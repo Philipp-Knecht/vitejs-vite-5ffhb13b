@@ -25,6 +25,7 @@ protections of the listing site. The UI is German; code and documentation are En
 - [Development](#development)
 - [Testing](#testing)
 - [Production build](#production-build)
+- [Deployment on Render](#deployment-on-render)
 - [AI provider configuration](#ai-provider-configuration)
 - [Stripe configuration](#stripe-configuration)
 - [Analytics configuration](#analytics-configuration)
@@ -169,6 +170,36 @@ docker compose --env-file .env.docker up --build
 
 Behind a reverse proxy set `TRUST_PROXY=1` (number of trusted hops) so rate limits use the client
 address. HSTS and `upgrade-insecure-requests` are sent when `PUBLIC_SITE_URL` uses HTTPS.
+
+## Deployment on Render
+
+[`render.yaml`](render.yaml) is a [Render Blueprint](https://render.com/docs/blueprint-spec): the
+Docker image as a web service and a PostgreSQL database, both in Frankfurt. On the Hobby workspace
+this costs about $13 per month (web service `0.5c-512mb` $7, database `0.1c-256mb` $6 with 1 GB
+storage that grows automatically when needed).
+
+1. Merge into `main`. The Blueprint deploys `main` and every later commit on it.
+2. In the Render dashboard choose **New → Blueprint** and select this repository.
+3. Enter the requested values:
+   - `PUBLIC_SITE_URL` – the public HTTPS address, e.g. `https://kaufcheck.onrender.com` or your
+     own domain
+   - `VITE_IMPRINT_NAME`, `VITE_IMPRINT_ADDRESS` (lines separated by `|`) and `VITE_CONTACT_EMAIL`
+     – the operator details for the imprint and the privacy policy
+4. Apply. The first build takes a few minutes; migrations run when the container starts.
+
+Render passes environment variables to the Docker build as build arguments, so the build-time
+values above reach the image. `COOKIE_SECRET` is generated, `DATABASE_URL` uses the internal
+database address and the database accepts no connections from the internet.
+
+`PUBLIC_SITE_URL` is used at build time (canonical URLs, sitemap) and at runtime (allowed origins,
+secure cookies). If Render assigns a different `onrender.com` address than the one you entered, or
+you add a custom domain later, change it in the service's **Environment** settings and deploy
+again. Render asks for `sync: false` values only when the Blueprint is created; later changes are
+made there too, as are optional features (AI, Stripe, SMTP for password resets – see below).
+
+`TRUST_PROXY=true` makes rate limits use the visitor address from `X-Forwarded-For`; without it
+all visitors would share the address of Render's proxy and therefore one limit. The proxy may pass
+on a header sent by the client, so treat the limits as abuse protection, not as identification.
 
 ## AI provider configuration
 
