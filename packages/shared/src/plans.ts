@@ -1,12 +1,13 @@
-import { z } from 'zod';
+import type { Entitlements } from './schemas/plans';
+
+export type { Entitlements } from './schemas/plans';
 
 /**
  * `anonymous` = no account (identified by an anonymous cookie),
  * `free` = registered account without subscription, `pro` = paid subscription.
  */
 export const PLANS = ['anonymous', 'free', 'pro'] as const;
-export const PlanSchema = z.enum(PLANS);
-export type Plan = z.infer<typeof PlanSchema>;
+export type Plan = (typeof PLANS)[number];
 
 export const PLAN_LABELS: Record<Plan, string> = {
   anonymous: 'Ohne Konto',
@@ -14,13 +15,34 @@ export const PLAN_LABELS: Record<Plan, string> = {
   pro: 'Pro',
 };
 
-export const EntitlementsSchema = z.object({
-  monthlyAnalyses: z.number().int().nonnegative(),
-  savedListingsMax: z.number().int().nonnegative(),
-  /** Maximum listings per comparison; 0 = comparison not available. */
-  compareMax: z.number().int().nonnegative(),
-  history: z.boolean(),
-  photoAnalysis: z.boolean(),
-  showAds: z.boolean(),
-});
-export type Entitlements = z.infer<typeof EntitlementsSchema>;
+/**
+ * Default plan limits. Operators can override the monthly analysis counts via
+ * environment variables; the web app shows these defaults until the server
+ * configuration has loaded.
+ */
+export const DEFAULT_ENTITLEMENTS: Readonly<Record<Plan, Entitlements>> = {
+  anonymous: {
+    monthlyAnalyses: 3,
+    savedListingsMax: 0,
+    compareMax: 0,
+    history: false,
+    photoAnalysis: false,
+    showAds: true,
+  },
+  free: {
+    monthlyAnalyses: 10,
+    savedListingsMax: 5,
+    compareMax: 3,
+    history: false,
+    photoAnalysis: false,
+    showAds: true,
+  },
+  pro: {
+    monthlyAnalyses: 300,
+    savedListingsMax: 500,
+    compareMax: 6,
+    history: true,
+    photoAnalysis: true,
+    showAds: false,
+  },
+};

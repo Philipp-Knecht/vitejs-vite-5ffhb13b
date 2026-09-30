@@ -44,6 +44,10 @@ export async function registerWeb(app: FastifyInstance, config: AppConfig): Prom
         .status(404)
         .send({ error: { code: 'NOT_FOUND', message: 'Nicht gefunden.', requestId: request.id } });
     }
+    // Missing files (e.g. outdated asset hashes) get a plain 404, never the HTML shell.
+    if (/\.[a-z0-9]{1,8}$/i.test(pathname)) {
+      return reply.status(404).type('text/plain; charset=utf-8').send('Nicht gefunden');
+    }
     let decoded: string;
     try {
       decoded = decodeURIComponent(pathname);

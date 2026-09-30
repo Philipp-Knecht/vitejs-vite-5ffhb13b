@@ -22,6 +22,7 @@ export function systemRoutes(app: FastifyInstance, services: Services): void {
     return {
       features: {
         urlRetrieval: services.retriever.mode !== 'off',
+        listingPhotos: config.showListingPhotos,
         ai: enricher !== null,
         aiIsMock: enricher?.isMock ?? false,
         photoAnalysis: enricher?.photoAnalysisAvailable ?? false,

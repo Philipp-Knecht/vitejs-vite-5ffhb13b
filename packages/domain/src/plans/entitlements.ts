@@ -1,36 +1,13 @@
-import type { Entitlements, Plan } from '@kaufcheck/shared';
+import { DEFAULT_ENTITLEMENTS, type Entitlements, type Plan } from '@kaufcheck/shared';
 
 /**
  * What each plan may do. Free accounts can save and compare a few listings
  * so the core product is usable without payment; Pro raises the limits and
- * adds history, photo analysis and an ad-free experience.
+ * adds history, photo analysis and an ad-free experience. The defaults live
+ * in the shared package so the web app can show them before the server
+ * configuration has loaded.
  */
-export const DEFAULT_ENTITLEMENTS: Readonly<Record<Plan, Entitlements>> = {
-  anonymous: {
-    monthlyAnalyses: 3,
-    savedListingsMax: 0,
-    compareMax: 0,
-    history: false,
-    photoAnalysis: false,
-    showAds: true,
-  },
-  free: {
-    monthlyAnalyses: 10,
-    savedListingsMax: 5,
-    compareMax: 3,
-    history: false,
-    photoAnalysis: false,
-    showAds: true,
-  },
-  pro: {
-    monthlyAnalyses: 300,
-    savedListingsMax: 500,
-    compareMax: 6,
-    history: true,
-    photoAnalysis: true,
-    showAds: false,
-  },
-};
+export { DEFAULT_ENTITLEMENTS };
 
 export interface EntitlementOverrides {
   anonymousMonthlyAnalyses?: number;

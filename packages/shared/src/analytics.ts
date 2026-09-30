@@ -1,5 +1,3 @@
-import { z } from 'zod';
-
 /**
  * Privacy-conscious product analytics: a fixed allowlist of events and a tiny,
  * non-personal property vocabulary. No user ids, no IPs, no free text.
@@ -17,17 +15,7 @@ export const ANALYTICS_EVENTS = [
   'pro_clicked',
 ] as const;
 
-export const AnalyticsEventNameSchema = z.enum(ANALYTICS_EVENTS);
-export type AnalyticsEventName = z.infer<typeof AnalyticsEventNameSchema>;
-
-const PropValue = z.union([
-  z
-    .string()
-    .max(64)
-    .regex(/^[\w.:/-]*$/),
-  z.number().finite(),
-  z.boolean(),
-]);
+export type AnalyticsEventName = (typeof ANALYTICS_EVENTS)[number];
 
 /** Allowed property keys. Events with other keys are rejected. */
 export const ANALYTICS_PROP_KEYS = [
@@ -40,11 +28,7 @@ export const ANALYTICS_PROP_KEYS = [
   'path',
 ] as const;
 
-export const AnalyticsPropsSchema = z.partialRecord(z.enum(ANALYTICS_PROP_KEYS), PropValue);
-export type AnalyticsProps = z.infer<typeof AnalyticsPropsSchema>;
+export type AnalyticsPropKey = (typeof ANALYTICS_PROP_KEYS)[number];
+export type AnalyticsProps = Partial<Record<AnalyticsPropKey, string | number | boolean>>;
 
-export const AnalyticsEventRequestSchema = z.object({
-  name: AnalyticsEventNameSchema,
-  props: AnalyticsPropsSchema.optional(),
-});
-export type AnalyticsEventRequest = z.infer<typeof AnalyticsEventRequestSchema>;
+export type { AnalyticsEventRequest } from './schemas/analytics';

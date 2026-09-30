@@ -1,6 +1,13 @@
 import { z } from 'zod';
-import { ApiErrorSchema } from '../errors';
-import { EntitlementsSchema, PlanSchema } from '../plans';
+import {
+  ANALYSIS_STAGES,
+  MAX_LISTING_TEXT_LENGTH,
+  MIN_LISTING_TEXT_LENGTH,
+  PASSWORD_MAX_LENGTH,
+  PASSWORD_MIN_LENGTH,
+} from '../constants';
+import { ApiErrorSchema } from './errors';
+import { EntitlementsSchema, PlanSchema } from './plans';
 import { MAX_URL_INPUT_LENGTH } from '../url';
 import { AnalysisResultSchema, EvidenceTypeSchema } from './analysis';
 import { ListingDtoSchema, ListingSourceTypeSchema, VehicleSchema } from './listing';
@@ -8,9 +15,6 @@ import { ListingDtoSchema, ListingSourceTypeSchema, VehicleSchema } from './list
 // ---------------------------------------------------------------------------
 // Analysis requests
 // ---------------------------------------------------------------------------
-
-export const MIN_LISTING_TEXT_LENGTH = 40;
-export const MAX_LISTING_TEXT_LENGTH = 20_000;
 
 export const AnalyzeUrlRequestSchema = z.object({
   url: z
@@ -60,20 +64,7 @@ export const AnalysisDtoSchema = z.object({
 });
 export type AnalysisDto = z.infer<typeof AnalysisDtoSchema>;
 
-/**
- * Real pipeline stages, reported while an analysis runs. `ai` is only
- * reported when an AI provider is configured and actually called.
- */
-export const ANALYSIS_STAGES = [
-  'validate',
-  'retrieve',
-  'extract',
-  'analyze',
-  'questions',
-  'ai',
-] as const;
 export const AnalysisStageSchema = z.enum(ANALYSIS_STAGES);
-export type AnalysisStage = z.infer<typeof AnalysisStageSchema>;
 
 export const AnalysisStreamEventSchema = z.discriminatedUnion('type', [
   z.object({
@@ -85,8 +76,6 @@ export const AnalysisStreamEventSchema = z.discriminatedUnion('type', [
   z.object({ type: z.literal('error'), error: ApiErrorSchema }),
 ]);
 export type AnalysisStreamEvent = z.infer<typeof AnalysisStreamEventSchema>;
-
-export const NDJSON_CONTENT_TYPE = 'application/x-ndjson';
 
 // ---------------------------------------------------------------------------
 // History
@@ -231,6 +220,8 @@ export const PublicConfigSchema = z.object({
   features: z.object({
     /** Automatic retrieval of listing URLs is enabled on this server. */
     urlRetrieval: z.boolean(),
+    /** Listing photos may be shown (loaded directly from the listing's image CDN). */
+    listingPhotos: z.boolean(),
     ai: z.boolean(),
     aiIsMock: z.boolean(),
     photoAnalysis: z.boolean(),
@@ -246,9 +237,6 @@ export const PublicConfigSchema = z.object({
   pro: z.object({ priceLabel: z.string().nullable() }),
 });
 export type PublicConfig = z.infer<typeof PublicConfigSchema>;
-
-export const PASSWORD_MIN_LENGTH = 10;
-export const PASSWORD_MAX_LENGTH = 200;
 
 export const EmailSchema = z
   .string()

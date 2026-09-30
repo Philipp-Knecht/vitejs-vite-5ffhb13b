@@ -4,6 +4,7 @@
   "private": true,
   "description": "API contracts shared by web and api: schemas, error codes, analytics events, plans.",
   "type": "module",
+  "sideEffects": false,
   "exports": {
     ".": "./src/index.ts"
   },

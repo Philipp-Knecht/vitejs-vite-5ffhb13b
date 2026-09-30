@@ -46,6 +46,11 @@ export default defineConfig([
     languageOptions: { globals: globals.browser },
   },
   {
+    // Build-time SSR entry for prerendering; never hot-reloaded.
+    files: ['apps/web/src/entry-server.tsx'],
+    rules: { 'react-refresh/only-export-components': 'off' },
+  },
+  {
     files: ['apps/api/**/*.ts', 'packages/**/*.ts', 'e2e/**/*.ts', '*.config.ts'],
     languageOptions: { globals: globals.node },
   },
