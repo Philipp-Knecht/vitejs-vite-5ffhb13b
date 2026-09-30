@@ -7,6 +7,8 @@ export interface Actor {
   anonymousId: string | null;
   plan: Plan;
   entitlements: Entitlements;
+  /** False when the browser sends Do Not Track or Global Privacy Control. */
+  trackingAllowed: boolean;
 }
 
 export function usageSubject(

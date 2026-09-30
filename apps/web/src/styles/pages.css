@@ -97,8 +97,20 @@
   border-color: var(--c-danger);
 }
 
-.url-form__field .field__error {
+.url-form__field .field__error,
+.url-form__field .field__hint {
   padding-inline: 4px;
+}
+
+.url-form__field .input--textarea {
+  min-height: 104px;
+}
+
+.url-form__help {
+  padding: 16px;
+  border: 1px solid var(--c-border);
+  border-radius: var(--radius-lg);
+  background: var(--c-surface);
 }
 
 @media (min-width: 640px) {

@@ -10,7 +10,7 @@ import {
 import { useEffect } from 'react';
 import { Link } from 'react-router';
 import { EvidenceLegend } from '../components/EvidenceBadge';
-import { UrlAnalysisForm } from '../features/analysis/UrlAnalysisForm';
+import { LISTING_INPUT_ID, ListingAnalysisForm } from '../features/analysis/ListingAnalysisForm';
 import { track } from '../lib/analytics';
 import { STATIC_PAGE_META } from '../seo/pages';
 import { usePageMeta } from '../seo/use-page-meta';
@@ -50,7 +50,14 @@ const FEATURES = [
   },
 ];
 
-const FAQ = [
+interface FaqItem {
+  question: string;
+  answer: (anonymous: number, free: number, retrieval: boolean) => string;
+  /** Shown only with (or without) automatic retrieval of listing links. */
+  when?: 'retrieval' | 'no-retrieval';
+}
+
+const FAQ: FaqItem[] = [
   {
     question: 'Was kostet KaufCheck?',
     answer: (anonymous: number, free: number) =>
@@ -58,11 +65,20 @@ const FAQ = [
   },
   {
     question: 'Welche Inserate kann ich prüfen?',
+    answer: (_anonymous, _free, retrieval) =>
+      retrieval
+        ? 'Derzeit Auto-Inserate von Kleinanzeigen. Du kannst den Link einfügen oder den Text des Inserats kopieren. Weitere Kategorien sind in Planung.'
+        : 'Derzeit Auto-Inserate von Kleinanzeigen: Kopiere den Text des Inserats und füge ihn ein. Weitere Kategorien sind in Planung.',
+  },
+  {
+    question: 'Warum reicht der Link nicht?',
+    when: 'no-retrieval',
     answer: () =>
-      'Derzeit Auto-Inserate von Kleinanzeigen. Du kannst den Link einfügen oder den Text des Inserats kopieren. Weitere Kategorien sind in Planung.',
+      'Die Nutzungsbedingungen von Kleinanzeigen erlauben das automatische Auslesen von Inseraten nur mit ausdrücklicher Zustimmung. KaufCheck hält sich daran und ruft Inserate deshalb nicht selbst ab. Mit dem kopierten Inseratstext ist die Prüfung genauso ausführlich.',
   },
   {
     question: 'Warum klappt der Link manchmal nicht?',
+    when: 'retrieval',
     answer: () =>
       'KaufCheck ruft Inserate nur ab, wenn das technisch und rechtlich zulässig ist, und umgeht keine Schutzmaßnahmen. Wenn der Abruf nicht möglich ist, fügst du einfach den Inseratstext ein – die Prüfung ist dann genauso ausführlich.',
   },
@@ -88,6 +104,11 @@ export function LandingPage() {
   usePageMeta(meta ?? { title: 'KaufCheck', description: '' });
   const config = useConfig();
   const plans = config.data?.plans ?? DEFAULT_ENTITLEMENTS;
+  // Until the configuration has loaded, assume the default: no automatic retrieval.
+  const retrieval = config.data?.features.urlRetrieval === true;
+  const faq = FAQ.filter(
+    (item) => !item.when || item.when === (retrieval ? 'retrieval' : 'no-retrieval'),
+  );
 
   useEffect(() => track('landing_page_view'), []);
 
@@ -102,10 +123,13 @@ export function LandingPage() {
             Besser entscheiden.
           </h1>
           <p className="hero__lead">
-            Füge den Link zu einem Auto-Inserat ein. KaufCheck ordnet die Angaben, zeigt, was fehlt,
-            und stellt dir die passenden Fragen für den Verkäufer zusammen.
+            {retrieval
+              ? 'Füge den Link zu einem Auto-Inserat ein.'
+              : 'Füge den Text eines Auto-Inserats ein.'}{' '}
+            KaufCheck ordnet die Angaben, zeigt, was fehlt, und stellt dir die passenden Fragen für
+            den Verkäufer zusammen.
           </p>
-          <UrlAnalysisForm />
+          <ListingAnalysisForm />
           <ul className="hero__facts">
             <li>Ohne Anmeldung</li>
             <li>{plans.anonymous.monthlyAnalyses} Prüfungen im Monat kostenlos</li>
@@ -126,7 +150,9 @@ export function LandingPage() {
               </span>
               <h3>Inserat einfügen</h3>
               <p>
-                Link aus dem Browser oder der App kopieren – oder den Text des Inserats einfügen.
+                {retrieval
+                  ? 'Link aus dem Browser oder der App kopieren – oder den Text des Inserats einfügen.'
+                  : 'Den Text des Inserats kopieren und oben einfügen – am Smartphone im Browser über „Alles auswählen“.'}
               </p>
             </li>
             <li className="step">
@@ -249,10 +275,16 @@ export function LandingPage() {
             Häufige Fragen
           </h2>
           <div className="faq">
-            {FAQ.map((item) => (
+            {faq.map((item) => (
               <details key={item.question} className="faq__item">
                 <summary>{item.question}</summary>
-                <p>{item.answer(plans.anonymous.monthlyAnalyses, plans.free.monthlyAnalyses)}</p>
+                <p>
+                  {item.answer(
+                    plans.anonymous.monthlyAnalyses,
+                    plans.free.monthlyAnalyses,
+                    retrieval,
+                  )}
+                </p>
               </details>
             ))}
           </div>
@@ -262,12 +294,12 @@ export function LandingPage() {
       <section className="section cta-band" aria-labelledby="cta-title">
         <div className="container container--narrow cta-band__inner">
           <h2 id="cta-title">Bereit für das nächste Inserat?</h2>
-          <p>Link einfügen, Angaben prüfen, gezielt nachfragen.</p>
+          <p>{retrieval ? 'Link' : 'Inserat'} einfügen, Angaben prüfen, gezielt nachfragen.</p>
           <a
-            href="#inserat-link"
+            href={`#${LISTING_INPUT_ID}`}
             className="btn btn--primary btn--lg"
             onClick={() =>
-              window.setTimeout(() => document.getElementById('inserat-link')?.focus(), 0)
+              window.setTimeout(() => document.getElementById(LISTING_INPUT_ID)?.focus(), 0)
             }
           >
             <span>Jetzt Inserat prüfen</span>

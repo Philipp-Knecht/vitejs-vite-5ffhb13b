@@ -60,6 +60,22 @@ describe('loadConfig', () => {
     expect(() => loadConfig({})).toThrow('DATABASE_URL');
   });
 
+  it('detects the hosting provider for the privacy policy', () => {
+    expect(loadConfig(BASE).hostingProvider).toBeNull();
+    expect(loadConfig({ ...BASE, RENDER: 'true' }).hostingProvider).toBe('render');
+    expect(loadConfig({ ...BASE, HOSTING_PROVIDER: 'render' }).hostingProvider).toBe('render');
+    expect(() => loadConfig({ ...BASE, HOSTING_PROVIDER: 'elsewhere' })).toThrow(ConfigError);
+  });
+
+  it('uses the CDN client-address header on Render unless configured otherwise', () => {
+    expect(loadConfig(BASE).clientIpHeader).toBeNull();
+    expect(loadConfig({ ...BASE, RENDER: 'true' }).clientIpHeader).toBe('cf-connecting-ip');
+    expect(loadConfig({ ...BASE, CLIENT_IP_HEADER: 'True-Client-IP' }).clientIpHeader).toBe(
+      'true-client-ip',
+    );
+    expect(() => loadConfig({ ...BASE, CLIENT_IP_HEADER: 'x forwarded' })).toThrow(ConfigError);
+  });
+
   it('parses TRUST_PROXY and allowed origins', () => {
     expect(loadConfig({ ...BASE, TRUST_PROXY: '1' }).trustProxy).toBe(1);
     expect(loadConfig({ ...BASE, TRUST_PROXY: 'true' }).trustProxy).toBe(true);

@@ -65,14 +65,14 @@ or a short cookie secret). Only `VITE_*` variables are compiled into the browser
 
 | Group             | Variables                                                                                                                                                 | Notes                                                                                          |
 | ----------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------- |
-| Core              | `PORT`, `HOST`, `PUBLIC_SITE_URL`, `ALLOWED_ORIGINS`, `TRUST_PROXY`, `LOG_LEVEL`                                                                          | `PUBLIC_SITE_URL` is required in production and is also used at build time for canonical URLs. |
+| Core              | `PORT`, `HOST`, `PUBLIC_SITE_URL`, `ALLOWED_ORIGINS`, `TRUST_PROXY`, `CLIENT_IP_HEADER`, `LOG_LEVEL`                                                      | `PUBLIC_SITE_URL` is required in production and is also used at build time for canonical URLs. |
 | Database, secrets | `DATABASE_URL`, `COOKIE_SECRET`                                                                                                                           | `COOKIE_SECRET`: at least 32 random characters in production.                                  |
 | Listing retrieval | `LISTING_FETCH_MODE` (`off`/`live`/`fixtures`), `FETCH_USER_AGENT`, `FETCH_TIMEOUT_MS`, `FETCH_MAX_BYTES`, `FETCH_RATE_PER_MINUTE`, `SHOW_LISTING_PHOTOS` | Production default is `off`. `fixtures` is development/test only.                              |
 | AI                | `AI_PROVIDER`, `ANTHROPIC_*`, `OPENAI_*`, `AI_TIMEOUT_MS`, `AI_MAX_CONCURRENCY`, `AI_PHOTO_ANALYSIS`, `AI_MAX_PHOTOS`                                     | See [AI provider configuration](#ai-provider-configuration).                                   |
 | Plans             | `ANON_MONTHLY_ANALYSES`, `FREE_MONTHLY_ANALYSES`, `PRO_MONTHLY_ANALYSES`, `ANALYZE_RATE_PER_MINUTE`                                                       | Defaults: 3 without account, 10 free, 300 Pro per calendar month (UTC).                        |
 | Payments          | `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET`, `STRIPE_PRICE_ID_PRO`, `PRO_PRICE_LABEL`                                                                    | All three Stripe values or none.                                                               |
 | E-mail            | `EMAIL_TRANSPORT` (`none`/`smtp`/`console`), `SMTP_URL`, `EMAIL_FROM`                                                                                     | Needed for password reset; without e-mail the feature is shown as unavailable.                 |
-| Operations        | `ANALYTICS_ENABLED`, `SERVE_WEB`, `WEB_DIST_DIR`, `ANON_RETENTION_DAYS`                                                                                   |                                                                                                |
+| Operations        | `ANALYTICS_ENABLED`, `SERVE_WEB`, `WEB_DIST_DIR`, `ANON_RETENTION_DAYS`, `HOSTING_PROVIDER`                                                               | `HOSTING_PROVIDER=render` names Render in the privacy policy (detected automatically there).   |
 | Web (build time)  | `VITE_IMPRINT_NAME`, `VITE_IMPRINT_ADDRESS` (lines separated by `\|`), `VITE_CONTACT_EMAIL`, `VITE_ADS_PROVIDER`                                          | The imprint is legally required in Germany before going live.                                  |
 | Tests             | `TEST_DATABASE_URL`, `E2E_DATABASE_URL`                                                                                                                   | Defaults: `kaufcheck_test` and `kaufcheck_e2e` on localhost.                                   |
 
@@ -197,9 +197,12 @@ you add a custom domain later, change it in the service's **Environment** settin
 again. Render asks for `sync: false` values only when the Blueprint is created; later changes are
 made there too, as are optional features (AI, Stripe, SMTP for password resets – see below).
 
-`TRUST_PROXY=true` makes rate limits use the visitor address from `X-Forwarded-For`; without it
-all visitors would share the address of Render's proxy and therefore one limit. The proxy may pass
-on a header sent by the client, so treat the limits as abuse protection, not as identification.
+Rate limits count per visitor address. On Render that address comes from `CF-Connecting-IP`
+(`CLIENT_IP_HEADER`, the default there): Cloudflare, Render's edge network, sets it and rejects
+requests that try to send it themselves. `X-Forwarded-For` alone is not reliable on Render because
+entries sent by the client are kept, so a forged header would get a fresh limit. `TRUST_PROXY=true`
+only serves as the fallback when the header is missing; without either, all visitors would share
+the address of Render's proxy and therefore one limit.
 
 ## AI provider configuration
 
@@ -307,13 +310,18 @@ already reserved in the contracts and the database.
 ## Legal
 
 - KaufCheck is independent and not affiliated with Kleinanzeigen GmbH.
-- Automatic retrieval is **off by default in production**. Operators must check the Kleinanzeigen
-  terms of use before enabling `LISTING_FETCH_MODE=live`; even then KaufCheck fetches only single
-  pages a user asked for, respects robots.txt and never bypasses CAPTCHAs, logins or blocks. The
-  text fallback works without any retrieval.
+- Automatic retrieval is **off by default in production** and must stay off for Kleinanzeigen: its
+  terms of use (§ 5, version of 17 February 2024) forbid crawlers, spiders, scrapers or other
+  automated mechanisms without Kleinanzeigen's express written consent. Enable
+  `LISTING_FETCH_MODE=live` only with such consent; even then KaufCheck fetches only single pages a
+  user asked for, respects robots.txt and never bypasses CAPTCHAs, logins or blocks. Without
+  retrieval the homepage asks for the listing text, and a pasted link leads to the text page.
 - The fixtures are synthetic and not real listings.
-- `/datenschutz` is a template that describes what the software does; adapt it to your hosting and
-  providers and have it reviewed. `/impressum` needs the `VITE_IMPRINT_*` values.
+- `/datenschutz` follows the configuration: sections for optional features (AI, payments, password
+  reset e-mails, retrieval, analytics) appear only when they are active, and on Render the hosting
+  section names Render, its data processing agreement and its sub-processors. Other hosts get a
+  generic hosting paragraph – extend `PrivacyPage` for them. Have the text reviewed before going
+  live. `/impressum` needs the `VITE_IMPRINT_*` values.
 - With AI enabled, listing texts (and for Pro, photos) are sent to the chosen AI provider, possibly
   outside the EU – mention this in the privacy policy and conclude the necessary agreements.
 - KaufCheck gives no purchase advice and does not verify listing data; the UI and every analysis

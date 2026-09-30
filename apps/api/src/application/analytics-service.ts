@@ -6,11 +6,13 @@ import {
 } from '@kaufcheck/shared';
 import type { FastifyBaseLogger } from 'fastify';
 import type { Db } from '../infrastructure/db/client';
+import type { Actor } from './actor';
 
 /**
  * First-party, privacy-conscious analytics: only the event name, a small
  * allowlisted property set and a timestamp are stored. No user or visitor
- * ids, no IP addresses, no user agents. Failures never affect requests.
+ * ids, no IP addresses, no user agents. Nothing is recorded for requests
+ * with Do Not Track or Global Privacy Control. Failures never affect requests.
  */
 export class AnalyticsService {
   constructor(
@@ -35,8 +37,12 @@ export class AnalyticsService {
     return parsed.success ? parsed.data : undefined;
   }
 
-  track(name: AnalyticsEventName, props?: AnalyticsProps): void {
-    if (!this.enabled) return;
+  track(
+    name: AnalyticsEventName,
+    props: AnalyticsProps | undefined,
+    actor: Pick<Actor, 'trackingAllowed'>,
+  ): void {
+    if (!this.enabled || !actor.trackingAllowed) return;
     this.db.analyticsEvent
       .create({ data: { name, props: props ?? undefined } })
       .catch((error: unknown) =>

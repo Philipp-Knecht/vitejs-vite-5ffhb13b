@@ -86,8 +86,8 @@ export function GuideLayout({
           <aside className="guide-cta" aria-label="Inserat prüfen">
             <p className="guide-cta__title">Du hast schon ein Auto im Blick?</p>
             <p>
-              Füge den Link zum Inserat bei KaufCheck ein: Du siehst, welche Angaben fehlen, was
-              auffällt und welche Fragen du dem Verkäufer stellen solltest.
+              Füge das Inserat bei KaufCheck ein: Du siehst, welche Angaben fehlen, was auffällt und
+              welche Fragen du dem Verkäufer stellen solltest.
             </p>
             <ButtonLink to="/">Inserat prüfen</ButtonLink>
           </aside>

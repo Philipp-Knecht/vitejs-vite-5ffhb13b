@@ -51,14 +51,14 @@ export function TextInputPage() {
       <h1>Inseratstext prüfen</h1>
       <p className="page__lead">
         Kopiere den Text des Auto-Inserats und füge ihn hier ein. KaufCheck liest daraus die Angaben
-        aus – genauso wie bei einem Link.
+        aus, zeigt, was fehlt, und stellt dir die passenden Fragen für den Verkäufer zusammen.
       </p>
 
       {incoming.url && incoming.reason === 'retrieval_disabled' && (
-        <Alert tone="info" title="Automatisches Auslesen ist hier nicht verfügbar">
+        <Alert tone="info" title="KaufCheck ruft Inserate nicht selbst ab">
           <p>
-            Auf diesem Server werden Inserate nicht automatisch abgerufen. Mit dem kopierten Text
-            klappt die Prüfung genauso.
+            Kopiere den Text des Inserats und füge ihn unten ein – die Prüfung ist damit genauso
+            ausführlich. Den Link speichern wir zur Zuordnung mit.
           </p>
         </Alert>
       )}

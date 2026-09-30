@@ -42,7 +42,7 @@ test('the analysis result meets WCAG 2.1 AA checks', async ({ page }) => {
 
 test('the error state after a blocked listing meets WCAG 2.1 AA checks', async ({ page }) => {
   await page.goto('/');
-  await page.getByLabel('Link zum Auto-Inserat auf Kleinanzeigen').fill(LISTINGS.blocked);
+  await page.getByLabel('Inseratstext oder Link zum Auto-Inserat').fill(LISTINGS.blocked);
   await page.getByRole('button', { name: 'Inserat prüfen' }).click();
   await expect(page.getByRole('button', { name: 'Inseratstext einfügen' })).toBeVisible();
   await expectAccessible(page);

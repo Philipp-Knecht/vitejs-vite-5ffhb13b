@@ -78,13 +78,14 @@ export class AnalysisService {
   async run(input: AnalysisInput, ctx: AnalysisRunContext): Promise<AnalysisDto> {
     const started = Date.now();
     const source = sourceLabel(input);
-    this.deps.analytics.track('listing_analysis_started', { source });
+    this.deps.analytics.track('listing_analysis_started', { source }, ctx.actor);
     try {
       const dto = await this.execute(input, ctx);
-      this.deps.analytics.track('listing_analysis_completed', {
-        source,
-        aiStatus: dto.analysis.ai.status,
-      });
+      this.deps.analytics.track(
+        'listing_analysis_completed',
+        { source, aiStatus: dto.analysis.ai.status },
+        ctx.actor,
+      );
       this.deps.logger.info(
         {
           op: 'listing.analyze',
@@ -104,7 +105,11 @@ export class AnalysisService {
           ? new AppError('REQUEST_ABORTED')
           : new AppError('INTERNAL_ERROR', { cause: error });
       if (appError.code !== 'REQUEST_ABORTED') {
-        this.deps.analytics.track('listing_analysis_failed', { source, errorCode: appError.code });
+        this.deps.analytics.track(
+          'listing_analysis_failed',
+          { source, errorCode: appError.code },
+          ctx.actor,
+        );
       }
       const level = appError.code === 'INTERNAL_ERROR' ? 'error' : 'info';
       this.deps.logger[level](
