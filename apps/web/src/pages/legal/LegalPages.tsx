@@ -104,13 +104,13 @@ export function PrivacyPage() {
           </p>
           <p>
             Beim Aufruf der Seite verarbeiten Render und diese Dienstleister technisch notwendige
-            Verbindungsdaten wie deine IP-Adresse, den Zeitpunkt und die aufgerufene Adresse. Mit
-            Render besteht ein Vertrag zur Auftragsverarbeitung (Art. 28 DSGVO). Render ist nach dem
-            EU-US Data Privacy Framework zertifiziert; Übermittlungen in die USA stützen sich auf
-            den Angemessenheitsbeschluss der EU-Kommission (Art. 45 DSGVO), ergänzend auf die
-            EU-Standardvertragsklauseln (Art. 46 Abs. 2 lit. c DSGVO). Rechtsgrundlage ist unser
-            berechtigtes Interesse an einer sicheren und zuverlässigen Bereitstellung (Art. 6 Abs. 1
-            lit. f DSGVO).
+            Verbindungsdaten wie deine IP-Adresse, den Zeitpunkt und die aufgerufene Adresse, um die
+            Seite auszuliefern und vor Angriffen zu schützen. Mit Render besteht ein Vertrag zur
+            Auftragsverarbeitung (Art. 28 DSGVO). Render ist nach dem EU-US Data Privacy Framework
+            zertifiziert; Übermittlungen in die USA stützen sich auf den Angemessenheitsbeschluss
+            der EU-Kommission (Art. 45 DSGVO), ergänzend auf die EU-Standardvertragsklauseln (Art.
+            46 Abs. 2 lit. c DSGVO). Rechtsgrundlage ist unser berechtigtes Interesse an einer
+            sicheren und zuverlässigen Bereitstellung (Art. 6 Abs. 1 lit. f DSGVO).
           </p>
         </>
       ) : (
