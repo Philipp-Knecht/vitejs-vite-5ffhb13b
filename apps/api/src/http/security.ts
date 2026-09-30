@@ -9,6 +9,8 @@ const STATE_CHANGING = new Set(['POST', 'PUT', 'PATCH', 'DELETE']);
 const CSRF_EXEMPT = new Set(['/api/billing/webhook']);
 
 export async function registerSecurity(app: FastifyInstance, config: AppConfig): Promise<void> {
+  // HSTS and request upgrades only make sense when the site is served over HTTPS.
+  const https = config.isProduction && config.secureCookies;
   const imageSources = config.showListingPhotos
     ? LISTING_IMAGE_HOSTS.map((host) => `https://${host}`)
     : [];
@@ -27,13 +29,13 @@ export async function registerSecurity(app: FastifyInstance, config: AppConfig):
         baseUri: ["'self'"],
         formAction: ["'self'"],
         objectSrc: ["'none'"],
-        ...(config.isProduction ? { upgradeInsecureRequests: [] } : {}),
+        ...(https ? { upgradeInsecureRequests: [] } : {}),
       },
     },
     crossOriginEmbedderPolicy: false,
     // Listing photos are loaded from the Kleinanzeigen CDN without sending our URL.
     referrerPolicy: { policy: 'strict-origin-when-cross-origin' },
-    hsts: config.isProduction ? { maxAge: 31_536_000, includeSubDomains: true } : false,
+    hsts: https ? { maxAge: 31_536_000, includeSubDomains: true } : false,
   });
 
   app.addHook('onSend', async (_request, reply, payload) => {

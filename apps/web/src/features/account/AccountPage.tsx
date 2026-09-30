@@ -34,10 +34,17 @@ const SUBSCRIPTION_STATUS: Record<string, string> = {
   paused: 'pausiert',
 };
 
-function DeleteAccountDialog({ onClose }: { onClose: () => void }) {
-  const remove = useDeleteAccount();
-  const navigate = useNavigate();
-  const toast = useToast();
+function DeleteAccountDialog({
+  pending,
+  error,
+  onConfirm,
+  onClose,
+}: {
+  pending: boolean;
+  error: unknown;
+  onConfirm: (password: string) => void;
+  onClose: () => void;
+}) {
   const [password, setPassword] = useState('');
   return (
     <Dialog
@@ -48,16 +55,9 @@ function DeleteAccountDialog({ onClose }: { onClose: () => void }) {
         <>
           <Button
             variant="danger"
-            loading={remove.isPending}
+            loading={pending}
             disabled={!password}
-            onClick={() =>
-              remove.mutate(password, {
-                onSuccess: () => {
-                  toast.show('Dein Konto wurde gelöscht');
-                  void navigate('/', { replace: true });
-                },
-              })
-            }
+            onClick={() => onConfirm(password)}
           >
             Endgültig löschen
           </Button>
@@ -77,7 +77,7 @@ function DeleteAccountDialog({ onClose }: { onClose: () => void }) {
         autoComplete="current-password"
         value={password}
         onChange={(event) => setPassword(event.target.value)}
-        error={remove.error instanceof ApiRequestError ? remove.error.message : null}
+        error={error instanceof ApiRequestError ? error.message : null}
       />
     </Dialog>
   );
@@ -97,11 +97,40 @@ export function AccountPage() {
   const logout = useLogout();
   const checkout = useCheckout();
   const portal = usePortal();
+  const remove = useDeleteAccount();
   const navigate = useNavigate();
+  const toast = useToast();
   const [deleting, setDeleting] = useState(false);
+  // While signing out or deleting, stay mounted until the navigation to the homepage.
+  const [leaving, setLeaving] = useState(false);
+
+  const signOut = () => {
+    setLeaving(true);
+    logout.mutate(undefined, {
+      onSuccess: () => void navigate('/', { replace: true }),
+      onError: () => setLeaving(false),
+    });
+  };
+
+  const deleteAccount = (password: string) => {
+    setLeaving(true);
+    remove.mutate(password, {
+      onSuccess: () => {
+        toast.show('Dein Konto wurde gelöscht');
+        void navigate('/', { replace: true });
+      },
+      onError: () => setLeaving(false),
+    });
+  };
 
   if (me.isPending) return <PageLoading />;
-  if (!me.data?.user) return <Navigate to="/anmelden" state={{ returnTo: '/konto' }} replace />;
+  if (!me.data?.user) {
+    return leaving ? (
+      <PageLoading />
+    ) : (
+      <Navigate to="/anmelden" state={{ returnTo: '/konto' }} replace />
+    );
+  }
 
   const { user, plan, usage, subscription, entitlements } = me.data;
   const billing = config.data?.features.billing ?? false;
@@ -138,11 +167,7 @@ export function AccountPage() {
             <dd>{formatDate(user.createdAt)}</dd>
           </div>
         </dl>
-        <Button
-          variant="secondary"
-          loading={logout.isPending}
-          onClick={() => logout.mutate(undefined, { onSuccess: () => void navigate('/') })}
-        >
+        <Button variant="secondary" loading={logout.isPending} onClick={signOut}>
           Abmelden
         </Button>
       </section>
@@ -227,7 +252,14 @@ export function AccountPage() {
         </Button>
       </section>
 
-      {deleting && <DeleteAccountDialog onClose={() => setDeleting(false)} />}
+      {deleting && (
+        <DeleteAccountDialog
+          pending={remove.isPending}
+          error={remove.error}
+          onConfirm={deleteAccount}
+          onClose={() => setDeleting(false)}
+        />
+      )}
     </div>
   );
 }

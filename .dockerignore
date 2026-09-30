@@ -1,0 +1,15 @@
+**/node_modules
+**/dist
+**/dist-ssr
+apps/api/src/generated
+.git
+.env
+.env.*
+!.env.example
+!.env.docker.example
+coverage
+playwright-report
+test-results
+blob-report
+*.log
+.DS_Store

@@ -155,3 +155,34 @@ describe('analytics switched off', () => {
     }
   });
 });
+
+describe('transport security in production', () => {
+  const production = { NODE_ENV: 'production', LISTING_FETCH_MODE: 'off', SERVE_WEB: 'false' };
+
+  it('sends HSTS and upgrades requests only when the site is served over HTTPS', async () => {
+    const httpsApp = await createTestApp({
+      ...production,
+      PUBLIC_SITE_URL: 'https://kaufcheck.example',
+    });
+    const httpApp = await createTestApp({
+      ...production,
+      PUBLIC_SITE_URL: 'http://localhost:3000',
+    });
+    try {
+      const secure = await httpsApp.app.inject({ method: 'GET', url: '/api/health' });
+      expect(secure.headers['strict-transport-security']).toContain('max-age=31536000');
+      expect(String(secure.headers['content-security-policy'])).toContain(
+        'upgrade-insecure-requests',
+      );
+
+      const plain = await httpApp.app.inject({ method: 'GET', url: '/api/health' });
+      expect(plain.headers['strict-transport-security']).toBeUndefined();
+      expect(String(plain.headers['content-security-policy'])).not.toContain(
+        'upgrade-insecure-requests',
+      );
+    } finally {
+      await httpsApp.app.close();
+      await httpApp.app.close();
+    }
+  });
+});
