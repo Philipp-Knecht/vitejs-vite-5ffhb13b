@@ -73,9 +73,9 @@ test('the fictional example is clearly labelled', async ({ page }) => {
 test('invalid links get instant feedback without a request', async ({ page }) => {
   await page.goto('/');
   await page
-    .getByLabel('Link zum Auto-Inserat auf Kleinanzeigen')
+    .getByLabel('Inseratstext oder Link zum Auto-Inserat')
     .fill('https://www.mobile.de/auto/123');
   await page.getByRole('button', { name: 'Inserat prüfen' }).click();
-  await expect(page.getByText(/nur Links von kleinanzeigen\.de/)).toBeVisible();
+  await expect(page.getByText(/Auto-Inserate von kleinanzeigen\.de/)).toBeVisible();
   await expect(page).toHaveURL('/');
 });

@@ -219,9 +219,9 @@ export function InspectionGuidePage() {
         Problem.
       </p>
       <p>
-        Vor der Besichtigung hilft dir <Link to="/">KaufCheck</Link>: Füge den Link zum Inserat ein
-        und du bekommst eine Checkliste mit Hinweisen, die sich aus genau diesem Inserat ergeben –
-        zum Beispiel zu Automatikgetriebe, Laufleistung oder erwähnten Schäden.
+        Vor der Besichtigung hilft dir <Link to="/">KaufCheck</Link>: Füge das Inserat ein und du
+        bekommst eine Checkliste mit Hinweisen, die sich aus genau diesem Inserat ergeben – zum
+        Beispiel zu Automatikgetriebe, Laufleistung oder erwähnten Schäden.
       </p>
     </GuideLayout>
   );

@@ -135,7 +135,7 @@ export class SavedListingService {
       },
       include: SAVED_INCLUDE,
     });
-    this.analytics.track('listing_saved', { plan: actor.plan });
+    this.analytics.track('listing_saved', { plan: actor.plan }, actor);
     return toDto(row);
   }
 
@@ -262,7 +262,7 @@ export class SavedListingService {
         analysis,
       };
     });
-    this.analytics.track('comparison_created', { count: items.length, plan: actor.plan });
+    this.analytics.track('comparison_created', { count: items.length, plan: actor.plan }, actor);
     return buildComparison(items, this.now());
   }
 }

@@ -81,6 +81,10 @@ const EnvSchema = z
     SERVE_WEB: booleanString.optional(),
     WEB_DIST_DIR: optionalString,
     ANON_RETENTION_DAYS: z.coerce.number().int().min(1).max(3650).default(90),
+    /** Named in the privacy policy; detected automatically on Render. */
+    HOSTING_PROVIDER: z.enum(['render']).optional(),
+    /** Set to "true" by Render on its services. */
+    RENDER: optionalString,
   })
   .superRefine((env, ctx) => {
     const production = env.NODE_ENV === 'production';
@@ -166,6 +170,7 @@ export interface AppConfig {
   serveWeb: boolean;
   webDistDir: string;
   anonRetentionDays: number;
+  hostingProvider: 'render' | null;
 }
 
 export class ConfigError extends Error {
@@ -258,6 +263,7 @@ export function loadConfig(source: NodeJS.ProcessEnv = process.env): AppConfig {
     serveWeb: env.SERVE_WEB ?? production,
     webDistDir: env.WEB_DIST_DIR ?? path.resolve(apiRoot, '../web/dist'),
     anonRetentionDays: env.ANON_RETENTION_DAYS,
+    hostingProvider: env.HOSTING_PROVIDER ?? (env.RENDER === 'true' ? 'render' : null),
   };
 }
 

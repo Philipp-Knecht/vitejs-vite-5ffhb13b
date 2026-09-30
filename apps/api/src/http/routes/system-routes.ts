@@ -1,6 +1,7 @@
 import { AnalyticsEventRequestSchema, type PublicConfig } from '@kaufcheck/shared';
 import type { FastifyInstance } from 'fastify';
 import { AnalyticsService } from '../../application/analytics-service';
+import type { AppConfig } from '../../config/env';
 import type { Services } from '../../container';
 import { AppError } from '../../lib/errors';
 import { parseInput } from '../errors';
@@ -24,6 +25,7 @@ export function systemRoutes(app: FastifyInstance, services: Services): void {
         urlRetrieval: services.retriever.mode !== 'off',
         listingPhotos: config.showListingPhotos,
         ai: enricher !== null,
+        aiProvider: realAiProvider(config.ai.provider, enricher?.isMock ?? true),
         aiIsMock: enricher?.isMock ?? false,
         photoAnalysis: enricher?.photoAnalysisAvailable ?? false,
         billing: billing.configured,
@@ -32,6 +34,10 @@ export function systemRoutes(app: FastifyInstance, services: Services): void {
       },
       plans,
       pro: { priceLabel: config.proPriceLabel },
+      privacy: {
+        hosting: config.hostingProvider,
+        anonymousRetentionDays: config.anonRetentionDays,
+      },
     };
   });
 
@@ -45,7 +51,7 @@ export function systemRoutes(app: FastifyInstance, services: Services): void {
         name: raw.name,
         props: AnalyticsService.sanitize(raw.props),
       });
-      analytics.track(body.name, body.props);
+      analytics.track(body.name, body.props, request.actor);
       return reply.status(204).send();
     },
   );
@@ -93,4 +99,11 @@ export function systemRoutes(app: FastifyInstance, services: Services): void {
     });
     done();
   });
+}
+
+function realAiProvider(
+  provider: AppConfig['ai']['provider'],
+  isMock: boolean,
+): 'anthropic' | 'openai' | null {
+  return !isMock && (provider === 'anthropic' || provider === 'openai') ? provider : null;
 }

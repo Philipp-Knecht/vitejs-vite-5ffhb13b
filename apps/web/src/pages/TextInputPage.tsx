@@ -55,10 +55,10 @@ export function TextInputPage() {
       </p>
 
       {incoming.url && incoming.reason === 'retrieval_disabled' && (
-        <Alert tone="info" title="Automatisches Auslesen ist hier nicht verfügbar">
+        <Alert tone="info" title="KaufCheck ruft Inserate nicht selbst ab">
           <p>
-            Auf diesem Server werden Inserate nicht automatisch abgerufen. Mit dem kopierten Text
-            klappt die Prüfung genauso.
+            Kopiere den Text des Inserats und füge ihn unten ein – die Prüfung ist damit genauso
+            ausführlich. Den Link speichern wir zur Zuordnung mit.
           </p>
         </Alert>
       )}

@@ -223,6 +223,8 @@ export const PublicConfigSchema = z.object({
     /** Listing photos may be shown (loaded directly from the listing's image CDN). */
     listingPhotos: z.boolean(),
     ai: z.boolean(),
+    /** The AI provider that receives listing texts (null without real AI). */
+    aiProvider: z.enum(['anthropic', 'openai']).nullable(),
     aiIsMock: z.boolean(),
     photoAnalysis: z.boolean(),
     billing: z.boolean(),
@@ -235,6 +237,11 @@ export const PublicConfigSchema = z.object({
     pro: EntitlementsSchema,
   }),
   pro: z.object({ priceLabel: z.string().nullable() }),
+  /** Operator facts the privacy policy depends on. */
+  privacy: z.object({
+    hosting: z.enum(['render']).nullable(),
+    anonymousRetentionDays: z.number().int().positive(),
+  }),
 });
 export type PublicConfig = z.infer<typeof PublicConfigSchema>;
 

@@ -1,6 +1,15 @@
-import { afterAll, beforeAll, beforeEach, describe, expect, it } from 'vitest';
+import { afterAll, beforeAll, beforeEach, describe, expect, it, vi } from 'vitest';
+import { PublicConfigSchema } from '@kaufcheck/shared';
 import type { BuiltApp } from '../src/app';
-import { createTestApp, errorOf, ORIGIN, resetDatabase, TestClient, URLS } from './helpers';
+import {
+  createTestApp,
+  errorOf,
+  ORIGIN,
+  PASTED_LISTING,
+  resetDatabase,
+  TestClient,
+  URLS,
+} from './helpers';
 
 describe('HTTP security', () => {
   let built: BuiltApp;
@@ -132,6 +141,28 @@ describe('HTTP security', () => {
     expect(JSON.stringify(stored[0]?.props)).not.toContain('example.com');
   });
 
+  it('records no analytics for Do Not Track or Global Privacy Control', async () => {
+    const client = new TestClient(built.app);
+    const dnt = await client.request('POST', '/api/events', {
+      json: { name: 'landing_page_view' },
+      headers: { dnt: '1' },
+    });
+    expect(dnt.statusCode).toBe(204);
+    const analysis = await client.request('POST', '/api/listings/analyze-text', {
+      json: { text: PASTED_LISTING },
+      headers: { 'sec-gpc': '1' },
+    });
+    expect(analysis.statusCode).toBe(201);
+
+    // Events are written in the background: once the one allowed event is
+    // stored, nothing from the opted-out requests may follow.
+    await client.request('POST', '/api/events', { json: { name: 'landing_page_view' } });
+    const count = () => built.services.db.analyticsEvent.count();
+    await vi.waitFor(async () => expect(await count()).toBe(1));
+    await new Promise((resolve) => setTimeout(resolve, 200));
+    expect(await count()).toBe(1);
+  });
+
   it('does not reveal the server stack', async () => {
     const response = await built.app.inject({ method: 'GET', url: '/api/health' });
     expect(response.headers['x-powered-by']).toBeUndefined();
@@ -183,6 +214,21 @@ describe('transport security in production', () => {
     } finally {
       await httpsApp.app.close();
       await httpApp.app.close();
+    }
+  });
+});
+
+describe('public config', () => {
+  it('matches the shared contract and names the facts the privacy policy needs', async () => {
+    const built = await createTestApp({ RENDER: 'true', ANON_RETENTION_DAYS: '30' });
+    try {
+      const response = await new TestClient(built.app).get('/api/config');
+      const config = PublicConfigSchema.parse(response.json());
+      expect(config.privacy).toEqual({ hosting: 'render', anonymousRetentionDays: 30 });
+      // The development mock is not a real AI provider.
+      expect(config.features.aiProvider).toBeNull();
+    } finally {
+      await built.app.close();
     }
   });
 });

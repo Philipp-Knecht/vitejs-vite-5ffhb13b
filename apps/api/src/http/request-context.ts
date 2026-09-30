@@ -67,6 +67,11 @@ export function ensureAnonymousId(
   request.actor = { ...request.actor, anonymousId: id };
 }
 
+/** Do Not Track (`DNT: 1`) or Global Privacy Control (`Sec-GPC: 1`). */
+function trackingOptOut(request: FastifyRequest): boolean {
+  return request.headers.dnt === '1' || request.headers['sec-gpc'] === '1';
+}
+
 /** Resolves the session and anonymous id for every API request. */
 export const requestContextPlugin = fp(
   (app: FastifyInstance, options: { services: Services }) => {
@@ -106,6 +111,7 @@ export const requestContextPlugin = fp(
         anonymousId,
         plan,
         entitlements: plans[plan],
+        trackingAllowed: !trackingOptOut(request),
       };
     });
   },
