@@ -21,6 +21,7 @@ import {
   formatYearMonth,
   plural,
 } from '../format';
+import { deriveVehicleTitle } from './normalize-vehicle';
 import type { VehicleRuleContext } from './rule-context';
 
 const SOURCE_NOTES = {
@@ -222,8 +223,11 @@ export function buildOverview(ctx: VehicleRuleContext): OverviewItem[] {
   return items;
 }
 
+/** The seller's own (cleaned) title reads best; structured fields are the fallback. */
 export function buildVehicleTitle(ctx: VehicleRuleContext): string {
   const { vehicle, listing } = ctx;
+  const fromTitle = deriveVehicleTitle(listing.title);
+  if (fromTitle) return fromTitle;
   const parts = [vehicle.make, vehicle.model, vehicle.variant].filter((part): part is string =>
     Boolean(part),
   );

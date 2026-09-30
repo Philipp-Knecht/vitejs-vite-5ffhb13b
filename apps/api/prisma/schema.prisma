@@ -1,0 +1,243 @@
+// KaufCheck data model (PostgreSQL).
+//
+// Listing rows are snapshots: every analysis stores the listing as it was
+// retrieved at that moment. `fingerprint` identifies the same offer across
+// snapshots (Kleinanzeigen ad id, or a hash for pasted text).
+
+generator client {
+  provider     = "prisma-client"
+  output       = "../src/generated/prisma"
+  moduleFormat = "esm"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum AccountPlan {
+  FREE
+  PRO
+}
+
+enum ListingSourceType {
+  KLEINANZEIGEN_URL
+  TEXT
+  EXAMPLE
+}
+
+enum ListingCategory {
+  VEHICLE
+  ELECTRONICS
+  COMPUTER
+  SMARTPHONE
+  CAMERA
+  BIKE
+  TOOL
+  FURNITURE
+}
+
+model User {
+  id                  String               @id @default(uuid()) @db.Uuid
+  email               String               @unique
+  passwordHash        String
+  plan                AccountPlan          @default(FREE)
+  createdAt           DateTime             @default(now())
+  updatedAt           DateTime             @updatedAt
+  sessions            Session[]
+  analyses            Analysis[]
+  savedListings       SavedListing[]
+  subscription        Subscription?
+  passwordResetTokens PasswordResetToken[]
+}
+
+model Session {
+  id         String   @id @default(uuid()) @db.Uuid
+  /// SHA-256 of the session token; the token itself is only stored in the cookie.
+  tokenHash  String   @unique
+  userId     String   @db.Uuid
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt  DateTime @default(now())
+  lastUsedAt DateTime @default(now())
+  expiresAt  DateTime
+
+  @@index([userId])
+  @@index([expiresAt])
+}
+
+model PasswordResetToken {
+  id        String    @id @default(uuid()) @db.Uuid
+  tokenHash String    @unique
+  userId    String    @db.Uuid
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  expiresAt DateTime
+  usedAt    DateTime?
+  createdAt DateTime  @default(now())
+
+  @@index([userId])
+}
+
+model Listing {
+  id                String            @id @default(uuid()) @db.Uuid
+  fingerprint       String
+  category          ListingCategory
+  sourceType        ListingSourceType
+  sourceUrl         String?
+  externalId        String?
+  status            String?
+  title             String?
+  priceEur          Int?
+  priceKind         String?
+  priceRaw          String?
+  postalCode        String?
+  city              String?
+  district          String?
+  locationRaw       String?
+  sellerType        String?
+  sellerMemberSince String?
+  postedAt          String?
+  /// Contact data is redacted before storage.
+  description       String?
+  images            Json
+  attributes        Json
+  isExample         Boolean           @default(false)
+  retrievedAt       DateTime
+  createdAt         DateTime          @default(now())
+  vehicle           Vehicle?
+  analyses          Analysis[]
+  savedListings     SavedListing[]
+
+  @@index([fingerprint, retrievedAt])
+  @@index([sourceType, externalId])
+}
+
+model Vehicle {
+  id                     String   @id @default(uuid()) @db.Uuid
+  listingId              String   @unique @db.Uuid
+  listing                Listing  @relation(fields: [listingId], references: [id], onDelete: Cascade)
+  make                   String?
+  model                  String?
+  variant                String?
+  mileageKm              Int?
+  firstRegistrationYear  Int?
+  firstRegistrationMonth Int?
+  fuel                   String?
+  powerKw                Int?
+  powerPs                Int?
+  transmission           String?
+  drivetrain             String?
+  huYear                 Int?
+  huMonth                Int?
+  previousOwners         Int?
+  serviceHistory         String?
+  accidentHistory        String?
+  condition              String?
+  bodyType               String?
+  color                  String?
+  doors                  String?
+  emissionClass          String?
+  equipment              String[]
+  fieldSources           Json
+
+  @@index([make, model, firstRegistrationYear])
+}
+
+model Analysis {
+  id                String           @id @default(uuid()) @db.Uuid
+  listingId         String           @db.Uuid
+  listing           Listing          @relation(fields: [listingId], references: [id], onDelete: Cascade)
+  userId            String?          @db.Uuid
+  user              User?            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  anonymousId       String?
+  rulesVersion      String
+  aiStatus          String
+  aiProvider        String?
+  aiModel           String?
+  completenessScore Int
+  /// AnalysisResult without seller questions (those live in SellerQuestion).
+  result            Json
+  createdAt         DateTime         @default(now())
+  sellerQuestions   SellerQuestion[]
+  savedListings     SavedListing[]
+
+  @@index([userId, createdAt])
+  @@index([anonymousId, createdAt])
+  @@index([listingId])
+}
+
+model SellerQuestion {
+  id           String   @id @default(uuid()) @db.Uuid
+  analysisId   String   @db.Uuid
+  analysis     Analysis @relation(fields: [analysisId], references: [id], onDelete: Cascade)
+  key          String
+  position     Int
+  text         String
+  textInformal String
+  reason       String
+  priority     Int
+  relatedField String?
+  origin       String
+
+  @@unique([analysisId, key])
+  @@index([analysisId, position])
+}
+
+model SavedListing {
+  id          String   @id @default(uuid()) @db.Uuid
+  userId      String   @db.Uuid
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  fingerprint String
+  listingId   String   @db.Uuid
+  listing     Listing  @relation(fields: [listingId], references: [id], onDelete: Cascade)
+  analysisId  String   @db.Uuid
+  analysis    Analysis @relation(fields: [analysisId], references: [id], onDelete: Cascade)
+  customTitle String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@unique([userId, fingerprint])
+  @@index([userId, createdAt])
+}
+
+/// Monthly analysis counter per user or anonymous visitor.
+model Usage {
+  id            String   @id @default(uuid()) @db.Uuid
+  subjectType   String
+  subjectId     String
+  period        String
+  analysesCount Int      @default(0)
+  updatedAt     DateTime @updatedAt
+
+  @@unique([subjectType, subjectId, period])
+}
+
+model Subscription {
+  id                     String      @id @default(uuid()) @db.Uuid
+  userId                 String      @unique @db.Uuid
+  user                   User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  provider               String
+  providerCustomerId     String?     @unique
+  providerSubscriptionId String?     @unique
+  status                 String
+  plan                   AccountPlan
+  currentPeriodEnd       DateTime?
+  cancelAtPeriodEnd      Boolean     @default(false)
+  createdAt              DateTime    @default(now())
+  updatedAt              DateTime    @updatedAt
+}
+
+/// Processed payment-provider webhook events (idempotency).
+model BillingEvent {
+  id        String   @id
+  type      String
+  createdAt DateTime @default(now())
+}
+
+/// Privacy-conscious product analytics: event name and a few non-personal properties.
+model AnalyticsEvent {
+  id        String   @id @default(uuid()) @db.Uuid
+  name      String
+  props     Json?
+  createdAt DateTime @default(now())
+
+  @@index([name, createdAt])
+}

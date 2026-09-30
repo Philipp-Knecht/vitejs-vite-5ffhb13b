@@ -71,6 +71,24 @@ export function deriveVariant(title: string | null, model: string | null): strin
   return result.length >= 2 ? result : null;
 }
 
+/**
+ * The seller's title from the make onwards, without offer noise
+ * ("BMW 530d Touring M Sport *TOP* TÜV neu" → "BMW 530d Touring M Sport").
+ */
+export function deriveVehicleTitle(title: string | null): string | null {
+  if (!title) return null;
+  const match = findMakeInText(title);
+  if (!match) return null;
+  const make = title.slice(match.index, match.index + match.length);
+  const kept: string[] = [];
+  for (const token of titleTokensAfterMake(title)) {
+    if (TITLE_NOISE.test(token) || !TOKEN.test(token) || /[*!|/,]/.test(token)) break;
+    kept.push(token);
+    if (kept.length === 7) break;
+  }
+  return kept.length > 0 ? `${make} ${kept.join(' ')}` : null;
+}
+
 function yesNo(value: string): boolean | null {
   const v = foldGerman(value).trim();
   if (/^(ja|yes|vorhanden|j)$/.test(v)) return true;

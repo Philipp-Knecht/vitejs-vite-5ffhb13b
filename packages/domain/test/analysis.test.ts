@@ -377,3 +377,15 @@ describe('prepareListing', () => {
     expect(NOW.getFullYear()).toBe(2026);
   });
 });
+
+describe('vehicle title', () => {
+  it.each([
+    ['BMW 530d Touring M Sport *TOP* TÜV neu', 'BMW 530d Touring M Sport'],
+    ['Reserviert • VW Golf 7 1.4 TSI Highline DSG', 'VW Golf 7 1.4 TSI Highline DSG'],
+    ['Mercedes-Benz E 350 d T-Modell Avantgarde!!!', 'Mercedes-Benz E 350 d T-Modell Avantgarde'],
+    ['Schöner Kombi zu verkaufen', null],
+  ])('%s → %s', async (title, expected) => {
+    const { deriveVehicleTitle, stripTitleMarkers } = await import('../src/index');
+    expect(deriveVehicleTitle(stripTitleMarkers(title).title)).toBe(expected);
+  });
+});

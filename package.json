@@ -2,7 +2,7 @@
   "name": "kaufcheck",
   "private": true,
   "version": "1.0.0",
-  "description": "KaufCheck – Gebrauchtwagen-Angebote von Kleinanzeigen strukturiert prüfen.",
+  "description": "KaufCheck \u2013 Gebrauchtwagen-Angebote von Kleinanzeigen strukturiert pr\u00fcfen.",
   "type": "module",
   "license": "UNLICENSED",
   "engines": {
@@ -45,5 +45,9 @@
     "typescript": "~6.0.3",
     "typescript-eslint": "^8.71.0",
     "vitest": "^5.0.2"
+  },
+  "overrides": {
+    "deepmerge-ts": "^8.0.2",
+    "mysql2": "^3.24.5"
   }
 }

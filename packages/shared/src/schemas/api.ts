@@ -60,8 +60,18 @@ export const AnalysisDtoSchema = z.object({
 });
 export type AnalysisDto = z.infer<typeof AnalysisDtoSchema>;
 
-/** Real pipeline stages, reported while an analysis runs. */
-export const ANALYSIS_STAGES = ['validate', 'retrieve', 'extract', 'analyze', 'questions'] as const;
+/**
+ * Real pipeline stages, reported while an analysis runs. `ai` is only
+ * reported when an AI provider is configured and actually called.
+ */
+export const ANALYSIS_STAGES = [
+  'validate',
+  'retrieve',
+  'extract',
+  'analyze',
+  'questions',
+  'ai',
+] as const;
 export const AnalysisStageSchema = z.enum(ANALYSIS_STAGES);
 export type AnalysisStage = z.infer<typeof AnalysisStageSchema>;
 
@@ -240,7 +250,7 @@ export type PublicConfig = z.infer<typeof PublicConfigSchema>;
 export const PASSWORD_MIN_LENGTH = 10;
 export const PASSWORD_MAX_LENGTH = 200;
 
-const EmailSchema = z
+export const EmailSchema = z
   .string()
   .trim()
   .toLowerCase()
