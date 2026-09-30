@@ -39,6 +39,13 @@ const EnvSchema = z
     /** Additional origins allowed to call the API (comma separated), e.g. the Vite dev server. */
     ALLOWED_ORIGINS: optionalString,
     TRUST_PROXY: optionalString,
+    /** Header with the visitor address set by a trusted CDN, e.g. cf-connecting-ip. */
+    CLIENT_IP_HEADER: z
+      .string()
+      .trim()
+      .toLowerCase()
+      .regex(/^[a-z0-9-]+$/, 'must be a header name')
+      .optional(),
 
     DATABASE_URL: z.string().min(1, 'DATABASE_URL is required'),
     COOKIE_SECRET: optionalString,
@@ -136,6 +143,7 @@ export interface AppConfig {
   publicSiteUrl: string;
   allowedOrigins: string[];
   trustProxy: boolean | number;
+  clientIpHeader: string | null;
   databaseUrl: string;
   cookieSecret: string;
   secureCookies: boolean;
@@ -201,6 +209,7 @@ export function loadConfig(source: NodeJS.ProcessEnv = process.env): AppConfig {
   const production = env.NODE_ENV === 'production';
   const publicSiteUrl = (env.PUBLIC_SITE_URL ?? 'http://localhost:5173').replace(/\/$/, '');
   const defaultFetchMode = production ? 'off' : env.NODE_ENV === 'test' ? 'fixtures' : 'live';
+  const hostingProvider = env.HOSTING_PROVIDER ?? (env.RENDER === 'true' ? 'render' : null);
 
   return {
     env: env.NODE_ENV,
@@ -217,6 +226,9 @@ export function loadConfig(source: NodeJS.ProcessEnv = process.env): AppConfig {
         .filter(Boolean),
     ],
     trustProxy: parseTrustProxy(env.TRUST_PROXY),
+    // Render serves through Cloudflare, which sets CF-Connecting-IP and rejects it from clients.
+    clientIpHeader:
+      env.CLIENT_IP_HEADER ?? (hostingProvider === 'render' ? 'cf-connecting-ip' : null),
     databaseUrl: env.DATABASE_URL,
     // Development falls back to a per-process secret: anonymous ids reset on restart.
     cookieSecret: env.COOKIE_SECRET ?? randomBytes(32).toString('hex'),
@@ -263,7 +275,7 @@ export function loadConfig(source: NodeJS.ProcessEnv = process.env): AppConfig {
     serveWeb: env.SERVE_WEB ?? production,
     webDistDir: env.WEB_DIST_DIR ?? path.resolve(apiRoot, '../web/dist'),
     anonRetentionDays: env.ANON_RETENTION_DAYS,
-    hostingProvider: env.HOSTING_PROVIDER ?? (env.RENDER === 'true' ? 'render' : null),
+    hostingProvider,
   };
 }
 

@@ -232,3 +232,34 @@ describe('public config', () => {
     }
   });
 });
+
+describe('client address behind a CDN', () => {
+  it('rate-limits by the trusted header and ignores forged forwarding headers', async () => {
+    const built = await createTestApp({
+      ANALYZE_RATE_PER_MINUTE: '2',
+      CLIENT_IP_HEADER: 'cf-connecting-ip',
+      TRUST_PROXY: 'true',
+    });
+    try {
+      await resetDatabase(built.services.db);
+      const analyze = (headers: Record<string, string>) =>
+        built.app.inject({
+          method: 'POST',
+          url: '/api/listings/analyze',
+          headers: { origin: ORIGIN, 'content-type': 'application/json', ...headers },
+          payload: JSON.stringify({ url: URLS.blocked }),
+          remoteAddress: '10.20.30.40',
+        });
+      const visitor = { 'cf-connecting-ip': '203.0.113.10' };
+      expect((await analyze(visitor)).statusCode).not.toBe(429);
+      expect((await analyze(visitor)).statusCode).not.toBe(429);
+      // A forged X-Forwarded-For does not give the same visitor a new budget …
+      const forged = await analyze({ ...visitor, 'x-forwarded-for': '198.51.100.1' });
+      expect(forged.statusCode).toBe(429);
+      // … while another visitor behind the same proxy has its own.
+      expect((await analyze({ 'cf-connecting-ip': '203.0.113.11' })).statusCode).not.toBe(429);
+    } finally {
+      await built.app.close();
+    }
+  });
+});

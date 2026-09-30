@@ -65,7 +65,7 @@ or a short cookie secret). Only `VITE_*` variables are compiled into the browser
 
 | Group             | Variables                                                                                                                                                 | Notes                                                                                          |
 | ----------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------- |
-| Core              | `PORT`, `HOST`, `PUBLIC_SITE_URL`, `ALLOWED_ORIGINS`, `TRUST_PROXY`, `LOG_LEVEL`                                                                          | `PUBLIC_SITE_URL` is required in production and is also used at build time for canonical URLs. |
+| Core              | `PORT`, `HOST`, `PUBLIC_SITE_URL`, `ALLOWED_ORIGINS`, `TRUST_PROXY`, `CLIENT_IP_HEADER`, `LOG_LEVEL`                                                      | `PUBLIC_SITE_URL` is required in production and is also used at build time for canonical URLs. |
 | Database, secrets | `DATABASE_URL`, `COOKIE_SECRET`                                                                                                                           | `COOKIE_SECRET`: at least 32 random characters in production.                                  |
 | Listing retrieval | `LISTING_FETCH_MODE` (`off`/`live`/`fixtures`), `FETCH_USER_AGENT`, `FETCH_TIMEOUT_MS`, `FETCH_MAX_BYTES`, `FETCH_RATE_PER_MINUTE`, `SHOW_LISTING_PHOTOS` | Production default is `off`. `fixtures` is development/test only.                              |
 | AI                | `AI_PROVIDER`, `ANTHROPIC_*`, `OPENAI_*`, `AI_TIMEOUT_MS`, `AI_MAX_CONCURRENCY`, `AI_PHOTO_ANALYSIS`, `AI_MAX_PHOTOS`                                     | See [AI provider configuration](#ai-provider-configuration).                                   |
@@ -197,9 +197,12 @@ you add a custom domain later, change it in the service's **Environment** settin
 again. Render asks for `sync: false` values only when the Blueprint is created; later changes are
 made there too, as are optional features (AI, Stripe, SMTP for password resets – see below).
 
-`TRUST_PROXY=true` makes rate limits use the visitor address from `X-Forwarded-For`; without it
-all visitors would share the address of Render's proxy and therefore one limit. The proxy may pass
-on a header sent by the client, so treat the limits as abuse protection, not as identification.
+Rate limits count per visitor address. On Render that address comes from `CF-Connecting-IP`
+(`CLIENT_IP_HEADER`, the default there): Cloudflare, Render's edge network, sets it and rejects
+requests that try to send it themselves. `X-Forwarded-For` alone is not reliable on Render because
+entries sent by the client are kept, so a forged header would get a fresh limit. `TRUST_PROXY=true`
+only serves as the fallback when the header is missing; without either, all visitors would share
+the address of Render's proxy and therefore one limit.
 
 ## AI provider configuration
 

@@ -26,7 +26,11 @@ services:
       # Runtime
       - key: PORT
         value: '3000'
-      # Render's proxy sets X-Forwarded-For; without this all visitors share one rate limit.
+      # Rate limits use CF-Connecting-IP, set by Cloudflare (Render's edge) and rejected when
+      # sent by clients. X-Forwarded-For keeps client-supplied entries on Render, so it is only
+      # the fallback.
+      - key: CLIENT_IP_HEADER
+        value: cf-connecting-ip
       - key: TRUST_PROXY
         value: 'true'
       - key: COOKIE_SECRET

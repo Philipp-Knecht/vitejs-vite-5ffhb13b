@@ -5,6 +5,7 @@ import rateLimit from '@fastify/rate-limit';
 import Fastify, { type FastifyInstance } from 'fastify';
 import type { AppConfig } from './config/env';
 import { createServices, type ServiceOverrides, type Services } from './container';
+import { clientAddress } from './http/client-address';
 import { registerErrorHandling } from './http/errors';
 import { requestContextPlugin } from './http/request-context';
 import { accountRoutes } from './http/routes/account-routes';
@@ -63,6 +64,7 @@ export async function buildApp(
     global: true,
     max: 300,
     timeWindow: '1 minute',
+    keyGenerator: (request) => clientAddress(request, config.clientIpHeader),
     // The error is handled by the common error handler (RATE_LIMITED + Retry-After).
     errorResponseBuilder: (_request, context) =>
       new AppError('RATE_LIMITED', {
