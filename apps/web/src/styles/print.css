@@ -1,0 +1,58 @@
+@media print {
+  :root {
+    --c-bg: #fff;
+  }
+
+  body {
+    font-size: 11pt;
+    background: #fff;
+  }
+
+  .header,
+  .footer,
+  .skip-link,
+  .section-nav,
+  .result__aside,
+  .guide__toc,
+  .breadcrumbs,
+  .vehicle-header__actions,
+  .result-section__actions,
+  .button-row,
+  .ad-slot,
+  .guide-cta,
+  .related,
+  .no-print,
+  .toast-region,
+  .compare-bar,
+  .checklist-progress .btn {
+    display: none !important;
+  }
+
+  .result__layout,
+  .guide__layout {
+    display: block;
+  }
+
+  .result-section,
+  .vehicle-header,
+  .checklist,
+  .print-checklist {
+    break-inside: avoid-page;
+    box-shadow: none;
+  }
+
+  .checklist,
+  .observation,
+  .check-item {
+    break-inside: avoid;
+  }
+
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  details > summary {
+    list-style: none;
+  }
+}

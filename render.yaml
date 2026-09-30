@@ -1,0 +1,49 @@
+# Render Blueprint: the Docker image (API + prerendered web app) and PostgreSQL in Frankfurt.
+# Render dashboard → New → Blueprint → this repository. Values with `sync: false` are asked
+# for once when the Blueprint is created. See README → Deployment on Render.
+services:
+  - type: web
+    name: kaufcheck
+    runtime: docker
+    region: frankfurt
+    plan: 0.5c-512mb
+    branch: main
+    dockerfilePath: ./Dockerfile
+    healthCheckPath: /api/health
+    # Every commit on main is deployed; changes reach main through pull requests with green CI.
+    # (`checksPass` would wait for every check on the commit, including third-party apps.)
+    autoDeployTrigger: commit
+    envVars:
+      # Build time: Render passes environment variables to the Docker build as build args.
+      - key: PUBLIC_SITE_URL
+        sync: false
+      - key: VITE_IMPRINT_NAME
+        sync: false
+      - key: VITE_IMPRINT_ADDRESS
+        sync: false
+      - key: VITE_CONTACT_EMAIL
+        sync: false
+      # Runtime
+      - key: PORT
+        value: '3000'
+      # Render's proxy sets X-Forwarded-For; without this all visitors share one rate limit.
+      - key: TRUST_PROXY
+        value: 'true'
+      - key: COOKIE_SECRET
+        generateValue: true
+      - key: DATABASE_URL
+        fromDatabase:
+          name: kaufcheck-db
+          property: connectionString
+
+databases:
+  - name: kaufcheck-db
+    region: frankfurt
+    plan: 0.1c-256mb
+    diskSizeGB: 1
+    storageAutoscalingEnabled: true
+    postgresMajorVersion: '16'
+    databaseName: kaufcheck
+    user: kaufcheck
+    # Internal connections from the web service only.
+    ipAllowList: []

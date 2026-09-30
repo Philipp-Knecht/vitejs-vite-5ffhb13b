@@ -1,0 +1,265 @@
+.app {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.main {
+  flex: 1;
+}
+
+.container {
+  width: 100%;
+  max-width: calc(var(--container) + 2 * var(--gutter));
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+}
+
+.container--narrow {
+  max-width: calc(760px + 2 * var(--gutter));
+}
+
+/* ---------- Header ---------- */
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 30;
+  background: rgb(255 255 255 / 96%);
+  border-bottom: 1px solid var(--c-border);
+  backdrop-filter: saturate(1.4) blur(8px);
+}
+
+.header__bar {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  height: var(--header-h);
+}
+
+.header__logo {
+  display: inline-flex;
+  color: var(--c-text);
+  text-decoration: none;
+}
+
+.logo {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.logo__text {
+  font-size: 1.2rem;
+  font-weight: 750;
+  letter-spacing: -0.02em;
+  color: var(--c-text);
+}
+
+.header__nav {
+  display: none;
+  gap: 4px;
+  margin-left: 16px;
+}
+
+.header__link {
+  padding: 8px 12px;
+  border-radius: var(--radius);
+  color: var(--c-text-2);
+  font-weight: 550;
+  text-decoration: none;
+}
+
+.header__link:hover {
+  background: var(--c-surface-2);
+  color: var(--c-text);
+}
+
+.header__link--active {
+  color: var(--c-primary);
+  background: var(--c-primary-50);
+}
+
+.header__actions {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-left: auto;
+}
+
+.header__account-placeholder {
+  display: inline-block;
+  width: 96px;
+  height: 36px;
+}
+
+.mobile-menu {
+  border-top: 1px solid var(--c-border);
+  background: var(--c-surface);
+  box-shadow: var(--shadow);
+}
+
+.mobile-menu[hidden] {
+  display: none;
+}
+
+.mobile-menu__nav {
+  display: flex;
+  flex-direction: column;
+  padding-block: 8px 16px;
+}
+
+.mobile-menu__link {
+  display: flex;
+  align-items: center;
+  min-height: 48px;
+  padding-inline: 4px;
+  border-bottom: 1px solid var(--c-border);
+  color: var(--c-text);
+  font-weight: 550;
+  text-decoration: none;
+}
+
+.mobile-menu__link[aria-current='page'] {
+  color: var(--c-primary);
+}
+
+.mobile-menu__link--sub {
+  padding-left: 16px;
+  font-weight: 450;
+}
+
+.mobile-menu__heading {
+  margin: 16px 4px 4px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--c-text-3);
+}
+
+@media (min-width: 960px) {
+  .header__nav {
+    display: flex;
+  }
+
+  .header__menu-button,
+  .mobile-menu {
+    display: none;
+  }
+}
+
+/* ---------- Footer ---------- */
+.footer {
+  margin-top: 64px;
+  padding-block: 40px 24px;
+  border-top: 1px solid var(--c-border);
+  background: var(--c-surface);
+  font-size: 0.95rem;
+}
+
+.footer__grid {
+  display: grid;
+  gap: 28px;
+}
+
+.footer__brand p {
+  max-width: 44ch;
+  margin-top: 12px;
+  color: var(--c-text-2);
+}
+
+.footer__column {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.footer__column a {
+  color: var(--c-text-2);
+  text-decoration: none;
+}
+
+.footer__column a:hover {
+  color: var(--c-primary);
+  text-decoration: underline;
+}
+
+.footer__heading {
+  margin: 0 0 4px;
+  font-weight: 700;
+  color: var(--c-text);
+}
+
+.footer__legal {
+  margin-top: 28px;
+  padding-top: 16px;
+  border-top: 1px solid var(--c-border);
+  font-size: 0.85rem;
+  color: var(--c-text-3);
+}
+
+.footer__legal p {
+  margin: 0;
+}
+
+@media (min-width: 768px) {
+  .footer__grid {
+    grid-template-columns: 1.6fr repeat(3, 1fr);
+  }
+}
+
+/* ---------- Generic pages ---------- */
+.page {
+  padding-block: 32px 16px;
+}
+
+.page--narrow {
+  max-width: calc(760px + 2 * var(--gutter));
+}
+
+.page--auth {
+  max-width: calc(480px + 2 * var(--gutter));
+}
+
+.page__header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.page__header h1 {
+  margin-bottom: 4px;
+}
+
+.page__lead {
+  max-width: 62ch;
+  font-size: 1.075rem;
+  color: var(--c-text-2);
+}
+
+.page__intro {
+  max-width: 760px;
+  margin-bottom: 24px;
+}
+
+.page__section {
+  margin-top: 40px;
+}
+
+.auth-links {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 8px 16px;
+  margin: 8px 0 0;
+  font-size: 0.95rem;
+}
+
+@media (min-width: 1024px) {
+  .page {
+    padding-block: 48px 24px;
+  }
+}

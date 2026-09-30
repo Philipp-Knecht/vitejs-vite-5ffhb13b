@@ -1,0 +1,79 @@
+:root {
+  color-scheme: light;
+
+  --font-sans:
+    'Inter Variable', Inter, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial,
+    sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+
+  /* Surfaces and text (text colours meet WCAG AA on both --c-bg and --c-surface). */
+  --c-bg: #f6f7f9;
+  --c-surface: #ffffff;
+  --c-surface-2: #f0f3f7;
+  --c-border: #dfe4ea;
+  --c-border-strong: #c3ccd6;
+  --c-text: #152233;
+  --c-text-2: #445366;
+  --c-text-3: #5f6b7a;
+
+  /* Brand */
+  --c-primary: #0e4a7b;
+  --c-primary-hover: #0b3d66;
+  --c-primary-50: #eaf1f8;
+  --c-primary-100: #d4e3f1;
+  --c-focus: #1d63d6;
+
+  /* Status */
+  --c-success: #146c43;
+  --c-success-bg: #e8f5ee;
+  --c-success-border: #b9dfca;
+  --c-warning: #8f5100;
+  --c-warning-bg: #fff5e1;
+  --c-warning-border: #f0d49a;
+  --c-danger: #b42318;
+  --c-danger-hover: #971c13;
+  --c-danger-bg: #fdeeec;
+  --c-danger-border: #f4c4be;
+  --c-info: #1c559e;
+  --c-info-bg: #ebf2fb;
+  --c-info-border: #c6d9f1;
+
+  /* Evidence labels */
+  --e-fact: #1b4d82;
+  --e-fact-bg: #e6eef8;
+  --e-calc: #55369f;
+  --e-calc-bg: #efeafb;
+  --e-inference: #864900;
+  --e-inference-bg: #fff1dc;
+  --e-unknown: #525c68;
+  --e-unknown-bg: #eceff3;
+  --e-ai: #0d6b64;
+  --e-ai-bg: #e0f3f1;
+
+  --radius-sm: 6px;
+  --radius: 10px;
+  --radius-lg: 14px;
+  --radius-xl: 20px;
+  --radius-pill: 999px;
+
+  --shadow-sm: 0 1px 2px rgb(16 24 40 / 6%);
+  --shadow: 0 1px 3px rgb(16 24 40 / 8%), 0 1px 2px rgb(16 24 40 / 4%);
+  --shadow-lg: 0 16px 40px rgb(16 24 40 / 16%);
+
+  --container: 1160px;
+  --gutter: 16px;
+  --header-h: 60px;
+}
+
+@media (min-width: 768px) {
+  :root {
+    --gutter: 24px;
+  }
+}
+
+@media (min-width: 1024px) {
+  :root {
+    --gutter: 32px;
+    --header-h: 68px;
+  }
+}

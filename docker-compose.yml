@@ -1,0 +1,62 @@
+# Production-like local setup: PostgreSQL + KaufCheck (API serving the web app).
+#   cp .env.docker.example .env.docker   # then set COOKIE_SECRET etc.
+#   docker compose --env-file .env.docker up --build
+# Use --env-file: without it Compose would read the development .env.
+name: kaufcheck
+
+services:
+  db:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: kaufcheck
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD}
+      POSTGRES_DB: kaufcheck
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U kaufcheck -d kaufcheck']
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+  app:
+    build:
+      context: .
+      args:
+        NODE_IMAGE: ${NODE_IMAGE:-node:22-bookworm-slim}
+        PUBLIC_SITE_URL: ${PUBLIC_SITE_URL:-http://localhost:3000}
+        VITE_IMPRINT_NAME: ${VITE_IMPRINT_NAME:-}
+        VITE_IMPRINT_ADDRESS: ${VITE_IMPRINT_ADDRESS:-}
+        VITE_CONTACT_EMAIL: ${VITE_CONTACT_EMAIL:-}
+        VITE_ADS_PROVIDER: ${VITE_ADS_PROVIDER:-none}
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - '${APP_PORT:-3000}:3000'
+    environment:
+      DATABASE_URL: postgresql://kaufcheck:${POSTGRES_PASSWORD}@db:5432/kaufcheck
+      PUBLIC_SITE_URL: ${PUBLIC_SITE_URL:-http://localhost:3000}
+      COOKIE_SECRET: ${COOKIE_SECRET:?Set COOKIE_SECRET (at least 32 characters)}
+      TRUST_PROXY: ${TRUST_PROXY:-}
+      LISTING_FETCH_MODE: ${LISTING_FETCH_MODE:-off}
+      FETCH_USER_AGENT: ${FETCH_USER_AGENT:-}
+      AI_PROVIDER: ${AI_PROVIDER:-none}
+      ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY:-}
+      ANTHROPIC_MODEL: ${ANTHROPIC_MODEL:-claude-opus-5-5}
+      OPENAI_API_KEY: ${OPENAI_API_KEY:-}
+      OPENAI_MODEL: ${OPENAI_MODEL:-}
+      STRIPE_SECRET_KEY: ${STRIPE_SECRET_KEY:-}
+      STRIPE_WEBHOOK_SECRET: ${STRIPE_WEBHOOK_SECRET:-}
+      STRIPE_PRICE_ID_PRO: ${STRIPE_PRICE_ID_PRO:-}
+      PRO_PRICE_LABEL: ${PRO_PRICE_LABEL:-}
+      EMAIL_TRANSPORT: ${EMAIL_TRANSPORT:-none}
+      SMTP_URL: ${SMTP_URL:-}
+      EMAIL_FROM: ${EMAIL_FROM:-}
+      ANALYTICS_ENABLED: ${ANALYTICS_ENABLED:-true}
+      LOG_LEVEL: ${LOG_LEVEL:-info}
+
+volumes:
+  db-data:
