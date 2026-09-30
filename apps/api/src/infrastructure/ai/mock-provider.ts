@@ -12,7 +12,9 @@ export class MockAiProvider implements AiProvider {
   readonly isMock = true;
   readonly supportsVision = true;
 
-  generateStructuredAnalysis<T>(request: StructuredAnalysisRequest<T>): Promise<StructuredAnalysisResponse<T>> {
+  generateStructuredAnalysis<T>(
+    request: StructuredAnalysisRequest<T>,
+  ): Promise<StructuredAnalysisResponse<T>> {
     const data = request.task === 'listing_text' ? this.text(request.prompt) : this.photos();
     return Promise.resolve({ data: request.schema.parse(data), model: this.model });
   }
@@ -28,7 +30,8 @@ export class MockAiProvider implements AiProvider {
         ? [
             {
               title: 'Simulierter KI-Hinweis',
-              detail: 'Entwicklungsmodus: Dieser Hinweis ist simuliert und zitiert den ersten Satz der Beschreibung.',
+              detail:
+                'Entwicklungsmodus: Dieser Hinweis ist simuliert und zitiert den ersten Satz der Beschreibung.',
               severity: 'info',
               quote,
             },
@@ -37,8 +40,10 @@ export class MockAiProvider implements AiProvider {
       checks: [],
       sellerQuestions: [
         {
-          formal: 'Simulierte Frage (Entwicklungsmodus): Gibt es noch etwas, das ich vorab wissen sollte?',
-          informal: 'Simulierte Frage (Entwicklungsmodus): Gibt es noch etwas, das ich vorab wissen sollte?',
+          formal:
+            'Simulierte Frage (Entwicklungsmodus): Gibt es noch etwas, das ich vorab wissen sollte?',
+          informal:
+            'Simulierte Frage (Entwicklungsmodus): Gibt es noch etwas, das ich vorab wissen sollte?',
           reason: 'Nur zum Testen der KI-Anbindung.',
         },
       ],

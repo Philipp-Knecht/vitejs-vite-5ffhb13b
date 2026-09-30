@@ -20,7 +20,12 @@ export interface CookieOptions {
   secure: boolean;
 }
 
-export function setSessionCookie(reply: FastifyReply, token: string, expiresAt: Date, options: CookieOptions): void {
+export function setSessionCookie(
+  reply: FastifyReply,
+  token: string,
+  expiresAt: Date,
+  options: CookieOptions,
+): void {
   reply.setCookie(SESSION_COOKIE, token, {
     path: '/',
     httpOnly: true,
@@ -31,7 +36,12 @@ export function setSessionCookie(reply: FastifyReply, token: string, expiresAt: 
 }
 
 export function clearSessionCookie(reply: FastifyReply, options: CookieOptions): void {
-  reply.clearCookie(SESSION_COOKIE, { path: '/', httpOnly: true, sameSite: 'lax', secure: options.secure });
+  reply.clearCookie(SESSION_COOKIE, {
+    path: '/',
+    httpOnly: true,
+    sameSite: 'lax',
+    secure: options.secure,
+  });
 }
 
 /**
@@ -39,7 +49,11 @@ export function clearSessionCookie(reply: FastifyReply, options: CookieOptions):
  * analysis (needed to enforce the free quota), never on page views.
  * It is random, signed and carries no personal information.
  */
-export function ensureAnonymousId(request: FastifyRequest, reply: FastifyReply, options: CookieOptions): void {
+export function ensureAnonymousId(
+  request: FastifyRequest,
+  reply: FastifyReply,
+  options: CookieOptions,
+): void {
   if (request.actor.userId || request.actor.anonymousId) return;
   const id = randomToken(16);
   reply.setCookie(ANONYMOUS_COOKIE, id, {
@@ -81,7 +95,8 @@ export const requestContextPlugin = fp(
       const rawAnonymous = request.cookies[ANONYMOUS_COOKIE];
       if (rawAnonymous) {
         const unsigned = request.unsignCookie(rawAnonymous);
-        if (unsigned.valid && unsigned.value && ANONYMOUS_ID.test(unsigned.value)) anonymousId = unsigned.value;
+        if (unsigned.valid && unsigned.value && ANONYMOUS_ID.test(unsigned.value))
+          anonymousId = unsigned.value;
       }
 
       const plan = user ? (user.plan === 'PRO' ? 'pro' : 'free') : 'anonymous';

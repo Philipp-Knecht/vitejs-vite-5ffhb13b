@@ -64,7 +64,8 @@ export function sourceTypeFromDb(type: DbSourceType): ListingSourceType {
  * known (also found in pasted text), otherwise a hash of the key facts.
  */
 export function listingFingerprint(listing: NormalizedListing, exampleId?: string): string {
-  if (listing.source.isExample) return `example:${exampleId ?? listing.source.externalId ?? 'default'}`;
+  if (listing.source.isExample)
+    return `example:${exampleId ?? listing.source.externalId ?? 'default'}`;
   if (listing.source.externalId) return `ka:${listing.source.externalId}`;
   const vehicle = listing.vehicle;
   const key = [
@@ -77,12 +78,19 @@ export function listingFingerprint(listing: NormalizedListing, exampleId?: strin
     vehicle?.firstRegistration?.month,
     listing.description?.slice(0, 500),
   ]
-    .map((part) => String(part ?? '').toLowerCase().trim())
+    .map((part) =>
+      String(part ?? '')
+        .toLowerCase()
+        .trim(),
+    )
     .join('|');
   return `text:${sha256(key).slice(0, 40)}`;
 }
 
-export function toListingCreate(listing: NormalizedListing, fingerprint: string): Prisma.ListingCreateInput {
+export function toListingCreate(
+  listing: NormalizedListing,
+  fingerprint: string,
+): Prisma.ListingCreateInput {
   const vehicle = listing.vehicle;
   return {
     fingerprint,
@@ -187,7 +195,11 @@ function vehicleFromRow(row: VehicleRow): Vehicle {
     doors: row.doors,
     emissionClass: row.emissionClass,
     equipment: row.equipment,
-    fieldSources: parseJson(z.partialRecord(VehicleFieldSchema, FieldProvenanceSchema), row.fieldSources, {}),
+    fieldSources: parseJson(
+      z.partialRecord(VehicleFieldSchema, FieldProvenanceSchema),
+      row.fieldSources,
+      {},
+    ),
   };
 }
 
@@ -212,7 +224,10 @@ export function listingFromRow(row: ListingRow & { vehicle: VehicleRow | null })
     location: row.locationRaw
       ? { postalCode: row.postalCode, city: row.city, district: row.district, raw: row.locationRaw }
       : null,
-    seller: { type: enumOrNull(VehicleEnums.sellerType, row.sellerType), memberSince: row.sellerMemberSince },
+    seller: {
+      type: enumOrNull(VehicleEnums.sellerType, row.sellerType),
+      memberSince: row.sellerMemberSince,
+    },
     postedAt: row.postedAt,
     description: row.description,
     images: parseJson(z.array(ListingImageSchema), row.images, []),

@@ -9,7 +9,12 @@ import {
   type SellerQuestion,
 } from '@kaufcheck/shared';
 import type { Db } from '../infrastructure/db/client';
-import type { Analysis, Listing, SellerQuestion as SellerQuestionRow, Vehicle } from '../generated/prisma/client';
+import type {
+  Analysis,
+  Listing,
+  SellerQuestion as SellerQuestionRow,
+  Vehicle,
+} from '../generated/prisma/client';
 import { listingFromRow, sourceTypeFromDb, toListingCreate } from './listing-mapper';
 
 const StoredResultSchema = AnalysisResultSchema.omit({ sellerQuestions: true });
@@ -126,7 +131,9 @@ export class AnalysisRepository {
     if (!row) return null;
     const saved = viewerUserId
       ? await this.db.savedListing.findUnique({
-          where: { userId_fingerprint: { userId: viewerUserId, fingerprint: row.listing.fingerprint } },
+          where: {
+            userId_fingerprint: { userId: viewerUserId, fingerprint: row.listing.fingerprint },
+          },
           select: { id: true },
         })
       : null;
@@ -145,10 +152,17 @@ export class AnalysisRepository {
       return {
         id: row.id,
         createdAt: row.createdAt.toISOString(),
-        title: (result.success ? result.data.vehicleSummary?.title : null) ?? row.listing.title ?? 'Inserat',
-        priceDisplay: result.success ? (result.data.priceContext.askingPrice?.display ?? null) : null,
+        title:
+          (result.success ? result.data.vehicleSummary?.title : null) ??
+          row.listing.title ??
+          'Inserat',
+        priceDisplay: result.success
+          ? (result.data.priceContext.askingPrice?.display ?? null)
+          : null,
         chips: result.success
-          ? (result.data.vehicleSummary?.chips.filter((chip) => chip.key !== 'price').map((chip) => chip.text) ?? [])
+          ? (result.data.vehicleSummary?.chips
+              .filter((chip) => chip.key !== 'price')
+              .map((chip) => chip.text) ?? [])
           : [],
         completenessScore: row.completenessScore,
         sourceType: sourceTypeFromDb(row.listing.sourceType),
@@ -171,9 +185,19 @@ export class AnalysisRepository {
    * retrieved from Kleinanzeigen count (never pasted text or examples), one
    * snapshot per offer, similar model, age and mileage, last 90 days.
    */
-  async findComparables(listing: NormalizedListing, fingerprint: string, now: Date): Promise<MarketData | null> {
+  async findComparables(
+    listing: NormalizedListing,
+    fingerprint: string,
+    now: Date,
+  ): Promise<MarketData | null> {
     const vehicle = listing.vehicle;
-    if (!vehicle?.make || !vehicle.model || !vehicle.firstRegistration || vehicle.mileageKm === null) return null;
+    if (
+      !vehicle?.make ||
+      !vehicle.model ||
+      !vehicle.firstRegistration ||
+      vehicle.mileageKm === null
+    )
+      return null;
     const year = vehicle.firstRegistration.year;
     const minKm = Math.round(vehicle.mileageKm * 0.7);
     const maxKm = Math.round(vehicle.mileageKm * 1.3);

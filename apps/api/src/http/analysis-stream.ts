@@ -12,7 +12,11 @@ type Runner = (ctx: Omit<AnalysisRunContext, 'actor'>) => Promise<AnalysisDto>;
  * result or an error event; otherwise a plain JSON response is returned.
  * If the client disconnects, the pipeline is aborted and nothing is stored.
  */
-export async function respondWithAnalysis(request: FastifyRequest, reply: FastifyReply, run: Runner): Promise<unknown> {
+export async function respondWithAnalysis(
+  request: FastifyRequest,
+  reply: FastifyReply,
+  run: Runner,
+): Promise<unknown> {
   const controller = new AbortController();
   reply.raw.on('close', () => {
     if (!reply.raw.writableFinished) controller.abort();
@@ -28,11 +32,15 @@ export async function respondWithAnalysis(request: FastifyRequest, reply: Fastif
   const write = (event: AnalysisStreamEvent) => {
     if (!stream.writableEnded) stream.write(`${JSON.stringify(event)}\n`);
   };
-  run({ signal: controller.signal, onStage: (stage, status) => write({ type: 'stage', stage, status }) })
+  run({
+    signal: controller.signal,
+    onStage: (stage, status) => write({ type: 'stage', stage, status }),
+  })
     .then((data) => write({ type: 'result', data }))
     .catch((error: unknown) => {
       const appError = isAppError(error) ? error : new AppError('INTERNAL_ERROR');
-      if (appError.code !== 'REQUEST_ABORTED') write({ type: 'error', error: appError.toApiError(request.id) });
+      if (appError.code !== 'REQUEST_ABORTED')
+        write({ type: 'error', error: appError.toApiError(request.id) });
     })
     .finally(() => stream.end());
 

@@ -27,7 +27,10 @@ async function main(): Promise<void> {
 
   const maintenance = async () => {
     try {
-      const report = await runMaintenance(services.db, { now: new Date(), anonRetentionDays: config.anonRetentionDays });
+      const report = await runMaintenance(services.db, {
+        now: new Date(),
+        anonRetentionDays: config.anonRetentionDays,
+      });
       app.log.info({ op: 'maintenance', ...report }, 'maintenance finished');
     } catch (error) {
       app.log.error({ op: 'maintenance', err: error }, 'maintenance failed');

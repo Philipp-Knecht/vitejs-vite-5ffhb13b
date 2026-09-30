@@ -14,7 +14,10 @@ import {
   type NormalizedListing,
 } from '@kaufcheck/shared';
 import type { FastifyBaseLogger } from 'fastify';
-import type { ListingUrlRetriever, RetrievedListing } from '../infrastructure/listing-sources/types';
+import type {
+  ListingUrlRetriever,
+  RetrievedListing,
+} from '../infrastructure/listing-sources/types';
 import type { Db } from '../infrastructure/db/client';
 import { AppError, isAppError } from '../lib/errors';
 import { AnalysisRepository } from '../repositories/analysis-repository';
@@ -78,7 +81,10 @@ export class AnalysisService {
     this.deps.analytics.track('listing_analysis_started', { source });
     try {
       const dto = await this.execute(input, ctx);
-      this.deps.analytics.track('listing_analysis_completed', { source, aiStatus: dto.analysis.ai.status });
+      this.deps.analytics.track('listing_analysis_completed', {
+        source,
+        aiStatus: dto.analysis.ai.status,
+      });
       this.deps.logger.info(
         {
           op: 'listing.analyze',
@@ -117,7 +123,11 @@ export class AnalysisService {
     }
   }
 
-  private async stage<T>(ctx: AnalysisRunContext, stage: AnalysisStage, work: () => Promise<T> | T): Promise<T> {
+  private async stage<T>(
+    ctx: AnalysisRunContext,
+    stage: AnalysisStage,
+    work: () => Promise<T> | T,
+  ): Promise<T> {
     ensureNotAborted(ctx.signal);
     ctx.onStage?.(stage, 'started');
     const value = await work();
@@ -176,7 +186,9 @@ export class AnalysisService {
         const prepared = prepareListing(retrieved);
         if (!prepared.ok) {
           if (prepared.reason === 'no_content') {
-            throw new AppError('PARSING_FAILED', { details: { fallbackToText: input.kind === 'url' } });
+            throw new AppError('PARSING_FAILED', {
+              details: { fallbackToText: input.kind === 'url' },
+            });
           }
           throw new AppError('UNSUPPORTED_CATEGORY', {
             message:
@@ -189,7 +201,8 @@ export class AnalysisService {
         return prepared.listing;
       });
 
-      const exampleId = input.kind === 'example' ? (input.exampleId ?? DEFAULT_EXAMPLE_ID) : undefined;
+      const exampleId =
+        input.kind === 'example' ? (input.exampleId ?? DEFAULT_EXAMPLE_ID) : undefined;
       const fingerprint = listingFingerprint(listing, exampleId);
       const analyzer = getAnalyzer(listing.category);
       if (!analyzer) throw new AppError('UNSUPPORTED_CATEGORY');
@@ -223,11 +236,19 @@ export class AnalysisService {
             signal: ctx.signal,
             cacheKey,
           });
-        result = enricher.hasCached(cacheKey) ? await enrich() : await this.stage(ctx, 'ai', enrich);
+        result = enricher.hasCached(cacheKey)
+          ? await enrich()
+          : await this.stage(ctx, 'ai', enrich);
       } else {
         result = {
           ...result,
-          ai: { status: 'not_configured', provider: null, model: null, isMock: false, message: null },
+          ai: {
+            status: 'not_configured',
+            provider: null,
+            model: null,
+            isMock: false,
+            message: null,
+          },
         };
       }
       result = this.finalizePhotoStatus(result, listing, actor);
@@ -288,8 +309,13 @@ export class AnalysisService {
   }
 
   /** Makes the photo status explicit when no photo analysis ran. */
-  private finalizePhotoStatus(result: AnalysisResult, listing: NormalizedListing, actor: Actor): AnalysisResult {
-    if (result.photoAnalysis.status !== 'not_configured' || listing.images.length === 0) return result;
+  private finalizePhotoStatus(
+    result: AnalysisResult,
+    listing: NormalizedListing,
+    actor: Actor,
+  ): AnalysisResult {
+    if (result.photoAnalysis.status !== 'not_configured' || listing.images.length === 0)
+      return result;
     const enricher = this.deps.enricher;
     if (!enricher || !enricher.photoAnalysisAvailable) {
       return {

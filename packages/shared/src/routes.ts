@@ -40,5 +40,7 @@ export function isStaticPage(pathname: string): boolean {
 
 export function isAppRoute(pathname: string): boolean {
   const normalized = pathname.length > 1 ? pathname.replace(/\/+$/, '') : pathname;
-  return isStaticPage(normalized) || DYNAMIC_ROUTE_PATTERNS.some((pattern) => pattern.test(normalized));
+  return (
+    isStaticPage(normalized) || DYNAMIC_ROUTE_PATTERNS.some((pattern) => pattern.test(normalized))
+  );
 }

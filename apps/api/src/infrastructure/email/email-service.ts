@@ -32,7 +32,12 @@ export class SmtpEmailService implements EmailService {
   }
 
   async send(message: EmailMessage): Promise<void> {
-    await this.transport.sendMail({ from: this.from, to: message.to, subject: message.subject, text: message.text });
+    await this.transport.sendMail({
+      from: this.from,
+      to: message.to,
+      subject: message.subject,
+      text: message.text,
+    });
   }
 }
 
@@ -46,7 +51,10 @@ export class ConsoleEmailService implements EmailService {
   constructor(private readonly logger: FastifyBaseLogger) {}
 
   send(message: EmailMessage): Promise<void> {
-    this.logger.info({ op: 'email.dev', to: '[dev]', subject: message.subject }, `DEV E-MAIL\n${message.text}`);
+    this.logger.info(
+      { op: 'email.dev', to: '[dev]', subject: message.subject },
+      `DEV E-MAIL\n${message.text}`,
+    );
     return Promise.resolve();
   }
 }

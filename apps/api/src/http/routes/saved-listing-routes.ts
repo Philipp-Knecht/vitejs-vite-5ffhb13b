@@ -31,9 +31,16 @@ export function savedListingRoutes(app: FastifyInstance, services: Services): vo
 
   app.post<{ Params: { id: string } }>(
     '/api/saved-listings/:id/reanalyze',
-    { config: { rateLimit: { max: config.limits.analyzeRatePerMinute, timeWindow: '1 minute' }, compress: false } },
+    {
+      config: {
+        rateLimit: { max: config.limits.analyzeRatePerMinute, timeWindow: '1 minute' },
+        compress: false,
+      },
+    },
     async (request, reply) =>
-      respondWithAnalysis(request, reply, (ctx) => savedListings.reanalyze(request.actor, request.params.id, ctx)),
+      respondWithAnalysis(request, reply, (ctx) =>
+        savedListings.reanalyze(request.actor, request.params.id, ctx),
+      ),
   );
 
   app.post('/api/comparisons', async (request) => {

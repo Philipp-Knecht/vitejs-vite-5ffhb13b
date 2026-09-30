@@ -12,7 +12,16 @@ import type { ListingUrl, ListingUrlRetriever, RetrievedListing } from './types'
 const ALLOWED_HOSTS: ReadonlySet<string> = new Set([KLEINANZEIGEN_CANONICAL_HOST]);
 const CACHE_TTL_MS = 10 * 60 * 1000;
 
-function fallback(code: 'SOURCE_NOT_PERMITTED' | 'FETCH_BLOCKED' | 'FETCH_FAILED' | 'LISTING_NOT_FOUND' | 'PARSING_FAILED', reason: string, cause?: unknown): AppError {
+function fallback(
+  code:
+    | 'SOURCE_NOT_PERMITTED'
+    | 'FETCH_BLOCKED'
+    | 'FETCH_FAILED'
+    | 'LISTING_NOT_FOUND'
+    | 'PARSING_FAILED',
+  reason: string,
+  cause?: unknown,
+): AppError {
   return new AppError(code, { details: { fallbackToText: true }, internalReason: reason, cause });
 }
 
@@ -70,11 +79,13 @@ export class KleinanzeigenLiveRetriever implements ListingUrlRetriever {
     const cached = this.cache.get(url.canonicalUrl);
     if (cached) return cached;
 
-    const decision = await this.options.robots.check(new URL(url.canonicalUrl), signal).catch((error: unknown) => {
-      throw error instanceof SafeFetchError && error.kind === 'aborted'
-        ? new AppError('REQUEST_ABORTED')
-        : fallback('FETCH_FAILED', 'robots_check_failed', error);
-    });
+    const decision = await this.options.robots
+      .check(new URL(url.canonicalUrl), signal)
+      .catch((error: unknown) => {
+        throw error instanceof SafeFetchError && error.kind === 'aborted'
+          ? new AppError('REQUEST_ABORTED')
+          : fallback('FETCH_FAILED', 'robots_check_failed', error);
+      });
     if (decision === 'disallowed') throw fallback('SOURCE_NOT_PERMITTED', 'robots_disallow');
     if (decision === 'unavailable') throw fallback('SOURCE_NOT_PERMITTED', 'robots_unavailable');
 
@@ -100,19 +111,31 @@ export class KleinanzeigenLiveRetriever implements ListingUrlRetriever {
         resolver: this.options.resolver,
       });
     } catch (error) {
-      if (error instanceof SafeFetchError && error.kind === 'aborted') throw new AppError('REQUEST_ABORTED');
-      throw fallback('FETCH_FAILED', error instanceof SafeFetchError ? `fetch_${error.kind}` : 'fetch_error', error);
+      if (error instanceof SafeFetchError && error.kind === 'aborted')
+        throw new AppError('REQUEST_ABORTED');
+      throw fallback(
+        'FETCH_FAILED',
+        error instanceof SafeFetchError ? `fetch_${error.kind}` : 'fetch_error',
+        error,
+      );
     }
 
-    if (response.status === 404 || response.status === 410) throw fallback('LISTING_NOT_FOUND', `status_${response.status}`);
+    if (response.status === 404 || response.status === 410)
+      throw fallback('LISTING_NOT_FOUND', `status_${response.status}`);
     if (response.status === 403 || response.status === 429 || response.status === 451) {
       throw fallback('FETCH_BLOCKED', `status_${response.status}`);
     }
-    if (response.status < 200 || response.status >= 300) throw fallback('FETCH_FAILED', `status_${response.status}`);
+    if (response.status < 200 || response.status >= 300)
+      throw fallback('FETCH_FAILED', `status_${response.status}`);
     // A redirect away from the listing (e.g. to search results) means the ad is gone.
-    if (!new URL(response.url).pathname.startsWith('/s-anzeige/')) throw fallback('LISTING_NOT_FOUND', 'redirected_away');
+    if (!new URL(response.url).pathname.startsWith('/s-anzeige/'))
+      throw fallback('LISTING_NOT_FOUND', 'redirected_away');
 
-    const retrieved = toRetrieved(response.body.toString('utf8'), url, this.options.now?.() ?? new Date());
+    const retrieved = toRetrieved(
+      response.body.toString('utf8'),
+      url,
+      this.options.now?.() ?? new Date(),
+    );
     this.cache.set(url.canonicalUrl, retrieved);
     return retrieved;
   }

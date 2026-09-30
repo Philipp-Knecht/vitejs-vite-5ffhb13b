@@ -9,7 +9,9 @@ export interface Actor {
   entitlements: Entitlements;
 }
 
-export function usageSubject(actor: Actor): { subjectType: 'user' | 'anonymous'; subjectId: string } | null {
+export function usageSubject(
+  actor: Actor,
+): { subjectType: 'user' | 'anonymous'; subjectId: string } | null {
   if (actor.userId) return { subjectType: 'user', subjectId: actor.userId };
   if (actor.anonymousId) return { subjectType: 'anonymous', subjectId: actor.anonymousId };
   return null;

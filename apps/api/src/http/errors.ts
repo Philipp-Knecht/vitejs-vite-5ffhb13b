@@ -14,7 +14,9 @@ export function parseInput<T>(schema: z.ZodType<T>, value: unknown): T {
   }
   const first = parsed.error.issues[0];
   const message =
-    first && !/^(Invalid|Expected|Required)/.test(first.message) ? first.message : ERROR_MESSAGES.VALIDATION_ERROR;
+    first && !/^(Invalid|Expected|Required)/.test(first.message)
+      ? first.message
+      : ERROR_MESSAGES.VALIDATION_ERROR;
   throw new AppError('VALIDATION_ERROR', { message, details: { fieldErrors } });
 }
 
@@ -36,18 +38,30 @@ export function registerErrorHandling(app: FastifyInstance): void {
     if (isAppError(error)) {
       const level = error.status >= 500 ? 'error' : 'info';
       request.log[level](
-        { op: 'request.error', errorCategory: error.code, reason: error.internalReason, ...(error.status >= 500 ? { err: error } : {}) },
+        {
+          op: 'request.error',
+          errorCategory: error.code,
+          reason: error.internalReason,
+          ...(error.status >= 500 ? { err: error } : {}),
+        },
         'request failed',
       );
-      if (error.details?.retryAfterSeconds) reply.header('retry-after', String(error.details.retryAfterSeconds));
+      if (error.details?.retryAfterSeconds)
+        reply.header('retry-after', String(error.details.retryAfterSeconds));
       return reply.status(error.status).send({ error: error.toApiError(request.id) });
     }
 
     const status = typeof error.statusCode === 'number' ? error.statusCode : 500;
     if (status >= 500) {
-      request.log.error({ op: 'request.error', errorCategory: 'INTERNAL_ERROR', err: error }, 'unhandled error');
+      request.log.error(
+        { op: 'request.error', errorCategory: 'INTERNAL_ERROR', err: error },
+        'unhandled error',
+      );
     } else {
-      request.log.info({ op: 'request.error', errorCategory: codeForStatus(status), reason: error.code }, 'request rejected');
+      request.log.info(
+        { op: 'request.error', errorCategory: codeForStatus(status), reason: error.code },
+        'request rejected',
+      );
     }
     const code = codeForStatus(status);
     const message =
@@ -55,9 +69,12 @@ export function registerErrorHandling(app: FastifyInstance): void {
         ? 'Die Anfrage ist zu groß.'
         : status === 415
           ? 'Dieser Inhaltstyp wird nicht unterstützt.'
-          : error.code === 'FST_ERR_CTP_INVALID_JSON_BODY' || error.code === 'FST_ERR_CTP_EMPTY_JSON_BODY'
+          : error.code === 'FST_ERR_CTP_INVALID_JSON_BODY' ||
+              error.code === 'FST_ERR_CTP_EMPTY_JSON_BODY'
             ? 'Die Anfrage enthält kein gültiges JSON.'
             : ERROR_MESSAGES[code];
-    return reply.status(status >= 500 ? 500 : status).send({ error: { code, message, requestId: request.id } });
+    return reply
+      .status(status >= 500 ? 500 : status)
+      .send({ error: { code, message, requestId: request.id } });
   });
 }

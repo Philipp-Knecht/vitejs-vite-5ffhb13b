@@ -13,7 +13,10 @@ import {
 } from './kleinanzeigen-retriever';
 import type { ListingUrl } from './types';
 
-const FIXTURES = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../../../fixtures/listings');
+const FIXTURES = path.resolve(
+  path.dirname(fileURLToPath(import.meta.url)),
+  '../../../fixtures/listings',
+);
 const fixture = (id: string) => readFileSync(path.join(FIXTURES, `${id}.html`), 'utf8');
 
 const listingUrl = (id: string): ListingUrl => ({
@@ -24,20 +27,32 @@ const listingUrl = (id: string): ListingUrl => ({
 
 const PERMISSIVE_ROBOTS = 'User-agent: *\nDisallow: /m-einloggen.html\n';
 
-function reply(url: string, status: number, body: string, contentType = 'text/html'): SafeFetchResponse {
+function reply(
+  url: string,
+  status: number,
+  body: string,
+  contentType = 'text/html',
+): SafeFetchResponse {
   return { url, status, headers: {}, contentType, body: Buffer.from(body) };
 }
 
 /** Routes robots.txt and listing requests to the given handlers. */
 function router(listing: (url: string) => Promise<SafeFetchResponse>, robots = PERMISSIVE_ROBOTS) {
   const fetcher = vi.fn<SafeFetcher>((url) =>
-    url.endsWith('/robots.txt') ? Promise.resolve(reply(url, 200, robots, 'text/plain')) : listing(url),
+    url.endsWith('/robots.txt')
+      ? Promise.resolve(reply(url, 200, robots, 'text/plain'))
+      : listing(url),
   );
   return fetcher;
 }
 
 function retriever(fetcher: SafeFetcher, overrides: Partial<LiveRetrieverOptions> = {}) {
-  const robots = new RobotsPolicy({ userAgent: 'KaufCheckBot/1.0', agentToken: 'KaufCheckBot', timeoutMs: 1000, fetcher });
+  const robots = new RobotsPolicy({
+    userAgent: 'KaufCheckBot/1.0',
+    agentToken: 'KaufCheckBot',
+    timeoutMs: 1000,
+    fetcher,
+  });
   return new KleinanzeigenLiveRetriever({
     robots,
     userAgent: 'KaufCheckBot/1.0',
@@ -94,7 +109,10 @@ describe('KleinanzeigenLiveRetriever', () => {
   });
 
   it('respects robots.txt and never fetches disallowed pages', async () => {
-    const fetcher = router(() => Promise.reject(new Error('must not be called')), 'User-agent: *\nDisallow: /s-anzeige/\n');
+    const fetcher = router(
+      () => Promise.reject(new Error('must not be called')),
+      'User-agent: *\nDisallow: /s-anzeige/\n',
+    );
     const error = await appError(retriever(fetcher).retrieve(listingUrl('2912345678'), signal()));
     expect(error.code).toBe('SOURCE_NOT_PERMITTED');
     expect(error.details).toMatchObject({ fallbackToText: true });
@@ -125,28 +143,44 @@ describe('KleinanzeigenLiveRetriever', () => {
 
   it('recognizes block pages and removed listings', async () => {
     const blocked = router((url) => Promise.resolve(reply(url, 200, fixture('2919999999'))));
-    expect((await appError(retriever(blocked).retrieve(listingUrl('2919999999'), signal()))).code).toBe('FETCH_BLOCKED');
+    expect(
+      (await appError(retriever(blocked).retrieve(listingUrl('2919999999'), signal()))).code,
+    ).toBe('FETCH_BLOCKED');
     const removed = router((url) => Promise.resolve(reply(url, 200, fixture('2918888888'))));
-    expect((await appError(retriever(removed).retrieve(listingUrl('2918888888'), signal()))).code).toBe('LISTING_NOT_FOUND');
+    expect(
+      (await appError(retriever(removed).retrieve(listingUrl('2918888888'), signal()))).code,
+    ).toBe('LISTING_NOT_FOUND');
   });
 
   it('treats a redirect away from the listing as a removed listing', async () => {
     const fetcher = router(() =>
-      Promise.resolve(reply('https://www.kleinanzeigen.de/s-autos/c216', 200, fixture('2912345678'))),
+      Promise.resolve(
+        reply('https://www.kleinanzeigen.de/s-autos/c216', 200, fixture('2912345678')),
+      ),
     );
-    expect((await appError(retriever(fetcher).retrieve(listingUrl('2912345678'), signal()))).code).toBe('LISTING_NOT_FOUND');
+    expect(
+      (await appError(retriever(fetcher).retrieve(listingUrl('2912345678'), signal()))).code,
+    ).toBe('LISTING_NOT_FOUND');
   });
 
   it('rejects pages without listing content', async () => {
-    const fetcher = router((url) => Promise.resolve(reply(url, 200, '<html><body><p>Hallo</p></body></html>')));
-    expect((await appError(retriever(fetcher).retrieve(listingUrl('2912345678'), signal()))).code).toBe('PARSING_FAILED');
+    const fetcher = router((url) =>
+      Promise.resolve(reply(url, 200, '<html><body><p>Hallo</p></body></html>')),
+    );
+    expect(
+      (await appError(retriever(fetcher).retrieve(listingUrl('2912345678'), signal()))).code,
+    ).toBe('PARSING_FAILED');
   });
 
   it('maps transport failures and aborts', async () => {
     const network = router(() => Promise.reject(new SafeFetchError('timeout', 'slow')));
-    expect((await appError(retriever(network).retrieve(listingUrl('2912345678'), signal()))).code).toBe('FETCH_FAILED');
+    expect(
+      (await appError(retriever(network).retrieve(listingUrl('2912345678'), signal()))).code,
+    ).toBe('FETCH_FAILED');
     const aborted = router(() => Promise.reject(new SafeFetchError('aborted', 'gone')));
-    expect((await appError(retriever(aborted).retrieve(listingUrl('2912345678'), signal()))).code).toBe('REQUEST_ABORTED');
+    expect(
+      (await appError(retriever(aborted).retrieve(listingUrl('2912345678'), signal()))).code,
+    ).toBe('REQUEST_ABORTED');
   });
 
   it('limits outbound requests globally', async () => {
@@ -169,11 +203,15 @@ describe('FixtureListingRetriever (development only)', () => {
 
   it('fails like a real retrieval for unknown or invalid ids', async () => {
     expect((await appError(fixtures.retrieve(listingUrl('2900000000')))).code).toBe('FETCH_FAILED');
-    expect((await appError(fixtures.retrieve(listingUrl('../../etc/passwd')))).code).toBe('FETCH_FAILED');
+    expect((await appError(fixtures.retrieve(listingUrl('../../etc/passwd')))).code).toBe(
+      'FETCH_FAILED',
+    );
   });
 
   it('shows the block page behaviour for the blocked fixture', async () => {
-    expect((await appError(fixtures.retrieve(listingUrl('2919999999')))).code).toBe('FETCH_BLOCKED');
+    expect((await appError(fixtures.retrieve(listingUrl('2919999999')))).code).toBe(
+      'FETCH_BLOCKED',
+    );
   });
 });
 

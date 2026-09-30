@@ -27,7 +27,9 @@ export class AnalyticsService {
   static sanitize(props: Record<string, unknown> | undefined): AnalyticsProps | undefined {
     if (!props) return undefined;
     const allowed = Object.fromEntries(
-      Object.entries(props).filter(([key]) => (ANALYTICS_PROP_KEYS as readonly string[]).includes(key)),
+      Object.entries(props).filter(([key]) =>
+        (ANALYTICS_PROP_KEYS as readonly string[]).includes(key),
+      ),
     );
     const parsed = AnalyticsPropsSchema.safeParse(allowed);
     return parsed.success ? parsed.data : undefined;
@@ -36,7 +38,9 @@ export class AnalyticsService {
   track(name: AnalyticsEventName, props?: AnalyticsProps): void {
     if (!this.enabled) return;
     this.db.analyticsEvent
-      .create({ data: { name, props: (props ?? undefined) } })
-      .catch((error: unknown) => this.logger.warn({ op: 'analytics.track', err: error }, 'analytics event dropped'));
+      .create({ data: { name, props: props ?? undefined } })
+      .catch((error: unknown) =>
+        this.logger.warn({ op: 'analytics.track', err: error }, 'analytics event dropped'),
+      );
   }
 }

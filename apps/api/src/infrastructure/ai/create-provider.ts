@@ -10,11 +10,19 @@ export function createAiProvider(config: AppConfig): AiProvider | null {
   switch (ai.provider) {
     case 'anthropic':
       return ai.anthropic.apiKey
-        ? new AnthropicProvider({ apiKey: ai.anthropic.apiKey, model: ai.anthropic.model, effort: ai.anthropic.effort })
+        ? new AnthropicProvider({
+            apiKey: ai.anthropic.apiKey,
+            model: ai.anthropic.model,
+            effort: ai.anthropic.effort,
+          })
         : null;
     case 'openai':
       return ai.openai.apiKey && ai.openai.model
-        ? new OpenAiProvider({ apiKey: ai.openai.apiKey, model: ai.openai.model, baseUrl: ai.openai.baseUrl })
+        ? new OpenAiProvider({
+            apiKey: ai.openai.apiKey,
+            model: ai.openai.model,
+            baseUrl: ai.openai.baseUrl,
+          })
         : null;
     case 'mock':
       return config.isProduction ? null : new MockAiProvider();

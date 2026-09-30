@@ -87,10 +87,22 @@ export class AiEnricher {
   }
 
   private info(status: AiInfo['status'], message: string | null): AiInfo {
-    return { status, provider: this.provider.name, model: this.provider.model, isMock: this.provider.isMock, message };
+    return {
+      status,
+      provider: this.provider.name,
+      model: this.provider.model,
+      isMock: this.provider.isMock,
+      message,
+    };
   }
 
-  async enrich({ listing, result, photosAllowed, signal, cacheKey }: EnrichmentInput): Promise<AnalysisResult> {
+  async enrich({
+    listing,
+    result,
+    photosAllowed,
+    signal,
+    cacheKey,
+  }: EnrichmentInput): Promise<AnalysisResult> {
     const cached = cacheKey ? this.cache.get(cacheKey) : undefined;
     if (cached) return this.apply(cached, listing, result);
 
@@ -116,7 +128,11 @@ export class AiEnricher {
     }
   }
 
-  private apply(raw: RawOutput, listing: NormalizedListing, result: AnalysisResult): AnalysisResult {
+  private apply(
+    raw: RawOutput,
+    listing: NormalizedListing,
+    result: AnalysisResult,
+  ): AnalysisResult {
     let enriched = result;
     let ai: AiInfo;
     if (raw.text.status === 'fulfilled') {
@@ -124,10 +140,16 @@ export class AiEnricher {
       if (merged) {
         enriched = merged.result;
         ai = this.info('completed', null);
-        this.logger.info({ op: 'ai.text', provider: this.provider.name, ...merged.report }, 'ai text analysis merged');
+        this.logger.info(
+          { op: 'ai.text', provider: this.provider.name, ...merged.report },
+          'ai text analysis merged',
+        );
       } else {
         ai = this.info('failed', ERROR_MESSAGES.AI_OUTPUT_INVALID);
-        this.logger.warn({ op: 'ai.text', errorCategory: 'AI_OUTPUT_INVALID' }, 'ai output rejected');
+        this.logger.warn(
+          { op: 'ai.text', errorCategory: 'AI_OUTPUT_INVALID' },
+          'ai output rejected',
+        );
       }
     } else {
       ai = this.failure(raw.text.reason, 'ai.text');
@@ -137,7 +159,11 @@ export class AiEnricher {
     return enriched;
   }
 
-  private async runText(listing: NormalizedListing, result: AnalysisResult, signal: AbortSignal): Promise<unknown> {
+  private async runText(
+    listing: NormalizedListing,
+    result: AnalysisResult,
+    signal: AbortSignal,
+  ): Promise<unknown> {
     const prompt = buildTextAnalysisPrompt(
       listing,
       result,
@@ -190,11 +216,18 @@ export class AiEnricher {
   ): AnalysisResult {
     const failed = (message: string): AnalysisResult => ({
       ...result,
-      photoAnalysis: { status: 'failed', message, findings: [], analyzedImageCount: 0 } satisfies PhotoAnalysis,
+      photoAnalysis: {
+        status: 'failed',
+        message,
+        findings: [],
+        analyzedImageCount: 0,
+      } satisfies PhotoAnalysis,
     });
     if (outcome.status === 'rejected') {
       this.failure(outcome.reason, 'ai.photos');
-      return failed('Die Fotoanalyse ist fehlgeschlagen. Die übrige Analyse ist davon nicht betroffen.');
+      return failed(
+        'Die Fotoanalyse ist fehlgeschlagen. Die übrige Analyse ist davon nicht betroffen.',
+      );
     }
     if (!outcome.value) return failed('Die Fotos konnten für die Analyse nicht geladen werden.');
 

@@ -1,7 +1,13 @@
 import type { Db } from '../infrastructure/db/client';
 import { isUniqueViolation } from '../infrastructure/db/client';
 import type { EmailService } from '../infrastructure/email/email-service';
-import { burnPasswordCheck, hashPassword, randomToken, sha256, verifyPassword } from '../lib/crypto';
+import {
+  burnPasswordCheck,
+  hashPassword,
+  randomToken,
+  sha256,
+  verifyPassword,
+} from '../lib/crypto';
 import { AppError } from '../lib/errors';
 import type { AnalysisRepository } from '../repositories/analysis-repository';
 
@@ -41,7 +47,11 @@ export class AuthService {
     return this.email.enabled;
   }
 
-  async register(email: string, password: string, anonymousId: string | null): Promise<CreatedSession> {
+  async register(
+    email: string,
+    password: string,
+    anonymousId: string | null,
+  ): Promise<CreatedSession> {
     const passwordHash = await hashPassword(password);
     let user: SessionUser;
     try {
@@ -54,13 +64,21 @@ export class AuthService {
     return this.createSession(user);
   }
 
-  async login(email: string, password: string, anonymousId: string | null): Promise<CreatedSession> {
-    const user = await this.db.user.findUnique({ where: { email }, select: { ...USER_SELECT, passwordHash: true } });
+  async login(
+    email: string,
+    password: string,
+    anonymousId: string | null,
+  ): Promise<CreatedSession> {
+    const user = await this.db.user.findUnique({
+      where: { email },
+      select: { ...USER_SELECT, passwordHash: true },
+    });
     if (!user) {
       await burnPasswordCheck(password);
       throw new AppError('INVALID_CREDENTIALS');
     }
-    if (!(await verifyPassword(password, user.passwordHash))) throw new AppError('INVALID_CREDENTIALS');
+    if (!(await verifyPassword(password, user.passwordHash)))
+      throw new AppError('INVALID_CREDENTIALS');
     if (anonymousId) await this.analyses.attachAnonymousToUser(anonymousId, user.id);
     const { passwordHash: _hash, ...sessionUser } = user;
     return this.createSession(sessionUser);
@@ -69,12 +87,16 @@ export class AuthService {
   private async createSession(user: SessionUser): Promise<CreatedSession> {
     const token = randomToken(32);
     const expiresAt = new Date(this.now().getTime() + SESSION_TTL_MS);
-    await this.db.session.create({ data: { tokenHash: sha256(token), userId: user.id, expiresAt } });
+    await this.db.session.create({
+      data: { tokenHash: sha256(token), userId: user.id, expiresAt },
+    });
     return { token, expiresAt, user };
   }
 
   /** Resolves a session token; extends the session at most once a day (sliding expiry). */
-  async resolveSession(token: string): Promise<{ user: SessionUser; expiresAt: Date; refreshed: boolean } | null> {
+  async resolveSession(
+    token: string,
+  ): Promise<{ user: SessionUser; expiresAt: Date; refreshed: boolean } | null> {
     if (token.length < 20 || token.length > 100) return null;
     const session = await this.db.session.findUnique({
       where: { tokenHash: sha256(token) },
@@ -88,7 +110,10 @@ export class AuthService {
     }
     if (now.getTime() - session.lastUsedAt.getTime() > SESSION_REFRESH_AFTER_MS) {
       const expiresAt = new Date(now.getTime() + SESSION_TTL_MS);
-      await this.db.session.update({ where: { id: session.id }, data: { lastUsedAt: now, expiresAt } });
+      await this.db.session.update({
+        where: { id: session.id },
+        data: { lastUsedAt: now, expiresAt },
+      });
       return { user: session.user, expiresAt, refreshed: true };
     }
     return { user: session.user, expiresAt: session.expiresAt, refreshed: false };
@@ -100,12 +125,22 @@ export class AuthService {
 
   /** Always resolves the same way, whether or not the address has an account. */
   async requestPasswordReset(email: string): Promise<void> {
-    if (!this.email.enabled) throw new AppError('SERVICE_UNAVAILABLE', { message: 'Das Zurücksetzen des Passworts ist derzeit nicht verfügbar.' });
-    const user = await this.db.user.findUnique({ where: { email }, select: { id: true, email: true } });
+    if (!this.email.enabled)
+      throw new AppError('SERVICE_UNAVAILABLE', {
+        message: 'Das Zurücksetzen des Passworts ist derzeit nicht verfügbar.',
+      });
+    const user = await this.db.user.findUnique({
+      where: { email },
+      select: { id: true, email: true },
+    });
     if (!user) return;
     const token = randomToken(32);
     await this.db.passwordResetToken.create({
-      data: { tokenHash: sha256(token), userId: user.id, expiresAt: new Date(this.now().getTime() + RESET_TOKEN_TTL_MS) },
+      data: {
+        tokenHash: sha256(token),
+        userId: user.id,
+        expiresAt: new Date(this.now().getTime() + RESET_TOKEN_TTL_MS),
+      },
     });
     const link = `${this.publicSiteUrl}/passwort-zuruecksetzen?token=${encodeURIComponent(token)}`;
     await this.email.send({
@@ -132,7 +167,9 @@ export class AuthService {
       select: { id: true, userId: true, expiresAt: true, usedAt: true },
     });
     if (!record || record.usedAt || record.expiresAt <= this.now()) {
-      throw new AppError('VALIDATION_ERROR', { message: 'Der Link ist ungültig oder abgelaufen. Bitte fordere einen neuen an.' });
+      throw new AppError('VALIDATION_ERROR', {
+        message: 'Der Link ist ungültig oder abgelaufen. Bitte fordere einen neuen an.',
+      });
     }
     const passwordHash = await hashPassword(password);
     await this.db.$transaction([
@@ -144,7 +181,10 @@ export class AuthService {
   }
 
   async verifyPasswordForUser(userId: string, password: string): Promise<boolean> {
-    const user = await this.db.user.findUnique({ where: { id: userId }, select: { passwordHash: true } });
+    const user = await this.db.user.findUnique({
+      where: { id: userId },
+      select: { passwordHash: true },
+    });
     return user ? verifyPassword(password, user.passwordHash) : false;
   }
 }

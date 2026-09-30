@@ -63,7 +63,8 @@ export class RobotsPolicy {
         const token = this.options.agentToken;
         return {
           expiresAt: now + SUCCESS_TTL_MS,
-          decide: (target) => (robots.isAllowed(target, token) === false ? 'disallowed' : 'allowed'),
+          decide: (target) =>
+            robots.isAllowed(target, token) === false ? 'disallowed' : 'allowed',
         };
       }
       if (response.status >= 400 && response.status < 500 && response.status !== 429) {

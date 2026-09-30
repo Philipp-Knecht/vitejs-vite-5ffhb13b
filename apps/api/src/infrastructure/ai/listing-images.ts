@@ -17,7 +17,13 @@ export interface DownloadedImage extends AiImageInput {
  */
 export async function downloadListingImages(
   images: readonly ListingImage[],
-  options: { max: number; userAgent: string; timeoutMs: number; signal?: AbortSignal; resolver?: Resolver },
+  options: {
+    max: number;
+    userAgent: string;
+    timeoutMs: number;
+    signal?: AbortSignal;
+    resolver?: Resolver;
+  },
 ): Promise<DownloadedImage[]> {
   const selected = images.slice(0, options.max);
   const results = await Promise.all(

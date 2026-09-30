@@ -9,7 +9,9 @@ const STATE_CHANGING = new Set(['POST', 'PUT', 'PATCH', 'DELETE']);
 const CSRF_EXEMPT = new Set(['/api/billing/webhook']);
 
 export async function registerSecurity(app: FastifyInstance, config: AppConfig): Promise<void> {
-  const imageSources = config.showListingPhotos ? LISTING_IMAGE_HOSTS.map((host) => `https://${host}`) : [];
+  const imageSources = config.showListingPhotos
+    ? LISTING_IMAGE_HOSTS.map((host) => `https://${host}`)
+    : [];
   await app.register(helmet, {
     contentSecurityPolicy: {
       useDefaults: false,
@@ -35,7 +37,10 @@ export async function registerSecurity(app: FastifyInstance, config: AppConfig):
   });
 
   app.addHook('onSend', async (_request, reply, payload) => {
-    reply.header('permissions-policy', 'camera=(), microphone=(), geolocation=(), payment=(), usb=(), interest-cohort=()');
+    reply.header(
+      'permissions-policy',
+      'camera=(), microphone=(), geolocation=(), payment=(), usb=(), interest-cohort=()',
+    );
     return payload;
   });
 
@@ -59,7 +64,9 @@ function csrfViolation(request: FastifyRequest, allowed: ReadonlySet<string>): A
   if (!path.startsWith('/api/') || CSRF_EXEMPT.has(path)) return null;
   const origin = request.headers.origin;
   if (origin !== undefined) {
-    return allowed.has(origin) ? null : new AppError('FORBIDDEN', { internalReason: 'origin_not_allowed' });
+    return allowed.has(origin)
+      ? null
+      : new AppError('FORBIDDEN', { internalReason: 'origin_not_allowed' });
   }
   if (request.headers['sec-fetch-site'] === 'cross-site') {
     return new AppError('FORBIDDEN', { internalReason: 'cross_site_request' });

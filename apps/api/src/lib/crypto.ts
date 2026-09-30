@@ -10,7 +10,12 @@ export function sha256(value: string): string {
 
 const SCRYPT = { N: 32768, r: 8, p: 1, keyLength: 64, maxmem: 96 * 1024 * 1024 } as const;
 
-function scryptAsync(password: string, salt: Buffer, keyLength: number, options: ScryptOptions): Promise<Buffer> {
+function scryptAsync(
+  password: string,
+  salt: Buffer,
+  keyLength: number,
+  options: ScryptOptions,
+): Promise<Buffer> {
   return new Promise((resolve, reject) => {
     scrypt(password.normalize('NFKC'), salt, keyLength, options, (error, key) => {
       if (error) reject(error);
@@ -28,7 +33,14 @@ export async function hashPassword(password: string): Promise<string> {
     p: SCRYPT.p,
     maxmem: SCRYPT.maxmem,
   });
-  return ['scrypt', SCRYPT.N, SCRYPT.r, SCRYPT.p, salt.toString('base64url'), key.toString('base64url')].join('$');
+  return [
+    'scrypt',
+    SCRYPT.N,
+    SCRYPT.r,
+    SCRYPT.p,
+    salt.toString('base64url'),
+    key.toString('base64url'),
+  ].join('$');
 }
 
 export async function verifyPassword(password: string, stored: string): Promise<boolean> {

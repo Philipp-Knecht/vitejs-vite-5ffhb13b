@@ -17,7 +17,10 @@ import type { AnalyticsService } from './analytics-service';
 const StoredSummarySchema = AnalysisResultSchema.pick({ vehicleSummary: true, priceContext: true });
 
 function requireUser(actor: Actor): string {
-  if (!actor.userId) throw new AppError('UNAUTHENTICATED', { message: 'Melde dich an, um Angebote zu speichern und zu vergleichen.' });
+  if (!actor.userId)
+    throw new AppError('UNAUTHENTICATED', {
+      message: 'Melde dich an, um Angebote zu speichern und zu vergleichen.',
+    });
   return actor.userId;
 }
 
@@ -27,13 +30,20 @@ const SAVED_INCLUDE = {
 } as const;
 
 type SavedRow = Awaited<ReturnType<Db['savedListing']['findFirstOrThrow']>> & {
-  listing: { title: string | null; sourceType: 'KLEINANZEIGEN_URL' | 'TEXT' | 'EXAMPLE'; sourceUrl: string | null; isExample: boolean };
+  listing: {
+    title: string | null;
+    sourceType: 'KLEINANZEIGEN_URL' | 'TEXT' | 'EXAMPLE';
+    sourceUrl: string | null;
+    isExample: boolean;
+  };
   analysis: { id: string; createdAt: Date; completenessScore: number; result: unknown };
 };
 
 function toDto(row: SavedRow): SavedListingDto {
   const summary = StoredSummarySchema.safeParse(row.analysis.result);
-  const listingTitle = summary.success ? (summary.data.vehicleSummary?.title ?? row.listing.title) : row.listing.title;
+  const listingTitle = summary.success
+    ? (summary.data.vehicleSummary?.title ?? row.listing.title)
+    : row.listing.title;
   return {
     id: row.id,
     title: row.customTitle ?? listingTitle ?? 'Gespeichertes Angebot',
@@ -44,7 +54,9 @@ function toDto(row: SavedRow): SavedListingDto {
     createdAt: row.createdAt.toISOString(),
     priceDisplay: summary.success ? (summary.data.priceContext.askingPrice?.display ?? null) : null,
     chips: summary.success
-      ? (summary.data.vehicleSummary?.chips.filter((chip) => chip.key !== 'price').map((chip) => chip.text) ?? [])
+      ? (summary.data.vehicleSummary?.chips
+          .filter((chip) => chip.key !== 'price')
+          .map((chip) => chip.text) ?? [])
       : [],
     completenessScore: row.analysis.completenessScore,
     sourceType: sourceTypeFromDb(row.listing.sourceType),
@@ -72,11 +84,19 @@ export class SavedListingService {
     return { items: rows.map(toDto), limit: actor.entitlements.savedListingsMax };
   }
 
-  async save(actor: Actor, analysisId: string, title: string | undefined): Promise<SavedListingDto> {
+  async save(
+    actor: Actor,
+    analysisId: string,
+    title: string | undefined,
+  ): Promise<SavedListingDto> {
     const userId = requireUser(actor);
     const max = actor.entitlements.savedListingsMax;
-    if (max === 0) throw new AppError('PLAN_LIMIT_REACHED', { message: 'Mit deinem Tarif kannst du keine Angebote speichern.' });
-    if (!isUuid(analysisId)) throw new AppError('NOT_FOUND', { message: 'Diese Analyse gibt es nicht.' });
+    if (max === 0)
+      throw new AppError('PLAN_LIMIT_REACHED', {
+        message: 'Mit deinem Tarif kannst du keine Angebote speichern.',
+      });
+    if (!isUuid(analysisId))
+      throw new AppError('NOT_FOUND', { message: 'Diese Analyse gibt es nicht.' });
 
     const analysis = await this.db.analysis.findUnique({
       where: { id: analysisId },
@@ -101,8 +121,18 @@ export class SavedListingService {
 
     const row = await this.db.savedListing.upsert({
       where: { userId_fingerprint: { userId, fingerprint } },
-      create: { userId, fingerprint, listingId: analysis.listingId, analysisId: analysis.id, customTitle: title || null },
-      update: { listingId: analysis.listingId, analysisId: analysis.id, ...(title ? { customTitle: title } : {}) },
+      create: {
+        userId,
+        fingerprint,
+        listingId: analysis.listingId,
+        analysisId: analysis.id,
+        customTitle: title || null,
+      },
+      update: {
+        listingId: analysis.listingId,
+        analysisId: analysis.id,
+        ...(title ? { customTitle: title } : {}),
+      },
       include: SAVED_INCLUDE,
     });
     this.analytics.track('listing_saved', { plan: actor.plan });
@@ -112,9 +142,15 @@ export class SavedListingService {
   async rename(actor: Actor, id: string, title: string | null): Promise<SavedListingDto> {
     const userId = requireUser(actor);
     if (!isUuid(id)) throw new AppError('NOT_FOUND');
-    const updated = await this.db.savedListing.updateMany({ where: { id, userId }, data: { customTitle: title || null } });
+    const updated = await this.db.savedListing.updateMany({
+      where: { id, userId },
+      data: { customTitle: title || null },
+    });
     if (updated.count === 0) throw new AppError('NOT_FOUND');
-    const row = await this.db.savedListing.findUniqueOrThrow({ where: { id }, include: SAVED_INCLUDE });
+    const row = await this.db.savedListing.findUniqueOrThrow({
+      where: { id },
+      include: SAVED_INCLUDE,
+    });
     return toDto(row);
   }
 
@@ -129,7 +165,11 @@ export class SavedListingService {
    * Re-analysis: listings from a URL are retrieved again (fresh data);
    * pasted and example listings are analysed again from the stored snapshot.
    */
-  async reanalyze(actor: Actor, id: string, ctx: Omit<AnalysisRunContext, 'actor'>): Promise<AnalysisDto> {
+  async reanalyze(
+    actor: Actor,
+    id: string,
+    ctx: Omit<AnalysisRunContext, 'actor'>,
+  ): Promise<AnalysisDto> {
     const userId = requireUser(actor);
     if (!isUuid(id)) throw new AppError('NOT_FOUND');
     const saved = await this.db.savedListing.findFirst({
@@ -143,21 +183,33 @@ export class SavedListingService {
       stored.source.type === 'kleinanzeigen_url' && stored.source.url
         ? await this.analyses.run({ kind: 'url', url: stored.source.url }, { ...ctx, actor })
         : stored.source.isExample
-          ? await this.analyses.run({ kind: 'example', exampleId: stored.source.externalId ?? undefined }, { ...ctx, actor })
+          ? await this.analyses.run(
+              { kind: 'example', exampleId: stored.source.externalId ?? undefined },
+              { ...ctx, actor },
+            )
           : await this.analyses.run({ kind: 'stored', listing: stored }, { ...ctx, actor });
 
-    const fingerprint = await this.db.listing.findUniqueOrThrow({ where: { id: dto.listing.id }, select: { fingerprint: true } });
-    // If the offer changed its identity (e.g. new ad id), keep the saved entry pointing at the new analysis anyway.
-    await this.db.savedListing.update({
-      where: { id: saved.id },
-      data: { analysisId: dto.id, listingId: dto.listing.id, fingerprint: fingerprint.fingerprint },
-    }).catch(async () => {
-      // Unique conflict: the new fingerprint is already saved separately – just refresh that entry.
-      await this.db.savedListing.updateMany({
-        where: { userId, fingerprint: fingerprint.fingerprint },
-        data: { analysisId: dto.id, listingId: dto.listing.id },
-      });
+    const fingerprint = await this.db.listing.findUniqueOrThrow({
+      where: { id: dto.listing.id },
+      select: { fingerprint: true },
     });
+    // If the offer changed its identity (e.g. new ad id), keep the saved entry pointing at the new analysis anyway.
+    await this.db.savedListing
+      .update({
+        where: { id: saved.id },
+        data: {
+          analysisId: dto.id,
+          listingId: dto.listing.id,
+          fingerprint: fingerprint.fingerprint,
+        },
+      })
+      .catch(async () => {
+        // Unique conflict: the new fingerprint is already saved separately – just refresh that entry.
+        await this.db.savedListing.updateMany({
+          where: { userId, fingerprint: fingerprint.fingerprint },
+          data: { analysisId: dto.id, listingId: dto.listing.id },
+        });
+      });
     return { ...dto, savedListingId: saved.id };
   }
 
@@ -165,8 +217,14 @@ export class SavedListingService {
     const userId = requireUser(actor);
     const max = actor.entitlements.compareMax;
     const ids = [...new Set(savedListingIds)];
-    if (max === 0) throw new AppError('PLAN_LIMIT_REACHED', { message: 'Vergleiche sind mit einem Konto verfügbar.' });
-    if (ids.length < 2) throw new AppError('VALIDATION_ERROR', { message: 'Wähle mindestens zwei Angebote zum Vergleichen aus.' });
+    if (max === 0)
+      throw new AppError('PLAN_LIMIT_REACHED', {
+        message: 'Vergleiche sind mit einem Konto verfügbar.',
+      });
+    if (ids.length < 2)
+      throw new AppError('VALIDATION_ERROR', {
+        message: 'Wähle mindestens zwei Angebote zum Vergleichen aus.',
+      });
     if (ids.length > max) {
       throw new AppError('PLAN_LIMIT_REACHED', {
         message: `Mit deinem Tarif kannst du bis zu ${max} Angebote gleichzeitig vergleichen.`,
@@ -179,10 +237,16 @@ export class SavedListingService {
       where: { userId, id: { in: ids } },
       include: {
         listing: { include: { vehicle: true } },
-        analysis: { include: { listing: { include: { vehicle: true } }, sellerQuestions: { orderBy: { position: 'asc' } } } },
+        analysis: {
+          include: {
+            listing: { include: { vehicle: true } },
+            sellerQuestions: { orderBy: { position: 'asc' } },
+          },
+        },
       },
     });
-    if (rows.length !== ids.length) throw new AppError('NOT_FOUND', { message: 'Mindestens ein Angebot wurde nicht gefunden.' });
+    if (rows.length !== ids.length)
+      throw new AppError('NOT_FOUND', { message: 'Mindestens ein Angebot wurde nicht gefunden.' });
 
     const byId = new Map(rows.map((row) => [row.id, row]));
     const items: ComparisonInput[] = ids.map((savedId) => {

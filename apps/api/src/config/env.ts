@@ -32,7 +32,9 @@ const EnvSchema = z
     NODE_ENV: z.enum(['development', 'test', 'production']).default('development'),
     HOST: z.string().default('0.0.0.0'),
     PORT: z.coerce.number().int().min(1).max(65535).default(3000),
-    LOG_LEVEL: z.enum(['fatal', 'error', 'warn', 'info', 'debug', 'trace', 'silent']).default('info'),
+    LOG_LEVEL: z
+      .enum(['fatal', 'error', 'warn', 'info', 'debug', 'trace', 'silent'])
+      .default('info'),
     PUBLIC_SITE_URL: z.url().optional(),
     /** Additional origins allowed to call the API (comma separated), e.g. the Vite dev server. */
     ALLOWED_ORIGINS: optionalString,
@@ -82,26 +84,40 @@ const EnvSchema = z
   })
   .superRefine((env, ctx) => {
     const production = env.NODE_ENV === 'production';
-    const issue = (path: string, message: string) => ctx.addIssue({ code: 'custom', path: [path], message });
+    const issue = (path: string, message: string) =>
+      ctx.addIssue({ code: 'custom', path: [path], message });
     if (production && !env.PUBLIC_SITE_URL) issue('PUBLIC_SITE_URL', 'is required in production');
     if (production && (!env.COOKIE_SECRET || env.COOKIE_SECRET.length < 32)) {
       issue('COOKIE_SECRET', 'must be at least 32 characters in production');
     }
-    if (production && env.AI_PROVIDER === 'mock') issue('AI_PROVIDER', 'the mock provider is not allowed in production');
+    if (production && env.AI_PROVIDER === 'mock')
+      issue('AI_PROVIDER', 'the mock provider is not allowed in production');
     if (production && env.LISTING_FETCH_MODE === 'fixtures') {
       issue('LISTING_FETCH_MODE', 'fixtures are development data and not allowed in production');
     }
-    if (production && env.EMAIL_TRANSPORT === 'console') issue('EMAIL_TRANSPORT', 'console is not allowed in production');
-    if (env.AI_PROVIDER === 'anthropic' && !env.ANTHROPIC_API_KEY) issue('ANTHROPIC_API_KEY', 'is required for AI_PROVIDER=anthropic');
+    if (production && env.EMAIL_TRANSPORT === 'console')
+      issue('EMAIL_TRANSPORT', 'console is not allowed in production');
+    if (env.AI_PROVIDER === 'anthropic' && !env.ANTHROPIC_API_KEY)
+      issue('ANTHROPIC_API_KEY', 'is required for AI_PROVIDER=anthropic');
     if (env.AI_PROVIDER === 'openai' && (!env.OPENAI_API_KEY || !env.OPENAI_MODEL)) {
-      issue('OPENAI_API_KEY', 'OPENAI_API_KEY and OPENAI_MODEL are required for AI_PROVIDER=openai');
+      issue(
+        'OPENAI_API_KEY',
+        'OPENAI_API_KEY and OPENAI_MODEL are required for AI_PROVIDER=openai',
+      );
     }
     if (env.EMAIL_TRANSPORT === 'smtp' && (!env.SMTP_URL || !env.EMAIL_FROM)) {
       issue('SMTP_URL', 'SMTP_URL and EMAIL_FROM are required for EMAIL_TRANSPORT=smtp');
     }
-    const stripeValues = [env.STRIPE_SECRET_KEY, env.STRIPE_WEBHOOK_SECRET, env.STRIPE_PRICE_ID_PRO];
+    const stripeValues = [
+      env.STRIPE_SECRET_KEY,
+      env.STRIPE_WEBHOOK_SECRET,
+      env.STRIPE_PRICE_ID_PRO,
+    ];
     if (stripeValues.some(Boolean) && !stripeValues.every(Boolean)) {
-      issue('STRIPE_SECRET_KEY', 'STRIPE_SECRET_KEY, STRIPE_WEBHOOK_SECRET and STRIPE_PRICE_ID_PRO must be set together');
+      issue(
+        'STRIPE_SECRET_KEY',
+        'STRIPE_SECRET_KEY, STRIPE_WEBHOOK_SECRET and STRIPE_PRICE_ID_PRO must be set together',
+      );
     }
   });
 
@@ -171,7 +187,9 @@ function parseTrustProxy(value: string | undefined): boolean | number {
 export function loadConfig(source: NodeJS.ProcessEnv = process.env): AppConfig {
   const parsed = EnvSchema.safeParse(source);
   if (!parsed.success) {
-    const details = parsed.error.issues.map((issue) => `${issue.path.join('.')}: ${issue.message}`).join('; ');
+    const details = parsed.error.issues
+      .map((issue) => `${issue.path.join('.')}: ${issue.message}`)
+      .join('; ');
     throw new ConfigError(`Invalid configuration – ${details}`);
   }
   const env = parsed.data;
@@ -209,7 +227,11 @@ export function loadConfig(source: NodeJS.ProcessEnv = process.env): AppConfig {
     showListingPhotos: env.SHOW_LISTING_PHOTOS,
     ai: {
       provider: env.AI_PROVIDER,
-      anthropic: { apiKey: env.ANTHROPIC_API_KEY, model: env.ANTHROPIC_MODEL, effort: env.ANTHROPIC_EFFORT },
+      anthropic: {
+        apiKey: env.ANTHROPIC_API_KEY,
+        model: env.ANTHROPIC_MODEL,
+        effort: env.ANTHROPIC_EFFORT,
+      },
       openai: { apiKey: env.OPENAI_API_KEY, model: env.OPENAI_MODEL, baseUrl: env.OPENAI_BASE_URL },
       timeoutMs: env.AI_TIMEOUT_MS,
       maxConcurrency: env.AI_MAX_CONCURRENCY,

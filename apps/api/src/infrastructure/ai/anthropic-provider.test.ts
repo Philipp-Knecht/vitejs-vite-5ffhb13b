@@ -20,13 +20,20 @@ function request(overrides: Partial<StructuredAnalysisRequest<{ summary: string 
 }
 
 function fakeClient(result: unknown) {
-  const parse = vi.fn(() => (result instanceof Error ? Promise.reject(result) : Promise.resolve(result)));
+  const parse = vi.fn(() =>
+    result instanceof Error ? Promise.reject(result) : Promise.resolve(result),
+  );
   const client = { beta: { messages: { parse } } } as unknown as Anthropic;
   return { client, parse };
 }
 
 function provider(client: Anthropic) {
-  return new AnthropicProvider({ apiKey: 'test-key', model: 'claude-opus-5-5', effort: 'medium', client });
+  return new AnthropicProvider({
+    apiKey: 'test-key',
+    model: 'claude-opus-5-5',
+    effort: 'medium',
+    client,
+  });
 }
 
 describe('AnthropicProvider', () => {
@@ -38,11 +45,17 @@ describe('AnthropicProvider', () => {
     });
     const controller = new AbortController();
     const response = await provider(client).generateStructuredAnalysis(
-      request({ images: [{ mediaType: 'image/jpeg', data: 'aGVsbG8=' }], signal: controller.signal }),
+      request({
+        images: [{ mediaType: 'image/jpeg', data: 'aGVsbG8=' }],
+        signal: controller.signal,
+      }),
     );
     expect(response).toEqual({ data: { summary: 'ok' }, model: 'claude-opus-5-5' });
 
-    const [body, options] = parse.mock.calls[0] as unknown as [Record<string, unknown>, Record<string, unknown>];
+    const [body, options] = parse.mock.calls[0] as unknown as [
+      Record<string, unknown>,
+      Record<string, unknown>,
+    ];
     expect(body).toMatchObject({
       model: 'claude-opus-5-5',
       max_tokens: 1000,
@@ -57,8 +70,14 @@ describe('AnthropicProvider', () => {
   });
 
   it('reports the model that actually answered (e.g. after a server-side fallback)', async () => {
-    const { client } = fakeClient({ stop_reason: 'end_turn', parsed_output: { summary: 'ok' }, model: 'claude-fable-5-1' });
-    expect((await provider(client).generateStructuredAnalysis(request())).model).toBe('claude-fable-5-1');
+    const { client } = fakeClient({
+      stop_reason: 'end_turn',
+      parsed_output: { summary: 'ok' },
+      model: 'claude-fable-5-1',
+    });
+    expect((await provider(client).generateStructuredAnalysis(request())).model).toBe(
+      'claude-fable-5-1',
+    );
   });
 
   it.each([
@@ -67,7 +86,9 @@ describe('AnthropicProvider', () => {
     [{ stop_reason: 'end_turn', parsed_output: null, model: 'm' }, 'invalid_output'],
   ])('rejects unusable responses (%o → %s)', async (result, reason) => {
     const { client } = fakeClient(result);
-    await expect(provider(client).generateStructuredAnalysis(request())).rejects.toMatchObject({ reason });
+    await expect(provider(client).generateStructuredAnalysis(request())).rejects.toMatchObject({
+      reason,
+    });
   });
 });
 
@@ -93,7 +114,9 @@ describe('mapAnthropicError', () => {
   });
 
   it('never puts the API key into error messages', async () => {
-    const { client } = fakeClient(new Anthropic.AuthenticationError(401, {}, 'invalid x-api-key', headers));
+    const { client } = fakeClient(
+      new Anthropic.AuthenticationError(401, {}, 'invalid x-api-key', headers),
+    );
     const error = await provider(client)
       .generateStructuredAnalysis(request())
       .catch((caught: unknown) => caught);

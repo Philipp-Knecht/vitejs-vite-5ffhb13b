@@ -73,7 +73,9 @@ export class OpenAiProvider implements AiProvider {
     this.fetchImpl = options.fetchImpl ?? fetch;
   }
 
-  async generateStructuredAnalysis<T>(request: StructuredAnalysisRequest<T>): Promise<StructuredAnalysisResponse<T>> {
+  async generateStructuredAnalysis<T>(
+    request: StructuredAnalysisRequest<T>,
+  ): Promise<StructuredAnalysisResponse<T>> {
     const deadline = AbortSignal.timeout(request.timeoutMs);
     const signal = request.signal ? AbortSignal.any([deadline, request.signal]) : deadline;
     const userContent = [
@@ -86,26 +88,38 @@ export class OpenAiProvider implements AiProvider {
 
     let response: Response;
     try {
-      response = await this.fetchImpl(`${this.options.baseUrl.replace(/\/$/, '')}/chat/completions`, {
-        method: 'POST',
-        headers: { authorization: `Bearer ${this.options.apiKey}`, 'content-type': 'application/json' },
-        body: JSON.stringify({
-          model: this.model,
-          max_completion_tokens: request.maxOutputTokens,
-          messages: [
-            { role: 'system', content: request.system },
-            { role: 'user', content: userContent },
-          ],
-          response_format: {
-            type: 'json_schema',
-            json_schema: { name: request.schemaName, strict: true, schema: toStrictJsonSchema(request.schema) },
+      response = await this.fetchImpl(
+        `${this.options.baseUrl.replace(/\/$/, '')}/chat/completions`,
+        {
+          method: 'POST',
+          headers: {
+            authorization: `Bearer ${this.options.apiKey}`,
+            'content-type': 'application/json',
           },
-        }),
-        signal,
-      });
+          body: JSON.stringify({
+            model: this.model,
+            max_completion_tokens: request.maxOutputTokens,
+            messages: [
+              { role: 'system', content: request.system },
+              { role: 'user', content: userContent },
+            ],
+            response_format: {
+              type: 'json_schema',
+              json_schema: {
+                name: request.schemaName,
+                strict: true,
+                schema: toStrictJsonSchema(request.schema),
+              },
+            },
+          }),
+          signal,
+        },
+      );
     } catch (error) {
-      if (deadline.aborted) throw new AiProviderError('timeout', 'Request timed out', { cause: error });
-      if (request.signal?.aborted) throw new AiProviderError('aborted', 'Request aborted', { cause: error });
+      if (deadline.aborted)
+        throw new AiProviderError('timeout', 'Request timed out', { cause: error });
+      if (request.signal?.aborted)
+        throw new AiProviderError('aborted', 'Request aborted', { cause: error });
       throw new AiProviderError('unavailable', 'Network error', { cause: error });
     }
 
@@ -124,8 +138,10 @@ export class OpenAiProvider implements AiProvider {
 
     const payload = (await response.json()) as ChatCompletionResponse;
     const choice = payload.choices?.[0];
-    if (choice?.message?.refusal) throw new AiProviderError('refusal', 'The model declined the request');
-    if (choice?.finish_reason === 'length') throw new AiProviderError('truncated', 'The model output was truncated');
+    if (choice?.message?.refusal)
+      throw new AiProviderError('refusal', 'The model declined the request');
+    if (choice?.finish_reason === 'length')
+      throw new AiProviderError('truncated', 'The model output was truncated');
     const content = choice?.message?.content;
     if (!content) throw new AiProviderError('invalid_output', 'Empty model output');
 
@@ -136,7 +152,8 @@ export class OpenAiProvider implements AiProvider {
       throw new AiProviderError('invalid_output', 'Model output is not JSON', { cause: error });
     }
     const parsed = request.schema.safeParse(json);
-    if (!parsed.success) throw new AiProviderError('invalid_output', 'Model output did not match the schema');
+    if (!parsed.success)
+      throw new AiProviderError('invalid_output', 'Model output did not match the schema');
     return { data: parsed.data, model: payload.model ?? this.model };
   }
 }

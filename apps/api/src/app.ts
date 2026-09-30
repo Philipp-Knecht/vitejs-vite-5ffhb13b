@@ -29,7 +29,10 @@ export interface BuiltApp {
   services: Services;
 }
 
-export async function buildApp(config: AppConfig, overrides: ServiceOverrides = {}): Promise<BuiltApp> {
+export async function buildApp(
+  config: AppConfig,
+  overrides: ServiceOverrides = {},
+): Promise<BuiltApp> {
   const app = Fastify({
     logger: loggerOptions(config),
     // A hop count trusts that many proxies in front of the server (e.g. 1 behind a load balancer).
@@ -62,7 +65,9 @@ export async function buildApp(config: AppConfig, overrides: ServiceOverrides = 
     timeWindow: '1 minute',
     // The error is handled by the common error handler (RATE_LIMITED + Retry-After).
     errorResponseBuilder: (_request, context) =>
-      new AppError('RATE_LIMITED', { details: { retryAfterSeconds: Math.ceil(context.ttl / 1000) } }),
+      new AppError('RATE_LIMITED', {
+        details: { retryAfterSeconds: Math.ceil(context.ttl / 1000) },
+      }),
   });
   await app.register(compress, { global: true, threshold: 1024, encodings: ['br', 'gzip'] });
   await app.register(requestContextPlugin, { services });
@@ -75,7 +80,9 @@ export async function buildApp(config: AppConfig, overrides: ServiceOverrides = 
   const servingWeb = await registerWeb(app, config);
   if (!servingWeb) {
     app.setNotFoundHandler((request, reply) =>
-      reply.status(404).send({ error: { code: 'NOT_FOUND', message: 'Nicht gefunden.', requestId: request.id } }),
+      reply
+        .status(404)
+        .send({ error: { code: 'NOT_FOUND', message: 'Nicht gefunden.', requestId: request.id } }),
     );
   }
   return { app, services };

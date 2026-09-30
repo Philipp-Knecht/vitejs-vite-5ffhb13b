@@ -50,9 +50,13 @@ describe('loadConfig', () => {
 
   it('requires credentials for configured integrations', () => {
     expect(() => loadConfig({ ...BASE, AI_PROVIDER: 'anthropic' })).toThrow('ANTHROPIC_API_KEY');
-    expect(() => loadConfig({ ...BASE, AI_PROVIDER: 'openai', OPENAI_API_KEY: 'sk' })).toThrow('OPENAI_MODEL');
+    expect(() => loadConfig({ ...BASE, AI_PROVIDER: 'openai', OPENAI_API_KEY: 'sk' })).toThrow(
+      'OPENAI_MODEL',
+    );
     expect(() => loadConfig({ ...BASE, EMAIL_TRANSPORT: 'smtp' })).toThrow('SMTP_URL');
-    expect(() => loadConfig({ ...BASE, STRIPE_SECRET_KEY: 'sk_test_x' })).toThrow('must be set together');
+    expect(() => loadConfig({ ...BASE, STRIPE_SECRET_KEY: 'sk_test_x' })).toThrow(
+      'must be set together',
+    );
     expect(() => loadConfig({})).toThrow('DATABASE_URL');
   });
 
@@ -60,11 +64,10 @@ describe('loadConfig', () => {
     expect(loadConfig({ ...BASE, TRUST_PROXY: '1' }).trustProxy).toBe(1);
     expect(loadConfig({ ...BASE, TRUST_PROXY: 'true' }).trustProxy).toBe(true);
     expect(loadConfig({ ...BASE, TRUST_PROXY: 'nonsense' }).trustProxy).toBe(false);
-    expect(loadConfig({ ...BASE, ALLOWED_ORIGINS: 'http://localhost:4173, http://127.0.0.1:5173' }).allowedOrigins).toEqual([
-      'http://localhost:5173',
-      'http://localhost:4173',
-      'http://127.0.0.1:5173',
-    ]);
+    expect(
+      loadConfig({ ...BASE, ALLOWED_ORIGINS: 'http://localhost:4173, http://127.0.0.1:5173' })
+        .allowedOrigins,
+    ).toEqual(['http://localhost:5173', 'http://localhost:4173', 'http://127.0.0.1:5173']);
   });
 
   it('never includes secrets in the startup summary', () => {
@@ -86,10 +89,17 @@ describe('createAiProvider', () => {
   it('creates the configured provider or none', () => {
     expect(createAiProvider(loadConfig({ ...BASE }))).toBeNull();
     expect(createAiProvider(loadConfig({ ...BASE, AI_PROVIDER: 'mock' }))?.isMock).toBe(true);
-    const anthropic = createAiProvider(loadConfig({ ...BASE, AI_PROVIDER: 'anthropic', ANTHROPIC_API_KEY: 'sk-ant-x' }));
+    const anthropic = createAiProvider(
+      loadConfig({ ...BASE, AI_PROVIDER: 'anthropic', ANTHROPIC_API_KEY: 'sk-ant-x' }),
+    );
     expect(anthropic).toMatchObject({ name: 'anthropic', model: 'claude-opus-5-5', isMock: false });
     const openai = createAiProvider(
-      loadConfig({ ...BASE, AI_PROVIDER: 'openai', OPENAI_API_KEY: 'sk-x', OPENAI_MODEL: 'some-model' }),
+      loadConfig({
+        ...BASE,
+        AI_PROVIDER: 'openai',
+        OPENAI_API_KEY: 'sk-x',
+        OPENAI_MODEL: 'some-model',
+      }),
     );
     expect(openai).toMatchObject({ name: 'openai', model: 'some-model' });
   });

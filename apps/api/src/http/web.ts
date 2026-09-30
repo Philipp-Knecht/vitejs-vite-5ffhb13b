@@ -25,11 +25,14 @@ export async function registerWeb(app: FastifyInstance, config: AppConfig): Prom
     wildcard: false,
     redirect: false,
     // Prerendered pages are only reachable under their canonical paths.
-    allowedPath: (pathName) => !pathName.startsWith(`/${PRERENDERED_DIR}/`) && pathName !== '/index.html',
+    allowedPath: (pathName) =>
+      !pathName.startsWith(`/${PRERENDERED_DIR}/`) && pathName !== '/index.html',
     setHeaders(response, filePath) {
       response.header(
         'cache-control',
-        filePath.includes(`${path.sep}assets${path.sep}`) ? 'public, max-age=31536000, immutable' : 'public, max-age=3600',
+        filePath.includes(`${path.sep}assets${path.sep}`)
+          ? 'public, max-age=31536000, immutable'
+          : 'public, max-age=3600',
       );
     },
   });
@@ -37,7 +40,9 @@ export async function registerWeb(app: FastifyInstance, config: AppConfig): Prom
   app.setNotFoundHandler((request, reply) => {
     const pathname = (request.url.split('?')[0] ?? '/').replace(/\/+$/, '') || '/';
     if (pathname.startsWith('/api/') || (request.method !== 'GET' && request.method !== 'HEAD')) {
-      return reply.status(404).send({ error: { code: 'NOT_FOUND', message: 'Nicht gefunden.', requestId: request.id } });
+      return reply
+        .status(404)
+        .send({ error: { code: 'NOT_FOUND', message: 'Nicht gefunden.', requestId: request.id } });
     }
     let decoded: string;
     try {

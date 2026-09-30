@@ -11,7 +11,10 @@ import { UsageService } from './application/usage-service';
 import type { AppConfig } from './config/env';
 import { createAiProvider } from './infrastructure/ai/create-provider';
 import type { AiProvider } from './infrastructure/ai/types';
-import { NotConfiguredBillingService, type BillingService } from './infrastructure/billing/billing-service';
+import {
+  NotConfiguredBillingService,
+  type BillingService,
+} from './infrastructure/billing/billing-service';
 import { StripeBillingService } from './infrastructure/billing/stripe-billing-service';
 import { createDb, type Db } from './infrastructure/db/client';
 import {
@@ -78,12 +81,17 @@ function createEmail(config: AppConfig, logger: FastifyBaseLogger): EmailService
   if (config.email.transport === 'smtp' && config.email.smtpUrl && config.email.from) {
     return new SmtpEmailService(config.email.smtpUrl, config.email.from);
   }
-  if (config.email.transport === 'console' && !config.isProduction) return new ConsoleEmailService(logger);
+  if (config.email.transport === 'console' && !config.isProduction)
+    return new ConsoleEmailService(logger);
   return new DisabledEmailService();
 }
 
 /** Composition root: wires infrastructure into application services. */
-export function createServices(config: AppConfig, logger: FastifyBaseLogger, overrides: ServiceOverrides = {}): Services {
+export function createServices(
+  config: AppConfig,
+  logger: FastifyBaseLogger,
+  overrides: ServiceOverrides = {},
+): Services {
   const db = overrides.db ?? createDb(config.databaseUrl);
   const now = overrides.now ?? (() => new Date());
   const plans = buildEntitlements({
@@ -92,7 +100,8 @@ export function createServices(config: AppConfig, logger: FastifyBaseLogger, ove
     proMonthlyAnalyses: config.limits.proMonthlyAnalyses,
   });
 
-  const provider = overrides.aiProvider === undefined ? createAiProvider(config) : overrides.aiProvider;
+  const provider =
+    overrides.aiProvider === undefined ? createAiProvider(config) : overrides.aiProvider;
   const enricher = provider
     ? new AiEnricher(
         provider,
@@ -116,9 +125,25 @@ export function createServices(config: AppConfig, logger: FastifyBaseLogger, ove
   const auth = new AuthService(db, analyses.analyses, email, config.publicSiteUrl, now);
   const billing =
     overrides.billing ??
-    (config.stripe ? new StripeBillingService(db, config.stripe, logger) : new NotConfiguredBillingService(db));
+    (config.stripe
+      ? new StripeBillingService(db, config.stripe, logger)
+      : new NotConfiguredBillingService(db));
   const savedListings = new SavedListingService(db, analyses, analytics, now);
   const account = new AccountService(db, auth, billing);
 
-  return { config, db, plans, retriever, enricher, usage, analytics, analyses, auth, savedListings, billing, account, email };
+  return {
+    config,
+    db,
+    plans,
+    retriever,
+    enricher,
+    usage,
+    analytics,
+    analyses,
+    auth,
+    savedListings,
+    billing,
+    account,
+    email,
+  };
 }

@@ -15,31 +15,51 @@ import { ensureAnonymousId } from '../request-context';
 export function listingRoutes(app: FastifyInstance, services: Services): void {
   const { analyses, config } = services;
   const cookieOptions = { secure: config.secureCookies };
-  const analyzeLimit = { rateLimit: { max: config.limits.analyzeRatePerMinute, timeWindow: '1 minute' } };
+  const analyzeLimit = {
+    rateLimit: { max: config.limits.analyzeRatePerMinute, timeWindow: '1 minute' },
+  };
 
-  app.post('/api/listings/analyze', { config: { ...analyzeLimit, compress: false } }, async (request, reply) => {
-    const body = parseInput(AnalyzeUrlRequestSchema, request.body);
-    ensureAnonymousId(request, reply, cookieOptions);
-    return respondWithAnalysis(request, reply, (ctx) =>
-      analyses.run({ kind: 'url', url: body.url }, { ...ctx, actor: request.actor }),
-    );
-  });
+  app.post(
+    '/api/listings/analyze',
+    { config: { ...analyzeLimit, compress: false } },
+    async (request, reply) => {
+      const body = parseInput(AnalyzeUrlRequestSchema, request.body);
+      ensureAnonymousId(request, reply, cookieOptions);
+      return respondWithAnalysis(request, reply, (ctx) =>
+        analyses.run({ kind: 'url', url: body.url }, { ...ctx, actor: request.actor }),
+      );
+    },
+  );
 
-  app.post('/api/listings/analyze-text', { config: { ...analyzeLimit, compress: false } }, async (request, reply) => {
-    const body = parseInput(AnalyzeTextRequestSchema, request.body);
-    ensureAnonymousId(request, reply, cookieOptions);
-    return respondWithAnalysis(request, reply, (ctx) =>
-      analyses.run({ kind: 'text', text: body.text, url: body.url }, { ...ctx, actor: request.actor }),
-    );
-  });
+  app.post(
+    '/api/listings/analyze-text',
+    { config: { ...analyzeLimit, compress: false } },
+    async (request, reply) => {
+      const body = parseInput(AnalyzeTextRequestSchema, request.body);
+      ensureAnonymousId(request, reply, cookieOptions);
+      return respondWithAnalysis(request, reply, (ctx) =>
+        analyses.run(
+          { kind: 'text', text: body.text, url: body.url },
+          { ...ctx, actor: request.actor },
+        ),
+      );
+    },
+  );
 
-  app.post('/api/listings/analyze-example', { config: { ...analyzeLimit, compress: false } }, async (request, reply) => {
-    const body = parseInput(AnalyzeExampleRequestSchema, request.body);
-    ensureAnonymousId(request, reply, cookieOptions);
-    return respondWithAnalysis(request, reply, (ctx) =>
-      analyses.run({ kind: 'example', exampleId: body.exampleId }, { ...ctx, actor: request.actor }),
-    );
-  });
+  app.post(
+    '/api/listings/analyze-example',
+    { config: { ...analyzeLimit, compress: false } },
+    async (request, reply) => {
+      const body = parseInput(AnalyzeExampleRequestSchema, request.body);
+      ensureAnonymousId(request, reply, cookieOptions);
+      return respondWithAnalysis(request, reply, (ctx) =>
+        analyses.run(
+          { kind: 'example', exampleId: body.exampleId },
+          { ...ctx, actor: request.actor },
+        ),
+      );
+    },
+  );
 
   app.get<{ Params: { id: string } }>('/api/analyses/:id', async (request, reply) => {
     const dto = await analyses.analyses.findDto(request.params.id, request.actor.userId);
@@ -54,7 +74,9 @@ export function listingRoutes(app: FastifyInstance, services: Services): void {
     const { actor } = request;
     if (!actor.userId) throw new AppError('UNAUTHENTICATED');
     if (!actor.entitlements.history) {
-      throw new AppError('PLAN_LIMIT_REACHED', { message: 'Der Verlauf aller Analysen ist in KaufCheck Pro enthalten.' });
+      throw new AppError('PLAN_LIMIT_REACHED', {
+        message: 'Der Verlauf aller Analysen ist in KaufCheck Pro enthalten.',
+      });
     }
     return { items: await analyses.analyses.listForUser(actor.userId) };
   });

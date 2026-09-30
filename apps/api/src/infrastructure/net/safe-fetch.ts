@@ -70,7 +70,8 @@ export interface SafeFetchResponse {
   body: Buffer;
 }
 
-const defaultResolver: Resolver = (hostname) => dns.promises.lookup(hostname, { all: true, verbatim: true });
+const defaultResolver: Resolver = (hostname) =>
+  dns.promises.lookup(hostname, { all: true, verbatim: true });
 
 function validateUrl(raw: string, allowedHosts: ReadonlySet<string>): URL {
   let url: URL;
@@ -79,7 +80,12 @@ function validateUrl(raw: string, allowedHosts: ReadonlySet<string>): URL {
   } catch {
     throw new SafeFetchError('invalid_url', 'Invalid URL');
   }
-  if (url.protocol !== 'https:' || url.username || url.password || (url.port !== '' && url.port !== '443')) {
+  if (
+    url.protocol !== 'https:' ||
+    url.username ||
+    url.password ||
+    (url.port !== '' && url.port !== '443')
+  ) {
     throw new SafeFetchError('invalid_url', 'Only plain https URLs are allowed');
   }
   if (!allowedHosts.has(url.hostname.toLowerCase())) {
@@ -104,7 +110,10 @@ async function resolvePublic(
   const permitted = (address: string) =>
     isPublicAddress(address) || (allowLoopback && (address === '127.0.0.1' || address === '::1'));
   if (addresses.some((entry) => !permitted(entry.address))) {
-    throw new SafeFetchError('private_address', `Host ${hostname} resolves to a non-public address`);
+    throw new SafeFetchError(
+      'private_address',
+      `Host ${hostname} resolves to a non-public address`,
+    );
   }
   const first = addresses[0];
   if (!first) throw new SafeFetchError('dns_failed', `No address for ${hostname}`);
@@ -183,14 +192,21 @@ function requestOnce(
           chunks.push(chunk);
         });
         stream.on('end', () => resolve({ response, body: Buffer.concat(chunks) }));
-        stream.on('error', (error) => reject(new SafeFetchError('network', 'Failed to read response', { cause: error })));
+        stream.on('error', (error) =>
+          reject(new SafeFetchError('network', 'Failed to read response', { cause: error })),
+        );
       },
     );
     request.on('error', (error) => {
       if (signal.aborted) {
         const reason: unknown = signal.reason;
         const timedOut = reason instanceof DOMException && reason.name === 'TimeoutError';
-        reject(new SafeFetchError(timedOut ? 'timeout' : 'aborted', timedOut ? 'Request timed out' : 'Request aborted'));
+        reject(
+          new SafeFetchError(
+            timedOut ? 'timeout' : 'aborted',
+            timedOut ? 'Request timed out' : 'Request aborted',
+          ),
+        );
         return;
       }
       reject(new SafeFetchError('network', 'Network error', { cause: error }));
@@ -210,20 +226,32 @@ export const safeFetch: SafeFetcher = async (rawUrl, options) => {
     if (signal.aborted) {
       throw new SafeFetchError(deadline.aborted ? 'timeout' : 'aborted', 'Request aborted');
     }
-    const address = await resolvePublic(current.hostname, resolver, options.testOverrides?.allowLoopback);
+    const address = await resolvePublic(
+      current.hostname,
+      resolver,
+      options.testOverrides?.allowLoopback,
+    );
     const { response, body } = await requestOnce(current, address, options, signal);
     const status = response.statusCode ?? 0;
 
     if (body === null) {
-      if (redirects >= maxRedirects) throw new SafeFetchError('too_many_redirects', 'Too many redirects');
+      if (redirects >= maxRedirects)
+        throw new SafeFetchError('too_many_redirects', 'Too many redirects');
       const location = String(response.headers.location);
       current = validateUrl(new URL(location, current).toString(), options.allowedHosts);
       continue;
     }
 
     const contentType = mediaType(response.headers['content-type']);
-    if (status >= 200 && status < 300 && (!contentType || !options.contentTypes.includes(contentType))) {
-      throw new SafeFetchError('bad_content_type', `Unexpected content type: ${contentType ?? 'none'}`);
+    if (
+      status >= 200 &&
+      status < 300 &&
+      (!contentType || !options.contentTypes.includes(contentType))
+    ) {
+      throw new SafeFetchError(
+        'bad_content_type',
+        `Unexpected content type: ${contentType ?? 'none'}`,
+      );
     }
     return { url: current.toString(), status, headers: response.headers, contentType, body };
   }

@@ -35,10 +35,14 @@ describe('isPublicAddress', () => {
     expect(isPublicAddress(address)).toBe(false);
   });
 
-  it.each(['8.8.8.8', '1.1.1.1', '160.79.106.139', '172.32.0.1', '2a00:1450:4001:82b::200e', '2606:4700::1111'])(
-    'allows %s',
-    (address) => {
-      expect(isPublicAddress(address)).toBe(true);
-    },
-  );
+  it.each([
+    '8.8.8.8',
+    '1.1.1.1',
+    '160.79.106.139',
+    '172.32.0.1',
+    '2a00:1450:4001:82b::200e',
+    '2606:4700::1111',
+  ])('allows %s', (address) => {
+    expect(isPublicAddress(address)).toBe(true);
+  });
 });

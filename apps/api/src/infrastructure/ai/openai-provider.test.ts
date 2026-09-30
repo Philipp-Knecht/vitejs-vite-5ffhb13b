@@ -27,7 +27,12 @@ function completion(content: string | null, extra: Record<string, unknown> = {})
 }
 
 function provider(fetchImpl: typeof fetch) {
-  return new OpenAiProvider({ apiKey: 'sk-test', model: 'gpt-test', baseUrl: 'https://api.example.test/v1/', fetchImpl });
+  return new OpenAiProvider({
+    apiKey: 'sk-test',
+    model: 'gpt-test',
+    baseUrl: 'https://api.example.test/v1/',
+    fetchImpl,
+  });
 }
 
 describe('toStrictJsonSchema', () => {
@@ -51,7 +56,9 @@ describe('toStrictJsonSchema', () => {
 
 describe('OpenAiProvider', () => {
   it('sends a strict json_schema request and validates the answer', async () => {
-    const fetchImpl = vi.fn<typeof fetch>(() => Promise.resolve(completion('{"summary":"Alles gut","note":null}')));
+    const fetchImpl = vi.fn<typeof fetch>(() =>
+      Promise.resolve(completion('{"summary":"Alles gut","note":null}')),
+    );
     const result = await provider(fetchImpl).generateStructuredAnalysis(
       request({ images: [{ mediaType: 'image/png', data: 'aGk=' }] }),
     );
@@ -70,7 +77,10 @@ describe('OpenAiProvider', () => {
     expect(body.max_completion_tokens).toBe(1000);
     expect(body.response_format.type).toBe('json_schema');
     expect(body.response_format.json_schema).toMatchObject({ name: 'test_schema', strict: true });
-    const userContent = body.messages[1]?.content as { type: string; image_url?: { url: string } }[];
+    const userContent = body.messages[1]?.content as {
+      type: string;
+      image_url?: { url: string };
+    }[];
     expect(userContent.map((part) => part.type)).toEqual(['image_url', 'text']);
     expect(userContent[0]?.image_url?.url).toBe('data:image/png;base64,aGk=');
   });
@@ -95,19 +105,28 @@ describe('OpenAiProvider', () => {
     [503, 'unavailable'],
     [400, 'bad_request'],
   ])('maps HTTP %i to %s', async (status, reason) => {
-    const fetchImpl = () => Promise.resolve(new Response('{"error":{"message":"details"}}', { status }));
-    await expect(provider(fetchImpl).generateStructuredAnalysis(request())).rejects.toMatchObject({ reason });
+    const fetchImpl = () =>
+      Promise.resolve(new Response('{"error":{"message":"details"}}', { status }));
+    await expect(provider(fetchImpl).generateStructuredAnalysis(request())).rejects.toMatchObject({
+      reason,
+    });
   });
 
   it('distinguishes network errors, timeouts and caller aborts', async () => {
     const hang: typeof fetch = (_url, init) =>
       new Promise((_resolve, reject) => {
-        init?.signal?.addEventListener('abort', () => reject(new DOMException('aborted', 'AbortError')));
+        init?.signal?.addEventListener('abort', () =>
+          reject(new DOMException('aborted', 'AbortError')),
+        );
       });
     await expect(
-      provider(() => Promise.reject(new TypeError('fetch failed'))).generateStructuredAnalysis(request()),
+      provider(() => Promise.reject(new TypeError('fetch failed'))).generateStructuredAnalysis(
+        request(),
+      ),
     ).rejects.toMatchObject({ reason: 'unavailable' });
-    await expect(provider(hang).generateStructuredAnalysis(request({ timeoutMs: 50 }))).rejects.toMatchObject({
+    await expect(
+      provider(hang).generateStructuredAnalysis(request({ timeoutMs: 50 })),
+    ).rejects.toMatchObject({
       reason: 'timeout',
     });
     const controller = new AbortController();

@@ -34,14 +34,14 @@ export class AnthropicProvider implements AiProvider {
     this.client = options.client ?? new Anthropic({ apiKey: options.apiKey, maxRetries: 1 });
   }
 
-  async generateStructuredAnalysis<T>(request: StructuredAnalysisRequest<T>): Promise<StructuredAnalysisResponse<T>> {
+  async generateStructuredAnalysis<T>(
+    request: StructuredAnalysisRequest<T>,
+  ): Promise<StructuredAnalysisResponse<T>> {
     const content: Anthropic.Beta.BetaContentBlockParam[] = [
-      ...(request.images ?? []).map(
-        (image): Anthropic.Beta.BetaImageBlockParam => ({
-          type: 'image',
-          source: { type: 'base64', media_type: image.mediaType, data: image.data },
-        }),
-      ),
+      ...(request.images ?? []).map((image): Anthropic.Beta.BetaImageBlockParam => ({
+        type: 'image',
+        source: { type: 'base64', media_type: image.mediaType, data: image.data },
+      })),
       { type: 'text', text: request.prompt },
     ];
 
@@ -79,21 +79,33 @@ export class AnthropicProvider implements AiProvider {
 
 export function mapAnthropicError(error: unknown): AiProviderError {
   if (error instanceof AiProviderError) return error;
-  if (error instanceof Anthropic.APIUserAbortError) return new AiProviderError('aborted', 'Request aborted', { cause: error });
+  if (error instanceof Anthropic.APIUserAbortError)
+    return new AiProviderError('aborted', 'Request aborted', { cause: error });
   if (error instanceof Anthropic.APIConnectionTimeoutError) {
     return new AiProviderError('timeout', 'Request timed out', { cause: error });
   }
-  if (error instanceof Anthropic.RateLimitError) return new AiProviderError('rate_limited', 'Rate limited', { cause: error });
-  if (error instanceof Anthropic.AuthenticationError || error instanceof Anthropic.PermissionDeniedError) {
+  if (error instanceof Anthropic.RateLimitError)
+    return new AiProviderError('rate_limited', 'Rate limited', { cause: error });
+  if (
+    error instanceof Anthropic.AuthenticationError ||
+    error instanceof Anthropic.PermissionDeniedError
+  ) {
     return new AiProviderError('authentication', 'Authentication failed', { cause: error });
   }
-  if (error instanceof Anthropic.BadRequestError || error instanceof Anthropic.UnprocessableEntityError) {
+  if (
+    error instanceof Anthropic.BadRequestError ||
+    error instanceof Anthropic.UnprocessableEntityError
+  ) {
     return new AiProviderError('bad_request', 'Request rejected', { cause: error });
   }
-  if (error instanceof Anthropic.InternalServerError || error instanceof Anthropic.APIConnectionError) {
+  if (
+    error instanceof Anthropic.InternalServerError ||
+    error instanceof Anthropic.APIConnectionError
+  ) {
     return new AiProviderError('unavailable', 'Provider unavailable', { cause: error });
   }
-  if (error instanceof Anthropic.APIError) return new AiProviderError('unknown', `API error ${error.status ?? ''}`, { cause: error });
+  if (error instanceof Anthropic.APIError)
+    return new AiProviderError('unknown', `API error ${error.status ?? ''}`, { cause: error });
   // The SDK raises plain errors when structured output cannot be parsed.
   if (error instanceof Anthropic.AnthropicError || error instanceof SyntaxError) {
     return new AiProviderError('invalid_output', 'Could not parse model output', { cause: error });

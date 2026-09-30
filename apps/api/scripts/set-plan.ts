@@ -27,7 +27,10 @@ if (!databaseUrl) {
 
 const db = createDb(databaseUrl);
 try {
-  const user = await db.user.findUnique({ where: { email: email.data }, select: { id: true, subscription: true } });
+  const user = await db.user.findUnique({
+    where: { email: email.data },
+    select: { id: true, subscription: true },
+  });
   if (!user) {
     console.error('Kein Konto mit dieser E-Mail-Adresse gefunden.');
     process.exitCode = 1;
@@ -35,7 +38,9 @@ try {
     await db.user.update({ where: { id: user.id }, data: { plan } });
     console.log(`Tarif auf ${plan} gesetzt.`);
     if (user.subscription?.provider === 'stripe') {
-      console.warn('Hinweis: Dieses Konto hat ein Stripe-Abo. Der nächste Webhook kann den Tarif wieder ändern.');
+      console.warn(
+        'Hinweis: Dieses Konto hat ein Stripe-Abo. Der nächste Webhook kann den Tarif wieder ändern.',
+      );
     }
   }
 } finally {

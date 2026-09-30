@@ -13,10 +13,13 @@ describe('password hashing', () => {
   });
 
   it('salts every hash and normalizes Unicode', async () => {
-    const [a, b] = await Promise.all([hashPassword('Müller-Passwort'), hashPassword('Müller-Passwort')]);
+    const [a, b] = await Promise.all([
+      hashPassword('M\u00fcller-Passwort'),
+      hashPassword('M\u00fcller-Passwort'),
+    ]);
     expect(a).not.toBe(b);
     // "ü" as a single code point vs. "u" + combining diaeresis.
-    expect(await verifyPassword('Müller-Passwort', a)).toBe(true);
+    expect(await verifyPassword('Mu\u0308ller-Passwort', a)).toBe(true);
   });
 
   it('rejects malformed hashes without throwing', async () => {
@@ -40,7 +43,9 @@ describe('usage period', () => {
     // 00:30 in Berlin on 1 October is still September in UTC.
     expect(usagePeriod(new Date('2026-10-01T00:30:00+02:00'))).toBe('2026-09');
     expect(usagePeriod(new Date('2026-12-31T12:00:00Z'))).toBe('2026-12');
-    expect(periodResetsAt(new Date('2026-12-15T12:00:00Z')).toISOString()).toBe('2027-01-01T00:00:00.000Z');
+    expect(periodResetsAt(new Date('2026-12-15T12:00:00Z')).toISOString()).toBe(
+      '2027-01-01T00:00:00.000Z',
+    );
   });
 });
 

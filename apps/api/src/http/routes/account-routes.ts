@@ -24,10 +24,15 @@ export function accountRoutes(app: FastifyInstance, services: Services): void {
       actor.userId ? billing.getSubscription(actor.userId) : Promise.resolve(null),
     ]);
     const user = actor.userId
-      ? await services.db.user.findUnique({ where: { id: actor.userId }, select: { id: true, email: true, createdAt: true } })
+      ? await services.db.user.findUnique({
+          where: { id: actor.userId },
+          select: { id: true, email: true, createdAt: true },
+        })
       : null;
     return {
-      user: user ? { id: user.id, email: user.email, createdAt: user.createdAt.toISOString() } : null,
+      user: user
+        ? { id: user.id, email: user.email, createdAt: user.createdAt.toISOString() }
+        : null,
       plan: actor.plan,
       entitlements: actor.entitlements,
       usage: currentUsage,
@@ -37,12 +42,16 @@ export function accountRoutes(app: FastifyInstance, services: Services): void {
 
   const authLimit = { rateLimit: { max: 10, timeWindow: '15 minutes' } };
 
-  app.post('/api/auth/register', { config: { rateLimit: { max: 5, timeWindow: '1 hour' } } }, async (request, reply) => {
-    const body = parseInput(RegisterRequestSchema, request.body);
-    const session = await auth.register(body.email, body.password, request.actor.anonymousId);
-    setSessionCookie(reply, session.token, session.expiresAt, cookieOptions);
-    return reply.status(201).send({ user: { id: session.user.id, email: session.user.email } });
-  });
+  app.post(
+    '/api/auth/register',
+    { config: { rateLimit: { max: 5, timeWindow: '1 hour' } } },
+    async (request, reply) => {
+      const body = parseInput(RegisterRequestSchema, request.body);
+      const session = await auth.register(body.email, body.password, request.actor.anonymousId);
+      setSessionCookie(reply, session.token, session.expiresAt, cookieOptions);
+      return reply.status(201).send({ user: { id: session.user.id, email: session.user.email } });
+    },
+  );
 
   app.post('/api/auth/login', { config: authLimit }, async (request, reply) => {
     const body = parseInput(LoginRequestSchema, request.body);

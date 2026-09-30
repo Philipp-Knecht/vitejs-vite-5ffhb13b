@@ -10,7 +10,12 @@ export type SubscriptionSummary = NonNullable<MeDto['subscription']>;
  */
 export interface BillingService {
   readonly configured: boolean;
-  createCheckoutSession(input: { userId: string; email: string; successUrl: string; cancelUrl: string }): Promise<{ url: string }>;
+  createCheckoutSession(input: {
+    userId: string;
+    email: string;
+    successUrl: string;
+    cancelUrl: string;
+  }): Promise<{ url: string }>;
   createPortalSession(input: { userId: string; returnUrl: string }): Promise<{ url: string }>;
   getSubscription(userId: string): Promise<SubscriptionSummary | null>;
   handleWebhook(rawBody: Buffer, signature: string | undefined): Promise<void>;
@@ -18,7 +23,10 @@ export interface BillingService {
   cancelForAccountDeletion(userId: string): Promise<void>;
 }
 
-export async function readSubscription(db: Db, userId: string): Promise<SubscriptionSummary | null> {
+export async function readSubscription(
+  db: Db,
+  userId: string,
+): Promise<SubscriptionSummary | null> {
   const subscription = await db.subscription.findUnique({
     where: { userId },
     select: { status: true, currentPeriodEnd: true, cancelAtPeriodEnd: true },

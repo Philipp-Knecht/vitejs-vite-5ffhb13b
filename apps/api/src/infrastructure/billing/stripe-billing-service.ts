@@ -28,7 +28,8 @@ export class StripeBillingService implements BillingService {
     private readonly options: StripeBillingOptions,
     private readonly logger: FastifyBaseLogger,
   ) {
-    this.stripe = options.client ?? new Stripe(options.secretKey, { maxNetworkRetries: 1, timeout: 20_000 });
+    this.stripe =
+      options.client ?? new Stripe(options.secretKey, { maxNetworkRetries: 1, timeout: 20_000 });
   }
 
   private async customerFor(userId: string, email: string): Promise<string> {
@@ -40,7 +41,13 @@ export class StripeBillingService implements BillingService {
     const customer = await this.stripe.customers.create({ email, metadata: { userId } });
     await this.db.subscription.upsert({
       where: { userId },
-      create: { userId, provider: 'stripe', providerCustomerId: customer.id, status: 'incomplete', plan: 'FREE' },
+      create: {
+        userId,
+        provider: 'stripe',
+        providerCustomerId: customer.id,
+        status: 'incomplete',
+        plan: 'FREE',
+      },
       update: { provider: 'stripe', providerCustomerId: customer.id },
     });
     return customer.id;
@@ -64,11 +71,15 @@ export class StripeBillingService implements BillingService {
       locale: 'de',
       subscription_data: { metadata: { userId: input.userId } },
     });
-    if (!session.url) throw new AppError('SERVICE_UNAVAILABLE', { internalReason: 'checkout_without_url' });
+    if (!session.url)
+      throw new AppError('SERVICE_UNAVAILABLE', { internalReason: 'checkout_without_url' });
     return { url: session.url };
   }
 
-  async createPortalSession(input: { userId: string; returnUrl: string }): Promise<{ url: string }> {
+  async createPortalSession(input: {
+    userId: string;
+    returnUrl: string;
+  }): Promise<{ url: string }> {
     const subscription = await this.db.subscription.findUnique({
       where: { userId: input.userId },
       select: { providerCustomerId: true },
@@ -96,14 +107,24 @@ export class StripeBillingService implements BillingService {
       throw new AppError('VALIDATION_ERROR', { internalReason: 'invalid_signature', cause: error });
     }
 
-    const seen = await this.db.billingEvent.findUnique({ where: { id: event.id }, select: { id: true } });
+    const seen = await this.db.billingEvent.findUnique({
+      where: { id: event.id },
+      select: { id: true },
+    });
     if (seen) return;
 
     switch (event.type) {
       case 'checkout.session.completed': {
         const session = event.data.object;
-        const subscriptionId = typeof session.subscription === 'string' ? session.subscription : session.subscription?.id;
-        if (subscriptionId) await this.sync(await this.stripe.subscriptions.retrieve(subscriptionId), session.client_reference_id);
+        const subscriptionId =
+          typeof session.subscription === 'string'
+            ? session.subscription
+            : session.subscription?.id;
+        if (subscriptionId)
+          await this.sync(
+            await this.stripe.subscriptions.retrieve(subscriptionId),
+            session.client_reference_id,
+          );
         break;
       }
       case 'customer.subscription.created':
@@ -123,16 +144,26 @@ export class StripeBillingService implements BillingService {
   }
 
   /** Mirrors a Stripe subscription into the database and updates the user's plan. */
-  private async sync(subscription: Stripe.Subscription, referenceUserId: string | null): Promise<void> {
-    const customerId = typeof subscription.customer === 'string' ? subscription.customer : subscription.customer.id;
+  private async sync(
+    subscription: Stripe.Subscription,
+    referenceUserId: string | null,
+  ): Promise<void> {
+    const customerId =
+      typeof subscription.customer === 'string' ? subscription.customer : subscription.customer.id;
     const known = await this.db.subscription.findFirst({
-      where: { OR: [{ providerSubscriptionId: subscription.id }, { providerCustomerId: customerId }] },
+      where: {
+        OR: [{ providerSubscriptionId: subscription.id }, { providerCustomerId: customerId }],
+      },
       select: { userId: true },
     });
-    const metadataUserId = typeof subscription.metadata.userId === 'string' ? subscription.metadata.userId : null;
+    const metadataUserId =
+      typeof subscription.metadata.userId === 'string' ? subscription.metadata.userId : null;
     const userId = known?.userId ?? metadataUserId ?? referenceUserId;
     if (!userId) {
-      this.logger.warn({ op: 'billing.sync', errorCategory: 'unknown_customer' }, 'subscription for unknown user');
+      this.logger.warn(
+        { op: 'billing.sync', errorCategory: 'unknown_customer' },
+        'subscription for unknown user',
+      );
       return;
     }
     const plan = PRO_STATUSES.has(subscription.status) ? 'PRO' : 'FREE';
@@ -150,7 +181,10 @@ export class StripeBillingService implements BillingService {
       this.db.subscription.upsert({ where: { userId }, create: { userId, ...data }, update: data }),
       this.db.user.update({ where: { id: userId }, data: { plan } }),
     ]);
-    this.logger.info({ op: 'billing.sync', status: subscription.status, plan }, 'subscription synced');
+    this.logger.info(
+      { op: 'billing.sync', status: subscription.status, plan },
+      'subscription synced',
+    );
   }
 
   async cancelForAccountDeletion(userId: string): Promise<void> {

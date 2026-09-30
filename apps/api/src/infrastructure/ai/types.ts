@@ -37,7 +37,9 @@ export interface AiProvider {
   /** True only for the development mock – its output is labelled as simulated. */
   readonly isMock: boolean;
   readonly supportsVision: boolean;
-  generateStructuredAnalysis<T>(request: StructuredAnalysisRequest<T>): Promise<StructuredAnalysisResponse<T>>;
+  generateStructuredAnalysis<T>(
+    request: StructuredAnalysisRequest<T>,
+  ): Promise<StructuredAnalysisResponse<T>>;
 }
 
 export type AiFailureReason =
