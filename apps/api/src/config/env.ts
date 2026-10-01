@@ -2,6 +2,12 @@ import { randomBytes } from 'node:crypto';
 import { existsSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import {
+  PAYMENT_METHODS,
+  VAT_MODES,
+  type OperatorInfo,
+  type PaymentMethod,
+} from '@kaufcheck/shared';
 import { z } from 'zod';
 
 /** Nearest directory with a package.json – works from `src/config` (dev) and the bundled `dist/`. */
@@ -78,11 +84,42 @@ const EnvSchema = z
     STRIPE_SECRET_KEY: optionalString,
     STRIPE_WEBHOOK_SECRET: optionalString,
     STRIPE_PRICE_ID_PRO: optionalString,
-    PRO_PRICE_LABEL: optionalString,
+    /** Payment methods offered in Stripe Checkout (comma separated). */
+    STRIPE_PAYMENT_METHODS: z
+      .string()
+      .default('card')
+      .transform((value) =>
+        value
+          .split(',')
+          .map((method) => method.trim())
+          .filter(Boolean),
+      )
+      .pipe(z.array(z.enum(PAYMENT_METHODS)).min(1)),
+    /** small_business = Kleinunternehmer (§ 19 UStG), standard = price includes 19 % VAT. */
+    VAT_MODE: z.enum(VAT_MODES).optional(),
+
+    /** Operator details; the same variables fill the imprint of the web app at build time. */
+    VITE_IMPRINT_NAME: optionalString,
+    VITE_IMPRINT_ADDRESS: optionalString,
+    VITE_CONTACT_EMAIL: optionalString,
+    VITE_CONTACT_PHONE: optionalString,
 
     EMAIL_TRANSPORT: z.enum(['none', 'smtp', 'console']).default('none'),
     SMTP_URL: optionalString,
     EMAIL_FROM: optionalString,
+
+    /** Google AdSense publisher ID (ca-pub-…): ads.txt and site verification. */
+    ADSENSE_CLIENT: z
+      .string()
+      .trim()
+      .regex(/^ca-pub-\d{16}$/, 'must look like ca-pub-0000000000000000')
+      .optional(),
+    /** AdSense ad unit (data-ad-slot); with it, ads are shown to visitors without Pro. */
+    ADSENSE_SLOT: z
+      .string()
+      .trim()
+      .regex(/^\d{6,20}$/, 'must be the numeric ad unit ID')
+      .optional(),
 
     ANALYTICS_ENABLED: booleanString.default(true),
     SERVE_WEB: booleanString.optional(),
@@ -130,6 +167,30 @@ const EnvSchema = z
         'STRIPE_SECRET_KEY, STRIPE_WEBHOOK_SECRET and STRIPE_PRICE_ID_PRO must be set together',
       );
     }
+    // Paid contracts need the confirmations required by law (§§ 312f, 312i, 312k, 356a BGB)
+    // and the operator's full contact details (Art. 246a § 1 Abs. 1 Nr. 2 and 3 EGBGB).
+    if (stripeValues.every(Boolean)) {
+      const emailReady =
+        env.EMAIL_TRANSPORT === 'smtp' || (!production && env.EMAIL_TRANSPORT === 'console');
+      if (!emailReady) {
+        issue(
+          'EMAIL_TRANSPORT',
+          'payments need e-mail (EMAIL_TRANSPORT=smtp) for the legally required confirmations',
+        );
+      }
+      if (!env.VAT_MODE) {
+        issue('VAT_MODE', 'is required for payments: small_business (§ 19 UStG) or standard');
+      }
+      const operator = {
+        VITE_IMPRINT_NAME: env.VITE_IMPRINT_NAME,
+        VITE_IMPRINT_ADDRESS: env.VITE_IMPRINT_ADDRESS,
+        VITE_CONTACT_EMAIL: env.VITE_CONTACT_EMAIL,
+        VITE_CONTACT_PHONE: env.VITE_CONTACT_PHONE,
+      };
+      for (const [key, value] of Object.entries(operator)) {
+        if (!value) issue(key, 'is required for payments (operator details in the contract)');
+      }
+    }
   });
 
 export type Env = z.infer<typeof EnvSchema>;
@@ -171,9 +232,24 @@ export interface AppConfig {
     proMonthlyAnalyses?: number;
     analyzeRatePerMinute: number;
   };
-  stripe: { secretKey: string; webhookSecret: string; priceIdPro: string } | null;
-  proPriceLabel: string | null;
-  email: { transport: Env['EMAIL_TRANSPORT']; smtpUrl?: string; from?: string };
+  stripe: {
+    secretKey: string;
+    webhookSecret: string;
+    priceIdPro: string;
+    paymentMethods: PaymentMethod[];
+    vatMode: (typeof VAT_MODES)[number];
+  } | null;
+  /** Operator named in contracts and e-mails; null until name, address and e-mail are set. */
+  operator: OperatorInfo | null;
+  email: {
+    transport: Env['EMAIL_TRANSPORT'];
+    smtpUrl?: string;
+    from?: string;
+    /** Named in the privacy policy when recognised from the SMTP host. */
+    provider: 'brevo' | 'other' | null;
+  };
+  /** Google AdSense; `slot` null = only verification (ads.txt, meta tag), no ads yet. */
+  adsense: { client: string; slot: string | null } | null;
   analyticsEnabled: boolean;
   serveWeb: boolean;
   webDistDir: string;
@@ -185,6 +261,35 @@ export class ConfigError extends Error {
   constructor(message: string) {
     super(message);
     this.name = 'ConfigError';
+  }
+}
+
+/** Address lines separated by "|" or a literal "\\n" (as in the web app's imprint). */
+function addressLines(value: string | undefined): string[] {
+  return (value ?? '')
+    .split(/\||\\n/)
+    .map((line) => line.trim())
+    .filter(Boolean);
+}
+
+function operatorFrom(env: Env): OperatorInfo | null {
+  const lines = addressLines(env.VITE_IMPRINT_ADDRESS);
+  if (!env.VITE_IMPRINT_NAME || lines.length === 0 || !env.VITE_CONTACT_EMAIL) return null;
+  return {
+    name: env.VITE_IMPRINT_NAME,
+    addressLines: lines,
+    email: env.VITE_CONTACT_EMAIL,
+    phone: env.VITE_CONTACT_PHONE ?? '',
+  };
+}
+
+function emailProvider(env: Env): 'brevo' | 'other' | null {
+  if (env.EMAIL_TRANSPORT !== 'smtp' || !env.SMTP_URL) return null;
+  try {
+    const host = new URL(env.SMTP_URL).hostname.toLowerCase();
+    return host === 'smtp-relay.brevo.com' || host.endsWith('.brevo.com') ? 'brevo' : 'other';
+  } catch {
+    return 'other';
   }
 }
 
@@ -262,15 +367,25 @@ export function loadConfig(source: NodeJS.ProcessEnv = process.env): AppConfig {
       analyzeRatePerMinute: env.ANALYZE_RATE_PER_MINUTE,
     },
     stripe:
-      env.STRIPE_SECRET_KEY && env.STRIPE_WEBHOOK_SECRET && env.STRIPE_PRICE_ID_PRO
+      env.STRIPE_SECRET_KEY && env.STRIPE_WEBHOOK_SECRET && env.STRIPE_PRICE_ID_PRO && env.VAT_MODE
         ? {
             secretKey: env.STRIPE_SECRET_KEY,
             webhookSecret: env.STRIPE_WEBHOOK_SECRET,
             priceIdPro: env.STRIPE_PRICE_ID_PRO,
+            paymentMethods: env.STRIPE_PAYMENT_METHODS,
+            vatMode: env.VAT_MODE,
           }
         : null,
-    proPriceLabel: env.PRO_PRICE_LABEL ?? null,
-    email: { transport: env.EMAIL_TRANSPORT, smtpUrl: env.SMTP_URL, from: env.EMAIL_FROM },
+    operator: operatorFrom(env),
+    email: {
+      transport: env.EMAIL_TRANSPORT,
+      smtpUrl: env.SMTP_URL,
+      from: env.EMAIL_FROM,
+      provider: emailProvider(env),
+    },
+    adsense: env.ADSENSE_CLIENT
+      ? { client: env.ADSENSE_CLIENT, slot: env.ADSENSE_SLOT ?? null }
+      : null,
     analyticsEnabled: env.ANALYTICS_ENABLED,
     serveWeb: env.SERVE_WEB ?? production,
     webDistDir: env.WEB_DIST_DIR ?? path.resolve(apiRoot, '../web/dist'),
@@ -292,6 +407,7 @@ export function describeConfig(config: AppConfig): Record<string, unknown> {
           ? config.ai.openai.model
           : null,
     billing: config.stripe ? 'stripe' : 'not_configured',
+    ads: config.adsense ? (config.adsense.slot ? 'adsense' : 'adsense_verification_only') : 'none',
     email: config.email.transport,
     analytics: config.analyticsEnabled,
     serveWeb: config.serveWeb,

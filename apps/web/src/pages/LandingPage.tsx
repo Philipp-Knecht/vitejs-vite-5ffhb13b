@@ -50,9 +50,17 @@ const FEATURES = [
   },
 ];
 
+interface FaqContext {
+  anonymous: number;
+  free: number;
+  retrieval: boolean;
+  ads: boolean;
+  retentionDays: number;
+}
+
 interface FaqItem {
   question: string;
-  answer: (anonymous: number, free: number, retrieval: boolean) => string;
+  answer: (context: FaqContext) => string;
   /** Shown only with (or without) automatic retrieval of listing links. */
   when?: 'retrieval' | 'no-retrieval';
 }
@@ -60,12 +68,12 @@ interface FaqItem {
 const FAQ: FaqItem[] = [
   {
     question: 'Was kostet KaufCheck?',
-    answer: (anonymous: number, free: number) =>
+    answer: ({ anonymous, free }) =>
       `Ohne Anmeldung kannst du ${anonymous} Inserate im Monat prüfen, mit einem kostenlosen Konto ${free}. Für mehr Prüfungen, Verlauf und größere Vergleiche gibt es KaufCheck Pro.`,
   },
   {
     question: 'Welche Inserate kann ich prüfen?',
-    answer: (_anonymous, _free, retrieval) =>
+    answer: ({ retrieval }) =>
       retrieval
         ? 'Derzeit Auto-Inserate von Kleinanzeigen. Du kannst den Link einfügen oder den Text des Inserats kopieren. Weitere Kategorien sind in Planung.'
         : 'Derzeit Auto-Inserate von Kleinanzeigen: Kopiere den Text des Inserats und füge ihn ein. Weitere Kategorien sind in Planung.',
@@ -89,8 +97,12 @@ const FAQ: FaqItem[] = [
   },
   {
     question: 'Was passiert mit meinen Daten?',
-    answer: () =>
-      'Telefonnummern und E-Mail-Adressen aus dem Inserat werden vor dem Speichern entfernt. Ohne Konto werden Prüfungen nach 90 Tagen gelöscht. Es gibt keine Werbe-Tracker; Details stehen in der Datenschutzerklärung.',
+    answer: ({ ads, retentionDays }) =>
+      `Telefonnummern und E-Mail-Adressen aus dem Inserat werden vor dem Speichern entfernt. Ohne Konto werden Prüfungen nach ${retentionDays} Tagen gelöscht. ${
+        ads
+          ? 'Werbung von Google zeigen wir nur mit deiner Einwilligung, mit KaufCheck Pro gar nicht'
+          : 'Es gibt keine Werbe-Tracker'
+      }; Details stehen in der Datenschutzerklärung.`,
   },
   {
     question: 'Kontaktiert KaufCheck den Verkäufer?',
@@ -279,11 +291,13 @@ export function LandingPage() {
               <details key={item.question} className="faq__item">
                 <summary>{item.question}</summary>
                 <p>
-                  {item.answer(
-                    plans.anonymous.monthlyAnalyses,
-                    plans.free.monthlyAnalyses,
+                  {item.answer({
+                    anonymous: plans.anonymous.monthlyAnalyses,
+                    free: plans.free.monthlyAnalyses,
                     retrieval,
-                  )}
+                    ads: config.data?.ads != null,
+                    retentionDays: config.data?.privacy.anonymousRetentionDays ?? 90,
+                  })}
                 </p>
               </details>
             ))}

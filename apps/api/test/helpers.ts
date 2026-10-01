@@ -77,6 +77,8 @@ const TABLES = [
   'Subscription',
   'BillingEvent',
   'AnalyticsEvent',
+  'Order',
+  'ContractNotice',
 ];
 
 export async function resetDatabase(db: Db): Promise<void> {

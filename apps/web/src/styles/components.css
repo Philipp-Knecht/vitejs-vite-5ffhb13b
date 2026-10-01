@@ -766,11 +766,23 @@
   display: grid;
   gap: 6px;
   margin: 32px 0 8px;
+}
+
+.ad-slot--placeholder {
   padding: 16px;
   border: 1px dashed var(--c-border-strong);
   border-radius: var(--radius-lg);
   background: repeating-linear-gradient(45deg, #fafbfc, #fafbfc 10px, #f3f5f8 10px, #f3f5f8 20px);
   text-align: center;
+}
+
+.ad-slot--adsense {
+  min-width: 250px;
+}
+
+/* No ad (e.g. no consent): no empty box and no label (allowed by AdSense for unfilled units). */
+.ad-slot--adsense:has(ins.adsbygoogle[data-ad-status='unfilled']) {
+  display: none;
 }
 
 .ad-slot__label {

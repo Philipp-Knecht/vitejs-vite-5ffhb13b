@@ -13,15 +13,16 @@ import { parseInput } from '../errors';
 import { clearSessionCookie, setSessionCookie } from '../request-context';
 
 export function accountRoutes(app: FastifyInstance, services: Services): void {
-  const { auth, usage, billing, account, config } = services;
+  const { auth, usage, billing, account, config, contracts } = services;
   const cookieOptions = { secure: config.secureCookies };
 
   app.get('/api/me', async (request, reply): Promise<MeDto> => {
     const { actor } = request;
     reply.header('cache-control', 'private, no-store');
-    const [currentUsage, subscription] = await Promise.all([
+    const [currentUsage, subscription, contract] = await Promise.all([
       usage.get(actor),
       actor.userId ? billing.getSubscription(actor.userId) : Promise.resolve(null),
+      actor.userId ? contracts.currentContract(actor.userId) : Promise.resolve(null),
     ]);
     const user = actor.userId
       ? await services.db.user.findUnique({
@@ -37,6 +38,7 @@ export function accountRoutes(app: FastifyInstance, services: Services): void {
       entitlements: actor.entitlements,
       usage: currentUsage,
       subscription,
+      contract,
     };
   });
 

@@ -33,8 +33,10 @@ export default defineConfig(({ command, isSsrBuild }) => ({
         ? [{ find: /^react-router$/, replacement: reactRouterProduction }]
         : [],
   },
-  // One .env for the whole repository; only VITE_* variables reach the browser.
+  // One .env for the whole repository; only VITE_* variables and the public site address
+  // (named in the legal texts) reach the browser.
   envDir: '../../',
+  envPrefix: ['VITE_', 'PUBLIC_SITE_URL'],
   server: { port: 5173, strictPort: true, proxy },
   preview: { port: 4173, strictPort: true, proxy },
   build: {

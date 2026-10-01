@@ -224,7 +224,11 @@ describe('public config', () => {
     try {
       const response = await new TestClient(built.app).get('/api/config');
       const config = PublicConfigSchema.parse(response.json());
-      expect(config.privacy).toEqual({ hosting: 'render', anonymousRetentionDays: 30 });
+      expect(config.privacy).toEqual({
+        hosting: 'render',
+        anonymousRetentionDays: 30,
+        emailProvider: null,
+      });
       // The development mock is not a real AI provider.
       expect(config.features.aiProvider).toBeNull();
     } finally {

@@ -1,4 +1,5 @@
 import type { AnalyticsEventName, AnalyticsProps } from '@kaufcheck/shared';
+import { privacySignal } from './privacy-signals';
 
 /**
  * First-party, privacy-conscious analytics. Events carry no identifiers and
@@ -14,10 +15,7 @@ interface QueuedEvent {
 let serverEnabled: boolean | null = null;
 const queue: QueuedEvent[] = [];
 
-function optedOut(): boolean {
-  const nav = navigator as Navigator & { globalPrivacyControl?: boolean };
-  return nav.doNotTrack === '1' || nav.globalPrivacyControl === true;
-}
+const optedOut = privacySignal;
 
 function send(event: QueuedEvent): void {
   void fetch('/api/events', {

@@ -9,6 +9,22 @@ const PRODUCTION = {
   PUBLIC_SITE_URL: 'https://kaufcheck.example',
   COOKIE_SECRET: 'x'.repeat(40),
 };
+/** Everything a paid contract needs besides the Stripe keys. */
+const PAYMENT_READY = {
+  EMAIL_TRANSPORT: 'smtp',
+  SMTP_URL: 'smtps://user:pass@smtp.example:465',
+  EMAIL_FROM: 'KaufCheck <noreply@kaufcheck.example>',
+  VAT_MODE: 'small_business',
+  VITE_IMPRINT_NAME: 'Erika Musterfrau',
+  VITE_IMPRINT_ADDRESS: 'Musterstraße 1|12345 Musterstadt',
+  VITE_CONTACT_EMAIL: 'kontakt@kaufcheck.example',
+  VITE_CONTACT_PHONE: '+49 30 1234567',
+};
+const STRIPE = {
+  STRIPE_SECRET_KEY: 'sk_live_secret',
+  STRIPE_WEBHOOK_SECRET: 'whsec_secret',
+  STRIPE_PRICE_ID_PRO: 'price_123',
+};
 
 describe('loadConfig', () => {
   it('uses safe development defaults', () => {
@@ -86,14 +102,52 @@ describe('loadConfig', () => {
     ).toEqual(['http://localhost:5173', 'http://localhost:4173', 'http://127.0.0.1:5173']);
   });
 
+  it('enables payments only with e-mail, VAT mode and the full operator details', () => {
+    const config = loadConfig({ ...PRODUCTION, ...PAYMENT_READY, ...STRIPE });
+    expect(config.stripe).toMatchObject({ vatMode: 'small_business', paymentMethods: ['card'] });
+    expect(config.operator).toEqual({
+      name: 'Erika Musterfrau',
+      addressLines: ['Musterstraße 1', '12345 Musterstadt'],
+      email: 'kontakt@kaufcheck.example',
+      phone: '+49 30 1234567',
+    });
+    for (const missing of [
+      'EMAIL_TRANSPORT',
+      'VAT_MODE',
+      'VITE_IMPRINT_NAME',
+      'VITE_IMPRINT_ADDRESS',
+      'VITE_CONTACT_EMAIL',
+      'VITE_CONTACT_PHONE',
+    ]) {
+      const env: Record<string, string> = { ...PRODUCTION, ...PAYMENT_READY, ...STRIPE };
+      delete env[missing];
+      expect(() => loadConfig(env), missing).toThrow(new RegExp(missing));
+    }
+    expect(() =>
+      loadConfig({
+        ...PRODUCTION,
+        ...PAYMENT_READY,
+        ...STRIPE,
+        STRIPE_PAYMENT_METHODS: 'card,bitcoin',
+      }),
+    ).toThrow(/STRIPE_PAYMENT_METHODS/);
+    expect(
+      loadConfig({
+        ...PRODUCTION,
+        ...PAYMENT_READY,
+        ...STRIPE,
+        STRIPE_PAYMENT_METHODS: 'card, sepa_debit',
+      }).stripe?.paymentMethods,
+    ).toEqual(['card', 'sepa_debit']);
+  });
+
   it('never includes secrets in the startup summary', () => {
     const config = loadConfig({
       ...PRODUCTION,
+      ...PAYMENT_READY,
       AI_PROVIDER: 'anthropic',
       ANTHROPIC_API_KEY: 'sk-ant-secret-value',
-      STRIPE_SECRET_KEY: 'sk_live_secret',
-      STRIPE_WEBHOOK_SECRET: 'whsec_secret',
-      STRIPE_PRICE_ID_PRO: 'price_123',
+      ...STRIPE,
     });
     const summary = JSON.stringify(describeConfig(config));
     expect(summary).not.toMatch(/secret|sk-ant|whsec|pass@/);

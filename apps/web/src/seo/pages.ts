@@ -30,9 +30,9 @@ export const STATIC_PAGE_META: Readonly<Record<string, PageMeta>> = {
       'So besichtigst du einen Gebrauchtwagen richtig: was du mitnimmst, worauf du bei Lack, Rost, Motor und Reifen achtest und wie eine aussagekräftige Probefahrt abläuft.',
   },
   '/pro': {
-    title: 'KaufCheck Pro – mehr Prüfungen, Verlauf und Fotoanalyse',
+    title: 'KaufCheck Pro – mehr Prüfungen, Verlauf und keine Werbung',
     description:
-      'KaufCheck Pro: mehr Prüfungen pro Monat, Verlauf aller Analysen, größere Vergleiche, Fotoanalyse und keine Werbung.',
+      'KaufCheck Pro: mehr Prüfungen pro Monat, Verlauf aller Analysen, größere Vergleiche und keine Werbung. Monatlich kündbar.',
   },
   '/bot': {
     title: 'KaufCheckBot – Informationen für Websitebetreiber | KaufCheck',
@@ -48,6 +48,26 @@ export const STATIC_PAGE_META: Readonly<Record<string, PageMeta>> = {
   '/impressum': {
     title: 'Impressum | KaufCheck',
     description: 'Anbieterkennzeichnung von KaufCheck.',
+    noindex: true,
+  },
+  '/agb': {
+    title: 'AGB für KaufCheck Pro | KaufCheck',
+    description: 'Allgemeine Geschäftsbedingungen für das Abonnement KaufCheck Pro.',
+    noindex: true,
+  },
+  '/widerrufsbelehrung': {
+    title: 'Widerrufsbelehrung | KaufCheck',
+    description: 'Widerrufsbelehrung und Muster-Widerrufsformular für KaufCheck Pro.',
+    noindex: true,
+  },
+  '/vertrag-kuendigen': {
+    title: 'Vertrag kündigen | KaufCheck',
+    description: 'KaufCheck Pro kündigen – ohne Anmeldung, mit sofortiger Bestätigung.',
+    noindex: true,
+  },
+  '/vertrag-widerrufen': {
+    title: 'Vertrag widerrufen | KaufCheck',
+    description: 'Den Vertrag über KaufCheck Pro online widerrufen.',
     noindex: true,
   },
 };

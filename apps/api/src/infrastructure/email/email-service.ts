@@ -5,6 +5,8 @@ export interface EmailMessage {
   to: string;
   subject: string;
   text: string;
+  /** Where replies go, e.g. the operator's contact address. */
+  replyTo?: string;
 }
 
 export interface EmailService {
@@ -28,7 +30,13 @@ export class SmtpEmailService implements EmailService {
     smtpUrl: string,
     private readonly from: string,
   ) {
-    this.transport = createTransport(smtpUrl);
+    // Bounded waits: contract confirmations are sent while the visitor waits for the page.
+    this.transport = createTransport({
+      url: smtpUrl,
+      connectionTimeout: 10_000,
+      greetingTimeout: 10_000,
+      socketTimeout: 20_000,
+    });
   }
 
   async send(message: EmailMessage): Promise<void> {
@@ -37,6 +45,7 @@ export class SmtpEmailService implements EmailService {
       to: message.to,
       subject: message.subject,
       text: message.text,
+      ...(message.replyTo ? { replyTo: message.replyTo } : {}),
     });
   }
 }

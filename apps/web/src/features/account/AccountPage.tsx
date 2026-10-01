@@ -1,17 +1,17 @@
-import { PLAN_LABELS } from '@kaufcheck/shared';
-import { useState } from 'react';
-import { Link, Navigate, useNavigate, useSearchParams } from 'react-router';
-import { ApiRequestError } from '../../api/client';
 import {
-  useCheckout,
-  useConfig,
-  useDeleteAccount,
-  useLogout,
-  useMe,
-  usePortal,
-} from '../../api/queries';
+  berlinDate,
+  CANCEL_BUTTON_LABEL,
+  CANCEL_PATH,
+  PLAN_LABELS,
+  WITHDRAW_BUTTON_LABEL,
+  WITHDRAW_PATH,
+} from '@kaufcheck/shared';
+import { useState } from 'react';
+import { Link, Navigate, useNavigate } from 'react-router';
+import { ApiRequestError } from '../../api/client';
+import { useConfig, useDeleteAccount, useLogout, useMe, usePortal } from '../../api/queries';
 import { Alert } from '../../components/ui/Alert';
-import { Button } from '../../components/ui/Button';
+import { Button, ButtonLink } from '../../components/ui/Button';
 import { Dialog } from '../../components/ui/Dialog';
 import { TextField } from '../../components/ui/Field';
 import { PageLoading } from '../../components/ui/Spinner';
@@ -68,8 +68,14 @@ function DeleteAccountDialog({
       }
     >
       <p>
-        Dein Konto, alle gespeicherten Angebote und deine Prüfungen werden sofort gelöscht. Ein
-        laufendes Abo wird gekündigt. Das lässt sich nicht rückgängig machen.
+        Dein Konto, alle gespeicherten Angebote und deine Prüfungen werden sofort gelöscht. Das
+        lässt sich nicht rückgängig machen.
+      </p>
+      <p>
+        Ein laufendes Pro-Abo endet mit der Löschung; für den bezahlten Monat erstatten wir nichts.
+        Möchtest du nur Pro beenden, nutze „<Link to={CANCEL_PATH}>{CANCEL_BUTTON_LABEL}</Link>“.
+        Nachweise zu Bestellungen, Kündigungen und Widerrufen bewahren wir auf, solange das Gesetz
+        es verlangt.
       </p>
       <TextField
         label="Zur Bestätigung dein Passwort"
@@ -85,17 +91,9 @@ function DeleteAccountDialog({
 
 export function AccountPage() {
   usePageMeta(META);
-  const [params] = useSearchParams();
-  const checkoutDone = params.get('checkout') === 'erfolgreich';
-  // After checkout the plan changes once the payment provider confirms it (webhook): poll briefly.
-  const me = useMe({
-    poll: checkoutDone
-      ? (data, updates) => (data?.plan === 'pro' || updates > 20 ? false : 3000)
-      : undefined,
-  });
+  const me = useMe();
   const config = useConfig();
   const logout = useLogout();
-  const checkout = useCheckout();
   const portal = usePortal();
   const remove = useDeleteAccount();
   const navigate = useNavigate();
@@ -132,25 +130,28 @@ export function AccountPage() {
     );
   }
 
-  const { user, plan, usage, subscription, entitlements } = me.data;
+  const { user, plan, usage, subscription, entitlements, contract } = me.data;
   const billing = config.data?.features.billing ?? false;
-  const billingError = [checkout.error, portal.error].find(
-    (error) => error instanceof ApiRequestError,
-  );
+  const withdrawalOpen = contract !== null && berlinDate(new Date()) <= contract.withdrawalEndsAt;
 
   return (
     <div className="container page page--narrow">
       <h1>Dein Konto</h1>
 
-      {checkoutDone && (
+      {withdrawalOpen && contract && (
         <Alert
-          tone={plan === 'pro' ? 'success' : 'info'}
-          title={plan === 'pro' ? 'KaufCheck Pro ist aktiv' : 'Danke für deine Buchung'}
+          tone="info"
+          title="Widerrufsrecht"
+          actions={
+            <ButtonLink to={WITHDRAW_PATH} variant="secondary" size="sm">
+              {WITHDRAW_BUTTON_LABEL}
+            </ButtonLink>
+          }
         >
           <p>
-            {plan === 'pro'
-              ? 'Viel Erfolg bei der Suche nach dem passenden Auto.'
-              : 'Sobald die Zahlung bestätigt ist, wird Pro freigeschaltet. Das dauert meist nur wenige Sekunden.'}
+            Deinen Vertrag über KaufCheck Pro (Bestellung {contract.orderNumber}, geschlossen am{' '}
+            {formatDate(contract.concludedAt)}) kannst du binnen 14 Tagen ab Vertragsschluss ohne
+            Angabe von Gründen widerrufen.
           </p>
         </Alert>
       )}
@@ -209,22 +210,19 @@ export function AccountPage() {
             </div>
           )}
         </dl>
-        {billingError instanceof ApiRequestError && (
-          <Alert tone="error">{billingError.message}</Alert>
+        {portal.error instanceof ApiRequestError && (
+          <Alert tone="error">{portal.error.message}</Alert>
         )}
         <div className="button-row">
           {plan !== 'pro' && billing && (
-            <Button
-              loading={checkout.isPending}
-              onClick={() => {
-                track('pro_clicked', { placement: 'account' });
-                checkout.mutate(undefined, { onSuccess: ({ url }) => window.location.assign(url) });
-              }}
+            <ButtonLink
+              to="/pro/bestellen"
+              onClick={() => track('pro_clicked', { placement: 'account' })}
             >
-              Pro buchen
-            </Button>
+              Pro bestellen
+            </ButtonLink>
           )}
-          {subscription && billing && (
+          {subscription && (
             <Button
               variant="secondary"
               loading={portal.isPending}
@@ -234,6 +232,11 @@ export function AccountPage() {
             >
               Abo verwalten
             </Button>
+          )}
+          {subscription && (
+            <ButtonLink to={CANCEL_PATH} variant="secondary">
+              {CANCEL_BUTTON_LABEL}
+            </ButtonLink>
           )}
         </div>
         {plan !== 'pro' && !billing && (
