@@ -15,6 +15,14 @@ import { CONTRACT_DETAILS_COMPLETE, LEGAL_CONTEXT } from './site-info';
 
 function MissingDetails() {
   if (CONTRACT_DETAILS_COMPLETE) return null;
+  // Visitors only learn that Pro cannot be ordered yet; the setup hint is for development.
+  if (!import.meta.env.DEV) {
+    return (
+      <Alert tone="info">
+        <p>KaufCheck Pro kann derzeit noch nicht bestellt werden.</p>
+      </Alert>
+    );
+  }
   return (
     <Alert tone="warning" title="Angaben zum Betreiber fehlen">
       <p>

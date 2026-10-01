@@ -246,7 +246,7 @@ export interface AppConfig {
     smtpUrl?: string;
     from?: string;
     /** Named in the privacy policy when recognised from the SMTP host. */
-    provider: 'brevo' | 'other' | null;
+    provider: 'brevo' | 'gmail' | 'other' | null;
   };
   /** Google AdSense; `slot` null = only verification (ads.txt, meta tag), no ads yet. */
   adsense: { client: string; slot: string | null } | null;
@@ -283,14 +283,17 @@ function operatorFrom(env: Env): OperatorInfo | null {
   };
 }
 
-function emailProvider(env: Env): 'brevo' | 'other' | null {
+function emailProvider(env: Env): 'brevo' | 'gmail' | 'other' | null {
   if (env.EMAIL_TRANSPORT !== 'smtp' || !env.SMTP_URL) return null;
+  let host: string;
   try {
-    const host = new URL(env.SMTP_URL).hostname.toLowerCase();
-    return host === 'smtp-relay.brevo.com' || host.endsWith('.brevo.com') ? 'brevo' : 'other';
+    host = new URL(env.SMTP_URL).hostname.toLowerCase();
   } catch {
     return 'other';
   }
+  if (host === 'brevo.com' || host.endsWith('.brevo.com')) return 'brevo';
+  if (host === 'smtp.gmail.com' || host === 'smtp.googlemail.com') return 'gmail';
+  return 'other';
 }
 
 function parseTrustProxy(value: string | undefined): boolean | number {

@@ -258,13 +258,14 @@ export function PrivacyPage() {
           <p>
             E-Mails – etwa zum Zurücksetzen des Passworts und die Bestätigungen zu Bestellungen,
             Verträgen, Kündigungen und Widerrufen – verschicken wir über{' '}
-            {emailProvider === 'brevo'
-              ? 'die Brevo GmbH, Köpenicker Str. 126, 10179 Berlin, die'
-              : 'einen E-Mail-Dienstleister, der'}{' '}
-            in unserem Auftrag handelt (Auftragsverarbeitung nach Art. 28 DSGVO). Dabei werden deine
-            E-Mail-Adresse und der Inhalt der E-Mail verarbeitet. Rechtsgrundlage ist die
-            Durchführung des Vertrags bzw. deiner Anfrage (Art. 6 Abs. 1 lit. b DSGVO) und, bei den
-            Bestätigungen, unsere gesetzliche Pflicht dazu (Art. 6 Abs. 1 lit. c DSGVO).
+            {emailProvider === 'brevo' &&
+              'die Brevo GmbH, Köpenicker Str. 126, 10179 Berlin, die in unserem Auftrag handelt (Auftragsverarbeitung nach Art. 28 DSGVO).'}
+            {emailProvider === 'gmail' &&
+              'Gmail, einen Dienst der Google Ireland Limited, Gordon House, Barrow Street, Dublin 4, Irland. Google LLC (USA) ist nach dem EU-U.S. Data Privacy Framework zertifiziert; Übermittlungen in die USA stützen sich auf den Angemessenheitsbeschluss der EU-Kommission (Art. 45 DSGVO).'}
+            {emailProvider === 'other' && 'einen E-Mail-Dienstleister.'} Dabei erhält der Dienst
+            deine E-Mail-Adresse und den Inhalt der E-Mail. Rechtsgrundlage ist die Durchführung des
+            Vertrags bzw. deiner Anfrage (Art. 6 Abs. 1 lit. b DSGVO) und, bei den Bestätigungen,
+            unsere gesetzliche Pflicht dazu (Art. 6 Abs. 1 lit. c DSGVO).
           </p>
         </>
       )}
