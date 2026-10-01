@@ -311,7 +311,7 @@ already reserved in the contracts and the database.
 
 ## Legal
 
-- KaufCheck is independent and not affiliated with Kleinanzeigen GmbH.
+- KaufCheck is independent and not affiliated with Kleinanzeigen (kleinanzeigen.de GmbH).
 - Automatic retrieval is **off by default in production** and must stay off for Kleinanzeigen: its
   terms of use (§ 5, version of 17 February 2024) forbid crawlers, spiders, scrapers or other
   automated mechanisms without Kleinanzeigen's express written consent. Enable
