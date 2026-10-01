@@ -98,7 +98,15 @@ export function ListingAnalysisForm() {
 
   if (state.phase === 'running') {
     return (
-      <AnalysisProgress stages={state.stages} kind={state.request.kind} onCancel={runner.cancel} />
+      <AnalysisProgress
+        stages={state.stages}
+        kind={state.request.kind}
+        onCancel={() => {
+          runner.cancel();
+          // The form replaces the progress view; keep keyboard and screen reader focus on it.
+          window.setTimeout(() => document.getElementById(LISTING_INPUT_ID)?.focus(), 0);
+        }}
+      />
     );
   }
 

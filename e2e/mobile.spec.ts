@@ -34,3 +34,13 @@ test('the mobile menu opens and navigates', async ({ page }) => {
   await expect(page).toHaveURL(/\/gebrauchtwagen-kaufen$/);
   await expect(menu).toBeHidden();
 });
+
+test('Escape closes the mobile menu and returns focus to its button', async ({ page }) => {
+  await page.goto('/');
+  await page.getByRole('button', { name: 'Menü öffnen' }).click();
+  const menu = page.getByRole('navigation', { name: 'Menü' });
+  await expect(menu).toBeVisible();
+  await page.keyboard.press('Escape');
+  await expect(menu).toBeHidden();
+  await expect(page.getByRole('button', { name: 'Menü öffnen' })).toBeFocused();
+});

@@ -18,6 +18,7 @@ interface LocationState {
 }
 
 const META = appPageMeta('Inseratstext prüfen');
+const TEXT_INPUT_ID = 'inseratstext';
 
 export function TextInputPage() {
   usePageMeta(META);
@@ -75,7 +76,10 @@ export function TextInputPage() {
         <AnalysisProgress
           stages={state.stages}
           kind={state.request.kind}
-          onCancel={runner.cancel}
+          onCancel={() => {
+            runner.cancel();
+            window.setTimeout(() => document.getElementById(TEXT_INPUT_ID)?.focus(), 0);
+          }}
         />
       ) : (
         <>
@@ -89,6 +93,7 @@ export function TextInputPage() {
           )}
           <form className="stack" onSubmit={submit} noValidate>
             <TextAreaField
+              id={TEXT_INPUT_ID}
               label="Inseratstext"
               rows={12}
               value={text}
