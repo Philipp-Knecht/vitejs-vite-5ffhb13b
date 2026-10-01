@@ -1,7 +1,7 @@
 import Anthropic from '@anthropic-ai/sdk';
 import { describe, expect, it, vi } from 'vitest';
 import { z } from 'zod';
-import { AnthropicProvider, mapAnthropicError } from './anthropic-provider';
+import { AnthropicProvider, claudeModelFeatures, mapAnthropicError } from './anthropic-provider';
 import { AiProviderError, type StructuredAnalysisRequest } from './types';
 
 const Schema = z.object({ summary: z.string() });
@@ -27,10 +27,10 @@ function fakeClient(result: unknown) {
   return { client, parse };
 }
 
-function provider(client: Anthropic) {
+function provider(client: Anthropic, model = 'claude-opus-5-5') {
   return new AnthropicProvider({
     apiKey: 'test-key',
-    model: 'claude-opus-5-5',
+    model,
     effort: 'medium',
     client,
   });
@@ -67,6 +67,22 @@ describe('AnthropicProvider', () => {
     const messages = body.messages as { role: string; content: { type: string }[] }[];
     expect(messages[0]?.content.map((block) => block.type)).toEqual(['image', 'text']);
     expect(options).toEqual({ signal: controller.signal, timeout: 5000 });
+  });
+
+  it('leaves out effort and fallbacks on Claude Haiku 4.5', async () => {
+    const { client, parse } = fakeClient({
+      stop_reason: 'end_turn',
+      parsed_output: { summary: 'ok' },
+      model: 'claude-haiku-4-5',
+    });
+    await provider(client, 'claude-haiku-4-5').generateStructuredAnalysis(request());
+    const [body] = parse.mock.calls[0] as unknown as [Record<string, unknown>];
+    expect(body.model).toBe('claude-haiku-4-5');
+    expect(body).not.toHaveProperty('fallbacks');
+    expect(body).not.toHaveProperty('betas');
+    const outputConfig = body.output_config as Record<string, unknown>;
+    expect(outputConfig).not.toHaveProperty('effort');
+    expect(outputConfig).toHaveProperty('format');
   });
 
   it('reports the model that actually answered (e.g. after a server-side fallback)', async () => {
@@ -121,5 +137,26 @@ describe('mapAnthropicError', () => {
       .generateStructuredAnalysis(request())
       .catch((caught: unknown) => caught);
     expect(String((error as Error).message)).not.toContain('test-key');
+  });
+});
+
+describe('claudeModelFeatures', () => {
+  it.each([
+    ['claude-opus-5-5', true, true],
+    ['claude-opus-5', true, true],
+    ['claude-opus-4-8', true, false],
+    ['claude-opus-4-5-20251101', true, false],
+    ['claude-opus-4-1', false, false],
+    ['claude-opus-4-20250514', false, false],
+    ['claude-sonnet-5-5', true, true],
+    ['claude-sonnet-5', true, false],
+    ['claude-sonnet-4-6', true, false],
+    ['claude-sonnet-4-5', false, false],
+    ['claude-haiku-4-5', false, false],
+    ['claude-haiku-4-5-20251001', false, false],
+    ['claude-fable-5-1', true, true],
+    ['not-a-claude-model', false, false],
+  ])('%s → effort %s, refusal fallbacks %s', (model, effort, refusalFallbacks) => {
+    expect(claudeModelFeatures(model)).toEqual({ effort, refusalFallbacks });
   });
 });

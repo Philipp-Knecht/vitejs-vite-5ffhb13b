@@ -227,9 +227,11 @@ How AI output is handled:
 - Only listing data is sent (contact data is removed first); no user data. Photos are downloaded
   through the SSRF-safe fetcher (image CDN allowlist, size and type limits).
 - Calls run with a timeout and a concurrency cap (`AI_MAX_CONCURRENCY`); when all slots are busy
-  the AI step is skipped instead of queued. The Anthropic provider enables server-side fallbacks
-  (`fallbacks: "default"`), so a false-positive refusal falls back to another model instead of
-  failing; the model that answered is recorded.
+  the AI step is skipped instead of queued. On models with refusal classifiers (Fable 5+, Opus 5+,
+  Sonnet 5.5+) the Anthropic provider enables server-side fallbacks (`fallbacks: "default"`), so a
+  false-positive refusal falls back to another model instead of failing; the model that answered is
+  recorded. `ANTHROPIC_EFFORT` is sent only to models that support it, so a budget model such as
+  `ANTHROPIC_MODEL=claude-haiku-4-5` works without further settings.
 
 ## Stripe configuration
 
