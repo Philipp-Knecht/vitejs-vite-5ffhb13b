@@ -793,6 +793,8 @@
 
 .question__reason summary {
   width: fit-content;
+  min-height: 24px;
+  padding-block: 2px;
   color: var(--c-primary);
   cursor: pointer;
 }

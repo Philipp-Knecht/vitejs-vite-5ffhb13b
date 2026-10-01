@@ -1,5 +1,5 @@
 import { Menu, UserRound, X } from 'lucide-react';
-import { useId, useState } from 'react';
+import { useEffect, useId, useRef, useState } from 'react';
 import { Link, NavLink } from 'react-router';
 import { useMe } from '../../api/queries';
 import { cn } from '../../lib/format';
@@ -44,7 +44,20 @@ function AccountLink({ onNavigate }: { onNavigate?: () => void }) {
 export function Header() {
   const [open, setOpen] = useState(false);
   const menuId = useId();
+  const menuButton = useRef<HTMLButtonElement>(null);
   const close = () => setOpen(false);
+
+  // Escape closes the open menu and returns focus to the menu button.
+  useEffect(() => {
+    if (!open) return;
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key !== 'Escape') return;
+      setOpen(false);
+      menuButton.current?.focus();
+    };
+    document.addEventListener('keydown', onKeyDown);
+    return () => document.removeEventListener('keydown', onKeyDown);
+  }, [open]);
 
   return (
     <header className="header">
@@ -72,6 +85,7 @@ export function Header() {
         <div className="header__actions">
           <AccountLink />
           <button
+            ref={menuButton}
             type="button"
             className="icon-button header__menu-button"
             aria-expanded={open}
