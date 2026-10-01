@@ -35,8 +35,8 @@ export function Footer() {
       </div>
       <div className="container footer__legal">
         <p>
-          KaufCheck ist ein unabhängiges Angebot und steht in keiner Verbindung zur Kleinanzeigen
-          GmbH. Alle Angaben ohne Gewähr.
+          KaufCheck ist ein unabhängiges Angebot und steht in keiner Verbindung zu Kleinanzeigen.
+          Alle Angaben ohne Gewähr.
         </p>
       </div>
     </footer>

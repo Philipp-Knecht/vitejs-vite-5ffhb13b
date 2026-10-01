@@ -45,8 +45,8 @@ export function ImprintPage() {
       <p>Verantwortlich für die redaktionellen Inhalte (Ratgeber) ist die oben genannte Person.</p>
       <h2>Hinweis zu Kleinanzeigen</h2>
       <p>
-        KaufCheck ist ein unabhängiges Angebot und steht in keiner Verbindung zur Kleinanzeigen
-        GmbH. „Kleinanzeigen“ ist eine Marke ihrer Inhaber.
+        KaufCheck ist ein unabhängiges Angebot und steht in keiner Verbindung zu Kleinanzeigen
+        (kleinanzeigen.de GmbH). „Kleinanzeigen“ ist eine Marke ihrer Inhaber.
       </p>
       <h2>Haftung für Inhalte</h2>
       <p>

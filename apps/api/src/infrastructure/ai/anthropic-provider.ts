@@ -16,9 +16,41 @@ export interface AnthropicProviderOptions {
 }
 
 /**
+ * Request features that depend on the model. `output_config.effort` works on
+ * Claude Opus 4.5+, Sonnet 4.6+ and Fable, and errors on Haiku 4.5. The
+ * server-side refusal fallback (`fallbacks: "default"`) is for the models
+ * whose safety classifiers can decline a request: Fable 5+, Opus 5+ and
+ * Sonnet 5.5+.
+ */
+export function claudeModelFeatures(model: string): { effort: boolean; refusalFallbacks: boolean } {
+  const match = /^claude-(opus|sonnet|haiku|fable|mythos)-(\d+)(?:-(\d{1,2}))?(?:-\d{8})?$/.exec(
+    model,
+  );
+  if (!match) return { effort: false, refusalFallbacks: false };
+  const family = match[1];
+  const major = Number(match[2]);
+  const minor = Number(match[3] ?? 0);
+  const atLeast = (wantMajor: number, wantMinor: number) =>
+    major > wantMajor || (major === wantMajor && minor >= wantMinor);
+  switch (family) {
+    case 'fable':
+      return { effort: true, refusalFallbacks: major >= 5 };
+    case 'mythos':
+      return { effort: true, refusalFallbacks: false };
+    case 'opus':
+      return { effort: atLeast(4, 5), refusalFallbacks: major >= 5 };
+    case 'sonnet':
+      return { effort: atLeast(4, 6), refusalFallbacks: atLeast(5, 5) };
+    default:
+      return { effort: false, refusalFallbacks: false };
+  }
+}
+
+/**
  * Claude via the official SDK with structured outputs (`messages.parse` +
- * Zod output format). Server-side refusal fallbacks are enabled so a
- * classifier false positive falls back to another model instead of failing.
+ * Zod output format). On models with refusal classifiers the server-side
+ * fallback is enabled, so a false positive falls back to another model
+ * instead of failing.
  */
 export class AnthropicProvider implements AiProvider {
   readonly name = 'anthropic' as const;
@@ -27,10 +59,12 @@ export class AnthropicProvider implements AiProvider {
   readonly model: string;
   private readonly client: Anthropic;
   private readonly effort: AnthropicProviderOptions['effort'];
+  private readonly features: ReturnType<typeof claudeModelFeatures>;
 
   constructor(options: AnthropicProviderOptions) {
     this.model = options.model;
     this.effort = options.effort;
+    this.features = claudeModelFeatures(options.model);
     this.client = options.client ?? new Anthropic({ apiKey: options.apiKey, maxRetries: 1 });
   }
 
@@ -51,10 +85,14 @@ export class AnthropicProvider implements AiProvider {
         {
           model: this.model,
           max_tokens: request.maxOutputTokens,
-          betas: ['server-side-fallback-2026-07-01'],
-          fallbacks: 'default',
+          ...(this.features.refusalFallbacks
+            ? { betas: ['server-side-fallback-2026-07-01'], fallbacks: 'default' as const }
+            : {}),
           system: request.system,
-          output_config: { format: betaZodOutputFormat(request.schema), effort: this.effort },
+          output_config: {
+            format: betaZodOutputFormat(request.schema),
+            ...(this.features.effort ? { effort: this.effort } : {}),
+          },
           messages: [{ role: 'user', content }],
         },
         { signal: request.signal, timeout: request.timeoutMs },
