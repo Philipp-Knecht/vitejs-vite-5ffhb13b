@@ -71,6 +71,11 @@ const server = spawn(process.execPath, [path.join(root, 'apps/api/dist/server.js
     AI_PROVIDER: 'mock',
     EMAIL_TRANSPORT: 'console',
     ANALYZE_RATE_PER_MINUTE: '1000',
+    // Operator details named in contract confirmations (synthetic).
+    VITE_IMPRINT_NAME: 'Erika Musterfrau',
+    VITE_IMPRINT_ADDRESS: 'Musterstraße 1|12345 Musterstadt',
+    VITE_CONTACT_EMAIL: 'kontakt@kaufcheck.example',
+    VITE_CONTACT_PHONE: '+49 30 1234567',
   },
 });
 

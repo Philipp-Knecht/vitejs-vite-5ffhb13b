@@ -1,26 +1,62 @@
-import { useMe } from '../api/queries';
+import { useEffect, useRef } from 'react';
+import { useConfig, useMe } from '../api/queries';
+import { loadAdSense, requestAd } from '../lib/adsense';
+import { privacySignal } from '../lib/privacy-signals';
 
 /**
- * Designated ad placements. Slots are only placed between content
- * sections – never next to warnings, input fields or action buttons.
+ * Designated ad placements: below editorial or analysis content – never next
+ * to warnings, input fields or action buttons, and not on pages without
+ * content of our own (account, sign-in, saved listings, errors).
  */
-export type AdPlacement = 'result_bottom' | 'guide_bottom' | 'saved_listings_bottom';
+export type AdPlacement = 'result_bottom' | 'guide_bottom';
 
-const PROVIDER = import.meta.env.VITE_ADS_PROVIDER ?? 'none';
+/** `placeholder` shows labelled boxes for layout work (development only). */
+const PLACEHOLDER = import.meta.env.VITE_ADS_PROVIDER === 'placeholder';
+
+function AdSenseUnit({ client, slot }: { client: string; slot: string }) {
+  const requested = useRef(false);
+  useEffect(() => {
+    loadAdSense(client);
+    if (requested.current) return;
+    requested.current = true;
+    requestAd();
+  }, [client]);
+  return (
+    <ins
+      className="adsbygoogle"
+      style={{ display: 'block' }}
+      data-ad-client={client}
+      data-ad-slot={slot}
+      data-ad-format="auto"
+      data-full-width-responsive="true"
+    />
+  );
+}
 
 /**
- * Ad abstraction. No ad network is integrated yet: with `VITE_ADS_PROVIDER=placeholder`
- * a labelled box shows where an ad would appear (layout work), otherwise
- * nothing is rendered. Pro users never see ads, and nothing is shown until
- * the plan is known.
+ * Shows a Google AdSense unit (configured on the server) to visitors
+ * without Pro. Nothing is loaded for Pro, while the plan is unknown, or when
+ * the browser sends Do Not Track / Global Privacy Control. Unfilled units –
+ * for example without consent – stay invisible.
  */
 export function AdSlot({ placement }: { placement: AdPlacement }) {
   const me = useMe();
-  if (PROVIDER !== 'placeholder') return null;
-  if (!me.data?.entitlements.showAds) return null;
+  const config = useConfig();
+  const ads = config.data?.ads ?? null;
+  if (me.data?.entitlements.showAds !== true) return null;
+  if (ads) {
+    if (privacySignal()) return null;
+    return (
+      <aside className="ad-slot ad-slot--adsense" aria-label="Werbung" data-placement={placement}>
+        <span className="ad-slot__label">Werbung</span>
+        <AdSenseUnit client={ads.client} slot={ads.slot} />
+      </aside>
+    );
+  }
+  if (!PLACEHOLDER) return null;
   return (
-    <aside className="ad-slot" aria-label="Anzeige" data-placement={placement}>
-      <span className="ad-slot__label">Anzeige</span>
+    <aside className="ad-slot ad-slot--placeholder" aria-label="Werbung" data-placement={placement}>
+      <span className="ad-slot__label">Werbung</span>
       <span className="ad-slot__placeholder">
         Platzhalter für eine Anzeige ({placement}) – nur in der Entwicklung sichtbar
       </span>

@@ -31,7 +31,8 @@ async function main(): Promise<void> {
         now: new Date(),
         anonRetentionDays: config.anonRetentionDays,
       });
-      app.log.info({ op: 'maintenance', ...report }, 'maintenance finished');
+      const contracts = await services.contracts.runMaintenance();
+      app.log.info({ op: 'maintenance', ...report, ...contracts }, 'maintenance finished');
     } catch (error) {
       app.log.error({ op: 'maintenance', err: error }, 'maintenance failed');
     }

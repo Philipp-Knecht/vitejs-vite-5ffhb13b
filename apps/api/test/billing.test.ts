@@ -32,14 +32,15 @@ describe('billing without a payment provider', () => {
     }>();
     expect(config.features.billing).toBe(false);
 
-    const anonymous = await new TestClient(built.app).post('/api/billing/checkout');
+    const consents = { acceptTerms: true, requestImmediateStart: true };
+    const anonymous = await new TestClient(built.app).post('/api/billing/orders', consents);
     expect(anonymous.statusCode).toBe(401);
 
     const client = new TestClient(built.app);
     await client.register();
-    const checkout = await client.post('/api/billing/checkout');
-    expect(checkout.statusCode).toBe(501);
-    expect(errorOf(checkout).code).toBe('PAYMENT_NOT_CONFIGURED');
+    const order = await client.post('/api/billing/orders', consents);
+    expect(order.statusCode).toBe(501);
+    expect(errorOf(order).code).toBe('PAYMENT_NOT_CONFIGURED');
 
     const webhook = await built.app.inject({
       method: 'POST',
@@ -70,6 +71,8 @@ describe('Stripe webhooks', () => {
         secretKey: 'sk_test_integration_dummy',
         webhookSecret: WEBHOOK_SECRET,
         priceIdPro: 'price_test',
+        paymentMethods: ['card'],
+        vatMode: 'small_business',
         client: stripe,
       },
       logger,

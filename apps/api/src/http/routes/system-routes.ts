@@ -4,10 +4,11 @@ import { AnalyticsService } from '../../application/analytics-service';
 import type { AppConfig } from '../../config/env';
 import type { Services } from '../../container';
 import { AppError } from '../../lib/errors';
+import { adsTxt } from '../ads';
 import { parseInput } from '../errors';
 
 export function systemRoutes(app: FastifyInstance, services: Services): void {
-  const { config, db, plans, enricher, billing, auth, analytics } = services;
+  const { config, db, plans, enricher, billing, auth, analytics, contracts } = services;
 
   app.get('/api/health', { config: { rateLimit: false } }, async (_request, reply) => {
     try {
@@ -20,6 +21,7 @@ export function systemRoutes(app: FastifyInstance, services: Services): void {
 
   app.get('/api/config', async (_request, reply): Promise<PublicConfig> => {
     reply.header('cache-control', 'public, max-age=60');
+    const offer = contracts.ordersPossible ? await billing.getOffer() : null;
     return {
       features: {
         urlRetrieval: services.retriever.mode !== 'off',
@@ -27,18 +29,32 @@ export function systemRoutes(app: FastifyInstance, services: Services): void {
         ai: enricher !== null,
         aiProvider: realAiProvider(config.ai.provider, enricher?.isMock ?? true),
         aiIsMock: enricher?.isMock ?? false,
-        photoAnalysis: enricher?.photoAnalysisAvailable ?? false,
-        billing: billing.configured,
+        // Photos only come with retrieved listings; pasted text has none.
+        photoAnalysis: services.photoAnalysisAvailable,
+        billing: offer !== null,
         passwordReset: auth.passwordResetEnabled,
         analytics: analytics.isEnabled,
       },
       plans,
-      pro: { priceLabel: config.proPriceLabel },
+      pro: { offer },
+      ads: config.adsense?.slot
+        ? { client: config.adsense.client, slot: config.adsense.slot }
+        : null,
       privacy: {
         hosting: config.hostingProvider,
         anonymousRetentionDays: config.anonRetentionDays,
+        emailProvider: services.email.enabled ? config.email.provider : null,
       },
     };
+  });
+
+  // Authorised sellers for AdSense; with a public-suffix host it belongs on this subdomain.
+  app.get('/ads.txt', async (_request, reply) => {
+    if (!config.adsense) {
+      return reply.status(404).type('text/plain; charset=utf-8').send('Nicht gefunden');
+    }
+    reply.header('cache-control', 'public, max-age=3600');
+    return reply.type('text/plain; charset=utf-8').send(adsTxt(config.adsense.client));
   });
 
   app.post(
@@ -55,21 +71,6 @@ export function systemRoutes(app: FastifyInstance, services: Services): void {
       return reply.status(204).send();
     },
   );
-
-  app.post('/api/billing/checkout', async (request) => {
-    const { actor } = request;
-    if (!actor.userId || !actor.email) {
-      throw new AppError('UNAUTHENTICATED', { message: 'Bitte melde dich an, um Pro zu buchen.' });
-    }
-    if (actor.plan === 'pro')
-      throw new AppError('VALIDATION_ERROR', { message: 'Du hast bereits KaufCheck Pro.' });
-    return billing.createCheckoutSession({
-      userId: actor.userId,
-      email: actor.email,
-      successUrl: `${config.publicSiteUrl}/konto?checkout=erfolgreich`,
-      cancelUrl: `${config.publicSiteUrl}/pro?checkout=abgebrochen`,
-    });
-  });
 
   app.post('/api/billing/portal', async (request) => {
     const { actor } = request;
@@ -94,6 +95,7 @@ export function systemRoutes(app: FastifyInstance, services: Services): void {
       await billing.handleWebhook(
         request.body as Buffer,
         typeof signature === 'string' ? signature : undefined,
+        contracts,
       );
       return reply.status(200).send({ received: true });
     });

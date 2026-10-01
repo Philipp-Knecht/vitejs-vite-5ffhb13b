@@ -11,6 +11,8 @@ import { EntitlementsSchema, PlanSchema } from './plans';
 import { MAX_URL_INPUT_LENGTH } from '../url';
 import { AnalysisResultSchema, EvidenceTypeSchema } from './analysis';
 import { ListingDtoSchema, ListingSourceTypeSchema, VehicleSchema } from './listing';
+import { ProOfferSchema } from './contracts';
+import { EmailSchema } from './email';
 
 // ---------------------------------------------------------------------------
 // Analysis requests
@@ -213,6 +215,15 @@ export const MeDtoSchema = z.object({
       cancelAtPeriodEnd: z.boolean(),
     })
     .nullable(),
+  /** The latest concluded Pro contract (for the withdrawal notice in the account). */
+  contract: z
+    .object({
+      orderNumber: z.string(),
+      concludedAt: z.string(),
+      /** Last day of the withdrawal period as YYYY-MM-DD (weekends considered). */
+      withdrawalEndsAt: z.string(),
+    })
+    .nullable(),
 });
 export type MeDto = z.infer<typeof MeDtoSchema>;
 
@@ -236,21 +247,21 @@ export const PublicConfigSchema = z.object({
     free: EntitlementsSchema,
     pro: EntitlementsSchema,
   }),
-  pro: z.object({ priceLabel: z.string().nullable() }),
+  /** The Pro offer; null while payments are not available. */
+  pro: z.object({ offer: ProOfferSchema.nullable() }),
+  /** Google AdSense ad unit; null = no ads. */
+  ads: z.object({ client: z.string(), slot: z.string() }).nullable(),
   /** Operator facts the privacy policy depends on. */
   privacy: z.object({
     hosting: z.enum(['render']).nullable(),
     anonymousRetentionDays: z.number().int().positive(),
+    /** E-mail service provider, when e-mail is sent (Brevo is recognised by its SMTP host). */
+    emailProvider: z.enum(['brevo', 'other']).nullable(),
   }),
 });
 export type PublicConfig = z.infer<typeof PublicConfigSchema>;
 
-export const EmailSchema = z
-  .string()
-  .trim()
-  .toLowerCase()
-  .max(254, 'Die E-Mail-Adresse ist zu lang.')
-  .pipe(z.email('Bitte gib eine gültige E-Mail-Adresse ein.'));
+export { EmailSchema };
 
 export const RegisterRequestSchema = z.object({
   email: EmailSchema,

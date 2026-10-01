@@ -18,6 +18,10 @@ export const STATIC_PAGES: readonly StaticPage[] = [
   { path: '/bot', indexable: false },
   { path: '/datenschutz', indexable: false },
   { path: '/impressum', indexable: false },
+  { path: '/agb', indexable: false },
+  { path: '/widerrufsbelehrung', indexable: false },
+  { path: '/vertrag-kuendigen', indexable: false },
+  { path: '/vertrag-widerrufen', indexable: false },
 ];
 
 /** Client-rendered routes (not prerendered, never indexed). */
@@ -32,6 +36,8 @@ const DYNAMIC_ROUTE_PATTERNS: readonly RegExp[] = [
   /^\/konto$/,
   /^\/passwort-vergessen$/,
   /^\/passwort-zuruecksetzen$/,
+  /^\/pro\/bestellen$/,
+  /^\/pro\/bestellt$/,
 ];
 
 export function isStaticPage(pathname: string): boolean {

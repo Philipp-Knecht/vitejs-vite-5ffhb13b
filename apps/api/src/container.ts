@@ -6,6 +6,7 @@ import { AiEnricher } from './application/ai-enricher';
 import { AnalysisService } from './application/analysis-service';
 import { AnalyticsService } from './application/analytics-service';
 import { AuthService } from './application/auth-service';
+import { ContractService } from './application/contract-service';
 import { SavedListingService } from './application/saved-listing-service';
 import { UsageService } from './application/usage-service';
 import type { AppConfig } from './config/env';
@@ -45,6 +46,9 @@ export interface Services {
   billing: BillingService;
   account: AccountService;
   email: EmailService;
+  contracts: ContractService;
+  /** Photos only come with retrieved listings, so pasted text never gets a photo analysis. */
+  photoAnalysisAvailable: boolean;
 }
 
 export interface ServiceOverrides {
@@ -128,6 +132,21 @@ export function createServices(
     (config.stripe
       ? new StripeBillingService(db, config.stripe, logger)
       : new NotConfiguredBillingService(db));
+  const photoAnalysisAvailable =
+    retriever.mode !== 'off' && (enricher?.photoAnalysisAvailable ?? false);
+  const contracts = new ContractService(
+    db,
+    billing,
+    email,
+    {
+      siteUrl: config.publicSiteUrl,
+      operator: config.operator,
+      pro: plans.pro,
+      photoAnalysisAvailable,
+      now,
+    },
+    logger,
+  );
   const savedListings = new SavedListingService(db, analyses, analytics, now);
   const account = new AccountService(db, auth, billing);
 
@@ -145,5 +164,7 @@ export function createServices(
     billing,
     account,
     email,
+    contracts,
+    photoAnalysisAvailable,
   };
 }

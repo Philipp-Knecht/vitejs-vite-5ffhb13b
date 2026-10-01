@@ -1,9 +1,12 @@
 import { createReadStream, existsSync } from 'node:fs';
+import { readFile } from 'node:fs/promises';
 import path from 'node:path';
 import fastifyStatic from '@fastify/static';
 import { isAppRoute } from '@kaufcheck/shared';
 import type { FastifyInstance } from 'fastify';
 import type { AppConfig } from '../config/env';
+import { adsContentSecurityPolicy, createNonce, prepareHtml } from './ads';
+import { servedOverHttps } from './security';
 
 /** Directory (inside the web build) with prerendered static pages. */
 export const PRERENDERED_DIR = '_pages';
@@ -37,7 +40,17 @@ export async function registerWeb(app: FastifyInstance, config: AppConfig): Prom
     },
   });
 
-  app.setNotFoundHandler((request, reply) => {
+  // With AdSense, pages carry the verification tag and – once ads are shown – a nonce per response.
+  const html = new Map<string, string>();
+  const readHtml = async (file: string) => {
+    const cached = html.get(file);
+    if (cached !== undefined) return cached;
+    const content = await readFile(file, 'utf8');
+    html.set(file, content);
+    return content;
+  };
+
+  app.setNotFoundHandler(async (request, reply) => {
     const pathname = (request.url.split('?')[0] ?? '/').replace(/\/+$/, '') || '/';
     if (pathname.startsWith('/api/') || (request.method !== 'GET' && request.method !== 'HEAD')) {
       return reply
@@ -58,9 +71,25 @@ export async function registerWeb(app: FastifyInstance, config: AppConfig): Prom
     const prerendered = path.resolve(pagesRoot, `.${decoded}`, 'index.html');
     const insideRoot = prerendered.startsWith(`${pagesRoot}${path.sep}`);
     const file = insideRoot && existsSync(prerendered) ? prerendered : shell;
-    reply.header('cache-control', 'no-cache');
     reply.type('text/html; charset=utf-8');
-    return reply.status(isAppRoute(decoded) ? 200 : 404).send(createReadStream(file));
+    reply.status(isAppRoute(decoded) ? 200 : 404);
+    const { adsense } = config;
+    if (!adsense) {
+      reply.header('cache-control', 'no-cache');
+      return reply.send(createReadStream(file));
+    }
+    const nonce = adsense.slot ? createNonce() : null;
+    if (nonce) {
+      reply.header(
+        'content-security-policy',
+        adsContentSecurityPolicy(nonce, servedOverHttps(config)),
+      );
+      // A cached copy would carry an outdated nonce.
+      reply.header('cache-control', 'no-store');
+    } else {
+      reply.header('cache-control', 'no-cache');
+    }
+    return reply.send(prepareHtml(await readHtml(file), { adsenseClient: adsense.client, nonce }));
   });
   return true;
 }

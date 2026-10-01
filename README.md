@@ -70,10 +70,11 @@ or a short cookie secret). Only `VITE_*` variables are compiled into the browser
 | Listing retrieval | `LISTING_FETCH_MODE` (`off`/`live`/`fixtures`), `FETCH_USER_AGENT`, `FETCH_TIMEOUT_MS`, `FETCH_MAX_BYTES`, `FETCH_RATE_PER_MINUTE`, `SHOW_LISTING_PHOTOS` | Production default is `off`. `fixtures` is development/test only.                              |
 | AI                | `AI_PROVIDER`, `ANTHROPIC_*`, `OPENAI_*`, `AI_TIMEOUT_MS`, `AI_MAX_CONCURRENCY`, `AI_PHOTO_ANALYSIS`, `AI_MAX_PHOTOS`                                     | See [AI provider configuration](#ai-provider-configuration).                                   |
 | Plans             | `ANON_MONTHLY_ANALYSES`, `FREE_MONTHLY_ANALYSES`, `PRO_MONTHLY_ANALYSES`, `ANALYZE_RATE_PER_MINUTE`                                                       | Defaults: 3 without account, 10 free, 300 Pro per calendar month (UTC).                        |
-| Payments          | `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET`, `STRIPE_PRICE_ID_PRO`, `PRO_PRICE_LABEL`                                                                    | All three Stripe values or none.                                                               |
+| Payments          | `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET`, `STRIPE_PRICE_ID_PRO`, `VAT_MODE`, `STRIPE_PAYMENT_METHODS`                                                 | All three Stripe values or none; payments also need SMTP e-mail and the full operator details. |
+| Ads               | `ADSENSE_CLIENT`, `ADSENSE_SLOT`                                                                                                                          | See [Google AdSense](#google-adsense).                                                         |
 | E-mail            | `EMAIL_TRANSPORT` (`none`/`smtp`/`console`), `SMTP_URL`, `EMAIL_FROM`                                                                                     | Needed for password reset; without e-mail the feature is shown as unavailable.                 |
 | Operations        | `ANALYTICS_ENABLED`, `SERVE_WEB`, `WEB_DIST_DIR`, `ANON_RETENTION_DAYS`, `HOSTING_PROVIDER`                                                               | `HOSTING_PROVIDER=render` names Render in the privacy policy (detected automatically there).   |
-| Web (build time)  | `VITE_IMPRINT_NAME`, `VITE_IMPRINT_ADDRESS` (lines separated by `\|`), `VITE_CONTACT_EMAIL`, `VITE_ADS_PROVIDER`                                          | The imprint is legally required in Germany before going live.                                  |
+| Web (build time)  | `VITE_IMPRINT_NAME`, `VITE_IMPRINT_ADDRESS` (lines separated by `\|`), `VITE_CONTACT_EMAIL`, `VITE_CONTACT_PHONE`, `VITE_ADS_PROVIDER`                    | The imprint is legally required in Germany; the server reads the same values for contracts.    |
 | Tests             | `TEST_DATABASE_URL`, `E2E_DATABASE_URL`                                                                                                                   | Defaults: `kaufcheck_test` and `kaufcheck_e2e` on localhost.                                   |
 
 Do not set `NODE_ENV` in `.env`: it defaults to `development`, the Docker image sets `production`,
@@ -235,19 +236,53 @@ How AI output is handled:
 
 ## Stripe configuration
 
-Without the three Stripe variables, KaufCheck shows „Pro – bald verfügbar“ and the checkout endpoint
-answers `PAYMENT_NOT_CONFIGURED`. Nothing is simulated.
+Without the three Stripe variables, KaufCheck shows „Pro – bald verfügbar“ and ordering answers
+`PAYMENT_NOT_CONFIGURED`. Nothing is simulated. The server also refuses to start with Stripe but
+without SMTP e-mail, `VAT_MODE` or the operator's name, address, e-mail and phone number.
 
-1. Create a product with a recurring price in Stripe and set `STRIPE_PRICE_ID_PRO`,
-   `STRIPE_SECRET_KEY` and `PRO_PRICE_LABEL` (the price text shown on `/pro`).
+1. Create a product with a monthly euro price in Stripe (no trial, tax behaviour „inclusive“ or
+   unspecified) and set `STRIPE_PRICE_ID_PRO` and `STRIPE_SECRET_KEY`. The price shown on `/pro`,
+   on the order page and in the confirmations is read from this price.
 2. Add a webhook endpoint `https://<your-domain>/api/billing/webhook` for the events
-   `checkout.session.completed`, `customer.subscription.created`, `customer.subscription.updated`
-   and `customer.subscription.deleted`; set its signing secret as `STRIPE_WEBHOOK_SECRET`.
-3. Enable the Customer Portal (cancellation, payment methods) in the Stripe dashboard.
+   `checkout.session.completed`, `checkout.session.expired`, `customer.subscription.created`,
+   `customer.subscription.updated` and `customer.subscription.deleted`; set its signing secret as
+   `STRIPE_WEBHOOK_SECRET`.
+3. Enable the Customer Portal (cancellation at period end, payment methods, invoices) and let
+   failed subscription payments end the subscription after the last retry.
+
+### How a Pro contract works (German consumer law)
+
+- `/pro/bestellen` shows everything § 312j Abs. 2 BGB requires directly above the button
+  „Zahlungspflichtig bestellen“; the order needs two consents (terms, immediate start with
+  compensation on withdrawal, § 357a Abs. 2 BGB), stored with a timestamp and the terms version.
+- The order is confirmed by e-mail at once (§ 312i BGB); payment follows in Stripe Checkout. When
+  Stripe confirms the payment, the contract is concluded and confirmed by e-mail with the terms,
+  the official withdrawal notice and the model withdrawal form (§ 312f BGB). Failed confirmations
+  are retried (webhook retries, maintenance job).
+- `/vertrag-kuendigen` („Verträge hier kündigen“, § 312k BGB) and `/vertrag-widerrufen`
+  („Vertrag widerrufen“, § 356a BGB) work without signing in, show a receipt with date and time to
+  save, and confirm by e-mail. Cancellations are passed to Stripe (at period end; later dates by the
+  maintenance job); withdrawals of signed-in customers end the subscription at once. Everything the
+  operator has to do by hand (refunds, unmatched notices) arrives as an e-mail.
+- The texts live in `packages/shared/src/legal` so that pages and e-mails use the same wording.
 
 The plan changes only from verified webhook events (signature checked, each event processed once).
 `active`, `trialing` and `past_due` grant Pro. Deleting an account cancels its subscription. For
 local testing: `stripe listen --forward-to localhost:3000/api/billing/webhook`.
+
+## Google AdSense
+
+- `ADSENSE_CLIENT` (ca-pub-…) alone serves `/ads.txt` and the `google-adsense-account` tag for the
+  site verification. With `ADSENSE_SLOT` (a display ad unit), result pages and guides show one ad
+  below the content – never with Pro, never when the browser sends Do Not Track or Global Privacy
+  Control, and not on account, saved-listing or error pages.
+- Consent comes from Google's certified consent dialog (AdSense → Privacy & messaging → European
+  regulations message, with „Do not consent“ on the first layer). The footer button
+  „Datenschutz- und Cookie-Einstellungen“ reopens it. Turn off „programmatic limited ads“ so that
+  no ads (and no ad cookies) are served without consent – the privacy policy says so.
+- While ads are on, HTML pages carry a nonce per response and the strict, nonce-based
+  Content-Security-Policy Google supports (`'strict-dynamic'`); API responses keep the strict
+  default policy.
 
 ## Analytics configuration
 
@@ -319,8 +354,8 @@ already reserved in the contracts and the database.
   user asked for, respects robots.txt and never bypasses CAPTCHAs, logins or blocks. Without
   retrieval the homepage asks for the listing text, and a pasted link leads to the text page.
 - The fixtures are synthetic and not real listings.
-- `/datenschutz` follows the configuration: sections for optional features (AI, payments, password
-  reset e-mails, retrieval, analytics) appear only when they are active, and on Render the hosting
+- `/datenschutz` follows the configuration: sections for optional features (AI, payments, ads,
+  e-mail, retrieval, analytics) appear only when they are active, and on Render the hosting
   section names Render, its data processing agreement and its sub-processors. Other hosts get a
   generic hosting paragraph – extend `PrivacyPage` for them. Have the text reviewed before going
   live. `/impressum` needs the `VITE_IMPRINT_*` values.

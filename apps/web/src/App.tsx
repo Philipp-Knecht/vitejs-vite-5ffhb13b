@@ -10,6 +10,8 @@ import { BuyingGuidePage } from './pages/guides/BuyingGuidePage';
 import { ChecklistGuidePage } from './pages/guides/ChecklistGuidePage';
 import { InspectionGuidePage } from './pages/guides/InspectionGuidePage';
 import { LandingPage } from './pages/LandingPage';
+import { CancelContractPage, WithdrawContractPage } from './features/contracts/ContractNoticePages';
+import { TermsPage, WithdrawalPolicyPage } from './pages/legal/ContractDocuments';
 import { BotPage, ImprintPage, PrivacyPage } from './pages/legal/LegalPages';
 import { NotFoundPage } from './pages/NotFoundPage';
 import { ProPage } from './pages/ProPage';
@@ -46,6 +48,12 @@ const ForgotPasswordPage = lazy(() =>
 );
 const ResetPasswordPage = lazy(() =>
   import('./features/account/AuthPages').then((module) => ({ default: module.ResetPasswordPage })),
+);
+const OrderPage = lazy(() =>
+  import('./features/contracts/OrderPages').then((module) => ({ default: module.OrderPage })),
+);
+const OrderDonePage = lazy(() =>
+  import('./features/contracts/OrderPages').then((module) => ({ default: module.OrderDonePage })),
 );
 
 /** Scrolls to the top and moves focus to the content after client-side navigation. */
@@ -90,6 +98,12 @@ export function App({ queryClient }: { queryClient: QueryClient }) {
               <Route path="/bot" element={<BotPage />} />
               <Route path="/datenschutz" element={<PrivacyPage />} />
               <Route path="/impressum" element={<ImprintPage />} />
+              <Route path="/agb" element={<TermsPage />} />
+              <Route path="/widerrufsbelehrung" element={<WithdrawalPolicyPage />} />
+              <Route path="/vertrag-kuendigen" element={<CancelContractPage />} />
+              <Route path="/vertrag-widerrufen" element={<WithdrawContractPage />} />
+              <Route path="/pro/bestellen" element={<OrderPage />} />
+              <Route path="/pro/bestellt" element={<OrderDonePage />} />
               <Route path="/inseratstext" element={<TextInputPage />} />
               <Route path="/analyse/:id" element={<ResultPage />} />
               <Route path="/meine-angebote" element={<SavedListingsPage />} />

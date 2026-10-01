@@ -28,6 +28,12 @@ function Operator() {
       ))}
       <br />
       E-Mail: <a href={`mailto:${IMPRINT.email}`}>{IMPRINT.email}</a>
+      {IMPRINT.phone && (
+        <>
+          <br />
+          Telefon: <a href={`tel:${IMPRINT.phone.replace(/[^\d+]/g, '')}`}>{IMPRINT.phone}</a>
+        </>
+      )}
     </address>
   );
 }
@@ -77,6 +83,8 @@ export function PrivacyPage() {
   const hosting = config?.privacy.hosting ?? null;
   const retentionDays = config?.privacy.anonymousRetentionDays ?? 90;
   const aiProvider = features?.aiProvider ? AI_PROVIDER_NAMES[features.aiProvider] : null;
+  const emailProvider = config?.privacy.emailProvider ?? null;
+  const ads = config?.ads ?? null;
 
   return (
     <div className="container page page--narrow prose">
@@ -89,7 +97,10 @@ export function PrivacyPage() {
       <h2>Grundsatz</h2>
       <p>
         KaufCheck verarbeitet nur die Daten, die für die Prüfung von Inseraten und für dein Konto
-        nötig sind. Es gibt keine Werbe-Tracker, keine Profilbildung und keinen Verkauf von Daten.
+        nötig sind.{' '}
+        {ads
+          ? 'Werbung von Google zeigen wir nur, wenn du einwilligst (siehe „Werbung“); wir selbst bilden keine Profile und verkaufen keine Daten.'
+          : 'Es gibt keine Werbe-Tracker, keine Profilbildung und keinen Verkauf von Daten.'}{' '}
         Du musst keine Angaben zu deiner Person machen, um Inserate zu prüfen.
       </p>
 
@@ -169,7 +180,7 @@ export function PrivacyPage() {
         E-Mail-Adresse und Passwort kann kein Konto angelegt werden. Du kannst dein Konto jederzeit
         selbst in den Kontoeinstellungen löschen; dabei werden alle zugehörigen Daten entfernt.
         {features?.passwordReset === true &&
-          ' Wenn du dein Passwort zurücksetzt, schicken wir dir eine E-Mail über unseren E-Mail-Anbieter.'}{' '}
+          ' Wenn du dein Passwort zurücksetzt, schicken wir dir eine E-Mail (siehe „E-Mails“).'}{' '}
         Rechtsgrundlage ist Art. 6 Abs. 1 lit. b DSGVO.
       </p>
 
@@ -194,6 +205,8 @@ export function PrivacyPage() {
         Beide Cookies sind für den von dir angefragten Dienst unbedingt erforderlich (§ 25 Abs. 2
         Nr. 2 TDDDG); eine Einwilligung ist dafür nicht nötig. Die Monatszähler löschen wir nach
         spätestens 400 Tagen.
+        {ads &&
+          ' Cookies und ähnliche Techniken von Google und seinen Werbepartnern kommen nur mit deiner Einwilligung zum Einsatz (siehe „Werbung“).'}
       </p>
 
       {features?.analytics !== false && (
@@ -239,16 +252,65 @@ export function PrivacyPage() {
         </>
       )}
 
-      {features?.billing === true && (
+      {emailProvider && (
         <>
-          <h2>Bezahlung</h2>
+          <h2>E-Mails</h2>
           <p>
-            Wenn du KaufCheck Pro buchst, wickelt der Zahlungsdienstleister Stripe die Zahlung ab.
-            Deine Zahlungsdaten gibst du direkt bei Stripe ein; wir erhalten nur den Status deines
-            Abos. Rechtsgrundlage ist die Erfüllung des Vertrags (Art. 6 Abs. 1 lit. b DSGVO).
+            E-Mails – etwa zum Zurücksetzen des Passworts und die Bestätigungen zu Bestellungen,
+            Verträgen, Kündigungen und Widerrufen – verschicken wir über{' '}
+            {emailProvider === 'brevo'
+              ? 'die Brevo GmbH, Köpenicker Str. 126, 10179 Berlin, die'
+              : 'einen E-Mail-Dienstleister, der'}{' '}
+            in unserem Auftrag handelt (Auftragsverarbeitung nach Art. 28 DSGVO). Dabei werden deine
+            E-Mail-Adresse und der Inhalt der E-Mail verarbeitet. Rechtsgrundlage ist die
+            Durchführung des Vertrags bzw. deiner Anfrage (Art. 6 Abs. 1 lit. b DSGVO) und, bei den
+            Bestätigungen, unsere gesetzliche Pflicht dazu (Art. 6 Abs. 1 lit. c DSGVO).
           </p>
         </>
       )}
+
+      {features?.billing === true && (
+        <>
+          <h2>Bestellung und Bezahlung von KaufCheck Pro</h2>
+          <p>
+            Bestellst du KaufCheck Pro, speichern wir die Bestellung: Bestellnummer, die
+            E-Mail-Adresse deines Kontos, Preis, die Zeitpunkte von Bestellung und Vertragsschluss,
+            die Fassung der AGB und deine beiden Erklärungen bei der Bestellung (AGB akzeptiert,
+            sofortiger Beginn verlangt). Dazu schicken wir dir eine Eingangsbestätigung und die
+            Vertragsbestätigung per E-Mail.
+          </p>
+          <p>
+            Die Zahlung wickelt der Zahlungsdienstleister Stripe ab. Deine Zahlungsdaten gibst du
+            direkt bei Stripe ein; wir erhalten sie nicht. Wir übermitteln Stripe deine
+            E-Mail-Adresse, eine interne Kennung deines Kontos und die Bestellnummer und erfahren
+            von Stripe den Status deiner Zahlung und deines Abos. Stripe verarbeitet Zahlungsdaten
+            auch in eigener Verantwortung, etwa zur Betrugsvorbeugung und für gesetzliche Pflichten;
+            Einzelheiten stehen in den Datenschutzhinweisen von Stripe unter{' '}
+            <a href="https://stripe.com/de/privacy">stripe.com/de/privacy</a>. Stripe hält sich an
+            das EU-U.S. Data Privacy Framework; Übermittlungen in die USA stützen sich auf den
+            Angemessenheitsbeschluss der EU-Kommission (Art. 45 DSGVO).
+          </p>
+          <p>
+            Rechtsgrundlage ist die Erfüllung des Vertrags (Art. 6 Abs. 1 lit. b DSGVO) sowie unsere
+            gesetzlichen Pflichten, etwa zur Aufbewahrung (Art. 6 Abs. 1 lit. c DSGVO).
+            Bestellungen, die nicht bezahlt werden, löschen wir nach 30 Tagen. Unterlagen zu
+            geschlossenen Verträgen bewahren wir auf, solange Ansprüche aus dem Vertrag möglich sind
+            und gesetzliche Aufbewahrungsfristen laufen, höchstens zehn Jahre – auch dann, wenn du
+            dein Konto löschst.
+          </p>
+        </>
+      )}
+
+      <h2>Kündigung und Widerruf über die Website</h2>
+      <p>
+        Kündigst oder widerrufst du einen Vertrag über unsere Website, speichern wir deine Angaben –
+        Name, E-Mail-Adresse, Vertrag und Bestellnummer, bei einer Kündigung auch deren Art, den
+        Grund und den gewünschten Zeitpunkt – mit Datum und Uhrzeit des Eingangs. Wir ordnen sie
+        deinem Konto zu, setzen sie um und bestätigen dir den Eingang per E-Mail; wenn nötig, geht
+        eine Kopie zur Bearbeitung an uns. Diese Funktionen und Bestätigungen schreibt das Gesetz
+        vor (§§ 312k, 356a BGB). Rechtsgrundlage ist Art. 6 Abs. 1 lit. b und c DSGVO. Die Angaben
+        bewahren wir wie Vertragsunterlagen auf, höchstens zehn Jahre.
+      </p>
 
       <h2>Server-Protokolle</h2>
       <p>
@@ -258,10 +320,56 @@ export function PrivacyPage() {
           ' Die Protokolle liegen bei Render und werden je nach Tarif nach 7 bis 30 Tagen gelöscht.'}
       </p>
 
+      {ads && (
+        <>
+          <h2>Werbung (Google AdSense)</h2>
+          <p>
+            Auf Ergebnisseiten und in den Ratgebern zeigen wir Werbung über Google AdSense, einen
+            Dienst der Google Ireland Limited, Gordon House, Barrow Street, Dublin 4, Irland
+            („Google“). Mit KaufCheck Pro siehst du keine Werbung. Sendet dein Browser „Do Not
+            Track“ oder „Global Privacy Control“, laden wir Google AdSense gar nicht.
+          </p>
+          <p>
+            Auf einer Seite mit Werbung lädt dein Browser Programmcode von Google; dabei erhält
+            Google technisch bedingt deine IP-Adresse, die Adresse der Seite und Angaben zu deinem
+            Browser. Zuerst zeigt Google einen Einwilligungsdialog – eine nach dem Transparency and
+            Consent Framework (TCF) des IAB zertifizierte Plattform. Rechtsgrundlage dafür ist unser
+            berechtigtes Interesse, die gesetzlich nötige Einwilligung einzuholen (Art. 6 Abs. 1
+            lit. f DSGVO).
+          </p>
+          <p>
+            Im Dialog entscheidest du, ob Google und die dort genannten Werbepartner Cookies und
+            ähnliche Techniken auf deinem Gerät nutzen dürfen, um Anzeigen auszuliefern, ihre
+            Wirkung zu messen und – wenn du auch dem zustimmst – Anzeigen nach deinen Interessen
+            auszuwählen. Die Partner und ihre Zwecke sind im Dialog aufgeführt. Rechtsgrundlage ist
+            deine Einwilligung (§ 25 Abs. 1 TDDDG, Art. 6 Abs. 1 lit. a DSGVO). Ohne Einwilligung
+            zeigen wir keine Werbung. Deine Entscheidung speichert Google in einem Cookie auf deinem
+            Gerät.
+          </p>
+          <p>
+            Deine Einwilligung kannst du jederzeit mit Wirkung für die Zukunft ändern oder
+            widerrufen: über „Datenschutz- und Cookie-Einstellungen“ am Ende jeder Seite.
+          </p>
+          <p>
+            Google verarbeitet die Daten in eigener Verantwortung. Google LLC (USA) ist nach dem
+            EU-U.S. Data Privacy Framework zertifiziert; Übermittlungen in die USA stützen sich auf
+            den Angemessenheitsbeschluss der EU-Kommission (Art. 45 DSGVO). Wie Google Daten auf
+            Websites von Partnern verwendet, erklärt Google unter{' '}
+            <a href="https://policies.google.com/technologies/partner-sites">
+              policies.google.com/technologies/partner-sites
+            </a>
+            ; Informationen zu den Werbediensten von Google stehen unter{' '}
+            <a href="https://business.safety.google/privacy/">business.safety.google/privacy</a>.
+          </p>
+        </>
+      )}
+
       <h2>Keine automatisierten Entscheidungen</h2>
       <p>
         KaufCheck wertet Inserate automatisch aus. Das betrifft Fahrzeuge und Angebote, nicht dich:
-        Es gibt weder Profiling noch automatisierte Entscheidungen im Sinne von Art. 22 DSGVO.
+        Wir selbst betreiben weder Profiling noch treffen wir automatisierte Entscheidungen im Sinne
+        von Art. 22 DSGVO.
+        {ads && ' Zur Auswahl von Anzeigen durch Google siehe „Werbung“.'}
       </p>
 
       <h2>Deine Rechte</h2>

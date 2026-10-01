@@ -48,6 +48,8 @@ model User {
   savedListings       SavedListing[]
   subscription        Subscription?
   passwordResetTokens PasswordResetToken[]
+  orders              Order[]
+  contractNotices     ContractNotice[]
 }
 
 model Session {
@@ -223,6 +225,81 @@ model Subscription {
   cancelAtPeriodEnd      Boolean     @default(false)
   createdAt              DateTime    @default(now())
   updatedAt              DateTime    @updatedAt
+}
+
+enum OrderStatus {
+  PENDING
+  CONCLUDED
+  ABANDONED
+}
+
+/// A Pro order. Placed with the order button (the consumer's offer); concluded
+/// once the payment succeeded and the contract was confirmed. Kept after an
+/// account is deleted as evidence of the contract (consents, terms version).
+model Order {
+  id                        String      @id @default(uuid()) @db.Uuid
+  /// Shown to the customer, e.g. KC-7F3K9QMA.
+  number                    String      @unique
+  userId                    String?     @db.Uuid
+  user                      User?       @relation(fields: [userId], references: [id], onDelete: SetNull)
+  email                     String
+  status                    OrderStatus @default(PENDING)
+  priceCents                Int
+  currency                  String
+  vatMode                   String
+  termsVersion              String
+  /// Wording of both consents as shown on the order page.
+  consentTexts              Json
+  termsAcceptedAt           DateTime
+  immediateStartRequestedAt DateTime
+  checkoutSessionId         String?     @unique
+  subscriptionId            String?
+  concludedAt               DateTime?
+  receiptSentAt             DateTime?
+  confirmationSentAt        DateTime?
+  createdAt                 DateTime    @default(now())
+  updatedAt                 DateTime    @updatedAt
+
+  @@index([userId, createdAt])
+  @@index([subscriptionId])
+  @@index([status, createdAt])
+}
+
+enum ContractNoticeType {
+  CANCELLATION
+  WITHDRAWAL
+}
+
+/// A cancellation (§ 312k BGB) or withdrawal (§ 356a BGB) sent through the website.
+model ContractNotice {
+  id                 String             @id @default(uuid()) @db.Uuid
+  /// Reference shown to the consumer, e.g. KC-K-4H7Q2M.
+  number             String             @unique
+  type               ContractNoticeType
+  receivedAt         DateTime           @default(now())
+  name               String
+  /// Address for the confirmation, as entered.
+  email              String
+  /// Contract as identified by the consumer.
+  contract           String
+  orderNumber        String?
+  /// Cancellation only: ordinary or extraordinary, with the reason.
+  kind               String?
+  reason             String?
+  requestedEndDate   DateTime?          @db.Date
+  /// Account and subscription the notice was matched to.
+  userId             String?            @db.Uuid
+  user               User?              @relation(fields: [userId], references: [id], onDelete: SetNull)
+  subscriptionId     String?
+  outcome            String
+  effectiveEnd       DateTime?
+  /// Set once a later end date has been passed on to the payment provider.
+  appliedAt          DateTime?
+  confirmationSentAt DateTime?
+  operatorNotifiedAt DateTime?
+
+  @@index([type, outcome])
+  @@index([userId])
 }
 
 /// Processed payment-provider webhook events (idempotency).

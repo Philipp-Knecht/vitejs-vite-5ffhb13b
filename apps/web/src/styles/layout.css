@@ -190,8 +190,15 @@
   color: var(--c-text);
 }
 
-.footer__legal {
+.footer__contracts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
   margin-top: 28px;
+}
+
+.footer__legal {
+  margin-top: 20px;
   padding-top: 16px;
   border-top: 1px solid var(--c-border);
   font-size: 0.85rem;

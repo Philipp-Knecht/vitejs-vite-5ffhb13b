@@ -9,7 +9,6 @@ import {
   useRenameSavedListing,
   useSavedListings,
 } from '../../api/queries';
-import { AdSlot } from '../../components/AdSlot';
 import { Alert } from '../../components/ui/Alert';
 import { Button, ButtonLink } from '../../components/ui/Button';
 import { Dialog } from '../../components/ui/Dialog';
@@ -323,7 +322,6 @@ export function SavedListingsPage() {
               </Button>
             </div>
           )}
-          <AdSlot placement="saved_listings_bottom" />
         </>
       )}
 

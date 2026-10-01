@@ -25,6 +25,11 @@ test('static pages meet WCAG 2.1 AA checks', async ({ page }) => {
     '/registrieren',
     '/meine-angebote',
     '/datenschutz',
+    '/agb',
+    '/widerrufsbelehrung',
+    '/vertrag-kuendigen',
+    '/vertrag-widerrufen',
+    '/pro/bestellen',
   ]) {
     await page.goto(path);
     await expect(page.getByRole('heading', { level: 1 })).toBeVisible();

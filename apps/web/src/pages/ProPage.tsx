@@ -1,10 +1,19 @@
-import { DEFAULT_ENTITLEMENTS, type Entitlements } from '@kaufcheck/shared';
+import {
+  CANCEL_BUTTON_LABEL,
+  CANCEL_PATH,
+  DEFAULT_ENTITLEMENTS,
+  formatCents,
+  paymentMethodsText,
+  vatNote,
+  WITHDRAW_BUTTON_LABEL,
+  WITHDRAW_PATH,
+  type Entitlements,
+} from '@kaufcheck/shared';
 import { Check, Minus } from 'lucide-react';
 import type { ReactNode } from 'react';
-import { useLocation, useSearchParams } from 'react-router';
-import { ApiRequestError } from '../api/client';
-import { useCheckout, useConfig, useMe } from '../api/queries';
-import { Alert } from '../components/ui/Alert';
+import { Link } from 'react-router';
+import { useConfig, useMe } from '../api/queries';
+import { CONTRACT_DETAILS_COMPLETE } from './legal/site-info';
 import { Button, ButtonLink } from '../components/ui/Button';
 import { track } from '../lib/analytics';
 import { STATIC_PAGE_META } from '../seo/pages';
@@ -57,7 +66,7 @@ function rows(
       cells: [flag(plans.anonymous.history), flag(plans.free.history), flag(plans.pro.history)],
     },
     {
-      label: photoAnalysisAvailable ? 'Fotoanalyse' : 'Fotoanalyse (in Vorbereitung)',
+      label: photoAnalysisAvailable ? 'Fotoanalyse' : 'Fotoanalyse (derzeit nicht verfügbar)',
       cells: [
         flag(plans.anonymous.photoAnalysis),
         flag(plans.free.photoAnalysis),
@@ -76,18 +85,15 @@ export function ProPage() {
   usePageMeta(meta ?? { title: 'KaufCheck Pro', description: '' });
   const config = useConfig();
   const me = useMe();
-  const checkout = useCheckout();
-  const location = useLocation();
-  const [params] = useSearchParams();
   const plans = config.data?.plans ?? DEFAULT_ENTITLEMENTS;
-  const billing = config.data?.features.billing ?? false;
-  const priceLabel = config.data?.pro.priceLabel ?? null;
-  const photoAnalysis = config.data?.features.photoAnalysis ?? true;
+  // Orders also need the operator's full details in the order page and the terms.
+  const offer = CONTRACT_DETAILS_COMPLETE ? (config.data?.pro.offer ?? null) : null;
+  const photoAnalysis = config.data?.features.photoAnalysis ?? false;
 
   const cta = () => {
     if (!config.data || !me.data) return null;
     if (me.data.plan === 'pro') return <p className="plan-note">Du nutzt bereits KaufCheck Pro.</p>;
-    if (!billing) {
+    if (!offer) {
       return (
         <>
           <Button disabled>Bald verfügbar</Button>
@@ -98,27 +104,39 @@ export function ProPage() {
         </>
       );
     }
-    if (!me.data.user) {
-      return (
-        <ButtonLink
-          to="/registrieren"
-          state={{ returnTo: location.pathname }}
-          onClick={() => track('pro_clicked', { placement: 'pro_page' })}
-        >
-          Konto erstellen und Pro buchen
-        </ButtonLink>
-      );
-    }
     return (
-      <Button
-        loading={checkout.isPending}
-        onClick={() => {
-          track('pro_clicked', { placement: 'pro_page' });
-          checkout.mutate(undefined, { onSuccess: ({ url }) => window.location.assign(url) });
-        }}
-      >
-        Pro buchen
-      </Button>
+      <>
+        {me.data.user ? (
+          <ButtonLink
+            to="/pro/bestellen"
+            onClick={() => track('pro_clicked', { placement: 'pro_page' })}
+          >
+            Weiter zur Bestellung
+          </ButtonLink>
+        ) : (
+          <ButtonLink
+            to="/registrieren"
+            state={{ returnTo: '/pro/bestellen' }}
+            onClick={() => track('pro_clicked', { placement: 'pro_page' })}
+          >
+            Konto erstellen und Pro bestellen
+          </ButtonLink>
+        )}
+        {/* § 312j Abs. 1 BGB: payment methods and delivery restrictions before ordering. */}
+        <p className="plan-note">
+          Zahlungsarten: {paymentMethodsText(offer.paymentMethods)}. Bestellen kannst du, wenn du
+          volljährig bist und in der EU wohnst.
+          {!me.data.user && (
+            <>
+              {' '}
+              Schon ein Konto?{' '}
+              <Link to="/anmelden" state={{ returnTo: '/pro/bestellen' }}>
+                Anmelden
+              </Link>
+            </>
+          )}
+        </p>
+      </>
     );
   };
 
@@ -129,18 +147,9 @@ export function ProPage() {
         <h1>Mehr Prüfungen für die heiße Phase der Autosuche</h1>
         <p className="page__lead">
           Wenn du viele Inserate vergleichst: mehr Prüfungen pro Monat, ein Verlauf aller Prüfungen,
-          größere Vergleiche und keine Werbung.
+          größere Vergleiche und keine Werbung. Monatlich kündbar.
         </p>
       </div>
-
-      {params.get('checkout') === 'abgebrochen' && (
-        <Alert tone="info" title="Buchung abgebrochen">
-          <p>Es wurde nichts berechnet.</p>
-        </Alert>
-      )}
-      {checkout.error instanceof ApiRequestError && (
-        <Alert tone="error">{checkout.error.message}</Alert>
-      )}
 
       <div className="plan-cards">
         <article className="plan-card">
@@ -158,7 +167,10 @@ export function ProPage() {
         </article>
         <article className="plan-card plan-card--highlight">
           <h2>Pro</h2>
-          <p className="plan-card__price">{priceLabel ?? 'Preis folgt'}</p>
+          <p className="plan-card__price">
+            {offer ? `${formatCents(offer.priceCents)} / Monat` : 'Preis folgt'}
+          </p>
+          {offer && <p className="plan-card__tax">{vatNote(offer.vatMode)}</p>}
           <p>
             {plans.pro.monthlyAnalyses} Prüfungen im Monat, Verlauf, Vergleiche mit bis zu{' '}
             {plans.pro.compareMax} Angeboten
@@ -198,8 +210,17 @@ export function ProPage() {
         <details className="faq__item">
           <summary>Wie kündige ich?</summary>
           <p>
-            Über „Abo verwalten“ in deinem Konto. Pro läuft dann bis zum Ende des bezahlten
-            Zeitraums weiter.
+            Jederzeit zum Ende des Abrechnungsmonats, ohne Frist: über „
+            <Link to={CANCEL_PATH}>{CANCEL_BUTTON_LABEL}</Link>“ am Ende jeder Seite oder über „Abo
+            verwalten“ in deinem Konto. Pro läuft bis zum Ende des bezahlten Monats weiter.
+          </p>
+        </details>
+        <details className="faq__item">
+          <summary>Kann ich den Vertrag widerrufen?</summary>
+          <p>
+            Ja, binnen 14 Tagen ab Vertragsschluss und ohne Angabe von Gründen – online über „
+            <Link to={WITHDRAW_PATH}>{WITHDRAW_BUTTON_LABEL}</Link>“. Weil Pro sofort beginnt,
+            zahlst du für die Tage bis zum Widerruf einen anteiligen Betrag; den Rest erstatten wir.
           </p>
         </details>
         <details className="faq__item">

@@ -8,9 +8,13 @@ const STATE_CHANGING = new Set(['POST', 'PUT', 'PATCH', 'DELETE']);
 /** Endpoints called by third parties (signature-verified instead). */
 const CSRF_EXEMPT = new Set(['/api/billing/webhook']);
 
+/** HSTS and request upgrades only make sense when the site is served over HTTPS. */
+export function servedOverHttps(config: AppConfig): boolean {
+  return config.isProduction && config.secureCookies;
+}
+
 export async function registerSecurity(app: FastifyInstance, config: AppConfig): Promise<void> {
-  // HSTS and request upgrades only make sense when the site is served over HTTPS.
-  const https = config.isProduction && config.secureCookies;
+  const https = servedOverHttps(config);
   const imageSources = config.showListingPhotos
     ? LISTING_IMAGE_HOSTS.map((host) => `https://${host}`)
     : [];

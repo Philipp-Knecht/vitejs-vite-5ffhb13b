@@ -1,12 +1,18 @@
 import type {
   AnalysisDto,
   AnalysisListItem,
+  CancellationRequest,
   ComparisonDto,
+  ContractNoticeReceipt,
   MeDto,
+  OrderCreated,
+  OrderDto,
+  OrderRequest,
   PublicConfig,
   RedirectResponse,
   SavedListingDto,
   SavedListingsResponse,
+  WithdrawalRequest,
 } from '@kaufcheck/shared';
 import { QueryClient, useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { api, ApiRequestError } from './client';
@@ -18,6 +24,7 @@ export const queryKeys = {
   savedListings: ['saved-listings'] as const,
   history: ['history'] as const,
   comparison: (ids: readonly string[]) => ['comparison', ...ids] as const,
+  order: (number: string) => ['order', number] as const,
 };
 
 export function createQueryClient(): QueryClient {
@@ -187,8 +194,39 @@ export function useDeleteSavedListing() {
   });
 }
 
-export function useCheckout() {
-  return useMutation({ mutationFn: () => api.post<RedirectResponse>('/api/billing/checkout') });
+/** Places the order (the button "Zahlungspflichtig bestellen") and returns the payment page. */
+export function usePlaceOrder() {
+  return useMutation({
+    mutationFn: (input: OrderRequest) => api.post<OrderCreated>('/api/billing/orders', input),
+  });
+}
+
+/** An order after the payment page; polls until the payment provider has confirmed it. */
+export function useOrder(number: string) {
+  return useQuery({
+    queryKey: queryKeys.order(number),
+    queryFn: ({ signal }) =>
+      api.get<OrderDto>(`/api/billing/orders/${encodeURIComponent(number)}`, signal),
+    enabled: number.length > 0,
+    refetchInterval: (query) =>
+      query.state.data?.status === 'pending' && query.state.dataUpdateCount < 40 ? 2000 : false,
+  });
+}
+
+/** "jetzt kündigen" (§ 312k BGB). */
+export function useSendCancellation() {
+  return useMutation({
+    mutationFn: (input: CancellationRequest) =>
+      api.post<ContractNoticeReceipt>('/api/contracts/cancellations', input),
+  });
+}
+
+/** "Widerruf bestätigen" (§ 356a BGB). */
+export function useSendWithdrawal() {
+  return useMutation({
+    mutationFn: (input: WithdrawalRequest) =>
+      api.post<ContractNoticeReceipt>('/api/contracts/withdrawals', input),
+  });
 }
 
 export function usePortal() {
