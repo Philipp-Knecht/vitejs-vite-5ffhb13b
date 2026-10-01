@@ -255,8 +255,8 @@ export const PublicConfigSchema = z.object({
   privacy: z.object({
     hosting: z.enum(['render']).nullable(),
     anonymousRetentionDays: z.number().int().positive(),
-    /** E-mail service provider, when e-mail is sent (Brevo is recognised by its SMTP host). */
-    emailProvider: z.enum(['brevo', 'other']).nullable(),
+    /** E-mail service, when e-mail is sent (Brevo and Gmail are recognised by their SMTP host). */
+    emailProvider: z.enum(['brevo', 'gmail', 'other']).nullable(),
   }),
 });
 export type PublicConfig = z.infer<typeof PublicConfigSchema>;

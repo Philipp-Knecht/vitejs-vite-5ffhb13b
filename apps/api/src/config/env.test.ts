@@ -141,6 +141,20 @@ describe('loadConfig', () => {
     ).toEqual(['card', 'sepa_debit']);
   });
 
+  it('recognises the e-mail service named in the privacy policy', () => {
+    const provider = (smtpUrl: string) =>
+      loadConfig({
+        ...BASE,
+        EMAIL_TRANSPORT: 'smtp',
+        SMTP_URL: smtpUrl,
+        EMAIL_FROM: 'KaufCheck <noreply@kaufcheck.example>',
+      }).email.provider;
+    expect(provider('smtp://login:key@smtp-relay.brevo.com:587')).toBe('brevo');
+    expect(provider('smtps://me%40gmail.com:app-password@smtp.gmail.com:465')).toBe('gmail');
+    expect(provider('smtps://user:pass@smtp.example.com:465')).toBe('other');
+    expect(loadConfig({ ...BASE }).email.provider).toBeNull();
+  });
+
   it('never includes secrets in the startup summary', () => {
     const config = loadConfig({
       ...PRODUCTION,
