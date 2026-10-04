@@ -10,6 +10,10 @@ services:
     branch: main
     dockerfilePath: ./Dockerfile
     healthCheckPath: /api/health
+    # Render adds www.kaufcheck-app.de and redirects it to the root domain. Once the domain is
+    # verified, set PUBLIC_SITE_URL to https://kaufcheck-app.de (README → Own domain).
+    domains:
+      - kaufcheck-app.de
     # Every commit on main is deployed; changes reach main through pull requests with green CI.
     # (`checksPass` would wait for every check on the commit, including third-party apps.)
     autoDeployTrigger: commit
