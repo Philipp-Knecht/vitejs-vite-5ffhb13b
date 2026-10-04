@@ -198,6 +198,21 @@ you add a custom domain later, change it in the service's **Environment** settin
 again. Render asks for `sync: false` values only when the Blueprint is created; later changes are
 made there too, as are optional features (AI, Stripe, SMTP for password resets – see below).
 
+### Own domain
+
+The Blueprint lists `kaufcheck-app.de` under `domains`; Render adds `www.kaufcheck-app.de` and
+redirects it to the root domain (or add the domain under **Settings → Custom Domains**).
+
+1. At the DNS provider: an `A` record for the root domain pointing to `216.24.57.1` and a `CNAME`
+   record `www` pointing to `kaufcheck.onrender.com`. Delete `AAAA` records for the root domain –
+   Render only answers over IPv4.
+2. Wait until Render shows both names as verified with a certificate.
+3. Set `PUBLIC_SITE_URL` to `https://kaufcheck-app.de` and deploy. Pages requested under the
+   `onrender.com` address are then redirected (301) to the domain, keeping path and query;
+   `/api` requests – the health check and the Stripe webhook – are still answered there.
+4. Update the services that know the address: the Stripe webhook endpoint and Google AdSense (add
+   the domain as a new site and request a review – AdSense rejected the `onrender.com` address).
+
 Rate limits count per visitor address. On Render that address comes from `CF-Connecting-IP`
 (`CLIENT_IP_HEADER`, the default there): Cloudflare, Render's edge network, sets it and rejects
 requests that try to send it themselves. `X-Forwarded-For` alone is not reliable on Render because

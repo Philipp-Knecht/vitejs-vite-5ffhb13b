@@ -7,6 +7,7 @@ import type { AppConfig } from './config/env';
 import { createServices, type ServiceOverrides, type Services } from './container';
 import { clientAddress } from './http/client-address';
 import { registerErrorHandling } from './http/errors';
+import { redirectToPublicSite } from './http/public-site';
 import { requestContextPlugin } from './http/request-context';
 import { accountRoutes } from './http/routes/account-routes';
 import { listingRoutes } from './http/routes/listing-routes';
@@ -60,6 +61,7 @@ export async function buildApp(
 
   registerErrorHandling(app);
   await registerSecurity(app, config);
+  redirectToPublicSite(app, config);
   await app.register(cookie, { secret: config.cookieSecret });
   await app.register(rateLimit, {
     global: true,
