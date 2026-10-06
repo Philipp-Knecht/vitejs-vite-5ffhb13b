@@ -63,8 +63,10 @@ export function TextInputPage() {
     <div className="container page page--narrow">
       <h1>Inseratstext prüfen</h1>
       <p className="page__lead">
-        Kopiere den Text des Auto-Inserats und füge ihn hier ein. KaufCheck liest daraus die Angaben
-        aus, zeigt, was fehlt, und stellt dir die passenden Fragen für den Verkäufer zusammen.
+        Kopiere den Text des Auto-Inserats und füge ihn hier ein – egal ob von mobile.de,
+        AutoScout24, Kleinanzeigen, eBay oder einer anderen Seite. KaufCheck liest daraus die
+        Angaben aus, zeigt, was fehlt, und stellt dir die passenden Fragen für den Verkäufer
+        zusammen.
       </p>
 
       {incoming.url && incoming.reason === 'retrieval_disabled' && (

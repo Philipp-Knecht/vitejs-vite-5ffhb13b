@@ -409,7 +409,8 @@ export function BotPage() {
       <ul>
         <li>
           Er ruft ausschließlich einzelne Inseratsseiten ab, deren Link eine Person bei KaufCheck
-          ausdrücklich eingegeben hat. Er folgt keinen Links und durchsucht keine Websites.
+          ausdrücklich eingegeben hat, und nur bei Plattformen, die dem zugestimmt haben. Er folgt
+          keinen Links und durchsucht keine Websites.
         </li>
         <li>
           Er identifiziert sich mit dem User-Agent <code>KaufCheckBot/1.0</code> und einem Link auf

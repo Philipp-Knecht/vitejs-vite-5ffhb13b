@@ -61,6 +61,42 @@
   background: var(--c-success);
 }
 
+/* Supported marketplaces – names only, no logos (their trademarks). */
+.hero__platforms {
+  margin-top: 20px;
+}
+
+.hero__platforms-title {
+  margin: 0 0 8px;
+  font-size: 0.875rem;
+  color: var(--c-text-2);
+}
+
+.hero__platforms ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.hero__platforms li {
+  padding: 4px 12px;
+  border: 1px solid var(--c-border);
+  border-radius: 999px;
+  background: var(--c-surface);
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--c-text);
+}
+
+.hero__platforms li:last-child {
+  border-style: dashed;
+  font-weight: 500;
+  color: var(--c-text-2);
+}
+
 @media (min-width: 1024px) {
   .hero {
     padding-block: 72px 64px;
@@ -421,6 +457,12 @@
 .copy-help {
   display: grid;
   gap: 16px;
+}
+
+.copy-help__intro {
+  grid-column: 1 / -1;
+  margin: 0;
+  color: var(--c-text-2);
 }
 
 .copy-help__title {

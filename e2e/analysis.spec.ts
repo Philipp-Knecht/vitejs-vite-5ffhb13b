@@ -3,7 +3,9 @@ import { analyzeFromHomepage, LISTINGS } from './helpers';
 
 test('homepage → analysis result with all sections', async ({ page, context }) => {
   await page.goto('/');
-  await expect(page).toHaveTitle('KaufCheck – Gebrauchtwagen-Angebote prüfen');
+  await expect(page).toHaveTitle(
+    'KaufCheck – Gebrauchtwagen-Inserate von mobile.de, AutoScout24 & Co. prüfen',
+  );
   await expect(page.getByRole('heading', { level: 1 })).toContainText('Gebraucht kaufen.');
 
   await analyzeFromHomepage(page, LISTINGS.audi);

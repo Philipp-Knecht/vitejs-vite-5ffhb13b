@@ -10,9 +10,9 @@ export const SITE_NAME = 'KaufCheck';
 /** Metadata of the prerendered pages. Used by the prerender script and on client-side navigation. */
 export const STATIC_PAGE_META: Readonly<Record<string, PageMeta>> = {
   '/': {
-    title: 'KaufCheck – Gebrauchtwagen-Angebote prüfen',
+    title: 'KaufCheck – Gebrauchtwagen-Inserate von mobile.de, AutoScout24 & Co. prüfen',
     description:
-      'Kleinanzeigen-Angebot einfügen und wichtige Informationen, fehlende Angaben und Fragen für den Verkäufer strukturiert prüfen.',
+      'Auto-Inserat von mobile.de, AutoScout24, Kleinanzeigen oder eBay einfügen: KaufCheck zeigt die Angaben, was fehlt, und die passenden Fragen an den Verkäufer.',
   },
   '/gebrauchtwagen-kaufen': {
     title: 'Gebrauchtwagen privat kaufen: Schritt für Schritt | KaufCheck',
