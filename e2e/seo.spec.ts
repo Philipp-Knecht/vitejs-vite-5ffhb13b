@@ -4,10 +4,14 @@ test('the homepage is prerendered with the required title and description', asyn
   const response = await request.get('/');
   expect(response.status()).toBe(200);
   const html = await response.text();
-  expect(html).toContain('<title>KaufCheck – Gebrauchtwagen-Angebote prüfen</title>');
   expect(html).toContain(
-    '<meta name="description" content="Kleinanzeigen-Angebot einfügen und wichtige Informationen, fehlende Angaben und Fragen für den Verkäufer strukturiert prüfen." />',
+    '<title>KaufCheck – Gebrauchtwagen-Inserate von mobile.de, AutoScout24 &amp; Co. prüfen</title>',
   );
+  expect(html).toContain(
+    '<meta name="description" content="Auto-Inserat von mobile.de, AutoScout24, Kleinanzeigen oder eBay einfügen: KaufCheck zeigt die Angaben, was fehlt, und die passenden Fragen an den Verkäufer." />',
+  );
+  // The supported marketplaces are part of the prerendered page.
+  expect(html).toContain('Funktioniert mit Inseraten von');
   expect(html).toContain('<link rel="canonical"');
   expect(html).toContain('data-prerendered="true"');
   expect(html).toContain('Gebraucht kaufen.');

@@ -109,8 +109,9 @@ export function BuyingGuidePage() {
         unter vergleichbaren Angeboten.
       </p>
       <p>
-        <Link to="/">KaufCheck</Link> zeigt dir für ein Kleinanzeigen-Inserat auf einen Blick,
-        welche Angaben fehlen, was auffällt und welche Fragen du stellen solltest.
+        <Link to="/">KaufCheck</Link> zeigt dir für ein Inserat von mobile.de, AutoScout24,
+        Kleinanzeigen, eBay und anderen Plattformen auf einen Blick, welche Angaben fehlen, was
+        auffällt und welche Fragen du stellen solltest.
       </p>
 
       <h2 id="kontakt">4. Den Verkäufer kontaktieren</h2>

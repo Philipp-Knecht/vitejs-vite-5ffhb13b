@@ -15,7 +15,7 @@ import { track } from '../lib/analytics';
 import { STATIC_PAGE_META } from '../seo/pages';
 import { usePageMeta } from '../seo/use-page-meta';
 import { useConfig } from '../api/queries';
-import { DEFAULT_ENTITLEMENTS } from '@kaufcheck/shared';
+import { DEFAULT_ENTITLEMENTS, PLATFORM_NAMES, type ListingPlatform } from '@kaufcheck/shared';
 
 const FEATURES = [
   {
@@ -50,6 +50,21 @@ const FEATURES = [
   },
 ];
 
+/** Order on the homepage: the largest German car marketplaces first. */
+const SUPPORTED_PLATFORMS: readonly ListingPlatform[] = [
+  'mobile_de',
+  'autoscout24',
+  'kleinanzeigen',
+  'ebay',
+  'heycar',
+  'autohero',
+  'pkw_de',
+  'facebook',
+];
+const PLATFORM_LIST = `${SUPPORTED_PLATFORMS.slice(0, -1)
+  .map((platform) => PLATFORM_NAMES[platform])
+  .join(', ')} und ${PLATFORM_NAMES.facebook}`;
+
 interface FaqContext {
   anonymous: number;
   free: number;
@@ -74,15 +89,17 @@ const FAQ: FaqItem[] = [
   {
     question: 'Welche Inserate kann ich prüfen?',
     answer: ({ retrieval }) =>
-      retrieval
-        ? 'Derzeit Auto-Inserate von Kleinanzeigen. Du kannst den Link einfügen oder den Text des Inserats kopieren. Weitere Kategorien sind in Planung.'
-        : 'Derzeit Auto-Inserate von Kleinanzeigen: Kopiere den Text des Inserats und füge ihn ein. Weitere Kategorien sind in Planung.',
+      `Auto-Inserate von ${PLATFORM_LIST} – und von jeder anderen Seite, deren Text du kopieren kannst. ${
+        retrieval
+          ? 'Bei Kleinanzeigen reicht der Link, sonst fügst du den Text des Inserats ein.'
+          : 'Kopiere den Text des Inserats und füge ihn ein.'
+      } Motorräder, Wohnmobile und Nutzfahrzeuge prüft KaufCheck noch nicht.`,
   },
   {
     question: 'Warum reicht der Link nicht?',
     when: 'no-retrieval',
     answer: () =>
-      'Die Nutzungsbedingungen von Kleinanzeigen erlauben das automatische Auslesen von Inseraten nur mit ausdrücklicher Zustimmung. KaufCheck hält sich daran und ruft Inserate deshalb nicht selbst ab. Mit dem kopierten Inseratstext ist die Prüfung genauso ausführlich.',
+      'Die Nutzungsbedingungen von mobile.de, AutoScout24, Kleinanzeigen und eBay erlauben das automatische Auslesen von Inseraten nicht ohne ausdrückliche Zustimmung. KaufCheck hält sich daran und ruft Inserate deshalb nicht selbst ab. Mit dem kopierten Inseratstext ist die Prüfung genauso ausführlich; den Link kannst du zur Zuordnung dazu speichern.',
   },
   {
     question: 'Warum klappt der Link manchmal nicht?',
@@ -107,7 +124,7 @@ const FAQ: FaqItem[] = [
   {
     question: 'Kontaktiert KaufCheck den Verkäufer?',
     answer: () =>
-      'Nein. KaufCheck formuliert die Nachricht nur vor. Du entscheidest, ob und wie du sie im Chat auf Kleinanzeigen verschickst.',
+      'Nein. KaufCheck formuliert die Nachricht nur vor. Du entscheidest, ob und wie du sie im Chat der jeweiligen Plattform verschickst.',
   },
 ];
 
@@ -128,7 +145,9 @@ export function LandingPage() {
     <>
       <section className="hero">
         <div className="container hero__inner">
-          <p className="eyebrow">Für Auto-Inserate auf Kleinanzeigen</p>
+          <p className="eyebrow">
+            Für Auto-Inserate von mobile.de, AutoScout24, Kleinanzeigen & Co.
+          </p>
           <h1 className="hero__title">
             Gebraucht kaufen.
             <br />
@@ -147,6 +166,17 @@ export function LandingPage() {
             <li>{plans.anonymous.monthlyAnalyses} Prüfungen im Monat kostenlos</li>
             <li>Kontaktdaten werden entfernt</li>
           </ul>
+          <div className="hero__platforms">
+            <p id="platforms-title" className="hero__platforms-title">
+              Funktioniert mit Inseraten von
+            </p>
+            <ul aria-labelledby="platforms-title">
+              {SUPPORTED_PLATFORMS.map((platform) => (
+                <li key={platform}>{PLATFORM_NAMES[platform]}</li>
+              ))}
+              <li>und jeder anderen Seite</li>
+            </ul>
+          </div>
         </div>
       </section>
 
