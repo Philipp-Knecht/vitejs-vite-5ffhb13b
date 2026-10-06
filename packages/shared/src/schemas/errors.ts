@@ -1,9 +1,12 @@
 import { z } from 'zod';
 import { ERROR_CODES } from '../errors';
+import { LISTING_PLATFORMS } from '../url';
 
 export const ApiErrorDetailsSchema = z
   .object({
     fallbackToText: z.boolean().optional(),
+    /** The marketplace a link belongs to, when it is known but not retrieved. */
+    platform: z.enum(LISTING_PLATFORMS).optional(),
     retryAfterSeconds: z.number().int().nonnegative().optional(),
     limit: z.number().int().nonnegative().optional(),
     used: z.number().int().nonnegative().optional(),

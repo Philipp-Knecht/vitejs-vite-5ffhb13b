@@ -3,7 +3,9 @@ import {
   CONDITION_LABELS,
   DRIVETRAIN_LABELS,
   FUEL_LABELS,
+  PLATFORM_NAMES,
   PRICE_KIND_LABELS,
+  recognizeListingUrl,
   SELLER_TYPE_LABELS,
   SERVICE_HISTORY_LABELS,
   TRANSMISSION_LABELS,
@@ -23,6 +25,12 @@ import {
 } from '../format';
 import { deriveVehicleTitle } from './normalize-vehicle';
 import type { VehicleRuleContext } from './rule-context';
+
+/** "bei mobile.de " for listings with a known platform link, else nothing. */
+function platformPrefix(url: string | null): string {
+  const recognition = url ? recognizeListingUrl(url) : null;
+  return recognition?.ok ? `bei ${PLATFORM_NAMES[recognition.source]} ` : '';
+}
 
 const SOURCE_NOTES = {
   details: null,
@@ -168,7 +176,7 @@ export function buildOverview(ctx: VehicleRuleContext): OverviewItem[] {
     value: listing.seller.type ? SELLER_TYPE_LABELS[listing.seller.type] : null,
     evidence: listing.seller.type ? 'listing_fact' : 'unknown',
     note: listing.seller.memberSince
-      ? `bei Kleinanzeigen aktiv seit ${formatIsoDate(listing.seller.memberSince)}`
+      ? `${platformPrefix(listing.source.url)}aktiv seit ${formatIsoDate(listing.seller.memberSince)}`
       : null,
   });
   items.push(

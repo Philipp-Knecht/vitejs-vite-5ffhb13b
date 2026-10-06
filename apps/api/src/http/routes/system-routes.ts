@@ -25,6 +25,7 @@ export function systemRoutes(app: FastifyInstance, services: Services): void {
     return {
       features: {
         urlRetrieval: services.retriever.mode !== 'off',
+        retrievablePlatforms: [...services.retriever.platforms],
         listingPhotos: config.showListingPhotos,
         ai: enricher !== null,
         aiProvider: realAiProvider(config.ai.provider, enricher?.isMock ?? true),

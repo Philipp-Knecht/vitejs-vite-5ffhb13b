@@ -1,4 +1,10 @@
-import { MAX_LISTING_TEXT_LENGTH, MIN_LISTING_TEXT_LENGTH } from '@kaufcheck/shared';
+import {
+  LISTING_PLATFORMS,
+  MAX_LISTING_TEXT_LENGTH,
+  MIN_LISTING_TEXT_LENGTH,
+  PLATFORM_NAMES,
+  type ListingPlatform,
+} from '@kaufcheck/shared';
 import { useState, type FormEvent } from 'react';
 import { useLocation } from 'react-router';
 import { Alert } from '../components/ui/Alert';
@@ -15,6 +21,11 @@ import { usePageMeta } from '../seo/use-page-meta';
 interface LocationState {
   url?: string;
   reason?: string;
+  platform?: string;
+}
+
+function knownPlatform(value: string | undefined): ListingPlatform | null {
+  return LISTING_PLATFORMS.find((platform) => platform === value) ?? null;
 }
 
 const META = appPageMeta('Inseratstext prüfen');
@@ -24,6 +35,7 @@ export function TextInputPage() {
   usePageMeta(META);
   const location = useLocation();
   const incoming = (location.state ?? {}) as LocationState;
+  const platform = knownPlatform(incoming.platform);
   const runner = useAnalysisRunner();
   const [text, setText] = useState('');
   const [url, setUrl] = useState(incoming.url ?? '');
@@ -56,7 +68,14 @@ export function TextInputPage() {
       </p>
 
       {incoming.url && incoming.reason === 'retrieval_disabled' && (
-        <Alert tone="info" title="KaufCheck ruft Inserate nicht selbst ab">
+        <Alert
+          tone="info"
+          title={
+            platform
+              ? `Inserate von ${PLATFORM_NAMES[platform]} ruft KaufCheck nicht selbst ab`
+              : 'KaufCheck ruft Inserate nicht selbst ab'
+          }
+        >
           <p>
             Kopiere den Text des Inserats und füge ihn unten ein – die Prüfung ist damit genauso
             ausführlich. Den Link speichern wir zur Zuordnung mit.

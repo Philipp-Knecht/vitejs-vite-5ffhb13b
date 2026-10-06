@@ -20,6 +20,7 @@ const FIXTURES = path.resolve(
 const fixture = (id: string) => readFileSync(path.join(FIXTURES, `${id}.html`), 'utf8');
 
 const listingUrl = (id: string): ListingUrl => ({
+  source: 'kleinanzeigen',
   canonicalUrl: `https://www.kleinanzeigen.de/s-anzeige/auto/${id}-216-3331`,
   externalId: id,
   categoryId: '216',

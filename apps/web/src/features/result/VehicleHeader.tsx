@@ -4,6 +4,7 @@ import { useToast } from '../../components/ui/toast-context';
 import { Button } from '../../components/ui/Button';
 import { copyText } from '../../lib/clipboard';
 import { formatDateTime, formatIsoDay } from '../../lib/format';
+import { listingPlatformName } from '../../lib/platform';
 import { SaveButton } from './SaveButton';
 import { vehicleTitle } from './vehicle-title';
 
@@ -24,6 +25,7 @@ export function VehicleHeader({ dto }: { dto: AnalysisDto }) {
   const place = locationText(dto);
   const sellerType = listing.seller.type ? SELLER_TYPE_LABELS[listing.seller.type] : null;
   const source = listing.source;
+  const platformName = listingPlatformName(source.url);
 
   return (
     <header className="vehicle-header">
@@ -93,7 +95,7 @@ export function VehicleHeader({ dto }: { dto: AnalysisDto }) {
           {source.type === 'kleinanzeigen_url'
             ? `Abgerufen am ${formatDateTime(source.retrievedAt)}`
             : source.type === 'text'
-              ? `Aus eingefügtem Text, ${formatDateTime(source.retrievedAt)}`
+              ? `Aus eingefügtem Text${platformName ? ` (${platformName})` : ''}, ${formatDateTime(source.retrievedAt)}`
               : 'Fiktives Beispiel'}
         </li>
       </ul>
@@ -108,7 +110,7 @@ export function VehicleHeader({ dto }: { dto: AnalysisDto }) {
             rel="noopener noreferrer nofollow"
           >
             <ExternalLink aria-hidden size={18} />
-            <span>Inserat öffnen</span>
+            <span>{platformName ? `Inserat auf ${platformName} öffnen` : 'Inserat öffnen'}</span>
           </a>
         )}
         <Button

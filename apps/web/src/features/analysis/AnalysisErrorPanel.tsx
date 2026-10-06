@@ -65,7 +65,18 @@ export function AnalysisErrorPanel({
         title={error.message}
         actions={
           <>
-            <Button onClick={() => void navigate('/inseratstext', { state: { url: request.url } })}>
+            <Button
+              onClick={() =>
+                void navigate('/inseratstext', {
+                  state: {
+                    url: request.url,
+                    ...(error.details?.platform
+                      ? { reason: 'retrieval_disabled', platform: error.details.platform }
+                      : {}),
+                  },
+                })
+              }
+            >
               Inseratstext einfügen
             </Button>
             <Button variant="quiet" onClick={onDismiss}>

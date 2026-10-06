@@ -2,8 +2,10 @@ import {
   ERROR_MESSAGES,
   MAX_LISTING_TEXT_LENGTH,
   MIN_LISTING_TEXT_LENGTH,
+  PLATFORM_NAMES,
+  platformForHost,
   recognizeListingUrl,
-  type ListingUrlRejection,
+  type ListingUrlRecognition,
 } from '@kaufcheck/shared';
 import { ArrowRight } from 'lucide-react';
 import { useState, type FormEvent, type KeyboardEvent } from 'react';
@@ -18,22 +20,29 @@ import { useAnalysisRunner } from './use-analysis-runner';
 
 export const LISTING_INPUT_ID = 'inserat-eingabe';
 
-const REJECTION_MESSAGES: Record<ListingUrlRejection, string> = {
-  empty: 'Bitte füge den Text oder den Link eines Inserats ein.',
-  too_long: 'Der Link ist zu lang. Bitte kopiere nur den Link zum Inserat.',
-  not_a_url: ERROR_MESSAGES.INVALID_URL,
-  invalid_protocol: ERROR_MESSAGES.INVALID_URL,
-  credentials_not_allowed: ERROR_MESSAGES.INVALID_URL,
-  port_not_allowed: ERROR_MESSAGES.INVALID_URL,
-  unsupported_host:
-    'KaufCheck prüft derzeit Auto-Inserate von kleinanzeigen.de. Den Text eines anderen Inserats kannst du trotzdem einfügen.',
-  not_a_listing:
-    'Das ist ein Link zu Kleinanzeigen, aber nicht zu einem einzelnen Inserat. Öffne das Inserat und kopiere dessen Link.',
-};
+const EMPTY_INPUT = 'Bitte füge den Text oder den Link eines Inserats ein.';
+
+function rejectionMessage(recognition: Extract<ListingUrlRecognition, { ok: false }>): string {
+  switch (recognition.reason) {
+    case 'empty':
+      return EMPTY_INPUT;
+    case 'too_long':
+      return 'Der Link ist zu lang. Bitte kopiere nur den Link zum Inserat.';
+    case 'unsupported_host':
+      return 'Links dieses Anbieters kennt KaufCheck noch nicht. Kopiere einfach den Text des Inserats und füge ihn hier ein.';
+    case 'not_a_listing':
+      return recognition.source
+        ? `Das ist ein Link zu ${PLATFORM_NAMES[recognition.source]}, aber nicht zu einem einzelnen Inserat. Öffne das Inserat und kopiere dessen Link – oder füge gleich den Text ein.`
+        : ERROR_MESSAGES.INVALID_URL;
+    default:
+      return ERROR_MESSAGES.INVALID_URL;
+  }
+}
 
 /** A lone link (one token that looks like an address) rather than pasted listing text. */
 function isSingleLink(value: string): boolean {
-  return !/\s/.test(value) && /:\/\/|^www\.|kleinanzeigen\./i.test(value);
+  if (/\s/.test(value)) return false;
+  return /:\/\/|^www\./i.test(value) || platformForHost(value.split('/')[0] ?? '') !== null;
 }
 
 /**
@@ -50,24 +59,30 @@ export function ListingAnalysisForm() {
   const [showHelp, setShowHelp] = useState(false);
   const { state } = runner;
   const retrieval = config.data?.features.urlRetrieval;
+  const retrievable = config.data?.features.retrievablePlatforms;
 
   const submit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const value = input.trim();
     if (!value) {
-      setError(REJECTION_MESSAGES.empty);
+      setError(EMPTY_INPUT);
       return;
     }
     if (isSingleLink(value)) {
       const recognition = recognizeListingUrl(value);
       if (!recognition.ok) {
-        setError(REJECTION_MESSAGES[recognition.reason]);
+        setError(rejectionMessage(recognition));
         return;
       }
       setError(null);
-      if (retrieval === false) {
+      // Without the configuration yet, the server decides (and offers the text input).
+      if (retrievable && !retrievable.includes(recognition.source)) {
         void navigate('/inseratstext', {
-          state: { url: recognition.canonicalUrl, reason: 'retrieval_disabled' },
+          state: {
+            url: recognition.canonicalUrl,
+            reason: 'retrieval_disabled',
+            platform: recognition.source,
+          },
         });
         return;
       }

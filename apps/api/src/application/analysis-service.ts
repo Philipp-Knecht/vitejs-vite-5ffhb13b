@@ -6,6 +6,7 @@ import {
   DEFAULT_EXAMPLE_ID,
 } from '@kaufcheck/domain';
 import {
+  PLATFORM_NAMES,
   recognizeListingUrl,
   type AnalysisDto,
   type AnalysisResult,
@@ -159,6 +160,14 @@ export class AnalysisService {
               });
             }
             throw new AppError('INVALID_URL', { internalReason: recognition.reason });
+          }
+          if (!this.deps.retriever.platforms.includes(recognition.source)) {
+            // Only the visitor may copy listings of platforms that do not permit retrieval.
+            throw new AppError('SOURCE_NOT_PERMITTED', {
+              message: `Inserate von ${PLATFORM_NAMES[recognition.source]} ruft KaufCheck nicht automatisch ab.`,
+              details: { fallbackToText: true, platform: recognition.source },
+              internalReason: 'platform_not_retrievable',
+            });
           }
           url = recognition;
         }

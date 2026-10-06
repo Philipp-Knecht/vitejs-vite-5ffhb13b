@@ -69,7 +69,7 @@ describe('recognizeListingUrl', () => {
       'credentials_not_allowed',
     ],
     ['https://www.kleinanzeigen.de:8443/s-anzeige/x/2900000005-216-1', 'port_not_allowed'],
-    ['https://suchen.mobile.de/fahrzeuge/details.html?id=123', 'unsupported_host'],
+    ['https://www.example-autos.de/inserat/2900000005', 'unsupported_host'],
     ['https://www.kleinanzeigen.de.evil.example/s-anzeige/x/2900000005-216-1', 'unsupported_host'],
     ['https://127.0.0.1/s-anzeige/x/2900000005-216-1', 'unsupported_host'],
     ['https://[::1]/s-anzeige/x/2900000005-216-1', 'unsupported_host'],
@@ -87,10 +87,109 @@ describe('recognizeListingUrl', () => {
   });
 
   it('reports the host of unsupported links', () => {
-    expect(recognizeListingUrl('https://www.autoscout24.de/angebote/xyz')).toEqual({
+    expect(recognizeListingUrl('https://www.example-autos.de/inserat/2900000005')).toEqual({
       ok: false,
       reason: 'unsupported_host',
-      host: 'www.autoscout24.de',
+      host: 'www.example-autos.de',
     });
+  });
+
+  it('names the platform of links that are not a single listing', () => {
+    expect(recognizeListingUrl('https://www.autoscout24.de/angebote/xyz')).toEqual({
+      ok: false,
+      reason: 'not_a_listing',
+      host: 'www.autoscout24.de',
+      source: 'autoscout24',
+    });
+    expect(recognizeListingUrl('https://suchen.mobile.de/fahrzeuge/details.html?id=123')).toEqual({
+      ok: false,
+      reason: 'not_a_listing',
+      host: 'suchen.mobile.de',
+      source: 'mobile_de',
+    });
+  });
+});
+
+describe('recognizeListingUrl – other marketplaces', () => {
+  it.each([
+    [
+      'https://suchen.mobile.de/fahrzeuge/details.html?id=412345678&lang=de&utm_source=app',
+      'mobile_de',
+      '412345678',
+      'https://suchen.mobile.de/fahrzeuge/details.html?id=412345678',
+    ],
+    [
+      'https://suchen.mobile.de/auto-inserat/volkswagen-golf-1-4-tsi-hamburg/412345679.html',
+      'mobile_de',
+      '412345679',
+      'https://suchen.mobile.de/fahrzeuge/details.html?id=412345679',
+    ],
+    [
+      'https://m.mobile.de/auto-inserat/bmw-320d-touring/412345680.html?ref=share',
+      'mobile_de',
+      '412345680',
+      'https://suchen.mobile.de/fahrzeuge/details.html?id=412345680',
+    ],
+    [
+      'https://www.autoscout24.de/angebote/bmw-320-d-touring-diesel-schwarz-4f1d8f6e-5a7c-4b0e-9a3d-2c1b0e9f8a7d?source=list',
+      'autoscout24',
+      '4f1d8f6e-5a7c-4b0e-9a3d-2c1b0e9f8a7d',
+      'https://www.autoscout24.de/angebote/bmw-320-d-touring-diesel-schwarz-4f1d8f6e-5a7c-4b0e-9a3d-2c1b0e9f8a7d',
+    ],
+    [
+      'https://www.ebay.de/itm/Volkswagen-Golf-VII/256123456789?hash=item3ba',
+      'ebay',
+      '256123456789',
+      'https://www.ebay.de/itm/256123456789',
+    ],
+    [
+      'https://m.ebay.de/itm/256123456790',
+      'ebay',
+      '256123456790',
+      'https://www.ebay.de/itm/256123456790',
+    ],
+    [
+      'https://www.autohero.com/de/volkswagen-golf/id/0b8f6a52-1c3d-4e5f-8a9b-0c1d2e3f4a5b/',
+      'autohero',
+      '0b8f6a52-1c3d-4e5f-8a9b-0c1d2e3f4a5b',
+      'https://www.autohero.com/de/volkswagen-golf/id/0b8f6a52-1c3d-4e5f-8a9b-0c1d2e3f4a5b/',
+    ],
+    [
+      'https://www.facebook.com/marketplace/item/1234567890123456/?ref=share',
+      'facebook',
+      '1234567890123456',
+      'https://www.facebook.com/marketplace/item/1234567890123456/',
+    ],
+  ])('recognizes %s', (input, source, externalId, canonicalUrl) => {
+    expect(recognizeListingUrl(input)).toEqual({
+      ok: true,
+      source,
+      canonicalUrl,
+      externalId,
+      categoryId: null,
+    });
+  });
+
+  it('extracts the link from an app share text and accepts links without scheme', () => {
+    expect(
+      recognizeListingUrl(
+        'Schau dir dieses Fahrzeug auf mobile.de an: https://suchen.mobile.de/fahrzeuge/details.html?id=412345681',
+      ),
+    ).toMatchObject({ ok: true, source: 'mobile_de', externalId: '412345681' });
+    expect(recognizeListingUrl('www.ebay.de/itm/256123456791')).toMatchObject({
+      ok: true,
+      source: 'ebay',
+    });
+  });
+
+  it('does not trust look-alike hosts', () => {
+    for (const input of [
+      'https://suchen.mobile.de.evil.example/fahrzeuge/details.html?id=412345678',
+      'https://www.autoscout24.de.evil.example/angebote/x-4f1d8f6e-5a7c-4b0e-9a3d-2c1b0e9f8a7d',
+      'https://ebay.evil.example/itm/256123456789',
+      'https://notebay.de/itm/256123456789',
+    ]) {
+      expect(recognizeListingUrl(input)).toMatchObject({ ok: false, reason: 'unsupported_host' });
+    }
   });
 });
