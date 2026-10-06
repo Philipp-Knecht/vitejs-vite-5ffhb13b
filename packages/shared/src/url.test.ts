@@ -155,6 +155,30 @@ describe('recognizeListingUrl – other marketplaces', () => {
       'https://www.autohero.com/de/volkswagen-golf/id/0b8f6a52-1c3d-4e5f-8a9b-0c1d2e3f4a5b/',
     ],
     [
+      'https://www.autohero.com/at/Skoda-Octavia/id/1C9E7B3A-2D4F-4A6B-8C0D-1E2F3A4B5C6D',
+      'autohero',
+      '1c9e7b3a-2d4f-4a6b-8c0d-1e2f3a4b5c6d',
+      'https://www.autohero.com/at/skoda-octavia/id/1c9e7b3a-2d4f-4a6b-8c0d-1e2f3a4b5c6d/',
+    ],
+    [
+      'https://suche.pkw.de/fahrzeuge/details/48213977?utm_source=share',
+      'pkw_de',
+      '48213977',
+      'https://suche.pkw.de/fahrzeuge/details/48213977',
+    ],
+    [
+      'https://suche.pkw.de/fahrzeuge/financing/48213978/',
+      'pkw_de',
+      '48213978',
+      'https://suche.pkw.de/fahrzeuge/details/48213978',
+    ],
+    [
+      'https://suche.pkw.de/fahrzeuge/details/48213979/exposeView',
+      'pkw_de',
+      '48213979',
+      'https://suche.pkw.de/fahrzeuge/details/48213979',
+    ],
+    [
       'https://www.facebook.com/marketplace/item/1234567890123456/?ref=share',
       'facebook',
       '1234567890123456',
@@ -182,12 +206,34 @@ describe('recognizeListingUrl – other marketplaces', () => {
     });
   });
 
+  it('knows platform pages that are not a single listing', () => {
+    for (const [input, source] of [
+      ['https://suche.pkw.de/fahrzeuge', 'pkw_de'],
+      ['https://www.pkw.de/fahrzeuge/details/48213977', 'pkw_de'],
+      ['https://www.autohero.com/de/search/', 'autohero'],
+      ['https://www.facebook.com/marketplace/hamburg/vehicles', 'facebook'],
+    ] as const) {
+      expect(recognizeListingUrl(input)).toMatchObject({
+        ok: false,
+        reason: 'not_a_listing',
+        source,
+      });
+    }
+  });
+
+  it('no longer knows heycar, which has been shut down', () => {
+    expect(
+      recognizeListingUrl('https://hey.car/vehicle/4f1d8f6e-5a7c-4b0e-9a3d-2c1b0e9f8a7d'),
+    ).toMatchObject({ ok: false, reason: 'unsupported_host' });
+  });
+
   it('does not trust look-alike hosts', () => {
     for (const input of [
       'https://suchen.mobile.de.evil.example/fahrzeuge/details.html?id=412345678',
       'https://www.autoscout24.de.evil.example/angebote/x-4f1d8f6e-5a7c-4b0e-9a3d-2c1b0e9f8a7d',
       'https://ebay.evil.example/itm/256123456789',
       'https://notebay.de/itm/256123456789',
+      'https://suche.pkw.de.evil.example/fahrzeuge/details/48213977',
     ]) {
       expect(recognizeListingUrl(input)).toMatchObject({ ok: false, reason: 'unsupported_host' });
     }

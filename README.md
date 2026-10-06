@@ -362,14 +362,16 @@ already reserved in the contracts and the database.
 ## Legal
 
 - KaufCheck is independent and not affiliated with any marketplace (mobile.de, AutoScout24,
-  Kleinanzeigen, eBay, heycar, Autohero, pkw.de, Facebook Marketplace); their names are only used to
-  say where a listing comes from.
+  Kleinanzeigen, eBay, Autohero, pkw.de, Facebook Marketplace); their names are only used to say
+  where a listing comes from. (heycar was shut down in 2025 and is no longer recognized.)
 - Links of all these marketplaces are recognized (`packages/shared/src/url.ts`) but only kept for
   reference: their terms forbid automated access without consent (mobile.de AGB § 11 and
   robots.txt `Disallow: /fahrzeuge/details.html`; AutoScout24 Verbraucher-AGB § 8.2 and
   `Disallow: /angebote/`; eBay User Agreement, Buy APIs only for approved eBay Partner Network
-  partners). A link leads to the text page; the text parser understands the page layouts of all of
-  them. A platform is retrieved only if its retriever lists it in `platforms`.
+  partners; Autohero Nutzungsbedingungen § 4, written consent required; pkw.de AGB für Nutzer § 12,
+  January 2025, express consent required; Meta terms, automated collection only with prior
+  permission). A link leads to the text page; the text parser understands the page layouts of all
+  of them. A platform is retrieved only if its retriever lists it in `platforms`.
 - Automatic retrieval is **off by default in production** and must stay off for Kleinanzeigen: its
   terms of use (§ 5, version of 17 February 2024) forbid crawlers, spiders, scrapers or other
   automated mechanisms without Kleinanzeigen's express written consent. Enable

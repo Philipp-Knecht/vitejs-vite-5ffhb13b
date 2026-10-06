@@ -56,7 +56,6 @@ const SUPPORTED_PLATFORMS: readonly ListingPlatform[] = [
   'autoscout24',
   'kleinanzeigen',
   'ebay',
-  'heycar',
   'autohero',
   'pkw_de',
   'facebook',
@@ -99,7 +98,7 @@ const FAQ: FaqItem[] = [
     question: 'Warum reicht der Link nicht?',
     when: 'no-retrieval',
     answer: () =>
-      'Die Nutzungsbedingungen von mobile.de, AutoScout24, Kleinanzeigen und eBay erlauben das automatische Auslesen von Inseraten nicht ohne ausdrückliche Zustimmung. KaufCheck hält sich daran und ruft Inserate deshalb nicht selbst ab. Mit dem kopierten Inseratstext ist die Prüfung genauso ausführlich; den Link kannst du zur Zuordnung dazu speichern.',
+      'Die Nutzungsbedingungen von mobile.de, AutoScout24, Kleinanzeigen, eBay und den anderen Plattformen erlauben das automatische Auslesen von Inseraten nicht ohne ausdrückliche Zustimmung. KaufCheck hält sich daran und ruft Inserate deshalb nicht selbst ab. Mit dem kopierten Inseratstext ist die Prüfung genauso ausführlich; den Link kannst du zur Zuordnung dazu speichern.',
   },
   {
     question: 'Warum klappt der Link manchmal nicht?',

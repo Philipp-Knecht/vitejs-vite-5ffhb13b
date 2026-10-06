@@ -27,6 +27,10 @@ export type AttributeKey =
   | 'drivetrain'
   | 'accidentFree'
   | 'serviceBook'
+  | 'lastService'
+  | 'origin'
+  | 'keyCount'
+  | 'commercialUse'
   | 'price'
   | 'shipping';
 
@@ -48,7 +52,14 @@ const LABEL_VARIANTS: Record<AttributeKey, readonly string[]> = {
   fuel: ['kraftstoffart', 'kraftstoff', 'treibstoff', 'motorart', 'antriebsart (kraftstoff)'],
   power: ['leistung', 'motorleistung', 'ps', 'kw', 'leistung (ps)', 'leistung (kw)'],
   transmission: ['getriebe', 'getriebeart', 'schaltung'],
-  bodyType: ['fahrzeugtyp', 'karosserieform', 'karosserie', 'fahrzeugart', 'kategorie'],
+  bodyType: [
+    'fahrzeugtyp',
+    'karosserieform',
+    'karosserie',
+    'fahrzeugart',
+    'kategorie',
+    'fahrzeugklasse',
+  ],
   doors: ['anzahl tueren', 'anzahl der tueren', 'tueren', 'tuerenanzahl'],
   hu: [
     'hu bis',
@@ -59,6 +70,8 @@ const LABEL_VARIANTS: Record<AttributeKey, readonly string[]> = {
     'tuev bis',
     'hauptuntersuchung',
     'hu gueltig bis',
+    'hu/au gueltig bis',
+    'tuev gueltig bis',
   ],
   emissionSticker: ['umweltplakette', 'feinstaubplakette'],
   emissionClass: ['schadstoffklasse', 'abgasnorm', 'euronorm', 'emissionsklasse'],
@@ -80,6 +93,11 @@ const LABEL_VARIANTS: Record<AttributeKey, readonly string[]> = {
   drivetrain: ['antrieb', 'antriebsart'],
   accidentFree: ['unfallfrei', 'unfallfahrzeug', 'unfallschaden'],
   serviceBook: ['scheckheftgepflegt', 'scheckheft', 'serviceheft'],
+  // Kept as listing facts (and for the AI's grounding checks); not vehicle fields.
+  lastService: ['letzter service', 'letzter service am', 'letzte inspektion', 'letzte wartung'],
+  origin: ['herkunft', 'herkunftsland'],
+  keyCount: ['anzahl schluessel', 'anzahl der schluessel'],
+  commercialUse: ['gewerbliche nutzung'],
   price: ['preis', 'kaufpreis', 'preisvorstellung'],
   shipping: ['versand'],
 };

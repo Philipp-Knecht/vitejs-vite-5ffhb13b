@@ -11,7 +11,7 @@ import { emptyParsedListing, stripTitleMarkers, type ParsedListing } from './par
 
 /**
  * Parses listing text pasted by the user. Handles text copied from the pages
- * of Kleinanzeigen, mobile.de, AutoScout24, eBay and similar marketplaces
+ * of Kleinanzeigen, mobile.de, AutoScout24, eBay, Autohero, pkw.de and similar marketplaces
  * (labels and values on separate lines or on one line), "Label: Wert" lists
  * written by sellers and plain descriptions.
  */
@@ -27,6 +27,9 @@ const SECTION_HEADERS = new Map<string, 'details' | 'equipment' | 'description'>
   ['energieverbrauch', 'details'],
   ['farbe und innenausstattung', 'details'],
   ['artikelmerkmale', 'details'],
+  // Autohero
+  ['aussen und innen', 'details'],
+  ['motor, antrieb und verbrauch', 'details'],
   ['ausstattung', 'equipment'],
   ['ausstattungsmerkmale', 'equipment'],
   ['extras', 'equipment'],
@@ -34,6 +37,9 @@ const SECTION_HEADERS = new Map<string, 'details' | 'equipment' | 'description'>
   ['sicherheit', 'equipment'],
   ['unterhaltung/media', 'equipment'],
   ['unterhaltung / media', 'equipment'],
+  ['highlights', 'equipment'],
+  ['multimedia', 'equipment'],
+  ['licht und sicht', 'equipment'],
   ['beschreibung', 'description'],
   ['fahrzeugbeschreibung', 'description'],
   ['fahrzeugbeschreibung laut anbieter', 'description'],
@@ -57,6 +63,8 @@ const PAGE_END_PREFIXES = [
   'weitere fahrzeuge des haendlers',
   'weitere angebote des haendlers',
   'fahrzeuge des haendlers',
+  // Autohero: financing calculator and service offers follow the vehicle data.
+  'finanzierung individuell gestalten',
 ];
 
 /** Lines that end the description section (page chrome when copying the whole page). */
@@ -162,10 +170,20 @@ const JUNK_PATTERNS: readonly RegExp[] = [
   /^\d+\s*\/\s*\d+$/,
   /cookie|datenschutzeinstellungen|zustimmen/,
   /^(?:heute|gestern),?\s+\d{1,2}:\d{2}$/,
+  // Financing offers next to the price ("189 € mtl.", "Finanzierung ab").
+  /^(?:ab\s+)?\d[\d.\s]*(?:,\d{2})?\s*(?:€|eur)\s*(?:mtl|monatl(?:ich)?|pro monat|im monat|\/\s*monat)$/,
+  /^(?:mtl|monatl(?:ich)?|finanzierung ab)$/,
+  // Price ratings, VAT notes and discounts around the price (mobile.de, AutoScout24, pkw.de).
+  /^(?:super|top|sehr guter|guter|fairer|hoher|erhoehter)[\s-]?preis$/,
+  /^mwst\.?\s+(?:nicht\s+)?ausweisbar$/,
+  /^-\s?\d{1,2}\s?%$/,
 ];
 
-const AMOUNT = String.raw`(?:\d{1,3}(?:[.\s]\d{3})*|\d+)(?:,\d{2}|,-)?`;
-/** "8.450 € VB", "€ 18.900,-" (AutoScout24), "EUR 12.990,00" (eBay), "12.990 € (Brutto)" (mobile.de). */
+const AMOUNT = String.raw`(?:\d{1,3}(?:[.\s]\d{3})*|\d+)(?:\s?(?:,\d{2}|,-))?`;
+/**
+ * "8.450 € VB", "€ 18.900,-" (AutoScout24), "€ 17.780 ,-" (pkw.de), "EUR 12.990,00" (eBay),
+ * "12.990 € (Brutto)" (mobile.de).
+ */
 const PRICE_LINE = new RegExp(
   String.raw`^(?:preis\s*:?\s*)?(?:ca\.\s*)?(?:(?:€|eur)\s*${AMOUNT}(?:\s*vb)?|${AMOUNT}\s*(?:€|eur|euro)\s*[¹²³*]?(?:\s*vb)?(?:\s*\(?(?:brutto|netto)\)?)?|vb|zu verschenken)$`,
   'i',
@@ -175,8 +193,13 @@ const DATE_LINE =
   /^(?:\d{2}\.\d{2}\.\d{4}|heute(?:,\s*\d{1,2}:\d{2})?|gestern(?:,\s*\d{1,2}:\d{2})?)$/i;
 const SELLER_TYPE =
   /(gewerblicher?\s+(?:nutzer|anbieter|händler|verkäufer)|privater?\s+(?:nutzer|anbieter|verkäufer))/i;
-/** Seller lines on mobile.de, AutoScout24 and eBay ("Privatanbieter", "Händler"). */
-const SELLER_TYPE_LINE = /^(privatanbieter|privatverkäufer|privat|händler|gewerblich)$/i;
+/** A model variant on its own line: letters, digits, dots and hyphens only. */
+const VARIANT_LINE = /^[\p{L}\d][\p{L}\d .-]*$/u;
+/** Seller lines on mobile.de, AutoScout24, eBay and pkw.de ("Privatanbieter", "Händler kontaktieren"). */
+const SELLER_TYPE_LINE =
+  /^(privatanbieter|privatverkäufer|privat|händler|gewerblich)(?:\s+kontaktieren)?$/i;
+/** Autohero only sells its own stock; its pages name no seller type. */
+const AUTOHERO_PAGE = /\bautohero-garantie\b|\bdirekt über autohero\b/i;
 
 function isJunk(line: string): boolean {
   const folded = foldGerman(line)
@@ -334,6 +357,8 @@ export function parseListingText(input: string): ParsedListing {
   const attributes: ListingAttribute[] = [];
   const equipment: string[] = [];
   let section: 'details' | 'equipment' | null = null;
+  // A details or equipment heading means a whole page was copied (not just a description).
+  let copiedPage = false;
   const pageEnd = lines.findIndex((line, index) => !inDescription(index) && isPageEnd(line.text));
   const contentEnd = pageEnd === -1 ? lines.length : pageEnd;
 
@@ -349,6 +374,7 @@ export function parseListingText(input: string): ParsedListing {
     const header = headerType(line.text);
     if (header === 'details' || header === 'equipment') {
       section = header;
+      copiedPage = true;
       line.consumed = true;
       continue;
     }
@@ -427,7 +453,11 @@ export function parseListingText(input: string): ParsedListing {
       .filter((_, index) => !inDescription(index))
       .map((line) => SELLER_TYPE_LINE.exec(line.text.trim()))
       .find((match) => match !== null);
-  result.sellerTypeText = seller?.[1] ? cleanInline(seller[1]) : null;
+  result.sellerTypeText = seller?.[1]
+    ? cleanInline(seller[1])
+    : AUTOHERO_PAGE.test(outside)
+      ? 'Händler'
+      : null;
   const member = /aktiv\s+seit\s+(\d{2}\.\d{2}\.\d{4})/i.exec(outside);
   result.memberSinceText = member?.[1] ?? null;
   const adId = /anzeigen-?id\s*:?\s*\n?\s*(\d{6,12})/i.exec(text);
@@ -469,13 +499,30 @@ export function parseListingText(input: string): ParsedListing {
     for (let i = priceIndex - 1; i >= Math.max(0, priceIndex - 4) && nearby.length < 2; i -= 1) {
       const line = lines[i];
       if (!line || line.text.length === 0) continue;
+      // A financing offer ("189 € mtl.") or price rating may sit between title and price.
+      if (!line.consumed && isJunk(line.text)) continue;
       if (!titleCandidate(line)) break;
       nearby.push(line);
     }
-    const line = nearby.find((candidate) => findMakeInText(candidate.text)) ?? nearby[0];
+    const makeIndex = nearby.findIndex((candidate) => findMakeInText(candidate.text));
+    const line = nearby[Math.max(makeIndex, 0)];
     if (line) {
       const { title, status } = stripTitleMarkers(line.text);
-      result.title = title;
+      // Autohero splits the title into model and variant ("Skoda Octavia" / "Combi 2.0 TDI Style");
+      // subtitles listing features ("Navi, PDC, Sitzheizung") are left out.
+      const variant = makeIndex > 0 ? nearby[makeIndex - 1] : undefined;
+      if (
+        variant &&
+        wordCount(title) <= 3 &&
+        wordCount(variant.text) <= 6 &&
+        VARIANT_LINE.test(variant.text) &&
+        !findMakeInText(variant.text)
+      ) {
+        result.title = `${title} ${variant.text}`;
+        variant.consumed = true;
+      } else {
+        result.title = title;
+      }
       result.status ??= status;
       line.consumed = true;
     }
@@ -505,7 +552,16 @@ export function parseListingText(input: string): ParsedListing {
   } else {
     const remaining = lines
       .slice(0, contentEnd)
-      .filter((line) => !line.consumed && !isJunk(line.text) && !headerType(line.text))
+      .filter(
+        (line) =>
+          !line.consumed &&
+          !isJunk(line.text) &&
+          !headerType(line.text) &&
+          !isTerminator(line.text) &&
+          !PRICE_LINE.test(line.text) &&
+          // Of a copied page without a description heading only prose is left, not menus.
+          (!copiedPage || wordCount(line.text) >= 6 || /[.!?]$/.test(line.text)),
+      )
       .map((line) => line.text);
     const description = cleanText(remaining.join('\n'));
     result.description = wordCount(description) >= 5 ? description : null;
