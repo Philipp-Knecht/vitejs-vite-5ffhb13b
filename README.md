@@ -2,9 +2,9 @@
 
 **Gebraucht kaufen. Besser entscheiden.**
 
-KaufCheck helps people in Germany evaluate used-car listings on Kleinanzeigen. A user pastes a
-listing link (or the listing text); KaufCheck extracts and normalizes the vehicle data and shows a
-mobile-first dashboard:
+KaufCheck helps people in Germany evaluate used-car listings from mobile.de, AutoScout24,
+Kleinanzeigen, eBay and other marketplaces. A user pastes the listing text (or a link); KaufCheck
+extracts and normalizes the vehicle data and shows a mobile-first dashboard:
 
 - what the listing says, with the origin of every statement (_Aus dem Inserat_, _Berechnet_,
   _Vermutung_, _Nicht bekannt_),
@@ -361,7 +361,15 @@ already reserved in the contracts and the database.
 
 ## Legal
 
-- KaufCheck is independent and not affiliated with Kleinanzeigen (kleinanzeigen.de GmbH).
+- KaufCheck is independent and not affiliated with any marketplace (mobile.de, AutoScout24,
+  Kleinanzeigen, eBay, heycar, Autohero, pkw.de, Facebook Marketplace); their names are only used to
+  say where a listing comes from.
+- Links of all these marketplaces are recognized (`packages/shared/src/url.ts`) but only kept for
+  reference: their terms forbid automated access without consent (mobile.de AGB § 11 and
+  robots.txt `Disallow: /fahrzeuge/details.html`; AutoScout24 Verbraucher-AGB § 8.2 and
+  `Disallow: /angebote/`; eBay User Agreement, Buy APIs only for approved eBay Partner Network
+  partners). A link leads to the text page; the text parser understands the page layouts of all of
+  them. A platform is retrieved only if its retriever lists it in `platforms`.
 - Automatic retrieval is **off by default in production** and must stay off for Kleinanzeigen: its
   terms of use (§ 5, version of 17 February 2024) forbid crawlers, spiders, scrapers or other
   automated mechanisms without Kleinanzeigen's express written consent. Enable

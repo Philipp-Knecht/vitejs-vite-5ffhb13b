@@ -71,8 +71,8 @@ export function Footer() {
       </div>
       <div className="container footer__legal">
         <p>
-          KaufCheck ist ein unabhängiges Angebot und steht in keiner Verbindung zu Kleinanzeigen.
-          Alle Angaben ohne Gewähr.
+          KaufCheck ist ein unabhängiges Angebot und steht in keiner Verbindung zu mobile.de,
+          AutoScout24, Kleinanzeigen, eBay oder anderen Plattformen. Alle Angaben ohne Gewähr.
         </p>
       </div>
     </footer>

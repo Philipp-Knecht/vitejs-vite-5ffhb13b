@@ -68,6 +68,7 @@ export interface LiveRetrieverOptions {
  */
 export class KleinanzeigenLiveRetriever implements ListingUrlRetriever {
   readonly mode = 'live' as const;
+  readonly platforms = ['kleinanzeigen'] as const;
   private readonly cache = new TtlCache<RetrievedListing>(CACHE_TTL_MS, 500);
   private readonly limiter: RateLimiter;
 
@@ -148,6 +149,7 @@ export class KleinanzeigenLiveRetriever implements ListingUrlRetriever {
  */
 export class FixtureListingRetriever implements ListingUrlRetriever {
   readonly mode = 'fixtures' as const;
+  readonly platforms = ['kleinanzeigen'] as const;
 
   constructor(
     private readonly directory: string,
@@ -169,6 +171,7 @@ export class FixtureListingRetriever implements ListingUrlRetriever {
 /** Automatic retrieval disabled by configuration: always offer the text fallback. */
 export class DisabledListingRetriever implements ListingUrlRetriever {
   readonly mode = 'off' as const;
+  readonly platforms = [] as const;
 
   retrieve(): Promise<RetrievedListing> {
     return Promise.reject(fallback('SOURCE_NOT_PERMITTED', 'retrieval_disabled'));

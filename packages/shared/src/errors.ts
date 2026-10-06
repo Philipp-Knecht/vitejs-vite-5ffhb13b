@@ -31,7 +31,7 @@ export const ERROR_MESSAGES: Record<ErrorCode, string> = {
   INVALID_URL:
     'Das sieht nicht nach einem gültigen Link aus. Bitte füge den vollständigen Link zum Inserat ein.',
   UNSUPPORTED_SOURCE:
-    'Aktuell unterstützt KaufCheck nur Links von kleinanzeigen.de. Du kannst den Inseratstext aber direkt einfügen.',
+    'Links dieses Anbieters kennt KaufCheck noch nicht. Du kannst den Inseratstext aber direkt einfügen.',
   UNSUPPORTED_CATEGORY:
     'KaufCheck prüft derzeit nur Auto-Inserate. Weitere Kategorien sind in Planung.',
   SOURCE_NOT_PERMITTED: 'Dieses Inserat konnte nicht automatisch ausgelesen werden.',

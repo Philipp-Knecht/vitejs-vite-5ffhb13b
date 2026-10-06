@@ -147,12 +147,23 @@ describe('analysis pipeline', () => {
 
   it('rejects other sites and invalid links clearly', async () => {
     const other = await client.post('/api/listings/analyze', {
-      url: 'https://www.mobile.de/auto/123',
+      url: 'https://www.example-autos.de/inserat/123',
     });
     expect(other.statusCode).toBe(422);
     expect(errorOf(other)).toMatchObject({
       code: 'UNSUPPORTED_SOURCE',
       details: { fallbackToText: true },
+    });
+
+    // Known marketplaces that do not permit retrieval: the visitor pastes the text instead.
+    const mobile = await client.post('/api/listings/analyze', {
+      url: 'https://suchen.mobile.de/fahrzeuge/details.html?id=412345678',
+    });
+    expect(mobile.statusCode).toBe(422);
+    expect(errorOf(mobile)).toMatchObject({
+      code: 'SOURCE_NOT_PERMITTED',
+      message: 'Inserate von mobile.de ruft KaufCheck nicht automatisch ab.',
+      details: { fallbackToText: true, platform: 'mobile_de' },
     });
 
     const internal = await client.post('/api/listings/analyze', {
@@ -170,6 +181,16 @@ describe('analysis pipeline', () => {
     expect(response.statusCode, response.body).toBe(201);
     const dto = response.json<AnalysisDto>();
     expect(dto.listing.source.type).toBe('text');
+
+    // The link of any known marketplace is kept for reference, in its canonical form.
+    const withLink = await client.post('/api/listings/analyze-text', {
+      text: PASTED_LISTING,
+      url: 'https://www.autoscout24.de/angebote/vw-golf-4f1d8f6e-5a7c-4b0e-9a3d-2c1b0e9f8a7d?source=list',
+    });
+    expect(withLink.statusCode, withLink.body).toBe(201);
+    expect(withLink.json<AnalysisDto>().listing.source.url).toBe(
+      'https://www.autoscout24.de/angebote/vw-golf-4f1d8f6e-5a7c-4b0e-9a3d-2c1b0e9f8a7d',
+    );
     expect(dto.vehicle).toMatchObject({ make: 'Volkswagen', model: 'Golf', mileageKm: 142_000 });
 
     const sofa = await client.post('/api/listings/analyze-text', {
@@ -193,6 +214,7 @@ describe('analysis pipeline', () => {
   it('never exposes internal errors', async () => {
     const failing: ListingUrlRetriever = {
       mode: 'live',
+      platforms: ['kleinanzeigen'],
       retrieve: () =>
         Promise.reject(new Error('connect ECONNREFUSED 10.0.0.1:5432 at /srv/app/secret.ts:12')),
     };

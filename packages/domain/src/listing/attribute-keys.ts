@@ -1,9 +1,9 @@
 import { cleanInline, foldGerman } from '../text/text';
 
 /**
- * Canonical keys for listing detail attributes. Kleinanzeigen shows car
- * details as label/value pairs ("Kilometerstand: 185.000 km"); sellers who
- * write details themselves use many variants of the same labels.
+ * Canonical keys for listing detail attributes. Marketplaces show car details
+ * as label/value pairs ("Kilometerstand: 185.000 km", "Anzahl der Fahrzeughalter
+ * 2"); sellers who write details themselves use many variants of the same labels.
  */
 export type AttributeKey =
   | 'make'
@@ -35,13 +35,21 @@ const LABEL_VARIANTS: Record<AttributeKey, readonly string[]> = {
   make: ['marke', 'hersteller', 'fahrzeugmarke'],
   model: ['modell', 'fahrzeugmodell'],
   mileage: ['kilometerstand', 'km-stand', 'km stand', 'kmstand', 'laufleistung', 'kilometer', 'km'],
-  condition: ['fahrzeugzustand', 'zustand', 'schaden'],
-  firstRegistration: ['erstzulassung', 'ez', 'erstzul', 'erstzul.', 'zulassung'],
+  condition: ['fahrzeugzustand', 'zustand', 'schaden', 'artikelzustand'],
+  firstRegistration: [
+    'erstzulassung',
+    'ez',
+    'erstzul',
+    'erstzul.',
+    'zulassung',
+    'erstzulassungsdatum',
+    'datum der erstzulassung',
+  ],
   fuel: ['kraftstoffart', 'kraftstoff', 'treibstoff', 'motorart', 'antriebsart (kraftstoff)'],
   power: ['leistung', 'motorleistung', 'ps', 'kw', 'leistung (ps)', 'leistung (kw)'],
   transmission: ['getriebe', 'getriebeart', 'schaltung'],
-  bodyType: ['fahrzeugtyp', 'karosserieform', 'karosserie', 'fahrzeugart'],
-  doors: ['anzahl tueren', 'tueren', 'tuerenanzahl'],
+  bodyType: ['fahrzeugtyp', 'karosserieform', 'karosserie', 'fahrzeugart', 'kategorie'],
+  doors: ['anzahl tueren', 'anzahl der tueren', 'tueren', 'tuerenanzahl'],
   hu: [
     'hu bis',
     'hu',
@@ -54,7 +62,7 @@ const LABEL_VARIANTS: Record<AttributeKey, readonly string[]> = {
   ],
   emissionSticker: ['umweltplakette', 'feinstaubplakette'],
   emissionClass: ['schadstoffklasse', 'abgasnorm', 'euronorm', 'emissionsklasse'],
-  color: ['aussenfarbe', 'farbe'],
+  color: ['aussenfarbe', 'farbe', 'farbe (hersteller)', 'farbe laut hersteller', 'herstellerfarbe'],
   interior: ['material innenausstattung', 'innenausstattung', 'polster'],
   previousOwners: [
     'anzahl fahrzeughalter',
@@ -64,9 +72,11 @@ const LABEL_VARIANTS: Record<AttributeKey, readonly string[]> = {
     'anzahl vorbesitzer',
     'halter',
     'anzahl halter',
+    'anzahl der vorbesitzer',
+    'anzahl der halter',
   ],
   displacement: ['hubraum'],
-  seats: ['anzahl sitzplaetze', 'sitzplaetze', 'sitze'],
+  seats: ['anzahl sitzplaetze', 'anzahl der sitzplaetze', 'sitzplaetze', 'sitze'],
   drivetrain: ['antrieb', 'antriebsart'],
   accidentFree: ['unfallfrei', 'unfallfahrzeug', 'unfallschaden'],
   serviceBook: ['scheckheftgepflegt', 'scheckheft', 'serviceheft'],

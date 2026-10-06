@@ -10,9 +10,10 @@ import {
 import { emptyParsedListing, stripTitleMarkers, type ParsedListing } from './parsed-listing';
 
 /**
- * Parses listing text pasted by the user. Handles text copied from the
- * Kleinanzeigen page (labels and values on separate lines or on one line),
- * "Label: Wert" lists written by sellers and plain descriptions.
+ * Parses listing text pasted by the user. Handles text copied from the pages
+ * of Kleinanzeigen, mobile.de, AutoScout24, eBay and similar marketplaces
+ * (labels and values on separate lines or on one line), "Label: Wert" lists
+ * written by sellers and plain descriptions.
  */
 
 const SECTION_HEADERS = new Map<string, 'details' | 'equipment' | 'description'>([
@@ -20,11 +21,25 @@ const SECTION_HEADERS = new Map<string, 'details' | 'equipment' | 'description'>
   ['fahrzeugdetails', 'details'],
   ['fahrzeugdaten', 'details'],
   ['technische daten', 'details'],
+  // AutoScout24 and eBay group their details under these headings.
+  ['basisdaten', 'details'],
+  ['fahrzeughistorie', 'details'],
+  ['energieverbrauch', 'details'],
+  ['farbe und innenausstattung', 'details'],
+  ['artikelmerkmale', 'details'],
   ['ausstattung', 'equipment'],
   ['ausstattungsmerkmale', 'equipment'],
   ['extras', 'equipment'],
+  ['komfort', 'equipment'],
+  ['sicherheit', 'equipment'],
+  ['unterhaltung/media', 'equipment'],
+  ['unterhaltung / media', 'equipment'],
   ['beschreibung', 'description'],
   ['fahrzeugbeschreibung', 'description'],
+  ['fahrzeugbeschreibung laut anbieter', 'description'],
+  ['artikelbeschreibung', 'description'],
+  ['artikelbeschreibung des verkaeufers', 'description'],
+  ['beschreibung des verkaeufers', 'description'],
 ]);
 
 /** Lines after which the listing itself ends (other listings follow). */
@@ -34,7 +49,14 @@ const PAGE_END_PREFIXES = [
   'anzeigen des anbieters',
   'mehr anzeigen des anbieters',
   'das koennte dich auch interessieren',
+  'das koennte sie auch interessieren',
   'top-anzeigen',
+  'aehnliche fahrzeuge',
+  'aehnliche angebote',
+  'aehnliche artikel',
+  'weitere fahrzeuge des haendlers',
+  'weitere angebote des haendlers',
+  'fahrzeuge des haendlers',
 ];
 
 /** Lines that end the description section (page chrome when copying the whole page). */
@@ -51,6 +73,14 @@ const TERMINATOR_PREFIXES = [
   'verkaeufer kontaktieren',
   'top-anzeigen',
   'mehr anzeigen des anbieters',
+  'haendler kontaktieren',
+  'anbieter kontaktieren',
+  'kontakt aufnehmen',
+  'e-mail an den haendler',
+  'e-mail an den anbieter',
+  'aehnliche fahrzeuge',
+  'aehnliche angebote',
+  'aehnliche artikel',
 ];
 
 const JUNK_LINES = new Set([
@@ -101,6 +131,25 @@ const JUNK_LINES = new Set([
   'mehr anzeigen',
   'weniger anzeigen',
   'reserviert',
+  'parken',
+  'geparkt',
+  'vergleichen',
+  'melden',
+  'beobachten',
+  'auf die beobachtungsliste',
+  'sofort-kaufen',
+  'in den warenkorb',
+  'preis vorschlagen',
+  'probefahrt vereinbaren',
+  'e-mail',
+  'chat',
+  'brutto',
+  'netto',
+  'inkl. mwst',
+  'zurueck zu den suchergebnissen',
+  'zurueck zur trefferliste',
+  'haendler',
+  'privat',
 ]);
 
 const JUNK_PATTERNS: readonly RegExp[] = [
@@ -115,13 +164,19 @@ const JUNK_PATTERNS: readonly RegExp[] = [
   /^(?:heute|gestern),?\s+\d{1,2}:\d{2}$/,
 ];
 
-const PRICE_LINE =
-  /^(?:preis\s*:?\s*)?(?:ca\.\s*)?(?:(\d{1,3}(?:[.\s]\d{3})*|\d+)(?:,\d{2}|,-)?\s*(?:€|eur|euro)(?:\s*vb)?|vb|zu verschenken)$/i;
+const AMOUNT = String.raw`(?:\d{1,3}(?:[.\s]\d{3})*|\d+)(?:,\d{2}|,-)?`;
+/** "8.450 € VB", "€ 18.900,-" (AutoScout24), "EUR 12.990,00" (eBay), "12.990 € (Brutto)" (mobile.de). */
+const PRICE_LINE = new RegExp(
+  String.raw`^(?:preis\s*:?\s*)?(?:ca\.\s*)?(?:(?:€|eur)\s*${AMOUNT}(?:\s*vb)?|${AMOUNT}\s*(?:€|eur|euro)\s*[¹²³*]?(?:\s*vb)?(?:\s*\(?(?:brutto|netto)\)?)?|vb|zu verschenken)$`,
+  'i',
+);
 const LOCATION_LINE = /^(\d{5})\s+([A-ZÄÖÜ][\p{L}.' -]{1,60}?)(?:\s+-\s+([\p{L}.' -]{1,60}))?$/u;
 const DATE_LINE =
   /^(?:\d{2}\.\d{2}\.\d{4}|heute(?:,\s*\d{1,2}:\d{2})?|gestern(?:,\s*\d{1,2}:\d{2})?)$/i;
 const SELLER_TYPE =
-  /(gewerblicher?\s+(?:nutzer|anbieter|händler)|privater?\s+(?:nutzer|anbieter))/i;
+  /(gewerblicher?\s+(?:nutzer|anbieter|händler|verkäufer)|privater?\s+(?:nutzer|anbieter|verkäufer))/i;
+/** Seller lines on mobile.de, AutoScout24 and eBay ("Privatanbieter", "Händler"). */
+const SELLER_TYPE_LINE = /^(privatanbieter|privatverkäufer|privat|händler|gewerblich)$/i;
 
 function isJunk(line: string): boolean {
   const folded = foldGerman(line)
@@ -186,6 +241,12 @@ function plausibleValue(key: AttributeKey, value: string): boolean {
       return /^\d/.test(v);
     case 'price':
       return /\d|vb|verschenken/i.test(v);
+    case 'bodyType':
+      // AutoScout24's "Fahrzeugart" says new or used, not the body style.
+      return (
+        !/^(?:gebraucht|neu|neuwagen|jahreswagen|vorführ|tageszulassung|oldtimer)/i.test(v) &&
+        v.split(/\s+/).length <= 5
+      );
     default:
       return v.split(/\s+/).length <= 5;
   }
@@ -360,7 +421,12 @@ export function parseListingText(input: string): ParsedListing {
     .filter((_, index) => !inDescription(index))
     .map((line) => line.text)
     .join('\n');
-  const seller = SELLER_TYPE.exec(outside);
+  const seller =
+    SELLER_TYPE.exec(outside) ??
+    lines
+      .filter((_, index) => !inDescription(index))
+      .map((line) => SELLER_TYPE_LINE.exec(line.text.trim()))
+      .find((match) => match !== null);
   result.sellerTypeText = seller?.[1] ? cleanInline(seller[1]) : null;
   const member = /aktiv\s+seit\s+(\d{2}\.\d{2}\.\d{4})/i.exec(outside);
   result.memberSinceText = member?.[1] ?? null;
@@ -397,16 +463,21 @@ export function parseListingText(input: string): ParsedListing {
     !line.text.endsWith(':');
   const searchEnd = Math.min(contentEnd, descriptionStart === -1 ? 25 : descriptionStart, 25);
   if (priceIndex > 0) {
-    for (let i = priceIndex - 1; i >= Math.max(0, priceIndex - 3); i -= 1) {
+    // The title is the line right before the price – or, when a subtitle such as
+    // "Navi | LED | AHK" sits in between (mobile.de, AutoScout24), the nearest line naming a make.
+    const nearby: LineInfo[] = [];
+    for (let i = priceIndex - 1; i >= Math.max(0, priceIndex - 4) && nearby.length < 2; i -= 1) {
       const line = lines[i];
-      if (line && line.text.length === 0) continue;
-      if (titleCandidate(line) && line) {
-        const { title, status } = stripTitleMarkers(line.text);
-        result.title = title;
-        result.status ??= status;
-        line.consumed = true;
-      }
-      break;
+      if (!line || line.text.length === 0) continue;
+      if (!titleCandidate(line)) break;
+      nearby.push(line);
+    }
+    const line = nearby.find((candidate) => findMakeInText(candidate.text)) ?? nearby[0];
+    if (line) {
+      const { title, status } = stripTitleMarkers(line.text);
+      result.title = title;
+      result.status ??= status;
+      line.consumed = true;
     }
   }
   if (!result.title) {

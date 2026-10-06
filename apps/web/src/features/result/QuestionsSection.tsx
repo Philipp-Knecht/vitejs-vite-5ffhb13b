@@ -8,6 +8,7 @@ import { TextAreaField } from '../../components/ui/Field';
 import { useToast } from '../../components/ui/toast-context';
 import { track } from '../../lib/analytics';
 import { copyText } from '../../lib/clipboard';
+import { listingPlatformName } from '../../lib/platform';
 import { isBoolean, readJson, writeJson } from '../../lib/storage';
 import { ResultSection } from './Section';
 
@@ -31,6 +32,7 @@ export function QuestionsSection({
   const [deselected, setDeselected] = useState<ReadonlySet<string>>(() => new Set());
   const [composerOpen, setComposerOpen] = useState(false);
   const [message, setMessage] = useState('');
+  const platformName = listingPlatformName(listingUrl);
 
   const setFormal = (value: boolean) => {
     setFormalState(value);
@@ -189,7 +191,9 @@ export function QuestionsSection({
           rows={12}
           value={message}
           onChange={(event) => setMessage(event.target.value)}
-          hint="Du kannst den Text anpassen. KaufCheck verschickt nichts – füge die Nachricht selbst im Chat auf Kleinanzeigen ein."
+          hint={`Du kannst den Text anpassen. KaufCheck verschickt nichts – füge die Nachricht selbst ${
+            platformName ? `im Chat auf ${platformName}` : 'beim Verkäufer'
+          } ein.`}
         />
       </Dialog>
     </ResultSection>

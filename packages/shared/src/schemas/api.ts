@@ -8,7 +8,7 @@ import {
 } from '../constants';
 import { ApiErrorSchema } from './errors';
 import { EntitlementsSchema, PlanSchema } from './plans';
-import { MAX_URL_INPUT_LENGTH } from '../url';
+import { LISTING_PLATFORMS, MAX_URL_INPUT_LENGTH } from '../url';
 import { AnalysisResultSchema, EvidenceTypeSchema } from './analysis';
 import { ListingDtoSchema, ListingSourceTypeSchema, VehicleSchema } from './listing';
 import { ProOfferSchema } from './contracts';
@@ -231,6 +231,8 @@ export const PublicConfigSchema = z.object({
   features: z.object({
     /** Automatic retrieval of listing URLs is enabled on this server. */
     urlRetrieval: z.boolean(),
+    /** Platforms whose links are retrieved; other recognized links lead to the text input. */
+    retrievablePlatforms: z.array(z.enum(LISTING_PLATFORMS)),
     /** Listing photos may be shown (loaded directly from the listing's image CDN). */
     listingPhotos: z.boolean(),
     ai: z.boolean(),

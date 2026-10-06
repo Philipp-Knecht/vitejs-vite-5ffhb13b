@@ -1,8 +1,9 @@
 import type { ParsedListing } from '@kaufcheck/domain';
-import type { ListingSource } from '@kaufcheck/shared';
+import type { ListingPlatform, ListingSource } from '@kaufcheck/shared';
 
 /** A recognized listing URL (see `recognizeListingUrl`). */
 export interface ListingUrl {
+  source: ListingPlatform;
   canonicalUrl: string;
   externalId: string;
   categoryId: string | null;
@@ -22,5 +23,7 @@ export interface RetrievedListing {
  */
 export interface ListingUrlRetriever {
   readonly mode: 'off' | 'live' | 'fixtures';
+  /** Platforms whose listings this retriever may fetch; links to others are only kept for reference. */
+  readonly platforms: readonly ListingPlatform[];
   retrieve(url: ListingUrl, signal: AbortSignal): Promise<RetrievedListing>;
 }

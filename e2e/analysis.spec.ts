@@ -76,6 +76,23 @@ test('invalid links get instant feedback without a request', async ({ page }) =>
     .getByLabel('Inseratstext oder Link zum Auto-Inserat')
     .fill('https://www.mobile.de/auto/123');
   await page.getByRole('button', { name: 'Inserat prüfen' }).click();
-  await expect(page.getByText(/Auto-Inserate von kleinanzeigen\.de/)).toBeVisible();
+  await expect(
+    page.getByText(/Link zu mobile\.de, aber nicht zu einem einzelnen Inserat/),
+  ).toBeVisible();
   await expect(page).toHaveURL('/');
+});
+
+test('links of other marketplaces lead to the text input', async ({ page }) => {
+  await page.goto('/');
+  await page
+    .getByLabel('Inseratstext oder Link zum Auto-Inserat')
+    .fill('https://suchen.mobile.de/fahrzeuge/details.html?id=412345678&ref=app');
+  await page.getByRole('button', { name: 'Inserat prüfen' }).click();
+  await expect(page).toHaveURL('/inseratstext');
+  await expect(
+    page.getByText('Inserate von mobile.de ruft KaufCheck nicht selbst ab'),
+  ).toBeVisible();
+  await expect(page.getByLabel('Link zum Inserat (optional)')).toHaveValue(
+    'https://suchen.mobile.de/fahrzeuge/details.html?id=412345678',
+  );
 });
