@@ -44,8 +44,9 @@ function expandTwoDigitYear(value: number, reference: Date, maxYearsAhead: numbe
 
 /**
  * Parses month/year values: "Mai 2012", "05/2012", "5/12", "05.2012",
- * "2012-05" or "2012". `maxYearsAhead` bounds plausible future years
- * (HU dates lie in the future, registrations normally do not).
+ * "2012-05", "2012" or full dates such as "12.03.2018" and "14.05.28"
+ * (Autohero). `maxYearsAhead` bounds plausible future years (HU dates lie
+ * in the future, registrations normally do not).
  */
 export function parseYearMonth(
   input: string,
@@ -53,6 +54,23 @@ export function parseYearMonth(
   maxYearsAhead = 4,
 ): YearMonth | null {
   const text = input.trim().toLowerCase();
+
+  const fullDate = /\b(\d{1,2})\.(\d{1,2})\.(\d{4}|\d{2})\b/.exec(text);
+  if (fullDate?.[1] && fullDate[2] && fullDate[3]) {
+    const day = Number(fullDate[1]);
+    const month = Number(fullDate[2]);
+    let year = Number(fullDate[3]);
+    if (fullDate[3].length === 2) year = expandTwoDigitYear(year, reference, maxYearsAhead);
+    if (
+      day >= 1 &&
+      day <= 31 &&
+      month >= 1 &&
+      month <= 12 &&
+      plausibleYear(year, reference, maxYearsAhead)
+    ) {
+      return { year, month };
+    }
+  }
 
   const named = /([a-zäöü]{3,9})\.?\s*(\d{4})/.exec(text);
   if (named?.[1] && named[2]) {

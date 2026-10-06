@@ -14,7 +14,6 @@ export const LISTING_PLATFORMS = [
   'mobile_de',
   'autoscout24',
   'ebay',
-  'heycar',
   'autohero',
   'pkw_de',
   'facebook',
@@ -27,7 +26,6 @@ export const PLATFORM_NAMES: Record<ListingPlatform, string> = {
   mobile_de: 'mobile.de',
   autoscout24: 'AutoScout24',
   ebay: 'eBay',
-  heycar: 'heycar',
   autohero: 'Autohero',
   pkw_de: 'pkw.de',
   facebook: 'Facebook Marketplace',
@@ -106,14 +104,13 @@ const AUTOSCOUT24_PATH = new RegExp(`^/angebote/((?:[a-z0-9-]{0,300}-)?(${UUID})
 const EBAY_HOST = /^(?:www\.|m\.)?ebay\.(de|at|ch|com|co\.uk|fr|it|es|nl|be)$/;
 const EBAY_PATH = /^\/itm\/(?:[^/]{1,300}\/)?(\d{9,15})\/?$/;
 
-const HEYCAR_HOSTS: ReadonlySet<string> = new Set(['hey.car', 'www.hey.car']);
-const HEYCAR_PATH = new RegExp(`^/vehicle/(${UUID})/?$`, 'i');
-
 const AUTOHERO_HOSTS: ReadonlySet<string> = new Set(['www.autohero.com', 'autohero.com']);
-const AUTOHERO_PATH = new RegExp(`^/de/([a-z0-9-]{1,200})/id/(${UUID})/?$`, 'i');
+const AUTOHERO_PATH = new RegExp(`^/(de|at)/([a-z0-9-]{1,200})/id/(${UUID})/?$`, 'i');
 
-const PKW_DE_HOSTS: ReadonlySet<string> = new Set(['www.pkw.de', 'pkw.de']);
-const PKW_DE_PATH = /^\/fahrzeug\/(?:[^/]{1,300}\/)?(\d{5,12})\/?$/i;
+/** Listings live in the search app on suche.pkw.de; the other hosts are the magazine and seller pages. */
+const PKW_DE_SEARCH_HOST = 'suche.pkw.de';
+const PKW_DE_HOSTS: ReadonlySet<string> = new Set([PKW_DE_SEARCH_HOST, 'www.pkw.de', 'pkw.de']);
+const PKW_DE_PATH = /^\/fahrzeuge\/(?:details|financing)\/([a-z0-9_-]{4,64})(?:\/exposeView)?\/?$/i;
 
 const FACEBOOK_HOSTS: ReadonlySet<string> = new Set([
   'www.facebook.com',
@@ -183,26 +180,14 @@ const PLATFORMS: Record<ListingPlatform, PlatformDefinition> = {
       };
     },
   },
-  heycar: {
-    matchesHost: (host) => HEYCAR_HOSTS.has(host),
-    match(url) {
-      const externalId = HEYCAR_PATH.exec(url.pathname)?.[1]?.toLowerCase();
-      if (!externalId) return null;
-      return {
-        canonicalUrl: `https://hey.car/vehicle/${externalId}`,
-        externalId,
-        categoryId: null,
-      };
-    },
-  },
   autohero: {
     matchesHost: (host) => AUTOHERO_HOSTS.has(host),
     match(url) {
       const match = AUTOHERO_PATH.exec(url.pathname);
-      if (!match?.[1] || !match[2]) return null;
-      const externalId = match[2].toLowerCase();
+      if (!match?.[1] || !match[2] || !match[3]) return null;
+      const externalId = match[3].toLowerCase();
       return {
-        canonicalUrl: `https://www.autohero.com/de/${match[1].toLowerCase()}/id/${externalId}/`,
+        canonicalUrl: `https://www.autohero.com/${match[1].toLowerCase()}/${match[2].toLowerCase()}/id/${externalId}/`,
         externalId,
         categoryId: null,
       };
@@ -210,12 +195,12 @@ const PLATFORMS: Record<ListingPlatform, PlatformDefinition> = {
   },
   pkw_de: {
     matchesHost: (host) => PKW_DE_HOSTS.has(host),
-    match(url) {
-      const match = PKW_DE_PATH.exec(url.pathname);
-      if (!match?.[1]) return null;
+    match(url, host) {
+      const externalId = host === PKW_DE_SEARCH_HOST ? PKW_DE_PATH.exec(url.pathname)?.[1] : null;
+      if (!externalId) return null;
       return {
-        canonicalUrl: `https://www.pkw.de${url.pathname.replace(/\/$/, '').toLowerCase()}`,
-        externalId: match[1],
+        canonicalUrl: `https://${PKW_DE_SEARCH_HOST}/fahrzeuge/details/${externalId}`,
+        externalId,
         categoryId: null,
       };
     },

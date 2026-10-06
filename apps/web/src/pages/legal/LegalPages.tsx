@@ -52,9 +52,9 @@ export function ImprintPage() {
       <h2>Hinweis zu den Plattformen</h2>
       <p>
         KaufCheck ist ein unabhängiges Angebot und steht in keiner Verbindung zu den Plattformen,
-        deren Inserate du prüfen kannst, etwa mobile.de, AutoScout24, Kleinanzeigen, eBay, heycar,
-        Autohero, pkw.de oder Facebook Marketplace. Die Namen nennen wir nur, um zu beschreiben,
-        woher ein Inserat stammt; sie sind Marken ihrer jeweiligen Inhaber.
+        deren Inserate du prüfen kannst, etwa mobile.de, AutoScout24, Kleinanzeigen, eBay, Autohero,
+        pkw.de oder Facebook Marketplace. Die Namen nennen wir nur, um zu beschreiben, woher ein
+        Inserat stammt; sie sind Marken ihrer jeweiligen Inhaber.
       </p>
       <h2>Haftung für Inhalte</h2>
       <p>

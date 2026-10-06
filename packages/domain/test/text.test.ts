@@ -72,6 +72,7 @@ describe('parsePrice', () => {
     ['8.450 €', { amountEur: 8450, kind: 'asking' }],
     ['Festpreis 5.000 €', { amountEur: 5000, kind: 'fixed' }],
     ['Zu verschenken', { amountEur: 0, kind: 'give_away' }],
+    ['€ 17.780 ,-', { amountEur: 17780, kind: 'asking' }],
     ['VB', null],
   ])('%s', (input, expected) => {
     expect(parsePrice(input)).toEqual(expected);
@@ -87,6 +88,8 @@ describe('dates', () => {
     ['2012-05', { year: 2012, month: 5 }],
     ['März 2014', { year: 2014, month: 3 }],
     ['2012', { year: 2012, month: null }],
+    ['12.03.2018', { year: 2018, month: 3 }],
+    ['14.05.28', { year: 2028, month: 5 }],
     ['irgendwann', null],
   ])('parseYearMonth(%s)', (input, expected) => {
     expect(parseYearMonth(input, REF)).toEqual(expected);
