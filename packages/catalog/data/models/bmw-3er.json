@@ -55,24 +55,10 @@
       "id": "bmw-3er-e90",
       "name": "3er (E90/E91/E92/E93)",
       "code": "E90 / E91 / E92 / E93",
-      "years": [
-        2005,
-        2013
-      ],
-      "bodyTypes": [
-        "limousine",
-        "kombi",
-        "coupe",
-        "cabrio"
-      ],
-      "fuels": [
-        "petrol",
-        "diesel"
-      ],
-      "seats": [
-        4,
-        5
-      ],
+      "years": [2005, 2013],
+      "bodyTypes": ["limousine", "kombi", "coupe", "cabrio"],
+      "fuels": ["petrol", "diesel"],
+      "seats": [4, 5],
       "automatic": true,
       "typicalPriceEur": null,
       "priceSource": null,
@@ -231,24 +217,10 @@
       "id": "bmw-3er-f30",
       "name": "3er (F30/F31/F34)",
       "code": "F30 / F31 / F34",
-      "years": [
-        2011,
-        2019
-      ],
-      "bodyTypes": [
-        "limousine",
-        "kombi",
-        "schraegheck"
-      ],
-      "fuels": [
-        "petrol",
-        "diesel",
-        "hybrid",
-        "plugin_hybrid"
-      ],
-      "seats": [
-        5
-      ],
+      "years": [2011, 2019],
+      "bodyTypes": ["limousine", "kombi", "schraegheck"],
+      "fuels": ["petrol", "diesel", "hybrid", "plugin_hybrid"],
+      "seats": [5],
       "automatic": true,
       "typicalPriceEur": null,
       "priceSource": null,
@@ -378,22 +350,10 @@
       "id": "bmw-3er-g20",
       "name": "3er (G20/G21)",
       "code": "G20 / G21",
-      "years": [
-        2019,
-        null
-      ],
-      "bodyTypes": [
-        "limousine",
-        "kombi"
-      ],
-      "fuels": [
-        "petrol",
-        "diesel",
-        "plugin_hybrid"
-      ],
-      "seats": [
-        5
-      ],
+      "years": [2019, null],
+      "bodyTypes": ["limousine", "kombi"],
+      "fuels": ["petrol", "diesel", "plugin_hybrid"],
+      "seats": [5],
       "automatic": true,
       "typicalPriceEur": null,
       "priceSource": null,

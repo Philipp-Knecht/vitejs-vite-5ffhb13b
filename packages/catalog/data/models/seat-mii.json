@@ -2,11 +2,7 @@
   "id": "seat-mii",
   "make": "Seat",
   "model": "Mii",
-  "aliases": [
-    "mii",
-    "mii ecofuel",
-    "mii electric"
-  ],
+  "aliases": ["mii", "mii ecofuel", "mii electric"],
   "segment": "kleinstwagen",
   "summary": "Der Mii ist die Seat-Version des VW up!: technisch weitgehend identisch, ein handlicher und sparsamer Stadtwagen mit vier Sitzen.",
   "ratings": {
@@ -31,21 +27,10 @@
       "id": "seat-mii-1",
       "name": "Mii",
       "code": null,
-      "years": [
-        2011,
-        2021
-      ],
-      "bodyTypes": [
-        "schraegheck"
-      ],
-      "fuels": [
-        "petrol",
-        "cng",
-        "electric"
-      ],
-      "seats": [
-        4
-      ],
+      "years": [2011, 2021],
+      "bodyTypes": ["schraegheck"],
+      "fuels": ["petrol", "cng", "electric"],
+      "seats": [4],
       "automatic": true,
       "typicalPriceEur": null,
       "priceSource": null,

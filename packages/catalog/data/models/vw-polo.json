@@ -35,21 +35,10 @@
       "id": "vw-polo-5",
       "name": "Polo V",
       "code": "6R / 6C",
-      "years": [
-        2009,
-        2017
-      ],
-      "bodyTypes": [
-        "schraegheck"
-      ],
-      "fuels": [
-        "petrol",
-        "diesel",
-        "lpg"
-      ],
-      "seats": [
-        5
-      ],
+      "years": [2009, 2017],
+      "bodyTypes": ["schraegheck"],
+      "fuels": ["petrol", "diesel", "lpg"],
+      "seats": [5],
       "automatic": true,
       "typicalPriceEur": null,
       "priceSource": null,
@@ -169,21 +158,10 @@
       "id": "vw-polo-6",
       "name": "Polo VI",
       "code": "AW",
-      "years": [
-        2017,
-        null
-      ],
-      "bodyTypes": [
-        "schraegheck"
-      ],
-      "fuels": [
-        "petrol",
-        "diesel",
-        "cng"
-      ],
-      "seats": [
-        5
-      ],
+      "years": [2017, null],
+      "bodyTypes": ["schraegheck"],
+      "fuels": ["petrol", "diesel", "cng"],
+      "seats": [5],
       "automatic": true,
       "typicalPriceEur": null,
       "priceSource": null,

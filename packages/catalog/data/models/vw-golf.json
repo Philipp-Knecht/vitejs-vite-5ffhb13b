@@ -41,23 +41,10 @@
       "id": "vw-golf-6",
       "name": "Golf VI",
       "code": "5K",
-      "years": [
-        2008,
-        2013
-      ],
-      "bodyTypes": [
-        "schraegheck",
-        "kombi",
-        "cabrio"
-      ],
-      "fuels": [
-        "petrol",
-        "diesel",
-        "lpg"
-      ],
-      "seats": [
-        5
-      ],
+      "years": [2008, 2013],
+      "bodyTypes": ["schraegheck", "kombi", "cabrio"],
+      "fuels": ["petrol", "diesel", "lpg"],
+      "seats": [5],
       "automatic": true,
       "typicalPriceEur": null,
       "priceSource": null,
@@ -198,24 +185,10 @@
       "id": "vw-golf-7",
       "name": "Golf VII",
       "code": "AU / 5G",
-      "years": [
-        2012,
-        2020
-      ],
-      "bodyTypes": [
-        "schraegheck",
-        "kombi"
-      ],
-      "fuels": [
-        "petrol",
-        "diesel",
-        "cng",
-        "electric",
-        "plugin_hybrid"
-      ],
-      "seats": [
-        5
-      ],
+      "years": [2012, 2020],
+      "bodyTypes": ["schraegheck", "kombi"],
+      "fuels": ["petrol", "diesel", "cng", "electric", "plugin_hybrid"],
+      "seats": [5],
       "automatic": true,
       "typicalPriceEur": null,
       "priceSource": null,
@@ -353,24 +326,10 @@
       "id": "vw-golf-8",
       "name": "Golf VIII",
       "code": "CD",
-      "years": [
-        2019,
-        null
-      ],
-      "bodyTypes": [
-        "schraegheck",
-        "kombi"
-      ],
-      "fuels": [
-        "petrol",
-        "diesel",
-        "hybrid",
-        "plugin_hybrid",
-        "cng"
-      ],
-      "seats": [
-        5
-      ],
+      "years": [2019, null],
+      "bodyTypes": ["schraegheck", "kombi"],
+      "fuels": ["petrol", "diesel", "hybrid", "plugin_hybrid", "cng"],
+      "seats": [5],
       "automatic": true,
       "typicalPriceEur": null,
       "priceSource": null,

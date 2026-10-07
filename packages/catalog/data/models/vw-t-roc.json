@@ -2,14 +2,7 @@
   "id": "vw-t-roc",
   "make": "Volkswagen",
   "model": "T-Roc",
-  "aliases": [
-    "t roc",
-    "t-roc",
-    "t-roc cabrio",
-    "t-roc cabriolet",
-    "t-roc r",
-    "troc"
-  ],
+  "aliases": ["t roc", "t-roc", "t-roc cabrio", "t-roc cabriolet", "t-roc r", "troc"],
   "segment": "suv_kompakt",
   "summary": "Der T-Roc ist ein Kompakt-SUV auf Golf-Basis mit erhöhter Sitzposition, solider Verarbeitung und überdurchschnittlich guten TÜV-Ergebnissen.",
   "ratings": {
@@ -38,22 +31,10 @@
       "id": "vw-t-roc-1",
       "name": "T-Roc (erste Generation)",
       "code": "A1",
-      "years": [
-        2017,
-        2025
-      ],
-      "bodyTypes": [
-        "suv",
-        "cabrio"
-      ],
-      "fuels": [
-        "petrol",
-        "diesel"
-      ],
-      "seats": [
-        4,
-        5
-      ],
+      "years": [2017, 2025],
+      "bodyTypes": ["suv", "cabrio"],
+      "fuels": ["petrol", "diesel"],
+      "seats": [4, 5],
       "automatic": true,
       "typicalPriceEur": null,
       "priceSource": null,
@@ -177,20 +158,10 @@
       "id": "vw-t-roc-2",
       "name": "T-Roc (zweite Generation)",
       "code": null,
-      "years": [
-        2025,
-        null
-      ],
-      "bodyTypes": [
-        "suv"
-      ],
-      "fuels": [
-        "petrol",
-        "hybrid"
-      ],
-      "seats": [
-        5
-      ],
+      "years": [2025, null],
+      "bodyTypes": ["suv"],
+      "fuels": ["petrol", "hybrid"],
+      "seats": [5],
       "automatic": true,
       "typicalPriceEur": null,
       "priceSource": null,

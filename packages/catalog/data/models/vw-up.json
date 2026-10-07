@@ -2,15 +2,7 @@
   "id": "vw-up",
   "make": "Volkswagen",
   "model": "up!",
-  "aliases": [
-    "cross up",
-    "cross up!",
-    "e-up",
-    "e-up!",
-    "up",
-    "up!",
-    "up! gti"
-  ],
+  "aliases": ["cross up", "cross up!", "e-up", "e-up!", "up", "up!", "up! gti"],
   "segment": "kleinstwagen",
   "summary": "Der up! ist ein winziger Stadtflitzer mit vier Sitzen: handlich, sparsam und günstig im Unterhalt, aber ohne Reserven bei Platz und Komfort.",
   "ratings": {
@@ -39,21 +31,10 @@
       "id": "vw-up-1",
       "name": "up!",
       "code": "AA",
-      "years": [
-        2011,
-        2023
-      ],
-      "bodyTypes": [
-        "schraegheck"
-      ],
-      "fuels": [
-        "petrol",
-        "cng",
-        "electric"
-      ],
-      "seats": [
-        4
-      ],
+      "years": [2011, 2023],
+      "bodyTypes": ["schraegheck"],
+      "fuels": ["petrol", "cng", "electric"],
+      "seats": [4],
       "automatic": true,
       "typicalPriceEur": null,
       "priceSource": null,

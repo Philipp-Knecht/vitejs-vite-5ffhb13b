@@ -2,12 +2,7 @@
   "id": "skoda-citigo",
   "make": "Škoda",
   "model": "Citigo",
-  "aliases": [
-    "citigo",
-    "citigo e iv",
-    "citigo-e",
-    "citigo-e iv"
-  ],
+  "aliases": ["citigo", "citigo e iv", "citigo-e", "citigo-e iv"],
   "segment": "kleinstwagen",
   "summary": "Der Citigo ist die Škoda-Version des VW up!: technisch weitgehend identisch, aber mit eigenem Design und ebenfalls ein handlicher Stadtwagen mit vier Sitzen.",
   "ratings": {
@@ -32,21 +27,10 @@
       "id": "skoda-citigo-1",
       "name": "Citigo",
       "code": null,
-      "years": [
-        2011,
-        2020
-      ],
-      "bodyTypes": [
-        "schraegheck"
-      ],
-      "fuels": [
-        "petrol",
-        "cng",
-        "electric"
-      ],
-      "seats": [
-        4
-      ],
+      "years": [2011, 2020],
+      "bodyTypes": ["schraegheck"],
+      "fuels": ["petrol", "cng", "electric"],
+      "seats": [4],
       "automatic": true,
       "typicalPriceEur": null,
       "priceSource": null,

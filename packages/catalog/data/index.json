@@ -15,24 +15,10 @@
       {
         "id": "bmw-3er-e90",
         "name": "3er (E90/E91/E92/E93)",
-        "years": [
-          2005,
-          2013
-        ],
-        "bodyTypes": [
-          "limousine",
-          "kombi",
-          "coupe",
-          "cabrio"
-        ],
-        "fuels": [
-          "petrol",
-          "diesel"
-        ],
-        "seats": [
-          4,
-          5
-        ],
+        "years": [2005, 2013],
+        "bodyTypes": ["limousine", "kombi", "coupe", "cabrio"],
+        "fuels": ["petrol", "diesel"],
+        "seats": [4, 5],
         "automatic": true,
         "typicalPriceEur": null,
         "issueCount": 6,
@@ -41,24 +27,10 @@
       {
         "id": "bmw-3er-f30",
         "name": "3er (F30/F31/F34)",
-        "years": [
-          2011,
-          2019
-        ],
-        "bodyTypes": [
-          "limousine",
-          "kombi",
-          "schraegheck"
-        ],
-        "fuels": [
-          "petrol",
-          "diesel",
-          "hybrid",
-          "plugin_hybrid"
-        ],
-        "seats": [
-          5
-        ],
+        "years": [2011, 2019],
+        "bodyTypes": ["limousine", "kombi", "schraegheck"],
+        "fuels": ["petrol", "diesel", "hybrid", "plugin_hybrid"],
+        "seats": [5],
         "automatic": true,
         "typicalPriceEur": null,
         "issueCount": 5,
@@ -67,22 +39,10 @@
       {
         "id": "bmw-3er-g20",
         "name": "3er (G20/G21)",
-        "years": [
-          2019,
-          null
-        ],
-        "bodyTypes": [
-          "limousine",
-          "kombi"
-        ],
-        "fuels": [
-          "petrol",
-          "diesel",
-          "plugin_hybrid"
-        ],
-        "seats": [
-          5
-        ],
+        "years": [2019, null],
+        "bodyTypes": ["limousine", "kombi"],
+        "fuels": ["petrol", "diesel", "plugin_hybrid"],
+        "seats": [5],
         "automatic": true,
         "typicalPriceEur": null,
         "issueCount": 5,
@@ -106,21 +66,10 @@
       {
         "id": "seat-mii-1",
         "name": "Mii",
-        "years": [
-          2011,
-          2021
-        ],
-        "bodyTypes": [
-          "schraegheck"
-        ],
-        "fuels": [
-          "petrol",
-          "cng",
-          "electric"
-        ],
-        "seats": [
-          4
-        ],
+        "years": [2011, 2021],
+        "bodyTypes": ["schraegheck"],
+        "fuels": ["petrol", "cng", "electric"],
+        "seats": [4],
         "automatic": true,
         "typicalPriceEur": null,
         "issueCount": 6,
@@ -144,21 +93,10 @@
       {
         "id": "skoda-citigo-1",
         "name": "Citigo",
-        "years": [
-          2011,
-          2020
-        ],
-        "bodyTypes": [
-          "schraegheck"
-        ],
-        "fuels": [
-          "petrol",
-          "cng",
-          "electric"
-        ],
-        "seats": [
-          4
-        ],
+        "years": [2011, 2020],
+        "bodyTypes": ["schraegheck"],
+        "fuels": ["petrol", "cng", "electric"],
+        "seats": [4],
         "automatic": true,
         "typicalPriceEur": null,
         "issueCount": 6,
@@ -182,23 +120,10 @@
       {
         "id": "vw-golf-6",
         "name": "Golf VI",
-        "years": [
-          2008,
-          2013
-        ],
-        "bodyTypes": [
-          "schraegheck",
-          "kombi",
-          "cabrio"
-        ],
-        "fuels": [
-          "petrol",
-          "diesel",
-          "lpg"
-        ],
-        "seats": [
-          5
-        ],
+        "years": [2008, 2013],
+        "bodyTypes": ["schraegheck", "kombi", "cabrio"],
+        "fuels": ["petrol", "diesel", "lpg"],
+        "seats": [5],
         "automatic": true,
         "typicalPriceEur": null,
         "issueCount": 6,
@@ -207,24 +132,10 @@
       {
         "id": "vw-golf-7",
         "name": "Golf VII",
-        "years": [
-          2012,
-          2020
-        ],
-        "bodyTypes": [
-          "schraegheck",
-          "kombi"
-        ],
-        "fuels": [
-          "petrol",
-          "diesel",
-          "cng",
-          "electric",
-          "plugin_hybrid"
-        ],
-        "seats": [
-          5
-        ],
+        "years": [2012, 2020],
+        "bodyTypes": ["schraegheck", "kombi"],
+        "fuels": ["petrol", "diesel", "cng", "electric", "plugin_hybrid"],
+        "seats": [5],
         "automatic": true,
         "typicalPriceEur": null,
         "issueCount": 6,
@@ -233,24 +144,10 @@
       {
         "id": "vw-golf-8",
         "name": "Golf VIII",
-        "years": [
-          2019,
-          null
-        ],
-        "bodyTypes": [
-          "schraegheck",
-          "kombi"
-        ],
-        "fuels": [
-          "petrol",
-          "diesel",
-          "hybrid",
-          "plugin_hybrid",
-          "cng"
-        ],
-        "seats": [
-          5
-        ],
+        "years": [2019, null],
+        "bodyTypes": ["schraegheck", "kombi"],
+        "fuels": ["petrol", "diesel", "hybrid", "plugin_hybrid", "cng"],
+        "seats": [5],
         "automatic": true,
         "typicalPriceEur": null,
         "issueCount": 5,
@@ -274,21 +171,10 @@
       {
         "id": "vw-polo-5",
         "name": "Polo V",
-        "years": [
-          2009,
-          2017
-        ],
-        "bodyTypes": [
-          "schraegheck"
-        ],
-        "fuels": [
-          "petrol",
-          "diesel",
-          "lpg"
-        ],
-        "seats": [
-          5
-        ],
+        "years": [2009, 2017],
+        "bodyTypes": ["schraegheck"],
+        "fuels": ["petrol", "diesel", "lpg"],
+        "seats": [5],
         "automatic": true,
         "typicalPriceEur": null,
         "issueCount": 5,
@@ -297,21 +183,10 @@
       {
         "id": "vw-polo-6",
         "name": "Polo VI",
-        "years": [
-          2017,
-          null
-        ],
-        "bodyTypes": [
-          "schraegheck"
-        ],
-        "fuels": [
-          "petrol",
-          "diesel",
-          "cng"
-        ],
-        "seats": [
-          5
-        ],
+        "years": [2017, null],
+        "bodyTypes": ["schraegheck"],
+        "fuels": ["petrol", "diesel", "cng"],
+        "seats": [5],
         "automatic": true,
         "typicalPriceEur": null,
         "issueCount": 5,
@@ -335,22 +210,10 @@
       {
         "id": "vw-t-roc-1",
         "name": "T-Roc (erste Generation)",
-        "years": [
-          2017,
-          2025
-        ],
-        "bodyTypes": [
-          "suv",
-          "cabrio"
-        ],
-        "fuels": [
-          "petrol",
-          "diesel"
-        ],
-        "seats": [
-          4,
-          5
-        ],
+        "years": [2017, 2025],
+        "bodyTypes": ["suv", "cabrio"],
+        "fuels": ["petrol", "diesel"],
+        "seats": [4, 5],
         "automatic": true,
         "typicalPriceEur": null,
         "issueCount": 5,
@@ -359,20 +222,10 @@
       {
         "id": "vw-t-roc-2",
         "name": "T-Roc (zweite Generation)",
-        "years": [
-          2025,
-          null
-        ],
-        "bodyTypes": [
-          "suv"
-        ],
-        "fuels": [
-          "petrol",
-          "hybrid"
-        ],
-        "seats": [
-          5
-        ],
+        "years": [2025, null],
+        "bodyTypes": ["suv"],
+        "fuels": ["petrol", "hybrid"],
+        "seats": [5],
         "automatic": true,
         "typicalPriceEur": null,
         "issueCount": 0,
@@ -396,21 +249,10 @@
       {
         "id": "vw-up-1",
         "name": "up!",
-        "years": [
-          2011,
-          2023
-        ],
-        "bodyTypes": [
-          "schraegheck"
-        ],
-        "fuels": [
-          "petrol",
-          "cng",
-          "electric"
-        ],
-        "seats": [
-          4
-        ],
+        "years": [2011, 2023],
+        "bodyTypes": ["schraegheck"],
+        "fuels": ["petrol", "cng", "electric"],
+        "seats": [4],
         "automatic": true,
         "typicalPriceEur": null,
         "issueCount": 6,
