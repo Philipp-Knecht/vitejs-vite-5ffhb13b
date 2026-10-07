@@ -242,7 +242,7 @@ export function SavedListingsPage() {
             </p>
           )}
         </div>
-        {signedIn && <ButtonLink to="/">Neues Inserat prüfen</ButtonLink>}
+        {signedIn && <ButtonLink to="/inserat-pruefen">Neues Inserat prüfen</ButtonLink>}
       </div>
 
       {!signedIn ? (
@@ -262,7 +262,7 @@ export function SavedListingsPage() {
             Prüfe ein Inserat und tippe auf „Speichern“. Hier kannst du es dann später erneut prüfen
             oder mit anderen vergleichen.
           </p>
-          <ButtonLink to="/">Inserat prüfen</ButtonLink>
+          <ButtonLink to="/inserat-pruefen">Inserat prüfen</ButtonLink>
         </div>
       ) : (
         <>

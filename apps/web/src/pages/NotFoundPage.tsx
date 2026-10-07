@@ -11,7 +11,7 @@ export function NotFoundPage() {
         Vielleicht hat sich ein Tippfehler eingeschlichen, oder die Seite wurde verschoben.
       </p>
       <div className="button-row">
-        <ButtonLink to="/">Inserat prüfen</ButtonLink>
+        <ButtonLink to="/inserat-pruefen">Inserat prüfen</ButtonLink>
         <ButtonLink to="/gebrauchtwagen-kaufen" variant="secondary">
           Zum Ratgeber
         </ButtonLink>

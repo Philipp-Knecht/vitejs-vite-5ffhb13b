@@ -13,6 +13,8 @@ export const ANALYTICS_EVENTS = [
   'listing_saved',
   'comparison_created',
   'pro_clicked',
+  'car_search_started',
+  'platform_search_opened',
 ] as const;
 
 export type AnalyticsEventName = (typeof ANALYTICS_EVENTS)[number];

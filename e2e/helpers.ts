@@ -34,7 +34,7 @@ export const uniqueEmail = () =>
 
 /** Enters a listing link on the homepage and waits for the result page. */
 export async function analyzeFromHomepage(page: Page, url: string): Promise<void> {
-  await page.goto('/');
+  await page.goto('/inserat-pruefen');
   await page.getByLabel('Inseratstext oder Link zum Auto-Inserat').fill(url);
   await page.getByRole('button', { name: 'Inserat prüfen' }).click();
   await expect(page).toHaveURL(/\/analyse\/[0-9a-f-]{36}$/);

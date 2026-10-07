@@ -16,6 +16,7 @@ COPY apps/api/package.json apps/api/prisma.config.ts apps/api/
 COPY apps/api/prisma apps/api/prisma
 COPY apps/web/package.json apps/web/
 COPY packages/shared/package.json packages/shared/
+COPY packages/catalog/package.json packages/catalog/
 COPY packages/domain/package.json packages/domain/
 RUN npm ci
 
@@ -52,6 +53,7 @@ COPY apps/api/package.json apps/api/prisma.config.ts apps/api/
 COPY apps/api/prisma apps/api/prisma
 COPY apps/web/package.json apps/web/
 COPY packages/shared/package.json packages/shared/
+COPY packages/catalog/package.json packages/catalog/
 COPY packages/domain/package.json packages/domain/
 RUN npm ci --omit=dev --workspace @kaufcheck/api && npm cache clean --force
 

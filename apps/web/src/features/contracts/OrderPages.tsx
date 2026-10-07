@@ -353,7 +353,7 @@ export function OrderDonePage() {
           <Link to={WITHDRAW_PATH}>{WITHDRAW_BUTTON_LABEL}</Link>“.
         </p>
         <div className="button-row">
-          <ButtonLink to="/">Inserat prüfen</ButtonLink>
+          <ButtonLink to="/inserat-pruefen">Inserat prüfen</ButtonLink>
           <ButtonLink to="/konto" variant="secondary">
             Zum Konto
           </ButtonLink>

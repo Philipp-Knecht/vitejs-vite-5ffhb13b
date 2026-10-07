@@ -57,7 +57,7 @@ export function HistoryPage() {
       ) : history.data.items.length === 0 ? (
         <div className="empty-state">
           <h2>Noch keine Prüfungen</h2>
-          <ButtonLink to="/">Inserat prüfen</ButtonLink>
+          <ButtonLink to="/inserat-pruefen">Inserat prüfen</ButtonLink>
         </div>
       ) : (
         <ul className="history-list">

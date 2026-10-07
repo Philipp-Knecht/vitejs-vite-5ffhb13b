@@ -6,7 +6,8 @@ import { cn } from '../../lib/format';
 import { Logo } from './Logo';
 
 const NAV = [
-  { to: '/', label: 'Inserat prüfen', end: true },
+  { to: '/auto-finden', label: 'Auto finden' },
+  { to: '/inserat-pruefen', label: 'Inserat prüfen' },
   { to: '/meine-angebote', label: 'Meine Angebote' },
   { to: '/gebrauchtwagen-kaufen', label: 'Ratgeber' },
   { to: '/pro', label: 'Pro' },
@@ -75,7 +76,6 @@ export function Header() {
             <NavLink
               key={item.to}
               to={item.to}
-              end={item.end}
               className={({ isActive }) => cn('header__link', isActive && 'header__link--active')}
             >
               {item.label}
@@ -100,13 +100,7 @@ export function Header() {
       <div id={menuId} className={cn('mobile-menu', open && 'mobile-menu--open')} hidden={!open}>
         <nav className="container mobile-menu__nav" aria-label="Menü">
           {NAV.filter((item) => item.to !== '/gebrauchtwagen-kaufen').map((item) => (
-            <NavLink
-              key={item.to}
-              to={item.to}
-              end={item.end}
-              className="mobile-menu__link"
-              onClick={close}
-            >
+            <NavLink key={item.to} to={item.to} className="mobile-menu__link" onClick={close}>
               {item.label}
             </NavLink>
           ))}

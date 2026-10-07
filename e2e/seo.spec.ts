@@ -5,16 +5,16 @@ test('the homepage is prerendered with the required title and description', asyn
   expect(response.status()).toBe(200);
   const html = await response.text();
   expect(html).toContain(
-    '<title>KaufCheck – Gebrauchtwagen-Inserate von mobile.de, AutoScout24 &amp; Co. prüfen</title>',
+    '<title>KaufCheck – Gebrauchtwagen finden und Inserate prüfen: mobile.de, AutoScout24 &amp; Co.</title>',
   );
   expect(html).toContain(
-    '<meta name="description" content="Auto-Inserat von mobile.de, AutoScout24, Kleinanzeigen oder eBay einfügen: KaufCheck zeigt die Angaben, was fehlt, und die passenden Fragen an den Verkäufer." />',
+    '<meta name="description" content="Eine Suche für mobile.de, AutoScout24, Kleinanzeigen &amp; Co. und die Prüfung jedes Inserats: Angaben, Lücken, Widersprüche und passende Fragen an den Verkäufer." />',
   );
   // The supported marketplaces are part of the prerendered page.
   expect(html).toContain('Funktioniert mit Inseraten von');
   expect(html).toContain('<link rel="canonical"');
   expect(html).toContain('data-prerendered="true"');
-  expect(html).toContain('Gebraucht kaufen.');
+  expect(html).toContain('Gebrauchtwagen finden.');
 });
 
 test('guides are readable without JavaScript', async ({ browser }) => {

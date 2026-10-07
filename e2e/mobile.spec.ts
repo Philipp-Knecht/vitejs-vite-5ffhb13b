@@ -2,13 +2,21 @@ import { expect, test } from '@playwright/test';
 import { expectNoHorizontalScroll } from './helpers';
 
 test('pages fit the phone screen without horizontal scrolling', async ({ page }) => {
-  for (const path of ['/', '/inseratstext', '/pro', '/gebrauchtwagen-kaufen', '/meine-angebote']) {
+  for (const path of [
+    '/',
+    '/auto-finden?marke=vw&modell=vw-golf&preis_bis=15000&plz=79098',
+    '/inserat-pruefen',
+    '/inseratstext',
+    '/pro',
+    '/gebrauchtwagen-kaufen',
+    '/meine-angebote',
+  ]) {
     await page.goto(path);
     await expect(page.getByRole('heading', { level: 1 })).toBeVisible();
     await expectNoHorizontalScroll(page);
   }
 
-  await page.goto('/');
+  await page.goto('/inserat-pruefen');
   await page.getByRole('button', { name: 'Fiktives Beispiel ansehen' }).click();
   await expect(page).toHaveURL(/\/analyse\//);
   await expect(

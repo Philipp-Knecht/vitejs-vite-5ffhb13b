@@ -130,7 +130,7 @@ function ResultError({ notFound, onRetry }: { notFound: boolean; onRetry: () => 
         <Alert
           tone="info"
           title="Diese Prüfung gibt es nicht (mehr)"
-          actions={<ButtonLink to="/">Neues Inserat prüfen</ButtonLink>}
+          actions={<ButtonLink to="/inserat-pruefen">Neues Inserat prüfen</ButtonLink>}
         >
           <p>
             Prüfungen ohne Konto werden nach einiger Zeit gelöscht. Gespeicherte Angebote findest du
