@@ -690,6 +690,57 @@
     ]
   },
   {
+    "id": "vw-passat",
+    "make": "Volkswagen",
+    "model": "Passat",
+    "segment": "mittelklasse",
+    "twinOf": null,
+    "ratings": {
+      "reliability": 4,
+      "runningCosts": 3,
+      "space": 5,
+      "comfort": 4
+    },
+    "generations": [
+      {
+        "id": "vw-passat-b7",
+        "name": "Passat B7",
+        "years": [2010, 2014],
+        "bodyTypes": ["limousine", "kombi"],
+        "fuels": ["petrol", "diesel", "cng"],
+        "seats": [5],
+        "automatic": true,
+        "typicalPriceEur": null,
+        "issueCount": 6,
+        "severeIssueCount": 1
+      },
+      {
+        "id": "vw-passat-b8",
+        "name": "Passat B8",
+        "years": [2014, 2023],
+        "bodyTypes": ["limousine", "kombi"],
+        "fuels": ["petrol", "diesel", "plugin_hybrid"],
+        "seats": [5],
+        "automatic": true,
+        "typicalPriceEur": null,
+        "issueCount": 6,
+        "severeIssueCount": 0
+      },
+      {
+        "id": "vw-passat-b9",
+        "name": "Passat B9",
+        "years": [2023, null],
+        "bodyTypes": ["kombi"],
+        "fuels": ["petrol", "diesel", "plugin_hybrid"],
+        "seats": [5],
+        "automatic": true,
+        "typicalPriceEur": null,
+        "issueCount": 0,
+        "severeIssueCount": 0
+      }
+    ]
+  },
+  {
     "id": "vw-polo",
     "make": "Volkswagen",
     "model": "Polo",
@@ -763,6 +814,96 @@
         "automatic": true,
         "typicalPriceEur": null,
         "issueCount": 0,
+        "severeIssueCount": 0
+      }
+    ]
+  },
+  {
+    "id": "vw-tiguan",
+    "make": "Volkswagen",
+    "model": "Tiguan",
+    "segment": "suv_kompakt",
+    "twinOf": null,
+    "ratings": {
+      "reliability": 4,
+      "runningCosts": 3,
+      "space": 4,
+      "comfort": 4
+    },
+    "generations": [
+      {
+        "id": "vw-tiguan-i",
+        "name": "Tiguan I",
+        "years": [2007, 2016],
+        "bodyTypes": ["suv"],
+        "fuels": ["petrol", "diesel"],
+        "seats": [5],
+        "automatic": true,
+        "typicalPriceEur": null,
+        "issueCount": 6,
+        "severeIssueCount": 1
+      },
+      {
+        "id": "vw-tiguan-ii",
+        "name": "Tiguan II",
+        "years": [2016, 2024],
+        "bodyTypes": ["suv"],
+        "fuels": ["petrol", "diesel", "plugin_hybrid"],
+        "seats": [5, 7],
+        "automatic": true,
+        "typicalPriceEur": null,
+        "issueCount": 3,
+        "severeIssueCount": 0
+      },
+      {
+        "id": "vw-tiguan-iii",
+        "name": "Tiguan III",
+        "years": [2024, null],
+        "bodyTypes": ["suv"],
+        "fuels": ["petrol", "diesel", "plugin_hybrid"],
+        "seats": [5],
+        "automatic": true,
+        "typicalPriceEur": null,
+        "issueCount": 0,
+        "severeIssueCount": 0
+      }
+    ]
+  },
+  {
+    "id": "vw-touran",
+    "make": "Volkswagen",
+    "model": "Touran",
+    "segment": "van",
+    "twinOf": null,
+    "ratings": {
+      "reliability": 4,
+      "runningCosts": 3,
+      "space": 5,
+      "comfort": 4
+    },
+    "generations": [
+      {
+        "id": "vw-touran-i",
+        "name": "Touran I",
+        "years": [2003, 2015],
+        "bodyTypes": ["van"],
+        "fuels": ["petrol", "diesel", "cng"],
+        "seats": [5, 7],
+        "automatic": true,
+        "typicalPriceEur": null,
+        "issueCount": 0,
+        "severeIssueCount": 0
+      },
+      {
+        "id": "vw-touran-ii",
+        "name": "Touran II",
+        "years": [2015, null],
+        "bodyTypes": ["van"],
+        "fuels": ["petrol", "diesel", "cng"],
+        "seats": [5, 7],
+        "automatic": true,
+        "typicalPriceEur": null,
+        "issueCount": 4,
         "severeIssueCount": 0
       }
     ]

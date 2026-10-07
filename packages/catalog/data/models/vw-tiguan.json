@@ -1,0 +1,293 @@
+{
+  "id": "vw-tiguan",
+  "make": "Volkswagen",
+  "model": "Tiguan",
+  "aliases": ["tiguan", "tiguan allspace", "tiguan ehybrid", "tiguan r", "tiguan r-line"],
+  "segment": "suv_kompakt",
+  "summary": "Beliebter Kompakt-SUV von VW mit guter Verarbeitung, viel Platz und komfortabler Federung.",
+  "ratings": {
+    "reliability": 4,
+    "reliabilityNote": "Laut ADAC-Pannenstatistik sind alle Erstzulassungsjahre des Tiguan II (2016 bis 2022) als gut eingestuft, beim Tiguan I (2007 bis 2016) nur 2008 und 2012 als Mittelmaß. Beim TÜV erreicht der Tiguan II gute Werte, beim Tiguan I sind Federn, Dämpfer und Achsaufhängungen ein Dauerthema.",
+    "reliabilitySources": [
+      {
+        "label": "ADAC Gebrauchtwageninfo: VW Tiguan (2016-2024) Benziner",
+        "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0370-vw-tiguan-2016-2024-benziner-bericht.pdf"
+      },
+      {
+        "label": "ADAC Gebrauchtwageninfo: VW Tiguan (2016-2024) Diesel",
+        "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0371-vw-tiguan-2016-2024-diesel-bericht.pdf"
+      },
+      {
+        "label": "ADAC Gebrauchtwageninfo: VW Tiguan (2007-2016) Diesel",
+        "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0201-vw-tiguan-2007-2016-diesel-bericht.pdf"
+      },
+      {
+        "label": "ADAC Gebrauchtwageninfo: VW Tiguan (2007-2016) Benziner",
+        "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0202-vw-tiguan-2007-2016-benziner-bericht.pdf"
+      }
+    ],
+    "runningCosts": 3,
+    "space": 4,
+    "comfort": 4
+  },
+  "generations": [
+    {
+      "id": "vw-tiguan-i",
+      "name": "Tiguan I",
+      "code": "5N",
+      "years": [2007, 2016],
+      "bodyTypes": ["suv"],
+      "fuels": ["petrol", "diesel"],
+      "seats": [5],
+      "automatic": true,
+      "typicalPriceEur": null,
+      "priceSource": null,
+      "strengths": [
+        "Gute Verarbeitung und einfache Bedienung",
+        "Großzügiges Raumangebot und bequeme Sitze",
+        "Hohe Anhängelast",
+        "Laut ADAC wertstabil"
+      ],
+      "issues": [
+        {
+          "title": "Verschleißanfällige Steuerkette beim 1.4 TSI",
+          "affects": "1.4 TSI bis Baujahr 2015 (laut ADAC-Bericht zu den Benzinern)",
+          "detail": "Laut ADAC bereiten die 1.4 TSI bis Baujahr 2015 zuweilen Probleme mit der Steuerkette. Probleme an der Steuerkette können zu teuren Motorschäden führen.",
+          "check": "Penibel auf Rasselgeräusche aus dem Motorraum achten und nach Belegen für Arbeiten an der Steuerkette fragen.",
+          "severity": "hoch",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: VW Tiguan (2007-2016) Benziner",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0202-vw-tiguan-2007-2016-benziner-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Federn, Dämpfer und Achsaufhängungen",
+          "affects": "Tiguan I (2007-2016), Diesel und Benziner; genaue Baujahre nennt der Bericht nicht",
+          "detail": "Laut ADAC sind defekte Federn und Dämpfer sowie ausgeschlagene Achsaufhängungen im TÜV-Report ein Dauerthema. Sie machen sich oft durch Poltergeräusche aus dem Fahrwerk bemerkbar.",
+          "check": "Bei der Probefahrt über Unebenheiten auf Poltern achten und Federn, Dämpfer und Achsaufhängungen prüfen lassen.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: VW Tiguan (2007-2016) Diesel",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0201-vw-tiguan-2007-2016-diesel-bericht.pdf"
+            },
+            {
+              "label": "ADAC Gebrauchtwageninfo: VW Tiguan (2007-2016) Benziner",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0202-vw-tiguan-2007-2016-benziner-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Teils hoher Ölverbrauch beim 2.0 TSI",
+          "affects": "2.0 TSI (laut ADAC-Bericht zu den Benzinern); genaue Baujahre nennt der Bericht nicht",
+          "detail": "Laut ADAC haben manche 2.0 TSI einen hohen Ölverbrauch. Das bedeutet regelmäßiges Nachfüllen und zusätzliche Kosten.",
+          "check": "Ölstand bei der Besichtigung kontrollieren und fragen, wie viel Öl zwischen den Inspektionen nachgefüllt werden musste.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: VW Tiguan (2007-2016) Benziner",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0202-vw-tiguan-2007-2016-benziner-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Häufige Bauteilfehler bei Dieseln: Abgasrückführung, Steuerkette, Zündschloss",
+          "affects": "Diesel (laut ADAC-Bericht zu den Dieseln): Abgasrückführung bei Baujahr 2011, Steuerkette bei den Baujahren 2008 bis 2009, Zündschloss bei Baujahr 2008",
+          "detail": "Laut ADAC fallen diese Bauteile bei den genannten Baujahren häufiger durch Fehler auf. Genauere Folgen nennt der Bericht nicht.",
+          "check": "Nachfragen, ob an diesen Teilen schon repariert wurde, und den Fehlerspeicher auslesen lassen.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: VW Tiguan (2007-2016) Diesel",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0201-vw-tiguan-2007-2016-diesel-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Häufige Bauteilfehler bei Benzinern: Anlasser, Feststellbremse, Batterie",
+          "affects": "Benziner (laut ADAC-Bericht zu den Benzinern): Anlasser bei den Baujahren 2008 bis 2010, elektrische Feststellbremse bei den Baujahren 2008 bis 2009, entladene Batterie bei den Baujahren 2007 bis 2014",
+          "detail": "Laut ADAC fallen defekte Anlasser, eine elektrische Feststellbremse, die hängt und nicht löst, sowie entladene Batterien bei diesen Baujahren häufiger auf.",
+          "check": "Zustand von Batterie und Anlasser prüfen lassen und testen, ob sich die elektrische Feststellbremse zuverlässig löst.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: VW Tiguan (2007-2016) Benziner",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0202-vw-tiguan-2007-2016-benziner-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Rückrufe: Masseleitung, Kindersicherung, Magnetschalter, Software-Updates",
+          "affects": "Tiguan I: Masseleitung 7/2008 (TDI ohne Standheizung), Motorsoftware 11/2010 (nur 1.4 TSI, Motorcode CAV), Kindersicherung der hinteren Türen 7/2016, Bordnetzsteuergerät 2/2017 (Softwarestand S0162), Magnetschalter 2/2018 (1.6 und 2.0 TDI)",
+          "detail": "Laut ADAC gab es Rückrufe wegen einer unzureichend verschraubten Masseleitung (erhöhter Übergangswiderstand), einer nicht erkennbaren Kindersicherung an den hinteren Türschlössern und einer möglichen Dauerbestromung durch einen Defekt im Magnetschalter sowie Software-Updates für Motor- und Bordnetzsteuergerät. Ob sie bei einem Fahrzeug erledigt wurden, lässt sich nur über die Fahrgestellnummer klären.",
+          "check": "Per Fahrgestellnummer beim Händler prüfen lassen, ob die Rückrufe erledigt sind.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: VW Tiguan (2007-2016) Diesel",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0201-vw-tiguan-2007-2016-diesel-bericht.pdf"
+            },
+            {
+              "label": "ADAC Gebrauchtwageninfo: VW Tiguan (2007-2016) Benziner",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0202-vw-tiguan-2007-2016-benziner-bericht.pdf"
+            }
+          ]
+        }
+      ],
+      "engines": {
+        "recommended": [
+          {
+            "name": "2.0 TDI (140 und 150 PS)",
+            "why": "Laut ADAC deutlich souveränere Fahrleistungen als mit dem 110-PS-Einstiegsdiesel bei kaum höherem Verbrauch; häufig am Gebrauchtwagenmarkt zu finden."
+          }
+        ],
+        "caution": [
+          {
+            "name": "1.4 TSI bis Baujahr 2015",
+            "why": "Laut ADAC bereiten diese Motoren zuweilen Probleme mit der Steuerkette; penibel auf Rasselgeräusche aus dem Motorraum achten."
+          },
+          {
+            "name": "2.0 TSI (170 bis 211 PS)",
+            "why": "Laut ADAC seltener am Markt und teurer; als Schwäche nennt der ADAC einen teils hohen Ölverbrauch."
+          },
+          {
+            "name": "Einstiegsmotoren (Diesel 110 PS, Benziner 122/125 PS)",
+            "why": "Laut ADAC nur mit Frontantrieb erhältlich und gerade noch ausreichend zügig."
+          }
+        ]
+      },
+      "tips": [
+        "Bei der Probefahrt über Unebenheiten auf Poltergeräusche aus dem Fahrwerk achten und Federn, Dämpfer und Achsaufhängungen prüfen lassen.",
+        "Beim 1.4 TSI (bis Baujahr 2015) penibel auf Rasselgeräusche aus dem Motorraum achten.",
+        "Mit DSG auf ruckfreies Anfahren achten; laut ADAC ist das Anfahren teils ruckartig.",
+        "Abgefahrene Bremsscheiben liegen laut ADAC eher an mangelhafter Wartung: Serviceheft und Wartungsnachweise prüfen."
+      ]
+    },
+    {
+      "id": "vw-tiguan-ii",
+      "name": "Tiguan II",
+      "code": "AD1",
+      "years": [2016, 2024],
+      "bodyTypes": ["suv"],
+      "fuels": ["petrol", "diesel", "plugin_hybrid"],
+      "seats": [5, 7],
+      "automatic": true,
+      "typicalPriceEur": null,
+      "priceSource": null,
+      "strengths": [
+        "Gute Verarbeitung und funktionelle Bedienung",
+        "Großzügiges Raumangebot, besonders beim Allspace",
+        "Komfortable Federung, vor allem mit adaptivem Fahrwerk (DCC)",
+        "Verschiebbare Rückbank"
+      ],
+      "issues": [
+        {
+          "title": "Achsaufhängungen und Bremsscheiben",
+          "affects": "Tiguan II (2016-2024), Diesel und Benziner; genaue Baujahre nennt der Bericht nicht",
+          "detail": "Laut ADAC gibt es beim TÜV am ehesten Probleme mit den Achsaufhängungen oder verschlissenen Bremsscheiben, obwohl der Tiguan II insgesamt gute TÜV-Werte erreicht.",
+          "check": "Achsaufhängungen und Bremsscheiben prüfen lassen und bei der Probefahrt auf Klopf- und Poltergeräusche achten.",
+          "severity": "gering",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: VW Tiguan (2016-2024) Benziner",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0370-vw-tiguan-2016-2024-benziner-bericht.pdf"
+            },
+            {
+              "label": "ADAC Gebrauchtwageninfo: VW Tiguan (2016-2024) Diesel",
+              "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0371-vw-tiguan-2016-2024-diesel-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "DSG: teils unharmonisches Anfahren",
+          "affects": "Tiguan II mit DSG (Diesel und Benziner)",
+          "detail": "Laut ADAC fährt das DSG teils unharmonisch an, was sich als Ruckeln bemerkbar machen kann.",
+          "check": "Bei der Probefahrt Anfahren aus dem Stand und im Stop-and-go-Verkehr auf Ruckeln prüfen.",
+          "severity": "gering",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: VW Tiguan (2016-2024) Benziner",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0370-vw-tiguan-2016-2024-benziner-bericht.pdf"
+            },
+            {
+              "label": "ADAC Gebrauchtwageninfo: VW Tiguan (2016-2024) Diesel",
+              "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0371-vw-tiguan-2016-2024-diesel-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Rückrufe: Airbags, Bremsscheiben, Achs- und Radteile, LED-Modul, Anhängevorrichtung",
+          "affects": "Tiguan II (Diesel und Benziner): Airbags und Gurtstraffer 3/2017, Winterräder-Montage 3/2017, hinterer Radträger 12/2017, Bremsscheiben 3/2018 (nur 2,0-l-Motoren), vorderes Führungsgelenk 7/2018 (nur Allspace), LED-Modul 9/2018 (Panoramada…",
+          "detail": "Laut ADAC gab es viele Rückrufe, unter anderem wegen fehlerhafter Treibladung bei Airbags und Gurtstraffern, zu dünner Bremsscheiben bei 2,0-l-Motoren, eines nicht festen hinteren Radträgers, eines nicht mit dem richtigen Drehmoment angezogenen vorderen Führungsgelenks (nur Allspace), eines möglichen Kurzschlusses mit Wärmeentwicklung im LED-Modul und eines möglichen Bruchs des Sperrbolzens der Anhängevorrichtung. Ob sie bei einem Fahrzeug erledigt wurden, lässt sich nur über die Fahrgestellnummer klären.",
+          "check": "Per Fahrgestellnummer beim Händler prüfen lassen, ob die Rückrufe erledigt sind.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: VW Tiguan (2016-2024) Benziner",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0370-vw-tiguan-2016-2024-benziner-bericht.pdf"
+            },
+            {
+              "label": "ADAC Gebrauchtwageninfo: VW Tiguan (2016-2024) Diesel",
+              "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0371-vw-tiguan-2016-2024-diesel-bericht.pdf"
+            }
+          ]
+        }
+      ],
+      "engines": {
+        "recommended": [
+          {
+            "name": "1.4/1.5 TSI (150 PS)",
+            "why": "Laut ADAC die goldene Mitte unter den Benzinern: ausreichende Fahrleistungen bei moderatem Verbrauch, am besten mit DSG. Die früheren Probleme mit gelängten Steuerketten und erhöhtem Ölverbrauch hat der Tiguan II laut ADAC nicht mehr."
+          },
+          {
+            "name": "2.0 TDI (150 bis 200 PS)",
+            "why": "Laut ADAC die goldene Mitte unter den Dieseln: auch zügige Autobahnetappen sind souverän machbar und im Zugbetrieb reicht das Drehmoment; am besten mit DSG und Ausstattung Comfortline. Bei häufigem Zugbetrieb oder im Gebirge sollte laut ADAC nicht auf Allradantrieb verzichtet werden."
+          }
+        ],
+        "caution": [
+          {
+            "name": "Einstiegsmotoren (Benziner 125/130 PS, Diesel 115/122 PS)",
+            "why": "Laut ADAC prinzipiell ausreichend, ein souveränes Fahrgefühl erzeugen sie aber nicht."
+          },
+          {
+            "name": "Stärkere Benziner (ab 180 PS, 2.0 TSI)",
+            "why": "Laut ADAC mehr Reserven bei zügigen Autobahnetappen und im Anhängerbetrieb, aber im Einkauf und Unterhalt etwas teurer; als Schwäche nennt der ADAC den hohen Verbrauch des 2.0 TSI."
+          },
+          {
+            "name": "Top-Diesel (240 PS)",
+            "why": "Laut ADAC flotte Fahrleistungen, aber merklich höherer Kraftstoffverbrauch und teurer im Einkauf."
+          }
+        ]
+      },
+      "tips": [
+        "Mit DSG bei der Probefahrt auf ruckfreies Anfahren achten.",
+        "Achsaufhängungen und Bremsscheiben prüfen lassen; laut ADAC gibt es beim TÜV am ehesten dort Probleme.",
+        "Bei Panoramadach mit Ambientebeleuchtung nachfragen, ob der Rückruf wegen des LED-Moduls (9/2018) erledigt ist.",
+        "Beim Allspace nach dem Rückruf zum vorderen Führungsgelenk (7/2018) fragen, bei Anhängevorrichtung nach dem Rückruf zum Sperrbolzen (5/2019)."
+      ]
+    },
+    {
+      "id": "vw-tiguan-iii",
+      "name": "Tiguan III",
+      "code": "CT",
+      "years": [2024, null],
+      "bodyTypes": ["suv"],
+      "fuels": ["petrol", "diesel", "plugin_hybrid"],
+      "seats": [5],
+      "automatic": true,
+      "typicalPriceEur": null,
+      "priceSource": null,
+      "strengths": [],
+      "issues": [],
+      "engines": {
+        "recommended": [],
+        "caution": []
+      },
+      "tips": [
+        "Für diese Generation liegen noch wenige Gebrauchtwagen-Erfahrungen vor; Rückrufe per Fahrgestellnummer erfragen."
+      ]
+    }
+  ]
+}

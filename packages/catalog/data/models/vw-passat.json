@@ -1,0 +1,365 @@
+{
+  "id": "vw-passat",
+  "make": "Volkswagen",
+  "model": "Passat",
+  "aliases": [
+    "passat",
+    "passat alltrack",
+    "passat b7",
+    "passat b8",
+    "passat b9",
+    "passat gte",
+    "passat limousine",
+    "passat variant"
+  ],
+  "segment": "mittelklasse",
+  "summary": "Geräumige und komfortable Mittelklasse von VW, die vor allem als Kombi (Variant) bei Vielfahrern beliebt ist.",
+  "ratings": {
+    "reliability": 4,
+    "reliabilityNote": "Laut ADAC-Pannenstatistik sind alle Erstzulassungsjahre des Passat B8 (2014 bis 2022) als gut eingestuft, beim B7 (2010 bis 2014) nur 2010 als mittel. Beim TÜV schneidet der B8 durchschnittlich, der B7 unterdurchschnittlich ab, vor allem wegen Bremsscheiben und Fahrwerk bei hohen Laufleistungen.",
+    "reliabilitySources": [
+      {
+        "label": "ADAC Gebrauchtwageninfo: VW Passat (2014-2023) Diesel",
+        "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0351-vw-passat-2014-2023-diesel-bericht.pdf"
+      },
+      {
+        "label": "ADAC Gebrauchtwageninfo: VW Passat (2014-2023) Benziner",
+        "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0352-vw-passat-2014-2023-benziner-bericht.pdf"
+      },
+      {
+        "label": "ADAC Gebrauchtwageninfo: VW Passat (2010-2014) Diesel",
+        "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0261-vw-passat-2010-2014-diesel-bericht.pdf"
+      },
+      {
+        "label": "ADAC Gebrauchtwageninfo: VW Passat (2010-2014) Benzin",
+        "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0258-vw-passat-2010-2014-benzin-bericht.pdf"
+      }
+    ],
+    "runningCosts": 3,
+    "space": 5,
+    "comfort": 4
+  },
+  "generations": [
+    {
+      "id": "vw-passat-b7",
+      "name": "Passat B7",
+      "code": "B7",
+      "years": [2010, 2014],
+      "bodyTypes": ["limousine", "kombi"],
+      "fuels": ["petrol", "diesel", "cng"],
+      "seats": [5],
+      "automatic": true,
+      "typicalPriceEur": null,
+      "priceSource": null,
+      "strengths": [
+        "Sehr gute Verarbeitung und funktionelle Bedienung",
+        "Großzügiges Raumangebot",
+        "Komfortable Federung mit adaptivem Fahrwerk",
+        "Geringer Verbrauch bei den Dieseln"
+      ],
+      "issues": [
+        {
+          "title": "Steuerkette beim 1.4 TSI",
+          "affects": "1.4 TSI (laut ADAC-Bericht zu den Benzinern); genaue Baujahre nennt der Bericht nicht",
+          "detail": "Laut ADAC gibt es beim 1.4 TSI Probleme mit den Steuerketten. Probleme an der Steuerkette können zu teuren Motorschäden führen.",
+          "check": "Beim Kaltstart und im Leerlauf auf Rasselgeräusche aus dem Motorraum achten und nach Belegen für Arbeiten an der Steuerkette fragen.",
+          "severity": "hoch",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: VW Passat (2010-2014) Benzin",
+              "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0258-vw-passat-2010-2014-benzin-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Abgasrückführung und Turbolader bei Dieseln",
+          "affects": "Diesel (laut ADAC-Bericht zu den Dieseln): Abgasrückführung bei Baujahr 2011, Turbolader bei Baujahr 2010",
+          "detail": "Laut ADAC gehören die Abgasrückführung (Baujahr 2011) und der Turbolader (Baujahr 2010) zu den häufigen Bauteilfehlern des Passat B7. Folgen nennt der Bericht nicht.",
+          "check": "Fehlerspeicher auslesen lassen, bei der Probefahrt auf Leistungsverlust und Warnleuchten achten und nach bereits getauschten Teilen fragen.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: VW Passat (2010-2014) Diesel",
+              "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0261-vw-passat-2010-2014-diesel-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Mängel an Bremsscheiben, Achsen und Fahrwerk",
+          "affects": "Passat B7 insgesamt (Diesel und Benzin), laut TÜV schon bei ganz jungen Fahrzeugen relativ häufig, besonders bei hohen Laufleistungen",
+          "detail": "Laut ADAC sind Bremsscheiben und Probleme mit den Achsen (Aufhängung, Federn, Dämpfer) im TÜV-Report relativ häufig. Ausgeschlagene Achsgelenke, gebrochene Federn und poröse Manschetten der Antriebswellen sind laut ADAC ein Tribut der hohen Laufleistungen.",
+          "check": "Bremsscheiben, Achsgelenke, Federn, Dämpfer und Antriebswellenmanschetten prüfen lassen und bei der Probefahrt auf Klopfen und Poltern achten.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: VW Passat (2010-2014) Diesel",
+              "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0261-vw-passat-2010-2014-diesel-bericht.pdf"
+            },
+            {
+              "label": "ADAC Gebrauchtwageninfo: VW Passat (2010-2014) Benzin",
+              "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0258-vw-passat-2010-2014-benzin-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Rost an der Heckklappe",
+          "affects": "Passat B7 (Diesel und Benzin); genaue Baujahre nennt der Bericht nicht",
+          "detail": "Laut ADAC neigt die Heckklappe zu Rost. Rostschäden fallen bei der Besichtigung auf und können eine Lackierung oder Reparatur nötig machen.",
+          "check": "Heckklappe bei Tageslicht auf Rostblasen, Lackschäden und Rostansatz prüfen.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: VW Passat (2010-2014) Diesel",
+              "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0261-vw-passat-2010-2014-diesel-bericht.pdf"
+            },
+            {
+              "label": "ADAC Gebrauchtwageninfo: VW Passat (2010-2014) Benzin",
+              "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0258-vw-passat-2010-2014-benzin-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "DSG: teils ruckartiges Anfahren",
+          "affects": "Passat B7 mit DSG (Diesel und Benzin)",
+          "detail": "Laut ADAC fährt das DSG teils ruckartig an; bei der Probefahrt sollte darauf besonders geachtet werden.",
+          "check": "Bei der Probefahrt mehrfach aus dem Stand anfahren und im Stop-and-go-Verkehr auf Ruckeln prüfen.",
+          "severity": "gering",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: VW Passat (2010-2014) Diesel",
+              "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0261-vw-passat-2010-2014-diesel-bericht.pdf"
+            },
+            {
+              "label": "ADAC Gebrauchtwageninfo: VW Passat (2010-2014) Benzin",
+              "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0258-vw-passat-2010-2014-benzin-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Rückrufe: Magnetschalter (TDI), AdBlue-Meldung, Gastanks (Erdgas)",
+          "affects": "Passat B7: Magnetschalter 2/2018 (1.6 und 2.0 TDI), AdBlue-Meldung nach Software-Update 6/2018 (2.0 TDI, EA189 Gen 1 mit Euro 6 und SCR-System), Gastanks 2/2017 (nur Erdgas-Fahrzeuge)",
+          "detail": "Laut ADAC gab es Rückrufe wegen einer möglichen Dauerbestromung durch einen Bruch oder eine Schiefstellung der Rückstellfeder im Magnetschalter, wegen einer AdBlue-Warnmeldung nach einem Software-Update und wegen möglicher Korrosion an den Gastanks der Erdgasmodelle. Ob sie bei einem Fahrzeug erledigt wurden, lässt sich nur über die Fahrgestellnummer klären.",
+          "check": "Per Fahrgestellnummer beim Händler prüfen lassen, ob die Rückrufe erledigt sind.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: VW Passat (2010-2014) Diesel",
+              "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0261-vw-passat-2010-2014-diesel-bericht.pdf"
+            },
+            {
+              "label": "ADAC Gebrauchtwageninfo: VW Passat (2010-2014) Benzin",
+              "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0258-vw-passat-2010-2014-benzin-bericht.pdf"
+            }
+          ]
+        }
+      ],
+      "engines": {
+        "recommended": [
+          {
+            "name": "2.0 TDI (140 PS)",
+            "why": "Laut ADAC die goldene Mitte unter den Dieseln: völlig ausreichende Fahrleistungen bei moderatem Verbrauch, am besten mit DSG und Ausstattung Comfortline. Als BlueTDI erfüllt er sogar Euro 6."
+          }
+        ],
+        "caution": [
+          {
+            "name": "1.4 TSI",
+            "why": "Laut ADAC Probleme mit den Steuerketten; auf Rasselgeräusche und Wartungsbelege achten."
+          },
+          {
+            "name": "Einstiegsmotoren (Diesel 105 PS, Benziner 122 PS)",
+            "why": "Laut ADAC prinzipiell ausreichend, aber nicht souverän; beim Benziner wünscht man sich bei etwas üppigerer Beladung mehr Leistung."
+          },
+          {
+            "name": "3.6 V6 (300 PS)",
+            "why": "Laut ADAC selten am Markt, trinkfest und teuer."
+          }
+        ]
+      },
+      "tips": [
+        "Bremsscheiben, Fahrwerk (Achsgelenke, Federn, Dämpfer, Antriebswellenmanschetten) und Heckklappe (Rost) genau prüfen; viele Passat B7 haben hohe Laufleistungen.",
+        "Mit DSG bei der Probefahrt auf ruckfreies Anfahren achten.",
+        "Beim 1.4 TSI auf Rasselgeräusche aus dem Motorraum achten und nach Belegen für Arbeiten an der Steuerkette fragen.",
+        "Bei Dieseln nachfragen, ob das verpflichtende Software-Update nach dem Abgasskandal (EA189-Motoren) durchgeführt wurde."
+      ]
+    },
+    {
+      "id": "vw-passat-b8",
+      "name": "Passat B8",
+      "code": "B8",
+      "years": [2014, 2023],
+      "bodyTypes": ["limousine", "kombi"],
+      "fuels": ["petrol", "diesel", "plugin_hybrid"],
+      "seats": [5],
+      "automatic": true,
+      "typicalPriceEur": null,
+      "priceSource": null,
+      "strengths": [
+        "Sehr gute Verarbeitung und funktionelle Bedienung",
+        "Großzügiges Raumangebot",
+        "Komfortable Federung, vor allem mit adaptivem Fahrwerk (DCC)",
+        "Bequeme und langstreckentaugliche Sitze"
+      ],
+      "issues": [
+        {
+          "title": "Bremsscheiben beim TÜV überdurchschnittlich oft beanstandet",
+          "affects": "Passat B8 insgesamt (laut ADAC-Berichten zu Diesel und Benziner), nicht auf einzelne Motoren beschränkt",
+          "detail": "Laut ADAC beanstandet der TÜV bei den Hauptuntersuchungen die Bremsscheiben des Passat B8 überdurchschnittlich oft. Der ADAC führt das auch auf die oft hohen Laufleistungen zurück.",
+          "check": "Bremsscheiben und Bremsbeläge auf Riefen, Rostränder und Restdicke prüfen und nach Belegen für Bremsenarbeiten fragen.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: VW Passat (2014-2023) Diesel",
+              "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0351-vw-passat-2014-2023-diesel-bericht.pdf"
+            },
+            {
+              "label": "ADAC Gebrauchtwageninfo: VW Passat (2014-2023) Benziner",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0352-vw-passat-2014-2023-benziner-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Verschlissene Fahrwerksteile",
+          "affects": "Ältere Passat B8 (Diesel und Benziner), vor allem mit hoher Laufleistung; genaue Baujahre nennt der Bericht nicht",
+          "detail": "Laut ADAC leiden ältere Modelle zum Teil unter verschlissenen Fahrwerksteilen, was bei den oft hohen Laufleistungen nicht überrascht. Als Schwäche nennt der ADAC außerdem das anfällige Fahrwerk.",
+          "check": "Fahrwerk bei der Probefahrt auf Klopfen und Poltern prüfen und bei hoher Laufleistung nach Belegen für erneuerte Fahrwerksteile fragen.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: VW Passat (2014-2023) Diesel",
+              "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0351-vw-passat-2014-2023-diesel-bericht.pdf"
+            },
+            {
+              "label": "ADAC Gebrauchtwageninfo: VW Passat (2014-2023) Benziner",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0352-vw-passat-2014-2023-benziner-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Ladedruckregelung bei den Baujahren 2015 und 2017",
+          "affects": "Passat B8, Baujahre 2015 und 2017 (aufgeführt in den ADAC-Berichten zu Diesel und Benziner); betroffene Motoren nennt der Bericht nicht",
+          "detail": "Laut ADAC gehört die Ladedruckregelung bei diesen Baujahren zu den häufigen Bauteilfehlern. Sie regelt den Druck des Turboladers; Folgen und betroffene Motoren nennt der Bericht nicht.",
+          "check": "Fehlerspeicher auslesen lassen, bei der Probefahrt auf gleichmäßigen Leistungsaufbau achten und fragen, ob am Turbolader oder an der Ladedruckregelung schon repariert wurde.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: VW Passat (2014-2023) Diesel",
+              "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0351-vw-passat-2014-2023-diesel-bericht.pdf"
+            },
+            {
+              "label": "ADAC Gebrauchtwageninfo: VW Passat (2014-2023) Benziner",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0352-vw-passat-2014-2023-benziner-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "DSG: teils unharmonisches Anfahren, trockene Kupplungen weniger robust",
+          "affects": "Passat B8 mit DSG (Diesel und Benziner); zur geringeren Robustheit nennt der ADAC nur das DSG mit trockenen Kupplungen (Bericht zu den Benzinern), robuster ist laut ADAC das DSG mit nasslaufenden Kupplungen des 2.0 TSI mit 190 bis 220 PS",
+          "detail": "Laut ADAC fährt das DSG teils unharmonisch an. Das DSG mit trockenen Kupplungen ist laut ADAC weniger robust als das mit nasslaufenden Kupplungen; eine Getriebe- oder Kupplungsreparatur kann teuer werden.",
+          "check": "Bei der Probefahrt Anfahren und Schalten, auch im Stop-and-go-Verkehr, auf Ruckeln prüfen und nach Wartungs- und Reparaturbelegen zum Getriebe fragen.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: VW Passat (2014-2023) Diesel",
+              "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0351-vw-passat-2014-2023-diesel-bericht.pdf"
+            },
+            {
+              "label": "ADAC Gebrauchtwageninfo: VW Passat (2014-2023) Benziner",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0352-vw-passat-2014-2023-benziner-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Ölverlust bei jungen Modellen",
+          "affects": "Eher junge Passat B8 (Diesel und Benziner); genaue Baujahre oder Motoren nennt der Bericht nicht",
+          "detail": "Laut ADAC kommt es bei jungen Modellen hin und wieder zu Ölverlust. Die Ursache nennt der Bericht nicht.",
+          "check": "Motorraum und Unterboden auf frische Ölspuren prüfen, den Ölstand kontrollieren und nach bereits erfolgten Reparaturen fragen.",
+          "severity": "gering",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: VW Passat (2014-2023) Diesel",
+              "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0351-vw-passat-2014-2023-diesel-bericht.pdf"
+            },
+            {
+              "label": "ADAC Gebrauchtwageninfo: VW Passat (2014-2023) Benziner",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0352-vw-passat-2014-2023-benziner-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Rückrufe: Radlager, Airbags und Gurtstraffer, Räder, Radträger, Bremsscheiben",
+          "affects": "Passat B8 (Diesel und Benziner): Radlagergehäuse 6/2015, Airbags und Gurtstraffer 3/2017, Winterräder-Montage 3/2017, hinterer Radträger 12/2017, Bremsscheiben 3/2018 (nur 2,0-l-Motoren)",
+          "detail": "Laut ADAC gab es Rückrufe wegen eines möglichen Bruchs des Radlagergehäuses, fehlerhafter Treibladung bei Airbags und Gurtstraffern, nicht eingehaltener Anzugsmomente der Radschrauben bei der Winterräder-Montage, eines nicht festen hinteren Radträgers und zu dünner Bremsscheiben. Ob sie bei einem Fahrzeug erledigt wurden, lässt sich nur über die Fahrgestellnummer klären.",
+          "check": "Per Fahrgestellnummer beim Händler prüfen lassen, ob die Rückrufe erledigt sind.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: VW Passat (2014-2023) Diesel",
+              "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0351-vw-passat-2014-2023-diesel-bericht.pdf"
+            },
+            {
+              "label": "ADAC Gebrauchtwageninfo: VW Passat (2014-2023) Benziner",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0352-vw-passat-2014-2023-benziner-bericht.pdf"
+            }
+          ]
+        }
+      ],
+      "engines": {
+        "recommended": [
+          {
+            "name": "2.0 TDI (150, 190 oder 200 PS)",
+            "why": "Laut ADAC die goldene Mitte unter den Dieseln: völlig ausreichende Fahrleistungen bei moderatem Verbrauch, am besten mit DSG und Ausstattung Comfortline."
+          },
+          {
+            "name": "1.4/1.5 TSI (150 PS)",
+            "why": "Laut ADAC die goldene Mitte unter den Benzinern: ausreichende Fahrleistungen bei moderatem Verbrauch, gern mit DSG. Die früheren Probleme mit gelängten Steuerketten und erhöhtem Ölverbrauch hat der Passat B8 laut ADAC nicht mehr."
+          },
+          {
+            "name": "2.0 TSI (190 bis 220 PS)",
+            "why": "Laut ADAC deutlich mehr Reserven bei zügigen Autobahnetappen und im Anhängerbetrieb sowie ein robusteres DSG mit nasslaufenden Kupplungen; dafür nennt der ADAC einen hohen Verbrauch."
+          },
+          {
+            "name": "Plug-in-Hybrid (218 PS Systemleistung)",
+            "why": "Laut ADAC eine interessante Alternative für Pendler."
+          }
+        ],
+        "caution": [
+          {
+            "name": "Einstiegsmotoren (Diesel 120/122 PS, Benziner 125 PS)",
+            "why": "Laut ADAC prinzipiell ausreichend, aber in dieser Fahrzeugklasse nicht souverän motorisiert."
+          },
+          {
+            "name": "Top-Benziner (272/280 PS)",
+            "why": "Laut ADAC sehr gute Fahrleistungen, die aber mit erhöhtem Verbrauch einhergehen."
+          }
+        ]
+      },
+      "tips": [
+        "Bremsscheiben und Bremsbeläge genau ansehen; der TÜV beanstandet sie beim B8 überdurchschnittlich oft.",
+        "Bei hoher Laufleistung das Fahrwerk auf Klopfen und Poltern prüfen und nach Belegen für erneuerte Fahrwerksteile fragen.",
+        "Mit DSG bei der Probefahrt auf unharmonisches Anfahren achten.",
+        "Motorraum und Unterboden auf Ölspuren kontrollieren (Ölverlust bei jungen Modellen)."
+      ]
+    },
+    {
+      "id": "vw-passat-b9",
+      "name": "Passat B9",
+      "code": "B9",
+      "years": [2023, null],
+      "bodyTypes": ["kombi"],
+      "fuels": ["petrol", "diesel", "plugin_hybrid"],
+      "seats": [5],
+      "automatic": true,
+      "typicalPriceEur": null,
+      "priceSource": null,
+      "strengths": [],
+      "issues": [],
+      "engines": {
+        "recommended": [],
+        "caution": []
+      },
+      "tips": [
+        "Für diese Generation liegen noch wenige Gebrauchtwagen-Erfahrungen vor; Rückrufe per Fahrgestellnummer erfragen."
+      ]
+    }
+  ]
+}

@@ -1,0 +1,164 @@
+{
+  "id": "vw-touran",
+  "make": "Volkswagen",
+  "model": "Touran",
+  "aliases": ["touran", "touran cross", "touran ecofuel", "touran tgi"],
+  "segment": "van",
+  "summary": "Kompakter Familienvan von VW mit viel Platz und variablem Innenraum, auf Wunsch mit sieben Sitzen.",
+  "ratings": {
+    "reliability": 4,
+    "reliabilityNote": "Die Bewertung beruht auf dem Touran II: Laut ADAC-Pannenstatistik ist nur das Erstzulassungsjahr 2015 als mittel eingestuft, die Jahre 2016 bis 2022 sind als gut eingestuft. Beim TÜV liegt er im Mittelfeld bis leicht über dem Durchschnitt.",
+    "reliabilitySources": [
+      {
+        "label": "ADAC Gebrauchtwageninfo: VW Touran (ab 2015) Diesel",
+        "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0373-vw-touran-ab-2015-diesel-bericht.pdf"
+      },
+      {
+        "label": "ADAC Gebrauchtwageninfo: VW Touran (ab 2015) Benziner",
+        "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0372-vw-touran-ab-2015-benziner-bericht.pdf"
+      }
+    ],
+    "runningCosts": 3,
+    "space": 5,
+    "comfort": 4
+  },
+  "generations": [
+    {
+      "id": "vw-touran-i",
+      "name": "Touran I",
+      "code": "1T",
+      "years": [2003, 2015],
+      "bodyTypes": ["van"],
+      "fuels": ["petrol", "diesel", "cng"],
+      "seats": [5, 7],
+      "automatic": true,
+      "typicalPriceEur": null,
+      "priceSource": null,
+      "strengths": [],
+      "issues": [],
+      "engines": {
+        "recommended": [],
+        "caution": []
+      },
+      "tips": [
+        "Zu dieser Generation haben wir noch keine Schwachstellen ausgewertet. Lass das Auto vor dem Kauf in einer Werkstatt prüfen und Rückrufe per Fahrgestellnummer erfragen."
+      ]
+    },
+    {
+      "id": "vw-touran-ii",
+      "name": "Touran II",
+      "code": "5T",
+      "years": [2015, null],
+      "bodyTypes": ["van"],
+      "fuels": ["petrol", "diesel", "cng"],
+      "seats": [5, 7],
+      "automatic": true,
+      "typicalPriceEur": null,
+      "priceSource": null,
+      "strengths": [
+        "Gute Verarbeitung und funktionelle Bedienung",
+        "Großzügiges Raumangebot und sehr variabler Innenraum mit einzeln verschiebbaren Rücksitzen",
+        "Bequeme und langstreckentaugliche Sitze",
+        "Komfortable Federung, vor allem mit adaptivem Fahrwerk (DCC)"
+      ],
+      "issues": [
+        {
+          "title": "Achsaufhängungen und Bremsscheiben",
+          "affects": "Touran II (ab 2015), Diesel und Benziner; genaue Baujahre nennt der Bericht nicht",
+          "detail": "Laut ADAC verwehren Mängel an den Achsaufhängungen und verschlissene Bremsscheiben bei der Hauptuntersuchung zum Teil die neue Plakette. Insgesamt liegt der Touran II beim TÜV etwa im Mittelfeld.",
+          "check": "Achsaufhängungen und Bremsscheiben prüfen lassen und bei der Probefahrt auf Klopf- und Poltergeräusche achten.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: VW Touran (ab 2015) Diesel",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0373-vw-touran-ab-2015-diesel-bericht.pdf"
+            },
+            {
+              "label": "ADAC Gebrauchtwageninfo: VW Touran (ab 2015) Benziner",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0372-vw-touran-ab-2015-benziner-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Starterbatterie bei Baujahr 2015",
+          "affects": "Touran II, Baujahr 2015 (Diesel und Benziner); betroffene Motoren nennt der Bericht nicht",
+          "detail": "Laut ADAC gehört die Starterbatterie beim Baujahr 2015 zu den häufigen Bauteilfehlern. Eine defekte Starterbatterie kann zur Panne führen, weil das Auto nicht anspringt.",
+          "check": "Alter und Zustand der Batterie prüfen lassen und bei Baujahr 2015 fragen, ob sie schon getauscht wurde.",
+          "severity": "gering",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: VW Touran (ab 2015) Diesel",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0373-vw-touran-ab-2015-diesel-bericht.pdf"
+            },
+            {
+              "label": "ADAC Gebrauchtwageninfo: VW Touran (ab 2015) Benziner",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0372-vw-touran-ab-2015-benziner-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "DSG: teils unharmonisches Anfahren",
+          "affects": "Touran II mit DSG (Diesel und Benziner)",
+          "detail": "Laut ADAC fährt das DSG teils unharmonisch an, was sich als Ruckeln bemerkbar machen kann.",
+          "check": "Bei der Probefahrt Anfahren aus dem Stand und im Stop-and-go-Verkehr auf Ruckeln prüfen.",
+          "severity": "gering",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: VW Touran (ab 2015) Diesel",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0373-vw-touran-ab-2015-diesel-bericht.pdf"
+            },
+            {
+              "label": "ADAC Gebrauchtwageninfo: VW Touran (ab 2015) Benziner",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0372-vw-touran-ab-2015-benziner-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Rückrufe: Airbags und Gurtstraffer, LED-Modul, Kopfstützen, Bordnetz",
+          "affects": "Touran II (Diesel und Benziner): Bordnetzsteuergerät 2/2017 (Softwarestand S0162), Airbags und Gurtstraffer 3/2017, Kopfstützenführungshülse 5/2018, LED-Modul 9/2018 (Panoramadach mit Ambientebeleuchtung)",
+          "detail": "Laut ADAC gab es Rückrufe wegen fehlerhafter Treibladung bei Airbags und Gurtstraffern, eines möglichen Kurzschlusses mit Wärmeentwicklung im LED-Modul, einer Gratbildung an der Kopfstützenführungshülse und eines fehlerhaft kalibrierten Bordnetzsteuergeräts. Ob sie bei einem Fahrzeug erledigt wurden, lässt sich nur über die Fahrgestellnummer klären.",
+          "check": "Per Fahrgestellnummer beim Händler prüfen lassen, ob die Rückrufe erledigt sind.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: VW Touran (ab 2015) Diesel",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0373-vw-touran-ab-2015-diesel-bericht.pdf"
+            },
+            {
+              "label": "ADAC Gebrauchtwageninfo: VW Touran (ab 2015) Benziner",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0372-vw-touran-ab-2015-benziner-bericht.pdf"
+            }
+          ]
+        }
+      ],
+      "engines": {
+        "recommended": [
+          {
+            "name": "2.0 TDI (150 PS)",
+            "why": "Laut ADAC die goldene Mitte unter den Dieseln: zügige Autobahnetappen sind souverän machbar und auch im Zugbetrieb reicht das Drehmoment; idealerweise mit DSG und Ausstattung Comfortline. Alle Dieselmotoren erfüllen laut ADAC die Schadstoffklasse Euro 6."
+          },
+          {
+            "name": "1.4/1.5 TSI (150 PS)",
+            "why": "Laut ADAC die goldene Mitte unter den Benzinern: ausreichende Fahrleistungen bei moderatem Verbrauch, gern mit DSG. Die früheren Probleme mit gelängten Steuerketten und erhöhtem Ölverbrauch hat der Touran II laut ADAC nicht mehr."
+          }
+        ],
+        "caution": [
+          {
+            "name": "Einstiegsmotoren (Diesel 110/115 PS, Benziner 110/115 PS)",
+            "why": "Laut ADAC prinzipiell ausreichend, ein souveränes Fahrgefühl erzeugen die Motoren aber nicht."
+          },
+          {
+            "name": "1.8 TSI (180 PS)",
+            "why": "Laut ADAC mehr Reserven bei zügigen Autobahnetappen und im Anhängerbetrieb, aber deutlich teurer, seltener am Markt und mit hohem Verbrauch."
+          }
+        ]
+      },
+      "tips": [
+        "Achsaufhängungen und Bremsscheiben prüfen lassen; laut ADAC verwehren sie beim TÜV zum Teil die neue Plakette.",
+        "Mit DSG bei der Probefahrt auf ruckfreies Anfahren achten.",
+        "Bei Baujahr 2015 nach Alter und Zustand der Starterbatterie fragen.",
+        "Bei Panoramadach mit Ambientebeleuchtung nachfragen, ob der Rückruf wegen des LED-Moduls (9/2018) erledigt ist."
+      ]
+    }
+  ]
+}
