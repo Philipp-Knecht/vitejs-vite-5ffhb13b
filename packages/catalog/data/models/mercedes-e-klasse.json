@@ -1,0 +1,242 @@
+{
+  "id": "mercedes-e-klasse",
+  "make": "Mercedes-Benz",
+  "model": "E-Klasse",
+  "aliases": [
+    "e 200",
+    "e 220",
+    "e 250",
+    "e 300",
+    "e 350",
+    "e 400",
+    "e 500",
+    "e 63 amg",
+    "e klasse",
+    "e-klasse",
+    "e-klasse kombi",
+    "e-klasse limousine",
+    "e-klasse t-modell",
+    "eklasse",
+    "s212",
+    "w212",
+    "w213",
+    "w214"
+  ],
+  "segment": "obere_mittelklasse",
+  "summary": "Große, komfortable Mercedes-Limousine bzw. Kombi (T-Modell) der oberen Mittelklasse, bei Vielfahrern und als Taxi beliebt und daher oft mit hoher Laufleistung.",
+  "ratings": {
+    "reliability": 3,
+    "reliabilityNote": "Laut ADAC-Pannenstatistik liegen die Jahrgänge 2012 bis 2016 überwiegend im Mittelfeld (2014 „gut“), die frühen Jahrgänge 2009 und 2010 sind „sehr schlecht“ und 2011 „schlecht“. Im TÜV-Report schneidet die Baureihe W212 trotz sehr hoher Laufleistungen überdurchschnittlich gut ab.",
+    "reliabilitySources": [
+      {
+        "label": "ADAC Gebrauchtwageninfo: Mercedes-Benz E-Klasse (2009-2016) Benziner",
+        "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0187-mercedes-benz-e-klasse-2009-2016-benziner-bericht.pdf"
+      },
+      {
+        "label": "ADAC Gebrauchtwageninfo: Mercedes-Benz E-Klasse (2009-2016) Diesel",
+        "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0188-mercedes-benz-e-klasse-2009-2016-diesel-bericht.pdf"
+      }
+    ],
+    "runningCosts": 2,
+    "space": 5,
+    "comfort": 5
+  },
+  "generations": [
+    {
+      "id": "mercedes-e-klasse-w212",
+      "name": "E-Klasse W212",
+      "code": "W212",
+      "years": [2009, 2016],
+      "bodyTypes": ["limousine", "kombi"],
+      "fuels": ["petrol", "diesel", "hybrid"],
+      "seats": [5],
+      "automatic": true,
+      "typicalPriceEur": null,
+      "priceSource": null,
+      "strengths": [
+        "Sehr gute Verarbeitung",
+        "Sehr großzügiges Raumangebot und großer Kofferraum (vor allem beim T-Modell)",
+        "Zuverlässige Technik und funktionelle Bedienung",
+        "Komfortable Federung, sichere Fahreigenschaften und hohes Sicherheitsniveau"
+      ],
+      "issues": [
+        {
+          "title": "Rückrufe: Brandgefahr und Lenkung",
+          "affects": "Benziner und Diesel: Rückrufe 10/2010 (Servopumpe), 2/2015 (Motorraumabdichtung), 8/2017 (nur 4Matic, Servolenkung) und 10/2017 (Lenksäule); nur 4-Zylinder-Diesel: 4/2016 (Kraftstoffleitungen)",
+          "detail": "Laut ADAC kann sich die Motorraumabdichtung an der Trennwand lösen und im ungünstigen Fall an heißen Motorteilen entzünden (2/2015); beim 4-Zylinder-Diesel kann ein Materialfehler an den Kraftstoff-Hochdruckleitungen zu Rissen, Kraftstoffaustritt und erhöhter Brandgefahr führen (4/2016). Dazu kamen Rückrufe an der Lenkung: Hochdruckleitung der Servopumpe mit zu geringem Anzugsmoment befestigt (10/2010), undichte Steckverbindung an der elektrischen Servolenkung beim 4Matic (8/2017) und nicht ausreichende Erdung der Lenksäule (10/2017).",
+          "check": "Per Fahrgestellnummer beim Händler prüfen lassen, ob die Rückrufe erledigt sind.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: Mercedes-Benz E-Klasse (2009-2016) Benziner",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0187-mercedes-benz-e-klasse-2009-2016-benziner-bericht.pdf"
+            },
+            {
+              "label": "ADAC Gebrauchtwageninfo: Mercedes-Benz E-Klasse (2009-2016) Diesel",
+              "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0188-mercedes-benz-e-klasse-2009-2016-diesel-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Rostende Hinterachsträger",
+          "affects": "Benziner und Diesel; Baujahre im ADAC-Bericht nicht näher genannt",
+          "detail": "Laut ADAC gehören rostende Hinterachsträger zu den Schwächen der E-Klasse. Rost an dieser tragenden Achskomponente kann die Hauptuntersuchung gefährden und eine aufwendige Reparatur nach sich ziehen.",
+          "check": "Hinterachsträger von unten auf Rost prüfen (Hebebühne oder Werkstatt) und Mängel im letzten Hauptuntersuchungsbericht ansehen.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: Mercedes-Benz E-Klasse (2009-2016) Benziner",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0187-mercedes-benz-e-klasse-2009-2016-benziner-bericht.pdf"
+            },
+            {
+              "label": "ADAC Gebrauchtwageninfo: Mercedes-Benz E-Klasse (2009-2016) Diesel",
+              "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0188-mercedes-benz-e-klasse-2009-2016-diesel-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Anlasser, Starterbatterie und Zündschloss",
+          "affects": "Benziner und Diesel: Anlasser 2009-2012, Anlassermagnetschalter 2009-2010, Starterbatterie 2009-2012, Zündschloss 2009-2014, Schlüssel 2009-2010, Generator 2009-2010 und 2015",
+          "detail": "Laut ADAC sind diese Bauteile häufige Fehlerquellen, vor allem bei den früheren Baujahren. Fällt eines davon aus, kann das Auto nicht anspringen oder liegen bleiben.",
+          "check": "Beim Probestart auf sauberes Anspringen achten, das Alter der Batterie erfragen und nachfragen, ob Anlasser, Zündschloss oder Generator schon getauscht wurden.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: Mercedes-Benz E-Klasse (2009-2016) Benziner",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0187-mercedes-benz-e-klasse-2009-2016-benziner-bericht.pdf"
+            },
+            {
+              "label": "ADAC Gebrauchtwageninfo: Mercedes-Benz E-Klasse (2009-2016) Diesel",
+              "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0188-mercedes-benz-e-klasse-2009-2016-diesel-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Frühe Baujahre 2009 bis 2011 mit schlechter Pannenbilanz",
+          "affects": "Benziner und Diesel: Erstzulassung 2009 und 2010 („sehr schlecht“) sowie 2011 („schlecht“) in der ADAC-Pannenstatistik",
+          "detail": "Laut ADAC-Pannenstatistik liegen die Jahrgänge ab 2012 im Bereich „mittel“ bis „gut“, die frühen Jahrgänge deutlich darunter; häufige Bauteilfehler sind dort unter anderem Antriebsriemen und Spannvorrichtung, Kühl-/Heizungsschläuche, Kraftstoffpumpe, Abgasrückführung und die Lenkung. Der ADAC weist dabei darauf hin, dass die E-Klasse seit Jahren die höchste Jahreslaufleistung hat.",
+          "check": "Wenn möglich einen späteren Jahrgang wählen; bei frühen Fahrzeugen Werkstattbelege zu Antriebsriemen, Schläuchen, Kraftstoffpumpe und Lenkung zeigen lassen.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: Mercedes-Benz E-Klasse (2009-2016) Benziner",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0187-mercedes-benz-e-klasse-2009-2016-benziner-bericht.pdf"
+            },
+            {
+              "label": "ADAC Gebrauchtwageninfo: Mercedes-Benz E-Klasse (2009-2016) Diesel",
+              "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0188-mercedes-benz-e-klasse-2009-2016-diesel-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Feststellbremse und gelegentlicher Ölverlust",
+          "affects": "Benziner und Diesel; Baujahre im TÜV-Report nicht näher genannt",
+          "detail": "Im TÜV-Report hat die E-Klasse laut ADAC trotz der hohen Laufleistungen einen fast tadellosen Ruf; nur die Feststellbremse und gelegentlicher Ölverlust bereiten ab und zu Probleme.",
+          "check": "Wirkung der Feststellbremse testen und Motor sowie den Boden unter dem Fahrzeug auf Ölspuren prüfen.",
+          "severity": "gering",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: Mercedes-Benz E-Klasse (2009-2016) Benziner",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0187-mercedes-benz-e-klasse-2009-2016-benziner-bericht.pdf"
+            },
+            {
+              "label": "ADAC Gebrauchtwageninfo: Mercedes-Benz E-Klasse (2009-2016) Diesel",
+              "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0188-mercedes-benz-e-klasse-2009-2016-diesel-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Steuerkette beim Vierzylinder-Diesel",
+          "affects": "Vierzylinder-Diesel; Rückruf 1/2015 für den Diesel-Vierzylinder OM651",
+          "detail": "Laut ADAC sind bei den Vierzylinder-Dieseln gelegentlich gelängte Steuerketten zu finden; 1/2015 wurde zudem wegen einer defekten Dichtung am Steuerkettenspanner zurückgerufen, der dadurch ausfallen kann. Ein Schaden an der Steuerkette kann teuer werden.",
+          "check": "Nachweis verlangen, dass der Rückruf zum Steuerkettenspanner erledigt ist, Wartungsbelege zeigen lassen und beim Probelauf auf ungewöhnliche Motorgeräusche achten.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: Mercedes-Benz E-Klasse (2009-2016) Diesel",
+              "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0188-mercedes-benz-e-klasse-2009-2016-diesel-bericht.pdf"
+            }
+          ]
+        }
+      ],
+      "engines": {
+        "recommended": [
+          {
+            "name": "Vierzylinder-Benziner (184 bis 211 PS)",
+            "why": "Laut ADAC machen sie die E-Klasse nicht zum Sportler, reichen für gelassenes Reisen aber völlig aus und sind im Einkauf und Unterhalt deutlich günstiger als die Sechszylinder."
+          },
+          {
+            "name": "E 220 CDI und E 250 CDI (Diesel, 163 bis 204 PS)",
+            "why": "Laut ADAC ist man hier entspannter unterwegs als im E 200 CDI, und für gelassenes Reisen reicht die Leistung völlig aus."
+          },
+          {
+            "name": "Sechszylinder-Diesel (231 bis 265 PS)",
+            "why": "Laut ADAC stets äußerst souverän unterwegs und bei häufigem Anhängerbetrieb der passende Partner."
+          }
+        ],
+        "caution": [
+          {
+            "name": "Vierzylinder-Diesel",
+            "why": "Laut ADAC gelegentlich gelängte Steuerketten und brummiger Lauf; dazu Rückrufe 1/2015 (Steuerkettenspanner beim OM651) und 4/2016 (Kraftstoff-Hochdruckleitungen, erhöhte Brandgefahr)."
+          },
+          {
+            "name": "Sechs- und Achtzylinder-Benziner (ab 231 PS, E 500, E 63 AMG)",
+            "why": "Laut ADAC sehr souveräne Fahrleistungen, aber im Einkauf und Unterhalt deutlich teurer als die Vierzylinder; die Achtzylinder sind ein sehr teures Vergnügen und nur für liquide Liebhaber eine gute Wahl."
+          },
+          {
+            "name": "Hybridmodelle (E 400 Hybrid, E 300 BlueTEC Hybrid)",
+            "why": "Laut ADAC klingen sie verlockend, Sparwunder sind sie aber nicht; der Diesel-Hybrid verbraucht im Alltag kaum weniger als vergleichbare Varianten."
+          }
+        ]
+      },
+      "tips": [
+        "Hinterachsträger von unten auf Rost prüfen, laut ADAC ein bekannter Schwachpunkt.",
+        "Feststellbremse ausprobieren und auf Ölspuren am Motor achten (TÜV-Report).",
+        "Bei Fahrzeugen von 2009 bis 2011 Belege zu Anlasser, Batterie, Zündschloss und Antriebsriemen verlangen; spätere Jahrgänge schneiden in der Pannenstatistik besser ab.",
+        "Wegen oft sehr hoher Laufleistung (Langstrecke, Taxi) auf lückenlose Wartungsnachweise achten; beim Vierzylinder-Diesel zusätzlich den Rückruf zur Steuerkette (1/2015) klären."
+      ]
+    },
+    {
+      "id": "mercedes-e-klasse-w213",
+      "name": "E-Klasse W213",
+      "code": "W213",
+      "years": [2016, 2023],
+      "bodyTypes": ["limousine", "kombi"],
+      "fuels": ["petrol", "diesel", "plugin_hybrid"],
+      "seats": [5],
+      "automatic": true,
+      "typicalPriceEur": null,
+      "priceSource": null,
+      "strengths": [],
+      "issues": [],
+      "engines": {
+        "recommended": [],
+        "caution": []
+      },
+      "tips": [
+        "Für diese Generation liegen noch wenige Gebrauchtwagen-Erfahrungen vor; Rückrufe per Fahrgestellnummer erfragen."
+      ]
+    },
+    {
+      "id": "mercedes-e-klasse-w214",
+      "name": "E-Klasse W214",
+      "code": "W214",
+      "years": [2023, null],
+      "bodyTypes": ["limousine", "kombi"],
+      "fuels": ["petrol", "diesel", "plugin_hybrid"],
+      "seats": [5],
+      "automatic": true,
+      "typicalPriceEur": null,
+      "priceSource": null,
+      "strengths": [],
+      "issues": [],
+      "engines": {
+        "recommended": [],
+        "caution": []
+      },
+      "tips": [
+        "Für diese Generation liegen noch wenige Gebrauchtwagen-Erfahrungen vor; Rückrufe per Fahrgestellnummer erfragen."
+      ]
+    }
+  ]
+}

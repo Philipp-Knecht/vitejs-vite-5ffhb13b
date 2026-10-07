@@ -1,5 +1,6 @@
 import { readdirSync } from 'node:fs';
 import { expect, type Page } from '@playwright/test';
+import pg from 'pg';
 
 /** Researched models (packages/catalog/data/models): model pages and the advisor depend on them. */
 export const MODELS_DIR = new URL('../packages/catalog/data/models/', import.meta.url);
@@ -58,4 +59,19 @@ export async function expectNoHorizontalScroll(page: Page): Promise<void> {
     innerWidth: window.innerWidth,
   }));
   expect(scrollWidth, 'page must not scroll horizontally').toBeLessThanOrEqual(innerWidth);
+}
+
+/** Turns an account into a Pro account directly in the end-to-end database (no payment involved). */
+export async function makePro(email: string): Promise<void> {
+  const client = new pg.Client({
+    connectionString:
+      process.env.E2E_DATABASE_URL ??
+      'postgresql://kaufcheck:kaufcheck@localhost:5432/kaufcheck_e2e',
+  });
+  await client.connect();
+  try {
+    await client.query(`UPDATE "User" SET plan = 'PRO' WHERE email = $1`, [email]);
+  } finally {
+    await client.end();
+  }
 }

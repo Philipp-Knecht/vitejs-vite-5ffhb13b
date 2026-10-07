@@ -1,6 +1,12 @@
 import { readFileSync } from 'node:fs';
 import { expect, test, type Page } from '@playwright/test';
-import { ADVISOR_AVAILABLE, ADVISOR_MIN_MODELS, MODEL_IDS, MODELS_DIR } from './helpers';
+import {
+  ADVISOR_AVAILABLE,
+  ADVISOR_MIN_MODELS,
+  MODEL_IDS,
+  MODELS_DIR,
+  PASTED_LISTING,
+} from './helpers';
 
 // Model pages and the advisor depend on the researched models; the tests adapt to how many there are.
 
@@ -45,12 +51,14 @@ test('model pages are prerendered and hydrate without errors', async ({ page, re
   ).toBeVisible();
   if (model.generations.length > 1) {
     const generation = model.generations[0] as ModelFile['generations'][number];
+    // "Golf VI" must not match "Golf VII": the name is followed by the years.
+    const escaped = generation.name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
     await page
       .getByRole('group', { name: 'Generation wählen' })
-      .getByRole('button', { name: new RegExp(generation.name) })
+      .getByRole('button', { name: new RegExp(`^${escaped} (?:seit )?\\d`) })
       .click();
     await expect(
-      page.getByRole('heading', { level: 2, name: new RegExp(`^${generation.name}`) }),
+      page.getByRole('heading', { level: 2, name: new RegExp(`^${escaped}(?: \\(|,)`) }),
     ).toBeVisible();
   }
   await page.getByRole('link', { name: `${name} finden` }).click();
@@ -146,4 +154,23 @@ test('the advisor suggests models and opens their search', async ({ page }) => {
   await expect(page.getByText('Frage 1 von 7')).toBeVisible();
   await expect(page.getByRole('radio', { name: 'bis 20.000 €' })).toBeChecked();
   expect(errors).toEqual([]);
+});
+
+test('the listing check shows what is known about the model', async ({ page }) => {
+  test.skip(!MODEL_IDS.includes('vw-golf'), 'no knowledge about the VW Golf yet');
+  const { make, model } = readModel('vw-golf');
+  await page.goto('/inserat-pruefen');
+  // A Golf with first registration 03/2014.
+  await page.getByLabel('Inseratstext oder Link zum Auto-Inserat').fill(PASTED_LISTING);
+  await page.getByRole('button', { name: 'Inserat prüfen' }).click();
+  await expect(page).toHaveURL(/\/analyse\//);
+  const section = page.getByRole('region', { name: `${make} ${model}: bekannte Schwachstellen` });
+  await expect(section).toBeVisible();
+  await expect(section.getByText(/Passend zur Erstzulassung 2014/)).toBeVisible();
+  await expect(section.getByRole('heading', { level: 3, name: /^Golf VII\b/ })).toBeVisible();
+  await expect(
+    page.getByRole('navigation', { name: 'Abschnitte der Prüfung' }).getByRole('link', {
+      name: 'Modell',
+    }),
+  ).toBeVisible();
 });

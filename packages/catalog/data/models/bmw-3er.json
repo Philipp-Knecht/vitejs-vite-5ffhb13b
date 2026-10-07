@@ -1,0 +1,470 @@
+{
+  "id": "bmw-3er",
+  "make": "BMW",
+  "model": "3er",
+  "aliases": [
+    "316d",
+    "316i",
+    "318d",
+    "318i",
+    "320d",
+    "320i",
+    "320si",
+    "323i",
+    "325d",
+    "325i",
+    "328i",
+    "330d",
+    "330e",
+    "330i",
+    "335d",
+    "335i",
+    "340i",
+    "3er",
+    "3er cabrio",
+    "3er coupe",
+    "3er gran turismo",
+    "3er limousine",
+    "3er reihe",
+    "3er touring",
+    "bmw 3er",
+    "m340d",
+    "m340i"
+  ],
+  "segment": "mittelklasse",
+  "summary": "Sportliche Mittelklasse als Limousine und Touring (Kombi) mit Hinterradantrieb; oft von Vielfahrern und im Firmenwagen-Einsatz gefahren, daher häufig mit hoher Laufleistung.",
+  "ratings": {
+    "reliability": 4,
+    "reliabilityNote": "ADAC-Pannenstatistik 2026: 3er-Reihe unter den Besten ihrer Klasse. Im TÜV-Report 2026 liegen E90 und F30 etwa im Durchschnitt; der noch junge G20 fällt bei 4- bis 5-Jährigen negativ auf (17,8 % erhebliche Mängel bei 3er/4er, Durchschnitt 10,0 %), vor allem wegen der aktiven Motorhaube.",
+    "reliabilitySources": [
+      {
+        "label": "ADAC Pannenstatistik 2026",
+        "url": "https://www.adac.de/rund-ums-fahrzeug/unfall-schaden-panne/adac-pannenstatistik-2026/"
+      },
+      {
+        "label": "AUTO BILD: BMW 3er/4er im TÜV-Report 2026",
+        "url": "https://www.autobild.de/artikel/bmw-3er-4er-gebraucht-tuev-report-2026-28158815.html"
+      }
+    ],
+    "runningCosts": 2,
+    "space": 3,
+    "comfort": 4
+  },
+  "generations": [
+    {
+      "id": "bmw-3er-e90",
+      "name": "3er (E90/E91/E92/E93)",
+      "code": "E90 / E91 / E92 / E93",
+      "years": [2005, 2013],
+      "bodyTypes": ["limousine", "kombi", "coupe", "cabrio"],
+      "fuels": ["petrol", "diesel"],
+      "seats": [4, 5],
+      "automatic": true,
+      "typicalPriceEur": null,
+      "priceSource": null,
+      "strengths": [
+        "Hinterradantrieb, sichere und sportliche Fahreigenschaften (ADAC)",
+        "Hervorragende Sechszylinder: ruhiger Lauf, kräftige und gleichmäßige Kraftentfaltung (ADAC)",
+        "Ab dem Facelift 2008 laut ADAC-Pannenstatistik deutlich besser als die frühen Modelle",
+        "Motoren gelten laut AUTO BILD bei guter Pflege als robust – trotz im Schnitt rund 180.000 km Laufleistung"
+      ],
+      "issues": [
+        {
+          "title": "Steuerkette der frühen N47-Diesel kann sich längen",
+          "affects": "Vierzylinder-Diesel mit Motorcode N47 (316d, 318d, 320d), verkauft ab 09/2007; besonders Motoren vor Januar 2009",
+          "detail": "Bei den ersten N47-Dieseln reibt die untere Steuerkette an einem scharfkantigen Kettenrad (typisches Schleifgeräusch). Laut AUTO BILD (Stand 2015) kostet die von BMW vorgeschriebene Reparatur (optimierte Gleitschienen, neue Kurbelwelle samt Lagerschalen) rund 4.000 Euro; bei gerissener Kette sind es bis zu 8.500 Euro.",
+          "check": "Beim Kaltstart und im Leerlauf auf Schleif- oder Rasselgeräusche achten, Fehlerspeicher auslesen lassen und Belege über eine bereits erfolgte Steuerketten-Reparatur verlangen.",
+          "severity": "hoch",
+          "sources": [
+            {
+              "label": "AUTO BILD: BMW 3er (E90) Gebrauchtwagen-Test",
+              "url": "https://www.autobild.de/artikel/bmw-3er-e90-gebrauchtwagen-test-5593425.html"
+            },
+            {
+              "label": "AUTO BILD: BMW 3er/4er im TÜV-Report 2026",
+              "url": "https://www.autobild.de/artikel/bmw-3er-4er-gebraucht-tuev-report-2026-28158815.html"
+            }
+          ]
+        },
+        {
+          "title": "320si: Motorschäden durch reißende Zylinderlaufbuchsen",
+          "affects": "320si (Limousine, nur rund 2.600 Stück gebaut)",
+          "detail": "Die Alu-Laufbuchsen in den Zylindern können reißen, Folge ist laut AUTO BILD ein wirtschaftlicher Totalschaden des Motors. AUTO BILD rät grundsätzlich vom 320si ab.",
+          "check": "Motorbezeichnung im Inserat und in den Fahrzeugpapieren prüfen; vom 320si besser Abstand nehmen.",
+          "severity": "hoch",
+          "sources": [
+            {
+              "label": "AUTO BILD: BMW 3er (E90) Gebrauchtwagen-Test",
+              "url": "https://www.autobild.de/artikel/bmw-3er-e90-gebrauchtwagen-test-5593425.html"
+            },
+            {
+              "label": "AUTO BILD: BMW 3er/4er im TÜV-Report 2026",
+              "url": "https://www.autobild.de/artikel/bmw-3er-4er-gebraucht-tuev-report-2026-28158815.html"
+            }
+          ]
+        },
+        {
+          "title": "Diesel: verkokte AGR-Ventile, verstopfter Partikelfilter, Zweimassenschwungrad",
+          "affects": "Diesel ab Euro 5 (AGR-Ventil), alle Diesel mit hoher Laufleistung (Partikelfilter), Handschalter ab ca. 100.000 km (Zweimassenschwungrad)",
+          "detail": "Laut AUTO BILD verkokt bei den Euro-5-Dieseln das Abgasrückführungsventil, bei höheren Laufleistungen verstopft der Partikelfilter, und das Zweimassenschwungrad der Handschalter zeigt ab etwa 100.000 km Risse durch Materialermüdung.",
+          "check": "Probefahrt auf Leistungsverlust, Warnleuchten und Vibrationen beim Anfahren (Handschalter) achten; Wartungs- und Reparaturbelege ansehen.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "AUTO BILD: BMW 3er (E90) Gebrauchtwagen-Test",
+              "url": "https://www.autobild.de/artikel/bmw-3er-e90-gebrauchtwagen-test-5593425.html"
+            }
+          ]
+        },
+        {
+          "title": "Gebrochene Federn und defekte Stoßdämpfer",
+          "affects": "alle Varianten, bei der HU häufigster Mangel",
+          "detail": "Laut ADAC bereiten dem E9x am ehesten gebrochene Federn und defekte Stoßdämpfer Probleme, vereinzelt auch defekte Abgasanlagen. Auch AUTO BILD nennt brechende Fahrwerkfedern; im TÜV-Report 2026 fallen bei den älteren 3er-Generationen Federn und Dämpfung auf.",
+          "check": "Federn und Stoßdämpfer sowie die Abgasanlage in der Werkstatt prüfen lassen; letzten HU-Bericht ansehen.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: BMW 3er-Reihe (2005-2013) Benziner",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0079-bmw-3er-reihe-2005-2013-benziner-bericht.pdf"
+            },
+            {
+              "label": "ADAC Gebrauchtwageninfo: BMW 3er-Reihe (2005-2013) Diesel",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0007-bmw-3er-reihe-2005-2013-diesel-bericht.pdf"
+            },
+            {
+              "label": "AUTO BILD: BMW 3er (E90) Gebrauchtwagen-Test",
+              "url": "https://www.autobild.de/artikel/bmw-3er-e90-gebrauchtwagen-test-5593425.html"
+            },
+            {
+              "label": "AUTO BILD: BMW 3er/4er im TÜV-Report 2026",
+              "url": "https://www.autobild.de/artikel/bmw-3er-4er-gebraucht-tuev-report-2026-28158815.html"
+            }
+          ]
+        },
+        {
+          "title": "Rückrufe: Gebläse-Stecker, Zündspulen, 335i-Einspritzpumpe",
+          "affects": "Gebläse-Stecker: alle E90/E91/E92/E93, Bauzeit 07/2004–06/2012; Zündspulen: Benziner; 335i: Motorsteuerung/Hochdruckpumpe",
+          "detail": "2021 rief BMW 430.000 E9x in Deutschland zurück: Ein Stecker am Gebläseregler der Heizung/Klimaanlage kann überhitzen, in seltenen Fällen droht Brandgefahr (Prüfung ca. 1 Stunde). Außerdem laut ADAC: Zündspulen können vorzeitig ausfallen (Aussetzer, 2012) und beim 335i gab es 2010 eine Aktion zur Motorsteuerung, in seltenen Fällen mit Tausch der Hochdruckeinspritzpumpe.",
+          "check": "Mit der Fahrgestellnummer beim BMW-Händler erfragen, welche Rückrufe erledigt wurden.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC: Rückruf bei BMW - 430.000 Fahrzeuge der 3er-Serie (19.02.2021)",
+              "url": "https://www.adac.de/news/rueckruf-bmw/"
+            },
+            {
+              "label": "ADAC Gebrauchtwageninfo: BMW 3er-Reihe (2005-2013) Benziner",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0079-bmw-3er-reihe-2005-2013-benziner-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Frühe Modelle vor dem Facelift 2008 waren pannenanfälliger",
+          "affects": "Erstzulassungen vor dem Facelift 2008",
+          "detail": "Laut ADAC punktet der E9x in der Pannenstatistik erst ab dem Facelift 2008, frühere Modelle fallen mit erhöhtem Pannenvolumen auf. Als Pannenschwerpunkt nennt der ADAC die Sicherungs- und Relaisbox (Erstzulassungen 2010–2011). ADAC-Empfehlung: ein Modell nach dem Facelift 2008.",
+          "check": "Wenn möglich ein Auto ab Facelift wählen; bei älteren Exemplaren auf Elektrik-Störungen und Wartungsnachweise achten.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: BMW 3er-Reihe (2005-2013) Benziner",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0079-bmw-3er-reihe-2005-2013-benziner-bericht.pdf"
+            },
+            {
+              "label": "ADAC Gebrauchtwageninfo: BMW 3er-Reihe (2005-2013) Diesel",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0007-bmw-3er-reihe-2005-2013-diesel-bericht.pdf"
+            }
+          ]
+        }
+      ],
+      "engines": {
+        "recommended": [
+          {
+            "name": "325i (218 PS)",
+            "why": "AUTO BILD: guter Kompromiss aus Sparsamkeit und Schnelligkeit (0–100 km/h in 6,6 s, Realverbrauch unter 10 l)."
+          },
+          {
+            "name": "320d (ab 163 PS)",
+            "why": "ADAC: guter Kompromiss aus Leistung und Verbrauch, häufig im Angebot; beim N47 (ab 09/2007) Steuerkette prüfen."
+          },
+          {
+            "name": "Sechszylinder-Diesel 325d/330d/335d",
+            "why": "ADAC: „Meisterwerke des Motorenbaus“, aber im Einkauf und Unterhalt deutlich teurer."
+          }
+        ],
+        "caution": [
+          {
+            "name": "320si",
+            "why": "Zylinderlaufbuchsen können reißen (wirtschaftlicher Totalschaden); AUTO BILD rät ab."
+          },
+          {
+            "name": "N47-Diesel (316d/318d/320d) ab 09/2007",
+            "why": "Steuerketten-Längung/-Schäden, Reparatur laut AUTO BILD (2015) rund 4.000 bis 8.500 Euro."
+          },
+          {
+            "name": "335i (Biturbo-Benziner)",
+            "why": "ADAC: Aktion 2010 wegen Motorsteuerung, in seltenen Fällen mit Tausch der Hochdruckpumpe – Durchführung prüfen."
+          }
+        ]
+      },
+      "tips": [
+        "Wenn möglich ein Modell ab Facelift 2008 wählen (ADAC-Empfehlung).",
+        "N47-Diesel: Kaltstart auf Schleif- oder Rasselgeräusche prüfen und Belege über Steuerketten-Reparaturen verlangen.",
+        "Rückrufstatus per Fahrgestellnummer klären, besonders den Gebläse-Stecker-Rückruf (2021).",
+        "Federn, Stoßdämpfer und Abgasanlage prüfen – das sind die typischen HU-Mängel."
+      ]
+    },
+    {
+      "id": "bmw-3er-f30",
+      "name": "3er (F30/F31/F34)",
+      "code": "F30 / F31 / F34",
+      "years": [2011, 2019],
+      "bodyTypes": ["limousine", "kombi", "schraegheck"],
+      "fuels": ["petrol", "diesel", "hybrid", "plugin_hybrid"],
+      "seats": [5],
+      "automatic": true,
+      "typicalPriceEur": null,
+      "priceSource": null,
+      "strengths": [
+        "Laut AUTO BILD schnell, agil, sparsam und standfest; hervorragende Automatik und guter Langstreckenkomfort",
+        "Sehr standfeste Bremsen (AUTO BILD)",
+        "ADAC: sichere und sportliche Fahreigenschaften, hervorragende Achtstufenautomatik, niedriger Verbrauch",
+        "Breites Angebot: Limousine, Touring und Gran Turismo (F34) mit größerem Gepäckraum"
+      ],
+      "issues": [
+        {
+          "title": "Steuerkette des N20-Benziners kann sich längen",
+          "affects": "Vierzylinder-Benziner N20 (320i, 328i) vor dem Facelift 2015",
+          "detail": "AUTO BILD nennt Steuerkettenlängungen beim N20-Motor der Modelle 320i und 328i vor dem Facelift 2015. Eine gelängte Kette muss ersetzt werden, im schlimmsten Fall droht ein Motorschaden.",
+          "check": "Kaltstart auf Rasseln oder Klappern prüfen, Fehlerspeicher auslesen lassen und Belege über einen Kettenwechsel verlangen; wenn möglich ein Auto ab Facelift wählen.",
+          "severity": "hoch",
+          "sources": [
+            {
+              "label": "AUTO BILD: BMW 3er/4er im TÜV-Report 2026",
+              "url": "https://www.autobild.de/artikel/bmw-3er-4er-gebraucht-tuev-report-2026-28158815.html"
+            }
+          ]
+        },
+        {
+          "title": "Diesel: Steuerkette als Pannenschwerpunkt (Erstzulassung 2013)",
+          "affects": "Diesel mit Erstzulassung 2013 (Motorcode nennt der ADAC nicht)",
+          "detail": "In der ADAC-Pannenstatistik 2022 ist bei den Diesel-Modellen der Erstzulassung 2013 die Steuerkette als Pannenschwerpunkt aufgeführt. Insgesamt liegt der F30 in der Pannenstatistik laut ADAC aber auf einem der vorderen Plätze.",
+          "check": "Bei frühen Dieseln auf Rasseln beim Kaltstart achten und Wartungsbelege (Ölwechsel, Kettenarbeiten) ansehen.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: BMW 3er-Reihe (2012-2018) Diesel",
+              "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0267-bmw-3er-reihe-2012-2018-diesel-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Servolenkung und Bremskraftverstärker: Störungen und Rückrufe",
+          "affects": "Servolenkung: Rückruf 2012 (alle Varianten laut ADAC); Bremskraftverstärker-Unterdruckpumpe: Motorversionen 20i/28i, Rückruf 2013",
+          "detail": "AUTO BILD nennt Meldungen zu Störungen an Lenkhilfe und Bremsservos. Der ADAC führt 2012 einen Rückruf wegen eines Fehlers in der Steuerelektronik der elektrischen Servolenkung (Ausfall der Lenkkraftunterstützung) und 2013 einen Rückruf wegen vorzeitig ausfallender Unterdruckpumpe des Bremskraftverstärkers (deutlich höhere Pedalkräfte, Bremsfunktion bleibt laut Hersteller erhalten).",
+          "check": "Rückrufstatus per Fahrgestellnummer beim BMW-Händler klären; bei der Probefahrt Lenkkraft und Bremspedalgefühl testen.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "AUTO BILD: BMW 3er/4er im TÜV-Report 2026",
+              "url": "https://www.autobild.de/artikel/bmw-3er-4er-gebraucht-tuev-report-2026-28158815.html"
+            },
+            {
+              "label": "ADAC Gebrauchtwageninfo: BMW 3er-Reihe (2012-2018) Diesel",
+              "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0267-bmw-3er-reihe-2012-2018-diesel-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Federn/Dämpfer, Ölverlust und Handbremse bei der HU",
+          "affects": "alle Varianten, zunehmend mit Alter und Laufleistung",
+          "detail": "Im TÜV-Report fallen laut ADAC vor allem defekte Feder-Dämpfer-Einheiten und vermehrt Ölverlust auf. AUTO BILD (2020) nennt zusätzlich immer wieder beanstandete Handbremsen; im TÜV-Report 2026 zeigen neunjährige F30 mehr Mängel an Federn und Dämpfung.",
+          "check": "Fahrwerk, Handbremse und Ölfeuchtigkeit an Motor/Getriebe prüfen lassen; HU-Berichte ansehen.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: BMW 3er-Reihe (2012-2018) Diesel",
+              "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0267-bmw-3er-reihe-2012-2018-diesel-bericht.pdf"
+            },
+            {
+              "label": "AUTO BILD: BMW 3er (F30) Gebrauchtwagen-Kaufberatung (2020)",
+              "url": "https://www.autobild.de/artikel/bmw-3er-f30-gebrauchtwagen-kaufberatung-16690209.html"
+            },
+            {
+              "label": "AUTO BILD: BMW 3er/4er im TÜV-Report 2026",
+              "url": "https://www.autobild.de/artikel/bmw-3er-4er-gebraucht-tuev-report-2026-28158815.html"
+            }
+          ]
+        },
+        {
+          "title": "Rückrufe: AGR-Modul (Diesel), Airbag-Gasgeneratoren, Beifahrergurt",
+          "affects": "Diesel (AGR-Modul, 4- und 6-Zylinder); Airbag-/Gurt-Rückrufe je nach Bauzeit",
+          "detail": "Beim Diesel können im AGR-Modul Kühlflüssigkeit, Ruß und Öl zu brennbaren Ablagerungen führen, selten mit Anschmelzungen im Ansaugkrümmer (Rückruf 2019, in Deutschland 328.000 Fahrzeuge verschiedener Modelle). AUTO BILD nennt zudem fehlerhafte Gasgeneratoren sowie Probleme mit Beifahrergurten.",
+          "check": "Beim BMW-Händler per Fahrgestellnummer prüfen lassen, ob alle Rückrufe durchgeführt wurden.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: BMW 3er-Reihe (2012-2018) Diesel",
+              "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0267-bmw-3er-reihe-2012-2018-diesel-bericht.pdf"
+            },
+            {
+              "label": "AUTO BILD: BMW 3er/4er im TÜV-Report 2026",
+              "url": "https://www.autobild.de/artikel/bmw-3er-4er-gebraucht-tuev-report-2026-28158815.html"
+            }
+          ]
+        }
+      ],
+      "engines": {
+        "recommended": [
+          {
+            "name": "320d (nach dem Facelift 2015 mit Euro 6)",
+            "why": "AUTO BILD: „geradezu perfekt“, souveränes Drehmoment, harmoniert mit dem Hinterradantrieb; Euro 6 erst nach dem Facelift (Sommer 2015)."
+          },
+          {
+            "name": "Achtstufen-Automatik (ZF)",
+            "why": "ADAC: hervorragende Achtstufenautomatik, harmoniert sehr gut mit den Dieselmotoren."
+          },
+          {
+            "name": "Sechszylinder-Diesel 330d/335d",
+            "why": "ADAC: „Meisterwerke des Motorenbaus“, aber im Einkauf und Unterhalt deutlich teurer."
+          }
+        ],
+        "caution": [
+          {
+            "name": "320i/328i mit N20-Vierzylinder vor dem Facelift 2015",
+            "why": "Steuerkettenlängung laut AUTO BILD."
+          },
+          {
+            "name": "316d (116 PS)",
+            "why": "ADAC: reicht für den Alltag, bringt aber kaum die typische Freude am Fahren."
+          }
+        ]
+      },
+      "tips": [
+        "AUTO BILD nennt die Steuerkettenlängung des N20 nur für Modelle vor dem Facelift 2015 – ein Auto ab Facelift ist die sicherere Wahl.",
+        "Der 320d erfüllt laut AUTO BILD erst nach dem Facelift (Sommer 2015) Euro 6; frühere Diesel sind Euro 5.",
+        "Rückrufe per Fahrgestellnummer prüfen lassen (AGR-Modul beim Diesel, Airbag-Gasgeneratoren, Gurte).",
+        "Federn/Dämpfer, Handbremse und Ölverlust gezielt prüfen lassen."
+      ]
+    },
+    {
+      "id": "bmw-3er-g20",
+      "name": "3er (G20/G21)",
+      "code": "G20 / G21",
+      "years": [2019, null],
+      "bodyTypes": ["limousine", "kombi"],
+      "fuels": ["petrol", "diesel", "plugin_hybrid"],
+      "seats": [5],
+      "automatic": true,
+      "typicalPriceEur": null,
+      "priceSource": null,
+      "strengths": [
+        "ADAC-Autotest 320d (2019): Gesamtnote 2,0 – perfektes Automatikgetriebe, flotte Fahrleistungen, viele Assistenz- und Sicherheitssysteme",
+        "AUTO BILD-Dauertest: 320d Touring (G21) erhielt nach 100.000 km die Note 1",
+        "Die meisten Motoren sind mit der effizienten ZF-Achtstufenautomatik kombiniert (AUTO BILD)",
+        "Funktion der Fußbremse laut TÜV-Report 2026 bislang makellos"
+      ],
+      "issues": [
+        {
+          "title": "TÜV: aktive Motorhaube und Achsaufhängungen fallen auf",
+          "affects": "G20/G21, v. a. 4- bis 5 Jahre alte Fahrzeuge",
+          "detail": "Im TÜV-Report 2026 landet der G20 bei den 4- bis 5-Jährigen nur auf Platz 94 von 102; Hauptgrund laut AUTO BILD ist die aktive Motorhaube. Zudem fällt der G20 übermäßig oft mit Defekten an den Achsaufhängungen auf.",
+          "check": "Prüfen, ob die Motorhaube sauber öffnet/schließt und ob bei der letzten HU etwas an Motorhaube oder Achsaufhängung bemängelt wurde; Kosten einer Erneuerung vorab beim Händler erfragen.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "AUTO BILD: BMW 3er/4er im TÜV-Report 2026",
+              "url": "https://www.autobild.de/artikel/bmw-3er-4er-gebraucht-tuev-report-2026-28158815.html"
+            }
+          ]
+        },
+        {
+          "title": "Rückruf Diesel: Brandgefahr durch AGR-Kühler",
+          "affects": "Dieselmodelle (318d/320d/330d u. a.)",
+          "detail": "AUTO BILD nennt die Dieselmodelle als vom „Riesenrückruf“ wegen Brandgefahr durch einen defekten Kühler der Abgasrückführung betroffen. BMW tauscht fehlerhafte Komponenten kostenlos.",
+          "check": "Nachweis verlangen, dass der Rückruf in einer BMW-Werkstatt durchgeführt wurde (Fahrgestellnummer-Abfrage beim Händler).",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "AUTO BILD: BMW 3er/4er im TÜV-Report 2026",
+              "url": "https://www.autobild.de/artikel/bmw-3er-4er-gebraucht-tuev-report-2026-28158815.html"
+            },
+            {
+              "label": "ADAC Gebrauchtwageninfo: BMW 3er-Reihe (2012-2018) Diesel",
+              "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0267-bmw-3er-reihe-2012-2018-diesel-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Rückrufe zu Starter, Starter-Generator und Starterrelais (Brandgefahr)",
+          "affects": "Starter-Generator: Diesel-Mildhybride (laut AUTO BILD); Anlasser-Rückruf 2025: G20/G21 (Produktionszeitraum 09/2015–09/2021); Starterrelais-Rückruf 2026: Bauzeit 31.07.2020–26.02.2026",
+          "detail": "AUTO BILD nennt Brandgefahr wegen fehlerhaftem Anschluss des Starter-Generators. 2025 folgte ein Rückruf wegen Wassereintritts in den Anlasser (136.489 Fahrzeuge in Deutschland, u. a. G20/G21), 2026 ein weiterer wegen Ablagerungen im Starterrelais (rund 42.300 Fahrzeuge in Deutschland, u. a. G20/G21). Abhilfe ist jeweils kostenlos.",
+          "check": "Per Fahrgestellnummer prüfen lassen, ob die jeweiligen Rückrufe offen oder erledigt sind.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "AUTO BILD: BMW 3er/4er im TÜV-Report 2026",
+              "url": "https://www.autobild.de/artikel/bmw-3er-4er-gebraucht-tuev-report-2026-28158815.html"
+            },
+            {
+              "label": "auto motor und sport: Großer BMW-Rückruf - Brandgefahr durch Anlasser (26.09.2025)",
+              "url": "https://www.auto-motor-und-sport.de/verkehr/grosser-bmw-rueckruf-brandgefahr-durch-anlasser/"
+            },
+            {
+              "label": "ADAC: Erneuter Rückruf bei BMW - Brandgefahr durch Starter-Defekt (22.07.2026)",
+              "url": "https://www.adac.de/news/auto-rueckruf-bmw-starter/"
+            }
+          ]
+        },
+        {
+          "title": "Weitere Rückrufe 2020–2022 (Gurtschloss, Airbag, Bremskraftverstärker, Batterie, Gurtstraffer)",
+          "affects": "G20/G21 je nach Bauzeit",
+          "detail": "AUTO BILD listet Rückrufe zu Gurtschlosssensorik und Airbag-Steuergerät (2020), Bremskraftverstärker und Batterie-Crashpads (2021) sowie Onboard-Diagnose und Mikrogasgeneratoren im Gurtstraffer (2022).",
+          "check": "Rückrufstatus per Fahrgestellnummer beim BMW-Händler erfragen und dokumentieren lassen.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "AUTO BILD: BMW 3er/4er im TÜV-Report 2026",
+              "url": "https://www.autobild.de/artikel/bmw-3er-4er-gebraucht-tuev-report-2026-28158815.html"
+            }
+          ]
+        },
+        {
+          "title": "330e (Plug-in-Hybrid): Rückruf wegen Hochvoltbatterie 2020",
+          "affects": "Plug-in-Hybride (u. a. 3er) mit Produktionsdatum 20.01.–18.09.2020",
+          "detail": "Wegen Verunreinigungen im Produktionsprozess der Batteriezellen kann ein Kurzschluss in Zellen des Hochvoltspeichers entstehen. BMW rief die betroffenen Plug-in-Hybride 2020 zurück (in Deutschland rund 1.800 Fahrzeuge in Kundenhand, zusätzlich noch nicht ausgelieferte).",
+          "check": "Beim 330e mit Baujahr 2020 klären, ob der Rückruf durchgeführt wurde (Fahrgestellnummer, BMW-Händler).",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "electrive: BMW ruft erneut mehrere Plug-in-Hybrid-Modelle zurück (10/2020, Update 10/2021)",
+              "url": "https://www.electrive.net/2020/10/13/bmw-ruft-erneut-mehrere-plug-in-hybrid-modelle-zurueck/"
+            }
+          ]
+        }
+      ],
+      "engines": {
+        "recommended": [
+          {
+            "name": "320d (190 PS, Mildhybrid, Achtstufenautomatik)",
+            "why": "AUTO BILD-Dauertest (G21 Touring): Note 1 nach 100.000 km, 6,9 l/100 km im Schnitt."
+          }
+        ],
+        "caution": [
+          {
+            "name": "330e (Plug-in-Hybrid) mit Produktionsdatum 01–09/2020",
+            "why": "Rückruf wegen Hochvoltbatterie – Durchführung prüfen."
+          },
+          {
+            "name": "Diesel (Rückruf AGR-Kühler)",
+            "why": "Brandgefahr-Rückruf; Durchführung nachweisen lassen."
+          }
+        ]
+      },
+      "tips": [
+        "Bei der Besichtigung die aktive Motorhaube (Öffnen/Schließen, Haltekraft) und Achsaufhängungen im letzten HU-Bericht prüfen.",
+        "Alle Rückrufe per Fahrgestellnummer abfragen – besonders Starter/Starterrelais (2025/2026) und beim Diesel das AGR-Modul.",
+        "Beim 330e mit Baujahr 2020 den Hochvoltbatterie-Rückruf klären."
+      ]
+    }
+  ]
+}

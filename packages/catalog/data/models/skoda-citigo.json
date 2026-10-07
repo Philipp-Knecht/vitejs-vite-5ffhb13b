@@ -1,0 +1,181 @@
+{
+  "id": "skoda-citigo",
+  "make": "Škoda",
+  "model": "Citigo",
+  "aliases": ["citigo", "citigo e iv", "citigo-e", "citigo-e iv"],
+  "segment": "kleinstwagen",
+  "summary": "Der Citigo ist die Škoda-Version des VW up!: technisch weitgehend identisch, aber mit eigenem Design und ebenfalls ein handlicher Stadtwagen mit vier Sitzen.",
+  "ratings": {
+    "reliability": 4,
+    "reliabilityNote": "Laut ADAC-Pannenstatistik 2026 unter den zuverlässigsten Kleinstwagen. Beim TÜV-Report 2026 liegt der Citigo ab 6 Jahren beim Anteil mängelfreier Fahrzeuge über dem Schnitt (10–11 Jahre: 69,6 % statt Ø 64,7 %); Fußbremse und Abblendlicht werden aber überdurchschnittlich oft beanstandet.",
+    "reliabilitySources": [
+      {
+        "label": "ADAC Pannenstatistik 2026",
+        "url": "https://www.adac.de/rund-ums-fahrzeug/unfall-schaden-panne/adac-pannenstatistik-2026/"
+      },
+      {
+        "label": "AUTO BILD: Skoda Citigo gebraucht – TÜV-Report, 26.07.2026",
+        "url": "https://www.autobild.de/artikel/skoda-citigo-gebraucht-tuev-report-2026-28353881.html"
+      }
+    ],
+    "runningCosts": 5,
+    "space": 2,
+    "comfort": 2
+  },
+  "generations": [
+    {
+      "id": "skoda-citigo-1",
+      "name": "Citigo",
+      "code": null,
+      "years": [2011, 2020],
+      "bodyTypes": ["schraegheck"],
+      "fuels": ["petrol", "cng", "electric"],
+      "seats": [4],
+      "automatic": true,
+      "typicalPriceEur": null,
+      "priceSource": null,
+      "strengths": [
+        "Laut AUTO BILD fährt der Citigo erstaunlich erwachsen und hat eine gute Sicherheitsausstattung.",
+        "Gute Übersicht dank steilem Heck und großen Fensterflächen (AUTO BILD).",
+        "Technisch baugleich mit dem VW up!; laut ADAC-Pannenstatistik 2026 unter den zuverlässigsten Kleinstwagen."
+      ],
+      "issues": [
+        {
+          "title": "Automatisiertes Schaltgetriebe (ASG) nicht immer zuverlässig",
+          "affects": "ASG (automatisierte Schaltung) für die Saugbenziner, bis Herbst 2020",
+          "detail": "AUTO BILD nennt für den Citigo vereinzelt lahme Gangwechsel des automatischen Getriebes und für den baugleichen up! das ASG „nicht immer zuverlässig“; die AUTOHAUS-Auswertung (SP-X) bezeichnet es als „technisch anfällig“. Laut auto motor und sport schaltet es nur ruckfrei, wenn man dem Getriebe bewusst Zeit lässt.",
+          "check": "Ausgiebige Probefahrt (Anfahren, Rangieren, Gangwechsel); Handschalter als Alternative erwägen.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "AUTO BILD: Skoda Citigo gebraucht – TÜV-Report, 26.07.2026",
+              "url": "https://www.autobild.de/artikel/skoda-citigo-gebraucht-tuev-report-2026-28353881.html"
+            },
+            {
+              "label": "AUTO BILD: VW Up – TÜV-Report (Schwachstellen, Mängel, Probleme), 13.01.2026",
+              "url": "https://www.autobild.de/artikel/vw-up-tuev-report-schwachstellen-maengel-probleme-28285313.html"
+            },
+            {
+              "label": "AUTOHAUS (SP-X): VW Up im Gebrauchtwagen-Check – Kurz und recht gut, 23.09.2024",
+              "url": "https://www.autohaus.de/nachrichten/autohersteller/gebrauchtwagen-check-vw-up-kurz-und-recht-gut-3557764"
+            },
+            {
+              "label": "auto motor und sport: VW Up (Typ AA) im Gebrauchtwagencheck, 20.12.2022",
+              "url": "https://www.auto-motor-und-sport.de/kleinwagen/gebrauchtwagen/gebrauchtwagencheck-vw-up-probleme-staerken-schwaechen/"
+            }
+          ]
+        },
+        {
+          "title": "Wassereintritt in den Innenraum",
+          "affects": "Citigo, vor allem bis etwa Baujahr 2016 (Angabe zum baugleichen up!)",
+          "detail": "AUTO BILD nennt vereinzelte Berichte über Wasser im Innenraum des Citigo. Beim baugleichen up! beschreibt auto motor und sport Wassereinbrüche bis Baujahr 2016 als „Running Gag“, am häufigsten über die Türschweller.",
+          "check": "Auf miefigen Geruch, Schimmel unter den Fußmatten und Nässe an der tiefsten Stelle des Kofferraums achten.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "AUTO BILD: Skoda Citigo gebraucht – TÜV-Report, 26.07.2026",
+              "url": "https://www.autobild.de/artikel/skoda-citigo-gebraucht-tuev-report-2026-28353881.html"
+            },
+            {
+              "label": "auto motor und sport: VW Up (Typ AA) im Gebrauchtwagencheck, 20.12.2022",
+              "url": "https://www.auto-motor-und-sport.de/kleinwagen/gebrauchtwagen/gebrauchtwagencheck-vw-up-probleme-staerken-schwaechen/"
+            }
+          ]
+        },
+        {
+          "title": "Bremsen und Beleuchtung häufig bei der HU beanstandet",
+          "affects": "Citigo aller Baujahre",
+          "detail": "Laut AUTO BILD (TÜV-Report 2026) ist die Bremsfunktion eine Schwachstelle: Die Fußbremse wird in allen Generationen überdurchschnittlich oft beanstandet, verstelltes Abblendlicht steht überproportional auf der Mängelliste aller Baujahre. Beim baugleichen up! gilt laut AUTO BILD: Licht ist leicht zu beheben, Bremsen werden teurer.",
+          "check": "Bremsen und Beleuchtung vor dem Kauf prüfen lassen; HU-Bericht ansehen.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "AUTO BILD: Skoda Citigo gebraucht – TÜV-Report, 26.07.2026",
+              "url": "https://www.autobild.de/artikel/skoda-citigo-gebraucht-tuev-report-2026-28353881.html"
+            },
+            {
+              "label": "AUTO BILD: VW Up – TÜV-Report (Schwachstellen, Mängel, Probleme), 13.01.2026",
+              "url": "https://www.autobild.de/artikel/vw-up-tuev-report-schwachstellen-maengel-probleme-28285313.html"
+            },
+            {
+              "label": "AUTOHAUS (SP-X): VW Up im Gebrauchtwagen-Check – Kurz und recht gut, 23.09.2024",
+              "url": "https://www.autohaus.de/nachrichten/autohersteller/gebrauchtwagen-check-vw-up-kurz-und-recht-gut-3557764"
+            }
+          ]
+        },
+        {
+          "title": "Ölverlust bei jüngeren Fahrzeugen",
+          "affects": "Citigo (jüngere Modelle; Angabe zum baugleichen up!)",
+          "detail": "Laut der AUTOHAUS-Auswertung (SP-X) ist Ölverlust bei jüngeren Modellen ein Thema bei der HU; die Autozeitung nennt ölfeuchte Motoren und/oder Getriebe unter den häufigsten Mängeln beim up!.",
+          "check": "Motor und Getriebe auf Ölfeuchtigkeit prüfen; eine frische HU-Plakette ist empfehlenswert.",
+          "severity": "gering",
+          "sources": [
+            {
+              "label": "AUTOHAUS (SP-X): VW Up im Gebrauchtwagen-Check – Kurz und recht gut, 23.09.2024",
+              "url": "https://www.autohaus.de/nachrichten/autohersteller/gebrauchtwagen-check-vw-up-kurz-und-recht-gut-3557764"
+            },
+            {
+              "label": "Autozeitung: VW Up gebraucht kaufen – Vor allem als e-Up empfehlenswert, 13.06.2025",
+              "url": "https://www.autozeitung.de/vw-up-baujahr-2011-134206.html"
+            }
+          ]
+        },
+        {
+          "title": "Korrosion rund um die Tankklappe",
+          "affects": "Citigo bis Modelljahr 2016 (Angabe zum baugleichen up!)",
+          "detail": "Auto motor und sport schreibt, dass es beim up! rund um die Tankdeckelöffnung bis Modelljahr 2016 zu Korrosion bis hin zur Durchrostung des Seitenteils kommen konnte (beschädigte Beschichtung, Erdansammlungen im Tankstutzenbereich).",
+          "check": "Tankklappe und rechtes hinteres Seitenteil auf Blasen und Rost prüfen.",
+          "severity": "gering",
+          "sources": [
+            {
+              "label": "auto motor und sport: VW Up (Typ AA) im Gebrauchtwagencheck, 20.12.2022",
+              "url": "https://www.auto-motor-und-sport.de/kleinwagen/gebrauchtwagen/gebrauchtwagencheck-vw-up-probleme-staerken-schwaechen/"
+            }
+          ]
+        },
+        {
+          "title": "Verarbeitungsmängel, Klimaanlage und Rückrufe",
+          "affects": "Citigo; Batteriezellen-Rückruf nur Elektroversion Citigo-e iV",
+          "detail": "AUTO BILD nennt Verarbeitungsdefizite samt Dröhnen und Klappern, undichte Klimaanlagen und defekte Klimakompressoren. Rückrufe betrafen Airbagsteuergeräte, eine lose Frontblende am Panoramadach, bruchgefährdete Abschleppösen und ein Kurzschlussrisiko in beschädigten Batteriezellen (nur Elektroversion).",
+          "check": "Probefahrt auf Klappern achten; Klimaanlage prüfen; per Fahrgestellnummer klären, ob alle Rückrufe ausgeführt wurden.",
+          "severity": "gering",
+          "sources": [
+            {
+              "label": "AUTO BILD: Skoda Citigo gebraucht – TÜV-Report, 26.07.2026",
+              "url": "https://www.autobild.de/artikel/skoda-citigo-gebraucht-tuev-report-2026-28353881.html"
+            }
+          ]
+        }
+      ],
+      "engines": {
+        "recommended": [
+          {
+            "name": "1.0 MPI (60 PS) mit Fünfgang-Handschaltung",
+            "why": "Auto motor und sport (beim up!): genügt für die meisten Fälle, das Fünfganggetriebe schaltet leicht und präzise."
+          },
+          {
+            "name": "Citigo-e iV (Elektro, 2019–2020)",
+            "why": "Technisch identisch mit dem e-up!, den die Autozeitung für den E-Auto-Einstieg als absolute Empfehlung nennt; Batteriezustand unabhängig prüfen lassen."
+          }
+        ],
+        "caution": [
+          {
+            "name": "ASG (automatisierte Schaltung)",
+            "why": "AUTO BILD: nicht immer zuverlässig; AUTOHAUS/SP-X: technisch anfällig."
+          },
+          {
+            "name": "G-TEC (Erdgas, 68 PS)",
+            "why": "Technisch identisch mit dem up! EcoFuel: laut auto motor und sport deutlich träger, AUTO BILD nennt beim up! pfeifende Gasdruckregler."
+          }
+        ]
+      },
+      "tips": [
+        "Fußräume, Teppiche und Kofferraum auf Nässe prüfen.",
+        "Bremsen und Abblendlicht gehören zu den häufigsten HU-Mängeln – HU-Bericht zeigen lassen.",
+        "Beim ASG ausgiebig probefahren oder einen Handschalter wählen.",
+        "Beim Citigo-e iV den Batteriezustand unabhängig prüfen lassen."
+      ]
+    }
+  ],
+  "twinOf": "vw-up"
+}

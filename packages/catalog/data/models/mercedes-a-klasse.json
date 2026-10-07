@@ -1,0 +1,257 @@
+{
+  "id": "mercedes-a-klasse",
+  "make": "Mercedes-Benz",
+  "model": "A-Klasse",
+  "aliases": [
+    "a 150",
+    "a 160",
+    "a 160 cdi",
+    "a 170",
+    "a 180",
+    "a 180 cdi",
+    "a 180 d",
+    "a 200",
+    "a 200 cdi",
+    "a 200 d",
+    "a 220",
+    "a 220 d",
+    "a 250",
+    "a 45 amg",
+    "a klasse",
+    "a-klasse",
+    "a-klasse limousine",
+    "aklasse",
+    "v177",
+    "w169",
+    "w176",
+    "w177"
+  ],
+  "segment": "kompakt",
+  "summary": "Kompakter Mercedes mit hochwertiger Verarbeitung und guter Zuverlässigkeit; die Generation bis 2012 war hoch und sehr variabel, die späteren sind flacher und dynamischer.",
+  "ratings": {
+    "reliability": 4,
+    "reliabilityNote": "Laut ADAC-Pannenstatistik liegt die Baureihe W176 (2012-2018) ab Jahrgang 2013 bei „gut“ bis „sehr gut“ und die Vorgängerbaureihe (2004-2012) überwiegend bei „gut“. Im TÜV-Report schneidet die A-Klasse hervorragend ab (W176: bester Kompaktwagen); die Baureihe W177 ist in dieser Einstufung nicht berücksichtigt.",
+    "reliabilitySources": [
+      {
+        "label": "ADAC Gebrauchtwageninfo: Mercedes-Benz A-Klasse (2004-2012)",
+        "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0123-mercedes-benz-a-klasse-2004-2012-bericht.pdf"
+      },
+      {
+        "label": "ADAC Gebrauchtwageninfo: Mercedes-Benz A-Klasse (2012-2018) Benziner",
+        "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0276-mercedes-benz-a-klasse-2012-2018-benziner-bericht.pdf"
+      },
+      {
+        "label": "ADAC Gebrauchtwageninfo: Mercedes-Benz A-Klasse (2012-2018) Diesel",
+        "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0277-mercedes-benz-a-klasse-2012-2018-diesel-bericht.pdf"
+      }
+    ],
+    "runningCosts": 3,
+    "space": 3,
+    "comfort": 4
+  },
+  "generations": [
+    {
+      "id": "mercedes-a-klasse-w169",
+      "name": "A-Klasse W169",
+      "code": "W169",
+      "years": [2004, 2012],
+      "bodyTypes": ["schraegheck", "coupe"],
+      "fuels": ["petrol", "diesel"],
+      "seats": [5],
+      "automatic": true,
+      "typicalPriceEur": null,
+      "priceSource": null,
+      "strengths": [
+        "Solide, hohe Karosserie",
+        "Große Variabilität des Innenraums",
+        "Hoher Fahrkomfort und leichte Bedienung",
+        "Sehr zuverlässig laut ADAC-Pannenstatistik und TÜV-Report"
+      ],
+      "issues": [
+        {
+          "title": "Rückrufe: Gurtschlösser und Airbagmodul",
+          "affects": "Rückrufe 10/2008 (Gurtschlösser) und 9/2020 (Airbagmodul)",
+          "detail": "Laut ADAC konnte es bei hoher Belastung (Unfall) zum Bruch der Sperrklinken der Gurtschlösser kommen (10/2008); unter speziellen klimatischen Bedingungen konnte sich zudem das Treibmittel im Airbagmodul chemisch verändern (9/2020).",
+          "check": "Per Fahrgestellnummer beim Händler prüfen lassen, ob die Rückrufe erledigt sind.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: Mercedes-Benz A-Klasse (2004-2012)",
+              "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0123-mercedes-benz-a-klasse-2004-2012-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Korrodierte Bremsleitungen",
+          "affects": "Alle Motoren; Baujahre im TÜV-Report nicht näher genannt",
+          "detail": "Laut ADAC schneidet die A-Klasse bei der Hauptuntersuchung hervorragend ab; am ehesten bereiten noch gammelnde (verrostete) Bremsleitungen Probleme. Mängel an Bremsleitungen sind sicherheitsrelevant.",
+          "check": "Bremsleitungen auf Rost und Feuchtigkeit prüfen lassen und im letzten Hauptuntersuchungsbericht nach Bremsmängeln schauen.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: Mercedes-Benz A-Klasse (2004-2012)",
+              "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0123-mercedes-benz-a-klasse-2004-2012-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Antriebsriemen, Anlasser und Starterbatterie",
+          "affects": "Antriebsriemen 2004-2005 und 2007; Anlasser und Starterbatterie 2011",
+          "detail": "Laut ADAC gehören diese Bauteile bei den genannten Baujahren zu den häufigen Bauteilfehlern der sonst sehr zuverlässigen A-Klasse. Ein Ausfall kann zu einer Panne führen.",
+          "check": "Zustand und Alter von Antriebsriemen und Batterie erfragen, Belege zu bereits getauschten Teilen zeigen lassen und auf sauberes Anspringen achten.",
+          "severity": "gering",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: Mercedes-Benz A-Klasse (2004-2012)",
+              "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0123-mercedes-benz-a-klasse-2004-2012-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Automatikgetriebe (Baujahr 2005)",
+          "affects": "Automatikgetriebe, Baujahr 2005",
+          "detail": "Laut ADAC war das Automatikgetriebe bei Fahrzeugen des Baujahrs 2005 ein häufiger Bauteilfehler. Ein Getriebeschaden kann teuer werden.",
+          "check": "Bei Automatikmodellen, besonders Baujahr 2005, auf der Probefahrt auf Auffälligkeiten beim Schalten achten und Wartungsbelege zeigen lassen.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: Mercedes-Benz A-Klasse (2004-2012)",
+              "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0123-mercedes-benz-a-klasse-2004-2012-bericht.pdf"
+            }
+          ]
+        }
+      ],
+      "engines": {
+        "recommended": [
+          {
+            "name": "A 170 / A 180 (Benziner, 115 PS)",
+            "why": "Laut ADAC die Idealmotorisierung: für die meisten Lebenslagen völlig ausreichend, mit überschaubarem Verbrauch und häufig auf dem Gebrauchtwagenmarkt zu finden."
+          },
+          {
+            "name": "A 180 CDI und A 200 CDI (Diesel)",
+            "why": "Laut ADAC spürbar kräftiger und souveräner als der A 160 CDI, bei nur marginalem Mehrverbrauch."
+          }
+        ],
+        "caution": [
+          {
+            "name": "A 150 / A 160 (Basisbenziner)",
+            "why": "Laut ADAC reichen sie nur zum Mitschwimmen im Verkehr, mehr nicht."
+          },
+          {
+            "name": "A 200 und A 200 Turbo (stärkere Benziner)",
+            "why": "Laut ADAC mehr Reserven für Autobahn und Anhängerbetrieb, aber hoher Verbrauch; der A 200 Turbo spielt auf dem Gebrauchtwagenmarkt so gut wie keine Rolle."
+          }
+        ]
+      },
+      "tips": [
+        "Bremsleitungen auf Rost prüfen lassen; sie sind laut TÜV-Report am ehesten auffällig.",
+        "Türunterkanten auf Rost ansehen; die tragende Karosserie ist laut ADAC nur selten betroffen.",
+        "Bei Automatikmodellen auf der Probefahrt auf Auffälligkeiten beim Schalten achten, besonders bei Baujahr 2005.",
+        "Sitzkomfort auf der Probefahrt prüfen; die Sitze sind laut ADAC relativ hart gepolstert."
+      ]
+    },
+    {
+      "id": "mercedes-a-klasse-w176",
+      "name": "A-Klasse W176",
+      "code": "W176",
+      "years": [2012, 2018],
+      "bodyTypes": ["schraegheck"],
+      "fuels": ["petrol", "diesel"],
+      "seats": [5],
+      "automatic": true,
+      "typicalPriceEur": null,
+      "priceSource": null,
+      "strengths": [
+        "Sehr gute Verarbeitung mit hochwertigen Materialien",
+        "Zuverlässige Technik und funktionelle Bedienung",
+        "Sichere Fahreigenschaften und präzise Lenkung",
+        "Hohes Sicherheitsniveau mit sehr guten Euro-NCAP-Noten für aktive und passive Sicherheit"
+      ],
+      "issues": [
+        {
+          "title": "Rückrufe: Airbags, Bremskraftverstärker, Lenksäule und Kraftstoffleitungen",
+          "affects": "Rückrufe 5/2013, 6/2017 und 9/2020 (Airbags), 7/2017 (Bremskraftverstärker; Benziner M270 und Diesel OM651, beim Diesel nur Linkslenker) und 10/2017 (Lenksäule); nur Diesel: 1/2015 (Vierzylinder OM651, Steuerkettenspanner) und 4/2016 (4-Zy…",
+          "detail": "Laut ADAC war die Airbag-Entfaltung durch eine fehlerhafte Perforierung der Beifahrerairbag-Abdeckung beeinträchtigt (5/2013), bei bestimmten Airbag-Zündpillen war das Mischungsverhältnis des Treibmittels fehlerhaft (6/2017) und im Airbagmodul konnte sich das Treibmittel unter speziellen klimatischen Bedingungen chemisch verändern (9/2020). Außerdem konnte der Anschlussstutzen der Unterdruckleitung am Bremskraftverstärker brechen (7/2017), die Lenksäule war nicht ausreichend geerdet (10/2017), und bei Dieselmotoren gab es Rückrufe wegen Rissen an den Kraftstoff-Hochdruckleitungen mit erhöhter…",
+          "check": "Per Fahrgestellnummer beim Händler prüfen lassen, ob die Rückrufe erledigt sind.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: Mercedes-Benz A-Klasse (2012-2018) Benziner",
+              "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0276-mercedes-benz-a-klasse-2012-2018-benziner-bericht.pdf"
+            },
+            {
+              "label": "ADAC Gebrauchtwageninfo: Mercedes-Benz A-Klasse (2012-2018) Diesel",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0277-mercedes-benz-a-klasse-2012-2018-diesel-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Jahrgang 2012 nur durchschnittlich in der Pannenstatistik",
+          "affects": "Benziner und Diesel: Erstzulassung 2012",
+          "detail": "Der ADAC stuft den Jahrgang 2012 mit „mittel“ ein, die Jahrgänge 2013 und 2014 dagegen mit „sehr gut“ und 2015 bis 2018 mit „gut“.",
+          "check": "Wenn möglich einen Jahrgang ab 2013 wählen; bei Fahrzeugen von 2012 Werkstatt- und Wartungsbelege zeigen lassen.",
+          "severity": "gering",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: Mercedes-Benz A-Klasse (2012-2018) Benziner",
+              "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0276-mercedes-benz-a-klasse-2012-2018-benziner-bericht.pdf"
+            },
+            {
+              "label": "ADAC Gebrauchtwageninfo: Mercedes-Benz A-Klasse (2012-2018) Diesel",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0277-mercedes-benz-a-klasse-2012-2018-diesel-bericht.pdf"
+            }
+          ]
+        }
+      ],
+      "engines": {
+        "recommended": [
+          {
+            "name": "A 180 und A 200 (Benziner)",
+            "why": "Laut ADAC passen beide gut zum Charakter der A-Klasse und sind am Gebrauchtwagenmarkt häufig zu finden; der 180er hat spürbar mehr Kraft als der A 160, die 200er sind nochmals etwas kräftiger."
+          },
+          {
+            "name": "A 180 und A 200 (Diesel, früher CDI)",
+            "why": "Laut ADAC merklich kräftiger als der Basisdiesel A 160 CDI, passend zum Charakter der A-Klasse und häufig im Angebot."
+          }
+        ],
+        "caution": [
+          {
+            "name": "A 160 / A 160 CDI (Basismotoren)",
+            "why": "Laut ADAC reicht der Basismotor für den Alltag prinzipiell aus, spätestens bei etwas mehr Beladung wünscht man sich aber mehr Leistung."
+          },
+          {
+            "name": "AMG-45-Modelle (bis 381 PS)",
+            "why": "Laut ADAC echte Sportwagen, aber im Einkauf und Unterhalt sehr teuer und daher nur für Liebhaber eine gute Wahl."
+          }
+        ]
+      },
+      "tips": [
+        "Bei Erstzulassung 2012 auf Wartungsnachweise achten; spätere Jahrgänge schneiden in der Pannenstatistik besser ab.",
+        "Beim Diesel nachfragen, ob die Rückrufe zum Steuerkettenspanner (1/2015) und zu den Kraftstoffleitungen (4/2016) erledigt sind.",
+        "Platz im Fond, Zustieg und Kofferraumöffnung beim Probesitzen testen; laut ADAC sind sie eng bzw. schmal.",
+        "Rundumsicht bei der Probefahrt prüfen; sie ist laut ADAC schlecht."
+      ]
+    },
+    {
+      "id": "mercedes-a-klasse-w177",
+      "name": "A-Klasse W177",
+      "code": "W177",
+      "years": [2018, null],
+      "bodyTypes": ["schraegheck", "limousine"],
+      "fuels": ["petrol", "diesel", "plugin_hybrid"],
+      "seats": [5],
+      "automatic": true,
+      "typicalPriceEur": null,
+      "priceSource": null,
+      "strengths": [],
+      "issues": [],
+      "engines": {
+        "recommended": [],
+        "caution": []
+      },
+      "tips": [
+        "Für diese Generation liegen noch wenige Gebrauchtwagen-Erfahrungen vor; Rückrufe per Fahrgestellnummer erfragen."
+      ]
+    }
+  ]
+}

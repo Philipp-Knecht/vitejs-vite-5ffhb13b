@@ -8,6 +8,7 @@ import { AnalyticsService } from './application/analytics-service';
 import { AuthService } from './application/auth-service';
 import { ContractService } from './application/contract-service';
 import { SavedListingService } from './application/saved-listing-service';
+import { SavedSearchService } from './application/saved-search-service';
 import { UsageService } from './application/usage-service';
 import type { AppConfig } from './config/env';
 import { createAiProvider } from './infrastructure/ai/create-provider';
@@ -43,6 +44,7 @@ export interface Services {
   analyses: AnalysisService;
   auth: AuthService;
   savedListings: SavedListingService;
+  savedSearches: SavedSearchService;
   billing: BillingService;
   account: AccountService;
   email: EmailService;
@@ -148,6 +150,7 @@ export function createServices(
     logger,
   );
   const savedListings = new SavedListingService(db, analyses, analytics, now);
+  const savedSearches = new SavedSearchService(db, analytics, now);
   const account = new AccountService(db, auth, billing);
 
   return {
@@ -161,6 +164,7 @@ export function createServices(
     analyses,
     auth,
     savedListings,
+    savedSearches,
     billing,
     account,
     email,

@@ -13,7 +13,7 @@
   },
   "scripts": {
     "typecheck": "tsc --noEmit -p tsconfig.json",
-    "catalog:index": "tsx scripts/build-index.ts"
+    "catalog:index": "tsx scripts/build-index.ts && prettier --write --log-level warn data"
   },
   "dependencies": {
     "@kaufcheck/shared": "1.0.0",

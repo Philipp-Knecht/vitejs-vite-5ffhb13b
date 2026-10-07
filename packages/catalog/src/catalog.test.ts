@@ -8,6 +8,8 @@ import {
   EMPTY_SEARCH,
   findModel,
   MAKES,
+  findListingModel,
+  findMake,
   makeById,
   modelById,
   MODELS,
@@ -209,5 +211,37 @@ describe('model knowledge files', () => {
         for (const issue of generation.issues) expect(issue.sources.length).toBeGreaterThan(0);
       }
     }
+  });
+});
+
+describe('listing vehicles', () => {
+  const match = (make: string, model: string) =>
+    findListingModel(findMake(make), model)?.id ?? null;
+
+  it('finds makes as listings name them', () => {
+    expect(findMake('VW')?.id).toBe('vw');
+    expect(findMake('Volkswagen')?.id).toBe('vw');
+    expect(findMake('Mercedes-Benz')?.id).toBe('mercedes');
+    expect(findMake('Skoda')?.id).toBe('skoda');
+    expect(findMake('Land Rover')?.id).toBe('land-rover');
+    expect(findMake('Trabant')).toBeNull();
+  });
+
+  it('finds models by name, longer names and type designations', () => {
+    expect(match('Volkswagen', 'Golf')).toBe('vw-golf');
+    expect(match('Volkswagen', 'Golf Variant 1.4 TSI Highline')).toBe('vw-golf');
+    expect(match('VW', 'T-Roc Cabriolet')).toBe('vw-t-roc');
+    expect(match('VW', 'up! move up!')).toBe('vw-up');
+    expect(match('BMW', '320d Touring')).toBe('bmw-3er');
+    expect(match('BMW', '218i Active Tourer')).toBe('bmw-2er-active-tourer');
+    expect(match('BMW', '218i Coupé')).toBe('bmw-2er');
+    expect(match('Mercedes-Benz', 'C 220 d T-Modell')).toBe('mercedes-c-klasse');
+    expect(match('Mercedes-Benz', 'E 300 de')).toBe('mercedes-e-klasse');
+    expect(match('Mercedes-Benz', 'Vito Tourer')).toBe('mercedes-v-klasse');
+    expect(match('Audi', 'A4 Avant 2.0 TDI')).toBe('audi-a4');
+    // No guessing: unknown or partial names stay unmatched.
+    expect(match('Volkswagen', 'Golfino')).toBeNull();
+    expect(match('Mercedes-Benz', 'G 350 d')).toBeNull();
+    expect(match('Volkswagen', '')).toBeNull();
   });
 });

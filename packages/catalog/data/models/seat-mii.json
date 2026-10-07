@@ -1,0 +1,180 @@
+{
+  "id": "seat-mii",
+  "make": "Seat",
+  "model": "Mii",
+  "aliases": ["mii", "mii ecofuel", "mii electric"],
+  "segment": "kleinstwagen",
+  "summary": "Der Mii ist die Seat-Version des VW up!: technisch weitgehend identisch, ein handlicher und sparsamer Stadtwagen mit vier Sitzen.",
+  "ratings": {
+    "reliability": 4,
+    "reliabilityNote": "Technisch baugleich mit up! und Citigo, die laut ADAC-Pannenstatistik 2026 zu den zuverlässigsten Kleinstwagen zählen (der Mii selbst wird dort nicht genannt). Beim TÜV-Report 2026 liegt der Mii im Schnitt (10–11 Jahre: 67,6 % ohne Mängel, Ø 64,8 %); Bremsen und Beleuchtung fallen auf.",
+    "reliabilitySources": [
+      {
+        "label": "AUTO BILD: Seat Mii – Schwachstellen, Mängel, Stärken, 28.09.2025",
+        "url": "https://www.autobild.de/artikel/seat-mii-schwachstellen-maengel-staerken-28350243.html"
+      },
+      {
+        "label": "ADAC Pannenstatistik 2026",
+        "url": "https://www.adac.de/rund-ums-fahrzeug/unfall-schaden-panne/adac-pannenstatistik-2026/"
+      }
+    ],
+    "runningCosts": 5,
+    "space": 2,
+    "comfort": 2
+  },
+  "generations": [
+    {
+      "id": "seat-mii-1",
+      "name": "Mii",
+      "code": null,
+      "years": [2011, 2021],
+      "bodyTypes": ["schraegheck"],
+      "fuels": ["petrol", "cng", "electric"],
+      "seats": [4],
+      "automatic": true,
+      "typicalPriceEur": null,
+      "priceSource": null,
+      "strengths": [
+        "Laut AUTO BILD ein wendiger Stadtwagen mit solider Stabilität, überschaubaren Unterhaltskosten und guter Rundumsicht.",
+        "Geringes Leergewicht (ab 929 kg) und laut AUTO BILD Verbrauch unter fünf Liter je 100 km.",
+        "Technisch baugleich mit dem VW up!."
+      ],
+      "issues": [
+        {
+          "title": "Automatisiertes Schaltgetriebe (ASG) nicht immer zuverlässig",
+          "affects": "ASG (automatisierte Schaltung) für die Saugbenziner, bis Herbst 2020",
+          "detail": "AUTO BILD schreibt, auch das automatisierte Schaltgetriebe ASG sorge (wie VWs DSG) beim Mii für Kummer; beim baugleichen up! nennt es AUTO BILD „nicht immer zuverlässig“, die AUTOHAUS-Auswertung (SP-X) „technisch anfällig“. Laut auto motor und sport schaltet es nur ruckfrei, wenn man dem Getriebe bewusst Zeit lässt.",
+          "check": "Ausgiebige Probefahrt (Anfahren, Rangieren, Gangwechsel); Handschalter als Alternative erwägen.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "AUTO BILD: Seat Mii – Schwachstellen, Mängel, Stärken, 28.09.2025",
+              "url": "https://www.autobild.de/artikel/seat-mii-schwachstellen-maengel-staerken-28350243.html"
+            },
+            {
+              "label": "AUTO BILD: VW Up – TÜV-Report (Schwachstellen, Mängel, Probleme), 13.01.2026",
+              "url": "https://www.autobild.de/artikel/vw-up-tuev-report-schwachstellen-maengel-probleme-28285313.html"
+            },
+            {
+              "label": "AUTOHAUS (SP-X): VW Up im Gebrauchtwagen-Check – Kurz und recht gut, 23.09.2024",
+              "url": "https://www.autohaus.de/nachrichten/autohersteller/gebrauchtwagen-check-vw-up-kurz-und-recht-gut-3557764"
+            },
+            {
+              "label": "auto motor und sport: VW Up (Typ AA) im Gebrauchtwagencheck, 20.12.2022",
+              "url": "https://www.auto-motor-und-sport.de/kleinwagen/gebrauchtwagen/gebrauchtwagencheck-vw-up-probleme-staerken-schwaechen/"
+            }
+          ]
+        },
+        {
+          "title": "Wassereintritt in den Innenraum",
+          "affects": "Mii, vor allem bis etwa Baujahr 2016 (Angabe zum baugleichen up!)",
+          "detail": "AUTO BILD nennt beim Mii eindringende Feuchtigkeit wegen verdreckter Wasserkästen. Beim baugleichen up! beschreibt auto motor und sport Wassereinbrüche bis Baujahr 2016 als „Running Gag“, am häufigsten über die Türschweller.",
+          "check": "Auf miefigen Geruch, Schimmel unter den Fußmatten und Nässe im Kofferraum achten; Wasserkästen unter der Windschutzscheibe prüfen.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "AUTO BILD: Seat Mii – Schwachstellen, Mängel, Stärken, 28.09.2025",
+              "url": "https://www.autobild.de/artikel/seat-mii-schwachstellen-maengel-staerken-28350243.html"
+            },
+            {
+              "label": "auto motor und sport: VW Up (Typ AA) im Gebrauchtwagencheck, 20.12.2022",
+              "url": "https://www.auto-motor-und-sport.de/kleinwagen/gebrauchtwagen/gebrauchtwagencheck-vw-up-probleme-staerken-schwaechen/"
+            }
+          ]
+        },
+        {
+          "title": "Bremsen und Beleuchtung häufig bei der HU beanstandet",
+          "affects": "Mii aller Baujahre",
+          "detail": "Laut AUTO BILD muss beim Prüfen von Fuß- und Feststellbremse überdurchschnittlich oft der Rotstift angesetzt werden; verstelltes Abblendlicht und defekte Rückleuchten bescheren dem Mii in allen Jahren rote Zahlen. Beim baugleichen up! gilt laut AUTO BILD: Licht ist leicht zu beheben, Bremsen werden teurer.",
+          "check": "Bremsen und Beleuchtung vor dem Kauf prüfen lassen; HU-Bericht ansehen.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "AUTO BILD: Seat Mii – Schwachstellen, Mängel, Stärken, 28.09.2025",
+              "url": "https://www.autobild.de/artikel/seat-mii-schwachstellen-maengel-staerken-28350243.html"
+            },
+            {
+              "label": "AUTO BILD: VW Up – TÜV-Report (Schwachstellen, Mängel, Probleme), 13.01.2026",
+              "url": "https://www.autobild.de/artikel/vw-up-tuev-report-schwachstellen-maengel-probleme-28285313.html"
+            },
+            {
+              "label": "AUTOHAUS (SP-X): VW Up im Gebrauchtwagen-Check – Kurz und recht gut, 23.09.2024",
+              "url": "https://www.autohaus.de/nachrichten/autohersteller/gebrauchtwagen-check-vw-up-kurz-und-recht-gut-3557764"
+            }
+          ]
+        },
+        {
+          "title": "Ölverlust bei jüngeren Fahrzeugen",
+          "affects": "Mii (jüngere Modelle; Angabe zum baugleichen up!)",
+          "detail": "Laut der AUTOHAUS-Auswertung (SP-X) ist Ölverlust bei jüngeren Modellen ein Thema bei der HU; die Autozeitung nennt ölfeuchte Motoren und/oder Getriebe unter den häufigsten Mängeln beim up!.",
+          "check": "Motor und Getriebe auf Ölfeuchtigkeit prüfen; eine frische HU-Plakette ist empfehlenswert.",
+          "severity": "gering",
+          "sources": [
+            {
+              "label": "AUTOHAUS (SP-X): VW Up im Gebrauchtwagen-Check – Kurz und recht gut, 23.09.2024",
+              "url": "https://www.autohaus.de/nachrichten/autohersteller/gebrauchtwagen-check-vw-up-kurz-und-recht-gut-3557764"
+            },
+            {
+              "label": "Autozeitung: VW Up gebraucht kaufen – Vor allem als e-Up empfehlenswert, 13.06.2025",
+              "url": "https://www.autozeitung.de/vw-up-baujahr-2011-134206.html"
+            }
+          ]
+        },
+        {
+          "title": "Korrosion rund um die Tankklappe",
+          "affects": "Mii bis Modelljahr 2016 (Angabe zum baugleichen up!)",
+          "detail": "Auto motor und sport schreibt, dass es beim up! rund um die Tankdeckelöffnung bis Modelljahr 2016 zu Korrosion bis hin zur Durchrostung des Seitenteils kommen konnte (beschädigte Beschichtung, Erdansammlungen im Tankstutzenbereich).",
+          "check": "Tankklappe und rechtes hinteres Seitenteil auf Blasen und Rost prüfen.",
+          "severity": "gering",
+          "sources": [
+            {
+              "label": "auto motor und sport: VW Up (Typ AA) im Gebrauchtwagencheck, 20.12.2022",
+              "url": "https://www.auto-motor-und-sport.de/kleinwagen/gebrauchtwagen/gebrauchtwagencheck-vw-up-probleme-staerken-schwaechen/"
+            }
+          ]
+        },
+        {
+          "title": "Klimaanlage, Erdgas-Tank und Rückrufe",
+          "affects": "Mii; rostige Gastanks nur Mii Ecofuel; Batterie-Brandgefahr nur Elektroversion",
+          "detail": "AUTO BILD nennt undichte Klimaanlagen, defekte Klimakompressoren und rostige Gastanks beim Ecofuel. Rückrufe betrafen die Diagnosesoftware des Airbagsteuergeräts, sich entriegelnde Kindersicherungen und Brandgefahr infolge eines Batteriedefekts.",
+          "check": "Klimaanlage prüfen; beim Ecofuel den Gastank auf Rost kontrollieren lassen; per Fahrgestellnummer klären, ob alle Rückrufe ausgeführt wurden.",
+          "severity": "gering",
+          "sources": [
+            {
+              "label": "AUTO BILD: Seat Mii – Schwachstellen, Mängel, Stärken, 28.09.2025",
+              "url": "https://www.autobild.de/artikel/seat-mii-schwachstellen-maengel-staerken-28350243.html"
+            }
+          ]
+        }
+      ],
+      "engines": {
+        "recommended": [
+          {
+            "name": "1.0 MPI (60 PS) mit Fünfgang-Handschaltung",
+            "why": "Auto motor und sport (beim up!): genügt für die meisten Fälle, das Fünfganggetriebe schaltet leicht und präzise."
+          },
+          {
+            "name": "Mii electric (Elektro, 2019–2021)",
+            "why": "Technisch identisch mit dem e-up!, den die Autozeitung für den E-Auto-Einstieg als absolute Empfehlung nennt; Batteriezustand unabhängig prüfen lassen."
+          }
+        ],
+        "caution": [
+          {
+            "name": "ASG (automatisierte Schaltung)",
+            "why": "AUTO BILD: nicht immer zuverlässig; AUTOHAUS/SP-X: technisch anfällig."
+          },
+          {
+            "name": "Ecofuel (Erdgas, 68 PS)",
+            "why": "AUTO BILD nennt beim Mii rostige Gastanks, beim up! pfeifende Gasdruckregler; laut auto motor und sport deutlich träger als die Benziner."
+          }
+        ]
+      },
+      "tips": [
+        "Fußräume, Teppiche und Kofferraum auf Nässe prüfen; Wasserkästen unter der Windschutzscheibe kontrollieren.",
+        "Bremsen, Abblendlicht und Rückleuchten gehören zu den häufigsten HU-Mängeln – HU-Bericht zeigen lassen.",
+        "Beim ASG ausgiebig probefahren oder einen Handschalter wählen."
+      ]
+    }
+  ],
+  "twinOf": "vw-up"
+}

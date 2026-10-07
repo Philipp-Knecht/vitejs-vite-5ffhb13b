@@ -1,0 +1,251 @@
+{
+  "id": "mercedes-b-klasse",
+  "make": "Mercedes-Benz",
+  "model": "B-Klasse",
+  "aliases": [
+    "b 150",
+    "b 160",
+    "b 160 cdi",
+    "b 170",
+    "b 180",
+    "b 180 cdi",
+    "b 180 d",
+    "b 200",
+    "b 200 cdi",
+    "b 200 d",
+    "b 220",
+    "b 220 d",
+    "b 250",
+    "b klasse",
+    "b-klasse",
+    "bklasse",
+    "w245",
+    "w246",
+    "w247"
+  ],
+  "segment": "van_klein",
+  "summary": "Kompakter Familienvan von Mercedes mit viel Platz, hochwertiger Verarbeitung und guter Zuverlässigkeit.",
+  "ratings": {
+    "reliability": 4,
+    "reliabilityNote": "Laut ADAC-Pannenstatistik sind die Jahrgänge 2012 bis 2018 der B-Klasse (W246) durchweg „gut“ und 2011 „mittel“, die Vorgängerbaureihe (2005-2011) liegt zwischen „mittel“ und „gut“. Im TÜV-Report 2022 schneidet die B-Klasse als bester Van ab und liegt weit über dem Durchschnitt; die Baureihe W247 ist in dieser Einstufung nicht berücksichtigt.",
+    "reliabilitySources": [
+      {
+        "label": "ADAC Gebrauchtwageninfo: Mercedes-Benz B-Klasse (2011-2018) Diesel",
+        "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0270-mercedes-benz-b-klasse-2011-2018-diesel-bericht.pdf"
+      },
+      {
+        "label": "ADAC Gebrauchtwageninfo: Mercedes-Benz B-Klasse (2005-2011)",
+        "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0137-mercedes-benz-b-klasse-2005-2011-bericht.pdf"
+      }
+    ],
+    "runningCosts": 3,
+    "space": 4,
+    "comfort": 4
+  },
+  "generations": [
+    {
+      "id": "mercedes-b-klasse-w245",
+      "name": "B-Klasse W245",
+      "code": "W245",
+      "years": [2005, 2011],
+      "bodyTypes": ["van"],
+      "fuels": ["petrol", "diesel", "cng"],
+      "seats": [5],
+      "automatic": true,
+      "typicalPriceEur": null,
+      "priceSource": null,
+      "strengths": [
+        "Gute Verarbeitung und einfache Bedienung",
+        "Großer, variabler Kofferraum und weiter Sitzeinstellbereich",
+        "Ausgewogene Federung und sicheres Fahrverhalten",
+        "ESP serienmäßig und hohe passive Sicherheit"
+      ],
+      "issues": [
+        {
+          "title": "Stufenloses Autotronic-Getriebe weniger langlebig",
+          "affects": "Stufenloses Autotronic-Getriebe (für alle Motorvarianten erhältlich); Automatikgetriebe als Bauteilfehler bei Baujahren 2005-2006",
+          "detail": "Laut ADAC gilt das stufenlose Autotronic-Getriebe als weniger langlebig als die sonst viel gelobten Wandler-Automatikgetriebe von Mercedes; bei den Baujahren 2005-2006 war das Automatikgetriebe zudem ein häufiger Bauteilfehler. Ein Getriebeschaden kann teuer werden.",
+          "check": "Bei Automatikmodellen auf der Probefahrt auf Auffälligkeiten achten und nach Wartungsbelegen sowie bereits getauschten Getriebeteilen fragen.",
+          "severity": "hoch",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: Mercedes-Benz B-Klasse (2005-2011)",
+              "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0137-mercedes-benz-b-klasse-2005-2011-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Rost bei Modellen vor dem Facelift",
+          "affects": "Modelle vor dem Facelift; betroffene Stellen im ADAC-Bericht nicht genannt",
+          "detail": "Laut ADAC haben Modelle vor dem Facelift zum Teil mit Rost zu kämpfen; an welchen Stellen, nennt der Bericht nicht.",
+          "check": "Karosserie und Unterboden gründlich auf Rost absuchen, am besten auf der Hebebühne.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: Mercedes-Benz B-Klasse (2005-2011)",
+              "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0137-mercedes-benz-b-klasse-2005-2011-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Antriebsriemen, Antriebswelle, Kraftstoffpumpe und Anlasser",
+          "affects": "Antriebsriemen 2005-2008 und 2010-2011, Antriebswelle 2005-2006, Kraftstoffpumpe 2005-2006, Anlasser 2005 und 2011, Starterbatterie 2011",
+          "detail": "Laut ADAC gehören diese Bauteile bei den genannten Baujahren zu den häufigen Bauteilfehlern, obwohl die B-Klasse insgesamt als zuverlässig und langlebig gilt. Ein Ausfall kann zu einer Panne führen.",
+          "check": "Zustand von Antriebsriemen und Batterie prüfen lassen und Belege zum Austausch von Riemen, Kraftstoffpumpe, Antriebswelle oder Anlasser erfragen.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: Mercedes-Benz B-Klasse (2005-2011)",
+              "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0137-mercedes-benz-b-klasse-2005-2011-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Bremsen: Probleme bei der verwandten A-Klasse im TÜV-Report",
+          "affects": "Bremsen; Aussage zur technisch eng verwandten A-Klasse, die B-Klasse taucht im TÜV-Report altersbedingt nicht mehr auf",
+          "detail": "Laut ADAC schneidet die technisch eng verwandte A-Klasse im TÜV-Report gut ab, nur an den Bremsen treten vermehrt Probleme auf. Mängel an den Bremsen sind sicherheitsrelevant.",
+          "check": "Bremsscheiben, Beläge und Bremsleitungen prüfen lassen und im letzten Hauptuntersuchungsbericht nach Bremsmängeln schauen.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: Mercedes-Benz B-Klasse (2005-2011)",
+              "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0137-mercedes-benz-b-klasse-2005-2011-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Rückrufe: Gurtschlösser",
+          "affects": "Rückruf 10/2008 (Gurtschlösser)",
+          "detail": "Laut ADAC konnte es bei hoher Belastung (Unfall) zum Bruch der Sperrklinken der Gurtschlösser kommen.",
+          "check": "Per Fahrgestellnummer beim Händler prüfen lassen, ob die Rückrufe erledigt sind.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: Mercedes-Benz B-Klasse (2005-2011)",
+              "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0137-mercedes-benz-b-klasse-2005-2011-bericht.pdf"
+            }
+          ]
+        }
+      ],
+      "engines": {
+        "recommended": [
+          {
+            "name": "B 200 (Benziner, 136 PS)",
+            "why": "Laut ADAC ein guter Kompromiss aus Fahrleistungen und Verbrauch."
+          },
+          {
+            "name": "B 200 CDI (Diesel, 140 PS)",
+            "why": "Laut ADAC verbindet der stärkere Diesel gute Fahrleistungen mit geringem Verbrauch."
+          },
+          {
+            "name": "Erdgasvariante",
+            "why": "Laut ADAC eine Alternative mit günstigen Kraftstoffkosten, die aber nur selten als Gebrauchtwagen angeboten wird."
+          }
+        ],
+        "caution": [
+          {
+            "name": "B 150 / B 160 (Basisbenziner, 95 PS)",
+            "why": "Laut ADAC durchzugsschwach; der Motor reicht zum Mitschwimmen abseits von Autobahnen, mehr aber nicht."
+          },
+          {
+            "name": "B 200 Turbo (193 PS)",
+            "why": "Laut ADAC sehr gute Fahrleistungen, aber hoher Verbrauch, und der Motor ist nur sehr selten zu finden."
+          }
+        ]
+      },
+      "tips": [
+        "Karosserie und Unterboden auf Rost prüfen, besonders bei Modellen vor dem Facelift.",
+        "Bei Automatik (Autotronic) auf der Probefahrt auf Auffälligkeiten achten und Wartungsnachweise verlangen.",
+        "Ausstattung prüfen: Kopfairbags waren laut ADAC nicht serienmäßig, ESP dagegen schon.",
+        "Zustand der Bremsen und des Antriebsriemens prüfen lassen."
+      ]
+    },
+    {
+      "id": "mercedes-b-klasse-w246",
+      "name": "B-Klasse W246",
+      "code": "W246",
+      "years": [2011, 2018],
+      "bodyTypes": ["van"],
+      "fuels": ["petrol", "diesel", "cng", "electric"],
+      "seats": [5],
+      "automatic": true,
+      "typicalPriceEur": null,
+      "priceSource": null,
+      "strengths": [
+        "Sehr gute Verarbeitung und zuverlässige Technik",
+        "Großzügiges Raumangebot, vorn und hinten bequem, breite Kofferraumöffnung",
+        "Sichere Fahreigenschaften und hohes Sicherheitsniveau",
+        "Sparsame Diesel und funktionelle Bedienung"
+      ],
+      "issues": [
+        {
+          "title": "Rückrufe: Sicherheitsgurte, Airbags, Lenksäule und Kraftstoffleitungen",
+          "affects": "Diesel: Rückrufe 8/2014 (Sicherheitsgurte), 6/2017 (Airbag-Zündpillen), 10/2017 (Lenksäule) und 10/2018 (Insassenklassifizierung Beifahrersitz); nur 4-Zylinder-Diesel: 1/2015 (OM651, Steuerkettenspanner) und 4/2016 (Kraftstoff-Hochdrucklei…",
+          "detail": "Laut ADAC war die Verschraubung der Sicherheitsgurte mit zu wenig Drehmoment erfolgt (8/2014), bei bestimmten Airbag-Zündpillen war das Mischungsverhältnis des Treibmittels fehlerhaft (6/2017), die Lenksäule war nicht ausreichend geerdet (10/2017) und die Kalibrierung des Insassenklassifizierungssystems für den Beifahrersitz entsprach bei bestimmten Fahrzeugen möglicherweise nicht der Spezifikation (10/2018). Bei Dieselmotoren gab es zudem Rückrufe wegen Rissen an den Kraftstoff-Hochdruckleitungen mit erhöhter Brandgefahr (4/2016) und wegen eines möglichen Ausfalls des Steuerkettenspanners (1…",
+          "check": "Per Fahrgestellnummer beim Händler prüfen lassen, ob die Rückrufe erledigt sind.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: Mercedes-Benz B-Klasse (2011-2018) Diesel",
+              "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0270-mercedes-benz-b-klasse-2011-2018-diesel-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Jahrgang 2011: Anlasser und Antriebsriemen",
+          "affects": "Erstzulassung 2011: Anlasser und Antriebsriemen",
+          "detail": "Der Jahrgang 2011 wird in der ADAC-Pannenstatistik nur mit „mittel“ eingestuft, die Jahrgänge 2012 bis 2018 dagegen mit „gut“; für 2011 nennt der ADAC Anlasser und Antriebsriemen als häufige Bauteilfehler.",
+          "check": "Bei Fahrzeugen von 2011 Anlasser, Batterie und Antriebsriemen prüfen lassen und Belege zu bereits getauschten Teilen zeigen lassen; wenn möglich einen späteren Jahrgang wählen.",
+          "severity": "gering",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: Mercedes-Benz B-Klasse (2011-2018) Diesel",
+              "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0270-mercedes-benz-b-klasse-2011-2018-diesel-bericht.pdf"
+            }
+          ]
+        }
+      ],
+      "engines": {
+        "recommended": [
+          {
+            "name": "B 180 und B 200 (Diesel, früher CDI)",
+            "why": "Laut ADAC spürbar bzw. merklich kräftiger als der Basisdiesel B 160 CDI, passend zum Charakter der B-Klasse und am Gebrauchtwagenmarkt häufig zu finden."
+          }
+        ],
+        "caution": [
+          {
+            "name": "B 160 CDI (Basisdiesel)",
+            "why": "Laut ADAC reicht er für den Alltag prinzipiell aus, spätestens bei etwas mehr Beladung wünscht man sich aber mehr Leistung."
+          }
+        ]
+      },
+      "tips": [
+        "Rückrufe (Sicherheitsgurte, Airbags, Lenksäule, Insassenklassifizierung Beifahrersitz) per Fahrgestellnummer klären, beim Diesel auch Steuerkettenspanner und Kraftstoffleitungen.",
+        "Bei Erstzulassung 2011 Anlasser, Batterie und Antriebsriemen prüfen lassen.",
+        "Bei Fahrzeugen bis 2013 auf der Probefahrt den Federungskomfort testen; das Sportfahrwerk ist laut ADAC hart.",
+        "Rundumsicht auf der Probefahrt prüfen; sie ist laut ADAC schlecht."
+      ]
+    },
+    {
+      "id": "mercedes-b-klasse-w247",
+      "name": "B-Klasse W247",
+      "code": "W247",
+      "years": [2018, 2026],
+      "bodyTypes": ["van"],
+      "fuels": ["petrol", "diesel", "plugin_hybrid"],
+      "seats": [5],
+      "automatic": true,
+      "typicalPriceEur": null,
+      "priceSource": null,
+      "strengths": [],
+      "issues": [],
+      "engines": {
+        "recommended": [],
+        "caution": []
+      },
+      "tips": [
+        "Für diese Generation liegen noch wenige Gebrauchtwagen-Erfahrungen vor; Rückrufe per Fahrgestellnummer erfragen."
+      ]
+    }
+  ]
+}

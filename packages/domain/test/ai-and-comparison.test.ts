@@ -254,7 +254,17 @@ describe('buildComparison', async () => {
     expect(comparison.rows.map((r) => r.key)).not.toEqual(
       expect.arrayContaining(['score', 'total', 'winner']),
     );
-    expect(comparison.notes[0]).toMatch(/keine Gesamtnote/);
+    expect(comparison.notes[0]).toMatch(/keine allgemeine Gesamtnote/);
+  });
+
+  it('passes the numbers on, so the buyer can weigh them', () => {
+    const price = comparison.rows.find((row) => row.key === 'price');
+    expect(price?.numbers).toHaveLength(comparison.items.length);
+    expect(price?.numbers?.every((value) => value === null || typeof value === 'number')).toBe(
+      true,
+    );
+    expect(comparison.rows.find((row) => row.key === 'fuel')?.numbers).toBeUndefined();
+    expect(typeof comparison.items[0]?.vehicle?.make).toBe('string');
   });
 
   it('lists equipment differences and missing information per listing', () => {

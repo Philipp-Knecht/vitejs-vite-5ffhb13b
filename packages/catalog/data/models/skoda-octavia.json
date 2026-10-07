@@ -1,0 +1,409 @@
+{
+  "id": "skoda-octavia",
+  "make": "Škoda",
+  "model": "Octavia",
+  "aliases": [
+    "octavia",
+    "octavia combi",
+    "octavia g-tec",
+    "octavia i",
+    "octavia ii",
+    "octavia iii",
+    "octavia iv",
+    "octavia kombi",
+    "octavia limousine",
+    "octavia rs",
+    "octavia scout",
+    "octavia tour",
+    "skoda octavia",
+    "škoda octavia"
+  ],
+  "segment": "kompakt",
+  "summary": "Geräumiger, einfach zu bedienender Kompaktwagen als Limousine oder Combi (Kombi) mit sehr großem Kofferraum und gutem Preis-Leistungs-Verhältnis.",
+  "ratings": {
+    "reliability": 4,
+    "reliabilityNote": "Laut ADAC-Pannenstatistik überwiegend „gut“: Octavia III Erstzulassung 2014–2016 gut (2013 mittel), Octavia II meist gut (2011 und 2012 mittel), Octavia I gut bis sehr gut. Im TÜV-Report liegt der Octavia II leicht unter, der Octavia III leicht über dem Durchschnitt; Schwachpunkte sind vor allem Federn und Dämpfer bei den oft sehr hohen Laufleistungen.",
+    "reliabilitySources": [
+      {
+        "label": "ADAC Gebrauchtwageninfo: Skoda Octavia (2013-2020) Benziner",
+        "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0242-skoda-octavia-2013-2020-benziner-bericht.pdf"
+      },
+      {
+        "label": "ADAC Gebrauchtwageninfo: Skoda Octavia (2004-2013) Diesel",
+        "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0114-skoda-octavia-2004-2013-diesel-bericht.pdf"
+      },
+      {
+        "label": "ADAC Gebrauchtwageninfo: Skoda Octavia (2004-2013) Benziner",
+        "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0124-skoda-octavia-2004-2013-benziner-bericht.pdf"
+      },
+      {
+        "label": "ADAC Gebrauchtwageninfo: Skoda Octavia (1997-2010) Benziner",
+        "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0405-skoda-octavia-1997-2010-benziner-bericht.pdf"
+      }
+    ],
+    "runningCosts": 4,
+    "space": 5,
+    "comfort": 4
+  },
+  "generations": [
+    {
+      "id": "skoda-octavia-i",
+      "name": "Octavia I",
+      "code": "1U",
+      "years": [1997, 2010],
+      "bodyTypes": ["limousine", "kombi"],
+      "fuels": ["petrol", "diesel"],
+      "seats": [5],
+      "automatic": true,
+      "typicalPriceEur": null,
+      "priceSource": null,
+      "strengths": [
+        "Solide Verarbeitung; laut ADAC ein solides, langlebiges Auto, das bei korrekter Wartung sehr hohe Laufleistungen erreicht",
+        "Großzügiges Raumangebot vorn und riesiger Kofferraum",
+        "Sichere Fahreigenschaften und übersichtliches Cockpit",
+        "Gutes Preis-Leistungs-Verhältnis"
+      ],
+      "issues": [
+        {
+          "title": "Rost an Heckklappe und vorderen Kotflügeln",
+          "affects": "alle Octavia I; Karosserie, vor allem Heckklappe und vordere Kotflügel",
+          "detail": "Laut ADAC tritt teilweise Rostbefall auf; vor allem Heckklappe und vordere Kotflügel sind oft stark betroffen. Je nach Umfang sind Reparaturen aufwendig.",
+          "check": "Heckklappe und vordere Kotflügel (Kanten, Falze, Radläufe) auf Rostblasen, Farbunterschiede und Spachtelstellen prüfen.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: Skoda Octavia (1997-2010) Benziner",
+              "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0405-skoda-octavia-1997-2010-benziner-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Verschleißanfällige Kupplung",
+          "affects": "alle Octavia I (laut ADAC ohne Einschränkung auf Motor oder Baujahr)",
+          "detail": "Laut ADAC gehören die verschleißanfälligen Kupplungen zu den bekannten Schwachstellen des Octavia I. Eine verschlissene Kupplung muss ersetzt werden, was spürbare Kosten verursacht.",
+          "check": "Bei der Probefahrt auf Rutschen oder Rupfen beim Anfahren achten und fragen, ob die Kupplung schon erneuert wurde.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: Skoda Octavia (1997-2010) Benziner",
+              "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0405-skoda-octavia-1997-2010-benziner-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Defektes Zündschloss als häufigste Ursache fürs Liegenbleiben",
+          "affects": "Erstzulassung 2005–2010",
+          "detail": "Laut ADAC sorgt am ehesten ein defektes Zündschloss für Liegenbleiber; der Bericht nennt es für die Erstzulassungen 2005 bis 2010.",
+          "check": "Startverhalten bei kaltem und warmem Motor testen und fragen, ob das Zündschloss schon getauscht wurde.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: Skoda Octavia (1997-2010) Benziner",
+              "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0405-skoda-octavia-1997-2010-benziner-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Defekte Beleuchtungseinrichtungen",
+          "affects": "alle Octavia I",
+          "detail": "Laut ADAC gehören defekte Beleuchtungseinrichtungen zu den bekannten Schwachstellen des Octavia I.",
+          "check": "Alle Leuchten (Abblend-, Fern-, Brems- und Blinklicht) durchprobieren und den Zustand der Scheinwerfer ansehen.",
+          "severity": "gering",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: Skoda Octavia (1997-2010) Benziner",
+              "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0405-skoda-octavia-1997-2010-benziner-bericht.pdf"
+            }
+          ]
+        }
+      ],
+      "engines": {
+        "recommended": [
+          {
+            "name": "1.6 (101/102 PS)",
+            "why": "Laut ADAC passt er besser in den Alltag als die schwachen 75-PS-Basismotoren; alle Benziner gelten bei regelmäßiger Wartung als unkompliziert und langlebig."
+          },
+          {
+            "name": "1.8 (125 PS) und 2.0 (115 PS)",
+            "why": "Laut ADAC gehen sie durchaus flott zu Werke und gelten bei regelmäßiger Wartung als langlebig; sonderlich sparsam ist laut ADAC keiner der Benziner."
+          }
+        ],
+        "caution": [
+          {
+            "name": "1.4 und 1.6 mit 75 PS",
+            "why": "Laut ADAC stellen diese Basismotoren nur wenig Kraft zur Verfügung und sind sehr müde im Durchzug."
+          }
+        ]
+      },
+      "tips": [
+        "Heckklappe und vordere Kotflügel gezielt auf Rost prüfen.",
+        "Kupplung bei der Probefahrt prüfen (Rutschen, Rupfen); sie gilt laut ADAC als verschleißanfällig.",
+        "Startverhalten testen: Das Zündschloss ist laut ADAC die häufigste Ursache fürs Liegenbleiben.",
+        "Auf nachweisbare, regelmäßige Wartung achten: Bei korrekter Wartung kann ein Octavia I laut ADAC ein langes Leben erreichen."
+      ]
+    },
+    {
+      "id": "skoda-octavia-ii",
+      "name": "Octavia II",
+      "code": "1Z",
+      "years": [2004, 2013],
+      "bodyTypes": ["limousine", "kombi"],
+      "fuels": ["petrol", "diesel"],
+      "seats": [5],
+      "automatic": true,
+      "typicalPriceEur": null,
+      "priceSource": null,
+      "strengths": [
+        "Großzügiges Raumangebot und sehr großer Kofferraum, im Combi hinten noch etwas mehr Platz",
+        "Solide Verarbeitung; laut ADAC ein solides und langlebiges Fahrzeug",
+        "Sichere Fahreigenschaften, bequeme Sitze und einfache Bedienung",
+        "Sparsame Diesel; der 1.9 TDI gilt als besonders haltbar"
+      ],
+      "issues": [
+        {
+          "title": "Anfällige Steuerketten bei 1.2 TSI und 1.4 TSI",
+          "affects": "Benziner 1.2 TSI und 1.4 TSI",
+          "detail": "Laut ADAC haben diese Motoren anfällige Steuerketten; Rasselgeräusche aus dem Motor sind ein Warnzeichen. Im Zweifel ist ein Auto mit bereits ersetzter Steuerkette die bessere Wahl.",
+          "check": "Beim Kaltstart und im Leerlauf auf Rasselgeräusche achten und einen Beleg für einen Steuerkettenwechsel verlangen.",
+          "severity": "hoch",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: Skoda Octavia (2004-2013) Benziner",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0124-skoda-octavia-2004-2013-benziner-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Defektes Zündschloss als Pannenursache Nummer eins",
+          "affects": "Benziner und Diesel; Erstzulassung 2006–2011",
+          "detail": "Laut ADAC ist das Zündschloss die häufigste Pannenursache des Octavia II; der Bericht nennt es für die Erstzulassungen 2006 bis 2011.",
+          "check": "Start- und Zündverhalten testen und fragen, ob das Zündschloss schon einmal getauscht wurde.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: Skoda Octavia (2004-2013) Diesel",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0114-skoda-octavia-2004-2013-diesel-bericht.pdf"
+            },
+            {
+              "label": "ADAC Gebrauchtwageninfo: Skoda Octavia (2004-2013) Benziner",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0124-skoda-octavia-2004-2013-benziner-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Erhöhter Ölverbrauch bei 1.8 TSI und 2.0 TFSI/TSI",
+          "affects": "Benziner 1.8 TSI und 2.0 TFSI/TSI (u. a. im RS)",
+          "detail": "Laut ADAC neigen diese Motoren zu erhöhtem Öldurst, der Ölverbrauch sollte kontrolliert werden. Das bedeutet laufendes Nachfüllen und im Zweifel zusätzliche Kosten.",
+          "check": "Ölstand bei der Besichtigung prüfen, nach dem Ölverbrauch fragen und die Ölwechsel-Belege ansehen.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: Skoda Octavia (2004-2013) Benziner",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0124-skoda-octavia-2004-2013-benziner-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Gebrochene Federn und verschlissene Dämpfer",
+          "affects": "Benziner und Diesel; besonders bei den oft weit überdurchschnittlichen Laufleistungen",
+          "detail": "Laut ADAC bemängelt der TÜV hauptsächlich gebrochene Fahrwerksfedern; unter den weit überdurchschnittlichen Laufleistungen leiden besonders Federn und Dämpfer.",
+          "check": "Fahrwerk auf Klappern und Poltern prüfen, Federn und Dämpfer in der Werkstatt kontrollieren lassen und den letzten HU-Bericht ansehen.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: Skoda Octavia (2004-2013) Diesel",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0114-skoda-octavia-2004-2013-diesel-bericht.pdf"
+            },
+            {
+              "label": "ADAC Gebrauchtwageninfo: Skoda Octavia (2004-2013) Benziner",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0124-skoda-octavia-2004-2013-benziner-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Rückrufe: Kraftstoffleitungen (2.0 CR TDI), DSG- und Tacho-Software",
+          "affects": "2.0 CR TDI (Rückruf 1/2012); Sechsgang-DSG (11/2009); Tacho und Tankanzeige (8/2009)",
+          "detail": "Laut ADAC gab es einen Rückruf wegen möglicher Schwingungsrisse an den Kraftstoff-Hochdruckleitungen des 2.0 CR TDI, durch die Kraftstoff austreten kann. Außerdem gab es Software-Rückrufe wegen möglicher Schaltprobleme beim Sechsgang-DSG und wegen fehlerhafter Anzeigewerte von Tacho und Tankanzeige.",
+          "check": "Per Fahrgestellnummer beim Händler prüfen lassen, ob die Rückrufe erledigt sind.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: Skoda Octavia (2004-2013) Diesel",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0114-skoda-octavia-2004-2013-diesel-bericht.pdf"
+            },
+            {
+              "label": "ADAC Gebrauchtwageninfo: Skoda Octavia (2004-2013) Benziner",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0124-skoda-octavia-2004-2013-benziner-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Defekte Beleuchtungseinheiten",
+          "affects": "Benziner und Diesel",
+          "detail": "Laut ADAC treten defekte Beleuchtungseinheiten häufig auf; der TÜV bemängelt sie vermehrt.",
+          "check": "Alle Leuchten durchprobieren und im letzten HU-Bericht nach Beleuchtungsmängeln suchen.",
+          "severity": "gering",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: Skoda Octavia (2004-2013) Diesel",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0114-skoda-octavia-2004-2013-diesel-bericht.pdf"
+            },
+            {
+              "label": "ADAC Gebrauchtwageninfo: Skoda Octavia (2004-2013) Benziner",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0124-skoda-octavia-2004-2013-benziner-bericht.pdf"
+            }
+          ]
+        }
+      ],
+      "engines": {
+        "recommended": [
+          {
+            "name": "2.0 TDI (140 PS)",
+            "why": "Laut ADAC passt er am besten zum Octavia; er ist oft auf dem Gebrauchtwagenmarkt zu finden, häufig mit DSG-Automatik oder Allradantrieb."
+          },
+          {
+            "name": "1.9 TDI (Pumpe-Düse, 105 PS, bis 2009)",
+            "why": "Laut ADAC läuft er relativ laut, gilt aber als enorm robust („legendäre Haltbarkeit“) und lässt sich sparsam fahren; schon 105 PS reichen für den normalen Verkehr völlig aus."
+          },
+          {
+            "name": "1.6 (102 PS)",
+            "why": "Laut ADAC passt der 1.6 besser als der müde 1.4 mit 75 oder 80 PS."
+          }
+        ],
+        "caution": [
+          {
+            "name": "1.2 TSI und 1.4 TSI",
+            "why": "Laut ADAC ein guter Kompromiss aus Leistung und Verbrauch, aber mit anfälligen Steuerketten; auf Rasselgeräusche achten, im Zweifel ein Auto mit bereits ersetzter Steuerkette wählen."
+          },
+          {
+            "name": "1.8 TSI und 2.0 TFSI/TSI (RS)",
+            "why": "Laut ADAC sehr flott, aber mit Neigung zu erhöhtem Ölverbrauch; Ölverbrauch kontrollieren."
+          }
+        ]
+      },
+      "tips": [
+        "Bei 1.2 und 1.4 TSI beim Kaltstart auf Rasselgeräusche achten und nach einem Steuerkettenwechsel fragen.",
+        "Bei 1.8 TSI und 2.0 TFSI/TSI den Ölstand prüfen und nach dem Ölverbrauch fragen.",
+        "Startverhalten (Zündschloss), Federn und Dämpfer sowie die Beleuchtung gezielt prüfen: Das sind laut ADAC die häufigsten Auffälligkeiten.",
+        "Bei Common-Rail-Dieseln (ab 2009) nachfragen, ob das verpflichtende Software-Update zur Senkung der Stickoxid-Emissionen durchgeführt wurde."
+      ]
+    },
+    {
+      "id": "skoda-octavia-iii",
+      "name": "Octavia III",
+      "code": "5E",
+      "years": [2013, 2020],
+      "bodyTypes": ["limousine", "kombi"],
+      "fuels": ["petrol", "diesel", "cng"],
+      "seats": [5],
+      "automatic": true,
+      "typicalPriceEur": null,
+      "priceSource": null,
+      "strengths": [
+        "Sehr großzügiges Raumangebot und üppiger Kofferraum mit mehr Stauvolumen als bei vielen größeren und teureren Autos",
+        "Gute Verarbeitung und zuverlässige Technik",
+        "Einfache Bedienung und sehr sicheres Fahrverhalten",
+        "Gutes Preis-Leistungs-Verhältnis und sparsame Motoren"
+      ],
+      "issues": [
+        {
+          "title": "Gebrochene Federn und anfälliges Fahrwerk",
+          "affects": "alle Octavia III, vor allem Fahrzeuge mit weit überdurchschnittlicher Laufleistung",
+          "detail": "Laut ADAC bemängelt der TÜV bei den Hauptuntersuchungen vermehrt gebrochene Federn, allerdings bei weit überdurchschnittlichen Laufleistungen; der Bericht nennt das Fahrwerk als anfällig.",
+          "check": "Federn und Fahrwerk in der Werkstatt prüfen lassen, den letzten HU-Bericht ansehen und nach Laufleistung und bisheriger Nutzung fragen.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: Skoda Octavia (2013-2020) Benziner",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0242-skoda-octavia-2013-2020-benziner-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Kühlwasserpumpe (2013) und Ladedruckregelung (2015) als Pannenschwerpunkte",
+          "affects": "Erstzulassung 2013 (Kühlwasserpumpe) und 2015 (Ladedruckregelung); Motoren laut ADAC nicht genannt",
+          "detail": "Laut ADAC stehen diese Bauteile bei den genannten Jahrgängen unter den häufigen Bauteilfehlern. Der Jahrgang 2013 wird in der Pannenstatistik mit „mittel“ eingestuft, 2014 bis 2016 mit „gut“.",
+          "check": "Bei diesen Jahrgängen nach Reparaturen an Kühlwasserpumpe oder Ladedruckregelung fragen und bei der Probefahrt auf Warnleuchten und Leistungsverlust achten.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: Skoda Octavia (2013-2020) Benziner",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0242-skoda-octavia-2013-2020-benziner-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Rückrufe: hinterer Radträger",
+          "affects": "hinterer Radträger (Rückruf 12/2017); betroffene Baujahre und Motoren laut ADAC nicht genannt",
+          "detail": "Laut ADAC gab es einen Rückruf (12/2017), weil der hintere Radträger nicht fest genug ist. Ob er bei einem bestimmten Auto schon erledigt wurde, lässt sich über die Fahrgestellnummer klären.",
+          "check": "Per Fahrgestellnummer beim Händler prüfen lassen, ob die Rückrufe erledigt sind.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: Skoda Octavia (2013-2020) Benziner",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0242-skoda-octavia-2013-2020-benziner-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Teils ruckartiges Anfahren mit DSG",
+          "affects": "Modelle mit DSG-Getriebe",
+          "detail": "Laut ADAC kommt es mit dem DSG teils zu ruckartigem Anfahren. Das mindert vor allem den Fahrkomfort beim Anfahren.",
+          "check": "Bei der Probefahrt mehrmals aus dem Stand und im Stop-and-go anfahren und auf Ruckeln achten.",
+          "severity": "gering",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: Skoda Octavia (2013-2020) Benziner",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0242-skoda-octavia-2013-2020-benziner-bericht.pdf"
+            }
+          ]
+        }
+      ],
+      "engines": {
+        "recommended": [
+          {
+            "name": "1.4 TSI und 1.5 TSI (u. a. 150 PS mit Zylinderabschaltung)",
+            "why": "Laut ADAC deutlich souveräner unterwegs als mit den Basismotoren; die 150-PS-Version (110 kW) bietet dank Zylinderabschaltung einen guten Kompromiss aus Leistung und Verbrauch."
+          },
+          {
+            "name": "G-Tec (Erdgas)",
+            "why": "Laut ADAC eine interessante Alternative: sehr niedrige Kraftstoffkosten bei vollkommen ausreichenden Fahrleistungen."
+          }
+        ],
+        "caution": [
+          {
+            "name": "1.2 TSI und 1.0 TSI (Basismotoren)",
+            "why": "Laut ADAC sehr leise und laufruhig, im beladenen Zustand wünscht man sich jedoch etwas mehr Leistung."
+          }
+        ]
+      },
+      "tips": [
+        "Federn und Fahrwerk prüfen lassen: Der TÜV bemängelt laut ADAC vermehrt gebrochene Federn, vor allem bei hohen Laufleistungen.",
+        "Bei DSG-Modellen mehrmals aus dem Stand anfahren und auf Ruckeln achten.",
+        "Bei Erstzulassung 2013 oder 2015 nach Reparaturen an Kühlwasserpumpe bzw. Ladedruckregelung fragen.",
+        "Rückruf zum hinteren Radträger (12/2017) per Fahrgestellnummer prüfen lassen."
+      ]
+    },
+    {
+      "id": "skoda-octavia-iv",
+      "name": "Octavia IV",
+      "code": "NX",
+      "years": [2020, null],
+      "bodyTypes": ["limousine", "kombi"],
+      "fuels": ["petrol", "diesel", "hybrid", "plugin_hybrid", "cng"],
+      "seats": [5],
+      "automatic": true,
+      "typicalPriceEur": null,
+      "priceSource": null,
+      "strengths": [],
+      "issues": [],
+      "engines": {
+        "recommended": [],
+        "caution": []
+      },
+      "tips": [
+        "Für diese Generation liegen noch wenige Gebrauchtwagen-Erfahrungen vor; Rückrufe per Fahrgestellnummer erfragen."
+      ]
+    }
+  ]
+}

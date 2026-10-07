@@ -13,7 +13,9 @@ press), engines to prefer or avoid and inspection tips. Each researched model ge
 page (`/modelle/<id>`, overview at `/modelle`). The advisor (`/auto-berater`) asks a few questions
 about budget, use and space and ranks the researched models with a transparent points system
 (`packages/catalog/src/advisor.ts`); it is linked once at least 40 models are researched
-(`apps/web/src/features/advisor/availability.ts`).
+(`apps/web/src/features/advisor/availability.ts`). The listing check shows the known weaknesses of
+the listed model's generation, the comparison orders saved offers by the buyer's own priorities
+(`packages/shared/src/comparison-ranking.ts`), and Pro members can save searches.
 
 For the listing check, a user pastes the listing text (or a link); KaufCheck extracts and
 normalizes the vehicle data and shows a mobile-first dashboard:
@@ -427,6 +429,7 @@ already reserved in the contracts and the database.
 - Official data sources or partner APIs instead of page retrieval; a browser extension that
   imports the listing the user is viewing.
 - Richer market context as more verified comparables accumulate.
-- Saved-search alerts and price-change notifications for saved listings.
+- Alerts for saved searches and price-change notifications for saved listings (both need licensed
+  listing data – KaufCheck does not query the marketplaces itself).
 - PDF export of an analysis and the checklist.
 - Integration of a privacy-friendly ad network behind the existing `AdSlot` abstraction.

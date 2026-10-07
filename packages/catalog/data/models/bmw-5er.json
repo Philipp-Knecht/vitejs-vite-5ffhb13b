@@ -1,0 +1,370 @@
+{
+  "id": "bmw-5er",
+  "make": "BMW",
+  "model": "5er",
+  "aliases": [
+    "518d",
+    "520d",
+    "520i",
+    "523i",
+    "525d",
+    "525i",
+    "528i",
+    "530d",
+    "530e",
+    "530i",
+    "535d",
+    "535i",
+    "540i",
+    "545e",
+    "545i",
+    "550e",
+    "550i",
+    "5er",
+    "5er kombi",
+    "5er limousine",
+    "5er reihe",
+    "5er touring",
+    "5er-reihe",
+    "bmw 5er",
+    "i5",
+    "m5",
+    "m550d"
+  ],
+  "segment": "obere_mittelklasse",
+  "summary": "Große, komfortable Limousine und Touring (Kombi) der oberen Mittelklasse mit hochwertiger Verarbeitung und viel Platz; laut ADAC ab Erstzulassung 2011 pannensicher, im Unterhalt aber teuer.",
+  "ratings": {
+    "reliability": 4,
+    "reliabilityNote": "Laut ADAC wird der 5er F10 (2010–2017) ab Erstzulassung 2011 als gut, ab 2014 als sehr gut eingestuft (2010: mittel); der Vorgänger E60/E61 war bis 2006 sehr schlecht, 2007 schlecht, 2008–2010 mittel. Beim TÜV fallen beim F10 vor allem Achsgelenke, Federn und Antriebswellenmanschetten auf.",
+    "reliabilitySources": [
+      {
+        "label": "ADAC Gebrauchtwageninfo: BMW 5er-Reihe (2010-2017) Benziner",
+        "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0127-bmw-5er-reihe-2010-2017-benziner-bericht.pdf"
+      },
+      {
+        "label": "ADAC Gebrauchtwageninfo: BMW 5er-Reihe (2010-2017) Diesel",
+        "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0133-bmw-5er-reihe-2010-2017-diesel-bericht.pdf"
+      },
+      {
+        "label": "ADAC Gebrauchtwageninfo: BMW 5er-Reihe (2003-2010) Benziner",
+        "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0109-bmw-5er-reihe-2003-2010-benziner-bericht.pdf"
+      },
+      {
+        "label": "ADAC Gebrauchtwageninfo: BMW 5er-Reihe (2003-2010) Diesel",
+        "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0108-bmw-5er-reihe-2003-2010-diesel-bericht.pdf"
+      }
+    ],
+    "runningCosts": 2,
+    "space": 4,
+    "comfort": 5
+  },
+  "generations": [
+    {
+      "id": "bmw-5er-e60",
+      "name": "5er E60/E61",
+      "code": "E60 / E61",
+      "years": [2003, 2010],
+      "bodyTypes": ["limousine", "kombi"],
+      "fuels": ["petrol", "diesel"],
+      "seats": [5],
+      "automatic": true,
+      "typicalPriceEur": null,
+      "priceSource": null,
+      "strengths": [
+        "Gute Verarbeitung, guter Federungskomfort und sehr bequeme Sitze",
+        "Gute Fahreigenschaften und kräftige Bremsen",
+        "Exzellente Reihensechszylinder bei Benzinern und Dieseln mit hervorragender Laufruhe",
+        "Der Touring nimmt laut ADAC auch das Urlaubsgepäck einer mehrköpfigen Familie auf"
+      ],
+      "issues": [
+        {
+          "title": "Elektrik der frühen Jahrgänge: Generator, Anlasser, Batterie",
+          "affects": "Benziner und Diesel: Anlasser 2004–2009, Generator 2003–2006 und 2008–2009 (Diesel bis 2010), Starterbatterie 2003–2005, Batteriesensor 2005–2006",
+          "detail": "Laut ADAC fallen in der Pannenstatistik vor allem Autos bis Baujahr 2006 negativ auf und leiden unter einem stark erhöhten Pannenrisiko; besonders defekte Generatoren und Anlasser sorgen für Liegenbleiber.",
+          "check": "Möglichst ein späteres Baujahr wählen; Anlasser, Generator und Batterie bei der Probefahrt (auch beim Kaltstart) auf Funktion prüfen und nach Belegen für Reparaturen fragen.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: BMW 5er-Reihe (2003-2010) Benziner",
+              "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0109-bmw-5er-reihe-2003-2010-benziner-bericht.pdf"
+            },
+            {
+              "label": "ADAC Gebrauchtwageninfo: BMW 5er-Reihe (2003-2010) Diesel",
+              "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0108-bmw-5er-reihe-2003-2010-diesel-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Riemenscheibe der Kurbelwelle fällt häufig auf",
+          "affects": "Riemenscheibe (Kurbelwelle): Erstzulassungen 2006–2009 (Benziner) und 2006–2010 (Diesel); Antriebsriemen: 2005",
+          "detail": "Laut ADAC zählt die Riemenscheibe an der Kurbelwelle bei diesen Jahrgängen zu den häufigen Bauteilfehlern der Pannenstatistik; beim Antriebsriemen fiel der Jahrgang 2005 auf.",
+          "check": "Den Riementrieb vor dem Kauf auf Geräusche und Spiel prüfen lassen und nach Belegen für erneuerte Riemenscheiben oder Riemen fragen.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: BMW 5er-Reihe (2003-2010) Benziner",
+              "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0109-bmw-5er-reihe-2003-2010-benziner-bericht.pdf"
+            },
+            {
+              "label": "ADAC Gebrauchtwageninfo: BMW 5er-Reihe (2003-2010) Diesel",
+              "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0108-bmw-5er-reihe-2003-2010-diesel-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "HU: ölende Antriebseinheiten, ausgeschlagene Lenkgelenke, poröse Bremsschläuche",
+          "affects": "Benziner und Diesel der 5er-Reihe 2003–2010",
+          "detail": "Der TÜV bescheinigt dem 5er laut ADAC Solidität im Mittelfeld; Problemfelder sind besonders ölende Antriebseinheiten, ausgeschlagene Lenkgelenke und poröse Bremsschläuche.",
+          "check": "Antriebseinheiten und Unterboden auf Ölspuren prüfen, Spiel in den Lenkgelenken und den Zustand der Bremsschläuche kontrollieren lassen.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: BMW 5er-Reihe (2003-2010) Benziner",
+              "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0109-bmw-5er-reihe-2003-2010-benziner-bericht.pdf"
+            },
+            {
+              "label": "ADAC Gebrauchtwageninfo: BMW 5er-Reihe (2003-2010) Diesel",
+              "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0108-bmw-5er-reihe-2003-2010-diesel-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Rückrufe: Beifahrerairbag, Fahrerairbag, Batteriekabel (Brandgefahr), Stoßdämpfer",
+          "affects": "Rückrufe 7/2006 (hintere Stoßdämpfer, Modelljahr 2006), 9/2008 (Beifahrerairbag), 3/2012 (Batteriekabel, Brandgefahr), 3/2020 (Fahrerairbag); V8/V12: 10/2010 (Bremskraftverstärker)",
+          "detail": "Laut ADAC löste bei defekter Sensormatte der Beifahrersitzbelegungserkennung der Beifahrerairbag im Unfall nicht aus (9/2008); ein Fehler im Gasgenerator des Fahrerairbags kann zu unkontrollierter Entfaltung und Verletzungen führen (3/2020); ein Montagefehler an der Batteriekabelabdeckung im Kofferraum kann einen Kurzschluss mit Brandgefahr verursachen (3/2012). Weitere Rückrufe betrafen die Befestigung der hinteren Stoßdämpfer (7/2006) und bei V8/V12 die Bremskraftunterstützung (10/2010).",
+          "check": "Per Fahrgestellnummer beim Händler prüfen lassen, ob die Rückrufe erledigt sind.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: BMW 5er-Reihe (2003-2010) Benziner",
+              "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0109-bmw-5er-reihe-2003-2010-benziner-bericht.pdf"
+            },
+            {
+              "label": "ADAC Gebrauchtwageninfo: BMW 5er-Reihe (2003-2010) Diesel",
+              "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0108-bmw-5er-reihe-2003-2010-diesel-bericht.pdf"
+            }
+          ]
+        }
+      ],
+      "engines": {
+        "recommended": [
+          {
+            "name": "525i (218 PS) und 530i (bis 272 PS)",
+            "why": "Laut ADAC souverän beziehungsweise richtig nobel; die kräftigen Sechszylinder glänzen mit hervorragender Laufruhe und enormer Drehfreudigkeit."
+          },
+          {
+            "name": "530d",
+            "why": "Laut ADAC die goldene Mitte: Man hat nie das Gefühl, mehr Leistung zu brauchen, und die Versionen sind häufig auf dem Gebrauchtwagenmarkt zu finden."
+          },
+          {
+            "name": "535d (selten)",
+            "why": "Laut ADAC herausragende Fahrleistungen für einen Diesel dieser Altersklasse; der Motor ist aber selten zu finden."
+          },
+          {
+            "name": "Modelle mit Allradantrieb (Diesel)",
+            "why": "Laut ADAC eine Option für bergige Gegenden und häufigen Anhängerbetrieb."
+          }
+        ],
+        "caution": [
+          {
+            "name": "520i (ab 2005 Vierzylinder)",
+            "why": "Laut ADAC reichen die Fahrleistungen im Alltag, sind für einen großen BMW aber nicht wirklich standesgemäß; bis 2005 war der 520i ein laufruhiger Reihensechszylinder, danach ein Vierzylinder."
+          },
+          {
+            "name": "Achtzylinder (540i, 545i, 550i) und M5 (V10)",
+            "why": "Laut ADAC selten zu finden und im Einkauf wie im Unterhalt ziemlich teuer; der M5 ist noch teurer und nur für Liebhaber eine gute Wahl."
+          }
+        ]
+      },
+      "tips": [
+        "Je jünger der Jahrgang, desto besser: Autos bis Baujahr 2006 haben laut ADAC ein stark erhöhtes Pannenrisiko.",
+        "Anlasser, Generator und Batterie prüfen lassen; defekte Generatoren und Anlasser sorgen laut ADAC für Liegenbleiber.",
+        "Auf Ölspuren an den Antriebseinheiten, Spiel in den Lenkgelenken und poröse Bremsschläuche achten (typische HU-Mängel).",
+        "Rückrufstatus per Fahrgestellnummer erfragen, besonders Beifahrer- und Fahrerairbag sowie die Batteriekabelabdeckung im Kofferraum."
+      ]
+    },
+    {
+      "id": "bmw-5er-f10",
+      "name": "5er F10",
+      "code": "F10 / F11",
+      "years": [2010, 2017],
+      "bodyTypes": ["limousine", "kombi"],
+      "fuels": ["petrol", "diesel"],
+      "seats": [5],
+      "automatic": true,
+      "typicalPriceEur": null,
+      "priceSource": null,
+      "strengths": [
+        "Hochwertige Verarbeitung und Materialauswahl, einfache Bedienung",
+        "Viel Platz im Innenraum, hoher Komfort und bequeme Sitze, die auch für lange Autobahnetappen taugen",
+        "Sehr sicheres Fahrwerk und sehr hoher Sicherheitsstandard (inklusive aktiver Motorhaube)",
+        "Laut ADAC ab Erstzulassung 2011 gute, ab 2014 sehr gute Pannenstatistik"
+      ],
+      "issues": [
+        {
+          "title": "Rückrufe: Airbags und Gelenkwelle",
+          "affects": "Laut ADAC-Bericht zum Diesel: Rückrufe 12/2016 (Airbag-Sensor), 1/2017 (Airbags), 2/2017 (Gelenkwelle)",
+          "detail": "Laut ADAC sendete ein Softwarefehler im Airbag-Sensor bei einem Front- oder Heckaufprall falsche Daten an das Airbag-Steuergerät (12/2016); bei mehreren Airbags zündete die erste Stufe nicht (1/2017). Zudem kann bei betroffenen Fahrzeugen die elastische Gelenkscheibe an der Gelenkwelle brechen (2/2017).",
+          "check": "Per Fahrgestellnummer beim Händler prüfen lassen, ob die Rückrufe erledigt sind.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: BMW 5er-Reihe (2010-2017) Diesel",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0133-bmw-5er-reihe-2010-2017-diesel-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "HU: Achsgelenke vorn, Federn und Antriebswellenmanschetten",
+          "affects": "5er F10 (Benziner und Diesel); laut ADAC häufigste Mängel bei der Hauptuntersuchung",
+          "detail": "Laut ADAC mindern ausgeschlagene Achsgelenke vorn den sonst guten Eindruck; der Mangel ist relativ schnell zu beheben. Im TÜV-Report gehören außerdem gebrochene Federn, Spiel in den Achsgelenken und rissige Antriebswellenmanschetten zu den häufigsten Problemen.",
+          "check": "Achsgelenke, Federn und Antriebswellenmanschetten auf der Hebebühne prüfen lassen und den letzten HU-Bericht ansehen.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: BMW 5er-Reihe (2010-2017) Benziner",
+              "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0127-bmw-5er-reihe-2010-2017-benziner-bericht.pdf"
+            },
+            {
+              "label": "ADAC Gebrauchtwageninfo: BMW 5er-Reihe (2010-2017) Diesel",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0133-bmw-5er-reihe-2010-2017-diesel-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Jahrgang 2010: mehrere Bauteile auffällig, Pannenstatistik nur mittel",
+          "affects": "Erstzulassung 2010 (Benziner und Diesel): Anlasser, Automatikgetriebe, Generator, Kraftstoffpumpe, Riemenscheibe der Kurbelwelle",
+          "detail": "Laut ADAC stehen diese Bauteile beim Jahrgang 2010 unter den häufigen Bauteilfehlern; der Jahrgang wird in der Pannenstatistik nur als mittel eingestuft, ab 2011 als gut bis sehr gut.",
+          "check": "Möglichst einen Jahrgang ab 2011 wählen; bei 2010er Fahrzeugen nach Belegen für Reparaturen an diesen Teilen fragen und die Automatik bei der Probefahrt prüfen.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: BMW 5er-Reihe (2010-2017) Benziner",
+              "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0127-bmw-5er-reihe-2010-2017-benziner-bericht.pdf"
+            },
+            {
+              "label": "ADAC Gebrauchtwageninfo: BMW 5er-Reihe (2010-2017) Diesel",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0133-bmw-5er-reihe-2010-2017-diesel-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Jahrgänge 2011–2013: Motor, Kühlung und Turbolader auffällig",
+          "affects": "Benziner und Diesel: Motor allgemein 2011–2013, Motorkühlung 2011–2012, Steuerkette 2011, Kühl-/Heizungsschlauch 2012, Turbolader 2012–2013",
+          "detail": "Laut ADAC zählen diese Bauteile bei den genannten Jahrgängen zu den häufigen Bauteilfehlern; insgesamt wird der 5er ab Erstzulassung 2011 dennoch gut bis sehr gut eingestuft.",
+          "check": "Bei der Probefahrt auf Motorgeräusche und Fehlermeldungen achten und Belege über Reparaturen an Kühlung, Steuerkette und Turbolader verlangen.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: BMW 5er-Reihe (2010-2017) Benziner",
+              "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0127-bmw-5er-reihe-2010-2017-benziner-bericht.pdf"
+            },
+            {
+              "label": "ADAC Gebrauchtwageninfo: BMW 5er-Reihe (2010-2017) Diesel",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0133-bmw-5er-reihe-2010-2017-diesel-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Fahrwerkregelung bei Erstzulassung 2013 auffällig",
+          "affects": "Erstzulassung 2013 (Benziner und Diesel)",
+          "detail": "Die Fahrwerkregelung zählt laut ADAC beim Jahrgang 2013 zu den häufigen Bauteilfehlern der Pannenstatistik.",
+          "check": "Bei Fahrzeugen mit Fahrwerkregelung auf Fehlermeldungen im Display achten und die Funktion bei der Probefahrt testen.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: BMW 5er-Reihe (2010-2017) Benziner",
+              "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0127-bmw-5er-reihe-2010-2017-benziner-bericht.pdf"
+            },
+            {
+              "label": "ADAC Gebrauchtwageninfo: BMW 5er-Reihe (2010-2017) Diesel",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0133-bmw-5er-reihe-2010-2017-diesel-bericht.pdf"
+            }
+          ]
+        }
+      ],
+      "engines": {
+        "recommended": [
+          {
+            "name": "528i und stärkere Benziner",
+            "why": "Laut ADAC bereitet keines der Triebwerke Probleme; dem Basismotor geht bei mindestens 1,7 t Fahrzeuggewicht etwas die Puste aus, daher empfiehlt der ADAC die kräftigeren Varianten ab dem 528i."
+          },
+          {
+            "name": "523i/528i mit Reihensechszylinder (bis Herbst 2011)",
+            "why": "Laut ADAC interessant wegen des fast legendären BMW-Reihensechszylinders; der Nachfolger mit vier Zylindern ist zwar sparsamer, in der Laufkultur aber unterlegen."
+          },
+          {
+            "name": "535i (aufgeladener Sechszylinder)",
+            "why": "Laut ADAC ein Meisterwerk der Motorenbaukunst, das schon bei niedrigen Drehzahlen kräftig anschiebt; im Einkauf und Unterhalt aber teurer als die Vierzylinder."
+          },
+          {
+            "name": "520d",
+            "why": "Laut ADAC häufig als Gebrauchtwagen verfügbar und ein guter Kompromiss aus Leistung und Preis."
+          },
+          {
+            "name": "Sechszylinder-Diesel",
+            "why": "Laut ADAC deutlich ruhiger laufend und besser zum Charakter des Fahrzeugs passend, im Einkauf aber spürbar teurer als die Vierzylinder."
+          }
+        ],
+        "caution": [
+          {
+            "name": "520i (Basis-Benziner)",
+            "why": "Laut ADAC geht dem Basismotor bei einem mindestens 1,7 t schweren Fahrzeug etwas die Puste aus."
+          },
+          {
+            "name": "Vierzylinder-Diesel",
+            "why": "Laut ADAC gehen sie eher hemdsärmelig ans Werk; wegen der besseren Geräuschdämmung fällt das weniger auf als in kleineren Baureihen."
+          }
+        ]
+      },
+      "tips": [
+        "Möglichst einen Jahrgang ab Erstzulassung 2011 wählen: Der Jahrgang 2010 wird in der ADAC-Pannenstatistik nur mit mittel bewertet.",
+        "Achsgelenke vorn, Federn und Antriebswellenmanschetten prüfen lassen: Das sind laut TÜV-Report die häufigsten Probleme.",
+        "Rückrufstatus per Fahrgestellnummer erfragen, vor allem zu Airbags (12/2016, 1/2017) und zur Gelenkwelle (2/2017).",
+        "Bei Erstzulassung 2011–2013 Belege über Reparaturen an Kühlung, Steuerkette und Turbolader verlangen."
+      ]
+    },
+    {
+      "id": "bmw-5er-g30",
+      "name": "5er G30",
+      "code": "G30 / G31",
+      "years": [2017, 2023],
+      "bodyTypes": ["limousine", "kombi"],
+      "fuels": ["petrol", "diesel", "plugin_hybrid"],
+      "seats": [5],
+      "automatic": true,
+      "typicalPriceEur": null,
+      "priceSource": null,
+      "strengths": [],
+      "issues": [],
+      "engines": {
+        "recommended": [],
+        "caution": []
+      },
+      "tips": [
+        "Für diese Generation liegen noch wenige Gebrauchtwagen-Erfahrungen vor; Rückrufe per Fahrgestellnummer erfragen."
+      ]
+    },
+    {
+      "id": "bmw-5er-g60",
+      "name": "5er G60",
+      "code": "G60 / G61",
+      "years": [2023, null],
+      "bodyTypes": ["limousine", "kombi"],
+      "fuels": ["petrol", "diesel", "plugin_hybrid", "electric"],
+      "seats": [5],
+      "automatic": true,
+      "typicalPriceEur": null,
+      "priceSource": null,
+      "strengths": [],
+      "issues": [],
+      "engines": {
+        "recommended": [],
+        "caution": []
+      },
+      "tips": [
+        "Für diese Generation liegen noch wenige Gebrauchtwagen-Erfahrungen vor; Rückrufe per Fahrgestellnummer erfragen."
+      ]
+    }
+  ]
+}

@@ -46,6 +46,7 @@ model User {
   sessions            Session[]
   analyses            Analysis[]
   savedListings       SavedListing[]
+  savedSearches       SavedSearch[]
   subscription        Subscription?
   passwordResetTokens PasswordResetToken[]
   orders              Order[]
@@ -197,6 +198,18 @@ model SavedListing {
   updatedAt   DateTime @updatedAt
 
   @@unique([userId, fingerprint])
+  @@index([userId, createdAt])
+}
+
+/// A car search the user saved (Pro): only KaufCheck's own search parameters, no marketplace data.
+model SavedSearch {
+  id        String   @id @default(uuid()) @db.Uuid
+  userId    String   @db.Uuid
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  name      String
+  query     String
+  createdAt DateTime @default(now())
+
   @@index([userId, createdAt])
 }
 

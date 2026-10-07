@@ -101,6 +101,7 @@ const ROWS: readonly RowSpec[] = [
           ? `${ctx.ageApproximate ? 'ca. ' : ''}${formatMonthsDuration(ctx.ageMonths)}`
           : null,
       evidence: ctx?.ageMonths != null ? 'calculation' : 'unknown',
+      numeric: ctx?.ageMonths != null && ctx.ageMonths >= 0 ? ctx.ageMonths : null,
     }),
   },
   {
@@ -110,6 +111,7 @@ const ROWS: readonly RowSpec[] = [
     cell: (_item, ctx) => ({
       value: ctx?.kmPerYear != null ? formatKm(ctx.kmPerYear) : null,
       evidence: ctx?.kmPerYear != null ? 'calculation' : 'unknown',
+      numeric: ctx?.kmPerYear ?? null,
     }),
   },
   {
@@ -299,12 +301,14 @@ export function buildComparison(items: readonly ComparisonInput[], now: Date): C
     const raw = items.map((item, index) => spec.cell(item, contexts[index] ?? null));
     const cells = markerCells(spec, raw);
     const values = cells.map((cell) => cell.value ?? '');
+    const numbers = raw.map((cell) => (typeof cell.numeric === 'number' ? cell.numeric : null));
     return {
       key: spec.key,
       label: spec.label,
       group: spec.group,
       cells,
       differs: new Set(values).size > 1,
+      ...(numbers.some((value) => value !== null) ? { numbers } : {}),
     };
   });
 
@@ -335,6 +339,13 @@ export function buildComparison(items: readonly ComparisonInput[], now: Date): C
       title: item.title,
       sourceUrl: item.listing.source.url,
       isExample: item.listing.source.isExample,
+      vehicle: item.listing.vehicle
+        ? {
+            make: item.listing.vehicle.make,
+            model: item.listing.vehicle.model,
+            firstRegistrationYear: item.listing.vehicle.firstRegistration?.year ?? null,
+          }
+        : null,
     })),
     rows,
     equipment,
@@ -344,7 +355,7 @@ export function buildComparison(items: readonly ComparisonInput[], now: Date): C
         .map((field) => field.label),
     ),
     notes: [
-      'KaufCheck vergibt bewusst keine Gesamtnote. Welche Unterschiede wichtig sind, hängt von deinen Prioritäten ab.',
+      'KaufCheck vergibt keine allgemeine Gesamtnote. Eine Reihenfolge entsteht nur aus deinen eigenen Prioritäten und den Angaben der Inserate.',
       'Markierungen wie „niedrigster Preis“ beschreiben nur den Wert – nicht, welches Angebot besser ist.',
     ],
   };

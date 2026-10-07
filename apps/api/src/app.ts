@@ -12,6 +12,7 @@ import { requestContextPlugin } from './http/request-context';
 import { accountRoutes } from './http/routes/account-routes';
 import { listingRoutes } from './http/routes/listing-routes';
 import { savedListingRoutes } from './http/routes/saved-listing-routes';
+import { savedSearchRoutes } from './http/routes/saved-search-routes';
 import { contractRoutes } from './http/routes/contract-routes';
 import { systemRoutes } from './http/routes/system-routes';
 import { registerSecurity } from './http/security';
@@ -81,6 +82,7 @@ export async function buildApp(
   accountRoutes(app, services);
   listingRoutes(app, services);
   savedListingRoutes(app, services);
+  savedSearchRoutes(app, services);
   contractRoutes(app, services);
 
   const servingWeb = await registerWeb(app, config);

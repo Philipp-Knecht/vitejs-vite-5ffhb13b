@@ -1,0 +1,318 @@
+{
+  "id": "mercedes-c-klasse",
+  "make": "Mercedes-Benz",
+  "model": "C-Klasse",
+  "aliases": [
+    "c 180",
+    "c 200",
+    "c 200 cdi",
+    "c 220",
+    "c 220 cdi",
+    "c 220 d",
+    "c 250",
+    "c 300",
+    "c 350",
+    "c 63 amg",
+    "c klasse",
+    "c-klasse",
+    "c-klasse cabrio",
+    "c-klasse cabriolet",
+    "c-klasse coupe",
+    "c-klasse coupé",
+    "c-klasse kombi",
+    "c-klasse limousine",
+    "c-klasse t-modell",
+    "mercedes c klasse",
+    "mercedes c-klasse",
+    "mercedes-benz c-klasse",
+    "w204",
+    "w205",
+    "w206"
+  ],
+  "segment": "mittelklasse",
+  "summary": "Komfortable, gut verarbeitete Mittelklasse von Mercedes-Benz als Limousine, T-Modell (Kombi), Coupé und Cabrio, mit engem Fond und eher kleinem Kofferraum.",
+  "ratings": {
+    "reliability": 4,
+    "reliabilityNote": "Laut ADAC-Pannenstatistik liegt die C-Klasse W205 durchgehend bei „gut“ bis „sehr gut“, die ältere W204 erst ab Erstzulassung 2012 bei „gut“ (2007–2011: „schlecht“ bis „sehr schlecht“). Im TÜV-Report gehört die C-Klasse zu den besten Autos der Mittelklasse; nur Achsaufhängungen bzw. Fahrwerksgelenke und Rost an Bremsleitungen und Hinterachsträgern fallen vereinzelt auf.",
+    "reliabilitySources": [
+      {
+        "label": "ADAC Gebrauchtwageninfo: Mercedes-Benz C-Klasse (2014-2023) Diesel",
+        "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0358-mercedes-benz-c-klasse-2014-2023-diesel-bericht.pdf"
+      },
+      {
+        "label": "ADAC Gebrauchtwageninfo: Mercedes-Benz C-Klasse (2014-2023) Benziner",
+        "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0356-mercedes-benz-c-klasse-2014-2023-benziner-bericht.pdf"
+      },
+      {
+        "label": "ADAC Gebrauchtwageninfo: Mercedes-Benz C-Klasse (2007-2015) Diesel",
+        "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0159-mercedes-benz-c-klasse-2007-2015-diesel-bericht.pdf"
+      },
+      {
+        "label": "ADAC Gebrauchtwageninfo: Mercedes-Benz C-Klasse (2007-2015) Benziner",
+        "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0161-mercedes-benz-c-klasse-2007-2015-benziner-bericht.pdf"
+      }
+    ],
+    "runningCosts": 2,
+    "space": 3,
+    "comfort": 5
+  },
+  "generations": [
+    {
+      "id": "mercedes-c-klasse-w204",
+      "name": "C-Klasse W204",
+      "code": "W204",
+      "years": [2007, 2015],
+      "bodyTypes": ["limousine", "kombi", "coupe"],
+      "fuels": ["petrol", "diesel"],
+      "seats": [4, 5],
+      "automatic": true,
+      "typicalPriceEur": null,
+      "priceSource": null,
+      "strengths": [
+        "Gute Verarbeitung (nach dem Facelift 2011 hochwertige Materialien) und sehr zuverlässige Technik",
+        "Sehr guter Federungskomfort schon mit Standardfahrwerk, gute Geräuschdämmung und bequeme Sitze",
+        "Zielgenaue Lenkung, kräftige Bremsanlage und hohes Sicherheitsniveau",
+        "Im TÜV-Report ausgezeichnet (laut ADAC 2017 Sieger der Mittelklasse) und große Auswahl an Gebrauchtwagen"
+      ],
+      "issues": [
+        {
+          "title": "Modelle vor dem Facelift deutlich pannenanfälliger",
+          "affects": "Erstzulassung 2007–2011 (Benziner und Diesel)",
+          "detail": "Laut ADAC-Pannenstatistik sind die Erstzulassungen 2007 bis 2011 mit „schlecht“ bis „sehr schlecht“ eingestuft (2009 und 2010 „sehr schlecht“), ab 2012 mit „gut“; erst ab Baujahr 2012 gilt die W204 laut ADAC als sehr pannensicher.",
+          "check": "Wenn möglich ein Fahrzeug ab Erstzulassung 2012 (nach dem Facelift 2011) wählen; bei älteren Exemplaren Wartungs- und Reparaturbelege verlangen.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: Mercedes-Benz C-Klasse (2007-2015) Benziner",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0161-mercedes-benz-c-klasse-2007-2015-benziner-bericht.pdf"
+            },
+            {
+              "label": "ADAC Gebrauchtwageninfo: Mercedes-Benz C-Klasse (2007-2015) Diesel",
+              "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0159-mercedes-benz-c-klasse-2007-2015-diesel-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Steuerkette als Pannenschwerpunkt bei frühen Jahrgängen",
+          "affects": "Erstzulassung 2007 und 2009–2011 (Motor laut ADAC nicht genannt)",
+          "detail": "Laut ADAC gehört die Steuerkette bei diesen Jahrgängen zu den häufigen Bauteilfehlern; welche Motoren betroffen sind, nennt der Bericht nicht. Die Steuerkette ist ein zentrales Motorbauteil, Arbeiten daran sind aufwendig.",
+          "check": "Bei Fahrzeugen dieser Jahrgänge beim Kaltstart auf Rasselgeräusche achten und nach Belegen für Steuerkettenarbeiten fragen.",
+          "severity": "hoch",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: Mercedes-Benz C-Klasse (2007-2015) Benziner",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0161-mercedes-benz-c-klasse-2007-2015-benziner-bericht.pdf"
+            },
+            {
+              "label": "ADAC Gebrauchtwageninfo: Mercedes-Benz C-Klasse (2007-2015) Diesel",
+              "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0159-mercedes-benz-c-klasse-2007-2015-diesel-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Häufige Bauteilfehler: Zündschloss, Lenkung, Anlasser, Starterbatterie",
+          "affects": "Zündschloss und Lenkung allgemein: Erstzulassung 2007–2014; Anlasser: 2009–2011; Starterbatterie: 2007–2010",
+          "detail": "Laut ADAC stehen diese Bauteile in der Pannenstatistik der W204 unter den häufigen Bauteilfehlern. Der Bericht nennt jeweils nur das Bauteil, nicht das genaue Fehlerbild.",
+          "check": "Startverhalten bei kaltem und warmem Motor testen, Lenkung auf Spiel und Geräusche prüfen und fragen, ob Zündschloss, Anlasser oder Starterbatterie schon getauscht wurden.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: Mercedes-Benz C-Klasse (2007-2015) Benziner",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0161-mercedes-benz-c-klasse-2007-2015-benziner-bericht.pdf"
+            },
+            {
+              "label": "ADAC Gebrauchtwageninfo: Mercedes-Benz C-Klasse (2007-2015) Diesel",
+              "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0159-mercedes-benz-c-klasse-2007-2015-diesel-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Rost an Bremsleitungen und Hinterachsträgern, ausgeschlagene Fahrwerksgelenke",
+          "affects": "Benziner und Diesel; Baujahre laut ADAC nicht genannt",
+          "detail": "Laut ADAC waren beim TÜV vereinzelt angerostete Bremsleitungen und ausgeschlagene Fahrwerksgelenke festzustellen; gelegentlich rosten die Hinterachsträger, was Mercedes meist kulant repariert.",
+          "check": "Bremsleitungen, Hinterachsträger und Fahrwerksgelenke von unten prüfen lassen und fragen, ob Mercedes die Hinterachsträger kulant instand gesetzt hat.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: Mercedes-Benz C-Klasse (2007-2015) Benziner",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0161-mercedes-benz-c-klasse-2007-2015-benziner-bericht.pdf"
+            },
+            {
+              "label": "ADAC Gebrauchtwageninfo: Mercedes-Benz C-Klasse (2007-2015) Diesel",
+              "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0159-mercedes-benz-c-klasse-2007-2015-diesel-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Rückrufe: Lenkung, Airbag-Steuergerät, Diesel-Kraftstofffilter und Steuerkettenspanner",
+          "affects": "Hochdruckleitung an der Servopumpe/Lenkung (10/2010); 4-/6-Zylinder-Diesel mit beheiztem Kraftstofffilter (11/2010); OM651-Vierzylinder-Diesel (1/2015); Airbag-Steuergerät (4/2016); Lenksäulen-Erdung (10/2017)",
+          "detail": "Laut ADAC gab es Rückrufe wegen einer mit zu geringem Anzugsmoment befestigten Hochdruckleitung an der Servopumpe (10/2010), wegen möglicher Funktionsbeeinträchtigung des Airbag-Steuergeräts (4/2016) und wegen nicht ausreichender Erdung der Lenksäule (10/2017). Bei Dieseln kamen Rückrufe wegen undichter Kraftstofffilter mit Heizung (11/2010) und wegen einer defekten Dichtung am Steuerkettenspanner des OM651-Vierzylinders (1/2015) hinzu.",
+          "check": "Per Fahrgestellnummer beim Händler prüfen lassen, ob die Rückrufe erledigt sind.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: Mercedes-Benz C-Klasse (2007-2015) Diesel",
+              "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0159-mercedes-benz-c-klasse-2007-2015-diesel-bericht.pdf"
+            },
+            {
+              "label": "ADAC Gebrauchtwageninfo: Mercedes-Benz C-Klasse (2007-2015) Benziner",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0161-mercedes-benz-c-klasse-2007-2015-benziner-bericht.pdf"
+            }
+          ]
+        }
+      ],
+      "engines": {
+        "recommended": [
+          {
+            "name": "C 180 und C 200 (Benziner) mit Automatik",
+            "why": "Laut ADAC die Empfehlung: genug Mercedes, um damit glücklich zu werden, bei großer Auswahl auf dem Gebrauchtwagenmarkt; der C 180 mit 156 PS reicht bereits völlig aus."
+          },
+          {
+            "name": "C 220 CDI (170 PS) mit Automatik",
+            "why": "Laut ADAC die goldene Mitte: zügige Fahrleistungen bei geringem Verbrauch und große Auswahl auf dem Gebrauchtwagenmarkt."
+          },
+          {
+            "name": "Sechszylinder-Diesel C 300, C 320 und C 350 CDI",
+            "why": "Laut ADAC laufruhig, mit Kraft im Überfluss und bei häufigem Anhängerbetrieb die erste Wahl; der Verbrauch liegt über dem der Vierzylinder, hält sich aber in Grenzen."
+          }
+        ],
+        "caution": [
+          {
+            "name": "C 63 AMG (Achtzylinder)",
+            "why": "Laut ADAC nur etwas für Käufer, die bereit sind, für den Unterhalt enorm viel Geld auszugeben."
+          },
+          {
+            "name": "Vierzylinder-Diesel OM651",
+            "why": "Laut ADAC-Rückrufliste kann bei diesem Motor der Steuerkettenspanner wegen einer defekten Dichtung ausfallen (Rückruf 1/2015); Erledigung nachweisen lassen. Die Vierzylinder-Diesel laufen laut ADAC als Dauerläufer, aber nicht besonders kultiviert."
+          }
+        ]
+      },
+      "tips": [
+        "Wenn möglich ein Fahrzeug ab Erstzulassung 2012 wählen: Die Jahrgänge 2007 bis 2011 sind laut ADAC-Pannenstatistik „schlecht“ bis „sehr schlecht“ eingestuft.",
+        "Bremsleitungen, Hinterachsträger und Fahrwerksgelenke von unten auf Rost und Spiel prüfen; bei Rost an den Hinterachsträgern nach einer Kulanzreparatur fragen.",
+        "Bei frühen Jahrgängen auf Startverhalten (Zündschloss, Anlasser, Batterie) und Rasselgeräusche der Steuerkette achten.",
+        "Rückrufe zu Lenkung (10/2010, 10/2017) und Airbag-Steuergerät (4/2016) per Fahrgestellnummer prüfen lassen."
+      ]
+    },
+    {
+      "id": "mercedes-c-klasse-w205",
+      "name": "C-Klasse W205",
+      "code": "W205",
+      "years": [2014, 2023],
+      "bodyTypes": ["limousine", "kombi", "coupe", "cabrio"],
+      "fuels": ["petrol", "diesel", "hybrid", "plugin_hybrid"],
+      "seats": [4, 5],
+      "automatic": true,
+      "typicalPriceEur": null,
+      "priceSource": null,
+      "strengths": [
+        "Hervorragende Verarbeitung mit hochwertigen Materialien und sehr zuverlässige Technik",
+        "Sehr guter Federungskomfort schon mit Standardfahrwerk (optional Luftfahrwerk), gute Geräuschdämmung und bequeme Sitze",
+        "Präzise Lenkung, sehr kräftige Bremsanlage mit kurzen Bremswegen und hohes Sicherheitsniveau",
+        "Laut ADAC durchgehend gute bis sehr gute Werte in der Pannenstatistik und im TÜV-Report eines der besten Autos der Mittelklasse"
+      ],
+      "issues": [
+        {
+          "title": "Mängel an Achsaufhängungen",
+          "affects": "Benziner und Diesel; Baujahre laut ADAC nicht genannt",
+          "detail": "Laut ADAC sieht der TÜV bei den Achsaufhängungen leichte Mängel; ansonsten schneidet die C-Klasse bei den Hauptuntersuchungen hervorragend ab.",
+          "check": "Achsaufhängungen in der Werkstatt prüfen lassen und den letzten HU-Bericht ansehen.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: Mercedes-Benz C-Klasse (2014-2023) Diesel",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0358-mercedes-benz-c-klasse-2014-2023-diesel-bericht.pdf"
+            },
+            {
+              "label": "ADAC Gebrauchtwageninfo: Mercedes-Benz C-Klasse (2014-2023) Benziner",
+              "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0356-mercedes-benz-c-klasse-2014-2023-benziner-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Erste Baujahre 2014: Lenkung und Zündschloss als Pannenschwerpunkte",
+          "affects": "Erstzulassung 2014",
+          "detail": "Laut ADAC stehen bei der Erstzulassung 2014 Lenkung (allgemein) und Zündschloss unter den häufigen Bauteilfehlern. Der Jahrgang 2014 liegt in der Pannenstatistik mit „gut“ hinter den späteren Jahrgängen (teils „sehr gut“).",
+          "check": "Bei Erstzulassung 2014 Lenkung und Startverhalten gezielt testen und nach Reparaturen fragen.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: Mercedes-Benz C-Klasse (2014-2023) Diesel",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0358-mercedes-benz-c-klasse-2014-2023-diesel-bericht.pdf"
+            },
+            {
+              "label": "ADAC Gebrauchtwageninfo: Mercedes-Benz C-Klasse (2014-2023) Benziner",
+              "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0356-mercedes-benz-c-klasse-2014-2023-benziner-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Rückrufe: Lenkung, Brandgefahr bei Vierzylinder-Dieseln, Gurtstraffer",
+          "affects": "Lenkungskupplung (10/2014); OM651-Vierzylinder-Diesel, Steuerkettenspanner (1/2015); 4-Zylinder-Diesel, Kraftstoff-Hochdruckleitungen (4/2016); 1,6-CDI OM626, Hochdruckpumpe (6/2016); Gurtstraffer (5/2017); Lenksäulen-Erdung (10/2017); Die…",
+          "detail": "Laut ADAC gab es Rückrufe zur Lenkung (Verriegelung der Lenkungskupplung, Erdung der Lenksäule, Leitungssatz des Lenkungssteuergeräts), bei 4-Zylinder-Dieseln wegen Rissbildung an den Kraftstoff-Hochdruckleitungen mit erhöhter Brandgefahr sowie wegen des Steuerkettenspanners (OM651) und beim 1,6-CDI wegen einer sich lösenden Verbindung an der Hochdruckpumpe. Außerdem gab es einen Rückruf wegen der Gurtstraffer-Zündpillen und, bei Dieselmotoren, einen offiziellen Rückruf für ein Software-Update (Abschalteinrichtungen).",
+          "check": "Per Fahrgestellnummer beim Händler prüfen lassen, ob die Rückrufe erledigt sind.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: Mercedes-Benz C-Klasse (2014-2023) Diesel",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0358-mercedes-benz-c-klasse-2014-2023-diesel-bericht.pdf"
+            },
+            {
+              "label": "ADAC Gebrauchtwageninfo: Mercedes-Benz C-Klasse (2014-2023) Benziner",
+              "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0356-mercedes-benz-c-klasse-2014-2023-benziner-bericht.pdf"
+            }
+          ]
+        }
+      ],
+      "engines": {
+        "recommended": [
+          {
+            "name": "C 220 d (BlueTec/d) in der Ausstattung Avantgarde",
+            "why": "Laut ADAC die goldene Mitte und Empfehlung: C 200 und C 220 BlueTec/d bieten einen sehr guten Kompromiss aus Leistung und Verbrauch, der C 220 überzeugt mit guten Fahrleistungen und ist häufig auf dem Gebrauchtwagenmarkt zu finden."
+          },
+          {
+            "name": "C 180 und C 200 (Benziner) in der Ausstattung Avantgarde",
+            "why": "Laut ADAC die goldene Mitte und Empfehlung: guter Kompromiss aus Leistung und Verbrauch, gute Fahrleistungen und häufig im Angebot."
+          }
+        ],
+        "caution": [
+          {
+            "name": "Ältere Vierzylinder-Diesel mit 2,1 Liter Hubraum (OM651)",
+            "why": "Laut ADAC geringfügig schlechtere Laufkultur als bei den neuen Motoren; für Vierzylinder-Diesel gab es Rückrufe wegen des Steuerkettenspanners (1/2015, OM651) und wegen Kraftstoff-Hochdruckleitungen mit erhöhter Brandgefahr (4/2016): Erledigung nachweisen lassen."
+          },
+          {
+            "name": "AMG-Varianten (ab 367 PS) und C 400",
+            "why": "Laut ADAC besonders kostspielig im Einkauf und Unterhalt; der Sechszylinder im C 400 ist ein Luxusmotor und deutlich teurer."
+          }
+        ]
+      },
+      "tips": [
+        "Achsaufhängungen in der Werkstatt prüfen lassen: Laut ADAC der einzige nennenswerte TÜV-Mangel.",
+        "Bei Erstzulassung 2014 auf Lenkung und Startverhalten achten (Pannenschwerpunkte laut ADAC).",
+        "Rückrufe per Fahrgestellnummer prüfen lassen: Lenkung (10/2014, 10/2017, 11/2020) und bei Dieseln Kraftstoffleitungen (4/2016) sowie Steuerkettenspanner (1/2015).",
+        "Bei Dieseln nachfragen, ob das Software-Update aus dem Rückruf 6/2018 (Abschalteinrichtungen) durchgeführt wurde."
+      ]
+    },
+    {
+      "id": "mercedes-c-klasse-w206",
+      "name": "C-Klasse W206",
+      "code": "W206",
+      "years": [2021, null],
+      "bodyTypes": ["limousine", "kombi"],
+      "fuels": ["petrol", "diesel", "plugin_hybrid"],
+      "seats": [5],
+      "automatic": true,
+      "typicalPriceEur": null,
+      "priceSource": null,
+      "strengths": [],
+      "issues": [],
+      "engines": {
+        "recommended": [],
+        "caution": []
+      },
+      "tips": [
+        "Für diese Generation liegen noch wenige Gebrauchtwagen-Erfahrungen vor; Rückrufe per Fahrgestellnummer erfragen."
+      ]
+    }
+  ]
+}

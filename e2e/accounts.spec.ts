@@ -40,6 +40,20 @@ test('save listings with a new account, compare, rename and delete them', async 
   await expect(table).toContainText('Kilometerstand');
   await expect(table).not.toContainText(/Sieger|Empfehlung|besser/i);
 
+  // The buyer's priorities decide the order: only the price matters here.
+  const decision = page.getByRole('region', { name: 'Deine Reihenfolge' });
+  for (const criterion of [
+    'Kilometerstand',
+    'Alter',
+    'Vollständige Angaben',
+    'Auffälligkeiten im Inserat',
+  ]) {
+    await decision.getByRole('group', { name: criterion }).getByText('Egal').click();
+  }
+  await decision.getByRole('group', { name: 'Preis' }).getByText('Sehr wichtig').click();
+  await expect(decision.getByText(/zuerst anfragen: Audi A7/)).toBeVisible();
+  await expect(decision.getByRole('listitem').first()).toContainText('günstigster Preis');
+
   // Rename and delete.
   await page.goto('/meine-angebote');
   await page.getByRole('button', { name: 'Umbenennen' }).first().click();

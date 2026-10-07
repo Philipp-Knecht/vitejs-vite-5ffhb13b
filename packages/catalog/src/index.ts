@@ -1,6 +1,7 @@
 export * from './types';
 export * from './makes';
 export * from './models';
+export * from './vehicle-match';
 export * from './search-query';
 export * from './platform-links';
 export * from './knowledge-index';

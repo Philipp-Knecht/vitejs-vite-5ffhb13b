@@ -17,30 +17,13 @@ import { Link, useSearchParams } from 'react-router';
 import { ADVISOR_AVAILABLE } from '../features/advisor/availability';
 import { ModelInsights } from '../features/search/ModelInsights';
 import { PlatformResults } from '../features/search/PlatformResults';
+import { describeSearch, isModelId } from '../features/search/describe-search';
+import { SaveSearch } from '../features/search/SaveSearch';
 import { SearchForm } from '../features/search/SearchForm';
 import { track } from '../lib/analytics';
-import { formatNumber } from '../lib/format';
 import { useHydrated } from '../lib/use-hydrated';
 import { STATIC_PAGE_META } from '../seo/pages';
 import { usePageMeta } from '../seo/use-page-meta';
-
-const isModelId = (id: string) => modelById(id) !== null;
-
-/** "VW Golf · bis 15.000 € · ab 2016 · bis 120.000 km" */
-function describe(query: SearchQuery): string {
-  const make = makeById(query.makeId);
-  const model = modelById(query.modelId);
-  const parts = [
-    [make?.name, model?.model ?? query.modelText].filter(Boolean).join(' ') || 'Alle Marken',
-    query.priceMax !== null ? `bis ${formatNumber(query.priceMax)} €` : null,
-    query.priceMin !== null ? `ab ${formatNumber(query.priceMin)} €` : null,
-    query.yearMin !== null ? `ab ${query.yearMin}` : null,
-    query.yearMax !== null ? `bis Baujahr ${query.yearMax}` : null,
-    query.kmMax !== null ? `bis ${formatNumber(query.kmMax)} km` : null,
-    query.zip ? `${query.radiusKm ?? 50} km um ${query.zip}` : null,
-  ];
-  return parts.filter(Boolean).join(' · ');
-}
 
 const TIPS = [
   'Such auf mehreren Plattformen: Händler stellen ihre Autos oft überall ein, Privatleute meist nur auf einer.',
@@ -127,7 +110,10 @@ export function FindCarPage() {
             <h2 id="results-title" className="section__title">
               Deine Suche auf {links.length} Plattformen
             </h2>
-            <p className="search-results__query">{describe(query)}</p>
+            <p className="search-results__query">{describeSearch(query)}</p>
+            <div className="save-search-row">
+              <SaveSearch key={params.toString()} query={query} />
+            </div>
             <PlatformResults links={links} requested={requestedFields(query)} />
           </div>
         </section>

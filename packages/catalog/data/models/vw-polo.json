@@ -1,0 +1,268 @@
+{
+  "id": "vw-polo",
+  "make": "Volkswagen",
+  "model": "Polo",
+  "aliases": [
+    "cross polo",
+    "polo",
+    "polo bluegt",
+    "polo bluemotion",
+    "polo cross",
+    "polo gti",
+    "polo tgi"
+  ],
+  "segment": "kleinwagen",
+  "summary": "Der Polo ist der kleine Bruder des Golf: alltagstauglich, gut verarbeitet und für Pendler und kleine Familien auch auf längeren Strecken geeignet.",
+  "ratings": {
+    "reliability": 4,
+    "reliabilityNote": "Laut ADAC-Pannenstatistik 2026 unter den zuverlässigsten Kleinwagen. Beim TÜV fallen beim Polo 6 vor allem Lenkgelenke (6–7 Jahre), beim älteren Polo 5 Bremsen, Abgasanlage und Beleuchtung auf.",
+    "reliabilitySources": [
+      {
+        "label": "ADAC Pannenstatistik 2026",
+        "url": "https://www.adac.de/rund-ums-fahrzeug/unfall-schaden-panne/adac-pannenstatistik-2026/"
+      },
+      {
+        "label": "AUTO BILD: VW Polo im TÜV-Check (2026), 02.07.2026",
+        "url": "https://www.autobild.de/artikel/vw-polo-im-tuev-check-2026--28310671.html"
+      }
+    ],
+    "runningCosts": 4,
+    "space": 3,
+    "comfort": 3
+  },
+  "generations": [
+    {
+      "id": "vw-polo-5",
+      "name": "Polo V",
+      "code": "6R / 6C",
+      "years": [2009, 2017],
+      "bodyTypes": ["schraegheck"],
+      "fuels": ["petrol", "diesel", "lpg"],
+      "seats": [5],
+      "automatic": true,
+      "typicalPriceEur": null,
+      "priceSource": null,
+      "strengths": [
+        "Laut AUTO BILD gegenüber dem Vorgänger mit besserem Komfort und besserer Verarbeitung; dank guter Dämmung und bequemer Sitze auch für längere Strecken geeignet.",
+        "Sparsame TDI-Motoren (75 bis 105 PS).",
+        "Der 1.4-Sauger (86 PS) gilt laut AUTO BILD als anspruchslos und solide."
+      ],
+      "issues": [
+        {
+          "title": "Steuerkette kann sich längen",
+          "affects": "1.2 TSI und 1.4 TSI (EA111), vor allem frühe Jahrgänge ab 2009",
+          "detail": "Laut AUTO BILD ist Rasseln im kalten Zustand bei diesen Motoren ein sicheres Indiz für eine gelängte Steuerkette; eine gerissene oder übersprungene Kette kann zum Motorschaden führen. Auf Kulanz von VW sollte man sich laut AUTO BILD nicht verlassen.",
+          "check": "Kalt starten und auf Rasseln achten; Rechnung über einen Kettenwechsel verlangen.",
+          "severity": "hoch",
+          "sources": [
+            {
+              "label": "AUTO BILD: VW Polo im TÜV-Check (2026), 02.07.2026",
+              "url": "https://www.autobild.de/artikel/vw-polo-im-tuev-check-2026--28310671.html"
+            },
+            {
+              "label": "AUTO BILD: VW Polo V (6R) – Gebrauchtwagen-Test, 21.03.2017",
+              "url": "https://www.autobild.de/artikel/vw-polo-v-6r-gebrauchtwagen-test-11406239.html"
+            },
+            {
+              "label": "AUTO BILD: VW Steuerketten – Kulanz-Versprechen gebrochen, 01.06.2018",
+              "url": "https://www.autobild.de/artikel/vw-steuerketten-kulanz-2892135.html"
+            }
+          ]
+        },
+        {
+          "title": "7-Gang-DSG ruckelt beim Anfahren",
+          "affects": "Polo V mit 7-Gang-DSG (DQ200)",
+          "detail": "AUTO BILD berichtet von ruckelnd anfahrenden DSG-Getrieben; als Ursache nennt der Gebrauchtwagen-Test von 2017 meist verschlissene Kupplungen oder eine defekte Mechatronik.",
+          "check": "Ausgiebige Probefahrt (Anfahren, Stop-and-go, Rangieren); Serviceheft auf Getriebeservice prüfen.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "AUTO BILD: VW Polo im TÜV-Check (2026), 02.07.2026",
+              "url": "https://www.autobild.de/artikel/vw-polo-im-tuev-check-2026--28310671.html"
+            },
+            {
+              "label": "AUTO BILD: VW Polo V (6R) – Gebrauchtwagen-Test, 21.03.2017",
+              "url": "https://www.autobild.de/artikel/vw-polo-v-6r-gebrauchtwagen-test-11406239.html"
+            }
+          ]
+        },
+        {
+          "title": "Bremsen, Abgasanlage und Beleuchtung bei der HU",
+          "affects": "Polo V, vor allem ältere Fahrzeuge",
+          "detail": "Laut AUTO BILD (TÜV-Report 2026) zeigt der Polo V bei der HU vermehrt Mängel an Abgasanlage (Schalldämpfer), Fuß- und Feststellbremse sowie Bremsscheiben; bei älteren Exemplaren auch an der vorderen Beleuchtung.",
+          "check": "Bremsen, Auspuff und Scheinwerfer ansehen lassen; letzten HU-Bericht zeigen lassen.",
+          "severity": "gering",
+          "sources": [
+            {
+              "label": "AUTO BILD: VW Polo im TÜV-Check (2026), 02.07.2026",
+              "url": "https://www.autobild.de/artikel/vw-polo-im-tuev-check-2026--28310671.html"
+            }
+          ]
+        },
+        {
+          "title": "Diesel mit illegaler Abschalteinrichtung",
+          "affects": "Diesel der Baureihen EA189 (u. a. 1.2 TDI, 1.6 TDI) und EA288",
+          "detail": "Beim Polo V gab es laut AUTO BILD Rückrufe wegen illegaler Abschalteinrichtungen bei Dieselmotoren der Baureihen EA189 und EA288. Der ADAC testete einen Polo 1.2 TDI vor und nach dem Software-Update und sah keine nennenswerten Nachteile.",
+          "check": "Nachweis über das durchgeführte Software-Update verlangen.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "AUTO BILD: VW Polo im TÜV-Check (2026), 02.07.2026",
+              "url": "https://www.autobild.de/artikel/vw-polo-im-tuev-check-2026--28310671.html"
+            },
+            {
+              "label": "ADAC: VW-Schummel-Diesel – Was bringen die Softwareupdates?, 20.11.2019",
+              "url": "https://www.adac.de/rund-ums-fahrzeug/autokatalog/ecotest/test-vw-updates-schummelsoftware/"
+            }
+          ]
+        },
+        {
+          "title": "Weitere Rückrufe",
+          "affects": "Polo V, u. a. Baujahr 2011 (Anlasser)",
+          "detail": "Laut AUTO BILD gab es Rückrufe wegen eines fehlerhaften Anlasser-Magnetschalters (Baujahr 2011) und diverser Airbagprobleme.",
+          "check": "Per Fahrgestellnummer beim Händler klären, ob alle Rückrufe ausgeführt wurden.",
+          "severity": "gering",
+          "sources": [
+            {
+              "label": "AUTO BILD: VW Polo im TÜV-Check (2026), 02.07.2026",
+              "url": "https://www.autobild.de/artikel/vw-polo-im-tuev-check-2026--28310671.html"
+            }
+          ]
+        }
+      ],
+      "engines": {
+        "recommended": [
+          {
+            "name": "1.4 mit 85/86 PS (Sauger, bis 2014), möglichst mit Schaltgetriebe",
+            "why": "AUTO BILD (2017): langlebig und zuverlässig; 2026: anspruchslos und solide."
+          }
+        ],
+        "caution": [
+          {
+            "name": "1.2 TSI und 1.4 TSI (EA111), frühe Jahrgänge",
+            "why": "Steuerkette kann sich längen (AUTO BILD); Wartungsnachweis verlangen."
+          },
+          {
+            "name": "7-Gang-DSG (DQ200)",
+            "why": "Ruckelndes Anfahren, oft Kupplung oder Mechatronik (AUTO BILD)."
+          }
+        ]
+      },
+      "tips": [
+        "Bei 1.2/1.4 TSI kalt starten und auf Rasseln achten; Nachweis über einen Kettenwechsel verlangen.",
+        "Bei DSG-Modellen die Probefahrt länger und mit Stop-and-go-Passagen ansetzen.",
+        "Bremsen, Auspuff und Frontbeleuchtung kontrollieren – laut TÜV-Auswertung häufige Mängel."
+      ]
+    },
+    {
+      "id": "vw-polo-6",
+      "name": "Polo VI",
+      "code": "AW",
+      "years": [2017, null],
+      "bodyTypes": ["schraegheck"],
+      "fuels": ["petrol", "diesel", "cng"],
+      "seats": [5],
+      "automatic": true,
+      "typicalPriceEur": null,
+      "priceSource": null,
+      "strengths": [
+        "Laut AUTO BILD überzeugen Fahrverhalten, Bedienung und Platzangebot schon in der Basisversion; erfüllt die Bedürfnisse von Pendlern und kleinen Familien.",
+        "Bei der HU unauffällig: Abgasanlage zeigt selten Rost, die AU besteht er zuverlässig, Ölverlust kommt selten vor.",
+        "Bremsen bei der HU im Durchschnitt."
+      ],
+      "issues": [
+        {
+          "title": "Lenkgelenke mit morschen Staubmanschetten",
+          "affects": "Polo VI, besonders 6- bis 7-jährige Fahrzeuge",
+          "detail": "Beim TÜV zeigen sechs- bis siebenjährige Polo 6 laut AUTO BILD eklatante Mängel an den Lenkgelenken, die Fehlerquote liegt rund 20-fach über dem Schnitt; schuld sind morsche Staubmanschetten. Auch im Polo-GTI-Test nennt AUTO BILD die Lenkgelenke als oft schadhaft.",
+          "check": "Lenkgelenke und Manschetten auf der Hebebühne prüfen lassen; HU-Bericht ansehen.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "AUTO BILD: VW Polo im TÜV-Check (2026), 02.07.2026",
+              "url": "https://www.autobild.de/artikel/vw-polo-im-tuev-check-2026--28310671.html"
+            },
+            {
+              "label": "AUTO BILD: VW Polo 6 GTI – Gebrauchtwagen-Test, 30.03.2025",
+              "url": "https://www.autobild.de/artikel/vw-polo-6-gti-gebrauchtwagen-test-27993913.html"
+            }
+          ]
+        },
+        {
+          "title": "DSG schaltet vereinzelt ruppig",
+          "affects": "Polo VI mit DSG",
+          "detail": "AUTO BILD nennt vereinzelte Beschwerden über ruppig schaltende DSG; beim Polo GTI schaltet das DSG teils unharmonisch.",
+          "check": "Bei der Probefahrt Anfahren und Schaltvorgänge bei kaltem und warmem Getriebe prüfen.",
+          "severity": "gering",
+          "sources": [
+            {
+              "label": "AUTO BILD: VW Polo im TÜV-Check (2026), 02.07.2026",
+              "url": "https://www.autobild.de/artikel/vw-polo-im-tuev-check-2026--28310671.html"
+            },
+            {
+              "label": "AUTO BILD: VW Polo 6 GTI – Gebrauchtwagen-Test, 30.03.2025",
+              "url": "https://www.autobild.de/artikel/vw-polo-6-gti-gebrauchtwagen-test-27993913.html"
+            }
+          ]
+        },
+        {
+          "title": "Navi und Infotainment hängen oder stürzen ab",
+          "affects": "Polo VI mit Navigationssystem Discover Media/Discover Pro",
+          "detail": "AUTO BILD schreibt von lahmen und abstürzenden Navigationssystemen; beim GTI können je nach Softwarestand Abstürze und Kompatibilitätsstörungen auftreten.",
+          "check": "Navi und Smartphone-Anbindung ausprobieren; beim Händler nach Software-Updates fragen.",
+          "severity": "gering",
+          "sources": [
+            {
+              "label": "AUTO BILD: VW Polo im TÜV-Check (2026), 02.07.2026",
+              "url": "https://www.autobild.de/artikel/vw-polo-im-tuev-check-2026--28310671.html"
+            },
+            {
+              "label": "AUTO BILD: VW Polo 6 GTI – Gebrauchtwagen-Test, 30.03.2025",
+              "url": "https://www.autobild.de/artikel/vw-polo-6-gti-gebrauchtwagen-test-27993913.html"
+            }
+          ]
+        },
+        {
+          "title": "Mehrere Rückrufe",
+          "affects": "Polo VI",
+          "detail": "Laut AUTO BILD betrafen Rückrufe u. a. Gurtschlösser, ein fehlerhaftes Rückschlagventil am Bremskraftverstärker, nicht auslösende Airbags, Gurtwarner und Gurtstraffer sowie eine fehlerhafte Verschraubung der Hinterachse mit drohendem Kontrollverlust.",
+          "check": "Per Fahrgestellnummer beim Händler klären, ob alle Rückrufe ausgeführt wurden.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "AUTO BILD: VW Polo im TÜV-Check (2026), 02.07.2026",
+              "url": "https://www.autobild.de/artikel/vw-polo-im-tuev-check-2026--28310671.html"
+            }
+          ]
+        },
+        {
+          "title": "Wasserverlust beim Polo GTI",
+          "affects": "Polo GTI (2.0 TSI)",
+          "detail": "AUTO BILD nennt im Gebrauchtwagen-Test Wasserverlust durch defekte Thermostatflansche und Wasserpumpen als Ärgernis.",
+          "check": "Kühlmittelstand und Motorraum auf Kühlmittelspuren prüfen; Werkstatthistorie erfragen.",
+          "severity": "gering",
+          "sources": [
+            {
+              "label": "AUTO BILD: VW Polo 6 GTI – Gebrauchtwagen-Test, 30.03.2025",
+              "url": "https://www.autobild.de/artikel/vw-polo-6-gti-gebrauchtwagen-test-27993913.html"
+            }
+          ]
+        }
+      ],
+      "engines": {
+        "recommended": [],
+        "caution": [
+          {
+            "name": "Polo GTI (2.0 TSI)",
+            "why": "AUTO BILD: teils Wasserverlust durch Thermostatflansche/Wasserpumpen; einige Exemplare mit Tuning (Zustand genau prüfen)."
+          }
+        ]
+      },
+      "tips": [
+        "Lenkgelenke und Staubmanschetten bei Fahrzeugen ab etwa sechs Jahren prüfen lassen.",
+        "Infotainment/Navi und DSG bei der Probefahrt testen.",
+        "Offene Rückrufe beim Händler per Fahrgestellnummer abfragen; Facelift 2021 beachten."
+      ]
+    }
+  ]
+}

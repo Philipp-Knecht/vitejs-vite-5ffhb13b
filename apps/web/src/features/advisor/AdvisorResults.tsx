@@ -154,8 +154,10 @@ export function AdvisorResults({ answers, onEdit }: AdvisorResultsProps) {
       </ol>
       <p className="advisor-results__note">
         Die Reihenfolge ergibt sich aus deinen Antworten und unserer Einschätzung zu Zuverlässigkeit
-        (nach TÜV-Report und ADAC-Pannenstatistik), Kosten, Platz und Komfort. Sie ist keine
-        Kaufempfehlung – wie gut ein Auto ist, zeigt erst die Besichtigung.
+        (nach TÜV-Report und ADAC-Pannenstatistik), Kosten, Platz und Komfort. Welche Generation in
+        dein Budget passt, schätzen wir grob nach Fahrzeugklasse und Alter – die echten Preise
+        zeigen die Börsen. Das ist keine Kaufempfehlung: Wie gut ein Auto ist, zeigt erst die
+        Besichtigung.
       </p>
     </div>
   );

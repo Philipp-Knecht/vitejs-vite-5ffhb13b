@@ -1,0 +1,182 @@
+{
+  "id": "vw-t-roc",
+  "make": "Volkswagen",
+  "model": "T-Roc",
+  "aliases": ["t roc", "t-roc", "t-roc cabrio", "t-roc cabriolet", "t-roc r", "troc"],
+  "segment": "suv_kompakt",
+  "summary": "Der T-Roc ist ein Kompakt-SUV auf Golf-Basis mit erhöhter Sitzposition, solider Verarbeitung und überdurchschnittlich guten TÜV-Ergebnissen.",
+  "ratings": {
+    "reliability": 5,
+    "reliabilityNote": "TÜV-Report 2026: SUV-Klassensieger bei den 2- bis 3-Jährigen (3,2 % erhebliche Mängel) und bester aller Modelle bei den 6- bis 7-Jährigen (6,7 %); laut ADAC-Pannenstatistik 2026 unter den zuverlässigsten Modellen der unteren Mittelklasse.",
+    "reliabilitySources": [
+      {
+        "label": "TÜV-Verband: TÜV-Report 2026 – Mängelquoten steigen zum vierten Mal in Folge (20.11.2025)",
+        "url": "https://www.tuev-verband.de/pressemitteilungen/tuev-report-2026"
+      },
+      {
+        "label": "TÜV-Verband: TÜV-Report 2026, Pressekonferenz-Präsentation (20.11.2025)",
+        "url": "https://www.tuev-verband.de/fileadmin/user_upload/Content_local/2025_TUEV-Verband_TUV-Report_2026_Praesentation.pdf"
+      },
+      {
+        "label": "ADAC Pannenstatistik 2026",
+        "url": "https://www.adac.de/rund-ums-fahrzeug/unfall-schaden-panne/adac-pannenstatistik-2026/"
+      }
+    ],
+    "runningCosts": 4,
+    "space": 3,
+    "comfort": 3
+  },
+  "generations": [
+    {
+      "id": "vw-t-roc-1",
+      "name": "T-Roc (erste Generation)",
+      "code": "A1",
+      "years": [2017, 2025],
+      "bodyTypes": ["suv", "cabrio"],
+      "fuels": ["petrol", "diesel"],
+      "seats": [4, 5],
+      "automatic": true,
+      "typicalPriceEur": null,
+      "priceSource": null,
+      "strengths": [
+        "Beim TÜV-Report 2026 Klassensieger bei den SUV und bei den 6- bis 7-Jährigen bester aller Modelle.",
+        "Laut AUTO BILD bezahlbarer Allrounder mit breitem Antriebsspektrum und moderaten Fixkosten.",
+        "Laut Autozeitung dynamisch, kompakt und übersichtlich und vergleichsweise günstig in Unterhalt und Anschaffung."
+      ],
+      "issues": [
+        {
+          "title": "Leckende Injektoren und Anfahrruckler bei frühen Benzinern",
+          "affects": "frühe 1.0 TSI und 1.5 TSI",
+          "detail": "AUTO BILD berichtet, dass frühe 1.0- und 1.5-TSI-Motoren vereinzelt leckende Injektoren und Anfahrruckler zeigen.",
+          "check": "Kalt und warm anfahren und auf Ruckeln und unruhigen Lauf achten; Werkstattrechnungen und Rückrufe prüfen lassen.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "AUTO BILD: VW T-Roc – Gebrauchtwagen-Test, 31.08.2025",
+              "url": "https://www.autobild.de/artikel/vw-t-roc-gebrauchtwagen-test-28291333.html"
+            }
+          ]
+        },
+        {
+          "title": "DSG schaltet mitunter ruppig",
+          "affects": "T-Roc mit DSG",
+          "detail": "AUTO BILD nennt das mitunter ruppige DSG als Stolperfalle.",
+          "check": "Probefahrt mit Anfahren, Stop-and-go und Rangieren.",
+          "severity": "gering",
+          "sources": [
+            {
+              "label": "AUTO BILD: VW T-Roc – Gebrauchtwagen-Test, 31.08.2025",
+              "url": "https://www.autobild.de/artikel/vw-t-roc-gebrauchtwagen-test-28291333.html"
+            },
+            {
+              "label": "AUTO BILD: VW T-Roc beim TÜV – Top-SUV oder Problemfall?, 26.05.2026",
+              "url": "https://www.autobild.de/artikel/vw-t-roc-im-tuev-check-2026--28071449.html"
+            }
+          ]
+        },
+        {
+          "title": "Assistenzsysteme und Infotainment mit Aussetzern",
+          "affects": "T-Roc, je nach Softwarestand",
+          "detail": "Laut AUTO BILD können Assistenzsysteme gelegentlich gestört sein oder zeitweise ausfallen, und je nach Softwarestand neigt das Infotainment zu sporadischen Aussetzern.",
+          "check": "Assistenzsysteme (Spurhalter, Notbremse, Tempomat) und Infotainment testen; beim Händler nach Software-Updates fragen.",
+          "severity": "gering",
+          "sources": [
+            {
+              "label": "AUTO BILD: VW T-Roc – Gebrauchtwagen-Test, 31.08.2025",
+              "url": "https://www.autobild.de/artikel/vw-t-roc-gebrauchtwagen-test-28291333.html"
+            },
+            {
+              "label": "AUTO BILD: VW T-Roc beim TÜV – Top-SUV oder Problemfall?, 26.05.2026",
+              "url": "https://www.autobild.de/artikel/vw-t-roc-im-tuev-check-2026--28071449.html"
+            }
+          ]
+        },
+        {
+          "title": "Quietschende Bremsen und Lackqualität",
+          "affects": "T-Roc",
+          "detail": "AUTO BILD erwähnt teils quietschende Bremsen und mangelnde Lackqualität. Die Autozeitung nennt als häufigste HU-Mängel verschlissene Bremsen, falsch eingestellte Scheinwerfer, abgefahrene Reifen und abgenutzte Wischerblätter.",
+          "check": "Bremsen und Lack prüfen; HU-Bericht ansehen.",
+          "severity": "gering",
+          "sources": [
+            {
+              "label": "AUTO BILD: VW T-Roc beim TÜV – Top-SUV oder Problemfall?, 26.05.2026",
+              "url": "https://www.autobild.de/artikel/vw-t-roc-im-tuev-check-2026--28071449.html"
+            },
+            {
+              "label": "AUTO BILD: VW T-Roc – Gebrauchtwagen-Test, 31.08.2025",
+              "url": "https://www.autobild.de/artikel/vw-t-roc-gebrauchtwagen-test-28291333.html"
+            },
+            {
+              "label": "Autozeitung: VW T-Roc (Cabrio) gebraucht kaufen – Darauf sollte man achten!, 23.05.2025",
+              "url": "https://www.autozeitung.de/vw-t-roc-gebrauchtwagen-kaufen-205545.html"
+            }
+          ]
+        },
+        {
+          "title": "Rückrufe (u. a. Bremspedalplatte, Motorverkleidung)",
+          "affects": "T-Roc, u. a. Modelljahr 2020 mit Automatik und Linkslenker",
+          "detail": "AUTO BILD zählt 13 KBA-Rückrufe, etwa wegen fehlerhafter Befestigung der Motorverkleidung. 2020 rief VW außerdem wegen einer fehlerhaften Schweißverbindung der Bremspedalplatte zurück (Automatik, Linkslenker; auch Golf, Tiguan und Touran).",
+          "check": "Per Fahrgestellnummer beim Händler klären, ob alle Rückrufe ausgeführt wurden.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "AUTO BILD: VW T-Roc beim TÜV – Top-SUV oder Problemfall?, 26.05.2026",
+              "url": "https://www.autobild.de/artikel/vw-t-roc-im-tuev-check-2026--28071449.html"
+            },
+            {
+              "label": "AUTOHAUS: VW-Rückruf – Problem mit Bremspedalen, 16.12.2020",
+              "url": "https://www.autohaus.de/nachrichten/vw-rueckruf-problem-mit-bremspedalen-2694509.html"
+            }
+          ]
+        }
+      ],
+      "engines": {
+        "recommended": [
+          {
+            "name": "1.5 TSI (150 PS), möglichst mit Handschaltung",
+            "why": "Autozeitung: passt mit Handschaltung perfekt zum T-Roc; Drehfreude, Leistungscharakteristik und Verbrauch stimmen."
+          }
+        ],
+        "caution": [
+          {
+            "name": "Frühe 1.0 TSI und 1.5 TSI",
+            "why": "AUTO BILD: vereinzelt leckende Injektoren und Anfahrruckler."
+          },
+          {
+            "name": "7-Gang-DSG",
+            "why": "AUTO BILD: agiert schon mal ruppig."
+          }
+        ]
+      },
+      "tips": [
+        "Bei der Probefahrt Anfahren (Ruckeln), DSG-Verhalten sowie Assistenzsysteme und Infotainment gezielt testen.",
+        "Wer Wert auf den Innenraum legt, wählt ein Facelift-Modell (ab 2022): laut Wikipedia besseres Material im vorderen Innenraum; AUTO BILD nennt den Qualitätseindruck zu Beginn durchwachsen.",
+        "Offene Rückrufe beim Händler per Fahrgestellnummer abfragen."
+      ]
+    },
+    {
+      "id": "vw-t-roc-2",
+      "name": "T-Roc (zweite Generation)",
+      "code": null,
+      "years": [2025, null],
+      "bodyTypes": ["suv"],
+      "fuels": ["petrol", "hybrid"],
+      "seats": [5],
+      "automatic": true,
+      "typicalPriceEur": null,
+      "priceSource": null,
+      "strengths": [
+        "Deutlich größer als der Vorgänger: 4,37 m lang (12 cm mehr), Kofferraum 475 Liter (laut Wikipedia).",
+        "Alle Versionen mit Doppelkupplungsgetriebe; Benziner mit 48-Volt-Mild-Hybrid, Dieselmotoren werden nicht mehr angeboten."
+      ],
+      "issues": [],
+      "engines": {
+        "recommended": [],
+        "caution": []
+      },
+      "tips": [
+        "Als sehr junges Modell liegen noch keine belastbaren Gebrauchtwagen-Erfahrungen vor; Rückrufe und Software-Stand beim Händler per Fahrgestellnummer erfragen."
+      ]
+    }
+  ]
+}
