@@ -1,0 +1,511 @@
+{
+  "id": "opel-astra",
+  "make": "Opel",
+  "model": "Astra",
+  "aliases": [
+    "astra",
+    "astra cabrio",
+    "astra caravan",
+    "astra electric",
+    "astra gtc",
+    "astra h",
+    "astra j",
+    "astra k",
+    "astra l",
+    "astra opc",
+    "astra sports tourer",
+    "astra twin top",
+    "astra twintop",
+    "opel astra"
+  ],
+  "segment": "kompakt",
+  "summary": "Der Opel Astra ist ein solider Kompaktwagen für den Alltag mit guter Verarbeitung und sicherem Fahrverhalten, der als Kombi (Caravan oder Sports Tourer) viel Kofferraum bietet.",
+  "ratings": {
+    "reliability": 3,
+    "reliabilityNote": "Laut ADAC-Pannenstatistik liegt der Astra meist im Mittelfeld: Astra H und J sind überwiegend „mittel“ eingestuft (beim Astra J ist die Erstzulassung 2012 „schlecht“), der Astra K 2016 bis 2019 „gut“ und 2015 sowie 2020 und 2021 „mittel“. Beim TÜV schneiden Astra H und K laut ADAC leicht unterdurchschnittlich ab, der Astra J leicht überdurchschnittlich.",
+    "reliabilitySources": [
+      {
+        "label": "ADAC Gebrauchtwageninfo: Opel Astra (2004-2010) Diesel",
+        "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0002-opel-astra-2004-2010-diesel-bericht.pdf"
+      },
+      {
+        "label": "ADAC Gebrauchtwageninfo: Opel Astra (2004-2010) Benziner",
+        "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0009-opel-astra-2004-2010-benziner-bericht.pdf"
+      },
+      {
+        "label": "ADAC Gebrauchtwageninfo: Opel Astra (2009-2017) Diesel",
+        "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0192-opel-astra-2009-2017-diesel-bericht.pdf"
+      },
+      {
+        "label": "ADAC Gebrauchtwageninfo: Opel Astra (2009-2017) Benziner",
+        "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0191-opel-astra-2009-2017-benziner-bericht.pdf"
+      },
+      {
+        "label": "ADAC Gebrauchtwageninfo: Opel Astra (2015-2021) Benziner",
+        "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0361-opel-astra-2015-2021-benziner-bericht.pdf"
+      }
+    ],
+    "runningCosts": 4,
+    "space": 3,
+    "comfort": 3
+  },
+  "generations": [
+    {
+      "id": "opel-astra-h",
+      "name": "Astra H",
+      "code": "H",
+      "years": [2004, 2010],
+      "bodyTypes": ["schraegheck", "limousine", "cabrio", "kombi", "coupe"],
+      "fuels": ["petrol", "diesel", "lpg"],
+      "seats": [4, 5],
+      "automatic": true,
+      "typicalPriceEur": null,
+      "priceSource": null,
+      "strengths": [
+        "Solide Verarbeitung und sicheres, ausgewogenes Fahrverhalten",
+        "Gute Platzverhältnisse und bequeme Sitze vorn",
+        "Großer Kofferraum im Kombi (Caravan)",
+        "ESP serienmäßig und große Auswahl an Gebrauchtwagen"
+      ],
+      "issues": [
+        {
+          "title": "Rückrufe: Kühler, Öldruckgeber, Kühlerlüfter, Hupe",
+          "affects": "Astra H: Rückrufe 4/2008 (nur 1.6 mit Kennbuchstabe XEP, Öldruckgeber), 8/2009 (1.8- und 2.2-Benziner sowie Automatikgetriebe, Kühler), 3/2011 (Hupenfunktion) und 1/2015 (Batterieabdeckung, Kühlerlüfter)",
+          "detail": "Laut ADAC kann bei betroffenen Fahrzeugen der Kühler undicht werden (Wasser kann in den Ölkreislauf gelangen), die Membran des Öldruckgebers kann Mikro-Risse bekommen und die Batterieabdeckung kann den Kühlerlüfter blockieren; zudem ist die Kontaktstelle der Hupe im Lenksäulenmodul fehlerhaft. Ob die Rückrufe erledigt wurden, sollte vor dem Kauf geklärt sein.",
+          "check": "Per Fahrgestellnummer beim Händler prüfen lassen, ob die Rückrufe erledigt sind.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: Opel Astra (2004-2010) Benziner",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0009-opel-astra-2004-2010-benziner-bericht.pdf"
+            },
+            {
+              "label": "ADAC Gebrauchtwageninfo: Opel Astra (2004-2010) Diesel",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0002-opel-astra-2004-2010-diesel-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Ölverlust und ölfeuchte Antriebseinheiten",
+          "affects": "Astra H insgesamt (Benziner und Diesel), laut TÜV-Auswertung im ADAC-Bericht",
+          "detail": "Laut ADAC treten Ölverlust und ölfeuchte Antriebseinheiten häufig auf und gehören zu den Hauptproblemzonen des Astra H. Ursache und mögliche Reparaturkosten sollten vor dem Kauf geklärt sein.",
+          "check": "Motor, Getriebe und Unterboden auf Ölspuren prüfen und den Ölstand kontrollieren.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: Opel Astra (2004-2010) Benziner",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0009-opel-astra-2004-2010-benziner-bericht.pdf"
+            },
+            {
+              "label": "ADAC Gebrauchtwageninfo: Opel Astra (2004-2010) Diesel",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0002-opel-astra-2004-2010-diesel-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Gebrochene Fahrwerksfedern",
+          "affects": "Astra H insgesamt (Benziner und Diesel), laut TÜV-Auswertung im ADAC-Bericht",
+          "detail": "Laut ADAC treten brechende Fahrwerksfedern häufig auf und gehören zu den Hauptproblemzonen des Astra H. Sie fallen beim TÜV als Mangel auf.",
+          "check": "Federn bei der Besichtigung auf Bruch prüfen lassen und auf eine einseitig abgesenkte Karosserie sowie auf Klappern achten.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: Opel Astra (2004-2010) Benziner",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0009-opel-astra-2004-2010-benziner-bericht.pdf"
+            },
+            {
+              "label": "ADAC Gebrauchtwageninfo: Opel Astra (2004-2010) Diesel",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0002-opel-astra-2004-2010-diesel-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Abgasrückführung als Pannenursache",
+          "affects": "Astra H (Benziner und Diesel), laut ADAC-Pannenstatistik bei den Jahrgängen 2007 bis 2010",
+          "detail": "Laut ADAC gehört die Abgasrückführung bei Fahrzeugen der Jahrgänge 2007 bis 2010 zu den Pannenschwerpunkten.",
+          "check": "Auf Motorstörungen und Warnleuchten achten, den Fehlerspeicher auslesen lassen und nach Reparaturen an der Abgasrückführung fragen.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: Opel Astra (2004-2010) Benziner",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0009-opel-astra-2004-2010-benziner-bericht.pdf"
+            },
+            {
+              "label": "ADAC Gebrauchtwageninfo: Opel Astra (2004-2010) Diesel",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0002-opel-astra-2004-2010-diesel-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Easytronic: lange Schaltzeiten und ruckartiges Anfahren",
+          "affects": "Astra H mit automatisiertem Schaltgetriebe Easytronic (laut ADAC-Bericht zu den Dieseln nur beim 1.3 CDTI); laut ADAC-Pannenstatistik Pannenschwerpunkt beim Jahrgang 2004",
+          "detail": "Laut ADAC nerven Modelle mit Easytronic mit langen Schaltzeiten, ruckartigem Anfahren und erhöhtem Verbrauch. In der Pannenstatistik fällt das automatisierte Schaltgetriebe bei Fahrzeugen des Jahrgangs 2004 auf.",
+          "check": "Bei Easytronic-Modellen auf der Probefahrt Anfahren und Gangwechsel testen; wer eine Automatik möchte, sollte laut ADAC lieber einen 1.9 CDTI mit Sechsgangautomatik wählen.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: Opel Astra (2004-2010) Benziner",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0009-opel-astra-2004-2010-benziner-bericht.pdf"
+            },
+            {
+              "label": "ADAC Gebrauchtwageninfo: Opel Astra (2004-2010) Diesel",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0002-opel-astra-2004-2010-diesel-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Verdeck-Elektrik und -Mechanik beim Cabrio (Twintop)",
+          "affects": "Astra H Cabrio (Twintop), laut ADAC-Pannenstatistik bei den Jahrgängen 2007 und 2008",
+          "detail": "Laut ADAC gehört das elektrische beziehungsweise mechanische Verdeck bei Fahrzeugen der Jahrgänge 2007 und 2008 zu den Pannenschwerpunkten.",
+          "check": "Das Verdeck mehrfach öffnen und schließen, auf Geräusche, Hakeln und Undichtigkeiten achten und Rechnungen früherer Reparaturen ansehen.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: Opel Astra (2004-2010) Benziner",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0009-opel-astra-2004-2010-benziner-bericht.pdf"
+            },
+            {
+              "label": "ADAC Gebrauchtwageninfo: Opel Astra (2004-2010) Diesel",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0002-opel-astra-2004-2010-diesel-bericht.pdf"
+            }
+          ]
+        }
+      ],
+      "engines": {
+        "recommended": [
+          {
+            "name": "1.6 Benziner (105–115 PS)",
+            "why": "Laut ADAC bringt er das Auto angemessen in Schwung, gilt als solide und ist als Gebrauchter häufig zu finden."
+          },
+          {
+            "name": "LPG-Varianten (Autogas)",
+            "why": "Laut ADAC eine interessante Alternative mit günstigen Kraftstoffkosten."
+          },
+          {
+            "name": "1.9 CDTI Diesel (100 und 120 PS)",
+            "why": "Laut ADAC merklich kultivierter als der 1.7 CDTI; schon die schwächeren Versionen reichen vollkommen aus, auch auf der Autobahn."
+          },
+          {
+            "name": "1.9 CDTI mit Sechsgangautomatik",
+            "why": "Laut ADAC die bessere Wahl für alle, die eine Automatik möchten (statt Easytronic)."
+          }
+        ],
+        "caution": [
+          {
+            "name": "1.4 Benziner (90 PS)",
+            "why": "Laut ADAC bringt er den Opel nur verhalten in Fahrt und ist nur abseits von Autobahnen zu empfehlen."
+          },
+          {
+            "name": "1.7 CDTI Diesel (kräftigere Varianten bis 125 PS)",
+            "why": "Laut ADAC mit verbesserungswürdiger Laufkultur: Sie vibrieren gern und machen keinen Hehl aus ihrem Arbeitsprinzip."
+          },
+          {
+            "name": "1.8 Benziner (125 und 140 PS)",
+            "why": "Laut ADAC braucht er einen spürbaren Extra-Schluck Kraftstoff; 1.8- und 2.2-Benziner waren zudem vom Kühler-Rückruf 8/2009 betroffen."
+          },
+          {
+            "name": "Modelle mit Easytronic (automatisiertes Schaltgetriebe)",
+            "why": "Laut ADAC lange Schaltzeiten, ruckartiges Anfahren und erhöhter Verbrauch; Pannenschwerpunkt beim Jahrgang 2004."
+          }
+        ]
+      },
+      "tips": [
+        "Motor, Getriebe und Unterboden auf Ölspuren prüfen; ölfeuchte Antriebseinheiten gehören laut ADAC zu den Hauptproblemzonen.",
+        "Fahrwerksfedern auf Bruch kontrollieren lassen; sie sind laut ADAC anfällig.",
+        "Beim Cabrio (Twintop) das Verdeck mehrfach öffnen und schließen und auf Geräusche und Undichtigkeiten achten.",
+        "Bei Modellen mit Easytronic die Probefahrt ausgiebig nutzen: Lange Schaltzeiten und ruckartiges Anfahren sind laut ADAC typisch."
+      ]
+    },
+    {
+      "id": "opel-astra-j",
+      "name": "Astra J",
+      "code": "J",
+      "years": [2009, 2017],
+      "bodyTypes": ["schraegheck", "kombi", "limousine", "coupe"],
+      "fuels": ["petrol", "diesel", "lpg"],
+      "seats": [5],
+      "automatic": true,
+      "typicalPriceEur": null,
+      "priceSource": null,
+      "strengths": [
+        "Solide Verarbeitung",
+        "Ausgewogenes Fahrverhalten und komfortable Federung",
+        "Sehr bequeme Sitze (vor allem die AGR-Sitze)",
+        "Kombi Sports Tourer mit genügend großem Kofferraum"
+      ],
+      "issues": [
+        {
+          "title": "Rückrufe: Airbag-Module, Berganfahrhilfe, Beifahrersitz",
+          "affects": "Astra J (Benziner und Diesel): Rückrufe 11/2010 (nur Beifahrersitz ohne Höhenverstellung), 9/2015 (Schaltgetriebe mit Berganfahrhilfe), 2/2017 (Airbag-Module) und 5/2019 (Berganfahrassistent)",
+          "detail": "Laut ADAC können bei betroffenen Fahrzeugen Befestigungsschrauben der Sitzführungsschienen des Beifahrersitzes reißen, Airbag-Module wegen fehlerhafter Zündchemikalie nicht richtig zünden und das Fahrzeug wegen eines Fehlers des Berganfahrassistenten unbeabsichtigt wegrollen. Beim Rückruf 9/2015 ging es um einen Softwarefehler bei Fahrzeugen mit Schaltgetriebe und Berganfahrhilfe.",
+          "check": "Per Fahrgestellnummer beim Händler prüfen lassen, ob die Rückrufe erledigt sind.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: Opel Astra (2009-2017) Benziner",
+              "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0191-opel-astra-2009-2017-benziner-bericht.pdf"
+            },
+            {
+              "label": "ADAC Gebrauchtwageninfo: Opel Astra (2009-2017) Diesel",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0192-opel-astra-2009-2017-diesel-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Sechsgang-Schaltgetriebe: Singgeräusche und Getriebeschaden",
+          "affects": "Astra J mit Sechsgang-Schaltgetriebe (Benziner: stärkere Varianten; Diesel: Sechsgangschaltung)",
+          "detail": "Laut ADAC bereiten die Sechsganggetriebe größere Sorgen. Sind bei der Probefahrt Singgeräusche aus dem Getriebe zu hören, droht ein baldiger Getriebeschaden.",
+          "check": "Auf der Probefahrt in allen Gängen auf Singgeräusche aus dem Getriebe achten; bei Auffälligkeiten das Getriebe von einer Werkstatt prüfen lassen oder vom Kauf Abstand nehmen.",
+          "severity": "hoch",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: Opel Astra (2009-2017) Benziner",
+              "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0191-opel-astra-2009-2017-benziner-bericht.pdf"
+            },
+            {
+              "label": "ADAC Gebrauchtwageninfo: Opel Astra (2009-2017) Diesel",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0192-opel-astra-2009-2017-diesel-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Häufiger Ölverlust",
+          "affects": "Astra J insgesamt (Benziner und Diesel), laut TÜV-Auswertung im ADAC-Bericht",
+          "detail": "Laut ADAC bereitet beim Astra J häufig Ölverlust Probleme. Ursache und mögliche Reparaturkosten sollten vor dem Kauf geklärt sein.",
+          "check": "Motorraum, Getriebe und Unterboden auf Ölspuren prüfen und den Ölstand kontrollieren.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: Opel Astra (2009-2017) Benziner",
+              "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0191-opel-astra-2009-2017-benziner-bericht.pdf"
+            },
+            {
+              "label": "ADAC Gebrauchtwageninfo: Opel Astra (2009-2017) Diesel",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0192-opel-astra-2009-2017-diesel-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Anfällige Fahrwerksfedern",
+          "affects": "Astra J insgesamt (Benziner und Diesel), laut TÜV-Auswertung im ADAC-Bericht",
+          "detail": "Laut ADAC bereiten die Federn des Fahrwerks Probleme und gehören zu den größeren Sorgen des Astra J.",
+          "check": "Federn und Dämpfer bei der Besichtigung auf Bruch und Undichtigkeit prüfen lassen und auf der Probefahrt auf Klappern achten.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: Opel Astra (2009-2017) Benziner",
+              "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0191-opel-astra-2009-2017-benziner-bericht.pdf"
+            },
+            {
+              "label": "ADAC Gebrauchtwageninfo: Opel Astra (2009-2017) Diesel",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0192-opel-astra-2009-2017-diesel-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Turbolader beim Jahrgang 2014",
+          "affects": "Astra J mit Turbomotor (Benziner und Diesel), laut ADAC-Pannenstatistik beim Jahrgang 2014",
+          "detail": "Laut ADAC gehört der Turbolader bei Fahrzeugen des Jahrgangs 2014 zu den Pannenschwerpunkten.",
+          "check": "Bei Turbomotoren auf ungewöhnliche Geräusche, Leistungsverlust und Rauch achten und nach dem Wartungsnachweis fragen.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: Opel Astra (2009-2017) Benziner",
+              "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0191-opel-astra-2009-2017-benziner-bericht.pdf"
+            },
+            {
+              "label": "ADAC Gebrauchtwageninfo: Opel Astra (2009-2017) Diesel",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0192-opel-astra-2009-2017-diesel-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Abgasrückführung bei Dieseln",
+          "affects": "Astra J Diesel, laut ADAC-Bericht zu den Dieseln bei den Jahrgängen 2009 bis 2012",
+          "detail": "Laut ADAC gehört die Abgasrückführung bei Dieselfahrzeugen der Jahrgänge 2009 bis 2012 zu den Pannenschwerpunkten.",
+          "check": "Auf Motorstörungen und Warnleuchten achten, den Fehlerspeicher auslesen lassen und nach Reparaturen an der Abgasrückführung fragen.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: Opel Astra (2009-2017) Diesel",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0192-opel-astra-2009-2017-diesel-bericht.pdf"
+            }
+          ]
+        }
+      ],
+      "engines": {
+        "recommended": [
+          {
+            "name": "1.4 Turbo Benziner (140 PS)",
+            "why": "Laut ADAC die goldene Mitte: genug Kraft, zurückhaltender Verbrauch, wenige Probleme und häufig am Markt zu finden."
+          },
+          {
+            "name": "1.6 CDTi Diesel (136 PS)",
+            "why": "Laut ADAC deutlich moderner und laufruhiger als die 1.7 CDTi; mit 136 PS ist der Astra standesgemäß motorisiert."
+          },
+          {
+            "name": "1.7 CDTi Diesel",
+            "why": "Laut ADAC nicht leise, aber kräftiger als der kleinste Diesel und als robust geltend."
+          }
+        ],
+        "caution": [
+          {
+            "name": "Saugbenziner (87–115 PS)",
+            "why": "Laut ADAC robust und zuverlässig, bringen den schweren Astra aber nur sehr mühsam in Schwung."
+          },
+          {
+            "name": "1.3 CDTi Diesel (95 PS)",
+            "why": "Laut ADAC bringt er den schweren Astra nur sehr mühsam in Schwung und läuft relativ laut."
+          },
+          {
+            "name": "Varianten mit Sechsgang-Schaltgetriebe",
+            "why": "Laut ADAC bereiten die Sechsganggetriebe größere Sorgen; bei Singgeräuschen droht ein baldiger Getriebeschaden."
+          }
+        ]
+      },
+      "tips": [
+        "Bei Modellen mit Sechsgang-Schaltgetriebe auf der Probefahrt in allen Gängen auf Singgeräusche achten; laut ADAC droht dann ein baldiger Getriebeschaden.",
+        "Motorraum, Getriebe und Unterboden auf Ölspuren prüfen.",
+        "Federn und Dämpfer des Fahrwerks auf Bruch und Undichtigkeit prüfen lassen.",
+        "Fahrzeuge mit Erstzulassung 2012 liegen in der ADAC-Pannenstatistik im schlechten Bereich: hier besonders gründlich prüfen und Wartungsnachweise verlangen."
+      ]
+    },
+    {
+      "id": "opel-astra-k",
+      "name": "Astra K",
+      "code": "K",
+      "years": [2015, 2021],
+      "bodyTypes": ["schraegheck", "kombi"],
+      "fuels": ["petrol", "diesel", "cng"],
+      "seats": [5],
+      "automatic": true,
+      "typicalPriceEur": null,
+      "priceSource": null,
+      "strengths": [
+        "Solide Verarbeitung und eingängige Bedienung",
+        "Agiles Fahrverhalten bei deutlich geringerem Gewicht und niedrigerem Verbrauch als der Vorgänger",
+        "Gute Platzverhältnisse vorn auf sehr bequemen Sitzen",
+        "Gute serienmäßige Sicherheitsausstattung und kräftige Bremsen"
+      ],
+      "issues": [
+        {
+          "title": "Rückrufe: Beifahrer-Airbag, Brandgefahr, Rückenlehne",
+          "affects": "Astra K (laut ADAC-Bericht zu den Benzinern): Rückrufe 12/2016 (Beifahrer-Airbag), 7/2018 (Turbolader-Ölleitung) und 1/2020 (untere Querträger der Rückenlehne)",
+          "detail": "Laut ADAC könnte sich der Beifahrer-Airbag bei einer Frontalkollision nicht korrekt entfalten, weil er nicht den Spezifikationen entspricht; an der Turbolader-Ölleitung besteht durch Ölaustritt Brandgefahr, und Verschweißungen der unteren Querträger der Rückenlehne sind möglicherweise fehlerhaft. Ob die Rückrufe erledigt wurden, sollte vor dem Kauf geklärt sein.",
+          "check": "Per Fahrgestellnummer beim Händler prüfen lassen, ob die Rückrufe erledigt sind.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: Opel Astra (2015-2021) Benziner",
+              "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0361-opel-astra-2015-2021-benziner-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Ölfeuchte Antriebsstrangteile",
+          "affects": "Astra K insgesamt, laut TÜV-Auswertung im ADAC-Bericht zu den Benzinern",
+          "detail": "Laut ADAC sind ölfeuchte Antriebsstrangteile einer der Hauptgründe dafür, dass der Astra K die neue HU-Plakette nicht bekommt. Ursache und mögliche Reparaturkosten sollten vor dem Kauf geklärt sein.",
+          "check": "Motor, Getriebe und Unterboden auf Ölspuren prüfen und den Ölstand kontrollieren.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: Opel Astra (2015-2021) Benziner",
+              "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0361-opel-astra-2015-2021-benziner-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Defekte Lenkgelenke",
+          "affects": "Astra K insgesamt, laut TÜV-Auswertung im ADAC-Bericht zu den Benzinern",
+          "detail": "Laut ADAC gehören defekte Lenkgelenke zu den Hauptgründen dafür, dass der Astra K die neue HU-Plakette nicht bekommt.",
+          "check": "Auf der Probefahrt auf Spiel und Geräusche in der Lenkung achten und die Lenkgelenke bei der Besichtigung prüfen lassen.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: Opel Astra (2015-2021) Benziner",
+              "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0361-opel-astra-2015-2021-benziner-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Turbolader und Ladedruckregelung bei jungen Fahrzeugen",
+          "affects": "Astra K mit Turbomotor (laut ADAC-Bericht zu den Benzinern), laut ADAC-Pannenstatistik bei den Jahrgängen 2020 und 2021",
+          "detail": "Laut ADAC gehören die Ladedruckregelung und der Turbolader bei Fahrzeugen der Jahrgänge 2020 und 2021 zu den Pannenschwerpunkten; diese Jahrgänge liegen in der ADAC-Einstufung nur im mittleren Bereich.",
+          "check": "Bei Turbomotoren auf Leistungsverlust, Warnleuchten und ungewöhnliche Geräusche achten und nach dem Wartungsnachweis fragen.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: Opel Astra (2015-2021) Benziner",
+              "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0361-opel-astra-2015-2021-benziner-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Starterbatterie beim Jahrgang 2015",
+          "affects": "Astra K (laut ADAC-Bericht zu den Benzinern), laut ADAC-Pannenstatistik beim Jahrgang 2015",
+          "detail": "Laut ADAC gehört die Starterbatterie bei Fahrzeugen des Jahrgangs 2015 zu den Pannenschwerpunkten; eine schwache Batterie kann zu Startproblemen führen.",
+          "check": "Startverhalten (auch kalt) testen und das Alter der Batterie erfragen.",
+          "severity": "gering",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: Opel Astra (2015-2021) Benziner",
+              "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0361-opel-astra-2015-2021-benziner-bericht.pdf"
+            }
+          ]
+        }
+      ],
+      "engines": {
+        "recommended": [
+          {
+            "name": "1.4 Turbo (125 und 150 PS)",
+            "why": "Laut ADAC ein laufruhiger Vierzylinder, der kräftig anschiebt, im Alltag ausreichend sparsam ist und als Gebrauchter häufig angeboten wird."
+          },
+          {
+            "name": "1.0 Dreizylinder (105 PS)",
+            "why": "Laut ADAC reicht die stärkere Variante im Alltag völlig aus und hält sich beim Spritverbrauch zurück."
+          },
+          {
+            "name": "1.2 Dreizylinder (110 und 130 PS)",
+            "why": "Laut ADAC ein guter Kompromiss aus Leistung und Verbrauch, allerdings mit Abstrichen bei der Laufkultur."
+          },
+          {
+            "name": "CNG-Variante (Erdgas, 110 PS)",
+            "why": "Laut ADAC eine günstige Alternative für Vielfahrer mit niedrigen Kraftstoffkosten."
+          }
+        ],
+        "caution": [
+          {
+            "name": "1.4 Saugbenziner (100 PS)",
+            "why": "Laut ADAC wirkt er etwas lethargisch."
+          }
+        ]
+      },
+      "tips": [
+        "Bei Turbomotoren der Jahrgänge 2020 und 2021 auf Leistungsverlust und Warnleuchten achten (Turbolader, Ladedruckregelung).",
+        "Motor, Getriebe und Unterboden auf Ölfeuchtigkeit prüfen und die Lenkgelenke auf Spiel kontrollieren; beides sind laut ADAC die Hauptgründe für verweigerte HU-Plaketten.",
+        "Nachweis über erledigte Rückrufe verlangen, besonders zur Turbolader-Ölleitung (7/2018, Brandgefahr) und zum Beifahrer-Airbag (12/2016)."
+      ]
+    },
+    {
+      "id": "opel-astra-l",
+      "name": "Astra L",
+      "code": "L",
+      "years": [2022, null],
+      "bodyTypes": ["schraegheck", "kombi"],
+      "fuels": ["petrol", "diesel", "plugin_hybrid", "electric"],
+      "seats": [5],
+      "automatic": true,
+      "typicalPriceEur": null,
+      "priceSource": null,
+      "strengths": [],
+      "issues": [],
+      "engines": {
+        "recommended": [],
+        "caution": []
+      },
+      "tips": [
+        "Für diese Generation liegen noch wenige Gebrauchtwagen-Erfahrungen vor; Rückrufe per Fahrgestellnummer erfragen."
+      ]
+    }
+  ]
+}

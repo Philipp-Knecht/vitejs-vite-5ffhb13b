@@ -420,6 +420,120 @@
     ]
   },
   {
+    "id": "opel-astra",
+    "make": "Opel",
+    "model": "Astra",
+    "segment": "kompakt",
+    "twinOf": null,
+    "ratings": {
+      "reliability": 3,
+      "runningCosts": 4,
+      "space": 3,
+      "comfort": 3
+    },
+    "generations": [
+      {
+        "id": "opel-astra-h",
+        "name": "Astra H",
+        "years": [2004, 2010],
+        "bodyTypes": ["schraegheck", "limousine", "cabrio", "kombi", "coupe"],
+        "fuels": ["petrol", "diesel", "lpg"],
+        "seats": [4, 5],
+        "automatic": true,
+        "typicalPriceEur": null,
+        "issueCount": 6,
+        "severeIssueCount": 0
+      },
+      {
+        "id": "opel-astra-j",
+        "name": "Astra J",
+        "years": [2009, 2017],
+        "bodyTypes": ["schraegheck", "kombi", "limousine", "coupe"],
+        "fuels": ["petrol", "diesel", "lpg"],
+        "seats": [5],
+        "automatic": true,
+        "typicalPriceEur": null,
+        "issueCount": 6,
+        "severeIssueCount": 1
+      },
+      {
+        "id": "opel-astra-k",
+        "name": "Astra K",
+        "years": [2015, 2021],
+        "bodyTypes": ["schraegheck", "kombi"],
+        "fuels": ["petrol", "diesel", "cng"],
+        "seats": [5],
+        "automatic": true,
+        "typicalPriceEur": null,
+        "issueCount": 5,
+        "severeIssueCount": 0
+      },
+      {
+        "id": "opel-astra-l",
+        "name": "Astra L",
+        "years": [2022, null],
+        "bodyTypes": ["schraegheck", "kombi"],
+        "fuels": ["petrol", "diesel", "plugin_hybrid", "electric"],
+        "seats": [5],
+        "automatic": true,
+        "typicalPriceEur": null,
+        "issueCount": 0,
+        "severeIssueCount": 0
+      }
+    ]
+  },
+  {
+    "id": "opel-corsa",
+    "make": "Opel",
+    "model": "Corsa",
+    "segment": "kleinwagen",
+    "twinOf": null,
+    "ratings": {
+      "reliability": 4,
+      "runningCosts": 4,
+      "space": 2,
+      "comfort": 3
+    },
+    "generations": [
+      {
+        "id": "opel-corsa-d",
+        "name": "Corsa D",
+        "years": [2006, 2014],
+        "bodyTypes": ["schraegheck"],
+        "fuels": ["petrol", "diesel", "lpg"],
+        "seats": [5],
+        "automatic": true,
+        "typicalPriceEur": null,
+        "issueCount": 6,
+        "severeIssueCount": 0
+      },
+      {
+        "id": "opel-corsa-e",
+        "name": "Corsa E",
+        "years": [2014, 2019],
+        "bodyTypes": ["schraegheck"],
+        "fuels": ["petrol", "diesel", "lpg"],
+        "seats": [5],
+        "automatic": true,
+        "typicalPriceEur": null,
+        "issueCount": 5,
+        "severeIssueCount": 0
+      },
+      {
+        "id": "opel-corsa-f",
+        "name": "Corsa F",
+        "years": [2019, null],
+        "bodyTypes": ["schraegheck"],
+        "fuels": ["petrol", "diesel", "electric"],
+        "seats": [5],
+        "automatic": true,
+        "typicalPriceEur": null,
+        "issueCount": 0,
+        "severeIssueCount": 0
+      }
+    ]
+  },
+  {
     "id": "seat-mii",
     "make": "Seat",
     "model": "Mii",
@@ -631,6 +745,45 @@
         "bodyTypes": ["limousine", "kombi"],
         "fuels": ["petrol", "diesel", "hybrid", "plugin_hybrid"],
         "seats": [5],
+        "automatic": true,
+        "typicalPriceEur": null,
+        "issueCount": 0,
+        "severeIssueCount": 0
+      }
+    ]
+  },
+  {
+    "id": "vw-caddy",
+    "make": "Volkswagen",
+    "model": "Caddy",
+    "segment": "hochdachkombi",
+    "twinOf": null,
+    "ratings": {
+      "reliability": 4,
+      "runningCosts": 4,
+      "space": 5,
+      "comfort": 3
+    },
+    "generations": [
+      {
+        "id": "vw-caddy-iii-iv",
+        "name": "Caddy III/IV",
+        "years": [2003, 2020],
+        "bodyTypes": ["van"],
+        "fuels": ["petrol", "diesel", "cng"],
+        "seats": [2, 5, 7],
+        "automatic": true,
+        "typicalPriceEur": null,
+        "issueCount": 6,
+        "severeIssueCount": 0
+      },
+      {
+        "id": "vw-caddy-v",
+        "name": "Caddy V",
+        "years": [2020, null],
+        "bodyTypes": ["van"],
+        "fuels": ["petrol", "diesel", "cng", "plugin_hybrid"],
+        "seats": [2, 5, 7],
         "automatic": true,
         "typicalPriceEur": null,
         "issueCount": 0,

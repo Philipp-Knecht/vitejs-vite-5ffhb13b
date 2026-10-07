@@ -1,0 +1,392 @@
+{
+  "id": "opel-corsa",
+  "make": "Opel",
+  "model": "Corsa",
+  "aliases": [
+    "corsa",
+    "corsa d",
+    "corsa e",
+    "corsa ecoflex",
+    "corsa electric",
+    "corsa f",
+    "corsa gsi",
+    "corsa opc",
+    "corsa-e",
+    "opel corsa"
+  ],
+  "segment": "kleinwagen",
+  "summary": "Der Opel Corsa ist ein beliebter Kleinwagen mit solider Verarbeitung und sicherem Fahrverhalten, bei dem Kofferraum und Platz im Fond eher knapp ausfallen.",
+  "ratings": {
+    "reliability": 4,
+    "reliabilityNote": "Laut ADAC-Pannenstatistik liegt der Corsa im oberen Mittelfeld der Kleinwagen: Der Corsa D ist überwiegend „gut“ eingestuft (nur 2006 und 2014 „mittel“), der Corsa E ab Erstzulassung 2017 „gut“ (2014 bis 2016 „mittel“). Beim TÜV liegt er laut ADAC unter dem Durchschnitt (vor allem Federn/Dämpfer und Ölverlust); zum Corsa F und Corsa-e gibt es noch keine belastbaren Daten.",
+    "reliabilitySources": [
+      {
+        "label": "ADAC Gebrauchtwageninfo: Opel Corsa D (2006-2014) Benziner",
+        "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0164-opel-corsa-d-2006-2014-benziner-bericht.pdf"
+      },
+      {
+        "label": "ADAC Gebrauchtwageninfo: Opel Corsa D (2006-2014) Diesel",
+        "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0163-opel-corsa-d-2006-2014-diesel-bericht.pdf"
+      },
+      {
+        "label": "ADAC Gebrauchtwageninfo: Opel Corsa E (2014-2019) Benziner",
+        "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0355-opel-corsa-e-2014-2019-benziner-bericht.pdf"
+      },
+      {
+        "label": "ADAC Gebrauchtwageninfo: Opel Corsa E (2014-2019) Diesel",
+        "url": "https://assets.adac.de/image/upload/w_120/Autodatenbank/GWInfo/gw0357-opel-corsa-e-2014-2019-diesel-bericht.pdf"
+      },
+      {
+        "label": "ADAC Gebrauchtwageninfo: Opel Corsa-e (seit 2019) Elektro",
+        "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0495-opel-corsa-e-seit-2019-elektro-bericht.pdf"
+      }
+    ],
+    "runningCosts": 4,
+    "space": 2,
+    "comfort": 3
+  },
+  "generations": [
+    {
+      "id": "opel-corsa-d",
+      "name": "Corsa D",
+      "code": "D",
+      "years": [2006, 2014],
+      "bodyTypes": ["schraegheck"],
+      "fuels": ["petrol", "diesel", "lpg"],
+      "seats": [5],
+      "automatic": true,
+      "typicalPriceEur": null,
+      "priceSource": null,
+      "strengths": [
+        "Solide Verarbeitung",
+        "Sicheres, ausgewogenes Fahrverhalten",
+        "Gute Platzverhältnisse und bequeme Sitze vorn",
+        "Zuverlässige Technik (Benziner) und kräftige Dieselmotoren laut ADAC"
+      ],
+      "issues": [
+        {
+          "title": "Rückrufe: Lenkung, Airbag, Handbremse, Sitzschienen",
+          "affects": "Corsa D (Benziner und Diesel): Rückrufe 10/2009 (nur Dreitürer, Vordersitzschienen), 4/2011 (Beifahrer-Airbag), 11/2011 (Handbremshebel) und 9/2014 (Lenkung, ergänzende KBA-Warnung 1/2016)",
+          "detail": "Laut ADAC können bei betroffenen Fahrzeugen Verbindungsschrauben der Vordersitzschienen brechen (bei einem Unfall), sich die Abdeckung des Beifahrer-Airbags lösen, das Zahnsegment des Handbremshebels ausbrechen oder die Lenkung wegen eines falschen Teils im Kardangelenk ausfallen. Ob die Rückrufe erledigt wurden, sollte vor dem Kauf geklärt sein.",
+          "check": "Per Fahrgestellnummer beim Händler prüfen lassen, ob die Rückrufe erledigt sind.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: Opel Corsa D (2006-2014) Benziner",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0164-opel-corsa-d-2006-2014-benziner-bericht.pdf"
+            },
+            {
+              "label": "ADAC Gebrauchtwageninfo: Opel Corsa D (2006-2014) Diesel",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0163-opel-corsa-d-2006-2014-diesel-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Ölverlust",
+          "affects": "Corsa D insgesamt (Benziner und Diesel), laut TÜV-Auswertung im ADAC-Bericht",
+          "detail": "Laut ADAC treten beim TÜV Ölverlust und marode Federn sowie Dämpfer häufig auf, bei den Hauptuntersuchungen wird Ölverlust vermehrt bemängelt. Ursache und mögliche Reparaturkosten sollten vor dem Kauf geklärt sein.",
+          "check": "Motorraum und Unterboden auf Ölspuren prüfen, den Ölstand kontrollieren und nach früheren Reparaturen fragen.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: Opel Corsa D (2006-2014) Benziner",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0164-opel-corsa-d-2006-2014-benziner-bericht.pdf"
+            },
+            {
+              "label": "ADAC Gebrauchtwageninfo: Opel Corsa D (2006-2014) Diesel",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0163-opel-corsa-d-2006-2014-diesel-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Defekte Federn und Dämpfer",
+          "affects": "Corsa D insgesamt (Benziner und Diesel), laut TÜV-Auswertung im ADAC-Bericht",
+          "detail": "Der TÜV bemängelt laut ADAC bei den Hauptuntersuchungen vermehrt defekte Feder-Dämpfer-Einheiten und marode Federn. Das führt häufig zu Mängeln bei der Hauptuntersuchung.",
+          "check": "Auf der Probefahrt über Unebenheiten auf Klappern und Poltern achten; Federn und Dämpfer bei der Besichtigung auf Bruch, Ölspuren und Rost ansehen lassen.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: Opel Corsa D (2006-2014) Benziner",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0164-opel-corsa-d-2006-2014-benziner-bericht.pdf"
+            },
+            {
+              "label": "ADAC Gebrauchtwageninfo: Opel Corsa D (2006-2014) Diesel",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0163-opel-corsa-d-2006-2014-diesel-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Bremsanlage, Beleuchtung und Abgasanlage bei der Hauptuntersuchung",
+          "affects": "Corsa D insgesamt (Benziner und Diesel), laut TÜV-Auswertung im ADAC-Bericht",
+          "detail": "Der TÜV bemängelt laut ADAC bei den Hauptuntersuchungen vermehrt funktionsunfähige Bremsanlagen und defekte Beleuchtungseinrichtungen; auch rostige Abgasanlagen kommen vor.",
+          "check": "Bremsen (Scheiben, Beläge, Handbremse) und Beleuchtung prüfen lassen, die Abgasanlage auf Rost ansehen und den letzten HU-Bericht zeigen lassen.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: Opel Corsa D (2006-2014) Benziner",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0164-opel-corsa-d-2006-2014-benziner-bericht.pdf"
+            },
+            {
+              "label": "ADAC Gebrauchtwageninfo: Opel Corsa D (2006-2014) Diesel",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0163-opel-corsa-d-2006-2014-diesel-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Easytronic: lange Schaltzeiten und ruckartiges Anfahren",
+          "affects": "Corsa D mit automatisiertem Schaltgetriebe Easytronic (Benziner und Diesel); laut ADAC-Pannenstatistik Pannenschwerpunkt bei den Jahrgängen 2006 und 2007",
+          "detail": "Laut ADAC nervt das automatisierte Schaltgetriebe mit langen Schaltzeiten, ruckartigem Anfahren und erhöhtem Verbrauch. In der Pannenstatistik fällt es bei Fahrzeugen der Jahrgänge 2006 und 2007 auf.",
+          "check": "Bei Easytronic-Modellen auf der Probefahrt Anfahren und Gangwechsel testen und nach Reparaturen am Getriebe fragen.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: Opel Corsa D (2006-2014) Benziner",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0164-opel-corsa-d-2006-2014-benziner-bericht.pdf"
+            },
+            {
+              "label": "ADAC Gebrauchtwageninfo: Opel Corsa D (2006-2014) Diesel",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0163-opel-corsa-d-2006-2014-diesel-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Starterbatterie und Türschloss Fahrerseite",
+          "affects": "Corsa D (Benziner und Diesel), laut ADAC-Pannenstatistik: Starterbatterie bei den Jahrgängen 2013 und 2014, Türschloss Fahrerseite bei 2009, 2012 und 2014",
+          "detail": "Laut ADAC gehören die Starterbatterie (Startprobleme) und das Türschloss der Fahrerseite in den genannten Jahrgängen zu den Pannenschwerpunkten.",
+          "check": "Startverhalten und Alter der Batterie prüfen; das Fahrertürschloss mehrfach mit dem Schlüssel und, falls vorhanden, mit der Fernbedienung betätigen.",
+          "severity": "gering",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: Opel Corsa D (2006-2014) Benziner",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0164-opel-corsa-d-2006-2014-benziner-bericht.pdf"
+            },
+            {
+              "label": "ADAC Gebrauchtwageninfo: Opel Corsa D (2006-2014) Diesel",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0163-opel-corsa-d-2006-2014-diesel-bericht.pdf"
+            }
+          ]
+        }
+      ],
+      "engines": {
+        "recommended": [
+          {
+            "name": "1.4 Saugbenziner (87–101 PS)",
+            "why": "Laut ADAC deutlich flotter als der 1.2 bei nur geringem Mehrverbrauch."
+          },
+          {
+            "name": "1.2 Saugbenziner (69–85 PS)",
+            "why": "Laut ADAC besser geeignet als der 1.0 und für Wenigfahrer, die hauptsächlich in der Stadt unterwegs sind, ausreichend."
+          },
+          {
+            "name": "1.4 LPG (Autogas)",
+            "why": "Laut ADAC für Vielfahrer eine Empfehlung: deutlich niedrigere Betriebskosten, aber teurerer Einkauf."
+          },
+          {
+            "name": "1.3 CDTI Diesel (90 und 95 PS)",
+            "why": "Laut ADAC reichen diese Varianten für alle Lebenslagen eines Kleinwagens vollkommen aus."
+          },
+          {
+            "name": "1.7 CDTI Diesel (125 und 130 PS)",
+            "why": "Laut ADAC richtig flott und auch für zügige Autobahnetappen geeignet."
+          }
+        ],
+        "caution": [
+          {
+            "name": "1.0 Benziner",
+            "why": "Laut ADAC sehr träge und mit unrunder Laufkultur."
+          },
+          {
+            "name": "Modelle mit Easytronic (automatisiertes Schaltgetriebe)",
+            "why": "Laut ADAC lange Schaltzeiten, ruckartiges Anfahren und erhöhter Verbrauch; Pannenschwerpunkt bei den Jahrgängen 2006 und 2007."
+          },
+          {
+            "name": "1.3 CDTI EcoFlex",
+            "why": "Laut ADAC fühlt er sich wegen des lang übersetzten Getriebes etwas träge an."
+          }
+        ]
+      },
+      "tips": [
+        "Easytronic-Modelle ausgiebig probefahren: Anfahren und Gangwechsel sollten nicht ruckeln oder sehr lange dauern.",
+        "Auf Ölspuren an Motor und Unterboden achten und Federn sowie Dämpfer prüfen lassen; beides bemängelt der TÜV laut ADAC häufig.",
+        "Bremsen inklusive Handbremse, Beleuchtung und Auspuff (Rost) kontrollieren und den letzten HU-Bericht ansehen.",
+        "Beim Dreitürer hinten Probe sitzen und die Rundumsicht prüfen: Laut ADAC ist es hinten arg eng und die Sicht schlecht."
+      ]
+    },
+    {
+      "id": "opel-corsa-e",
+      "name": "Corsa E",
+      "code": "E",
+      "years": [2014, 2019],
+      "bodyTypes": ["schraegheck"],
+      "fuels": ["petrol", "diesel", "lpg"],
+      "seats": [5],
+      "automatic": true,
+      "typicalPriceEur": null,
+      "priceSource": null,
+      "strengths": [
+        "Solide Verarbeitung",
+        "Sicheres Fahrverhalten mit angenehm komfortablem Fahrwerk und kräftiger Bremsanlage",
+        "Gute Platzverhältnisse vorn",
+        "Gute Sicherheitsausstattung"
+      ],
+      "issues": [
+        {
+          "title": "Rückrufe: Lenkgestänge, Airbag, Handbremse, Motorhaube",
+          "affects": "Corsa E (Benziner und Diesel): Rückrufe 12/2016 (Lenkgestänge), 2/2017 (Airbag-Module), 4/2017 (Handbremshebel, nur mit Handschaltung) und 11/2018 (Motorhaube)",
+          "detail": "Laut ADAC gab es Rückrufe wegen eines Lenkgestänges mit fehlerhaftem Aushärte-Prozess, wegen Airbag-Modulen mit fehlerhafter Zündchemikalie, wegen eines Materialfehlers am Handbremshebel (die Feststellbremse kann versagen, das Fahrzeug rollt unerwartet weg) und wegen der Gefahr, dass sich die Motorhaube während der Fahrt plötzlich öffnet. Ob die Rückrufe erledigt wurden, sollte vor dem Kauf geklärt sein.",
+          "check": "Per Fahrgestellnummer beim Händler prüfen lassen, ob die Rückrufe erledigt sind.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: Opel Corsa E (2014-2019) Benziner",
+              "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0355-opel-corsa-e-2014-2019-benziner-bericht.pdf"
+            },
+            {
+              "label": "ADAC Gebrauchtwageninfo: Opel Corsa E (2014-2019) Diesel",
+              "url": "https://assets.adac.de/image/upload/w_120/Autodatenbank/GWInfo/gw0357-opel-corsa-e-2014-2019-diesel-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Defekte Feder-Dämpfer-Einheiten und ausgeschlagene Lenkgelenke",
+          "affects": "Corsa E insgesamt (Benziner und Diesel), laut TÜV-Auswertung im ADAC-Bericht",
+          "detail": "Der TÜV bemängelt laut ADAC bei den Hauptuntersuchungen vermehrt defekte Feder-Dämpfer-Einheiten und ausgeschlagene Lenkgelenke. Insgesamt bekommen weniger Autos als im Schnitt die neue Plakette ohne Mängel.",
+          "check": "Auf der Probefahrt auf Klappern, Poltern und Spiel in der Lenkung achten; Fahrwerk und Lenkgelenke bei der Besichtigung prüfen lassen.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: Opel Corsa E (2014-2019) Benziner",
+              "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0355-opel-corsa-e-2014-2019-benziner-bericht.pdf"
+            },
+            {
+              "label": "ADAC Gebrauchtwageninfo: Opel Corsa E (2014-2019) Diesel",
+              "url": "https://assets.adac.de/image/upload/w_120/Autodatenbank/GWInfo/gw0357-opel-corsa-e-2014-2019-diesel-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Funktionseinschränkungen bei der Fußbremse",
+          "affects": "Corsa E insgesamt (Benziner und Diesel), laut TÜV-Auswertung im ADAC-Bericht",
+          "detail": "Der TÜV bemängelt laut ADAC bei den Hauptuntersuchungen vermehrt Funktionseinschränkungen bei der Fußbremse. Die Bremsanlage sollte deshalb vor dem Kauf geprüft werden.",
+          "check": "Bremsscheiben und -beläge prüfen lassen und auf der Probefahrt auf Bremswirkung, Rubbeln und Geräusche achten.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: Opel Corsa E (2014-2019) Benziner",
+              "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0355-opel-corsa-e-2014-2019-benziner-bericht.pdf"
+            },
+            {
+              "label": "ADAC Gebrauchtwageninfo: Opel Corsa E (2014-2019) Diesel",
+              "url": "https://assets.adac.de/image/upload/w_120/Autodatenbank/GWInfo/gw0357-opel-corsa-e-2014-2019-diesel-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Ölverlust",
+          "affects": "Corsa E insgesamt (Benziner und Diesel), laut TÜV-Auswertung im ADAC-Bericht",
+          "detail": "Der TÜV bemängelt laut ADAC bei den Hauptuntersuchungen vermehrt Ölverlust. Ursache und mögliche Reparaturkosten sollten vor dem Kauf geklärt sein.",
+          "check": "Motorraum und Unterboden auf Ölspuren prüfen und den Ölstand kontrollieren.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: Opel Corsa E (2014-2019) Benziner",
+              "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0355-opel-corsa-e-2014-2019-benziner-bericht.pdf"
+            },
+            {
+              "label": "ADAC Gebrauchtwageninfo: Opel Corsa E (2014-2019) Diesel",
+              "url": "https://assets.adac.de/image/upload/w_120/Autodatenbank/GWInfo/gw0357-opel-corsa-e-2014-2019-diesel-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Anlasser, Starterbatterie und Türschloss Fahrerseite",
+          "affects": "Corsa E (Benziner und Diesel), laut ADAC-Pannenstatistik: Anlasser bei den Jahrgängen 2015 und 2016, Starterbatterie bei 2014 und 2016, Türschloss Fahrerseite bei 2014",
+          "detail": "Laut ADAC gehören diese Bauteile in den genannten Jahrgängen zu den Pannenschwerpunkten; Anlasser oder Batterie können zu Startproblemen führen.",
+          "check": "Startverhalten (auch kalt) testen, das Alter der Batterie erfragen und das Fahrertürschloss mehrfach betätigen.",
+          "severity": "gering",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: Opel Corsa E (2014-2019) Benziner",
+              "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0355-opel-corsa-e-2014-2019-benziner-bericht.pdf"
+            },
+            {
+              "label": "ADAC Gebrauchtwageninfo: Opel Corsa E (2014-2019) Diesel",
+              "url": "https://assets.adac.de/image/upload/w_120/Autodatenbank/GWInfo/gw0357-opel-corsa-e-2014-2019-diesel-bericht.pdf"
+            }
+          ]
+        }
+      ],
+      "engines": {
+        "recommended": [
+          {
+            "name": "1.0 Turbo (90 und 115 PS)",
+            "why": "Laut ADAC kultiviert, leise und kräftig im Antritt; Fahrspaß bei geringem Verbrauch und eine klare Empfehlung für den Durchschnittsfahrer."
+          },
+          {
+            "name": "1.4 Saugbenziner (90 PS)",
+            "why": "Laut ADAC deutlich flotter als der 1.2 mit 70 PS bei nur geringem Mehrverbrauch."
+          },
+          {
+            "name": "1.4 Turbo (100 PS)",
+            "why": "Laut ADAC ein guter Kompromiss aus Leistung und Verbrauch."
+          },
+          {
+            "name": "1.4 LPG (Autogas)",
+            "why": "Laut ADAC für Vielfahrer eine Empfehlung: deutlich niedrigere Betriebskosten, aber teurerer Einkauf."
+          },
+          {
+            "name": "1.3 CDTI Diesel (75 und 95 PS)",
+            "why": "Laut ADAC im Alltag mit Werten unter fünf Litern auf 100 km sparsam zu bewegen; die beiden Leistungsstufen unterscheiden sich kaum."
+          }
+        ],
+        "caution": [
+          {
+            "name": "1.2 Saugbenziner (70 PS)",
+            "why": "Laut ADAC nur für Wenigfahrer, die hauptsächlich in der Stadt unterwegs sind, eine Empfehlung."
+          },
+          {
+            "name": "Modelle mit Easytronic (automatisiertes Schaltgetriebe)",
+            "why": "Laut ADAC lange Schaltzeiten, ruckartiges Anfahren und erhöhter Verbrauch; beim Diesel deutlich schlechtere Fahrleistungen und keine Empfehlung."
+          }
+        ]
+      },
+      "tips": [
+        "Lenkung und Fahrwerk auf der Probefahrt auf Spiel, Klappern und Poltern prüfen; Lenkgelenke und Feder-Dämpfer-Einheiten sind laut ADAC häufige Mängel bei der Hauptuntersuchung.",
+        "Fuß- und Handbremse prüfen lassen und beim Handschalter nach dem Rückruf zum Handbremshebel (4/2017) fragen.",
+        "Motorraum und Unterboden auf Ölspuren kontrollieren.",
+        "Easytronic-Modelle ausgiebig probefahren: Laut ADAC sind lange Schaltpausen und ruckartiges Anfahren typisch."
+      ]
+    },
+    {
+      "id": "opel-corsa-f",
+      "name": "Corsa F",
+      "code": "F",
+      "years": [2019, null],
+      "bodyTypes": ["schraegheck"],
+      "fuels": ["petrol", "diesel", "electric"],
+      "seats": [5],
+      "automatic": true,
+      "typicalPriceEur": null,
+      "priceSource": null,
+      "strengths": [
+        "Corsa-e: ideal für die Stadt und für kurze bis mittlere Pendelstrecken",
+        "Viel Platz vorn und komfortables Fahrwerk",
+        "Gute Fahrleistungen und sicheres Fahrverhalten",
+        "Corsa-e: günstig im Unterhalt"
+      ],
+      "issues": [],
+      "engines": {
+        "recommended": [
+          {
+            "name": "Corsa-e (100 kW / 136 PS, 46-kWh-Batterie netto)",
+            "why": "Laut ADAC die einzige Motorisierung des Corsa-e: stramme Fahrleistungen, knapp 300 km Reichweite bei gemäßigten Temperaturen (im Winter deutlich weniger), ideal für kurze bis mittlere Pendelstrecken, aber nicht für Langstrecken."
+          }
+        ],
+        "caution": []
+      },
+      "tips": [
+        "Beim Corsa-e die Reichweite realistisch einplanen: Laut ADAC sind es knapp 300 km bei gemäßigten Temperaturen, im Winter deutlich weniger."
+      ]
+    }
+  ]
+}

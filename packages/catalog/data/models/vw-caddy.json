@@ -1,0 +1,237 @@
+{
+  "id": "vw-caddy",
+  "make": "Volkswagen",
+  "model": "Caddy",
+  "aliases": [
+    "caddy",
+    "caddy 3",
+    "caddy 4",
+    "caddy 4motion",
+    "caddy 5",
+    "caddy comfortline",
+    "caddy ecofuel",
+    "caddy iii",
+    "caddy iv",
+    "caddy kombi",
+    "caddy life",
+    "caddy maxi",
+    "caddy maxi life",
+    "caddy tgi",
+    "caddy trendline",
+    "caddy v",
+    "volkswagen caddy",
+    "vw caddy"
+  ],
+  "segment": "hochdachkombi",
+  "summary": "Der VW Caddy ist ein Hochdachkombi mit sehr viel Platz und riesigem Kofferraum, der im Alltag als geräumiger Familien- oder Lastenwagen punktet.",
+  "ratings": {
+    "reliability": 4,
+    "reliabilityNote": "Laut ADAC-Pannenstatistik schneidet der Caddy überwiegend gut ab, nur Fahrzeuge aus 2011 fallen laut ADAC negativ auf; auch die jüngeren Jahrgänge ab 2015 liegen überwiegend im guten Bereich. Beim TÜV ist er laut ADAC nur mittelmäßig bis leicht unterdurchschnittlich, vor allem wegen verschlissener Bremsen.",
+    "reliabilitySources": [
+      {
+        "label": "ADAC Gebrauchtwageninfo: VW Caddy (2003-2020) Diesel",
+        "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0251-vw-caddy-2003-2020-diesel-bericht.pdf"
+      },
+      {
+        "label": "ADAC Gebrauchtwageninfo: VW Caddy (ab 2003) Benziner",
+        "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0203-vw-caddy-ab-2003-benziner-bericht.pdf"
+      }
+    ],
+    "runningCosts": 4,
+    "space": 5,
+    "comfort": 3
+  },
+  "generations": [
+    {
+      "id": "vw-caddy-iii-iv",
+      "name": "Caddy III/IV",
+      "code": null,
+      "years": [2003, 2020],
+      "bodyTypes": ["van"],
+      "fuels": ["petrol", "diesel", "cng"],
+      "seats": [2, 5, 7],
+      "automatic": true,
+      "typicalPriceEur": null,
+      "priceSource": null,
+      "strengths": [
+        "Riesiger Kofferraum, solange keine dritte Sitzreihe eingebaut ist",
+        "Leichter Zustieg durch große Vordertüren und hintere Schiebetüren",
+        "Bequeme Sitze und gute Verarbeitung",
+        "Einfache Bedienung"
+      ],
+      "issues": [
+        {
+          "title": "Rückrufe: ABS-Steuergerät, Erdgastanks, Heckklappe",
+          "affects": "Caddy III/IV: Rückrufe 3/2014 (nur Fahrzeuge mit Heckklappe), 9/2016 (Eco Fuel, Erdgas), 2/2017 (nur Erdgas-Fahrzeuge, Gastanks) und 7/2017 (ABS-Steuergerät)",
+          "detail": "Laut ADAC können sich bei Fahrzeugen mit Heckklappe die Kugelbolzen der Gasdruckdämpfer lösen, bei Erdgas-Fahrzeugen kann es an den Gastanks zu Korrosion kommen und im ABS-Steuergerät kann durch thermomechanische Überlastung eine fehlerhafte Masseverbindung entstehen, die den Stromfluss unterbricht. Ob die Rückrufe erledigt wurden, sollte vor dem Kauf geklärt sein.",
+          "check": "Per Fahrgestellnummer beim Händler prüfen lassen, ob die Rückrufe erledigt sind.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: VW Caddy (2003-2020) Diesel",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0251-vw-caddy-2003-2020-diesel-bericht.pdf"
+            },
+            {
+              "label": "ADAC Gebrauchtwageninfo: VW Caddy (ab 2003) Benziner",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0203-vw-caddy-ab-2003-benziner-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Verschlissene Bremsen",
+          "affects": "Caddy III/IV insgesamt (Benziner und Diesel); laut TÜV-Statistik im ADAC-Bericht verschlissene Bremsscheiben in allen Jahrgängen",
+          "detail": "Laut ADAC sind die Bremsen im TÜV-Mängelreport die Sorgenkinder des Caddy, oft wegen mangelnder Pflege und häufiger Fahrten mit viel Beladung. Verschlissene Bremsscheiben treten laut TÜV-Statistik in allen Jahrgängen auf.",
+          "check": "Bremsscheiben und -beläge bei der Besichtigung prüfen lassen und nach Wartungsnachweisen sowie der bisherigen Nutzung (oft stark beladen?) fragen.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: VW Caddy (2003-2020) Diesel",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0251-vw-caddy-2003-2020-diesel-bericht.pdf"
+            },
+            {
+              "label": "ADAC Gebrauchtwageninfo: VW Caddy (ab 2003) Benziner",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0203-vw-caddy-ab-2003-benziner-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Kupplung und Getriebe bei hoher Zuladung",
+          "affects": "Caddy III/IV (Benziner und Diesel), Fahrzeuge, die oft mit hoher Zuladung bewegt wurden",
+          "detail": "Laut ADAC leiden bei Fahrzeugen, die oft mit hoher Zuladung gefahren wurden, die Kupplung und das Getriebe unter dem hohen Gewicht.",
+          "check": "Bei der Probefahrt besonders auf Kupplung und Getriebe achten (Anfahren, Schaltvorgänge, Geräusche) und nach der bisherigen Nutzung fragen.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: VW Caddy (2003-2020) Diesel",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0251-vw-caddy-2003-2020-diesel-bericht.pdf"
+            },
+            {
+              "label": "ADAC Gebrauchtwageninfo: VW Caddy (ab 2003) Benziner",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0203-vw-caddy-ab-2003-benziner-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Abgasskandal-Update bei Common-Rail-Dieseln (EA189)",
+          "affects": "Caddy III/IV Diesel mit 1,6- und 2,0-Liter-Common-Rail-Motor (EA189, Euro 5), laut ADAC-Bericht zu den Dieseln ab 2010 verbaut",
+          "detail": "Laut ADAC sind diese Motoren vom Abgasskandal betroffen. Beim Kauf sollte darauf geachtet werden, ob das Update bereits durchgeführt wurde.",
+          "check": "Nachweis über das durchgeführte Update verlangen und per Fahrgestellnummer beim Händler prüfen lassen.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: VW Caddy (2003-2020) Diesel",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0251-vw-caddy-2003-2020-diesel-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Abgasrückführung und Einspritzdüsen als Pannenursachen",
+          "affects": "Caddy III/IV, laut ADAC-Pannenstatistik: beim Diesel Abgasrückführung im Jahrgang 2013 und Einspritzdüsen/Injektoren 2010 bis 2015; beim Benziner Abgasrückführung 2011 bis 2012 und Einspritzdüsen/Injektoren 2010 bis 2012",
+          "detail": "Laut ADAC gehören diese Bauteile in den genannten Jahrgängen zu den Pannenschwerpunkten.",
+          "check": "Auf Motorstörungen, unruhigen Lauf und Warnleuchten achten, den Fehlerspeicher auslesen lassen und nach Reparaturen an Einspritzung und Abgasrückführung fragen.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: VW Caddy (2003-2020) Diesel",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0251-vw-caddy-2003-2020-diesel-bericht.pdf"
+            },
+            {
+              "label": "ADAC Gebrauchtwageninfo: VW Caddy (ab 2003) Benziner",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0203-vw-caddy-ab-2003-benziner-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Verschleiß beim TÜV: Auspuff, Federn/Dämpfer, Antriebswellenmanschetten",
+          "affects": "Caddy III/IV: laut TÜV-Statistik im ADAC-Bericht zu den Benzinern Auspuffanlagen ab dem 7. Jahr sowie Federn/Dämpfer und Antriebswellenmanschetten in fast allen Jahrgängen; laut Bericht zu den Dieseln rostige Abgasanlagen bei älteren Model…",
+          "detail": "Laut ADAC sind defekte Auspuffanlagen ab dem 7. Jahr sowie defekte Federn/Dämpfer und undichte Manschetten der Antriebswellen überdurchschnittlich häufig. Beim Diesel nennt der ADAC bei älteren Modellen außerdem rostige Abgasanlagen und zum Teil Ölverlust.",
+          "check": "Auspuffanlage auf Rost, Federn und Dämpfer auf Defekte und die Gummimanschetten der Antriebswellen auf Undichtigkeit prüfen lassen; Motor und Unterboden auf Ölspuren ansehen.",
+          "severity": "gering",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: VW Caddy (ab 2003) Benziner",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0203-vw-caddy-ab-2003-benziner-bericht.pdf"
+            },
+            {
+              "label": "ADAC Gebrauchtwageninfo: VW Caddy (2003-2020) Diesel",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0251-vw-caddy-2003-2020-diesel-bericht.pdf"
+            }
+          ]
+        }
+      ],
+      "engines": {
+        "recommended": [
+          {
+            "name": "1.4 TSI Benziner (125 PS)",
+            "why": "Laut ADAC passt dieser Motor am besten in das Fahrzeug."
+          },
+          {
+            "name": "1.2 TSI Benziner (105 PS)",
+            "why": "Laut ADAC laufruhig, mit einigermaßen zufriedenstellenden Fahrleistungen und häufig auf dem Gebrauchtwagenmarkt zu finden."
+          },
+          {
+            "name": "Pumpe-Düse-Diesel bis 105 PS (bis 2010)",
+            "why": "Laut ADAC relativ laut, aber robust und sparsam zu fahren."
+          },
+          {
+            "name": "Common-Rail-Diesel (EA189, Euro 5) ab 102 PS",
+            "why": "Laut ADAC sind nur die Varianten ab 102 PS eine Empfehlung; wegen des Abgasskandals sollte vor dem Kauf geprüft werden, ob das Update durchgeführt wurde."
+          },
+          {
+            "name": "2,0 TDI (EA288, Euro 6, ab 2015) außer der schwächsten Variante",
+            "why": "Laut ADAC bieten die häufig angebotenen Motoren zwischen 102 und 110 PS für die Fahrzeugklasse ausreichende Fahrleistungen."
+          },
+          {
+            "name": "Erdgas-Varianten (um 110 PS)",
+            "why": "Laut ADAC vor allem mit günstigem Verbrauch; die Rückrufe wegen Gastank-Korrosion (9/2016, 2/2017) sollten geprüft werden."
+          }
+        ],
+        "caution": [
+          {
+            "name": "Benziner mit 75 bis 102 PS",
+            "why": "Laut ADAC für das große Auto etwas schwach, vor allem bei hoher Zuladung."
+          },
+          {
+            "name": "Diesel mit 69 und 75 PS",
+            "why": "Laut ADAC für das große Auto etwas schwach, vor allem bei hoher Zuladung; die 69-PS-Variante ohne Turbolader hat besonders Mühe."
+          },
+          {
+            "name": "Common-Rail-Diesel (EA189) unter 102 PS",
+            "why": "Laut ADAC keine Empfehlung; zudem vom Abgasskandal betroffen."
+          },
+          {
+            "name": "2,0 TDI (EA288) in der schwächsten Variante",
+            "why": "Laut ADAC keine Empfehlung."
+          }
+        ]
+      },
+      "tips": [
+        "Bei der Probefahrt besonders auf Kupplung und Getriebe achten, vor allem wenn das Auto oft stark beladen bewegt wurde.",
+        "Bremsscheiben und -beläge prüfen lassen; verschlissene Bremsen sind laut ADAC beim TÜV das größte Sorgenkind.",
+        "Bei Dieseln mit EA189-Motor (Euro 5, ab 2010) den Nachweis über das Abgas-Update verlangen.",
+        "Bei älteren Fahrzeugen die Auspuffanlage auf Rost sowie Federn, Dämpfer und Antriebswellenmanschetten auf Defekte prüfen."
+      ]
+    },
+    {
+      "id": "vw-caddy-v",
+      "name": "Caddy V",
+      "code": null,
+      "years": [2020, null],
+      "bodyTypes": ["van"],
+      "fuels": ["petrol", "diesel", "cng", "plugin_hybrid"],
+      "seats": [2, 5, 7],
+      "automatic": true,
+      "typicalPriceEur": null,
+      "priceSource": null,
+      "strengths": [],
+      "issues": [],
+      "engines": {
+        "recommended": [],
+        "caution": []
+      },
+      "tips": [
+        "Zu dieser Generation haben wir noch keine Schwachstellen ausgewertet. Lass das Auto vor dem Kauf in einer Werkstatt prüfen und Rückrufe per Fahrgestellnummer erfragen."
+      ]
+    }
+  ]
+}
