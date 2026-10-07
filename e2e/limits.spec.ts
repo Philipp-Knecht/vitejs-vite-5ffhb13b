@@ -4,7 +4,7 @@ import { analyzeFromHomepage, LISTINGS } from './helpers';
 test('visitors without an account reach the free monthly limit', async ({ page }) => {
   for (let index = 0; index < 3; index += 1) await analyzeFromHomepage(page, LISTINGS.mercedes);
 
-  await page.goto('/');
+  await page.goto('/inserat-pruefen');
   await page.getByLabel('Inseratstext oder Link zum Auto-Inserat').fill(LISTINGS.mercedes);
   await page.getByRole('button', { name: 'Inserat prüfen' }).click();
 
@@ -13,7 +13,7 @@ test('visitors without an account reach the free monthly limit', async ({ page }
   await expect(page.getByRole('link', { name: 'Kostenloses Konto erstellen' })).toBeVisible();
 
   // The fictional example stays available.
-  await page.goto('/');
+  await page.goto('/inserat-pruefen');
   await page.getByRole('button', { name: 'Fiktives Beispiel ansehen' }).click();
   await expect(page).toHaveURL(/\/analyse\//);
 });

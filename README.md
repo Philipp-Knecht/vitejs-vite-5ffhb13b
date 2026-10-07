@@ -2,9 +2,17 @@
 
 **Gebraucht kaufen. Besser entscheiden.**
 
-KaufCheck helps people in Germany evaluate used-car listings from mobile.de, AutoScout24,
-Kleinanzeigen, eBay and other marketplaces. A user pastes the listing text (or a link); KaufCheck
-extracts and normalizes the vehicle data and shows a mobile-first dashboard:
+KaufCheck is a starting point for buying a used car in Germany: **find** (one search for
+mobile.de, AutoScout24, Kleinanzeigen, eBay and other marketplaces, plus researched model
+knowledge), **check** (evaluate a listing) and **decide** (save and compare offers).
+
+The car search (`/auto-finden`) turns the visitor's filters into links to each marketplace's own
+result page; the visitor opens them there. Models in the catalog (`packages/catalog`) come with
+their generations, strengths, known weaknesses with sources (ADAC, TÜV-Report, recalls, trade
+press), engines to prefer or avoid and inspection tips.
+
+For the listing check, a user pastes the listing text (or a link); KaufCheck extracts and
+normalizes the vehicle data and shows a mobile-first dashboard:
 
 - what the listing says, with the origin of every statement (_Aus dem Inserat_, _Berechnet_,
   _Vermutung_, _Nicht bekannt_),
@@ -317,6 +325,8 @@ SELECT name, date_trunc('day', "createdAt") AS day, count(*) FROM "AnalyticsEven
 
 ```
 packages/shared   contracts used by web and API: Zod schemas, error codes, labels, plans, URL recognition
+packages/catalog  car models (search list, researched knowledge in data/models, one chunk per model)
+                  and the links to the marketplaces' own search pages
 packages/domain   business rules: HTML and text parsing, normalization, category detection,
                   the vehicle analyzer (rules), AI prompts and output validation, comparison
 apps/api          Fastify 5 + Prisma: pipeline, retrieval, AI providers, auth, quotas, billing, analytics
@@ -360,6 +370,18 @@ already reserved in the contracts and the database.
   overridden in `package.json`).
 
 ## Legal
+
+- **Car search:** KaufCheck only links to the marketplaces' own result pages with the visitor's
+  filters (`packages/catalog/src/platform-links.ts`) and never loads, stores or shows their
+  results. Linking to publicly accessible pages, deep links included, is lawful (BGH, judgment of
+  17 July 2003, I ZR 259/00 "Paperboy"). Showing the platforms' results inside KaufCheck would need
+  a licence: a dedicated meta search engine that queries a car-ad database in real time
+  re-utilises it (CJEU, judgment of 19 December 2013, C-202/12 "Innoweb"), and the platforms'
+  terms and robots.txt forbid automated searches. The search parameters stay in KaufCheck's own
+  URL; request logs never contain query strings.
+- **Model knowledge** (`packages/catalog/data/models`): every known weakness carries at least one
+  source (enforced by `src/catalog.test.ts`). The pages say that weaknesses do not occur in every
+  car and that only an inspection shows the state of the car at hand.
 
 - KaufCheck is independent and not affiliated with any marketplace (mobile.de, AutoScout24,
   Kleinanzeigen, eBay, Autohero, pkw.de, Facebook Marketplace); their names are only used to say

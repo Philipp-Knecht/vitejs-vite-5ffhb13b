@@ -12,6 +12,13 @@ export default defineConfig({
       },
       {
         test: {
+          name: 'catalog',
+          root: './packages/catalog',
+          include: ['src/**/*.test.ts'],
+        },
+      },
+      {
+        test: {
           name: 'domain',
           root: './packages/domain',
           include: ['src/**/*.test.ts', 'test/**/*.test.ts'],

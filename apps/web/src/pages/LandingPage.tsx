@@ -1,68 +1,20 @@
-import {
-  ClipboardCheck,
-  FileSearch,
-  HelpCircle,
-  ListChecks,
-  MessageSquareText,
-  Scale,
-  ShieldCheck,
-} from 'lucide-react';
-import { useEffect } from 'react';
-import { Link } from 'react-router';
-import { EvidenceLegend } from '../components/EvidenceBadge';
-import { LISTING_INPUT_ID, ListingAnalysisForm } from '../features/analysis/ListingAnalysisForm';
+import { EMPTY_SEARCH, toSearchParams } from '@kaufcheck/catalog';
+import { KNOWLEDGE_IDS } from '@kaufcheck/catalog/knowledge';
+import { DEFAULT_ENTITLEMENTS } from '@kaufcheck/shared';
+import { ClipboardCheck, FileSearch, ListChecks, Scale, Search } from 'lucide-react';
+import { useEffect, useMemo, useRef, useState, type KeyboardEvent } from 'react';
+import { Link, useNavigate } from 'react-router';
+import { useConfig } from '../api/queries';
+import { PLATFORM_LIST } from '../features/analysis/check-content';
+import { FeatureGrid, PlatformChips } from '../features/analysis/CheckContent';
+import { ListingAnalysisForm } from '../features/analysis/ListingAnalysisForm';
+import { SearchForm } from '../features/search/SearchForm';
 import { track } from '../lib/analytics';
+import { cn } from '../lib/format';
+import { readJson, writeJson } from '../lib/storage';
+import { useHydrated } from '../lib/use-hydrated';
 import { STATIC_PAGE_META } from '../seo/pages';
 import { usePageMeta } from '../seo/use-page-meta';
-import { useConfig } from '../api/queries';
-import { DEFAULT_ENTITLEMENTS, PLATFORM_NAMES, type ListingPlatform } from '@kaufcheck/shared';
-
-const FEATURES = [
-  {
-    icon: FileSearch,
-    title: 'Angaben geordnet',
-    text: 'Kilometerstand, Erstzulassung, HU, Vorbesitzer, Scheckheft: Alles Wichtige auf einen Blick – mit Hinweis, woher jede Angabe stammt.',
-  },
-  {
-    icon: HelpCircle,
-    title: 'Lücken sichtbar',
-    text: 'Was im Inserat fehlt, steht ausdrücklich als „Nicht angegeben“ da. So siehst du sofort, wonach du fragen musst.',
-  },
-  {
-    icon: ShieldCheck,
-    title: 'Auffälligkeiten mit Beleg',
-    text: 'Widersprüche wie zwei verschiedene Kilometerstände oder erwähnte Schäden – immer mit der Stelle aus dem Inserat.',
-  },
-  {
-    icon: MessageSquareText,
-    title: 'Fragen an den Verkäufer',
-    text: 'Passende Fragen in der Sie- oder Du-Form, fertig zum Kopieren oder als Nachricht für den Chat.',
-  },
-  {
-    icon: ListChecks,
-    title: 'Checkliste für die Besichtigung',
-    text: 'Unterlagen, Karosserie, Innenraum und Probefahrt – zum Abhaken direkt auf dem Smartphone.',
-  },
-  {
-    icon: Scale,
-    title: 'Preis mit Augenmaß',
-    text: 'Rechnungen wie Preis pro Jahr oder pro 10.000 km. Eine Marktpreis-Einschätzung gibt es nur mit genügend echten Vergleichsdaten.',
-  },
-];
-
-/** Order on the homepage: the largest German car marketplaces first. */
-const SUPPORTED_PLATFORMS: readonly ListingPlatform[] = [
-  'mobile_de',
-  'autoscout24',
-  'kleinanzeigen',
-  'ebay',
-  'autohero',
-  'pkw_de',
-  'facebook',
-];
-const PLATFORM_LIST = `${SUPPORTED_PLATFORMS.slice(0, -1)
-  .map((platform) => PLATFORM_NAMES[platform])
-  .join(', ')} und ${PLATFORM_NAMES.facebook}`;
 
 interface FaqContext {
   anonymous: number;
@@ -75,15 +27,20 @@ interface FaqContext {
 interface FaqItem {
   question: string;
   answer: (context: FaqContext) => string;
-  /** Shown only with (or without) automatic retrieval of listing links. */
-  when?: 'retrieval' | 'no-retrieval';
+  /** Shown only with (or without) automatic retrieval of listing links, or with model knowledge. */
+  when?: 'retrieval' | 'no-retrieval' | 'knowledge';
 }
 
 const FAQ: FaqItem[] = [
   {
     question: 'Was kostet KaufCheck?',
     answer: ({ anonymous, free }) =>
-      `Ohne Anmeldung kannst du ${anonymous} Inserate im Monat prüfen, mit einem kostenlosen Konto ${free}. Für mehr Prüfungen, Verlauf und größere Vergleiche gibt es KaufCheck Pro.`,
+      `Die Suche ist kostenlos. Ohne Anmeldung kannst du ${anonymous} Inserate im Monat prüfen, mit einem kostenlosen Konto ${free}. Für mehr Prüfungen, Verlauf und größere Vergleiche gibt es KaufCheck Pro.`,
+  },
+  {
+    question: 'Durchsucht KaufCheck die Plattformen selbst?',
+    answer: () =>
+      'Nein. KaufCheck baut aus deinen Wünschen die passende Suche für jede Plattform – die Angebote siehst du direkt bei mobile.de, AutoScout24, Kleinanzeigen & Co. Selbst abrufen und anzeigen dürfen wir sie nicht: Die Plattformen erlauben das nur mit ihrer Zustimmung, und daran halten wir uns.',
   },
   {
     question: 'Welche Inserate kann ich prüfen?',
@@ -107,6 +64,12 @@ const FAQ: FaqItem[] = [
       'KaufCheck ruft Inserate nur ab, wenn das technisch und rechtlich zulässig ist, und umgeht keine Schutzmaßnahmen. Wenn der Abruf nicht möglich ist, fügst du einfach den Inseratstext ein – die Prüfung ist dann genauso ausführlich.',
   },
   {
+    question: 'Woher stammt das Wissen über die Modelle?',
+    when: 'knowledge',
+    answer: () =>
+      'Aus ADAC-Pannenstatistik, TÜV-Report, Rückrufen und Fachpresse – bei jeder Schwachstelle steht die Quelle. Nicht jedes Auto ist betroffen; was am Auto vor dir los ist, zeigt erst die Besichtigung.',
+  },
+  {
     question: 'Bewertet KaufCheck, ob das Auto gut ist?',
     answer: () =>
       'Nein. KaufCheck ordnet die Angaben aus dem Inserat, zeigt Lücken und Widersprüche und hilft dir bei den richtigen Fragen. Ob das Auto in Ordnung ist, zeigt erst die Besichtigung – im Zweifel mit einer Werkstatt oder einem Gutachter.',
@@ -127,93 +90,218 @@ const FAQ: FaqItem[] = [
   },
 ];
 
+type HomeTab = 'finden' | 'pruefen';
+const TABS: readonly { id: HomeTab; label: string; icon: typeof Search }[] = [
+  { id: 'finden', label: 'Auto finden', icon: Search },
+  { id: 'pruefen', label: 'Inserat prüfen', icon: ClipboardCheck },
+];
+const TAB_STORAGE_KEY = 'kaufcheck:startseite-reiter';
+const isHomeTab = (value: unknown): value is HomeTab => value === 'finden' || value === 'pruefen';
+
+/** The tab asked for in the address (#pruefen) or chosen last in this browser. */
+function preferredTab(): HomeTab | null {
+  const fromHash = window.location.hash.slice(1);
+  return isHomeTab(fromHash) ? fromHash : readJson(TAB_STORAGE_KEY, null, isHomeTab);
+}
+
+/** Search first; the preference is applied once the prerendered page runs in the browser. */
+function useHomeTab(): [HomeTab, (tab: HomeTab) => void] {
+  const hydrated = useHydrated();
+  const [chosen, setChosen] = useState<HomeTab | null>(null);
+  const preferred = useMemo(() => (hydrated ? preferredTab() : null), [hydrated]);
+  const choose = (next: HomeTab) => {
+    setChosen(next);
+    writeJson(TAB_STORAGE_KEY, next);
+  };
+  return [chosen ?? preferred ?? 'finden', choose];
+}
+
 export function LandingPage() {
   const meta = STATIC_PAGE_META['/'];
   usePageMeta(meta ?? { title: 'KaufCheck', description: '' });
   const config = useConfig();
+  const navigate = useNavigate();
   const plans = config.data?.plans ?? DEFAULT_ENTITLEMENTS;
   // Until the configuration has loaded, assume the default: no automatic retrieval.
   const retrieval = config.data?.features.urlRetrieval === true;
-  const faq = FAQ.filter(
-    (item) => !item.when || item.when === (retrieval ? 'retrieval' : 'no-retrieval'),
+  const faq = FAQ.filter((item) =>
+    item.when === 'knowledge'
+      ? KNOWLEDGE_IDS.length > 0
+      : !item.when || item.when === (retrieval ? 'retrieval' : 'no-retrieval'),
   );
+  const [tab, setTab] = useHomeTab();
+  const tabRefs = useRef<Record<HomeTab, HTMLButtonElement | null>>({
+    finden: null,
+    pruefen: null,
+  });
 
   useEffect(() => track('landing_page_view'), []);
+
+  const selectTab = (next: HomeTab, focus = false) => {
+    setTab(next);
+    if (focus) tabRefs.current[next]?.focus();
+  };
+
+  // Arrow keys move between the tabs (WAI-ARIA tabs pattern).
+  const onTabKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
+    if (!['ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(event.key)) return;
+    event.preventDefault();
+    const index = TABS.findIndex((item) => item.id === tab);
+    const next =
+      event.key === 'Home'
+        ? TABS[0]
+        : event.key === 'End'
+          ? TABS[TABS.length - 1]
+          : TABS[(index + (event.key === 'ArrowRight' ? 1 : TABS.length - 1)) % TABS.length];
+    if (next) selectTab(next.id, true);
+  };
 
   return (
     <>
       <section className="hero">
         <div className="container hero__inner">
-          <p className="eyebrow">
-            Für Auto-Inserate von mobile.de, AutoScout24, Kleinanzeigen & Co.
-          </p>
+          <p className="eyebrow">Für mobile.de, AutoScout24, Kleinanzeigen & Co.</p>
           <h1 className="hero__title">
-            Gebraucht kaufen.
+            Gebrauchtwagen finden.
             <br />
-            Besser entscheiden.
+            Prüfen. Besser entscheiden.
           </h1>
           <p className="hero__lead">
-            {retrieval
-              ? 'Füge den Link zu einem Auto-Inserat ein.'
-              : 'Füge den Text eines Auto-Inserats ein.'}{' '}
-            KaufCheck ordnet die Angaben, zeigt, was fehlt, und stellt dir die passenden Fragen für
-            den Verkäufer zusammen.
+            Eine Suche für alle großen Börsen – und jedes Angebot geprüft, bevor du anrufst.
           </p>
-          <ListingAnalysisForm />
-          <ul className="hero__facts">
-            <li>Ohne Anmeldung</li>
-            <li>{plans.anonymous.monthlyAnalyses} Prüfungen im Monat kostenlos</li>
-            <li>Kontaktdaten werden entfernt</li>
-          </ul>
-          <div className="hero__platforms">
-            <p id="platforms-title" className="hero__platforms-title">
-              Funktioniert mit Inseraten von
-            </p>
-            <ul aria-labelledby="platforms-title">
-              {SUPPORTED_PLATFORMS.map((platform) => (
-                <li key={platform}>{PLATFORM_NAMES[platform]}</li>
+
+          <div className="home-tabs">
+            <div
+              className="home-tabs__list"
+              role="tablist"
+              aria-label="Was möchtest du tun?"
+              onKeyDown={onTabKeyDown}
+            >
+              {TABS.map(({ id, label, icon: Icon }) => (
+                <button
+                  key={id}
+                  ref={(element) => {
+                    tabRefs.current[id] = element;
+                  }}
+                  type="button"
+                  role="tab"
+                  id={`tab-${id}`}
+                  aria-selected={tab === id}
+                  aria-controls={`panel-${id}`}
+                  tabIndex={tab === id ? 0 : -1}
+                  className={cn('home-tabs__tab', tab === id && 'is-active')}
+                  onClick={() => selectTab(id)}
+                >
+                  <Icon aria-hidden size={18} />
+                  <span>{label}</span>
+                </button>
               ))}
-              <li>und jeder anderen Seite</li>
-            </ul>
+            </div>
+
+            <div
+              role="tabpanel"
+              id="panel-finden"
+              aria-labelledby="tab-finden"
+              className="home-tabs__panel"
+              hidden={tab !== 'finden'}
+            >
+              <SearchForm
+                variant="compact"
+                initial={EMPTY_SEARCH}
+                onSearch={(query) => {
+                  track('car_search_started', { placement: 'home' });
+                  void navigate(`/auto-finden?${toSearchParams(query).toString()}`);
+                }}
+              />
+              <p className="home-tabs__more">
+                <Link to="/auto-finden">Mehr Filter</Link>
+                <span aria-hidden>·</span>
+                <span>
+                  Schon ein Auto gefunden?{' '}
+                  <button
+                    type="button"
+                    className="link-button"
+                    onClick={() => selectTab('pruefen', true)}
+                  >
+                    Lass es hier checken
+                  </button>
+                </span>
+              </p>
+            </div>
+
+            <div
+              role="tabpanel"
+              id="panel-pruefen"
+              aria-labelledby="tab-pruefen"
+              className="home-tabs__panel"
+              hidden={tab !== 'pruefen'}
+            >
+              <p className="home-tabs__intro">
+                {retrieval
+                  ? 'Füge den Link oder Text eines Auto-Inserats ein.'
+                  : 'Füge den Text eines Auto-Inserats ein.'}{' '}
+                KaufCheck ordnet die Angaben, zeigt, was fehlt, und stellt dir die passenden Fragen
+                für den Verkäufer zusammen.
+              </p>
+              <ListingAnalysisForm />
+              <ul className="hero__facts">
+                <li>Ohne Anmeldung</li>
+                <li>{plans.anonymous.monthlyAnalyses} Prüfungen im Monat kostenlos</li>
+                <li>Kontaktdaten werden entfernt</li>
+              </ul>
+            </div>
           </div>
+
+          <PlatformChips titleId="platforms-title" />
         </div>
       </section>
 
       <section className="section" aria-labelledby="how-title">
         <div className="container">
           <h2 id="how-title" className="section__title">
-            So funktioniert’s
+            Vom ersten Suchen bis zur Besichtigung
           </h2>
           <ol className="steps">
             <li className="step">
               <span className="step__number" aria-hidden>
                 1
               </span>
-              <h3>Inserat einfügen</h3>
+              <h3>Finden</h3>
               <p>
-                {retrieval
-                  ? 'Link aus dem Browser oder der App kopieren – oder den Text des Inserats einfügen.'
-                  : 'Den Text des Inserats kopieren und oben einfügen – am Smartphone im Browser über „Alles auswählen“.'}
+                Eine Suche für alle großen Börsen – deine Filter gehen direkt an mobile.de,
+                AutoScout24 & Co.
+                {KNOWLEDGE_IDS.length > 0 &&
+                  ' Für viele Modelle dazu die bekannten Schwachstellen mit Quelle.'}
               </p>
+              <Link to="/auto-finden" className="step__link">
+                Auto finden
+              </Link>
             </li>
             <li className="step">
               <span className="step__number" aria-hidden>
                 2
               </span>
-              <h3>Angaben prüfen lassen</h3>
+              <h3>Prüfen</h3>
               <p>
-                KaufCheck liest die Details aus, rechnet nach und markiert Lücken und Widersprüche.
+                Inserat einfügen: Angaben geordnet, Lücken und Widersprüche sichtbar, Fragen an den
+                Verkäufer fertig formuliert.
               </p>
+              <Link to="/inserat-pruefen" className="step__link">
+                Inserat prüfen
+              </Link>
             </li>
             <li className="step">
               <span className="step__number" aria-hidden>
                 3
               </span>
-              <h3>Gezielt nachfragen</h3>
+              <h3>Entscheiden</h3>
               <p>
-                Mit den Fragen und der Checkliste gehst du vorbereitet ins Gespräch und zur
-                Besichtigung.
+                Angebote speichern, nebeneinander vergleichen und mit der Checkliste vorbereitet zur
+                Besichtigung gehen.
               </p>
+              <Link to="/meine-angebote" className="step__link">
+                Meine Angebote
+              </Link>
             </li>
           </ol>
         </div>
@@ -222,60 +310,9 @@ export function LandingPage() {
       <section className="section section--muted" aria-labelledby="features-title">
         <div className="container">
           <h2 id="features-title" className="section__title">
-            Was du bekommst
+            Was die Prüfung zeigt
           </h2>
-          <div className="feature-grid">
-            {FEATURES.map(({ icon: Icon, title, text }) => (
-              <article key={title} className="feature">
-                <Icon className="feature__icon" aria-hidden size={24} />
-                <h3>{title}</h3>
-                <p>{text}</p>
-              </article>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section className="section" aria-labelledby="evidence-title">
-        <div className="container two-column">
-          <div>
-            <h2 id="evidence-title" className="section__title">
-              Jede Aussage mit Herkunft
-            </h2>
-            <p className="section__lead">
-              KaufCheck trennt klar zwischen dem, was im Inserat steht, was daraus berechnet wurde
-              und was nur eine Einschätzung ist. So verwechselst du eine Vermutung nie mit einer
-              Tatsache.
-            </p>
-          </div>
-          <EvidenceLegend />
-        </div>
-      </section>
-
-      <section className="section section--muted" aria-labelledby="limits-title">
-        <div className="container two-column">
-          <div>
-            <h2 id="limits-title" className="section__title">
-              Was KaufCheck nicht kann
-            </h2>
-            <p className="section__lead">
-              Ehrlich gesagt: Ein Inserat verrät nicht alles über ein Auto.
-            </p>
-          </div>
-          <ul className="check-list">
-            <li>
-              KaufCheck sieht das Auto nicht. Zustand, Unfallspuren und Technik zeigt nur die
-              Besichtigung.
-            </li>
-            <li>
-              Angaben im Inserat werden nicht überprüft – auch dann nicht, wenn sie plausibel
-              wirken.
-            </li>
-            <li>
-              Einen Marktpreis nennt KaufCheck nur, wenn genügend vergleichbare Inserate vorliegen.
-            </li>
-            <li>KaufCheck gibt keine Kaufempfehlung. Die Entscheidung triffst du.</li>
-          </ul>
+          <FeatureGrid />
         </div>
       </section>
 
@@ -336,17 +373,18 @@ export function LandingPage() {
 
       <section className="section cta-band" aria-labelledby="cta-title">
         <div className="container container--narrow cta-band__inner">
-          <h2 id="cta-title">Bereit für das nächste Inserat?</h2>
-          <p>{retrieval ? 'Link' : 'Inserat'} einfügen, Angaben prüfen, gezielt nachfragen.</p>
-          <a
-            href={`#${LISTING_INPUT_ID}`}
-            className="btn btn--primary btn--lg"
-            onClick={() =>
-              window.setTimeout(() => document.getElementById(LISTING_INPUT_ID)?.focus(), 0)
-            }
-          >
-            <span>Jetzt Inserat prüfen</span>
-          </a>
+          <h2 id="cta-title">Bereit für die Suche?</h2>
+          <p>Wünsche eingeben, Angebote auf allen Börsen ansehen, das beste prüfen lassen.</p>
+          <div className="cta-band__actions">
+            <Link to="/auto-finden" className="btn btn--primary btn--lg">
+              <Search aria-hidden size={20} />
+              <span>Auto finden</span>
+            </Link>
+            <Link to="/inserat-pruefen" className="btn btn--secondary btn--lg">
+              <Scale aria-hidden size={20} />
+              <span>Inserat prüfen</span>
+            </Link>
+          </div>
         </div>
       </section>
     </>

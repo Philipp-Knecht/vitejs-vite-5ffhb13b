@@ -32,14 +32,15 @@ export function Footer() {
         <div className="footer__brand">
           <Logo />
           <p>
-            KaufCheck ordnet Auto-Inserate, zeigt fehlende Angaben und hilft dir, die richtigen
-            Fragen zu stellen. Eine Besichtigung oder Prüfung durch eine Fachwerkstatt ersetzt das
-            nicht.
+            KaufCheck bündelt die Suche auf den großen Gebrauchtwagenbörsen, ordnet Inserate, zeigt
+            fehlende Angaben und hilft dir, die richtigen Fragen zu stellen. Eine Besichtigung oder
+            Prüfung durch eine Fachwerkstatt ersetzt das nicht.
           </p>
         </div>
         <nav className="footer__column" aria-label="Produkt">
           <p className="footer__heading">KaufCheck</p>
-          <Link to="/">Inserat prüfen</Link>
+          <Link to="/auto-finden">Auto finden</Link>
+          <Link to="/inserat-pruefen">Inserat prüfen</Link>
           <Link to="/inseratstext">Inseratstext einfügen</Link>
           <Link to="/meine-angebote">Meine Angebote</Link>
           <Link to="/pro">KaufCheck Pro</Link>

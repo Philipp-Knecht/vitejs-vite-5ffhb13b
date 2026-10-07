@@ -2,7 +2,7 @@ import { expect, test } from '@playwright/test';
 import { LISTINGS, PASTED_LISTING } from './helpers';
 
 test('a listing that cannot be retrieved offers the text fallback', async ({ page }) => {
-  await page.goto('/');
+  await page.goto('/inserat-pruefen');
   await page.getByLabel('Inseratstext oder Link zum Auto-Inserat').fill(LISTINGS.blocked);
   await page.getByRole('button', { name: 'Inserat prüfen' }).click();
 
@@ -32,7 +32,7 @@ test('pasted text that is too short is rejected in the browser', async ({ page }
 });
 
 test('listing text can be pasted directly on the homepage', async ({ page }) => {
-  await page.goto('/');
+  await page.goto('/inserat-pruefen');
   const input = page.getByLabel('Inseratstext oder Link zum Auto-Inserat');
   await input.fill('Golf, 8000 Euro');
   await page.getByRole('button', { name: 'Inserat prüfen' }).click();

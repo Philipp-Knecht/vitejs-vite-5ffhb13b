@@ -2,6 +2,7 @@ import {
   useId,
   type InputHTMLAttributes,
   type ReactNode,
+  type SelectHTMLAttributes,
   type TextareaHTMLAttributes,
 } from 'react';
 import { cn } from '../../lib/format';
@@ -83,6 +84,46 @@ export function TextAreaField({
         aria-describedby={describedBy(`${id}-hint`, `${id}-error`, hint, error)}
         {...textarea}
       />
+      {hint && (
+        <p className="field__hint" id={`${id}-hint`}>
+          {hint}
+        </p>
+      )}
+      {error && (
+        <p className="field__error" id={`${id}-error`}>
+          {error}
+        </p>
+      )}
+    </div>
+  );
+}
+
+export function SelectField({
+  label,
+  hint,
+  error,
+  hideLabel,
+  className,
+  id: providedId,
+  children,
+  ...select
+}: FieldProps & SelectHTMLAttributes<HTMLSelectElement>) {
+  const generatedId = useId();
+  const id = providedId ?? generatedId;
+  return (
+    <div className={cn('field', className)}>
+      <label className={cn('field__label', hideLabel && 'visually-hidden')} htmlFor={id}>
+        {label}
+      </label>
+      <select
+        id={id}
+        className={cn('input', 'input--select', error && 'input--invalid')}
+        aria-invalid={error ? true : undefined}
+        aria-describedby={describedBy(`${id}-hint`, `${id}-error`, hint, error)}
+        {...select}
+      >
+        {children}
+      </select>
       {hint && (
         <p className="field__hint" id={`${id}-hint`}>
           {hint}

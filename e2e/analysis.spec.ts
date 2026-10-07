@@ -4,9 +4,9 @@ import { analyzeFromHomepage, LISTINGS } from './helpers';
 test('homepage → analysis result with all sections', async ({ page, context }) => {
   await page.goto('/');
   await expect(page).toHaveTitle(
-    'KaufCheck – Gebrauchtwagen-Inserate von mobile.de, AutoScout24 & Co. prüfen',
+    'KaufCheck – Gebrauchtwagen finden und Inserate prüfen: mobile.de, AutoScout24 & Co.',
   );
-  await expect(page.getByRole('heading', { level: 1 })).toContainText('Gebraucht kaufen.');
+  await expect(page.getByRole('heading', { level: 1 })).toContainText('Gebrauchtwagen finden.');
 
   await analyzeFromHomepage(page, LISTINGS.audi);
 
@@ -66,14 +66,14 @@ test('homepage → analysis result with all sections', async ({ page, context })
 });
 
 test('the fictional example is clearly labelled', async ({ page }) => {
-  await page.goto('/');
+  await page.goto('/inserat-pruefen');
   await page.getByRole('button', { name: 'Fiktives Beispiel ansehen' }).click();
   await expect(page).toHaveURL(/\/analyse\//);
   await expect(page.getByText('Fiktives Beispiel.', { exact: false })).toBeVisible();
 });
 
 test('invalid links get instant feedback without a request', async ({ page }) => {
-  await page.goto('/');
+  await page.goto('/inserat-pruefen');
   await page
     .getByLabel('Inseratstext oder Link zum Auto-Inserat')
     .fill('https://www.mobile.de/auto/123');
@@ -81,11 +81,11 @@ test('invalid links get instant feedback without a request', async ({ page }) =>
   await expect(
     page.getByText(/Link zu mobile\.de, aber nicht zu einem einzelnen Inserat/),
   ).toBeVisible();
-  await expect(page).toHaveURL('/');
+  await expect(page).toHaveURL('/inserat-pruefen');
 });
 
 test('links of other marketplaces lead to the text input', async ({ page }) => {
-  await page.goto('/');
+  await page.goto('/inserat-pruefen');
   await page
     .getByLabel('Inseratstext oder Link zum Auto-Inserat')
     .fill('https://suchen.mobile.de/fahrzeuge/details.html?id=412345678&ref=app');

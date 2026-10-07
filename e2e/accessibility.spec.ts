@@ -17,6 +17,9 @@ async function expectAccessible(page: Page): Promise<void> {
 test('static pages meet WCAG 2.1 AA checks', async ({ page }) => {
   for (const path of [
     '/',
+    '/auto-finden',
+    '/auto-finden?marke=vw&modell=vw-golf&preis_bis=15000&ez_ab=2016&plz=79098',
+    '/inserat-pruefen',
     '/inseratstext',
     '/pro',
     '/gebrauchtwagen-kaufen',
@@ -37,6 +40,13 @@ test('static pages meet WCAG 2.1 AA checks', async ({ page }) => {
   }
 });
 
+test('the homepage tabs meet WCAG 2.1 AA checks on both tabs', async ({ page }) => {
+  await page.goto('/');
+  await page.getByRole('tab', { name: 'Inserat prüfen' }).click();
+  await expect(page.getByLabel('Inseratstext oder Link zum Auto-Inserat')).toBeVisible();
+  await expectAccessible(page);
+});
+
 test('the analysis result meets WCAG 2.1 AA checks', async ({ page }) => {
   await analyzeFromHomepage(page, LISTINGS.audi);
   await expectAccessible(page);
@@ -46,7 +56,7 @@ test('the analysis result meets WCAG 2.1 AA checks', async ({ page }) => {
 });
 
 test('the error state after a blocked listing meets WCAG 2.1 AA checks', async ({ page }) => {
-  await page.goto('/');
+  await page.goto('/inserat-pruefen');
   await page.getByLabel('Inseratstext oder Link zum Auto-Inserat').fill(LISTINGS.blocked);
   await page.getByRole('button', { name: 'Inserat prüfen' }).click();
   await expect(page.getByRole('button', { name: 'Inseratstext einfügen' })).toBeVisible();
