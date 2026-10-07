@@ -8,6 +8,7 @@ import {
 } from '@kaufcheck/shared';
 import { Link } from 'react-router';
 import { useConfig } from '../../api/queries';
+import { ADVISOR_AVAILABLE, MODEL_PAGES_AVAILABLE } from '../../features/advisor/availability';
 import { openPrivacySettings } from '../../lib/adsense';
 import { privacySignal } from '../../lib/privacy-signals';
 import { ButtonLink } from '../ui/Button';
@@ -40,6 +41,7 @@ export function Footer() {
         <nav className="footer__column" aria-label="Produkt">
           <p className="footer__heading">KaufCheck</p>
           <Link to="/auto-finden">Auto finden</Link>
+          {ADVISOR_AVAILABLE && <Link to="/auto-berater">Auto-Berater</Link>}
           <Link to="/inserat-pruefen">Inserat prüfen</Link>
           <Link to="/inseratstext">Inseratstext einfügen</Link>
           <Link to="/meine-angebote">Meine Angebote</Link>
@@ -50,6 +52,7 @@ export function Footer() {
           <Link to="/gebrauchtwagen-kaufen">Gebrauchtwagen kaufen</Link>
           <Link to="/gebrauchtwagen-checkliste">Gebrauchtwagen-Checkliste</Link>
           <Link to="/auto-besichtigung-checkliste">Checkliste Besichtigung</Link>
+          {MODEL_PAGES_AVAILABLE && <Link to="/modelle">Modelle von A bis Z</Link>}
         </nav>
         <nav className="footer__column" aria-label="Rechtliches">
           <p className="footer__heading">Rechtliches</p>

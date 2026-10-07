@@ -22,7 +22,7 @@ try {
 const siteUrl = (process.env.PUBLIC_SITE_URL ?? 'http://localhost:5173').replace(/\/+$/, '');
 const MODIFIED = '2026-09-30';
 
-const { render, STATIC_PAGES } = await import(
+const { render, STATIC_PAGES, MODEL_PAGES } = await import(
   pathToFileURL(path.join(ssrDir, 'entry-server.js')).href
 );
 const template = await readFile(path.join(dist, 'index.html'), 'utf8');
@@ -48,6 +48,20 @@ const GUIDES = new Set([
 
 function structuredData(pagePath, meta) {
   const organization = { '@type': 'Organization', name: 'KaufCheck', url: `${siteUrl}/` };
+  const model = MODEL_PAGES.find((page) => page.path === pagePath);
+  if (model) {
+    return [
+      {
+        '@context': 'https://schema.org',
+        '@type': 'BreadcrumbList',
+        itemListElement: [
+          { '@type': 'ListItem', position: 1, name: 'KaufCheck', item: `${siteUrl}/` },
+          { '@type': 'ListItem', position: 2, name: 'Modelle', item: pageUrl('/modelle') },
+          { '@type': 'ListItem', position: 3, name: model.name, item: pageUrl(pagePath) },
+        ],
+      },
+    ];
+  }
   if (pagePath === '/') {
     return [
       {
@@ -117,14 +131,19 @@ function headTags(page, meta) {
   return tags.join('\n    ');
 }
 
-for (const page of STATIC_PAGES) {
-  const { html, meta } = render(page.path);
+const pages = [...STATIC_PAGES, ...MODEL_PAGES];
+for (const page of pages) {
+  const { html, meta, data } = render(page.path);
+  // Model pages embed their data, so the browser hydrates the same content.
+  const pageData = data
+    ? `<script id="page-data" type="application/json">${JSON.stringify(data).replaceAll('<', '\\u003c')}</script>`
+    : '';
   const document = template
     .replace(/<title>[\s\S]*?<\/title>/, `<title>${escapeHtml(meta.title)}</title>`)
     .replace('<!--app-head-->', headTags(page, meta))
     .replace(
       '<div id="root"><!--app-html--></div>',
-      `<div id="root" data-prerendered="true">${html}</div>`,
+      `<div id="root" data-prerendered="true">${html}</div>${pageData}`,
     );
   const target = path.join(
     dist,
@@ -142,7 +161,7 @@ const shell = template
   .replace('<!--app-html-->', '');
 await writeFile(path.join(dist, 'index.html'), shell);
 
-const indexable = STATIC_PAGES.filter((page) => page.indexable);
+const indexable = pages.filter((page) => page.indexable);
 const sitemap = [
   '<?xml version="1.0" encoding="UTF-8"?>',
   '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">',
@@ -167,4 +186,4 @@ const robots = [
 await writeFile(path.join(dist, 'robots.txt'), robots);
 
 await rm(ssrDir, { recursive: true, force: true });
-console.log(`Prerendered ${STATIC_PAGES.length} pages for ${siteUrl}`);
+console.log(`Prerendered ${pages.length} pages (${MODEL_PAGES.length} model pages) for ${siteUrl}`);

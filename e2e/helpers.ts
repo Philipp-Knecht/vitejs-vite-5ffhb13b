@@ -1,4 +1,15 @@
+import { readdirSync } from 'node:fs';
 import { expect, type Page } from '@playwright/test';
+
+/** Researched models (packages/catalog/data/models): model pages and the advisor depend on them. */
+export const MODELS_DIR = new URL('../packages/catalog/data/models/', import.meta.url);
+export const MODEL_IDS = readdirSync(MODELS_DIR)
+  .filter((file) => file.endsWith('.json'))
+  .map((file) => file.slice(0, -'.json'.length))
+  .sort();
+// As in apps/web/src/features/advisor/availability.ts (which needs Vite to load).
+export const ADVISOR_MIN_MODELS = 40;
+export const ADVISOR_AVAILABLE = MODEL_IDS.length >= ADVISOR_MIN_MODELS;
 
 /** Synthetic fixture listings (apps/api/fixtures/listings) – not real offers. */
 export const LISTINGS = {

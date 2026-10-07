@@ -72,7 +72,8 @@ export async function registerWeb(app: FastifyInstance, config: AppConfig): Prom
     const insideRoot = prerendered.startsWith(`${pagesRoot}${path.sep}`);
     const file = insideRoot && existsSync(prerendered) ? prerendered : shell;
     reply.type('text/html; charset=utf-8');
-    reply.status(isAppRoute(decoded) ? 200 : 404);
+    // Prerendered pages exist (model pages are generated from data); other paths must be app routes.
+    reply.status(file !== shell || isAppRoute(decoded) ? 200 : 404);
     const { adsense } = config;
     if (!adsense) {
       reply.header('cache-control', 'no-cache');

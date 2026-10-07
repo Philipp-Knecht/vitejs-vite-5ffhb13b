@@ -7,10 +7,13 @@
   "sideEffects": false,
   "exports": {
     ".": "./src/index.ts",
-    "./knowledge": "./src/knowledge.ts"
+    "./knowledge": "./src/knowledge.ts",
+    "./advisor-index": "./src/advisor-index.ts",
+    "./knowledge-eager": "./src/knowledge-eager.ts"
   },
   "scripts": {
-    "typecheck": "tsc --noEmit -p tsconfig.json"
+    "typecheck": "tsc --noEmit -p tsconfig.json",
+    "catalog:index": "tsx scripts/build-index.ts"
   },
   "dependencies": {
     "@kaufcheck/shared": "1.0.0",

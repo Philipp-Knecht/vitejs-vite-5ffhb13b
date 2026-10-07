@@ -1,4 +1,10 @@
-import { modelById, SEGMENT_LABELS, type CarModel, type Generation } from '@kaufcheck/catalog';
+import {
+  makeById,
+  modelById,
+  SEGMENT_LABELS,
+  type CarModel,
+  type Generation,
+} from '@kaufcheck/catalog';
 import { hasKnowledge, loadKnowledge } from '@kaufcheck/catalog/knowledge';
 import { useQuery } from '@tanstack/react-query';
 import { useState } from 'react';
@@ -122,13 +128,78 @@ function GenerationDetails({ generation }: { generation: Generation }) {
   );
 }
 
+interface ModelKnowledgeViewProps {
+  model: CarModel;
+  yearMin?: number | null;
+  yearMax?: number | null;
+  /** Heading level of the generation title (below the page or section heading). */
+  generationHeading?: 'h2' | 'h3';
+}
+
+/** Generations with strengths, weaknesses (with sources), engines and inspection tips. */
+export function ModelKnowledgeView({
+  model,
+  yearMin = null,
+  yearMax = null,
+  generationHeading: GenerationHeading = 'h3',
+}: ModelKnowledgeViewProps) {
+  const [selected, setSelected] = useState<string | null>(null);
+  const generation =
+    model.generations.find((item) => item.id === selected) ??
+    defaultGeneration(model, yearMin, yearMax);
+  const twin = model.twinOf ? modelById(model.twinOf) : null;
+  const twinName = twin ? `${makeById(twin.makeId)?.name ?? ''} ${twin.model}`.trim() : '';
+
+  return (
+    <div className="model-knowledge">
+      {twin && (
+        <p className="model-insights__note">
+          Technisch weitgehend baugleich mit{' '}
+          {hasKnowledge(twin.id) ? <Link to={`/modelle/${twin.id}`}>{twinName}</Link> : twinName} –
+          die dort bekannten Schwachstellen gelten meist auch hier.
+        </p>
+      )}
+      {model.generations.length > 1 && (
+        <div className="segmented" role="group" aria-label="Generation wählen">
+          {model.generations.map((item) => (
+            <button
+              key={item.id}
+              type="button"
+              className={cn('segmented__option', item.id === generation?.id && 'is-active')}
+              aria-pressed={item.id === generation?.id}
+              onClick={() => setSelected(item.id)}
+            >
+              {item.name} <span className="segmented__meta">{yearsLabel(item.years)}</span>
+            </button>
+          ))}
+        </div>
+      )}
+      {generation && (
+        <>
+          <GenerationHeading className="model-insights__generation">
+            {generation.name}
+            {generation.code ? ` (${generation.code})` : ''}, {yearsLabel(generation.years)}
+          </GenerationHeading>
+          <GenerationDetails generation={generation} />
+        </>
+      )}
+      <p className="model-insights__disclaimer">
+        Bekannte Schwachstellen laut ADAC, TÜV-Report und Fachpresse – sie treten nicht bei jedem
+        Auto auf. Wie es um das Auto vor dir steht, zeigt erst die Besichtigung, im Zweifel mit
+        einer Werkstatt.{' '}
+        <Link to="/auto-besichtigung-checkliste">Zur Besichtigungs-Checkliste</Link>
+      </p>
+    </div>
+  );
+}
+
 interface ModelInsightsProps {
   modelId: string;
   yearMin: number | null;
   yearMax: number | null;
 }
 
-/** Researched knowledge about the searched model, with sources. */
+/** Researched knowledge about the searched model (loaded on demand), on the search page. */
 export function ModelInsights({ modelId, yearMin, yearMax }: ModelInsightsProps) {
   const entry = modelById(modelId);
   const knowledge = useQuery({
@@ -137,14 +208,8 @@ export function ModelInsights({ modelId, yearMin, yearMax }: ModelInsightsProps)
     enabled: hasKnowledge(modelId),
     staleTime: Infinity,
   });
-  const [selected, setSelected] = useState<string | null>(null);
   if (!entry || !hasKnowledge(modelId) || !knowledge.data) return null;
-
   const model = knowledge.data;
-  const generation =
-    model.generations.find((item) => item.id === selected) ??
-    defaultGeneration(model, yearMin, yearMax);
-  const twin = model.twinOf ? modelById(model.twinOf) : null;
   const headingId = `insights-${model.id}`;
 
   return (
@@ -152,44 +217,14 @@ export function ModelInsights({ modelId, yearMin, yearMax }: ModelInsightsProps)
       <div className="container">
         <p className="eyebrow">{SEGMENT_LABELS[model.segment]}</p>
         <h2 id={headingId} className="section__title">
-          Das solltest du über den {model.make} {model.model} wissen
+          {model.make} {model.model}: Das solltest du wissen
         </h2>
         <p className="section__lead">{model.summary}</p>
-        {twin && (
-          <p className="model-insights__note">
-            Technisch weitgehend baugleich mit dem {twin.model} – dessen Schwachstellen gelten meist
-            auch hier.
-          </p>
-        )}
-        {model.generations.length > 1 && (
-          <div className="segmented" role="group" aria-label="Generation wählen">
-            {model.generations.map((item) => (
-              <button
-                key={item.id}
-                type="button"
-                className={cn('segmented__option', item.id === generation?.id && 'is-active')}
-                aria-pressed={item.id === generation?.id}
-                onClick={() => setSelected(item.id)}
-              >
-                {item.name} <span className="segmented__meta">{yearsLabel(item.years)}</span>
-              </button>
-            ))}
-          </div>
-        )}
-        {generation && (
-          <>
-            <h3 className="model-insights__generation">
-              {generation.name}
-              {generation.code ? ` (${generation.code})` : ''}, {yearsLabel(generation.years)}
-            </h3>
-            <GenerationDetails generation={generation} />
-          </>
-        )}
-        <p className="model-insights__disclaimer">
-          Bekannte Schwachstellen laut ADAC, TÜV-Report und Fachpresse – sie treten nicht bei jedem
-          Auto auf. Wie es um das Auto vor dir steht, zeigt erst die Besichtigung, im Zweifel mit
-          einer Werkstatt.{' '}
-          <Link to="/auto-besichtigung-checkliste">Zur Besichtigungs-Checkliste</Link>
+        <ModelKnowledgeView model={model} yearMin={yearMin} yearMax={yearMax} />
+        <p>
+          <Link to={`/modelle/${model.id}`}>
+            Alle Infos zu {model.make} {model.model}
+          </Link>
         </p>
       </div>
     </section>

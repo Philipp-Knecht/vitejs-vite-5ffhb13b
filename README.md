@@ -9,7 +9,11 @@ knowledge), **check** (evaluate a listing) and **decide** (save and compare offe
 The car search (`/auto-finden`) turns the visitor's filters into links to each marketplace's own
 result page; the visitor opens them there. Models in the catalog (`packages/catalog`) come with
 their generations, strengths, known weaknesses with sources (ADAC, TÜV-Report, recalls, trade
-press), engines to prefer or avoid and inspection tips.
+press), engines to prefer or avoid and inspection tips. Each researched model gets a prerendered
+page (`/modelle/<id>`, overview at `/modelle`). The advisor (`/auto-berater`) asks a few questions
+about budget, use and space and ranks the researched models with a transparent points system
+(`packages/catalog/src/advisor.ts`); it is linked once at least 40 models are researched
+(`apps/web/src/features/advisor/availability.ts`).
 
 For the listing check, a user pastes the listing text (or a link); KaufCheck extracts and
 normalizes the vehicle data and shows a mobile-first dashboard:
@@ -123,6 +127,12 @@ npm run user:set-plan -w @kaufcheck/api -- nutzer@example.de pro
 | `npm run check`                   | Format check, lint, typecheck and unit tests            |
 | `npm run lint` / `npm run format` | ESLint (type-aware, React Compiler rules) / Prettier    |
 | `npm run typecheck`               | TypeScript for all workspaces                           |
+| `npm run catalog:index`           | Rebuilds `packages/catalog/data/index.json` (see below) |
+
+Model knowledge is one JSON file per model in `packages/catalog/data/models` (format and rules in
+its README). After adding or changing a file, run `npm run catalog:index`: the advisor reads the
+compact summaries in `data/index.json`, and `src/catalog.test.ts` fails when they are out of date,
+when a weakness has no source or when make and class differ from the catalog.
 
 Development helpers, all clearly labelled in the UI and rejected in production:
 

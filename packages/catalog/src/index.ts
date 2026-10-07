@@ -3,3 +3,6 @@ export * from './makes';
 export * from './models';
 export * from './search-query';
 export * from './platform-links';
+export * from './knowledge-index';
+export * from './advisor';
+export * from './advisor-query';
