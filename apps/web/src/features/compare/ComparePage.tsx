@@ -8,6 +8,7 @@ import { Alert } from '../../components/ui/Alert';
 import { ButtonLink } from '../../components/ui/Button';
 import { PageLoading } from '../../components/ui/Spinner';
 import { cn } from '../../lib/format';
+import { DecisionPanel } from './DecisionPanel';
 import { appPageMeta } from '../../seo/pages';
 import { usePageMeta } from '../../seo/use-page-meta';
 
@@ -179,8 +180,8 @@ export function ComparePage() {
         <div>
           <h1>Angebote vergleichen</h1>
           <p className="page__lead">
-            Die Angaben aus den Inseraten nebeneinander. KaufCheck kürt keinen Sieger – was dir
-            wichtig ist, entscheidest du.
+            Die Angaben aus den Inseraten nebeneinander – und eine Reihenfolge, die sich allein nach
+            deinen Prioritäten richtet.
           </p>
         </div>
         <ButtonLink to="/meine-angebote" variant="secondary">
@@ -200,6 +201,8 @@ export function ComparePage() {
         </Alert>
       ) : (
         <>
+          <DecisionPanel comparison={comparison.data} />
+          <h2 className="compare-table-title">Alle Angaben im Vergleich</h2>
           <label className="toggle">
             <input
               type="checkbox"

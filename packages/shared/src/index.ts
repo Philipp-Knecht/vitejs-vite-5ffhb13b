@@ -16,3 +16,4 @@ export * from './schemas/contracts';
 export * from './legal';
 export * from './message';
 export * from './routes';
+export * from './comparison-ranking';

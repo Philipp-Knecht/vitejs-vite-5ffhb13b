@@ -160,6 +160,8 @@ export const ComparisonRowSchema = z.object({
   group: z.string(),
   cells: z.array(ComparisonCellSchema),
   differs: z.boolean(),
+  /** The underlying numbers of numeric rows (for weighing by the buyer's priorities). */
+  numbers: z.array(z.number().nullable()).optional(),
 });
 export type ComparisonRow = z.infer<typeof ComparisonRowSchema>;
 
@@ -169,6 +171,15 @@ export const ComparisonItemSchema = z.object({
   title: z.string(),
   sourceUrl: z.string().nullable(),
   isExample: z.boolean(),
+  /** For looking up what is known about the model. */
+  vehicle: z
+    .object({
+      make: z.string().nullable(),
+      model: z.string().nullable(),
+      firstRegistrationYear: z.number().int().nullable(),
+    })
+    .nullable()
+    .optional(),
 });
 
 export const ComparisonDtoSchema = z.object({
