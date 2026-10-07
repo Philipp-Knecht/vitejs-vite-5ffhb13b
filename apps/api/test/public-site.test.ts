@@ -17,10 +17,24 @@ describe('Custom domain', () => {
     await writeFile(path.join(webDir, 'index.html'), PAGE);
     await writeFile(path.join(webDir, '_pages', 'index.html'), PAGE);
     await writeFile(path.join(webDir, '_pages', 'impressum', 'index.html'), PAGE);
+    await mkdir(path.join(webDir, '_pages', 'modelle', 'vw-golf'), { recursive: true });
+    await writeFile(path.join(webDir, '_pages', 'modelle', 'vw-golf', 'index.html'), PAGE);
   });
   afterAll(() => rm(webDir, { recursive: true, force: true }));
 
   const web = () => ({ SERVE_WEB: 'true', WEB_DIST_DIR: webDir });
+
+  it('serves generated model pages and a real 404 for unknown models', async () => {
+    const built = await createTestApp({ ...web(), PUBLIC_SITE_URL: `https://${DOMAIN}` });
+    try {
+      const client = new TestClient(built.app);
+      expect((await client.get('/modelle/vw-golf', { host: DOMAIN })).statusCode).toBe(200);
+      expect((await client.get('/modelle/unbekannt', { host: DOMAIN })).statusCode).toBe(404);
+      expect((await client.get('/modelle/../impressum', { host: DOMAIN })).statusCode).toBe(200);
+    } finally {
+      await built.app.close();
+    }
+  });
 
   it('sends pages under the onrender.com address to the domain', async () => {
     const built = await createTestApp({ ...web(), PUBLIC_SITE_URL: `https://${DOMAIN}` });

@@ -5,6 +5,7 @@ import { ClipboardCheck, FileSearch, ListChecks, Scale, Search } from 'lucide-re
 import { useEffect, useMemo, useRef, useState, type KeyboardEvent } from 'react';
 import { Link, useNavigate } from 'react-router';
 import { useConfig } from '../api/queries';
+import { ADVISOR_AVAILABLE } from '../features/advisor/availability';
 import { PLATFORM_LIST } from '../features/analysis/check-content';
 import { FeatureGrid, PlatformChips } from '../features/analysis/CheckContent';
 import { ListingAnalysisForm } from '../features/analysis/ListingAnalysisForm';
@@ -215,6 +216,15 @@ export function LandingPage() {
               />
               <p className="home-tabs__more">
                 <Link to="/auto-finden">Mehr Filter</Link>
+                {ADVISOR_AVAILABLE && (
+                  <>
+                    <span aria-hidden>·</span>
+                    <span>
+                      Noch unsicher, welches Auto?{' '}
+                      <Link to="/auto-berater">Auto-Berater (2 Min.)</Link>
+                    </span>
+                  </>
+                )}
                 <span aria-hidden>·</span>
                 <span>
                   Schon ein Auto gefunden?{' '}
@@ -276,6 +286,14 @@ export function LandingPage() {
               <Link to="/auto-finden" className="step__link">
                 Auto finden
               </Link>
+              {ADVISOR_AVAILABLE && (
+                <>
+                  {' · '}
+                  <Link to="/auto-berater" className="step__link">
+                    Auto-Berater
+                  </Link>
+                </>
+              )}
             </li>
             <li className="step">
               <span className="step__number" aria-hidden>

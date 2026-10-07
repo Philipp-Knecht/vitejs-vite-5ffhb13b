@@ -1,5 +1,5 @@
 import { expect, test } from '@playwright/test';
-import { expectNoHorizontalScroll } from './helpers';
+import { ADVISOR_AVAILABLE, expectNoHorizontalScroll, MODEL_IDS } from './helpers';
 
 test('pages fit the phone screen without horizontal scrolling', async ({ page }) => {
   for (const path of [
@@ -10,6 +10,10 @@ test('pages fit the phone screen without horizontal scrolling', async ({ page })
     '/pro',
     '/gebrauchtwagen-kaufen',
     '/meine-angebote',
+    '/auto-berater',
+    '/modelle',
+    ...MODEL_IDS.slice(0, 1).map((id) => `/modelle/${id}`),
+    ...(ADVISOR_AVAILABLE ? ['/auto-berater?budget=20000&nutzung=familie&personen=4'] : []),
   ]) {
     await page.goto(path);
     await expect(page.getByRole('heading', { level: 1 })).toBeVisible();

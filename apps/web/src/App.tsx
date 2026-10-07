@@ -9,9 +9,12 @@ import { configureAnalytics } from './lib/analytics';
 import { BuyingGuidePage } from './pages/guides/BuyingGuidePage';
 import { ChecklistGuidePage } from './pages/guides/ChecklistGuidePage';
 import { InspectionGuidePage } from './pages/guides/InspectionGuidePage';
+import { AdvisorPage } from './pages/AdvisorPage';
 import { CheckListingPage } from './pages/CheckListingPage';
 import { FindCarPage } from './pages/FindCarPage';
 import { LandingPage } from './pages/LandingPage';
+import { ModelPage } from './pages/ModelPage';
+import { ModelsPage } from './pages/ModelsPage';
 import { CancelContractPage, WithdrawContractPage } from './features/contracts/ContractNoticePages';
 import { TermsPage, WithdrawalPolicyPage } from './pages/legal/ContractDocuments';
 import { BotPage, ImprintPage, PrivacyPage } from './pages/legal/LegalPages';
@@ -95,6 +98,9 @@ export function App({ queryClient }: { queryClient: QueryClient }) {
               <Route path="/" element={<LandingPage />} />
               <Route path="/auto-finden" element={<FindCarPage />} />
               <Route path="/inserat-pruefen" element={<CheckListingPage />} />
+              <Route path="/auto-berater" element={<AdvisorPage />} />
+              <Route path="/modelle" element={<ModelsPage />} />
+              <Route path="/modelle/:id" element={<ModelPage />} />
               <Route path="/gebrauchtwagen-kaufen" element={<BuyingGuidePage />} />
               <Route path="/gebrauchtwagen-checkliste" element={<ChecklistGuidePage />} />
               <Route path="/auto-besichtigung-checkliste" element={<InspectionGuidePage />} />

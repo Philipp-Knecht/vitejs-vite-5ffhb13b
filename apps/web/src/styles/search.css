@@ -231,7 +231,7 @@
 }
 
 /* ---------- Model knowledge ---------- */
-.model-insights .segmented {
+.model-knowledge .segmented {
   display: flex;
   flex-wrap: wrap;
   gap: 4px;

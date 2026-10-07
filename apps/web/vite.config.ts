@@ -43,5 +43,12 @@ export default defineConfig(({ command, isSsrBuild }) => ({
     target: 'es2022',
     sourcemap: true,
     assetsInlineLimit: 0,
+    rolldownOptions: {
+      onLog(level, log, handler) {
+        // The prerender build reads all models at once; their lazy chunks only matter in the browser.
+        if (isSsrBuild && log.code === 'INEFFECTIVE_DYNAMIC_IMPORT') return;
+        handler(level, log);
+      },
+    },
   },
 }));

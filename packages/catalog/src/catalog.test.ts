@@ -12,9 +12,11 @@ import {
   modelById,
   MODELS,
   parseSearchParams,
+  summarize,
   toSearchParams,
   type SearchQuery,
 } from './index';
+import { MODEL_INDEX } from './advisor-index';
 
 const isModelId = (id: string) => modelById(id) !== null;
 const NOW = new Date('2026-10-06T12:00:00Z');
@@ -181,11 +183,24 @@ describe('model knowledge files', () => {
   const dir = path.join(path.dirname(fileURLToPath(import.meta.url)), '../data/models');
   const files = existsSync(dir) ? readdirSync(dir).filter((file) => file.endsWith('.json')) : [];
 
+  it('are summarized in data/index.json (run npm run catalog:index after changes)', () => {
+    const summaries = files
+      .sort()
+      .map((file) =>
+        summarize(CarModelSchema.parse(JSON.parse(readFileSync(path.join(dir, file), 'utf8')))),
+      );
+    expect(MODEL_INDEX).toEqual(summaries);
+  });
+
   it('are valid, sourced and belong to catalog models', () => {
     for (const file of files) {
       const model = CarModelSchema.parse(JSON.parse(readFileSync(path.join(dir, file), 'utf8')));
       expect(`${model.id}.json`).toBe(file);
-      expect(modelById(model.id), model.id).not.toBeNull();
+      const entry = modelById(model.id);
+      expect(entry, model.id).not.toBeNull();
+      // Names and classes match the catalog, so search, advisor and model pages agree.
+      expect(model.make, model.id).toBe(makeById(entry?.makeId)?.name);
+      expect(model.segment, model.id).toBe(entry?.segment);
       if (model.twinOf) expect(modelById(model.twinOf), model.twinOf).not.toBeNull();
       for (const generation of model.generations) {
         expect(generation.id.startsWith(`${model.id}-`), generation.id).toBe(true);

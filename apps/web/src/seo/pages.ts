@@ -19,6 +19,16 @@ export const STATIC_PAGE_META: Readonly<Record<string, PageMeta>> = {
     description:
       'Wünsche einmal eingeben und die Treffer bei mobile.de, AutoScout24, Kleinanzeigen, eBay und weiteren Börsen öffnen – kostenlos und ohne Anmeldung.',
   },
+  '/auto-berater': {
+    title: 'Welches Auto passt zu mir? Der Auto-Berater für Gebrauchtwagen | KaufCheck',
+    description:
+      'Ein paar kurze Fragen zu Budget, Nutzung und Platz – KaufCheck zeigt passende Gebrauchtwagen mit Stärken und bekannten Schwachstellen und öffnet die Suche auf allen Börsen.',
+  },
+  '/modelle': {
+    title: 'Gebrauchtwagen-Modelle: Schwachstellen, Motoren und Tipps | KaufCheck',
+    description:
+      'Beliebte Gebrauchtwagen im Überblick: bekannte Schwachstellen je Generation mit Quelle, empfehlenswerte Motoren und worauf du bei der Besichtigung achten musst.',
+  },
   '/inserat-pruefen': {
     title: 'Gebrauchtwagen-Inserat prüfen: mobile.de, AutoScout24, Kleinanzeigen | KaufCheck',
     description:

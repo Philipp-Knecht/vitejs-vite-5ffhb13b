@@ -14,6 +14,7 @@ import { KNOWLEDGE_IDS } from '@kaufcheck/catalog/knowledge';
 import { ClipboardCheck } from 'lucide-react';
 import { useEffect, useMemo, useRef } from 'react';
 import { Link, useSearchParams } from 'react-router';
+import { ADVISOR_AVAILABLE } from '../features/advisor/availability';
 import { ModelInsights } from '../features/search/ModelInsights';
 import { PlatformResults } from '../features/search/PlatformResults';
 import { SearchForm } from '../features/search/SearchForm';
@@ -106,6 +107,12 @@ export function FindCarPage() {
             Die Angebote siehst du direkt auf den Plattformen – KaufCheck lädt ihre Seiten nicht
             selbst.
           </p>
+          {ADVISOR_AVAILABLE && (
+            <p className="search-note">
+              Noch unsicher, welches Modell? <Link to="/auto-berater">Der Auto-Berater</Link>{' '}
+              schlägt dir in zwei Minuten passende Autos vor.
+            </p>
+          )}
         </div>
       </section>
 

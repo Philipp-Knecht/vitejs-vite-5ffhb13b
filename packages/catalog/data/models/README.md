@@ -10,5 +10,8 @@ Rules for the content:
 - Affected engines, gearboxes and years as precisely as the source states them.
 - Plain German for laypeople, factual, no ranking of makes.
 - Typical prices only with a source that names them.
+- `make` and `segment` as in the catalog (`src/makes.ts`, `src/models.ts`); generation ids start
+  with the model id (`vw-golf-7`).
 
-The web app loads a file only when the model is shown (one chunk per model).
+The web app loads a file only when the model is shown (one chunk per model). After every change,
+run `npm run catalog:index` – it rebuilds `../index.json`, the summaries the advisor ranks.

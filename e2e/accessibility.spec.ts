@@ -1,6 +1,6 @@
 import AxeBuilder from '@axe-core/playwright';
 import { expect, test, type Page } from '@playwright/test';
-import { analyzeFromHomepage, LISTINGS } from './helpers';
+import { ADVISOR_AVAILABLE, analyzeFromHomepage, LISTINGS, MODEL_IDS } from './helpers';
 
 /** WCAG 2.1 A/AA checks with axe-core. */
 async function expectAccessible(page: Page): Promise<void> {
@@ -36,6 +36,22 @@ test('static pages meet WCAG 2.1 AA checks', async ({ page }) => {
   ]) {
     await page.goto(path);
     await expect(page.getByRole('heading', { level: 1 })).toBeVisible();
+    await expectAccessible(page);
+  }
+});
+
+test('the advisor and model pages meet WCAG 2.1 AA checks', async ({ page }) => {
+  const [model] = MODEL_IDS;
+  for (const path of ['/auto-berater', '/modelle', ...(model ? [`/modelle/${model}`] : [])]) {
+    await page.goto(path);
+    await expect(page.getByRole('heading', { level: 1 })).toBeVisible();
+    await expectAccessible(page);
+  }
+  if (ADVISOR_AVAILABLE) {
+    await page.goto('/auto-berater?budget=20000&nutzung=familie&personen=4');
+    await expect(
+      page.getByRole('heading', { level: 2, name: 'Diese Modelle passen zu dir' }),
+    ).toBeVisible();
     await expectAccessible(page);
   }
 });

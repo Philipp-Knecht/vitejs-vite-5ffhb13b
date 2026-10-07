@@ -13,6 +13,8 @@ export const STATIC_PAGES: readonly StaticPage[] = [
   { path: '/', indexable: true },
   { path: '/auto-finden', indexable: true },
   { path: '/inserat-pruefen', indexable: true },
+  { path: '/auto-berater', indexable: true },
+  { path: '/modelle', indexable: true },
   { path: '/gebrauchtwagen-kaufen', indexable: true },
   { path: '/gebrauchtwagen-checkliste', indexable: true },
   { path: '/auto-besichtigung-checkliste', indexable: true },

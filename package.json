@@ -19,6 +19,7 @@
     "dev": "concurrently -k -n api,web -c cyan,magenta \"npm run dev -w @kaufcheck/api\" \"npm run dev -w @kaufcheck/web\"",
     "build": "npm run build -w @kaufcheck/web && npm run build -w @kaufcheck/api",
     "start": "npm run start -w @kaufcheck/api",
+    "catalog:index": "npm run catalog:index -w @kaufcheck/catalog",
     "db:generate": "npm run db:generate -w @kaufcheck/api",
     "db:migrate": "npm run db:migrate -w @kaufcheck/api",
     "db:deploy": "npm run db:deploy -w @kaufcheck/api",
