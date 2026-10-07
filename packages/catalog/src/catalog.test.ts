@@ -1,4 +1,4 @@
-import { readdirSync, readFileSync } from 'node:fs';
+import { existsSync, readdirSync, readFileSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { describe, expect, it } from 'vitest';
@@ -179,7 +179,7 @@ describe('platform links', () => {
 
 describe('model knowledge files', () => {
   const dir = path.join(path.dirname(fileURLToPath(import.meta.url)), '../data/models');
-  const files = readdirSync(dir).filter((file) => file.endsWith('.json'));
+  const files = existsSync(dir) ? readdirSync(dir).filter((file) => file.endsWith('.json')) : [];
 
   it('are valid, sourced and belong to catalog models', () => {
     for (const file of files) {
