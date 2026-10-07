@@ -1,5 +1,107 @@
 [
   {
+    "id": "bmw-1er",
+    "make": "BMW",
+    "model": "1er",
+    "segment": "kompakt",
+    "twinOf": null,
+    "ratings": {
+      "reliability": 5,
+      "runningCosts": 2,
+      "space": 2,
+      "comfort": 3
+    },
+    "generations": [
+      {
+        "id": "bmw-1er-e87",
+        "name": "1er E87",
+        "years": [2004, 2013],
+        "bodyTypes": ["schraegheck", "coupe", "cabrio"],
+        "fuels": ["petrol", "diesel"],
+        "seats": [4, 5],
+        "automatic": true,
+        "typicalPriceEur": null,
+        "issueCount": 5,
+        "severeIssueCount": 1
+      },
+      {
+        "id": "bmw-1er-f20",
+        "name": "1er F20",
+        "years": [2011, 2019],
+        "bodyTypes": ["schraegheck"],
+        "fuels": ["petrol", "diesel"],
+        "seats": [5],
+        "automatic": true,
+        "typicalPriceEur": null,
+        "issueCount": 2,
+        "severeIssueCount": 0
+      },
+      {
+        "id": "bmw-1er-f40",
+        "name": "1er F40",
+        "years": [2019, 2024],
+        "bodyTypes": ["schraegheck"],
+        "fuels": ["petrol", "diesel"],
+        "seats": [5],
+        "automatic": true,
+        "typicalPriceEur": null,
+        "issueCount": 0,
+        "severeIssueCount": 0
+      },
+      {
+        "id": "bmw-1er-f70",
+        "name": "1er F70",
+        "years": [2024, null],
+        "bodyTypes": ["schraegheck"],
+        "fuels": ["petrol", "diesel"],
+        "seats": [5],
+        "automatic": true,
+        "typicalPriceEur": null,
+        "issueCount": 0,
+        "severeIssueCount": 0
+      }
+    ]
+  },
+  {
+    "id": "bmw-2er-active-tourer",
+    "make": "BMW",
+    "model": "2er Active Tourer",
+    "segment": "van_klein",
+    "twinOf": null,
+    "ratings": {
+      "reliability": 4,
+      "runningCosts": 3,
+      "space": 3,
+      "comfort": 4
+    },
+    "generations": [
+      {
+        "id": "bmw-2er-active-tourer-f45",
+        "name": "Active Tourer F45 / Gran Tourer F46",
+        "years": [2014, 2021],
+        "bodyTypes": ["van"],
+        "fuels": ["petrol", "diesel", "plugin_hybrid"],
+        "seats": [5, 7],
+        "automatic": true,
+        "typicalPriceEur": null,
+        "issueCount": 3,
+        "severeIssueCount": 0
+      },
+      {
+        "id": "bmw-2er-active-tourer-u06",
+        "name": "2er Active Tourer U06",
+        "years": [2021, null],
+        "bodyTypes": ["van"],
+        "fuels": ["petrol", "diesel", "plugin_hybrid"],
+        "seats": [5],
+        "automatic": true,
+        "typicalPriceEur": null,
+        "issueCount": 0,
+        "severeIssueCount": 0
+      }
+    ]
+  },
+  {
     "id": "bmw-3er",
     "make": "BMW",
     "model": "3er",
@@ -46,6 +148,273 @@
         "automatic": true,
         "typicalPriceEur": null,
         "issueCount": 5,
+        "severeIssueCount": 0
+      }
+    ]
+  },
+  {
+    "id": "bmw-5er",
+    "make": "BMW",
+    "model": "5er",
+    "segment": "obere_mittelklasse",
+    "twinOf": null,
+    "ratings": {
+      "reliability": 4,
+      "runningCosts": 2,
+      "space": 4,
+      "comfort": 5
+    },
+    "generations": [
+      {
+        "id": "bmw-5er-e60",
+        "name": "5er E60/E61",
+        "years": [2003, 2010],
+        "bodyTypes": ["limousine", "kombi"],
+        "fuels": ["petrol", "diesel"],
+        "seats": [5],
+        "automatic": true,
+        "typicalPriceEur": null,
+        "issueCount": 4,
+        "severeIssueCount": 0
+      },
+      {
+        "id": "bmw-5er-f10",
+        "name": "5er F10",
+        "years": [2010, 2017],
+        "bodyTypes": ["limousine", "kombi"],
+        "fuels": ["petrol", "diesel"],
+        "seats": [5],
+        "automatic": true,
+        "typicalPriceEur": null,
+        "issueCount": 5,
+        "severeIssueCount": 0
+      },
+      {
+        "id": "bmw-5er-g30",
+        "name": "5er G30",
+        "years": [2017, 2023],
+        "bodyTypes": ["limousine", "kombi"],
+        "fuels": ["petrol", "diesel", "plugin_hybrid"],
+        "seats": [5],
+        "automatic": true,
+        "typicalPriceEur": null,
+        "issueCount": 0,
+        "severeIssueCount": 0
+      },
+      {
+        "id": "bmw-5er-g60",
+        "name": "5er G60",
+        "years": [2023, null],
+        "bodyTypes": ["limousine", "kombi"],
+        "fuels": ["petrol", "diesel", "plugin_hybrid", "electric"],
+        "seats": [5],
+        "automatic": true,
+        "typicalPriceEur": null,
+        "issueCount": 0,
+        "severeIssueCount": 0
+      }
+    ]
+  },
+  {
+    "id": "mercedes-a-klasse",
+    "make": "Mercedes-Benz",
+    "model": "A-Klasse",
+    "segment": "kompakt",
+    "twinOf": null,
+    "ratings": {
+      "reliability": 4,
+      "runningCosts": 3,
+      "space": 3,
+      "comfort": 4
+    },
+    "generations": [
+      {
+        "id": "mercedes-a-klasse-w169",
+        "name": "A-Klasse W169",
+        "years": [2004, 2012],
+        "bodyTypes": ["schraegheck", "coupe"],
+        "fuels": ["petrol", "diesel"],
+        "seats": [5],
+        "automatic": true,
+        "typicalPriceEur": null,
+        "issueCount": 4,
+        "severeIssueCount": 0
+      },
+      {
+        "id": "mercedes-a-klasse-w176",
+        "name": "A-Klasse W176",
+        "years": [2012, 2018],
+        "bodyTypes": ["schraegheck"],
+        "fuels": ["petrol", "diesel"],
+        "seats": [5],
+        "automatic": true,
+        "typicalPriceEur": null,
+        "issueCount": 2,
+        "severeIssueCount": 0
+      },
+      {
+        "id": "mercedes-a-klasse-w177",
+        "name": "A-Klasse W177",
+        "years": [2018, null],
+        "bodyTypes": ["schraegheck", "limousine"],
+        "fuels": ["petrol", "diesel", "plugin_hybrid"],
+        "seats": [5],
+        "automatic": true,
+        "typicalPriceEur": null,
+        "issueCount": 0,
+        "severeIssueCount": 0
+      }
+    ]
+  },
+  {
+    "id": "mercedes-b-klasse",
+    "make": "Mercedes-Benz",
+    "model": "B-Klasse",
+    "segment": "van_klein",
+    "twinOf": null,
+    "ratings": {
+      "reliability": 4,
+      "runningCosts": 3,
+      "space": 4,
+      "comfort": 4
+    },
+    "generations": [
+      {
+        "id": "mercedes-b-klasse-w245",
+        "name": "B-Klasse W245",
+        "years": [2005, 2011],
+        "bodyTypes": ["van"],
+        "fuels": ["petrol", "diesel", "cng"],
+        "seats": [5],
+        "automatic": true,
+        "typicalPriceEur": null,
+        "issueCount": 5,
+        "severeIssueCount": 1
+      },
+      {
+        "id": "mercedes-b-klasse-w246",
+        "name": "B-Klasse W246",
+        "years": [2011, 2018],
+        "bodyTypes": ["van"],
+        "fuels": ["petrol", "diesel", "cng", "electric"],
+        "seats": [5],
+        "automatic": true,
+        "typicalPriceEur": null,
+        "issueCount": 2,
+        "severeIssueCount": 0
+      },
+      {
+        "id": "mercedes-b-klasse-w247",
+        "name": "B-Klasse W247",
+        "years": [2018, 2026],
+        "bodyTypes": ["van"],
+        "fuels": ["petrol", "diesel", "plugin_hybrid"],
+        "seats": [5],
+        "automatic": true,
+        "typicalPriceEur": null,
+        "issueCount": 0,
+        "severeIssueCount": 0
+      }
+    ]
+  },
+  {
+    "id": "mercedes-c-klasse",
+    "make": "Mercedes-Benz",
+    "model": "C-Klasse",
+    "segment": "mittelklasse",
+    "twinOf": null,
+    "ratings": {
+      "reliability": 4,
+      "runningCosts": 2,
+      "space": 3,
+      "comfort": 5
+    },
+    "generations": [
+      {
+        "id": "mercedes-c-klasse-w204",
+        "name": "C-Klasse W204",
+        "years": [2007, 2015],
+        "bodyTypes": ["limousine", "kombi", "coupe"],
+        "fuels": ["petrol", "diesel"],
+        "seats": [4, 5],
+        "automatic": true,
+        "typicalPriceEur": null,
+        "issueCount": 5,
+        "severeIssueCount": 1
+      },
+      {
+        "id": "mercedes-c-klasse-w205",
+        "name": "C-Klasse W205",
+        "years": [2014, 2023],
+        "bodyTypes": ["limousine", "kombi", "coupe", "cabrio"],
+        "fuels": ["petrol", "diesel", "hybrid", "plugin_hybrid"],
+        "seats": [4, 5],
+        "automatic": true,
+        "typicalPriceEur": null,
+        "issueCount": 3,
+        "severeIssueCount": 0
+      },
+      {
+        "id": "mercedes-c-klasse-w206",
+        "name": "C-Klasse W206",
+        "years": [2021, null],
+        "bodyTypes": ["limousine", "kombi"],
+        "fuels": ["petrol", "diesel", "plugin_hybrid"],
+        "seats": [5],
+        "automatic": true,
+        "typicalPriceEur": null,
+        "issueCount": 0,
+        "severeIssueCount": 0
+      }
+    ]
+  },
+  {
+    "id": "mercedes-e-klasse",
+    "make": "Mercedes-Benz",
+    "model": "E-Klasse",
+    "segment": "obere_mittelklasse",
+    "twinOf": null,
+    "ratings": {
+      "reliability": 3,
+      "runningCosts": 2,
+      "space": 5,
+      "comfort": 5
+    },
+    "generations": [
+      {
+        "id": "mercedes-e-klasse-w212",
+        "name": "E-Klasse W212",
+        "years": [2009, 2016],
+        "bodyTypes": ["limousine", "kombi"],
+        "fuels": ["petrol", "diesel", "hybrid"],
+        "seats": [5],
+        "automatic": true,
+        "typicalPriceEur": null,
+        "issueCount": 6,
+        "severeIssueCount": 0
+      },
+      {
+        "id": "mercedes-e-klasse-w213",
+        "name": "E-Klasse W213",
+        "years": [2016, 2023],
+        "bodyTypes": ["limousine", "kombi"],
+        "fuels": ["petrol", "diesel", "plugin_hybrid"],
+        "seats": [5],
+        "automatic": true,
+        "typicalPriceEur": null,
+        "issueCount": 0,
+        "severeIssueCount": 0
+      },
+      {
+        "id": "mercedes-e-klasse-w214",
+        "name": "E-Klasse W214",
+        "years": [2023, null],
+        "bodyTypes": ["limousine", "kombi"],
+        "fuels": ["petrol", "diesel", "plugin_hybrid"],
+        "seats": [5],
+        "automatic": true,
+        "typicalPriceEur": null,
+        "issueCount": 0,
         "severeIssueCount": 0
       }
     ]
@@ -100,6 +469,171 @@
         "automatic": true,
         "typicalPriceEur": null,
         "issueCount": 6,
+        "severeIssueCount": 0
+      }
+    ]
+  },
+  {
+    "id": "skoda-fabia",
+    "make": "Škoda",
+    "model": "Fabia",
+    "segment": "kleinwagen",
+    "twinOf": null,
+    "ratings": {
+      "reliability": 4,
+      "runningCosts": 4,
+      "space": 4,
+      "comfort": 3
+    },
+    "generations": [
+      {
+        "id": "skoda-fabia-ii",
+        "name": "Fabia II",
+        "years": [2007, 2014],
+        "bodyTypes": ["schraegheck", "kombi"],
+        "fuels": ["petrol", "diesel"],
+        "seats": [5],
+        "automatic": true,
+        "typicalPriceEur": null,
+        "issueCount": 6,
+        "severeIssueCount": 1
+      },
+      {
+        "id": "skoda-fabia-iii",
+        "name": "Fabia III",
+        "years": [2014, 2022],
+        "bodyTypes": ["schraegheck", "kombi"],
+        "fuels": ["petrol", "diesel"],
+        "seats": [5],
+        "automatic": true,
+        "typicalPriceEur": null,
+        "issueCount": 2,
+        "severeIssueCount": 0
+      },
+      {
+        "id": "skoda-fabia-iv",
+        "name": "Fabia IV",
+        "years": [2021, null],
+        "bodyTypes": ["schraegheck"],
+        "fuels": ["petrol"],
+        "seats": [5],
+        "automatic": true,
+        "typicalPriceEur": null,
+        "issueCount": 0,
+        "severeIssueCount": 0
+      }
+    ]
+  },
+  {
+    "id": "skoda-octavia",
+    "make": "Škoda",
+    "model": "Octavia",
+    "segment": "kompakt",
+    "twinOf": null,
+    "ratings": {
+      "reliability": 4,
+      "runningCosts": 4,
+      "space": 5,
+      "comfort": 4
+    },
+    "generations": [
+      {
+        "id": "skoda-octavia-i",
+        "name": "Octavia I",
+        "years": [1997, 2010],
+        "bodyTypes": ["limousine", "kombi"],
+        "fuels": ["petrol", "diesel"],
+        "seats": [5],
+        "automatic": true,
+        "typicalPriceEur": null,
+        "issueCount": 4,
+        "severeIssueCount": 0
+      },
+      {
+        "id": "skoda-octavia-ii",
+        "name": "Octavia II",
+        "years": [2004, 2013],
+        "bodyTypes": ["limousine", "kombi"],
+        "fuels": ["petrol", "diesel"],
+        "seats": [5],
+        "automatic": true,
+        "typicalPriceEur": null,
+        "issueCount": 6,
+        "severeIssueCount": 1
+      },
+      {
+        "id": "skoda-octavia-iii",
+        "name": "Octavia III",
+        "years": [2013, 2020],
+        "bodyTypes": ["limousine", "kombi"],
+        "fuels": ["petrol", "diesel", "cng"],
+        "seats": [5],
+        "automatic": true,
+        "typicalPriceEur": null,
+        "issueCount": 4,
+        "severeIssueCount": 0
+      },
+      {
+        "id": "skoda-octavia-iv",
+        "name": "Octavia IV",
+        "years": [2020, null],
+        "bodyTypes": ["limousine", "kombi"],
+        "fuels": ["petrol", "diesel", "hybrid", "plugin_hybrid", "cng"],
+        "seats": [5],
+        "automatic": true,
+        "typicalPriceEur": null,
+        "issueCount": 0,
+        "severeIssueCount": 0
+      }
+    ]
+  },
+  {
+    "id": "skoda-superb",
+    "make": "Škoda",
+    "model": "Superb",
+    "segment": "mittelklasse",
+    "twinOf": null,
+    "ratings": {
+      "reliability": 4,
+      "runningCosts": 3,
+      "space": 5,
+      "comfort": 4
+    },
+    "generations": [
+      {
+        "id": "skoda-superb-ii",
+        "name": "Superb II",
+        "years": [2008, 2015],
+        "bodyTypes": ["limousine", "kombi"],
+        "fuels": ["petrol", "diesel"],
+        "seats": [5],
+        "automatic": true,
+        "typicalPriceEur": null,
+        "issueCount": 6,
+        "severeIssueCount": 1
+      },
+      {
+        "id": "skoda-superb-iii",
+        "name": "Superb III",
+        "years": [2015, 2023],
+        "bodyTypes": ["limousine", "kombi"],
+        "fuels": ["petrol", "diesel", "plugin_hybrid"],
+        "seats": [5],
+        "automatic": true,
+        "typicalPriceEur": null,
+        "issueCount": 5,
+        "severeIssueCount": 0
+      },
+      {
+        "id": "skoda-superb-iv",
+        "name": "Superb IV",
+        "years": [2023, null],
+        "bodyTypes": ["limousine", "kombi"],
+        "fuels": ["petrol", "diesel", "hybrid", "plugin_hybrid"],
+        "seats": [5],
+        "automatic": true,
+        "typicalPriceEur": null,
+        "issueCount": 0,
         "severeIssueCount": 0
       }
     ]

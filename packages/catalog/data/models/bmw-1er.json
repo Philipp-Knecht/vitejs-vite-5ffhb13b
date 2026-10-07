@@ -1,0 +1,306 @@
+{
+  "id": "bmw-1er",
+  "make": "BMW",
+  "model": "1er",
+  "aliases": [
+    "114d",
+    "114i",
+    "116d",
+    "116i",
+    "118d",
+    "118i",
+    "120d",
+    "120i",
+    "123d",
+    "125d",
+    "125i",
+    "130i",
+    "135i",
+    "1er",
+    "1er cabrio",
+    "1er cabriolet",
+    "1er coupe",
+    "1er coupé",
+    "1er reihe",
+    "1er-reihe",
+    "bmw 1er",
+    "m135i",
+    "m140i"
+  ],
+  "segment": "kompakt",
+  "summary": "Kompakter Schrägheck-BMW, bis 2019 mit Heckantrieb und sportlichem Fahrwerk (früher auch als Coupé und Cabrio); laut ADAC pannensicher, aber eng im Fond und auch gebraucht recht teuer.",
+  "ratings": {
+    "reliability": 5,
+    "reliabilityNote": "Laut ADAC liegt der 1er der Reihe F20 (2011–2019) an der Spitze der Pannenstatistik und gilt bei der HU als mustergültig. Beim Vorgänger (2004–2013) sind die Jahrgänge 2005–2007 nur mittel, ab 2008 meist gut bis sehr gut; im TÜV-Report fallen gebrochene Federn auf.",
+    "reliabilitySources": [
+      {
+        "label": "ADAC Gebrauchtwageninfo: BMW 1er-Reihe (2011-2019) Benziner",
+        "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0208-bmw-1er-reihe-2011-2019-benziner-bericht.pdf"
+      },
+      {
+        "label": "ADAC Gebrauchtwageninfo: BMW 1er-Reihe (2011-2019) Diesel",
+        "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0207-bmw-1er-reihe-2011-2019-diesel-bericht.pdf"
+      },
+      {
+        "label": "ADAC Gebrauchtwageninfo: BMW 1er-Reihe (2004-2013) Benziner",
+        "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0227-bmw-1er-reihe-2004-2013-benziner-bericht.pdf"
+      },
+      {
+        "label": "ADAC Gebrauchtwageninfo: BMW 1er-Reihe (2004-2013) Diesel",
+        "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0031-bmw-1er-reihe-2004-2013-diesel-bericht.pdf"
+      }
+    ],
+    "runningCosts": 2,
+    "space": 2,
+    "comfort": 3
+  },
+  "generations": [
+    {
+      "id": "bmw-1er-e87",
+      "name": "1er E87",
+      "code": "E81 / E82 / E87 / E88",
+      "years": [2004, 2013],
+      "bodyTypes": ["schraegheck", "coupe", "cabrio"],
+      "fuels": ["petrol", "diesel"],
+      "seats": [4, 5],
+      "automatic": true,
+      "typicalPriceEur": null,
+      "priceSource": null,
+      "strengths": [
+        "Gute Verarbeitung, leichte und funktionelle Bedienung",
+        "Ausgezeichnete Straßenlage; der Heckantrieb war in dieser Klasse ein Alleinstellungsmerkmal",
+        "Kultivierte, kräftige Motoren; die Diesel verbrauchen wenig",
+        "Laut ADAC ab Erstzulassung 2008 mit ganz wenigen Pannen im Spitzenfeld"
+      ],
+      "issues": [
+        {
+          "title": "Steuerkette: gelängte Ketten, teure Reparatur",
+          "affects": "Benziner und Diesel der 1er-Reihe 2004–2013; laut ADAC häufig auffällig bei den Erstzulassungen 2004–2009 und 2011–2012",
+          "detail": "Die Steuerkette zählt laut ADAC bei diesen Jahrgängen zu den häufigen Bauteilfehlern. Beim Diesel sorgen teils gelängte Ketten für hohe Reparaturkosten; bei rasselnder Kette rät der ADAC, auf das Fahrzeug zu verzichten.",
+          "check": "Bei der Probefahrt auf rasselnde Geräusche aus dem Motor achten und Belege über bereits erfolgte Steuerketten-Reparaturen verlangen.",
+          "severity": "hoch",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: BMW 1er-Reihe (2004-2013) Benziner",
+              "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0227-bmw-1er-reihe-2004-2013-benziner-bericht.pdf"
+            },
+            {
+              "label": "ADAC Gebrauchtwageninfo: BMW 1er-Reihe (2004-2013) Diesel",
+              "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0031-bmw-1er-reihe-2004-2013-diesel-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Frühe Jahrgänge: Anlasser, Einspritzventile, Nockenwellenverstellung",
+          "affects": "Anlasser: Erstzulassung 2004–2006 (Benziner, Diesel); Einspritzventil: 2007 (Benziner, Diesel); Nockenwellenverstelleinrichtung: 2005–2007 (Benziner)",
+          "detail": "Diese Bauteile stehen laut ADAC bei den frühen Jahrgängen unter den häufigen Bauteilfehlern. Die Zuverlässigkeit hielt bis 2007 nicht ganz das sonst hohe BMW-Niveau; nach dem Facelift war der 1er laut ADAC Spitze.",
+          "check": "Möglichst einen Jahrgang ab Erstzulassung 2008 wählen; bei früheren Fahrzeugen auf Startprobleme und Motorfehlermeldungen achten und nach Belegen über Reparaturen fragen.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: BMW 1er-Reihe (2004-2013) Benziner",
+              "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0227-bmw-1er-reihe-2004-2013-benziner-bericht.pdf"
+            },
+            {
+              "label": "ADAC Gebrauchtwageninfo: BMW 1er-Reihe (2004-2013) Diesel",
+              "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0031-bmw-1er-reihe-2004-2013-diesel-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Zündspulen fallen häufig aus (Benziner)",
+          "affects": "Benziner der 1er-Reihe 2004–2013, Erstzulassungen 2006–2010 und 2012–2013",
+          "detail": "Die Zündspule steht laut ADAC bei diesen Jahrgängen unter den häufigen Bauteilfehlern der Pannenstatistik und kann zu einer Panne führen.",
+          "check": "Fehlerspeicher auslesen lassen und fragen, ob die Zündspulen bereits erneuert wurden.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: BMW 1er-Reihe (2004-2013) Benziner",
+              "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0227-bmw-1er-reihe-2004-2013-benziner-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "HU: gebrochene Federn und rissige Bremsschläuche",
+          "affects": "Benziner und Diesel der 1er-Reihe 2004–2013",
+          "detail": "Laut ADAC fallen bei der Hauptuntersuchung vermehrt gebrochene Federn und rissige Bremsschläuche auf; im TÜV-Report zeigt sich der 1er sonst solide.",
+          "check": "Federn und Bremsschläuche bei der Besichtigung (am besten auf der Hebebühne) kontrollieren lassen und den letzten HU-Bericht ansehen.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: BMW 1er-Reihe (2004-2013) Benziner",
+              "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0227-bmw-1er-reihe-2004-2013-benziner-bericht.pdf"
+            },
+            {
+              "label": "ADAC Gebrauchtwageninfo: BMW 1er-Reihe (2004-2013) Diesel",
+              "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0031-bmw-1er-reihe-2004-2013-diesel-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Rückrufe: Servolenkung (EPS), Gelenkwelle und Elektrik",
+          "affects": "Laut ADAC-Bericht zum Diesel (1er 2004–2013): Rückrufe 7/2012 (Servolenkung), 2/2017 (Gelenkwelle), 5/2019 (Elektrik)",
+          "detail": "Rückruf wegen eines Fehlers in der Steuerelektronik der elektromechanischen Servolenkung (EPS), durch den die Lenkkraftunterstützung ausfallen kann. Weitere Rückrufe betrafen die elastische Gelenkscheibe der Gelenkwelle (kann brechen) und einen möglichen Totalausfall der Elektrik.",
+          "check": "Per Fahrgestellnummer beim Händler prüfen lassen, ob die Rückrufe erledigt sind.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: BMW 1er-Reihe (2004-2013) Diesel",
+              "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0031-bmw-1er-reihe-2004-2013-diesel-bericht.pdf"
+            }
+          ]
+        }
+      ],
+      "engines": {
+        "recommended": [
+          {
+            "name": "Sechszylinder-Benziner",
+            "why": "Laut ADAC inzwischen gesucht und mit stabilem Werterhalt über längere Zeit; die Motorwahl ist laut ADAC letztlich eine Frage des Geldbeutels."
+          },
+          {
+            "name": "2,0-Liter-Diesel (116d bis 123d)",
+            "why": "Laut ADAC kann man mit jeder der sechs Varianten (85 bis 150 kW) glücklich werden; vor dem Kauf aber auf die Steuerkette achten."
+          }
+        ],
+        "caution": [
+          {
+            "name": "1,6-Liter im frühen 116i (bis 2009)",
+            "why": "Laut ADAC passt dieser Motor nicht recht zum sportlichen Auftritt des 1er; er wurde 2009 durch einen 2,0-Liter ersetzt."
+          },
+          {
+            "name": "Diesel mit rasselnder Steuerkette",
+            "why": "Laut ADAC besser die Finger von solchen Exemplaren lassen, da die Reparatur teuer ist."
+          }
+        ]
+      },
+      "tips": [
+        "Möglichst einen Jahrgang ab Erstzulassung 2008 (nach dem Facelift) wählen: Frühere Modelle schneiden laut ADAC in der Pannenstatistik schlechter ab.",
+        "Bei der Probefahrt auf Rasselgeräusche der Steuerkette achten und Belege über Reparaturen verlangen.",
+        "Federn und Bremsschläuche prüfen lassen: Gebrochene Federn und rissige Bremsschläuche fallen laut ADAC bei der HU häufig auf.",
+        "Rückrufstatus per Fahrgestellnummer erfragen, beim Diesel zum Beispiel zur Servolenkung."
+      ]
+    },
+    {
+      "id": "bmw-1er-f20",
+      "name": "1er F20",
+      "code": "F20 / F21",
+      "years": [2011, 2019],
+      "bodyTypes": ["schraegheck"],
+      "fuels": ["petrol", "diesel"],
+      "seats": [5],
+      "automatic": true,
+      "typicalPriceEur": null,
+      "priceSource": null,
+      "strengths": [
+        "Gute Sicherheitsausstattung: viele Fahrerassistenzsysteme und aktiver Fußgängerschutz",
+        "Laut ADAC an der Spitze der Pannenstatistik und bei der HU nur sehr selten Ärger",
+        "Gute Fahrleistungen; Fahrwerk sportlich und komfortabel (beim Benziner laut ADAC optional)",
+        "Ausgezeichnete Verarbeitung, gute Wertstabilität"
+      ],
+      "issues": [
+        {
+          "title": "Reifendruckkontrollsystem häufiger defekt",
+          "affects": "1er F20 (Benziner und Diesel), Fahrzeuge bis 2014",
+          "detail": "Laut ADAC ist bei Fahrzeugen bis 2014 das Reifendruckkontrollsystem häufiger defekt. Sonst sind die Einzelfehler laut ADAC breit gestreut und mit geringen Fallzahlen verbunden.",
+          "check": "Beim Einschalten der Zündung auf Warnmeldungen zum Reifendruck achten und die Funktion vor dem Kauf in der Werkstatt prüfen lassen.",
+          "severity": "gering",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: BMW 1er-Reihe (2011-2019) Benziner",
+              "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0208-bmw-1er-reihe-2011-2019-benziner-bericht.pdf"
+            },
+            {
+              "label": "ADAC Gebrauchtwageninfo: BMW 1er-Reihe (2011-2019) Diesel",
+              "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0207-bmw-1er-reihe-2011-2019-diesel-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Rückrufe: Lenkkraftunterstützung (EPS) kann ausfallen",
+          "affects": "Rückruf 12/2016: Fahrzeuge der Bauzeit Juli 2011 bis Juni 2016 (laut ADAC nur eine kleine Zahl betroffen)",
+          "detail": "Bei einigen Fahrzeugen waren Kontakte im Steuergerät der elektrischen Servolenkung (EPS) womöglich nicht verschweißt, wodurch die Lenkkraftunterstützung ausfallen kann; BMW tauscht Lenkgetriebe samt EPS-Einheit. Der ADAC nennt den Rückruf sicherheitsrelevant.",
+          "check": "Per Fahrgestellnummer beim Händler prüfen lassen, ob die Rückrufe erledigt sind.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: BMW 1er-Reihe (2011-2019) Benziner",
+              "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0208-bmw-1er-reihe-2011-2019-benziner-bericht.pdf"
+            },
+            {
+              "label": "ADAC Gebrauchtwageninfo: BMW 1er-Reihe (2011-2019) Diesel",
+              "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0207-bmw-1er-reihe-2011-2019-diesel-bericht.pdf"
+            }
+          ]
+        }
+      ],
+      "engines": {
+        "recommended": [
+          {
+            "name": "118d (143 PS)",
+            "why": "Laut ADAC ist man bereits mit dem 118d gut motorisiert unterwegs."
+          },
+          {
+            "name": "116d EfficientDynamics Edition (ab 2012)",
+            "why": "Laut ADAC die Wahl für Sparfüchse: nur 4,3 l Diesel Verbrauch im ADAC EcoTest."
+          },
+          {
+            "name": "118i (125 kW/170 PS)",
+            "why": "Laut ADAC sorgt schon der 118i für gute Fahrleistungen; die Sechszylinder der M GmbH sind dafür nicht nötig."
+          }
+        ],
+        "caution": [
+          {
+            "name": "Schwächere Benziner",
+            "why": "Laut ADAC genügen sie, um im Verkehr mitzuschwimmen, passen aber nicht recht zum agilen Charakter des 1er."
+          }
+        ]
+      },
+      "tips": [
+        "Bei Fahrzeugen bis 2014 prüfen, ob das Reifendruckkontrollsystem ohne Warnmeldung arbeitet.",
+        "Rückrufstatus per Fahrgestellnummer erfragen, besonders den Lenkgetriebe-Rückruf (12/2016) bei Fahrzeugen der Bauzeit Juli 2011 bis Juni 2016."
+      ]
+    },
+    {
+      "id": "bmw-1er-f40",
+      "name": "1er F40",
+      "code": "F40",
+      "years": [2019, 2024],
+      "bodyTypes": ["schraegheck"],
+      "fuels": ["petrol", "diesel"],
+      "seats": [5],
+      "automatic": true,
+      "typicalPriceEur": null,
+      "priceSource": null,
+      "strengths": [],
+      "issues": [],
+      "engines": {
+        "recommended": [],
+        "caution": []
+      },
+      "tips": [
+        "Für diese Generation liegen noch wenige Gebrauchtwagen-Erfahrungen vor; Rückrufe per Fahrgestellnummer erfragen."
+      ]
+    },
+    {
+      "id": "bmw-1er-f70",
+      "name": "1er F70",
+      "code": "F70",
+      "years": [2024, null],
+      "bodyTypes": ["schraegheck"],
+      "fuels": ["petrol", "diesel"],
+      "seats": [5],
+      "automatic": true,
+      "typicalPriceEur": null,
+      "priceSource": null,
+      "strengths": [],
+      "issues": [],
+      "engines": {
+        "recommended": [],
+        "caution": []
+      },
+      "tips": [
+        "Für diese Generation liegen noch wenige Gebrauchtwagen-Erfahrungen vor; Rückrufe per Fahrgestellnummer erfragen."
+      ]
+    }
+  ]
+}

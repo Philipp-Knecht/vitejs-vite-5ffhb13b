@@ -1,0 +1,151 @@
+{
+  "id": "bmw-2er-active-tourer",
+  "make": "BMW",
+  "model": "2er Active Tourer",
+  "aliases": [
+    "214d active tourer",
+    "216d active tourer",
+    "216i active tourer",
+    "218d active tourer",
+    "218i active tourer",
+    "220d active tourer",
+    "220i active tourer",
+    "225xe",
+    "225xe active tourer",
+    "2er active tourer",
+    "2er activetourer",
+    "2er gran tourer",
+    "2er grand tourer",
+    "2er reihe active tourer",
+    "2er-reihe active tourer",
+    "active tourer",
+    "bmw 2er active tourer",
+    "gran tourer",
+    "grand tourer"
+  ],
+  "segment": "van_klein",
+  "summary": "Kompakter BMW-Van mit Frontantrieb (2014 der erste Fronttriebler der Marke), laut ADAC bequem, sicher zu fahren und sehr zuverlässig, aber teuer und mit nur durchschnittlich großem Kofferraum.",
+  "ratings": {
+    "reliability": 4,
+    "reliabilityNote": "Laut ADAC liegt der 2er in der Pannenstatistik auf einem der vorderen Plätze: Erstzulassungen 2014–2019 und 2022 gut, 2020–2021 sehr gut. Beim TÜV schneidet er laut ADAC sehr gut ab und kommt auf überdurchschnittlich gute Ergebnisse.",
+    "reliabilitySources": [
+      {
+        "label": "ADAC Gebrauchtwageninfo: BMW 2er-Reihe Active/Gran Tourer (2014-2021) Diesel",
+        "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0367-bmw-2er-reihe-active-gran-tourer-2014-2021-diesel-bericht.pdf"
+      }
+    ],
+    "runningCosts": 3,
+    "space": 3,
+    "comfort": 4
+  },
+  "generations": [
+    {
+      "id": "bmw-2er-active-tourer-f45",
+      "name": "Active Tourer F45 / Gran Tourer F46",
+      "code": "F45 / F46",
+      "years": [2014, 2021],
+      "bodyTypes": ["van"],
+      "fuels": ["petrol", "diesel", "plugin_hybrid"],
+      "seats": [5, 7],
+      "automatic": true,
+      "typicalPriceEur": null,
+      "priceSource": null,
+      "strengths": [
+        "Zuverlässige und haltbare Technik",
+        "Sichere, sportliche Fahreigenschaften, kräftige Bremsen und bequeme Sitze",
+        "Variable Rückbank; der Gran Tourer bietet bis zu sieben Sitze",
+        "Sparsame Diesel, alle mit gut funktionierenden Automatikgetrieben erhältlich"
+      ],
+      "issues": [
+        {
+          "title": "Rückrufe: Beifahrergurt, Airbags, Schwenklager und Gurtstraffer",
+          "affects": "Rückrufe 1/2015 (Beifahrergurt), 1/2017 (Airbags), 6/2018 (Schwenklager), 5/2022 (Gurtstraffer, Brandgefahr); laut ADAC-Bericht zum Diesel 2014–2021",
+          "detail": "Laut ADAC konnte der Beifahrergurt blockieren oder schwer abrollen (1/2015), mehrere Airbags zündeten in der ersten Stufe nicht (1/2017) und bei einigen Schwenklagern (Radaufhängung) entsprach die Abkühlung in der Produktion nicht der Spezifikation (6/2018). 5/2022: Ein fehlerhafter Mikrogasgenerator im Gurtstraffer der vorderen Gurte kann die Verletzungsgefahr im Unfall erhöhen und zum Brand führen.",
+          "check": "Per Fahrgestellnummer beim Händler prüfen lassen, ob die Rückrufe erledigt sind.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: BMW 2er-Reihe Active/Gran Tourer (2014-2021) Diesel",
+              "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0367-bmw-2er-reihe-active-gran-tourer-2014-2021-diesel-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Starterbatterie bei Erstzulassung 2016 häufiger defekt",
+          "affects": "2er Active/Gran Tourer (Diesel), Erstzulassung 2016",
+          "detail": "Laut ADAC zählt die Starterbatterie beim Jahrgang 2016 zu den häufigen Bauteilfehlern der Pannenstatistik und kann zu einer Panne führen.",
+          "check": "Zustand und Alter der Batterie vor dem Kauf prüfen lassen (Batterietest).",
+          "severity": "gering",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: BMW 2er-Reihe Active/Gran Tourer (2014-2021) Diesel",
+              "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0367-bmw-2er-reihe-active-gran-tourer-2014-2021-diesel-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Abstandstempomat arbeitet unzuverlässig",
+          "affects": "Fahrzeuge mit Abstandstempomat (2er Active/Gran Tourer 2014–2021)",
+          "detail": "Der ADAC bezeichnet den Abstandstempomaten als unzuverlässig; er kann im Alltag Nerven kosten.",
+          "check": "Bei der Probefahrt die Funktion des Abstandstempomaten ausprobieren und auf Fehlermeldungen im Display achten.",
+          "severity": "gering",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: BMW 2er-Reihe Active/Gran Tourer (2014-2021) Diesel",
+              "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0367-bmw-2er-reihe-active-gran-tourer-2014-2021-diesel-bericht.pdf"
+            }
+          ]
+        }
+      ],
+      "engines": {
+        "recommended": [
+          {
+            "name": "216d (Dreizylinder-Diesel)",
+            "why": "Laut ADAC deutlich zügiger als der 214d; im Alltag lassen sich alle Diesel angenehm sparsam fahren."
+          },
+          {
+            "name": "218d und 220d (Vierzylinder-Diesel)",
+            "why": "Laut ADAC richtig flotte Fahrleistungen, aber im Einkauf und Unterhalt kostspieliger; die Achtgangautomatik der größeren Motoren arbeitet laut ADAC hervorragend."
+          },
+          {
+            "name": "Modelle mit Allradantrieb xDrive",
+            "why": "Laut ADAC empfehlenswert bei häufigen Fahrten im Gebirge oder mit Anhänger."
+          }
+        ],
+        "caution": [
+          {
+            "name": "214d (Dreizylinder-Diesel)",
+            "why": "Laut ADAC reicht die Einstiegsmotorisierung zum Mitschwimmen im Verkehr, mehr aber nicht."
+          }
+        ]
+      },
+      "tips": [
+        "Rückrufstatus per Fahrgestellnummer prüfen lassen: Es gab Rückrufe zu Beifahrergurt, Airbags, Schwenklagern und Gurtstraffern.",
+        "Abstandstempomat auf der Probefahrt testen; der ADAC nennt ihn unzuverlässig.",
+        "Bei Erstzulassung 2016 den Zustand der Starterbatterie prüfen lassen.",
+        "Auf der Probefahrt auf den Federungskomfort achten: Das Standardfahrwerk geht laut ADAC zu Lasten des Komforts, Modelle mit adaptivem Fahrwerk bieten deutlich mehr."
+      ]
+    },
+    {
+      "id": "bmw-2er-active-tourer-u06",
+      "name": "2er Active Tourer U06",
+      "code": "U06",
+      "years": [2021, null],
+      "bodyTypes": ["van"],
+      "fuels": ["petrol", "diesel", "plugin_hybrid"],
+      "seats": [5],
+      "automatic": true,
+      "typicalPriceEur": null,
+      "priceSource": null,
+      "strengths": [],
+      "issues": [],
+      "engines": {
+        "recommended": [],
+        "caution": []
+      },
+      "tips": [
+        "Für diese Generation liegen noch wenige Gebrauchtwagen-Erfahrungen vor; Rückrufe per Fahrgestellnummer erfragen."
+      ]
+    }
+  ]
+}

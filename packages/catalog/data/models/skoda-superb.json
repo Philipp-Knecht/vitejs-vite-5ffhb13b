@@ -1,0 +1,316 @@
+{
+  "id": "skoda-superb",
+  "make": "Škoda",
+  "model": "Superb",
+  "aliases": [
+    "skoda superb",
+    "superb",
+    "superb combi",
+    "superb ii",
+    "superb iii",
+    "superb iv",
+    "superb kombi",
+    "superb l&k",
+    "superb laurin & klement",
+    "superb limousine",
+    "superb scout",
+    "superb sportline",
+    "škoda superb"
+  ],
+  "segment": "mittelklasse",
+  "summary": "Der große Škoda der Mittelklasse als Limousine oder Combi (Kombi): sehr viel Platz und ein riesiger Kofferraum zu einem vergleichsweise günstigen Preis.",
+  "ratings": {
+    "reliability": 4,
+    "reliabilityNote": "Laut ADAC-Pannenstatistik meist „gut“ (Superb III: Erstzulassung 2015–2017 und 2020–2022 gut, 2018 und 2019 mittel; Superb II: 2010–2012 mittel, ab 2013 gut). Im TÜV-Report liegt der Superb II über, der Superb III unter dem Durchschnitt; Schwachpunkt ist das Fahrwerk bei den oft sehr hohen Laufleistungen.",
+    "reliabilitySources": [
+      {
+        "label": "ADAC Gebrauchtwageninfo: Skoda Superb (2015-2023) Diesel",
+        "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0404-skoda-superb-2015-2023-diesel-bericht.pdf"
+      },
+      {
+        "label": "ADAC Gebrauchtwageninfo: Skoda Superb (2008-2015) Diesel",
+        "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0223-skoda-superb-2008-2015-diesel-bericht.pdf"
+      },
+      {
+        "label": "ADAC Gebrauchtwageninfo: Skoda Superb (2008-2015) Benziner",
+        "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0246-skoda-superb-2008-2015-benziner-bericht.pdf"
+      }
+    ],
+    "runningCosts": 3,
+    "space": 5,
+    "comfort": 4
+  },
+  "generations": [
+    {
+      "id": "skoda-superb-ii",
+      "name": "Superb II",
+      "code": "3T",
+      "years": [2008, 2015],
+      "bodyTypes": ["limousine", "kombi"],
+      "fuels": ["petrol", "diesel"],
+      "seats": [5],
+      "automatic": true,
+      "typicalPriceEur": null,
+      "priceSource": null,
+      "strengths": [
+        "Sehr großzügiges Raumangebot mit enormer Beinfreiheit hinten und besonders großem Kofferraum, im Combi ein erstaunlich großes Ladevolumen",
+        "Gute Verarbeitung und bequeme Sitze",
+        "Sicheres Fahrverhalten und einfache Bedienung",
+        "Gutes Preis-Leistungs-Verhältnis; im TÜV-Report trotz hoher Laufleistungen besser als der Durchschnitt"
+      ],
+      "issues": [
+        {
+          "title": "Gelängte Steuerkette beim 1.4 TSI",
+          "affects": "Benziner 1.4 TSI (125 PS)",
+          "detail": "Laut ADAC fällt der 1.4 TSI zuweilen durch eine gelängte Steuerkette auf; bei der Besichtigung sollte besonders darauf geachtet werden. Das bedeutet im Zweifel eine Reparatur, die vor dem Kauf geklärt sein sollte.",
+          "check": "Beim Kaltstart und im Leerlauf auf Rasselgeräusche achten und einen Beleg für einen Steuerkettenwechsel verlangen.",
+          "severity": "hoch",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: Skoda Superb (2008-2015) Benziner",
+              "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0246-skoda-superb-2008-2015-benziner-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Verschleiß an Achsaufhängung, Federn und Dämpfern",
+          "affects": "Benziner und Diesel; besonders bei den oft weit überdurchschnittlichen Laufleistungen",
+          "detail": "Laut ADAC bereitet im TÜV-Report lediglich das Fahrwerk ab und zu Probleme, vor allem Achsaufhängung, Federn und Dämpfer. Der Superb II wurde oft als typisches Vertreterauto genutzt, die Laufleistungen der Gebrauchtwagen sind überdurchschnittlich hoch.",
+          "check": "Fahrwerk (Achsaufhängung, Federn, Dämpfer) in der Werkstatt prüfen lassen und nach Laufleistung und bisheriger Nutzung fragen.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: Skoda Superb (2008-2015) Benziner",
+              "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0246-skoda-superb-2008-2015-benziner-bericht.pdf"
+            },
+            {
+              "label": "ADAC Gebrauchtwageninfo: Skoda Superb (2008-2015) Diesel",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0223-skoda-superb-2008-2015-diesel-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Defekte Zündspulen als häufige Ursache fürs Liegenbleiben",
+          "affects": "Benziner; Zündspule als Bauteilfehler bei Erstzulassung 2012",
+          "detail": "Laut ADAC sind defekte Zündspulen bei den Benzinern eine häufige Ursache für Liegenbleiber; als Bauteilfehler nennt der Bericht sie für den Jahrgang 2012.",
+          "check": "Bei der Probefahrt auf Aussetzer und unrunden Motorlauf achten und fragen, ob Zündspulen schon getauscht wurden.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: Skoda Superb (2008-2015) Benziner",
+              "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0246-skoda-superb-2008-2015-benziner-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Defekte Abgas-Rückführungseinheiten beim Diesel",
+          "affects": "Diesel; Abgasrückführung als Bauteilfehler bei Erstzulassung 2011–2013",
+          "detail": "Laut ADAC sind defekte Abgas-Rückführungseinheiten bei den Dieseln eine häufige Ursache für Liegenbleiber; als Bauteilfehler nennt der Bericht sie für die Jahrgänge 2011 bis 2013.",
+          "check": "Auf Leistungsverlust, Notlauf und Warnleuchten achten, den Fehlerspeicher auslesen lassen und nach Reparaturen an der Abgasrückführung fragen.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: Skoda Superb (2008-2015) Diesel",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0223-skoda-superb-2008-2015-diesel-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Rückrufe: Kraftstoffleitungen (2.0 CR TDI) und DSG-Software",
+          "affects": "2.0 CR TDI (Rückruf 1/2012); Sechsgang-Direktschaltgetriebe O2E (11/2009); weitere Rückrufe 8/2009, 8/2019 und 1/2020 (betroffene Baujahre laut ADAC nicht genannt)",
+          "detail": "Laut ADAC gab es beim 2.0 CR TDI einen Rückruf wegen möglicher Schwingungsrisse an den Kraftstoff-Hochdruckleitungen, durch die Kraftstoff austreten kann, und einen Software-Rückruf wegen möglicher Schaltprobleme beim Sechsgang-Direktschaltgetriebe (O2E). Der Bericht nennt außerdem Rückrufe zu Tacho und Tankanzeige (8/2009), zu den vorderen LED-Blinkern (8/2019) und zu einem Kondensator (1/2020), ohne die betroffenen Baujahre anzugeben.",
+          "check": "Per Fahrgestellnummer beim Händler prüfen lassen, ob die Rückrufe erledigt sind.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: Skoda Superb (2008-2015) Diesel",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0223-skoda-superb-2008-2015-diesel-bericht.pdf"
+            },
+            {
+              "label": "ADAC Gebrauchtwageninfo: Skoda Superb (2008-2015) Benziner",
+              "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0246-skoda-superb-2008-2015-benziner-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Teils ruckartiges Anfahren mit DSG",
+          "affects": "Modelle mit DSG-Getriebe",
+          "detail": "Laut ADAC kommt es mit dem DSG teils zu ruckartigem Anfahren. Das mindert vor allem den Fahrkomfort beim Anfahren.",
+          "check": "Bei der Probefahrt mehrmals aus dem Stand anfahren und auf Ruckeln achten.",
+          "severity": "gering",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: Skoda Superb (2008-2015) Benziner",
+              "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0246-skoda-superb-2008-2015-benziner-bericht.pdf"
+            },
+            {
+              "label": "ADAC Gebrauchtwageninfo: Skoda Superb (2008-2015) Diesel",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0223-skoda-superb-2008-2015-diesel-bericht.pdf"
+            }
+          ]
+        }
+      ],
+      "engines": {
+        "recommended": [
+          {
+            "name": "2.0 TDI (140 und 170 PS)",
+            "why": "Laut ADAC mit 140 PS deutlich souveräner und auf schnellen Autobahnetappen kein Hindernis, die 170-PS-Diesel sind nochmals zügiger und brauchen in Summe kaum mehr Sprit; oft auf dem Gebrauchtwagenmarkt zu finden."
+          },
+          {
+            "name": "1.9 TDI (105 PS)",
+            "why": "Laut ADAC mit herber Laufkultur, aber nahezu unverwüstlich; Wunder darf man sich von 105 PS bei einem so stattlichen Auto nicht erwarten."
+          },
+          {
+            "name": "1.8 TSI",
+            "why": "Laut ADAC deutlich souveräner unterwegs als mit dem 1.4 TSI."
+          }
+        ],
+        "caution": [
+          {
+            "name": "1.4 TSI (125 PS)",
+            "why": "Laut ADAC sehr leise und laufruhig, aber nicht besonders kräftig und zuweilen mit gelängter Steuerkette; bei der Besichtigung besonders darauf achten."
+          },
+          {
+            "name": "3,6-Liter-Sechszylinder (Benziner)",
+            "why": "Laut ADAC selten auf dem Gebrauchtwagenmarkt, mit guter Laufruhe und tollem Klang, zwingt aber schon bei ruhiger Fahrweise oft zum Tanken (hoher Verbrauch)."
+          }
+        ]
+      },
+      "tips": [
+        "Beim 1.4 TSI beim Kaltstart auf Rasselgeräusche achten und nach einem Steuerkettenwechsel fragen.",
+        "Fahrwerk (Achsaufhängung, Federn, Dämpfer) prüfen lassen: Die Laufleistungen sind laut ADAC oft weit überdurchschnittlich.",
+        "Wenn möglich ein späteres Baujahr wählen: Laut ADAC-Pannenstatistik sind die Erstzulassungen 2013 bis 2015 „gut“, 2010 bis 2012 nur „mittel“.",
+        "Bei DSG-Modellen mehrmals aus dem Stand anfahren und auf Ruckeln achten."
+      ]
+    },
+    {
+      "id": "skoda-superb-iii",
+      "name": "Superb III",
+      "code": "3V",
+      "years": [2015, 2023],
+      "bodyTypes": ["limousine", "kombi"],
+      "fuels": ["petrol", "diesel", "plugin_hybrid"],
+      "seats": [5],
+      "automatic": true,
+      "typicalPriceEur": null,
+      "priceSource": null,
+      "strengths": [
+        "Sehr gutes Raumangebot vorn und hinten, großer und gut zugänglicher Kofferraum (im Combi riesig)",
+        "Tadellose Verarbeitung, zuverlässige Technik und problemlose Bedienung",
+        "Hoher Fahrkomfort durch gute Geräuschdämmung, bequeme Sitze und gekonnt abgestimmtes Fahrwerk",
+        "Hohes Sicherheitsniveau, sparsame Diesel mit hoher Reichweite"
+      ],
+      "issues": [
+        {
+          "title": "Starker Verschleiß an Achsaufhängungen, Federn und Dämpfern",
+          "affects": "Superb III (Bericht zum Diesel); besonders bei den oft sehr hohen Laufleistungen",
+          "detail": "Laut ADAC sorgen die oft sehr hohen Laufleistungen für starken Verschleiß an Achsaufhängungen, Federn und Dämpfern; der Bericht nennt das Fahrwerk anfällig. Im TÜV-Report liegt die Zahl der mängelfreien Autos bei der HU unter dem Durchschnitt.",
+          "check": "Fahrwerk in der Werkstatt prüfen lassen, den letzten HU-Bericht ansehen und nach der Laufleistung fragen.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: Skoda Superb (2015-2023) Diesel",
+              "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0404-skoda-superb-2015-2023-diesel-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Häufig verschlissene Bremsbauteile",
+          "affects": "Superb III (Bericht zum Diesel); bei hohen Laufleistungen",
+          "detail": "Laut ADAC sind auch die Bremsbauteile bei den oft hohen Laufleistungen häufig verschlissen.",
+          "check": "Bremsscheiben und -beläge prüfen lassen und nach dem letzten Bremsenservice fragen.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: Skoda Superb (2015-2023) Diesel",
+              "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0404-skoda-superb-2015-2023-diesel-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Rückrufe: hinterer Radträger, Panoramadach, Blinker-Steuerung",
+          "affects": "hinterer Radträger (Rückruf 12/2017); Combi mit Panorama-Schiebe-Ausstelldach (5/2016); vordere LED-Blinker/Body-Control-Modul (8/2019)",
+          "detail": "Laut ADAC gab es Rückrufe, weil der hintere Radträger nicht fest genug ist (12/2017) und weil beim Combi mit Panorama-Schiebe-Ausstelldach die gesetzlichen Grenzwerte der Kraftbegrenzung beim Schließen überschritten werden, wenn das Dach per Schlüssel von außen geschlossen wird (5/2016). Außerdem kann wegen einer fehlerhaften Konfiguration des Body-Control-Moduls der Ausfall der vorderen LED-Blinker unbemerkt bleiben (8/2019).",
+          "check": "Per Fahrgestellnummer beim Händler prüfen lassen, ob die Rückrufe erledigt sind.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: Skoda Superb (2015-2023) Diesel",
+              "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0404-skoda-superb-2015-2023-diesel-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Gelegentlicher Ölverlust",
+          "affects": "Superb III (Bericht zum Diesel); Baujahre laut ADAC nicht genannt",
+          "detail": "Laut ADAC tritt gelegentlich Ölverlust auf; das lässt sich an feuchten Stellen am Motor oder Ölflecken unter dem Auto erkennen.",
+          "check": "Motor und Unterboden auf Ölspuren prüfen und den Ölstand kontrollieren.",
+          "severity": "gering",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: Skoda Superb (2015-2023) Diesel",
+              "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0404-skoda-superb-2015-2023-diesel-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Starterbatterie als häufiger Bauteilfehler",
+          "affects": "Erstzulassung 2018–2020 und 2022",
+          "detail": "Laut ADAC steht die Starterbatterie bei diesen Jahrgängen unter den häufigen Bauteilfehlern. Eine schwache Batterie kann zu Startproblemen führen.",
+          "check": "Nach Alter und letztem Tausch der Starterbatterie fragen und das Startverhalten testen.",
+          "severity": "gering",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: Skoda Superb (2015-2023) Diesel",
+              "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0404-skoda-superb-2015-2023-diesel-bericht.pdf"
+            }
+          ]
+        }
+      ],
+      "engines": {
+        "recommended": [
+          {
+            "name": "2.0 TDI (190 und 200 PS)",
+            "why": "Laut ADAC die Empfehlung: druckvoll, mit weiteren Reserven auf schnellen Autobahnetappen, und oft in gebrauchten Superb verbaut; ab 190 PS ist die Vorderachse beim zügigen Anfahren oft überfordert, ein Allradantrieb wirkt hier souveräner."
+          },
+          {
+            "name": "2.0 TDI (150 PS)",
+            "why": "Laut ADAC deutlich besser passend als der 1.6 TDI: völlig ausreichende Fahrleistungen bei moderatem Verbrauch."
+          }
+        ],
+        "caution": [
+          {
+            "name": "1.6 TDI (120 PS)",
+            "why": "Laut ADAC reicht der Einstiegsmotor prinzipiell, souverän ist man damit in dieser Fahrzeugklasse jedoch nicht unterwegs."
+          }
+        ]
+      },
+      "tips": [
+        "Fahrwerk (Achsaufhängungen, Federn, Dämpfer) und Bremsen prüfen lassen: Bei den oft sehr hohen Laufleistungen verschleißen sie laut ADAC stark.",
+        "Motor und Unterboden auf Ölspuren prüfen.",
+        "Rückrufe per Fahrgestellnummer prüfen lassen (hinterer Radträger 12/2017, Panoramadach 5/2016, Blinker-Steuerung 8/2019)."
+      ]
+    },
+    {
+      "id": "skoda-superb-iv",
+      "name": "Superb IV",
+      "code": "3Y",
+      "years": [2023, null],
+      "bodyTypes": ["limousine", "kombi"],
+      "fuels": ["petrol", "diesel", "hybrid", "plugin_hybrid"],
+      "seats": [5],
+      "automatic": true,
+      "typicalPriceEur": null,
+      "priceSource": null,
+      "strengths": [],
+      "issues": [],
+      "engines": {
+        "recommended": [],
+        "caution": []
+      },
+      "tips": [
+        "Für diese Generation liegen noch wenige Gebrauchtwagen-Erfahrungen vor; Rückrufe per Fahrgestellnummer erfragen."
+      ]
+    }
+  ]
+}

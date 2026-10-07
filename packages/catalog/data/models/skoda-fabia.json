@@ -1,0 +1,275 @@
+{
+  "id": "skoda-fabia",
+  "make": "Škoda",
+  "model": "Fabia",
+  "aliases": [
+    "fabia",
+    "fabia 1.0 mpi",
+    "fabia 1.0 tsi",
+    "fabia 1.2 tdi",
+    "fabia 1.2 tsi",
+    "fabia 1.4 tdi",
+    "fabia 1.6 tdi",
+    "fabia combi",
+    "fabia greenline",
+    "fabia kombi",
+    "fabia monte carlo",
+    "fabia rs",
+    "fabia scout",
+    "skoda fabia",
+    "škoda fabia"
+  ],
+  "segment": "kleinwagen",
+  "summary": "Praktischer Kleinwagen mit großem Kofferraum (auch als Combi) und gutem Preis-Leistungs-Verhältnis; laut ADAC pannensicher, innen aber mit einfachen Materialien.",
+  "ratings": {
+    "reliability": 4,
+    "reliabilityNote": "Laut ADAC liegt der Fabia III (2014–2022) in der Pannenstatistik im guten bis sehr guten Bereich (2017–2018 sehr gut, sonst gut); beim TÜV schneidet er leicht überdurchschnittlich ab. Der Fabia II (2007–2014) ist außer im Jahrgang 2007 (mittel) ebenfalls gut, fällt beim TÜV aber unterdurchschnittlich auf.",
+    "reliabilitySources": [
+      {
+        "label": "ADAC Gebrauchtwageninfo: Skoda Fabia (2014-2022) Benziner",
+        "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0353-skoda-fabia-2014-2022-benziner-bericht.pdf"
+      },
+      {
+        "label": "ADAC Gebrauchtwageninfo: Skoda Fabia (2007-2014) Benziner",
+        "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0172-skoda-fabia-2007-2014-benziner-bericht.pdf"
+      },
+      {
+        "label": "ADAC Gebrauchtwageninfo: Skoda Fabia (2007-2014) Diesel",
+        "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0006-skoda-fabia-2007-2014-diesel-bericht.pdf"
+      }
+    ],
+    "runningCosts": 4,
+    "space": 4,
+    "comfort": 3
+  },
+  "generations": [
+    {
+      "id": "skoda-fabia-ii",
+      "name": "Fabia II",
+      "code": "5J",
+      "years": [2007, 2014],
+      "bodyTypes": ["schraegheck", "kombi"],
+      "fuels": ["petrol", "diesel"],
+      "seats": [5],
+      "automatic": true,
+      "typicalPriceEur": null,
+      "priceSource": null,
+      "strengths": [
+        "Gute Verarbeitung und großzügiges Raumangebot",
+        "Riesiger Kofferraum im Combi",
+        "Sichere Fahreigenschaften, angenehme Federung, übersichtliches Cockpit",
+        "Sehr sparsame Dieselmotoren"
+      ],
+      "issues": [
+        {
+          "title": "Steuerkette der TSI-Benziner: teure Schäden",
+          "affects": "1.2 TSI (86 und 105 PS) und Fabia RS (180 PS); laut ADAC Steuerkette häufig auffällig bei Erstzulassungen 2010–2013",
+          "detail": "Die TSI-Motoren neigen laut ADAC zu teuren Steuerkettenschäden; die Steuerkette zählt bei den Erstzulassungen 2010–2013 zu den häufigen Bauteilfehlern. Die seltene RS-Version mit 180 PS leidet unter derselben Problematik.",
+          "check": "Beim 1.2 TSI und beim RS die Steuerkette bei der Besichtigung genau prüfen lassen und Belege über bereits erfolgte Reparaturen verlangen.",
+          "severity": "hoch",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: Skoda Fabia (2007-2014) Benziner",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0172-skoda-fabia-2007-2014-benziner-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Zündspulen, Zündkabel und Zündkerzen fallen häufiger aus",
+          "affects": "Benziner: Zündspule Erstzulassung 2007–2010, Zündkabel (Hochspannungskabel) 2011–2012, Zündkerze 2007–2008",
+          "detail": "Laut ADAC zählen diese Teile der Zündanlage bei den genannten Jahrgängen zu den häufigen Bauteilfehlern der Pannenstatistik; insgesamt bleibt der Fabia II laut ADAC aber nur selten liegen.",
+          "check": "Fehlerspeicher auslesen lassen und nach Belegen fragen, ob Zündspulen, Zündkabel und Zündkerzen bereits erneuert wurden.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: Skoda Fabia (2007-2014) Benziner",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0172-skoda-fabia-2007-2014-benziner-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "HU: Bremsen, rostige Abgasanlage und Ölverlust",
+          "affects": "Fabia II (Benziner und Diesel); laut ADAC beim TÜV unterdurchschnittlich",
+          "detail": "Beim TÜV fallen laut ADAC viele Baugruppen negativ auf; vor allem die Bremsen machen in mehreren Bereichen Ärger, rostige Abgasanlagen und Ölverlust treten ebenfalls häufig auf. Der Fabia II schneidet im TÜV-Report deshalb unterdurchschnittlich ab.",
+          "check": "Bremsen, Abgasanlage und Ölverlust bei Motor und Getriebe bei der Besichtigung (am besten auf der Hebebühne) prüfen lassen und den letzten HU-Bericht ansehen.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: Skoda Fabia (2007-2014) Benziner",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0172-skoda-fabia-2007-2014-benziner-bericht.pdf"
+            },
+            {
+              "label": "ADAC Gebrauchtwageninfo: Skoda Fabia (2007-2014) Diesel",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0006-skoda-fabia-2007-2014-diesel-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Rost an Heckklappe und vorderen Kotflügeln",
+          "affects": "Fabia II (Benziner und Diesel): Heckklappe und Kotflügel vorn",
+          "detail": "Heckklappen und vordere Kotflügel rosten laut ADAC gerne.",
+          "check": "Heckklappe und vordere Kotflügel (Kanten, Falze, Lackblasen) genau auf Rost und Lackreparaturen prüfen.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: Skoda Fabia (2007-2014) Benziner",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0172-skoda-fabia-2007-2014-benziner-bericht.pdf"
+            },
+            {
+              "label": "ADAC Gebrauchtwageninfo: Skoda Fabia (2007-2014) Diesel",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0006-skoda-fabia-2007-2014-diesel-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Pflicht-Software-Update bei 1.2 und 1.6 TDI",
+          "affects": "1.2 TDI und 1.6 TDI (Common Rail, ab 2010)",
+          "detail": "Die Common-Rail-Diesel brauchen laut ADAC ein verpflichtendes Software-Update, um die Stickoxid-Emissionen zu minimieren.",
+          "check": "Nachweis über das durchgeführte Update verlangen und per Fahrgestellnummer beim Händler prüfen lassen, ob es erledigt ist.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: Skoda Fabia (2007-2014) Diesel",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0006-skoda-fabia-2007-2014-diesel-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Rückrufe: Kraftstoffleitung am Filterdeckel (1.2 TDI)",
+          "affects": "Rückruf 11/2014: 1.2 TDI mit 55 kW",
+          "detail": "Laut ADAC bringen Druckpulsationen in den Kraftstoffleitungen diese zum Schwingen und führen im Anschlussbereich am Kraftstofffilterdeckel zu Rissen.",
+          "check": "Per Fahrgestellnummer beim Händler prüfen lassen, ob die Rückrufe erledigt sind.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: Skoda Fabia (2007-2014) Diesel",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0006-skoda-fabia-2007-2014-diesel-bericht.pdf"
+            }
+          ]
+        }
+      ],
+      "engines": {
+        "recommended": [
+          {
+            "name": "1.4 (86 PS) und 1.6 (105 PS) Benziner",
+            "why": "Laut ADAC haben beide ausreichend Leistung, gelten als unkompliziert und verursachen wenig Probleme."
+          },
+          {
+            "name": "1.2 TDI und 1.6 TDI (Common Rail, ab 2010)",
+            "why": "Laut ADAC gute Fahrleistungen und angenehme Laufkultur; das verpflichtende Software-Update muss aber durchgeführt sein."
+          },
+          {
+            "name": "1.4 und 1.9 TDI (Pumpe-Düse, ab 2007)",
+            "why": "Laut ADAC zuverlässig und sehr sparsam, wegen der veralteten Pumpe-Düse-Technik aber recht rau; das gilt vor allem für den dreizylindrigen 1.4 TDI."
+          }
+        ],
+        "caution": [
+          {
+            "name": "1.2 TSI (86 und 105 PS)",
+            "why": "Laut ADAC ein guter Kompromiss aus Leistung und Verbrauch, neigt aber zu teuren Steuerkettenschäden; bei der Besichtigung genau inspizieren."
+          },
+          {
+            "name": "Fabia RS (180 PS)",
+            "why": "Laut ADAC selten und mit der gleichen Steuerkettenproblematik wie der 1.2 TSI."
+          },
+          {
+            "name": "1.2 HTP (60 oder 70 PS, Dreizylinder-Sauger)",
+            "why": "Laut ADAC eher für kurze Distanzen geeignet."
+          }
+        ]
+      },
+      "tips": [
+        "Beim 1.2 TSI und beim RS die Steuerkette genau prüfen lassen und nach Belegen über Reparaturen fragen.",
+        "Heckklappe und vordere Kotflügel auf Rost prüfen, ebenso Abgasanlage und Ölverlust.",
+        "Bei 1.2 und 1.6 TDI nachfragen, ob das verpflichtende Software-Update durchgeführt wurde.",
+        "Die Bremsen sorgfältig prüfen lassen: Sie machen beim TÜV laut ADAC in mehreren Bereichen Ärger."
+      ]
+    },
+    {
+      "id": "skoda-fabia-iii",
+      "name": "Fabia III",
+      "code": "NJ",
+      "years": [2014, 2022],
+      "bodyTypes": ["schraegheck", "kombi"],
+      "fuels": ["petrol", "diesel"],
+      "seats": [5],
+      "automatic": true,
+      "typicalPriceEur": null,
+      "priceSource": null,
+      "strengths": [
+        "Gute Verarbeitung, großzügiges Raumangebot vorn",
+        "Für einen Kleinwagen relativ großer Kofferraum, im Combi riesig",
+        "Sichere Fahreigenschaften, übersichtliches Cockpit",
+        "Gutes Preis-Leistungs-Verhältnis"
+      ],
+      "issues": [
+        {
+          "title": "Bremsanlage: häufiger Grund für Pannen und HU-Mängel",
+          "affects": "Fabia III (Benziner): Bremsbelag Erstzulassung 2018–2020, Bremstrommel vorn/hinten 2019, mechanische Feststellbremse 2017–2020",
+          "detail": "Wenn es beim Fabia III zu einer Panne kommt, liegt es laut ADAC oft an der Bremsanlage; sie verwehrt auch am ehesten eine neue HU-Plakette.",
+          "check": "Bremsbeläge, Bremstrommeln und die mechanische Feststellbremse bei der Besichtigung prüfen lassen und den letzten HU-Bericht ansehen.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: Skoda Fabia (2014-2022) Benziner",
+              "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0353-skoda-fabia-2014-2022-benziner-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Teils ruckartiges Anfahren mit DSG",
+          "affects": "Fabia III (Benziner) mit DSG-Doppelkupplungsgetriebe",
+          "detail": "Der ADAC nennt als Schwäche ein teils ruckartiges Anfahren mit dem DSG.",
+          "check": "Bei der Probefahrt mehrfach aus dem Stand anfahren und auf ruckartiges Anfahren achten.",
+          "severity": "gering",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: Skoda Fabia (2014-2022) Benziner",
+              "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0353-skoda-fabia-2014-2022-benziner-bericht.pdf"
+            }
+          ]
+        }
+      ],
+      "engines": {
+        "recommended": [
+          {
+            "name": "TSI-Benziner ab 90 PS (1.0 TSI, 1.2 TSI)",
+            "why": "Laut ADAC ziehen sie kräftig durch und brauchen im Alltag nicht mehr Sprit als die Saugmotoren; alle Motoren haben einen wartungsarmen Zahnriemen, die frühere Steuerkettenproblematik besteht nicht mehr."
+          }
+        ],
+        "caution": [
+          {
+            "name": "1.0 MPI (60 oder 75 PS)",
+            "why": "Laut ADAC liegt das maximale Drehmoment bei beiden Varianten nur bei 95 Nm und liegt spät an; schon bei Landstraßentempo mit viel Gepäck wirken sie überfordert und sind nur für den Stadtverkehr zu empfehlen."
+          }
+        ]
+      },
+      "tips": [
+        "Die Bremsanlage genau prüfen lassen (Beläge, Trommeln, mechanische Feststellbremse): Sie ist laut ADAC oft die Ursache von Pannen und verwehrt am ehesten die HU-Plakette.",
+        "Bei DSG-Modellen auf der Probefahrt auf ruckartiges Anfahren achten.",
+        "Beim 1.0 MPI (60/75 PS) auch außerorts probefahren: Der ADAC hält die Motoren nur für den Stadtverkehr geeignet."
+      ]
+    },
+    {
+      "id": "skoda-fabia-iv",
+      "name": "Fabia IV",
+      "code": "PJ",
+      "years": [2021, null],
+      "bodyTypes": ["schraegheck"],
+      "fuels": ["petrol"],
+      "seats": [5],
+      "automatic": true,
+      "typicalPriceEur": null,
+      "priceSource": null,
+      "strengths": [],
+      "issues": [],
+      "engines": {
+        "recommended": [],
+        "caution": []
+      },
+      "tips": [
+        "Für diese Generation liegen noch wenige Gebrauchtwagen-Erfahrungen vor; Rückrufe per Fahrgestellnummer erfragen."
+      ]
+    }
+  ]
+}
