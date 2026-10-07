@@ -112,11 +112,11 @@ describe('recommend', () => {
 describe('budget estimate', () => {
   it('estimates the newest model year a budget reaches from class and age', () => {
     const golf = { make: 'Volkswagen', segment: 'kompakt' } as const;
-    expect(newestAffordableYear(golf, 25000, 2026)).toBe(2026);
-    expect(newestAffordableYear(golf, 15000, 2026)).toBe(2024);
-    expect(newestAffordableYear(golf, 10000, 2026)).toBe(2019);
-    expect(newestAffordableYear(golf, 5000, 2026)).toBe(2011);
-    // A pricier make reaches older cars for the same money.
+    expect(newestAffordableYear(golf, 25000, 2026)).toBe(2024);
+    expect(newestAffordableYear(golf, 15000, 2026)).toBe(2020);
+    expect(newestAffordableYear(golf, 10000, 2026)).toBe(2018);
+    expect(newestAffordableYear(golf, 5000, 2026)).toBe(2012);
+    // A pricier make that loses value faster reaches older cars for the same money.
     expect(newestAffordableYear({ make: 'BMW', segment: 'kompakt' }, 10000, 2026)).toBe(2017);
   });
 
