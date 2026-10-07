@@ -1,0 +1,487 @@
+{
+  "id": "vw-golf",
+  "make": "Volkswagen",
+  "model": "Golf",
+  "aliases": [
+    "e-golf",
+    "golf",
+    "golf alltrack",
+    "golf cabriolet",
+    "golf gtd",
+    "golf gte",
+    "golf gti",
+    "golf r",
+    "golf variant"
+  ],
+  "segment": "kompakt",
+  "summary": "Der Golf ist seit Jahrzehnten der Maßstab der Kompaktklasse: vielseitig, gut verarbeitet und fast überall günstig zu warten.",
+  "ratings": {
+    "reliability": 4,
+    "reliabilityNote": "Laut ADAC-Pannenstatistik 2026 unter den zuverlässigsten Modellen der unteren Mittelklasse. Beim TÜV schneidet der Golf 8 nur durchschnittlich ab (Fußbremse, ABS/ESP-Hydraulik), Golf 6 und 7 gelten als solide.",
+    "reliabilitySources": [
+      {
+        "label": "ADAC Pannenstatistik 2026",
+        "url": "https://www.adac.de/rund-ums-fahrzeug/unfall-schaden-panne/adac-pannenstatistik-2026/"
+      },
+      {
+        "label": "AUTO BILD: Kompakte im TÜV-Vergleich – 1er, A-Klasse, Astra, Ceed, Golf, 25.06.2026",
+        "url": "https://www.autobild.de/artikel/kompekte-im-tuev-vergleich-1er-a-klasse-astra-ceed-golf-28208839.html"
+      },
+      {
+        "label": "Autozeitung: Gebrauchter VW Golf 7 – Die besten Tipps zum Kauf, 07.11.2025",
+        "url": "https://www.autozeitung.de/vw-golf-7-gebrauchtwagen-kaufen-189627.html"
+      }
+    ],
+    "runningCosts": 3,
+    "space": 3,
+    "comfort": 4
+  },
+  "generations": [
+    {
+      "id": "vw-golf-6",
+      "name": "Golf VI",
+      "code": "5K",
+      "years": [
+        2008,
+        2013
+      ],
+      "bodyTypes": [
+        "schraegheck",
+        "kombi",
+        "cabrio"
+      ],
+      "fuels": [
+        "petrol",
+        "diesel",
+        "lpg"
+      ],
+      "seats": [
+        5
+      ],
+      "automatic": true,
+      "typicalPriceEur": null,
+      "priceSource": null,
+      "strengths": [
+        "Schon die Basisversion vermittelt laut AUTO BILD ein Premiumgefühl.",
+        "Große Motorenauswahl von 80 PS bis zum 270 PS starken Golf R.",
+        "Laut Autozeitung in den Prüfstatistiken zumeist unauffällig."
+      ],
+      "issues": [
+        {
+          "title": "Steuerkette kann sich längen",
+          "affects": "1.2 TSI und 1.4 TSI (EA111); laut auto motor und sport hat VW 2010 eine nachgebesserte Version verbaut",
+          "detail": "Bei diesen Motoren werden häufig Schäden an Steuerkette und Kettenspanner berichtet, im schlimmsten Fall droht ein Motorschaden. Eine Reparatur wird schnell vierstellig (AUTO BILD-Fallbeispiel: rund 1.600 Euro); auf Kulanz von VW sollte man sich laut AUTO BILD nicht verlassen.",
+          "check": "Rechnung über einen Kettenwechsel verlangen; Motor kalt starten und auf Rasseln in den ersten Sekunden achten.",
+          "severity": "hoch",
+          "sources": [
+            {
+              "label": "AUTO BILD: VW Golf – Generationen 6 bis 8 im TÜV-Check (2026), 20.05.2026",
+              "url": "https://www.autobild.de/artikel/vw-golf-6-bis-8-gebraucht-tuev-report-2026-28207053.html"
+            },
+            {
+              "label": "auto motor und sport: VW Golf VI im Gebrauchtwagen-Check, 15.02.2020",
+              "url": "https://www.auto-motor-und-sport.de/kompakt/gebrauchtwagenvw-golf-vi-gebrauchtwagen-check/"
+            },
+            {
+              "label": "AUTO BILD: VW Steuerketten – Kulanz-Versprechen gebrochen, 01.06.2018",
+              "url": "https://www.autobild.de/artikel/vw-steuerketten-kulanz-2892135.html"
+            }
+          ]
+        },
+        {
+          "title": "Hoher Ölverbrauch beim 1.8 TSI",
+          "affects": "1.8 TSI (EA888)",
+          "detail": "Der seltenere 1.8 TSI leidet laut AUTO BILD nicht selten an enormem Ölverbrauch.",
+          "check": "Nach dem Ölverbrauch zwischen den Inspektionen fragen; Ölstand und Serviceheft prüfen.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "AUTO BILD: VW Golf – Generationen 6 bis 8 im TÜV-Check (2026), 20.05.2026",
+              "url": "https://www.autobild.de/artikel/vw-golf-6-bis-8-gebraucht-tuev-report-2026-28207053.html"
+            }
+          ]
+        },
+        {
+          "title": "DSG schaltet mit der Zeit ruppig",
+          "affects": "Golf VI mit DSG; die Öl-Serviceaktion betraf das 7-Gang-DSG mit Trockenkupplung (DQ200)",
+          "detail": "Laut auto motor und sport schalten einige DSG schon ab rund 120.000 km spürbar ruppig. Bei einer Serviceaktion stellte VW auf mineralisches Getriebeöl um, weil schwefelhaltige Additive die Getriebeelektronik schädigen konnten (laut AUTO BILD kein offizieller Rückruf).",
+          "check": "Probefahrt mit Anfahren, Rangieren und Hochschalten; nach Getriebeservice und Ölwechsel im Serviceheft fragen.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "auto motor und sport: VW Golf VI im Gebrauchtwagen-Check, 15.02.2020",
+              "url": "https://www.auto-motor-und-sport.de/kompakt/gebrauchtwagenvw-golf-vi-gebrauchtwagen-check/"
+            },
+            {
+              "label": "AUTO BILD: VW – Probleme mit DSG, 06.02.2014",
+              "url": "https://www.autobild.de/artikel/vw-probleme-mit-dsg-4559939.html"
+            }
+          ]
+        },
+        {
+          "title": "Diesel mit Abschalteinrichtung (Abgasskandal)",
+          "affects": "Diesel der Baureihe EA189 (u. a. 1.6 TDI und 2.0 TDI)",
+          "detail": "Diese Motoren waren vom VW-Abgasskandal betroffen; VW musste die illegale Abschalteinrichtung per Software-Update entfernen. Der ADAC sah bei Tests von Golf und Polo mit dem Update keine nennenswerten Nachteile.",
+          "check": "Nachweis verlangen, dass das Software-Update durchgeführt wurde (Händlerbeleg, Serviceheft).",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC: VW-Schummel-Diesel – Was bringen die Softwareupdates?, 20.11.2019",
+              "url": "https://www.adac.de/rund-ums-fahrzeug/autokatalog/ecotest/test-vw-updates-schummelsoftware/"
+            }
+          ]
+        },
+        {
+          "title": "Rost an den Kotflügeln",
+          "affects": "Golf VI (2008–2012)",
+          "detail": "AUTO BILD berichtet von Rost an den Kotflügeln durch wassersaugenden Dämmschaum. Autozeitung und auto motor und sport bezeichnen Rost beim Golf VI dagegen insgesamt als kein Thema beziehungsweise selten.",
+          "check": "Kotflügel, Radläufe und Lackkanten auf Blasen und Roststellen prüfen.",
+          "severity": "gering",
+          "sources": [
+            {
+              "label": "AUTO BILD: VW Golf – Generationen 6 bis 8 im TÜV-Check (2026), 20.05.2026",
+              "url": "https://www.autobild.de/artikel/vw-golf-6-bis-8-gebraucht-tuev-report-2026-28207053.html"
+            },
+            {
+              "label": "Autozeitung: VW Golf 6 gebraucht kaufen (Ratgeber), 05.06.2024",
+              "url": "https://www.autozeitung.de/vw-golf-plus-gebrauchtwagen-kaufen-baujahr-2004-2014-183517.html"
+            },
+            {
+              "label": "auto motor und sport: VW Golf VI im Gebrauchtwagen-Check, 15.02.2020",
+              "url": "https://www.auto-motor-und-sport.de/kompakt/gebrauchtwagenvw-golf-vi-gebrauchtwagen-check/"
+            }
+          ]
+        },
+        {
+          "title": "Typische Verschleißmängel bei der HU",
+          "affects": "Golf VI, vor allem höhere Laufleistungen",
+          "detail": "Die Autozeitung nennt als typische Befunde ölfeuchte Motoren und Getriebe, verschlissene Bremsen, gebrochene Federn und eingerissene Antriebswellenmanschetten.",
+          "check": "Unterboden ansehen (Öl, Manschetten, Federn) und den letzten HU-Bericht zeigen lassen.",
+          "severity": "gering",
+          "sources": [
+            {
+              "label": "Autozeitung: VW Golf 6 gebraucht kaufen (Ratgeber), 05.06.2024",
+              "url": "https://www.autozeitung.de/vw-golf-plus-gebrauchtwagen-kaufen-baujahr-2004-2014-183517.html"
+            }
+          ]
+        }
+      ],
+      "engines": {
+        "recommended": [
+          {
+            "name": "1.4 TSI (122 oder 160 PS), möglichst nach 2010 gebaut",
+            "why": "Von der Autozeitung (2024) als beliebt und durchzugsstark empfohlen; wegen der Steuerketten-Historie unbedingt Wartungsnachweis prüfen."
+          }
+        ],
+        "caution": [
+          {
+            "name": "1.2 TSI und 1.4 TSI (EA111), frühe Baujahre",
+            "why": "Steuerkettenschäden werden häufig berichtet (AUTO BILD, auto motor und sport)."
+          },
+          {
+            "name": "1.8 TSI (EA888)",
+            "why": "AUTO BILD: nicht selten enormer Ölverbrauch."
+          },
+          {
+            "name": "Diesel EA189 (1.6 TDI, 2.0 TDI)",
+            "why": "Vom Abgasskandal betroffen; Nachweis über das Software-Update einfordern."
+          }
+        ]
+      },
+      "tips": [
+        "Bei TSI-Benzinern kalt starten: Rasselgeräusche in den ersten Sekunden sind laut AUTO BILD ein Warnzeichen für eine geschädigte Steuerkette.",
+        "Kotflügel und Radläufe auf Rost prüfen.",
+        "Bei DSG-Modellen die Probefahrt nutzen, um ruppiges Schalten auszuschließen."
+      ]
+    },
+    {
+      "id": "vw-golf-7",
+      "name": "Golf VII",
+      "code": "AU / 5G",
+      "years": [
+        2012,
+        2020
+      ],
+      "bodyTypes": [
+        "schraegheck",
+        "kombi"
+      ],
+      "fuels": [
+        "petrol",
+        "diesel",
+        "cng",
+        "electric",
+        "plugin_hybrid"
+      ],
+      "seats": [
+        5
+      ],
+      "automatic": true,
+      "typicalPriceEur": null,
+      "priceSource": null,
+      "strengths": [
+        "Laut Autozeitung hohe Zuverlässigkeit; in der ADAC-Pannenstatistik 2025 unter den zuverlässigsten Modellen im Alter von drei bis zehn Jahren.",
+        "Geräumig und als Variant sehr praktisch (605 bis 1.620 Liter Kofferraum laut AUTO BILD).",
+        "Sehr breites Motorenangebot, vom sparsamen Diesel bis zum rein elektrischen e-Golf."
+      ],
+      "issues": [
+        {
+          "title": "DSG schaltet vor dem Facelift ruppig",
+          "affects": "Golf VII mit DSG, vor dem Facelift (Ende 2016/2017)",
+          "detail": "AUTO BILD nennt das ruppige DSG als Dauerthema; erst ab dem Facelift arbeiten die Getriebe etwas entspannter. Auto motor und sport beschreibt beim 7-Gang-DSG mit Trockenkupplung (DQ200) Anfahrruckeln, verzögerte Gangwechsel und im Extremfall einen Mechatronik-Ausfall.",
+          "check": "Probefahrt mit Anfahren und Rangieren; Nachweis über den Getriebeölwechsel verlangen (empfohlen wird ein Wechsel des Hydrauliköls etwa alle 60.000 km).",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "AUTO BILD: VW Golf – Generationen 6 bis 8 im TÜV-Check (2026), 20.05.2026",
+              "url": "https://www.autobild.de/artikel/vw-golf-6-bis-8-gebraucht-tuev-report-2026-28207053.html"
+            },
+            {
+              "label": "auto motor und sport: Warum das DQ200 im VW Golf 7 besondere Pflege erfordert, 14.07.2026",
+              "url": "https://www.auto-motor-und-sport.de/tech-zukunft/werkstatt/warum-das-dq200-im-vw-golf-7-besondere-pflege-erfordert/"
+            }
+          ]
+        },
+        {
+          "title": "Kühler können undicht werden",
+          "affects": "2.0 TDI (AGR- und Ladeluftkühler), 2.0 TSI (Kunststoffteile des Wasserkühlers)",
+          "detail": "Laut AUTO BILD kämpfen diese Kühler bei den genannten Motoren mit Undichtigkeit.",
+          "check": "Kühlmittelstand und Motorraum auf Kühlmittelspuren prüfen; Werkstatthistorie erfragen.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "AUTO BILD: VW Golf – Generationen 6 bis 8 im TÜV-Check (2026), 20.05.2026",
+              "url": "https://www.autobild.de/artikel/vw-golf-6-bis-8-gebraucht-tuev-report-2026-28207053.html"
+            }
+          ]
+        },
+        {
+          "title": "Diesel (EA288) im Fokus des Abgasskandals",
+          "affects": "1.6 TDI und 2.0 TDI (EA288, alle Leistungsstufen)",
+          "detail": "Laut Autozeitung ist bis heute nicht ganz klar, ob in allen EA288-Motoren eine unzulässige Abschalteinrichtung installiert war; Software-Updates waren beim Golf 7 zumindest bisher freiwillig. Modelle aus den Baujahren nach dem Skandal mit Euro 6 gelten als sicherer und sauberer.",
+          "check": "Nach Abgasnorm (Euro 5 oder 6) und durchgeführten Software-Updates fragen; Belege zeigen lassen.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "Autozeitung: Gebrauchter VW Golf 7 – Die besten Tipps zum Kauf, 07.11.2025",
+              "url": "https://www.autozeitung.de/vw-golf-7-gebrauchtwagen-kaufen-189627.html"
+            }
+          ]
+        },
+        {
+          "title": "Panoramadach kann undicht sein",
+          "affects": "Golf VII mit Panoramadach",
+          "detail": "AUTO BILD schreibt, Panoramadächer hielten nicht immer dicht; teuer wird es, wenn die ganze Dachkassette erneuert werden muss. Im AUTO BILD-Dauertest drang Wasser zudem durch eine falsch verlegte Kondenswasserleitung ein – laut AUTO BILD kein Einzelfall.",
+          "check": "Dachhimmel, Fußräume und Teppiche auf Wasserflecken und muffigen Geruch prüfen.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "AUTO BILD: VW Golf – Generationen 6 bis 8 im TÜV-Check (2026), 20.05.2026",
+              "url": "https://www.autobild.de/artikel/vw-golf-6-bis-8-gebraucht-tuev-report-2026-28207053.html"
+            }
+          ]
+        },
+        {
+          "title": "GTI: Wasserpumpengehäuse und Öldampf-Auffangbehälter",
+          "affects": "Golf VII GTI (2.0 TSI)",
+          "detail": "AUTO BILD nennt das Wasserpumpengehäuse aus Kunststoff und den Auffangbehälter für Öldämpfe als bekannte Schwachstellen des GTI; der aufwendig konstruierte Motor müsse seine Langzeitfestigkeit noch beweisen (Stand 2019).",
+          "check": "Kühlmittelstand und Motorraum auf Kühlmittel- und Ölspuren prüfen; Reparaturbelege zeigen lassen.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "AUTO BILD: VW Golf 7 – GTI, Facelift, Variant, Gebraucht, 24.10.2019",
+              "url": "https://www.autobild.de/artikel/vw-golf-7-gti-facelift-variant-gebraucht-15849124.html"
+            }
+          ]
+        },
+        {
+          "title": "Bremsen bei der Hauptuntersuchung",
+          "affects": "Golf VII allgemein (Bremsscheiben); e-Golf (Fußbremse)",
+          "detail": "Laut Autozeitung ist das mangelhafte Tragbild der Bremsscheiben der häufigste Mangel. Beim e-Golf ist laut AUTO BILD die Fußbremse die einzige echte Schwäche; der TÜV-Verband erklärt, dass die Rekuperation die mechanischen Bremsen weniger beansprucht und die Bremswirkung nachlassen kann.",
+          "check": "Bremsscheiben und -beläge ansehen lassen; beim e-Golf Bremsanlage auf Rost prüfen und den Batteriezustand unabhängig testen lassen.",
+          "severity": "gering",
+          "sources": [
+            {
+              "label": "Autozeitung: Gebrauchter VW Golf 7 – Die besten Tipps zum Kauf, 07.11.2025",
+              "url": "https://www.autozeitung.de/vw-golf-7-gebrauchtwagen-kaufen-189627.html"
+            },
+            {
+              "label": "AUTO BILD: VW e-Golf – Schwachstellen, Mängel, Stärken, 17.10.2025",
+              "url": "https://www.autobild.de/artikel/vw-e-golf-schwachstellen-maengel-staerken-28376533.html"
+            },
+            {
+              "label": "TÜV-Verband: TÜV-Report 2026, Pressekonferenz-Präsentation (20.11.2025)",
+              "url": "https://www.tuev-verband.de/fileadmin/user_upload/Content_local/2025_TUEV-Verband_TUV-Report_2026_Praesentation.pdf"
+            }
+          ]
+        }
+      ],
+      "engines": {
+        "recommended": [
+          {
+            "name": "1.5 TSI (130 PS, ab Facelift 2017)",
+            "why": "Von der Autozeitung unter den empfehlenswerten Antrieben für den Golf 7 geführt."
+          },
+          {
+            "name": "2.0 TDI (150 PS), möglichst Euro 6",
+            "why": "Von der Autozeitung empfohlen (viel Drehmoment, sparsam); Modelle nach dem Abgasskandal mit Euro 6 gelten als sicherer."
+          }
+        ],
+        "caution": [
+          {
+            "name": "1.6 TDI und 2.0 TDI (EA288) vor Euro 6",
+            "why": "Abgasskandal: Unklar, ob alle EA288-Motoren eine unzulässige Abschalteinrichtung hatten (Autozeitung)."
+          },
+          {
+            "name": "2.0 TDI und 2.0 TSI",
+            "why": "AUTO BILD: AGR-/Ladeluftkühler bzw. Kunststoff-Wasserkühler können undicht werden."
+          },
+          {
+            "name": "DSG vor dem Facelift",
+            "why": "AUTO BILD: ruppiges Schaltverhalten, erst ab dem Facelift etwas entspannter."
+          }
+        ]
+      },
+      "tips": [
+        "Wenn möglich ein Facelift-Modell (Ende 2016/2017) wählen: überarbeitetes Multimediasystem (Autozeitung), sanfteres DSG (AUTO BILD).",
+        "Bei Modellen mit Zahnriemen (AUTO BILD: TSI ohne Steuerkette) im Serviceheft prüfen, wann der Riemen zuletzt gewechselt wurde.",
+        "Panoramadach und Fußräume auf Feuchtigkeit kontrollieren.",
+        "Die Autozeitung empfiehlt die Ausstattungslinie Comfortline oder höher."
+      ]
+    },
+    {
+      "id": "vw-golf-8",
+      "name": "Golf VIII",
+      "code": "CD",
+      "years": [
+        2019,
+        null
+      ],
+      "bodyTypes": [
+        "schraegheck",
+        "kombi"
+      ],
+      "fuels": [
+        "petrol",
+        "diesel",
+        "hybrid",
+        "plugin_hybrid",
+        "cng"
+      ],
+      "seats": [
+        5
+      ],
+      "automatic": true,
+      "typicalPriceEur": null,
+      "priceSource": null,
+      "strengths": [
+        "Ausgereiftes Fahrwerk und Lenkung (AUTO BILD: „geschliffene Federung und Lenkung“), ordentliche Platzverhältnisse.",
+        "Große Motorenauswahl: Benziner, Diesel, Mild-Hybrid, Plug-in-Hybrid und Erdgas.",
+        "Laut auto motor und sport trotz Software-Schwächen ein Allrounder; ein gut gewarteter Vor-Facelift-Golf kann eine preiswerte Alternative sein.",
+        "Seit dem Facelift 2024 überarbeitetes Cockpit; laut AUTO BILD ist die Elektronik nun konkurrenzfähig."
+      ],
+      "issues": [
+        {
+          "title": "Software und Infotainment",
+          "affects": "Golf VIII vor dem Facelift (2024)",
+          "detail": "Häufig berichtet werden Fehlermeldungen im Elektronikbereich und ein abstürzendes Infotainment; AUTO BILD nennt das Bediensystem „unausgegoren“ (Haptik, Menüführung, Systemstabilität). Auto motor und sport sieht hier die Hauptschwäche und rät, sich über Software-Updates und Zustand zu informieren.",
+          "check": "Bei der Probefahrt Infotainment, Assistenzsysteme und Fehlermeldungen intensiv testen; beim VW-Händler nach Software-Stand und Updates fragen.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "AUTO BILD: VW Golf – Generationen 6 bis 8 im TÜV-Check (2026), 20.05.2026",
+              "url": "https://www.autobild.de/artikel/vw-golf-6-bis-8-gebraucht-tuev-report-2026-28207053.html"
+            },
+            {
+              "label": "auto motor und sport: VW Golf 8 im Gebrauchtwagen-Check – Stärken, Schwächen und Kaufberatung (Video)",
+              "url": "https://www.auto-motor-und-sport.de/video/gebrauchtwagen/vw-golf-8-im-gebrauchtwagen-check-staerken-schwaechen-und-kaufberatung/"
+            }
+          ]
+        },
+        {
+          "title": "Service-Aktion 2021 für frühe Golf VIII",
+          "affects": "Golf VIII, gebaut von Herbst 2019 bis Kalenderwoche 29/2020 (rund 56.000 Fahrzeuge)",
+          "detail": "Laut auto motor und sport rief VW freiwillig (kein offizieller KBA-Rückruf, nicht sicherheitsrelevant) zu einem Software-Update wegen Infotainment-Störungen und unzuverlässiger Datenübertragung der Notruf-Einheit auf; bei rund 7.400 Mild-Hybriden wurde zusätzlich das Gateway-Steuergerät getauscht.",
+          "check": "Beim Händler per Fahrgestellnummer klären, ob die Maßnahme durchgeführt wurde.",
+          "severity": "gering",
+          "sources": [
+            {
+              "label": "auto motor und sport: Software-Update – VW ruft 56.000 Golf VIII zurück, 17.02.2021",
+              "url": "https://www.auto-motor-und-sport.de/kompaktklasse/vw-ruft-golf-viii-in-die-werkstatt-elektronik-und-software-update-fuer-56-000-autos/"
+            }
+          ]
+        },
+        {
+          "title": "Rückruf wegen Bremspedalplatte",
+          "affects": "Golf VIII, Modelljahr 2020, nur Automatik und Linkslenker",
+          "detail": "Rückruf wegen einer fehlerhaften Schweißverbindung: Die Pedalplatte kann sich verformen oder ablösen. Betroffen waren laut AUTOHAUS rund 38.100 Fahrzeuge weltweit (Golf, Tiguan, Touran, T-Roc), Schäden waren bei der Ankündigung nicht bekannt.",
+          "check": "Beim Händler per Fahrgestellnummer prüfen, ob der Rückruf (interne Nummer 46i6) ausgeführt wurde.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "AUTOHAUS: VW-Rückruf – Problem mit Bremspedalen, 16.12.2020",
+              "url": "https://www.autohaus.de/nachrichten/vw-rueckruf-problem-mit-bremspedalen-2694509.html"
+            },
+            {
+              "label": "AUTO BILD: VW Golf – Generationen 6 bis 8 im TÜV-Check (2026), 20.05.2026",
+              "url": "https://www.autobild.de/artikel/vw-golf-6-bis-8-gebraucht-tuev-report-2026-28207053.html"
+            }
+          ]
+        },
+        {
+          "title": "Fußbremse und ABS/ESP-Hydraulikaggregat bei der HU",
+          "affects": "Golf VIII",
+          "detail": "Laut AUTO BILD (TÜV-Report 2026) ist die Fußbremse der Schwachpunkt des jungen Golf 8: Die Mängelquote liegt etwa viermal über dem Durchschnitt, verantwortlich sind vermehrt Defekte am ABS/ESP-Hydraulikaggregat; auch der Bremsscheibenverschleiß liegt etwas über dem Schnitt.",
+          "check": "Bremsfunktion und ABS/ESP-Meldungen bei der Probefahrt beachten; HU-Bericht und Werkstattrechnungen ansehen.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "AUTO BILD: VW Golf – Generationen 6 bis 8 im TÜV-Check (2026), 20.05.2026",
+              "url": "https://www.autobild.de/artikel/vw-golf-6-bis-8-gebraucht-tuev-report-2026-28207053.html"
+            },
+            {
+              "label": "AUTO BILD: Kompakte im TÜV-Vergleich – 1er, A-Klasse, Astra, Ceed, Golf, 25.06.2026",
+              "url": "https://www.autobild.de/artikel/kompekte-im-tuev-vergleich-1er-a-klasse-astra-ceed-golf-28208839.html"
+            }
+          ]
+        },
+        {
+          "title": "Rückruf bei Plug-in-Hybriden (Brandgefahr)",
+          "affects": "Plug-in-Hybride (u. a. Golf), Baujahre 2019–2022",
+          "detail": "Rückruf 2022: Eine Sicherung im Hochvoltsystem kann in Einzelfällen Mängel aufweisen und im ungünstigen Fall Brand- oder Stromschlaggefahr verursachen; als Maßnahme wird eine Isoliermatte an der Schaltbox der Hochvoltbatterie nachgerüstet.",
+          "check": "Beim Händler per Fahrgestellnummer klären, ob der Rückruf erledigt ist.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "AUTOHAUS: Stromschlag- und Brandgefahr – VW-Konzern ruft Hybridmodelle zurück, 31.03.2022",
+              "url": "https://www.autohaus.de/nachrichten/autohersteller/stromschlag-und-brandgefahr-vw-konzern-ruft-hybridmodelle-zurueck-3150006"
+            },
+            {
+              "label": "AUTO BILD: VW Golf – Generationen 6 bis 8 im TÜV-Check (2026), 20.05.2026",
+              "url": "https://www.autobild.de/artikel/vw-golf-6-bis-8-gebraucht-tuev-report-2026-28207053.html"
+            }
+          ]
+        }
+      ],
+      "engines": {
+        "recommended": [
+          {
+            "name": "1.5 TSI",
+            "why": "Von auto motor und sport im Gebrauchtwagen-Check als besonders empfehlenswert hervorgehoben."
+          }
+        ],
+        "caution": [
+          {
+            "name": "Plug-in-Hybrid (GTE/eHybrid), Baujahre 2019–2022",
+            "why": "Rückruf 2022 wegen Sicherung im Hochvoltsystem (Brand-/Stromschlaggefahr); Erledigung nachweisen lassen."
+          }
+        ]
+      },
+      "tips": [
+        "Software-Stand und Updates beim Händler erfragen; laut auto motor und sport ist die Software entscheidend.",
+        "Ein Facelift-Modell (ab Juli 2024) kostet mehr, bringt aber ein verbessertes Cockpit; ein gut gewarteter Vor-Facelift-Golf kann eine preiswerte Alternative sein.",
+        "Offene Rückrufe und Serviceaktionen beim Händler per Fahrgestellnummer abfragen."
+      ]
+    }
+  ]
+}

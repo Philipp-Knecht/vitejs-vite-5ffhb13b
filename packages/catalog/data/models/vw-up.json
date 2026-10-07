@@ -1,0 +1,195 @@
+{
+  "id": "vw-up",
+  "make": "Volkswagen",
+  "model": "up!",
+  "aliases": [
+    "cross up",
+    "cross up!",
+    "e-up",
+    "e-up!",
+    "up",
+    "up!",
+    "up! gti"
+  ],
+  "segment": "kleinstwagen",
+  "summary": "Der up! ist ein winziger Stadtflitzer mit vier Sitzen: handlich, sparsam und günstig im Unterhalt, aber ohne Reserven bei Platz und Komfort.",
+  "ratings": {
+    "reliability": 4,
+    "reliabilityNote": "Laut ADAC-Pannenstatistik 2026 unter den zuverlässigsten Kleinstwagen (häufigste Pannenursache: Batterie). Beim TÜV-Report 2026 liegt der up! ab 4 Jahren beim Anteil mängelfreier Fahrzeuge über dem Schnitt (10–11 Jahre: 68,7 % statt Ø 64,7 %); Schwachpunkte sind Beleuchtung und Bremsen.",
+    "reliabilitySources": [
+      {
+        "label": "ADAC Pannenstatistik 2026",
+        "url": "https://www.adac.de/rund-ums-fahrzeug/unfall-schaden-panne/adac-pannenstatistik-2026/"
+      },
+      {
+        "label": "AUTO BILD: VW Up – TÜV-Report (Schwachstellen, Mängel, Probleme), 13.01.2026",
+        "url": "https://www.autobild.de/artikel/vw-up-tuev-report-schwachstellen-maengel-probleme-28285313.html"
+      },
+      {
+        "label": "auto motor und sport: VW Up (Typ AA) im Gebrauchtwagencheck, 20.12.2022",
+        "url": "https://www.auto-motor-und-sport.de/kleinwagen/gebrauchtwagen/gebrauchtwagencheck-vw-up-probleme-staerken-schwaechen/"
+      }
+    ],
+    "runningCosts": 5,
+    "space": 2,
+    "comfort": 2
+  },
+  "generations": [
+    {
+      "id": "vw-up-1",
+      "name": "up!",
+      "code": "AA",
+      "years": [
+        2011,
+        2023
+      ],
+      "bodyTypes": [
+        "schraegheck"
+      ],
+      "fuels": [
+        "petrol",
+        "cng",
+        "electric"
+      ],
+      "seats": [
+        4
+      ],
+      "automatic": true,
+      "typicalPriceEur": null,
+      "priceSource": null,
+      "strengths": [
+        "Parkplatzwunder auf 3,54 Meter Länge, laut AUTO BILD flott genug und für die Größe geräumig.",
+        "Robustes Fahrwerk: Laut AUTO BILD stehen Achsaufhängungen, Federn und Dämpfer weit seltener auf der Mängelliste als im Durchschnitt.",
+        "Fünfgang-Handschaltung schaltet laut auto motor und sport angenehm leicht, kurzwegig und präzise."
+      ],
+      "issues": [
+        {
+          "title": "Automatisiertes Schaltgetriebe (ASG) nicht immer zuverlässig",
+          "affects": "ASG (automatisierte Schaltung) für die Saugbenziner, bis Herbst 2020",
+          "detail": "AUTO BILD nennt das ASG „nicht immer zuverlässig“, die AUTOHAUS-Auswertung (SP-X) „technisch anfällig“. Laut auto motor und sport schaltet es nur ruckfrei, wenn man dem Getriebe bewusst Zeit lässt.",
+          "check": "Ausgiebige Probefahrt (Anfahren, Rangieren, Gangwechsel); Handschalter als Alternative erwägen.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "AUTO BILD: VW Up – TÜV-Report (Schwachstellen, Mängel, Probleme), 13.01.2026",
+              "url": "https://www.autobild.de/artikel/vw-up-tuev-report-schwachstellen-maengel-probleme-28285313.html"
+            },
+            {
+              "label": "AUTOHAUS (SP-X): VW Up im Gebrauchtwagen-Check – Kurz und recht gut, 23.09.2024",
+              "url": "https://www.autohaus.de/nachrichten/autohersteller/gebrauchtwagen-check-vw-up-kurz-und-recht-gut-3557764"
+            },
+            {
+              "label": "auto motor und sport: VW Up (Typ AA) im Gebrauchtwagencheck, 20.12.2022",
+              "url": "https://www.auto-motor-und-sport.de/kleinwagen/gebrauchtwagen/gebrauchtwagencheck-vw-up-probleme-staerken-schwaechen/"
+            }
+          ]
+        },
+        {
+          "title": "Wassereintritt in den Innenraum",
+          "affects": "up! bis etwa Baujahr 2016 (vor dem Facelift)",
+          "detail": "Auto motor und sport nennt Wassereinbrüche beim up! bis Baujahr 2016 einen „Running Gag“, am häufigsten über die Türschweller. Weitere Ursachen sind verstellte Türen mit schlechten Dichtungen, die dritte Bremsleuchte, die Wellendichtung des Heckwischers und verstopfte Abläufe unter der Windschutzscheibe.",
+          "check": "Auf miefigen Geruch, Schimmel unter den Fußmatten und Nässe an der tiefsten Stelle des Kofferraums achten; Türschweller und Abläufe prüfen.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "auto motor und sport: VW Up (Typ AA) im Gebrauchtwagencheck, 20.12.2022",
+              "url": "https://www.auto-motor-und-sport.de/kleinwagen/gebrauchtwagen/gebrauchtwagencheck-vw-up-probleme-staerken-schwaechen/"
+            }
+          ]
+        },
+        {
+          "title": "Bremsen und Beleuchtung häufig bei der HU beanstandet",
+          "affects": "up! aller Baujahre (Beleuchtung vor allem bei bis zu 9 Jahre alten Fahrzeugen)",
+          "detail": "Laut AUTO BILD (TÜV-Report 2026) wird die Funktion der Fußbremse über alle Jahrgänge häufiger beanstandet als im Schnitt; Abblendlicht und hintere Beleuchtung haben bei bis zu Neunjährigen überdurchschnittlich viele Fehler. AUTO BILD: Die Lichtanlage ist leicht zu beheben, die Bremsen werden teurer.",
+          "check": "Bremsen und Beleuchtung vor dem Kauf prüfen lassen; HU-Bericht ansehen.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "AUTO BILD: VW Up – TÜV-Report (Schwachstellen, Mängel, Probleme), 13.01.2026",
+              "url": "https://www.autobild.de/artikel/vw-up-tuev-report-schwachstellen-maengel-probleme-28285313.html"
+            },
+            {
+              "label": "AUTOHAUS (SP-X): VW Up im Gebrauchtwagen-Check – Kurz und recht gut, 23.09.2024",
+              "url": "https://www.autohaus.de/nachrichten/autohersteller/gebrauchtwagen-check-vw-up-kurz-und-recht-gut-3557764"
+            }
+          ]
+        },
+        {
+          "title": "Ölverlust bei jüngeren Fahrzeugen",
+          "affects": "up! (jüngere Modelle)",
+          "detail": "Laut der AUTOHAUS-Auswertung (SP-X) ist Ölverlust bei jüngeren Modellen ein Thema bei der HU; die Autozeitung nennt ölfeuchte Motoren und/oder Getriebe unter den häufigsten Mängeln beim up!.",
+          "check": "Motor und Getriebe auf Ölfeuchtigkeit prüfen; eine frische HU-Plakette ist empfehlenswert.",
+          "severity": "gering",
+          "sources": [
+            {
+              "label": "AUTOHAUS (SP-X): VW Up im Gebrauchtwagen-Check – Kurz und recht gut, 23.09.2024",
+              "url": "https://www.autohaus.de/nachrichten/autohersteller/gebrauchtwagen-check-vw-up-kurz-und-recht-gut-3557764"
+            },
+            {
+              "label": "Autozeitung: VW Up gebraucht kaufen – Vor allem als e-Up empfehlenswert, 13.06.2025",
+              "url": "https://www.autozeitung.de/vw-up-baujahr-2011-134206.html"
+            }
+          ]
+        },
+        {
+          "title": "Korrosion rund um die Tankklappe",
+          "affects": "up! bis einschließlich Modelljahr 2016",
+          "detail": "Auto motor und sport schreibt, dass es beim up! rund um die Tankdeckelöffnung bis Modelljahr 2016 zu Korrosion bis hin zur Durchrostung des Seitenteils kommen konnte (beschädigte Beschichtung, Erdansammlungen im Tankstutzenbereich).",
+          "check": "Tankklappe und rechtes hinteres Seitenteil auf Blasen und Rost prüfen.",
+          "severity": "gering",
+          "sources": [
+            {
+              "label": "auto motor und sport: VW Up (Typ AA) im Gebrauchtwagencheck, 20.12.2022",
+              "url": "https://www.auto-motor-und-sport.de/kleinwagen/gebrauchtwagen/gebrauchtwagencheck-vw-up-probleme-staerken-schwaechen/"
+            }
+          ]
+        },
+        {
+          "title": "Kleinere Ärgernisse: Türschlösser, Klimaanlage, Panoramadach",
+          "affects": "up! (verschiedene Baujahre)",
+          "detail": "AUTO BILD nennt klemmende Türschlösser, undichte Klimaanlagen, knackende Panoramadächer, pfeifende Gasdruckregler (EcoFuel) und eingerissene Wärmeschutzbleche als nervige, aber meist kleine Mängel.",
+          "check": "Türschlösser, Klimaanlage (kühlt sie?), Panoramadach und Auspuff-Wärmeschutz kurz kontrollieren.",
+          "severity": "gering",
+          "sources": [
+            {
+              "label": "AUTO BILD: VW Up – TÜV-Report (Schwachstellen, Mängel, Probleme), 13.01.2026",
+              "url": "https://www.autobild.de/artikel/vw-up-tuev-report-schwachstellen-maengel-probleme-28285313.html"
+            }
+          ]
+        }
+      ],
+      "engines": {
+        "recommended": [
+          {
+            "name": "1.0 MPI (60 PS) mit Fünfgang-Handschaltung",
+            "why": "Auto motor und sport (beim up!): genügt für die meisten Fälle, das Fünfganggetriebe schaltet leicht und präzise."
+          },
+          {
+            "name": "1.0 TSI (90 PS, ab Facelift 2016)",
+            "why": "Auto motor und sport: ausgewogener Kompromiss aus Effizienz und Fahrvergnügen."
+          },
+          {
+            "name": "e-up! (spätere Baujahre)",
+            "why": "Autozeitung: Selbst die letzten Baujahre werden gebraucht erschwinglich und gelten als absolute Empfehlung für den Einstieg in die E-Mobilität."
+          }
+        ],
+        "caution": [
+          {
+            "name": "ASG (automatisierte Schaltung)",
+            "why": "AUTO BILD: nicht immer zuverlässig; AUTOHAUS/SP-X: technisch anfällig."
+          },
+          {
+            "name": "EcoFuel (Erdgas, 68 PS)",
+            "why": "Laut auto motor und sport deutlich träger (fast zwei Sekunden länger bis Tempo 100); AUTO BILD nennt pfeifende Gasdruckregler."
+          }
+        ]
+      },
+      "tips": [
+        "Fußräume, Teppiche und Kofferraum auf Nässe und Muff prüfen; das Problem betrifft laut auto motor und sport vor allem Modelle bis 2016.",
+        "Bremsen und Beleuchtung gehören zu den häufigsten HU-Mängeln – HU-Bericht zeigen lassen.",
+        "Beim ASG ausgiebig probefahren oder einen Handschalter wählen.",
+        "Beim e-up! den Batteriezustand unabhängig prüfen lassen; der TÜV-Verband fordert unabhängige Drittprüfungen der Antriebsbatterie."
+      ]
+    }
+  ]
+}

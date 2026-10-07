@@ -40,10 +40,44 @@ function defaultGeneration(
   );
 }
 
-function GenerationDetails({ generation }: { generation: Generation }) {
+function IssueBody({ issue }: { issue: Generation['issues'][number] }) {
+  return (
+    <>
+      <p className="issue__affects">Betrifft: {issue.affects}</p>
+      <p>{issue.detail}</p>
+      <p className="issue__check">
+        <strong>Darauf achten:</strong> {issue.check}
+      </p>
+      <p className="issue__sources">
+        Quelle{issue.sources.length > 1 ? 'n' : ''}:{' '}
+        {issue.sources.map((source, index) => (
+          <span key={source.url}>
+            {index > 0 && ', '}
+            <a href={source.url} target="_blank" rel="noopener nofollow">
+              {source.label}
+            </a>
+          </span>
+        ))}
+      </p>
+    </>
+  );
+}
+
+function IssueHead({ issue }: { issue: Generation['issues'][number] }) {
+  return (
+    <>
+      <span className={cn('issue__severity', `issue__severity--${issue.severity}`)}>
+        {SEVERITY_LABELS[issue.severity]}
+      </span>
+      <strong>{issue.title}</strong>
+    </>
+  );
+}
+
+function GenerationDetails({ generation, compact }: { generation: Generation; compact: boolean }) {
   return (
     <div className="model-generation">
-      {generation.strengths.length > 0 && (
+      {!compact && generation.strengths.length > 0 && (
         <section aria-label="Stärken">
           <h4>Stärken</h4>
           <ul className="check-list">
@@ -57,32 +91,25 @@ function GenerationDetails({ generation }: { generation: Generation }) {
         <section aria-label="Bekannte Schwachstellen">
           <h4>Bekannte Schwachstellen</h4>
           <ul className="issue-list">
-            {generation.issues.map((issue) => (
-              <li key={issue.title} className="issue">
-                <p className="issue__head">
-                  <span className={cn('issue__severity', `issue__severity--${issue.severity}`)}>
-                    {SEVERITY_LABELS[issue.severity]}
-                  </span>
-                  <strong>{issue.title}</strong>
-                </p>
-                <p className="issue__affects">Betrifft: {issue.affects}</p>
-                <p>{issue.detail}</p>
-                <p className="issue__check">
-                  <strong>Darauf achten:</strong> {issue.check}
-                </p>
-                <p className="issue__sources">
-                  Quelle{issue.sources.length > 1 ? 'n' : ''}:{' '}
-                  {issue.sources.map((source, index) => (
-                    <span key={source.url}>
-                      {index > 0 && ', '}
-                      <a href={source.url} target="_blank" rel="noopener nofollow">
-                        {source.label}
-                      </a>
-                    </span>
-                  ))}
-                </p>
-              </li>
-            ))}
+            {generation.issues.map((issue) =>
+              compact ? (
+                <li key={issue.title} className="issue issue--compact">
+                  <details>
+                    <summary className="issue__head">
+                      <IssueHead issue={issue} />
+                    </summary>
+                    <IssueBody issue={issue} />
+                  </details>
+                </li>
+              ) : (
+                <li key={issue.title} className="issue">
+                  <p className="issue__head">
+                    <IssueHead issue={issue} />
+                  </p>
+                  <IssueBody issue={issue} />
+                </li>
+              ),
+            )}
           </ul>
         </section>
       )}
@@ -134,6 +161,8 @@ interface ModelKnowledgeViewProps {
   yearMax?: number | null;
   /** Heading level of the generation title (below the page or section heading). */
   generationHeading?: 'h2' | 'h3';
+  /** Weaknesses as expandable rows, without strengths – inside a listing check. */
+  compact?: boolean;
 }
 
 /** Generations with strengths, weaknesses (with sources), engines and inspection tips. */
@@ -142,6 +171,7 @@ export function ModelKnowledgeView({
   yearMin = null,
   yearMax = null,
   generationHeading: GenerationHeading = 'h3',
+  compact = false,
 }: ModelKnowledgeViewProps) {
   const [selected, setSelected] = useState<string | null>(null);
   const generation =
@@ -180,7 +210,7 @@ export function ModelKnowledgeView({
             {generation.name}
             {generation.code ? ` (${generation.code})` : ''}, {yearsLabel(generation.years)}
           </GenerationHeading>
-          <GenerationDetails generation={generation} />
+          <GenerationDetails generation={generation} compact={compact} />
         </>
       )}
       <p className="model-insights__disclaimer">

@@ -122,21 +122,99 @@ function preferredFuels(answers: AdvisorAnswers): SearchFuel[] {
   return fuels;
 }
 
-function affordable(generation: GenerationSummary, budget: number | null): boolean {
-  if (budget === null || generation.typicalPriceEur === null) return true;
-  return generation.typicalPriceEur[0] <= budget;
+/**
+ * Rough new price of a class in euros (mid trim, list prices of the last
+ * decade). The sources name no used prices for most generations, so the
+ * advisor estimates which model years a budget reaches from class and age –
+ * a rule of thumb; the marketplaces show the real prices.
+ */
+const NEW_PRICE_EUR: Record<Segment, number> = {
+  kleinstwagen: 14_000,
+  kleinwagen: 20_000,
+  kompakt: 29_000,
+  mittelklasse: 38_000,
+  obere_mittelklasse: 52_000,
+  oberklasse: 90_000,
+  suv_klein: 24_000,
+  suv_kompakt: 33_000,
+  suv_mittel: 45_000,
+  suv_gross: 65_000,
+  van_klein: 27_000,
+  van: 34_000,
+  hochdachkombi: 27_000,
+  bus: 50_000,
+  sportwagen: 45_000,
+};
+
+/** Makes whose cars cost clearly more (or less) than their class's average. */
+const MAKE_PRICE_FACTOR: Readonly<Record<string, number>> = {
+  Audi: 1.2,
+  BMW: 1.2,
+  'Mercedes-Benz': 1.2,
+  Volvo: 1.2,
+  Lexus: 1.2,
+  Jaguar: 1.2,
+  'Land Rover': 1.2,
+  Porsche: 1.2,
+  Tesla: 1.2,
+  Polestar: 1.2,
+  'Alfa Romeo': 1.2,
+  MINI: 1.2,
+  'DS Automobiles': 1.2,
+  Dacia: 0.7,
+};
+
+/** Share of the new price a car of this age typically fetches: −15 % in the first year, then −8 % a year. */
+const typicalShare = (age: number) => (age <= 0 ? 1 : 0.85 * 0.92 ** (age - 1));
+
+/** Cheaper offers (more kilometres, basic trims) cost about a third less than typical ones. */
+const CHEAPER_OFFERS = 0.65;
+
+/** The newest model year a budget reaches at the cheaper end of the market (rough estimate). */
+export function newestAffordableYear(
+  model: Pick<ModelSummary, 'make' | 'segment'>,
+  budget: number,
+  year = new Date().getFullYear(),
+): number {
+  const newPrice = NEW_PRICE_EUR[model.segment] * (MAKE_PRICE_FACTOR[model.make] ?? 1);
+  let age = 0;
+  while (age < 40 && newPrice * typicalShare(age) * CHEAPER_OFFERS > budget) age += 1;
+  return year - age;
 }
 
-function fitsHard(generation: GenerationSummary, answers: AdvisorAnswers): boolean {
+function affordable(
+  model: ModelSummary,
+  generation: GenerationSummary,
+  budget: number | null,
+  year: number,
+): boolean {
+  if (budget === null) return true;
+  if (generation.typicalPriceEur) return generation.typicalPriceEur[0] <= budget;
+  // At least one full model year of the generation has to be old enough.
+  return generation.years[0] + 1 <= newestAffordableYear(model, budget, year);
+}
+
+function fitsHard(
+  model: ModelSummary,
+  generation: GenerationSummary,
+  answers: AdvisorAnswers,
+  year: number,
+): boolean {
   if (answers.people === 7 && !generation.seats.some((seats) => seats >= 7)) return false;
   if (answers.transmission === 'automatic' && !generation.automatic) return false;
   if (!answers.charging && generation.fuels.every((fuel) => fuel === 'electric')) return false;
-  return affordable(generation, answers.budget);
+  return affordable(model, generation, answers.budget, year);
 }
 
 /** The newest fitting generation (the newest one the budget reaches). */
-function pickGeneration(model: ModelSummary, answers: AdvisorAnswers): GenerationSummary | null {
-  const fitting = model.generations.filter((generation) => fitsHard(generation, answers));
+function pickGeneration(
+  model: ModelSummary,
+  answers: AdvisorAnswers,
+  year: number,
+): GenerationSummary | null {
+  const fitting = model.generations.filter((generation) =>
+    fitsHard(model, generation, answers, year),
+  );
   return fitting.sort((a, b) => b.years[0] - a.years[0])[0] ?? null;
 }
 
@@ -144,13 +222,14 @@ export function recommend(
   models: readonly ModelSummary[],
   answers: AdvisorAnswers,
   limit = 5,
+  year = new Date().getFullYear(),
 ): Recommendation[] {
   const preferred = preferredFuels(answers);
   const results: Recommendation[] = [];
   for (const model of models) {
     // Technically identical models would only repeat a suggestion.
     if (model.twinOf) continue;
-    const generation = pickGeneration(model, answers);
+    const generation = pickGeneration(model, answers, year);
     if (!generation) continue;
     const reasons: string[] = [];
     let score = 0;
@@ -188,9 +267,8 @@ export function recommend(
     if (answers.mileage === 'viel' && generation.fuels.includes('diesel')) score += 2;
     if (answers.transmission === 'automatic') reasons.push('Mit Automatik erhältlich');
 
-    // Known serious weaknesses count against a generation; unknown prices make the fit less certain.
+    // Known serious weaknesses count against a generation.
     score -= generation.severeIssueCount * 1.5;
-    if (answers.budget !== null && generation.typicalPriceEur === null) score -= 2;
 
     results.push({ model, generation, score, reasons: reasons.slice(0, 4), fuels });
   }

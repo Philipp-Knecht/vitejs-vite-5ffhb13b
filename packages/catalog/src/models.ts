@@ -30,7 +30,7 @@ const BY_MAKE: Record<string, readonly Row[]> = {
       ['golf variant', 'golf gti', 'golf gtd', 'golf plus', 'golf sportsvan', 'e-golf'],
     ],
     ['vw-t-cross', 'T-Cross', 'suv_klein'],
-    ['vw-t-roc', 'T-Roc', 'suv_klein'],
+    ['vw-t-roc', 'T-Roc', 'suv_kompakt'],
     ['vw-taigo', 'Taigo', 'suv_klein'],
     ['vw-id-3', 'ID.3', 'kompakt', ['id3']],
     ['vw-id-4', 'ID.4', 'suv_mittel', ['id4']],
@@ -363,7 +363,8 @@ export function modelsOfMake(makeId: string | null | undefined): readonly ModelE
   return makeId ? MODELS.filter((model) => model.makeId === makeId) : [];
 }
 
-const fold = (value: string) =>
+/** Lower case without accents and punctuation, for comparing names ("Škoda" → "skoda"). */
+export const foldName = (value: string) =>
   value
     .toLowerCase()
     .normalize('NFD')
@@ -373,14 +374,14 @@ const fold = (value: string) =>
 
 /** Matches typed model text ("golf variant", "C-Klasse") to a catalog model of the make. */
 export function findModel(makeId: string | null, text: string): ModelEntry | null {
-  const wanted = fold(text);
+  const wanted = foldName(text);
   if (!wanted) return null;
   const candidates = makeId ? modelsOfMake(makeId) : MODELS;
   return (
     candidates.find(
       (model) =>
-        fold(model.model) === wanted ||
-        (model.aliases ?? []).some((alias) => fold(alias) === wanted),
+        foldName(model.model) === wanted ||
+        (model.aliases ?? []).some((alias) => foldName(alias) === wanted),
     ) ?? null
   );
 }

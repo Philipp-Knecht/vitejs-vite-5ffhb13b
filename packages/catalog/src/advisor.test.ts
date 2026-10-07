@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { recommend, type AdvisorAnswers } from './advisor';
+import { newestAffordableYear, recommend, type AdvisorAnswers } from './advisor';
 import { EMPTY_ANSWERS, isComplete, parseAdvisorParams, toAdvisorParams } from './advisor-query';
 import type { GenerationSummary, ModelSummary } from './knowledge-index';
 
@@ -106,6 +106,36 @@ describe('recommend', () => {
   it('suggests diesel for many kilometres', () => {
     const result = recommend(MODELS, answers({ mileage: 'viel' }));
     expect(result[0]?.fuels[0]).toBe('diesel');
+  });
+});
+
+describe('budget estimate', () => {
+  it('estimates the newest model year a budget reaches from class and age', () => {
+    const golf = { make: 'Volkswagen', segment: 'kompakt' } as const;
+    expect(newestAffordableYear(golf, 25000, 2026)).toBe(2026);
+    expect(newestAffordableYear(golf, 15000, 2026)).toBe(2024);
+    expect(newestAffordableYear(golf, 10000, 2026)).toBe(2019);
+    expect(newestAffordableYear(golf, 5000, 2026)).toBe(2011);
+    // A pricier make reaches older cars for the same money.
+    expect(newestAffordableYear({ make: 'BMW', segment: 'kompakt' }, 10000, 2026)).toBe(2017);
+  });
+
+  it('picks generations without known prices by that estimate', () => {
+    const golfLike = model({
+      id: 'golf',
+      make: 'Volkswagen',
+      generations: [
+        generation({ id: 'golf-6', years: [2008, 2013], typicalPriceEur: null }),
+        generation({ id: 'golf-7', years: [2012, 2020], typicalPriceEur: null }),
+        generation({ id: 'golf-8', years: [2019, null], typicalPriceEur: null }),
+      ],
+    });
+    const pick = (budget: number) =>
+      recommend([golfLike], answers({ budget }), 5, 2026)[0]?.generation.id;
+    expect(pick(5000)).toBe('golf-6');
+    expect(pick(10000)).toBe('golf-7');
+    expect(pick(15000)).toBe('golf-8');
+    expect(recommend([golfLike], answers({ budget: 2000 }), 5, 2026)).toEqual([]);
   });
 });
 

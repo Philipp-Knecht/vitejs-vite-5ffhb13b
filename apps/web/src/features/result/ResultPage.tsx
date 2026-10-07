@@ -12,6 +12,8 @@ import { usePageMeta } from '../../seo/use-page-meta';
 import { AttentionSection } from './AttentionSection';
 import { ChecklistSection } from './ChecklistSection';
 import { CompletenessSection } from './CompletenessSection';
+import { knownModelId } from './known-model';
+import { ModelKnowledgeSection } from './ModelKnowledgeSection';
 import { OverviewSection } from './OverviewSection';
 import { PhotosSection } from './PhotosSection';
 import { PriceSection } from './PriceSection';
@@ -26,16 +28,17 @@ const SECTIONS = [
   { id: 'preis', label: 'Preis' },
   { id: 'was-wissen-wir', label: 'Was wissen wir?' },
   { id: 'darauf-achten', label: 'Darauf achten' },
+  { id: 'modell', label: 'Modell' },
   { id: 'fragen', label: 'Fragen' },
   { id: 'besichtigung', label: 'Besichtigung' },
   { id: 'fotos', label: 'Fotos' },
 ];
 
-function SectionNav() {
+function SectionNav({ withModel }: { withModel: boolean }) {
   return (
     <nav className="section-nav" aria-label="Abschnitte der Prüfung">
       <ul>
-        {SECTIONS.map((section) => (
+        {SECTIONS.filter((section) => withModel || section.id !== 'modell').map((section) => (
           <li key={section.id}>
             <a href={`#${section.id}`}>{section.label}</a>
           </li>
@@ -74,13 +77,14 @@ function ResultView({ dto }: { dto: AnalysisDto }) {
   const title = vehicleTitle(dto);
   usePageMeta(appPageMeta(title));
   const { analysis, listing } = dto;
+  const modelId = knownModelId(listing.vehicle);
 
   return (
     <div className="container result">
       <VehicleHeader dto={dto} />
       <div className="result__layout">
         <aside className="result__aside">
-          <SectionNav />
+          <SectionNav withModel={modelId !== null} />
         </aside>
         <div className="result__content">
           <SummarySection analysis={analysis} />
@@ -88,6 +92,7 @@ function ResultView({ dto }: { dto: AnalysisDto }) {
           <PriceSection price={analysis.priceContext} />
           <CompletenessSection completeness={analysis.completeness} />
           <AttentionSection observations={analysis.observations} checks={analysis.checks} />
+          {modelId && <ModelKnowledgeSection modelId={modelId} vehicle={listing.vehicle} />}
           <QuestionsSection
             questions={analysis.sellerQuestions}
             vehicleTitle={analysis.vehicleSummary?.title ?? null}
