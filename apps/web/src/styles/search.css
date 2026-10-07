@@ -415,3 +415,51 @@
 .issue--compact details > p:last-child {
   padding-bottom: 12px;
 }
+
+/* ---------- Saved searches (Pro) ---------- */
+.save-search-row {
+  margin: -8px 0 20px;
+}
+
+.save-search {
+  display: grid;
+  gap: 10px;
+  max-width: 480px;
+}
+
+.save-search__hint {
+  margin: 0;
+  color: var(--c-text-2);
+}
+
+.saved-searches {
+  display: grid;
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.saved-search {
+  display: grid;
+  gap: 10px;
+  padding: 14px 16px;
+  border: 1px solid var(--c-border);
+  border-radius: var(--radius-lg);
+  background: var(--c-surface);
+}
+
+.saved-search p {
+  margin: 0;
+}
+
+.saved-search__name {
+  font-weight: 700;
+}
+
+@media (min-width: 768px) {
+  .saved-search {
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+  }
+}

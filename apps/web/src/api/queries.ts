@@ -12,6 +12,9 @@ import type {
   RedirectResponse,
   SavedListingDto,
   SavedListingsResponse,
+  SavedSearchDto,
+  SavedSearchesResponse,
+  SaveSearchRequest,
   WithdrawalRequest,
 } from '@kaufcheck/shared';
 import { QueryClient, useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
@@ -22,6 +25,7 @@ export const queryKeys = {
   me: ['me'] as const,
   analysis: (id: string) => ['analysis', id] as const,
   savedListings: ['saved-listings'] as const,
+  savedSearches: ['saved-searches'] as const,
   history: ['history'] as const,
   comparison: (ids: readonly string[]) => ['comparison', ...ids] as const,
   order: (number: string) => ['order', number] as const,
@@ -81,6 +85,31 @@ export function useSavedListings(enabled: boolean) {
   });
 }
 
+export function useSavedSearches(enabled: boolean) {
+  return useQuery({
+    queryKey: queryKeys.savedSearches,
+    queryFn: ({ signal }) => api.get<SavedSearchesResponse>('/api/saved-searches', signal),
+    enabled,
+  });
+}
+
+export function useSaveSearch() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (input: SaveSearchRequest) =>
+      api.post<SavedSearchDto>('/api/saved-searches', input),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: queryKeys.savedSearches }),
+  });
+}
+
+export function useDeleteSavedSearch() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (id: string) => api.delete(`/api/saved-searches/${encodeURIComponent(id)}`),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: queryKeys.savedSearches }),
+  });
+}
+
 export function useHistory(enabled: boolean) {
   return useQuery({
     queryKey: queryKeys.history,
@@ -105,6 +134,7 @@ function useInvalidateSession() {
   const queryClient = useQueryClient();
   return async () => {
     queryClient.removeQueries({ queryKey: queryKeys.savedListings });
+    queryClient.removeQueries({ queryKey: queryKeys.savedSearches });
     queryClient.removeQueries({ queryKey: queryKeys.history });
     queryClient.removeQueries({ queryKey: ['comparison'] });
     queryClient.removeQueries({ queryKey: ['analysis'] });

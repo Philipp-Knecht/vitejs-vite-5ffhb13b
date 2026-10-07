@@ -11,6 +11,7 @@ export const ANALYTICS_EVENTS = [
   'seller_message_created',
   'checklist_started',
   'listing_saved',
+  'search_saved',
   'comparison_created',
   'pro_clicked',
   'car_search_started',

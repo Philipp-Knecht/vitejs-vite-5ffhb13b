@@ -65,6 +65,9 @@ export function proFeatures(pro: Entitlements, options: { photoAnalysis: boolean
     `bis zu ${pro.savedListingsMax} gespeicherte Angebote`,
     `Vergleiche von bis zu ${pro.compareMax} Angeboten nebeneinander`,
   ];
+  if (pro.savedSearchesMax > 0) {
+    features.push(`bis zu ${pro.savedSearchesMax} gespeicherte Gebrauchtwagen-Suchen`);
+  }
   if (pro.history) features.push('Verlauf aller deiner Prüfungen');
   if (pro.photoAnalysis && options.photoAnalysis) {
     features.push('KI-Fotoanalyse bei Inseraten mit Fotos');

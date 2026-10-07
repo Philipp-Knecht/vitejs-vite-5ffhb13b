@@ -138,6 +138,31 @@ export const UpdateSavedListingRequestSchema = z.object({
 export type UpdateSavedListingRequest = z.infer<typeof UpdateSavedListingRequestSchema>;
 
 // ---------------------------------------------------------------------------
+// Saved car searches (Pro)
+// ---------------------------------------------------------------------------
+
+export const SavedSearchDtoSchema = z.object({
+  id: z.string(),
+  name: z.string(),
+  /** The search in KaufCheck's own address format (`marke=vw&modell=vw-golf&…`). */
+  query: z.string(),
+  createdAt: z.string(),
+});
+export type SavedSearchDto = z.infer<typeof SavedSearchDtoSchema>;
+
+export const SavedSearchesResponseSchema = z.object({
+  items: z.array(SavedSearchDtoSchema),
+  limit: z.number().int().nonnegative(),
+});
+export type SavedSearchesResponse = z.infer<typeof SavedSearchesResponseSchema>;
+
+export const SaveSearchRequestSchema = z.object({
+  name: z.string().trim().min(1).max(80),
+  query: z.string().max(600),
+});
+export type SaveSearchRequest = z.infer<typeof SaveSearchRequestSchema>;
+
+// ---------------------------------------------------------------------------
 // Comparison
 // ---------------------------------------------------------------------------
 

@@ -21,6 +21,7 @@ import { usePageMeta } from '../../seo/use-page-meta';
 import { AnalysisErrorPanel } from '../analysis/AnalysisErrorPanel';
 import { AnalysisProgress } from '../analysis/AnalysisProgress';
 import { useAnalysisRunner } from '../analysis/use-analysis-runner';
+import { SavedSearchesSection } from './SavedSearchesSection';
 
 const META = appPageMeta('Meine Angebote');
 
@@ -324,6 +325,8 @@ export function SavedListingsPage() {
           )}
         </>
       )}
+
+      {signedIn && (me.data?.entitlements.savedSearchesMax ?? 0) > 0 && <SavedSearchesSection />}
 
       {dialog?.type === 'rename' && (
         <RenameDialog item={dialog.item} onClose={() => setDialog(null)} />

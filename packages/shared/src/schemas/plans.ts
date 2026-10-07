@@ -8,6 +8,8 @@ export const EntitlementsSchema = z.object({
   savedListingsMax: z.number().int().nonnegative(),
   /** Maximum listings per comparison; 0 = comparison not available. */
   compareMax: z.number().int().nonnegative(),
+  /** Saved car searches (all marketplaces); 0 = not available. */
+  savedSearchesMax: z.number().int().nonnegative(),
   history: z.boolean(),
   photoAnalysis: z.boolean(),
   showAds: z.boolean(),

@@ -46,6 +46,8 @@ function rows(
     entitlements.savedListingsMax > 0 ? <Yes>bis zu {entitlements.savedListingsMax}</Yes> : <No />;
   const compare = (entitlements: Entitlements) =>
     entitlements.compareMax > 0 ? <Yes>bis zu {entitlements.compareMax} Angebote</Yes> : <No />;
+  const searches = (entitlements: Entitlements) =>
+    entitlements.savedSearchesMax > 0 ? <Yes>bis zu {entitlements.savedSearchesMax}</Yes> : <No />;
   const flag = (value: boolean) => (value ? <Yes /> : <No />);
   return [
     { label: 'Inserate prüfen', cells: [per(plans.anonymous), per(plans.free), per(plans.pro)] },
@@ -60,6 +62,10 @@ function rows(
     {
       label: 'Angebote vergleichen',
       cells: [compare(plans.anonymous), compare(plans.free), compare(plans.pro)],
+    },
+    {
+      label: 'Suchen speichern',
+      cells: [searches(plans.anonymous), searches(plans.free), searches(plans.pro)],
     },
     {
       label: 'Verlauf aller Prüfungen',
