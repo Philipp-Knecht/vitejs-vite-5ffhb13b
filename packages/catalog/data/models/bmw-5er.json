@@ -34,8 +34,8 @@
   "segment": "obere_mittelklasse",
   "summary": "Große, komfortable Limousine und Touring (Kombi) der oberen Mittelklasse mit hochwertiger Verarbeitung und viel Platz; laut ADAC ab Erstzulassung 2011 pannensicher, im Unterhalt aber teuer.",
   "ratings": {
-    "reliability": 4,
-    "reliabilityNote": "Laut ADAC wird der 5er F10 (2010–2017) ab Erstzulassung 2011 als gut, ab 2014 als sehr gut eingestuft (2010: mittel); der Vorgänger E60/E61 war bis 2006 sehr schlecht, 2007 schlecht, 2008–2010 mittel. Beim TÜV fallen beim F10 vor allem Achsgelenke, Federn und Antriebswellenmanschetten auf.",
+    "reliability": 5,
+    "reliabilityNote": "Laut ADAC-Pannenstatistik 2025 gehört der 5er mit Erstzulassung 2015 bis 2022 fast durchweg zu den 15 Prozent der Autos mit den wenigsten Pannen, die Pannenstatistik 2026 zählt ihn zu den Besten der oberen Mittelklasse. Den F10 stuft der ADAC ab 2011 als gut ein, beim TÜV fallen vor allem Achsgelenke, Federn und Antriebswellenmanschetten auf.",
     "reliabilitySources": [
       {
         "label": "ADAC Gebrauchtwageninfo: BMW 5er-Reihe (2010-2017) Benziner",
@@ -52,6 +52,14 @@
       {
         "label": "ADAC Gebrauchtwageninfo: BMW 5er-Reihe (2003-2010) Diesel",
         "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0108-bmw-5er-reihe-2003-2010-diesel-bericht.pdf"
+      },
+      {
+        "label": "ADAC Pannenstatistik 2025",
+        "url": "https://assets.adac.de/image/upload/v1776261444/ADAC-eV/KOR/Text/PDF/Pannenstatistik_2025_Bericht_czmf9q.pdf"
+      },
+      {
+        "label": "ADAC Pannenstatistik 2026",
+        "url": "https://www.adac.de/rund-ums-fahrzeug/unfall-schaden-panne/adac-pannenstatistik-2026/"
       }
     ],
     "runningCosts": 2,

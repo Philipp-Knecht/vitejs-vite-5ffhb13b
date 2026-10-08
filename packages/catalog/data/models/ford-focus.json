@@ -1,0 +1,351 @@
+{
+  "id": "ford-focus",
+  "make": "Ford",
+  "model": "Focus",
+  "aliases": [
+    "focus",
+    "focus active",
+    "focus ecoblue",
+    "focus ecoboost",
+    "focus electric",
+    "focus iii",
+    "focus iv",
+    "focus kombi",
+    "focus mk3",
+    "focus mk4",
+    "focus rs",
+    "focus st",
+    "focus st-line",
+    "focus tdci",
+    "focus turnier"
+  ],
+  "segment": "kompakt",
+  "summary": "Kompaktklasse von Ford mit agilem, sicherem Fahrverhalten und großer Gebrauchtwagenauswahl, als Turnier (Kombi) mit besonders viel Platz.",
+  "ratings": {
+    "reliability": 3,
+    "reliabilityNote": "Laut ADAC-Pannenstatistik liegt der Focus IV (seit 2018) überwiegend im Bereich „mittel“ (Erstzulassung 2021 „gut“); der Focus III schneidet bei den Jahrgängen 2011 bis 2014 „schlecht“ bis „sehr schlecht“ ab, ab 2015 „mittel“ bis „gut“. Im TÜV-Report liegt der Focus bei beiden Generationen im Durchschnitt.",
+    "reliabilitySources": [
+      {
+        "label": "ADAC Gebrauchtwageninfo: Ford Focus (seit 2018)",
+        "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0526-ford-focus-seit-2018-bericht.pdf"
+      },
+      {
+        "label": "ADAC Gebrauchtwageninfo: Ford Focus (2011-2018) Diesel",
+        "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0221-ford-focus-2011-2018-diesel-bericht.pdf"
+      },
+      {
+        "label": "ADAC Gebrauchtwageninfo: Ford Focus (2011-2018) Benziner",
+        "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0222-ford-focus-2011-2018-benziner-bericht.pdf"
+      }
+    ],
+    "runningCosts": 4,
+    "space": 4,
+    "comfort": 3
+  },
+  "generations": [
+    {
+      "id": "ford-focus-iii",
+      "name": "Focus III",
+      "code": "Mk3",
+      "years": [2011, 2018],
+      "bodyTypes": ["schraegheck", "kombi", "limousine"],
+      "fuels": ["petrol", "diesel", "lpg", "electric"],
+      "seats": [5],
+      "automatic": true,
+      "typicalPriceEur": null,
+      "priceSource": null,
+      "strengths": [
+        "Gute Verarbeitung",
+        "Sicheres Fahrwerk und hohes Sicherheitsniveau",
+        "Große Auswahl am Gebrauchtwagenmarkt, günstig",
+        "Bequeme Sitze"
+      ],
+      "issues": [
+        {
+          "title": "Anfällige Achs- und Fahrwerksaufhängung",
+          "affects": "Focus III allgemein laut TÜV-Report (Diesel- und Benziner-Bericht); der ADAC nennt keine bestimmten Motoren oder Baujahre.",
+          "detail": "Laut ADAC bereiten die Achsaufhängung beziehungsweise die Fahrwerksaufhängungen im TÜV-Report öfter Probleme. Das sind Mängel bei der Hauptuntersuchung und verursachen Reparaturkosten.",
+          "check": "Fahrwerk und Achsaufhängung bei der Probefahrt (Klappern, Poltern, unruhiges Lenkverhalten) und auf der Hebebühne prüfen lassen; den HU-Bericht ansehen.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: Ford Focus (2011-2018) Diesel",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0221-ford-focus-2011-2018-diesel-bericht.pdf"
+            },
+            {
+              "label": "ADAC Gebrauchtwageninfo: Ford Focus (2011-2018) Benziner",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0222-ford-focus-2011-2018-benziner-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Rostige Abgasanlage",
+          "affects": "Focus III allgemein laut TÜV-Report (Diesel- und Benziner-Bericht); der ADAC nennt keine bestimmten Motoren oder Baujahre.",
+          "detail": "Laut ADAC werden im TÜV-Report rostige Abgasanlagen häufiger beanstandet. Das ist ein Mangel bei der Hauptuntersuchung und kann den Austausch von Teilen der Abgasanlage nötig machen.",
+          "check": "Auspuff und Abgasanlage auf Rost, Löcher und lose Aufhängungen prüfen und auf Zischen oder Abgasgeruch achten.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: Ford Focus (2011-2018) Diesel",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0221-ford-focus-2011-2018-diesel-bericht.pdf"
+            },
+            {
+              "label": "ADAC Gebrauchtwageninfo: Ford Focus (2011-2018) Benziner",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0222-ford-focus-2011-2018-benziner-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Ölverlust",
+          "affects": "Focus III allgemein laut TÜV-Report (Diesel- und Benziner-Bericht); der ADAC nennt keine bestimmten Motoren oder Baujahre.",
+          "detail": "Laut ADAC bereitet Ölverlust im TÜV-Report öfter Probleme. Undichte Stellen sollten vor dem Kauf geklärt sein.",
+          "check": "Motor und Unterboden auf frische Ölspuren prüfen, Ölstand kontrollieren und nach Dichtungsarbeiten fragen.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: Ford Focus (2011-2018) Diesel",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0221-ford-focus-2011-2018-diesel-bericht.pdf"
+            },
+            {
+              "label": "ADAC Gebrauchtwageninfo: Ford Focus (2011-2018) Benziner",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0222-ford-focus-2011-2018-benziner-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Starterbatterie, Anlasser und Generator",
+          "affects": "Starterbatterie: Baujahre 2011 bis 2014; Anlasser: 2012 bis 2016; Generator: 2011 (Diesel- und Benziner-Bericht).",
+          "detail": "Laut ADAC gehören diese Teile bei den ersten Jahrgängen zu den häufigen Bauteilfehlern; zudem liegen die Exemplare bis 2014 in der Pannenstatistik schlechter als der Durchschnitt.",
+          "check": "Batterie testen lassen, Startverhalten und Ladespannung prüfen lassen und fragen, ob Batterie, Anlasser oder Generator schon getauscht wurden.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: Ford Focus (2011-2018) Diesel",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0221-ford-focus-2011-2018-diesel-bericht.pdf"
+            },
+            {
+              "label": "ADAC Gebrauchtwageninfo: Ford Focus (2011-2018) Benziner",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0222-ford-focus-2011-2018-benziner-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Kühl-/Heizungsschlauch",
+          "affects": "Baujahre 2012 bis 2013 (Diesel- und Benziner-Bericht).",
+          "detail": "Laut ADAC gehört der Kühl-/Heizungsschlauch bei diesen Jahrgängen zu den häufigen Bauteilfehlern. Ein undichter Schlauch kann zu Kühlmittelverlust führen.",
+          "check": "Kühlmittelstand prüfen, im Motorraum auf Spuren von Kühlmittel achten und nach bereits getauschten Schläuchen fragen.",
+          "severity": "gering",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: Ford Focus (2011-2018) Diesel",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0221-ford-focus-2011-2018-diesel-bericht.pdf"
+            },
+            {
+              "label": "ADAC Gebrauchtwageninfo: Ford Focus (2011-2018) Benziner",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0222-ford-focus-2011-2018-benziner-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Rückrufe: Airbag-Zünder, Radbruch, Motorüberhitzung, Kupplung",
+          "affects": "Zünder der Seiten- und Knieairbags (Rückruf 9/2017); Gussfehler mit Gefahr von Radbruch (2/2018); nur 1.6-EcoBoost-Benziner: Überhitzung der Zylinderköpfe (1/2018, laut ADAC-Bericht zu den Benzinern); nur 2.0-Duratorq-Diesel: Überhitzung w…",
+          "detail": "Laut ADAC gab es Rückrufe wegen möglicherweise defekter Airbag-Zünder (Seiten- und Knieairbags lösen im Unfall eventuell nicht aus) und wegen eines möglichen Gussfehlers, der zu Ermüdungsrissen und Radbruch führen kann. Dazu kommen motorspezifische Rückrufe wegen Überhitzung sowie wegen Kupplungsverschleiß oder -bruch.",
+          "check": "Per Fahrgestellnummer beim Händler prüfen lassen, ob die Rückrufe erledigt sind.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: Ford Focus (2011-2018) Diesel",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0221-ford-focus-2011-2018-diesel-bericht.pdf"
+            },
+            {
+              "label": "ADAC Gebrauchtwageninfo: Ford Focus (2011-2018) Benziner",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0222-ford-focus-2011-2018-benziner-bericht.pdf"
+            }
+          ]
+        }
+      ],
+      "engines": {
+        "recommended": [
+          {
+            "name": "1,0-Liter-EcoBoost-Benziner mit mindestens 125 PS",
+            "why": "Laut ADAC eine klare Empfehlung: erstaunlich gute Fahrleistungen bei geringem Verbrauch; der Motor wurde mehrmals zum „Engine of the Year“ gewählt."
+          },
+          {
+            "name": "Diesel mit 115 und 120 PS",
+            "why": "Laut ADAC bieten sie sich eher an als die schwächeren Varianten mit 95 und 105 PS und wurden zahlreich verkauft, die Auswahl ist deshalb groß."
+          },
+          {
+            "name": "2,0-Liter-Diesel mit 140 bis 163 PS",
+            "why": "Laut ADAC wirklich souverän motorisiert, auch für schnelle Autobahnetappen, und oft mit Doppelkupplungsgetriebe gekoppelt. Der Bericht verzeichnet für den 2.0-Diesel Rückrufe (5/2017, 3/2018)."
+          },
+          {
+            "name": "LPG-Variante mit 117 PS",
+            "why": "Laut ADAC eine durchaus interessante Alternative; der günstige Kraftstoff steht aber im Widerspruch zu müden Fahrleistungen."
+          }
+        ],
+        "caution": [
+          {
+            "name": "Schwache Benziner: 1,6-Liter-Saugmotoren mit 85 und 105 PS sowie 1,0 EcoBoost mit 100 PS",
+            "why": "Laut ADAC sind die Saugmotoren relativ schwach für das stattliche Fahrzeug, der kleinste EcoBoost mit 100 PS bringt eher verhaltene Fahrleistungen."
+          },
+          {
+            "name": "1,6-Liter-EcoBoost-Benziner",
+            "why": "Laut ADAC-Bericht Rückruf 1/2018: Zylinderköpfe können wegen unzureichender Kühlmittelmenge überhitzen."
+          },
+          {
+            "name": "Diesel mit 95 und 105 PS",
+            "why": "Laut ADAC reichen sie prinzipiell aus, wirklich souverän ist man damit aber nicht unterwegs."
+          },
+          {
+            "name": "Focus ST und Focus RS",
+            "why": "Laut ADAC ist der ST mit 250 PS im Einkauf deutlich teurer und nur für Liebhaber eine gute Wahl, besonders der seltene RS mit 350 PS; auch der ST-Diesel mit 185 PS ist seltener und daher teurer."
+          }
+        ]
+      },
+      "tips": [
+        "Jahrgänge 2011 bis 2014 liegen laut ADAC-Pannenstatistik schlechter als der Durchschnitt: Batterie testen lassen, Startverhalten prüfen, Kühlmittelstand und Schläuche kontrollieren.",
+        "Achsaufhängung und Fahrwerk bei der Probefahrt und auf der Hebebühne prüfen lassen; den HU-Bericht ansehen.",
+        "Abgasanlage auf Rost prüfen und Motor sowie Unterboden auf Ölspuren kontrollieren.",
+        "Alle Lampen testen, denn defekte Beleuchtung wird laut TÜV-Report häufiger beanstandet."
+      ]
+    },
+    {
+      "id": "ford-focus-iv",
+      "name": "Focus IV",
+      "code": "Mk4",
+      "years": [2018, null],
+      "bodyTypes": ["schraegheck", "kombi"],
+      "fuels": ["petrol", "diesel", "hybrid"],
+      "seats": [5],
+      "automatic": true,
+      "typicalPriceEur": null,
+      "priceSource": null,
+      "strengths": [
+        "Agile und sichere Fahreigenschaften",
+        "Hohes Sicherheitsniveau",
+        "Einfache Bedienung (vor allem bis zum Facelift 2022)",
+        "Turnier mit viel Platz hinten und sehr großem Kofferraum"
+      ],
+      "issues": [
+        {
+          "title": "Zahnriemen im Ölbad beim 1.0 EcoBoost",
+          "affects": "1.0 EcoBoost (Dreizylinder-Benziner); der ADAC nennt keine bestimmten Baujahre.",
+          "detail": "Laut ADAC läuft der Zahnriemen des Dreizylinders im Ölbad. Bei falschem Öl kann er aufquellen und vorzeitig verschleißen, im schlimmsten Fall drohen Motorschäden.",
+          "check": "Mit Serviceheft und Rechnungen nachweisen lassen, dass nur das vom Hersteller vorgeschriebene Öl verwendet wurde, und nach dem Zustand beziehungsweise Wechsel des Zahnriemens fragen.",
+          "severity": "hoch",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: Ford Focus (seit 2018)",
+              "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0526-ford-focus-seit-2018-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Verstopfter Partikelfilter beim 1.5 EcoBlue",
+          "affects": "Vor allem 1.5 EcoBlue (Diesel); schon bei Laufleistungen unter 100.000 km.",
+          "detail": "Laut ADAC neigen die Partikelfilter vor allem beim 1.5 EcoBlue dazu, bereits bei niedrigen Laufleistungen von unter 100.000 km verstopft zu sein. Ford hat die Problematik erkannt und zeigt sich in der Regel kulant.",
+          "check": "Nach Warnleuchten, Werkstattbesuchen und Kulanzleistungen zum Partikelfilter fragen und die Rechnungen ansehen.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: Ford Focus (seit 2018)",
+              "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0526-ford-focus-seit-2018-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Starterbatterie",
+          "affects": "Baujahre 2018 bis 2022; Motoren nicht eingegrenzt.",
+          "detail": "Laut ADAC sind die Starterbatterien das Hauptproblem in der Pannenstatistik des aktuellen Focus. Der Austausch ist meist günstig, eine leere Batterie lässt das Auto aber stehen.",
+          "check": "Batterie testen lassen, nach ihrem Alter fragen und das Startverhalten bei kaltem Motor prüfen.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: Ford Focus (seit 2018)",
+              "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0526-ford-focus-seit-2018-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Verschlissene Bremsscheiben",
+          "affects": "Focus IV allgemein laut TÜV-Report; der ADAC nennt keine bestimmten Motoren oder Baujahre.",
+          "detail": "Laut ADAC werden im TÜV-Report häufig verschlissene Bremsscheiben beanstandet. Das betrifft die Bremsanlage und verursacht Reparaturkosten.",
+          "check": "Bremsscheiben auf Riefen, Rost und Verschleißrand prüfen, auf Rubbeln und Quietschen beim Bremsen achten und nach dem Wechselzeitpunkt der Bremsen fragen.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: Ford Focus (seit 2018)",
+              "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0526-ford-focus-seit-2018-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Ölverlust",
+          "affects": "Focus IV allgemein laut TÜV-Report; der ADAC nennt keine bestimmten Motoren oder Baujahre.",
+          "detail": "Laut ADAC ist Ölverlust im TÜV-Report häufig ein Problem. Undichte Stellen sollten vor dem Kauf geklärt sein.",
+          "check": "Motor und Unterboden auf frische Ölspuren prüfen, Ölstand kontrollieren und nach Dichtungsarbeiten fragen.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: Ford Focus (seit 2018)",
+              "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0526-ford-focus-seit-2018-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Rückrufe: Bremspedal, Kindersicherung und Türverriegelung hinten",
+          "affects": "Gelenkschraube am Bremspedal (Rückruf 1/2019); Kindersicherung der hinteren Türen (10/2018); Entriegelung der hinteren Türen beim Absenken der hinteren Fenster (3/2019).",
+          "detail": "Laut ADAC wurde bei bestimmten Fahrzeugen möglicherweise eine nicht spezifikationsgerechte Gelenkschraube am Bremspedal verbaut. Außerdem konnte die manuelle Kindersicherung der hinteren Türen nicht korrekt funktionieren, und die hinteren Türen konnten sich beim Absenken der Fenster eventuell entriegeln.",
+          "check": "Per Fahrgestellnummer beim Händler prüfen lassen, ob die Rückrufe erledigt sind.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: Ford Focus (seit 2018)",
+              "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0526-ford-focus-seit-2018-bericht.pdf"
+            }
+          ]
+        }
+      ],
+      "engines": {
+        "recommended": [
+          {
+            "name": "1.0 EcoBoost mit 125 PS (92 kW)",
+            "why": "Laut ADAC bietet er angemessene Fahrleistungen und ist als Gebrauchtwagen besonders häufig zu finden, deshalb wird er empfohlen; auf das richtige Öl achten (Zahnriemen im Ölbad)."
+          },
+          {
+            "name": "2.0 EcoBlue mit 150 PS (110 kW)",
+            "why": "Laut ADAC mehr als angemessen und sehr souverän motorisiert, gebraucht aber nicht oft zu finden."
+          },
+          {
+            "name": "1.5 EcoBoost mit 182 PS",
+            "why": "Laut ADAC potente Fahrleistungen, aber deutlich seltener am Markt als der 1.0 EcoBoost."
+          }
+        ],
+        "caution": [
+          {
+            "name": "1.0 EcoBoost (Dreizylinder-Benziner)",
+            "why": "Laut ADAC läuft der Zahnriemen im Ölbad; bei falschem Öl kann er aufquellen und vorzeitig verschleißen, im schlimmsten Fall drohen Motorschäden. Die Laufkultur ist vor allem mit Zylinderabschaltung nicht vorbildlich."
+          },
+          {
+            "name": "1.5 EcoBlue (Diesel)",
+            "why": "Laut ADAC neigen die Partikelfilter vor allem beim 1.5 EcoBlue dazu, schon bei unter 100.000 km verstopft zu sein; Ford zeigt sich in der Regel kulant. Die 95-PS-Basisversion ist zudem arg müde."
+          },
+          {
+            "name": "1.0 EcoBoost mit 85 PS (63 kW)",
+            "why": "Laut ADAC relativ lahm; sie sorgt nur für das Mindeste an Beschleunigung."
+          },
+          {
+            "name": "Focus ST (280 PS Benziner, 190 PS Diesel)",
+            "why": "Laut ADAC selten, der Benziner zudem teuer."
+          }
+        ]
+      },
+      "tips": [
+        "Beim 1.0 EcoBoost im Serviceheft und in den Rechnungen prüfen, ob immer das vorgeschriebene Öl verwendet wurde (Zahnriemen im Ölbad), und das Thema beim Besichtigungstermin direkt ansprechen.",
+        "Starterbatterie testen lassen, denn sie ist laut ADAC das Hauptproblem in der Pannenstatistik.",
+        "Beim 1.5 EcoBlue nach Problemen mit dem Partikelfilter und nach Kulanzleistungen von Ford fragen.",
+        "Bremsscheiben auf Verschleiß prüfen sowie Motor und Unterboden auf Ölspuren kontrollieren."
+      ]
+    }
+  ]
+}

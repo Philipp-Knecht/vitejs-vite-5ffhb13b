@@ -1,0 +1,225 @@
+{
+  "id": "opel-insignia",
+  "make": "Opel",
+  "model": "Insignia",
+  "aliases": [
+    "insignia",
+    "insignia a",
+    "insignia b",
+    "insignia cdti",
+    "insignia country tourer",
+    "insignia grand sport",
+    "insignia gsi",
+    "insignia opc",
+    "insignia sports tourer",
+    "insignia st"
+  ],
+  "segment": "mittelklasse",
+  "summary": "Komfortable große Mittelklasse von Opel mit bequemen Sitzen und breiter Motorenauswahl, die in der ADAC-Pannenstatistik allerdings in beiden Generationen schwach abschneidet.",
+  "ratings": {
+    "reliability": 1,
+    "reliabilityNote": "Laut ADAC-Pannenstatistik 2025 zählen die Insignia-Jahrgänge 2015 bis 2018 und 2022 zu den fünf Prozent der Autos mit den meisten Pannen, 2019 und 2021 liegen ebenfalls weit hinten; die Pannenstatistik 2026 nennt den Insignia als Schlusslicht der Mittelklasse. Auch frühere ADAC-Auswertungen sahen den Insignia A meist im Bereich „schlecht“.",
+    "reliabilitySources": [
+      {
+        "label": "ADAC Gebrauchtwageninfo: Opel Insignia (2008-2017) Diesel",
+        "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0193-opel-insignia-2008-2017-diesel-bericht.pdf"
+      },
+      {
+        "label": "ADAC Gebrauchtwageninfo: Opel Insignia (2008-2017) Benziner",
+        "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0194-opel-insignia-2008-2017-benziner-bericht.pdf"
+      },
+      {
+        "label": "ADAC Pannenstatistik 2025",
+        "url": "https://assets.adac.de/image/upload/v1776261444/ADAC-eV/KOR/Text/PDF/Pannenstatistik_2025_Bericht_czmf9q.pdf"
+      },
+      {
+        "label": "ADAC Pannenstatistik 2026",
+        "url": "https://www.adac.de/rund-ums-fahrzeug/unfall-schaden-panne/adac-pannenstatistik-2026/"
+      }
+    ],
+    "runningCosts": 3,
+    "space": 3,
+    "comfort": 4
+  },
+  "generations": [
+    {
+      "id": "opel-insignia-a",
+      "name": "Insignia A",
+      "code": "A",
+      "years": [2008, 2017],
+      "bodyTypes": ["limousine", "schraegheck", "kombi"],
+      "fuels": ["petrol", "diesel", "lpg"],
+      "seats": [5],
+      "automatic": true,
+      "typicalPriceEur": null,
+      "priceSource": null,
+      "strengths": [
+        "Solide Verarbeitung",
+        "Ausgewogenes Fahrverhalten und komfortable Federung",
+        "Sehr bequeme Sitze (v. a. AGR-Sitze)",
+        "Hohes Sicherheitsniveau"
+      ],
+      "issues": [
+        {
+          "title": "Motorprobleme bei frühen Baujahren",
+          "affects": "Diesel: Motor defekt und Geräusche (Baujahre 2009 bis 2011), Motormanagement gestört (2009, 2013); Benziner: Motor allgemein und Antriebsriemen (2009 bis 2011), Abgasrückführung (2009 bis 2010).",
+          "detail": "Laut ADAC gehören bei den frühen Baujahren defekte Motoren, Motorgeräusche und Störungen des Motormanagements (Diesel) sowie allgemeine Motorfehler, Antriebsriemen und die Abgasrückführung (Benziner) zu den häufigen Bauteilfehlern. Motorreparaturen können teuer werden.",
+          "check": "Bei kaltem Motor starten und probefahren: auf auffällige Motorgeräusche, Leistungsverlust und Warnleuchten achten; Wartungsnachweise (Öl, Antriebsriemen) und Werkstattrechnungen ansehen.",
+          "severity": "hoch",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: Opel Insignia (2008-2017) Diesel",
+              "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0193-opel-insignia-2008-2017-diesel-bericht.pdf"
+            },
+            {
+              "label": "ADAC Gebrauchtwageninfo: Opel Insignia (2008-2017) Benziner",
+              "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0194-opel-insignia-2008-2017-benziner-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Turbolader, Ladedruck und Ladeluftleitungen",
+          "affects": "Diesel: Ladedruckregelung defekt (Baujahre 2009 bis 2010), Turboladerschlauch abgerutscht (2009 bis 2011), Turbolader defekt (2009); Benziner: Turbolader (2009), Saug-/Druckleitung und Ladeluftkühler (2009, 2015 bis 2017), Ansaugsystem (20…",
+          "detail": "Laut ADAC gehören Fehler an Turbolader, Ladedruckregelung sowie an Schläuchen und Leitungen im Ladeluftsystem in einzelnen Jahrgängen zu den häufigen Bauteilfehlern. Ein Ausfall kann zu Leistungsverlust oder einer Panne führen.",
+          "check": "Bei der Probefahrt auf Leistungsverlust, Pfeifgeräusche und Warnleuchten achten; Schläuche und Leitungen im Motorraum auf festen Sitz und Undichtigkeiten kontrollieren lassen.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: Opel Insignia (2008-2017) Diesel",
+              "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0193-opel-insignia-2008-2017-diesel-bericht.pdf"
+            },
+            {
+              "label": "ADAC Gebrauchtwageninfo: Opel Insignia (2008-2017) Benziner",
+              "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0194-opel-insignia-2008-2017-benziner-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Gebrochene Achsfedern und defekte Dämpfer",
+          "affects": "Insignia A allgemein laut TÜV-Report (Diesel- und Benziner-Bericht); der ADAC nennt keine bestimmten Motoren oder Baujahre.",
+          "detail": "Laut ADAC werden im TÜV-Report gebrochene Achsfedern und defekte Dämpfer beim Insignia überdurchschnittlich oft beanstandet. Das sind Mängel bei der Hauptuntersuchung und verursachen Reparaturkosten.",
+          "check": "Federn und Stoßdämpfer auf der Hebebühne prüfen lassen (Federbruch, Ölspuren am Dämpfer), bei der Probefahrt auf Klappern und schwammiges Fahrverhalten achten und den letzten HU-Bericht ansehen.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: Opel Insignia (2008-2017) Diesel",
+              "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0193-opel-insignia-2008-2017-diesel-bericht.pdf"
+            },
+            {
+              "label": "ADAC Gebrauchtwageninfo: Opel Insignia (2008-2017) Benziner",
+              "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0194-opel-insignia-2008-2017-benziner-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Ölverlust",
+          "affects": "Insignia A allgemein laut TÜV-Report (Diesel- und Benziner-Bericht); der ADAC nennt keine bestimmten Motoren oder Baujahre.",
+          "detail": "Laut ADAC kommt Ölverlust im TÜV-Report deutlich zu oft als Mangel vor. Undichte Stellen werden bei der Hauptuntersuchung beanstandet und sollten vor dem Kauf geklärt sein.",
+          "check": "Motor und Unterboden auf frische Ölspuren prüfen, Ölstand kontrollieren und nach Ölverbrauch und bereits erfolgten Dichtungsarbeiten fragen.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: Opel Insignia (2008-2017) Diesel",
+              "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0193-opel-insignia-2008-2017-diesel-bericht.pdf"
+            },
+            {
+              "label": "ADAC Gebrauchtwageninfo: Opel Insignia (2008-2017) Benziner",
+              "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0194-opel-insignia-2008-2017-benziner-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Starterbatterie",
+          "affects": "Diesel: entladene Batterie (Baujahre 2011 bis 2014); Benziner: Starterbatterie (2011 bis 2017).",
+          "detail": "Laut ADAC gehört die Batterie bei diesen Jahrgängen zu den häufigen Bauteilfehlern und ist damit eine typische Pannenursache. Der Austausch ist meist günstig.",
+          "check": "Batterie testen lassen, nach ihrem Alter fragen und das Startverhalten bei kaltem Motor prüfen.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: Opel Insignia (2008-2017) Diesel",
+              "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0193-opel-insignia-2008-2017-diesel-bericht.pdf"
+            },
+            {
+              "label": "ADAC Gebrauchtwageninfo: Opel Insignia (2008-2017) Benziner",
+              "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0194-opel-insignia-2008-2017-benziner-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Rückrufe: Airbag-Module, Heckklappen-Elektrik (Brandgefahr), Gurtschlösser",
+          "affects": "Airbag-Module (Rückruf 2/2017); elektrische Heckklappe mit Glasdach (7/2017); Gurtschlösser der Vordersitze (9/2018, laut ADAC-Bericht zu den Benzinern).",
+          "detail": "Laut ADAC gab es Rückrufe wegen Airbag-Modulen mit fehlerhafter Zündchemikalie (der Airbag kann unvollständig oder falsch zünden) und, bei elektrischer Heckklappe mit Glasdach, wegen Wassereintritts in die Heckklappen-Steuerung (Kurzschluss, Brandgefahr). Im Benziner-Bericht kommt ein Rückruf wegen nicht spezifikationsgerecht montierter Gurtschlösser an den Vordersitzen hinzu.",
+          "check": "Per Fahrgestellnummer beim Händler prüfen lassen, ob die Rückrufe erledigt sind.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: Opel Insignia (2008-2017) Diesel",
+              "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0193-opel-insignia-2008-2017-diesel-bericht.pdf"
+            },
+            {
+              "label": "ADAC Gebrauchtwageninfo: Opel Insignia (2008-2017) Benziner",
+              "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0194-opel-insignia-2008-2017-benziner-bericht.pdf"
+            }
+          ]
+        }
+      ],
+      "engines": {
+        "recommended": [
+          {
+            "name": "Diesel mit 160 bis 170 PS",
+            "why": "Laut ADAC empfehlenswert: viel Leistung, auch auf schnelleren Autobahnetappen, und häufig auf dem Gebrauchtwagenmarkt zu finden."
+          },
+          {
+            "name": "Biturbo-Diesel mit mindestens 190 PS",
+            "why": "Laut ADAC nochmals deutlich kräftiger als die schwächeren Diesel und mit kaum mehr Verbrauch."
+          },
+          {
+            "name": "2,0-Liter-Turbobenziner mit 220 bis 250 PS",
+            "why": "Laut ADAC die insgesamt harmonischsten Antriebe mit einem guten Kompromiss aus Fahrleistungen und Verbrauch."
+          },
+          {
+            "name": "LPG-Benziner mit 140 PS (Autogas)",
+            "why": "Laut ADAC eine Alternative, die sich günstig bewegen lässt, bei den Fahrleistungen aber nur auf dem Niveau des Einstiegsbenziners liegt."
+          }
+        ],
+        "caution": [
+          {
+            "name": "Einstiegsbenziner mit 115 PS",
+            "why": "Laut ADAC der einzige Benziner, der für den großen Opel nicht ausreichend Leistung mitbringt; der Bericht bemängelt außerdem die schwachen Saugmotoren."
+          },
+          {
+            "name": "Diesel mit 110 bis 120 PS",
+            "why": "Laut ADAC reicht die Leistung prinzipiell aus, bei mehr Beladung und höheren Geschwindigkeiten wünscht man sich aber mehr."
+          }
+        ]
+      },
+      "tips": [
+        "Motor kalt starten und probefahren: auf Geräusche, Leistungsverlust und Warnleuchten achten, besonders bei Baujahren 2009 bis 2011; Ladeluftschläuche auf festen Sitz prüfen.",
+        "Motor und Unterboden auf Ölspuren kontrollieren, denn Ölverlust wird im TÜV-Report deutlich zu oft beanstandet.",
+        "Federn und Dämpfer prüfen lassen, denn gebrochene Achsfedern und defekte Dämpfer fallen im TÜV-Report überdurchschnittlich oft auf.",
+        "Batterie testen lassen und nach ihrem Alter fragen; sie ist bei Baujahren ab 2011 ein häufiger Fehler."
+      ]
+    },
+    {
+      "id": "opel-insignia-b",
+      "name": "Insignia B",
+      "code": "B",
+      "years": [2017, 2022],
+      "bodyTypes": ["schraegheck", "kombi"],
+      "fuels": ["petrol", "diesel"],
+      "seats": [5],
+      "automatic": true,
+      "typicalPriceEur": null,
+      "priceSource": null,
+      "strengths": [],
+      "issues": [],
+      "engines": {
+        "recommended": [],
+        "caution": []
+      },
+      "tips": [
+        "Zu dieser Generation haben wir noch keine Schwachstellen ausgewertet. Lass das Auto vor dem Kauf in einer Werkstatt prüfen und Rückrufe per Fahrgestellnummer erfragen."
+      ]
+    }
+  ]
+}

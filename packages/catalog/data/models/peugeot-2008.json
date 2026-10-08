@@ -1,0 +1,160 @@
+{
+  "id": "peugeot-2008",
+  "make": "Peugeot",
+  "model": "2008",
+  "aliases": [
+    "2008",
+    "2008 active",
+    "2008 allure",
+    "2008 bluehdi",
+    "2008 gt line",
+    "2008 puretech",
+    "e-2008"
+  ],
+  "segment": "suv_klein",
+  "summary": "Kleiner SUV auf Basis des Peugeot 208, in der ersten Generation (2013–2019) nur mit Frontantrieb; laut ADAC in der Pannenstatistik gut, beim TÜV aber oft mit Ölverlust.",
+  "ratings": {
+    "reliability": 4,
+    "reliabilityNote": "Laut ADAC-Pannenstatistik 2025 hatte der 2008 II (Erstzulassung 2020 bis 2022) weniger Pannen als die meisten gleich alten Autos, ebenso der 2008 I in den meisten Jahrgängen ab 2015. Im TÜV-Report schneidet der 2008 I dagegen unterdurchschnittlich ab, vor allem wegen Ölverlust.",
+    "reliabilitySources": [
+      {
+        "label": "ADAC Gebrauchtwageninfo: Peugeot 2008 (2013-2019) Benziner",
+        "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0253-peugeot-2008-2013-2019-benziner-bericht.pdf"
+      },
+      {
+        "label": "ADAC Pannenstatistik 2025",
+        "url": "https://assets.adac.de/image/upload/v1776261444/ADAC-eV/KOR/Text/PDF/Pannenstatistik_2025_Bericht_czmf9q.pdf"
+      }
+    ],
+    "runningCosts": 3,
+    "space": 3,
+    "comfort": 3
+  },
+  "generations": [
+    {
+      "id": "peugeot-2008-i",
+      "name": "2008 I",
+      "code": "A94",
+      "years": [2013, 2019],
+      "bodyTypes": ["suv"],
+      "fuels": ["petrol", "diesel"],
+      "seats": [5],
+      "automatic": true,
+      "typicalPriceEur": null,
+      "priceSource": null,
+      "strengths": [
+        "Niedrige Ladekante.",
+        "Ebener Ladeboden bei umgeklappter Rücksitzlehne.",
+        "Reichhaltige Serienausstattung.",
+        "Gute Zuverlässigkeit laut ADAC-Pannenstatistik."
+      ],
+      "issues": [
+        {
+          "title": "Ölverlust",
+          "affects": "Laut TÜV-Report im ADAC-Bericht zu den Benzinern; auch bei relativ jungen Fahrzeugen",
+          "detail": "Der Ölverlust ist laut ADAC beim TÜV besonders häufig und führt oft zu teuren Reparaturen, was gerade bei einem so jungen Auto sehr ärgerlich ist.",
+          "check": "Motor und Getriebe von unten auf Ölspuren ansehen, den Ölstand kontrollieren und bei Auffälligkeiten einen Kostenvoranschlag der Werkstatt einholen.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: Peugeot 2008 (2013-2019) Benziner",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0253-peugeot-2008-2013-2019-benziner-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Schwache Bremsen, Bremsbauteile und Beleuchtung bei der HU",
+          "affects": "Alle Motoren, laut TÜV-Report im ADAC-Bericht zu den Benzinern",
+          "detail": "Laut ADAC gelten die Bremsen des 2008 als schwach, und Bremsbauteile sowie die Beleuchtung bereiten bei der Hauptuntersuchung häufig Probleme; insgesamt schneidet der 2008 beim TÜV unterdurchschnittlich ab.",
+          "check": "Bremsscheiben und Bremsbeläge von einer Werkstatt prüfen lassen, bei der Probefahrt auf gleichmäßiges Bremsen achten und alle Leuchten testen.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: Peugeot 2008 (2013-2019) Benziner",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0253-peugeot-2008-2013-2019-benziner-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Antriebsriemen, Lüfter und Zündkerzen bei einzelnen Jahrgängen",
+          "affects": "Laut ADAC-Bericht zu den Benzinern: Antriebsriemen bei Erstzulassung 2014, Lüfter 2015, Zündkerzen 2016",
+          "detail": "Bei einzelnen Jahrgängen fallen laut ADAC in der Pannenstatistik der Antriebsriemen, der Lüfter oder die Zündkerzen häufig auf.",
+          "check": "Nach Belegen zu getauschtem Antriebsriemen, Lüfter und Zündkerzen fragen und auf Geräusche im Motorraum und unruhigen Motorlauf achten.",
+          "severity": "gering",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: Peugeot 2008 (2013-2019) Benziner",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0253-peugeot-2008-2013-2019-benziner-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Rückrufe: Starterrelais (Brandgefahr)",
+          "affects": "Rückrufe laut ADAC-Bericht zu den Benzinern: 6/2017 (Starterrelais, betroffene Motoren und Baujahre nicht näher genannt); 2/2020 ein weiterer Rückruf ohne nähere Angaben des Herstellers",
+          "detail": "Ein mangelhaftes Starterrelais kann zum Brand führen (6/2017). Zu einem weiteren Rückruf im Februar 2020 stellt der Hersteller laut ADAC auch auf Nachfrage keine weiteren Informationen bereit.",
+          "check": "Per Fahrgestellnummer beim Händler prüfen lassen, ob die Rückrufe erledigt sind.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: Peugeot 2008 (2013-2019) Benziner",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0253-peugeot-2008-2013-2019-benziner-bericht.pdf"
+            }
+          ]
+        }
+      ],
+      "engines": {
+        "recommended": [
+          {
+            "name": "Dreizylinder-Turbo mit 110 und 130 PS",
+            "why": "Laut ADAC wesentlich bessere Fahrleistungen als der Einstiegsmotor mit 82 PS."
+          },
+          {
+            "name": "110-PS-Dreizylinder mit 6-Stufen-Wandlerautomatik",
+            "why": "Laut ADAC deutlich moderner als das automatisierte Schaltgetriebe und die 4-Stufen-Wandlerautomatik der Fahrzeuge bis Baujahr 2015."
+          }
+        ],
+        "caution": [
+          {
+            "name": "Dreizylinder mit 82 PS",
+            "why": "Laut ADAC nicht für schnelle Autobahnetappen geeignet."
+          },
+          {
+            "name": "1.6-Liter-Sauger mit 120 PS",
+            "why": "Laut ADAC mit völlig ausreichenden Fahrleistungen, aber durch das hohe Drehzahlniveau laut und mit erhöhtem Verbrauch."
+          },
+          {
+            "name": "Automatisiertes Schaltgetriebe und 4-Stufen-Wandlerautomatik (bis Baujahr 2015)",
+            "why": "Laut ADAC nur für sehr zurückhaltende Fahrer geeignet, da Fahrleistungen und Verbrauch unter diesen Getrieben leiden."
+          }
+        ]
+      },
+      "tips": [
+        "Motor und Getriebe von unten auf Ölspuren prüfen: Ölverlust ist laut ADAC beim TÜV besonders häufig und führt oft zu teuren Reparaturen.",
+        "Bremsen und Beleuchtung gründlich prüfen; beides bereitet laut ADAC bei der Hauptuntersuchung häufig Probleme.",
+        "Auf der Probefahrt die Schaltung prüfen: Die Schaltgetriebe sind laut ADAC unpräzise, bei Automatik oder automatisiertem Getriebe bis Baujahr 2015 leiden Fahrleistungen und Verbrauch.",
+        "Per Fahrgestellnummer klären, ob der Rückruf wegen des Starterrelais (6/2017) erledigt ist."
+      ]
+    },
+    {
+      "id": "peugeot-2008-ii",
+      "name": "2008 II",
+      "code": "P24",
+      "years": [2019, null],
+      "bodyTypes": ["suv"],
+      "fuels": ["petrol", "diesel", "electric", "hybrid"],
+      "seats": [5],
+      "automatic": true,
+      "typicalPriceEur": null,
+      "priceSource": null,
+      "strengths": [],
+      "issues": [],
+      "engines": {
+        "recommended": [],
+        "caution": []
+      },
+      "tips": [
+        "Zu dieser Generation haben wir noch keine Schwachstellen ausgewertet. Lass das Auto vor dem Kauf in einer Werkstatt prüfen und Rückrufe per Fahrgestellnummer erfragen."
+      ]
+    }
+  ]
+}

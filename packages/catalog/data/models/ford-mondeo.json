@@ -1,0 +1,178 @@
+{
+  "id": "ford-mondeo",
+  "make": "Ford",
+  "model": "Mondeo",
+  "aliases": [
+    "mondeo",
+    "mondeo hybrid",
+    "mondeo kombi",
+    "mondeo st-line",
+    "mondeo tdci",
+    "mondeo turnier",
+    "mondeo vignale"
+  ],
+  "segment": "mittelklasse",
+  "summary": "Geräumiger Mittelklassewagen von Ford, am häufigsten als Kombi (Turnier) zu finden und oft ein ehemaliger Firmenwagen mit hoher Laufleistung.",
+  "ratings": {
+    "reliability": 2,
+    "reliabilityNote": "Laut ADAC-Pannenstatistik 2025 hatte auch der Mondeo V mit Erstzulassung 2015 bis 2017 und 2020 deutlich mehr Pannen als die meisten gleich alten Autos, nur 2019 schnitt er besser ab. Beim Mondeo IV waren laut ADAC die Erstzulassungen 2007 bis 2011 „schlecht“ bis „sehr schlecht“ und 2012 bis 2014 „mittel“.",
+    "reliabilitySources": [
+      {
+        "label": "ADAC Gebrauchtwageninfo: Ford Mondeo (2007-2014) Diesel",
+        "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0158-ford-mondeo-2007-2014-diesel-bericht.pdf"
+      },
+      {
+        "label": "ADAC Pannenstatistik 2025",
+        "url": "https://assets.adac.de/image/upload/v1776261444/ADAC-eV/KOR/Text/PDF/Pannenstatistik_2025_Bericht_czmf9q.pdf"
+      }
+    ],
+    "runningCosts": 3,
+    "space": 5,
+    "comfort": 4
+  },
+  "generations": [
+    {
+      "id": "ford-mondeo-iv",
+      "name": "Mondeo IV",
+      "code": "BA7",
+      "years": [2007, 2014],
+      "bodyTypes": ["kombi", "schraegheck", "limousine"],
+      "fuels": ["petrol", "diesel"],
+      "seats": [5],
+      "automatic": true,
+      "typicalPriceEur": null,
+      "priceSource": null,
+      "strengths": [
+        "Viel Platz im Innenraum; der Kombi (Turnier) fasst laut ADAC bis zu 530 Liter Gepäck.",
+        "Gute Verarbeitung und funktionelle Bedienung.",
+        "Sichere Straßenlage.",
+        "Niedriger Anschaffungspreis, weil viele Gebrauchte aus Firmenflotten stammen."
+      ],
+      "issues": [
+        {
+          "title": "Hohe Pannenhäufigkeit bei frühen Baujahren",
+          "affects": "Laut ADAC-Bericht zu den Dieseln: Erstzulassung 2007–2009 „sehr schlecht“, 2010–2011 „schlecht“, 2012–2014 „mittel“",
+          "detail": "Laut ADAC belegt der Mondeo in der Pannenstatistik einen der hinteren Plätze, das Fehlerbild ist vielfältig. Außerdem haben viele Mondeo laut ADAC weit überdurchschnittliche Laufleistungen.",
+          "check": "Wartungs- und Reparaturbelege verlangen, Laufleistung und Vorbesitzer (Firmen- oder Vertreterwagen?) erfragen und möglichst einen späten Jahrgang wählen.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: Ford Mondeo (2007-2014) Diesel",
+              "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0158-ford-mondeo-2007-2014-diesel-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Kraftstoffpumpe und Kraftstoffleitungen",
+          "affects": "Laut ADAC-Bericht zu den Dieseln: Kraftstoffpumpe bei Erstzulassung 2007–2013, Kraftstoffschlauch/-leitung bei Erstzulassung 2008",
+          "detail": "Die Kraftstoffpumpe zählt laut ADAC in sieben Erstzulassungsjahren zu den häufigen Bauteilfehlern der Pannenstatistik, die Kraftstoffleitungen beim Jahrgang 2008.",
+          "check": "Nach Belegen zu einem Pumpentausch fragen und bei der Probefahrt auf sauberes Anspringen und gleichmäßige Leistung achten.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: Ford Mondeo (2007-2014) Diesel",
+              "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0158-ford-mondeo-2007-2014-diesel-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Einspritzdüsen, Partikelfilter, Abgasrückführung und Turbo-Leitungen",
+          "affects": "Laut ADAC-Bericht zu den Dieseln: Einspritzdüsen/Injektoren bei Erstzulassung 2011–2012, Partikelfilter 2007 und 2011, Abgasrückführung 2007, Turbolader-Saug-/Druckleitung und Ladeluftkühler 2011",
+          "detail": "Bauteile der Dieseltechnik tauchen bei einzelnen Jahrgängen laut ADAC häufig in der Pannenstatistik auf; betroffen sind Einspritzung, Abgasreinigung und Aufladung.",
+          "check": "Rechnungen zu Einspritzdüsen, Partikelfilter und Abgasrückführung ansehen und bei der Probefahrt auf Leistungsverlust, Ruckeln und Warnleuchten achten.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: Ford Mondeo (2007-2014) Diesel",
+              "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0158-ford-mondeo-2007-2014-diesel-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Anlasser, Starterbatterie und Bordelektrik",
+          "affects": "Laut ADAC-Bericht zu den Dieseln: Anlasser bei Erstzulassung 2009 und 2011–2012, Anlassermagnetschalter 2009, Starterbatterie 2007–2010, Fahrzeugelektrik allgemein und Wegfahrsperre 2008–2009",
+          "detail": "Anlasser, Batterie, Wegfahrsperre und die Bordelektrik gehören laut ADAC bei einzelnen Jahrgängen zu den häufigen Bauteilfehlern.",
+          "check": "Startverhalten bei kaltem Motor prüfen, alle elektrischen Funktionen und Warnleuchten testen und nach dem Alter der Batterie und einem getauschten Anlasser fragen.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: Ford Mondeo (2007-2014) Diesel",
+              "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0158-ford-mondeo-2007-2014-diesel-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Fahrwerk, Beleuchtung, Abgasanlage und Ölverlust bei der HU",
+          "affects": "Laut TÜV-Report im ADAC-Bericht zu den Dieseln; Auspuffrohr/-topf zusätzlich in der Pannenstatistik bei Erstzulassung 2008 und 2010–2011",
+          "detail": "Auch im TÜV-Report kann der Mondeo laut ADAC nicht punkten: Das Fahrwerk ist verschleißanfällig, die Beleuchtung oft defekt, und rostende Abgasanlagen sowie ölfeuchte Motoren kommen häufig vor.",
+          "check": "Fahrwerk auf Verschleiß prüfen lassen, die Auspuffanlage auf Rost kontrollieren, den Motor von unten auf Ölspuren ansehen und alle Leuchten testen.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: Ford Mondeo (2007-2014) Diesel",
+              "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0158-ford-mondeo-2007-2014-diesel-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Rückrufe: Bremse, Steuergeräte-Software, Kraftstoffleitungen, Kupplung",
+          "affects": "Rückrufe laut ADAC-Bericht zu den Dieseln: 6/2009 (Bremssystem), 5/2011 (Steuergeräte, Antriebsstrang-Steuergerät bei 2.0 TDCi), 10/2013 (2,2 TDCi), 5/2019 (Ecoboost-Benziner mit Schaltgetriebe)",
+          "detail": "Es gab unter anderem Rückrufe wegen eines bei Kälte möglicherweise nicht öffnenden Rückschlagventils in der Unterdruckpumpe des Bremssystems (6/2009), wegen Softwarefehlern mit möglichem plötzlichem Funktionsausfall elektrischer Funktionen (5/2011) und wegen möglicherweise beschädigter O-Ringe im Bereich der Kraftstoff-Rücklaufleitungen (10/2013). Bei Ecoboost-Benzinern mit Schaltgetriebe kann die Kupplungsdruckplatte brechen (5/2019).",
+          "check": "Per Fahrgestellnummer beim Händler prüfen lassen, ob die Rückrufe erledigt sind.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: Ford Mondeo (2007-2014) Diesel",
+              "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0158-ford-mondeo-2007-2014-diesel-bericht.pdf"
+            }
+          ]
+        }
+      ],
+      "engines": {
+        "recommended": [
+          {
+            "name": "2.0 TDCi (Diesel)",
+            "why": "Laut ADAC die beste Wahl unter den Dieselmotoren des Mondeo."
+          }
+        ],
+        "caution": [
+          {
+            "name": "1.8 TDCi (Diesel)",
+            "why": "Laut ADAC für den stattlichen Wagen zu schwachbrüstig und daher nicht wirklich souverän."
+          },
+          {
+            "name": "1.6 TDCi (Diesel)",
+            "why": "Laut ADAC für den stattlichen Wagen zu schwachbrüstig und daher nicht wirklich souverän."
+          }
+        ]
+      },
+      "tips": [
+        "Laufleistung, Vorbesitzer und Serviceheft genau prüfen: Laut ADAC haben viele Mondeo weit überdurchschnittliche Laufleistungen, häufig als Firmenwagen.",
+        "Fahrwerk, Beleuchtung und Auspuffanlage prüfen und den Motor von unten auf Ölfeuchtigkeit ansehen; das sind laut ADAC häufige Mängel.",
+        "Nach Belegen zu Kraftstoffpumpe, Einspritzdüsen, Partikelfilter, Anlasser und Batterie fragen.",
+        "Wenn möglich einen späten Jahrgang (2012–2014) wählen: Er schneidet in der ADAC-Pannenstatistik mit „mittel“ besser ab als die früheren Jahre."
+      ]
+    },
+    {
+      "id": "ford-mondeo-v",
+      "name": "Mondeo V",
+      "code": null,
+      "years": [2014, 2022],
+      "bodyTypes": ["limousine", "schraegheck", "kombi"],
+      "fuels": ["petrol", "diesel", "hybrid"],
+      "seats": [5],
+      "automatic": true,
+      "typicalPriceEur": null,
+      "priceSource": null,
+      "strengths": [],
+      "issues": [],
+      "engines": {
+        "recommended": [],
+        "caution": []
+      },
+      "tips": [
+        "Zu dieser Generation haben wir noch keine Schwachstellen ausgewertet. Lass das Auto vor dem Kauf in einer Werkstatt prüfen und Rückrufe per Fahrgestellnummer erfragen."
+      ]
+    }
+  ]
+}

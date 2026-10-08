@@ -159,7 +159,7 @@
     "segment": "obere_mittelklasse",
     "twinOf": null,
     "ratings": {
-      "reliability": 4,
+      "reliability": 5,
       "runningCosts": 2,
       "space": 4,
       "comfort": 5
@@ -207,6 +207,174 @@
         "years": [2023, null],
         "bodyTypes": ["limousine", "kombi"],
         "fuels": ["petrol", "diesel", "plugin_hybrid", "electric"],
+        "seats": [5],
+        "automatic": true,
+        "typicalPriceEur": null,
+        "issueCount": 0,
+        "severeIssueCount": 0
+      }
+    ]
+  },
+  {
+    "id": "ford-fiesta",
+    "make": "Ford",
+    "model": "Fiesta",
+    "segment": "kleinwagen",
+    "twinOf": null,
+    "ratings": {
+      "reliability": 4,
+      "runningCosts": 4,
+      "space": 2,
+      "comfort": 3
+    },
+    "generations": [
+      {
+        "id": "ford-fiesta-vii",
+        "name": "Fiesta VII",
+        "years": [2008, 2017],
+        "bodyTypes": ["schraegheck"],
+        "fuels": ["petrol", "diesel"],
+        "seats": [5],
+        "automatic": true,
+        "typicalPriceEur": null,
+        "issueCount": 6,
+        "severeIssueCount": 0
+      },
+      {
+        "id": "ford-fiesta-viii",
+        "name": "Fiesta VIII",
+        "years": [2017, 2023],
+        "bodyTypes": ["schraegheck"],
+        "fuels": ["petrol", "diesel", "hybrid"],
+        "seats": [5],
+        "automatic": true,
+        "typicalPriceEur": null,
+        "issueCount": 0,
+        "severeIssueCount": 0
+      }
+    ]
+  },
+  {
+    "id": "ford-focus",
+    "make": "Ford",
+    "model": "Focus",
+    "segment": "kompakt",
+    "twinOf": null,
+    "ratings": {
+      "reliability": 3,
+      "runningCosts": 4,
+      "space": 4,
+      "comfort": 3
+    },
+    "generations": [
+      {
+        "id": "ford-focus-iii",
+        "name": "Focus III",
+        "years": [2011, 2018],
+        "bodyTypes": ["schraegheck", "kombi", "limousine"],
+        "fuels": ["petrol", "diesel", "lpg", "electric"],
+        "seats": [5],
+        "automatic": true,
+        "typicalPriceEur": null,
+        "issueCount": 6,
+        "severeIssueCount": 0
+      },
+      {
+        "id": "ford-focus-iv",
+        "name": "Focus IV",
+        "years": [2018, null],
+        "bodyTypes": ["schraegheck", "kombi"],
+        "fuels": ["petrol", "diesel", "hybrid"],
+        "seats": [5],
+        "automatic": true,
+        "typicalPriceEur": null,
+        "issueCount": 6,
+        "severeIssueCount": 1
+      }
+    ]
+  },
+  {
+    "id": "ford-kuga",
+    "make": "Ford",
+    "model": "Kuga",
+    "segment": "suv_kompakt",
+    "twinOf": null,
+    "ratings": {
+      "reliability": 2,
+      "runningCosts": 3,
+      "space": 4,
+      "comfort": 4
+    },
+    "generations": [
+      {
+        "id": "ford-kuga-i",
+        "name": "Kuga I",
+        "years": [2008, 2012],
+        "bodyTypes": ["suv"],
+        "fuels": ["petrol", "diesel"],
+        "seats": [5],
+        "automatic": true,
+        "typicalPriceEur": null,
+        "issueCount": 5,
+        "severeIssueCount": 0
+      },
+      {
+        "id": "ford-kuga-ii",
+        "name": "Kuga II",
+        "years": [2013, 2019],
+        "bodyTypes": ["suv"],
+        "fuels": ["petrol", "diesel"],
+        "seats": [5],
+        "automatic": true,
+        "typicalPriceEur": null,
+        "issueCount": 4,
+        "severeIssueCount": 0
+      },
+      {
+        "id": "ford-kuga-iii",
+        "name": "Kuga III",
+        "years": [2019, null],
+        "bodyTypes": ["suv"],
+        "fuels": ["petrol", "diesel", "hybrid", "plugin_hybrid"],
+        "seats": [5],
+        "automatic": true,
+        "typicalPriceEur": null,
+        "issueCount": 0,
+        "severeIssueCount": 0
+      }
+    ]
+  },
+  {
+    "id": "ford-mondeo",
+    "make": "Ford",
+    "model": "Mondeo",
+    "segment": "mittelklasse",
+    "twinOf": null,
+    "ratings": {
+      "reliability": 2,
+      "runningCosts": 3,
+      "space": 5,
+      "comfort": 4
+    },
+    "generations": [
+      {
+        "id": "ford-mondeo-iv",
+        "name": "Mondeo IV",
+        "years": [2007, 2014],
+        "bodyTypes": ["kombi", "schraegheck", "limousine"],
+        "fuels": ["petrol", "diesel"],
+        "seats": [5],
+        "automatic": true,
+        "typicalPriceEur": null,
+        "issueCount": 6,
+        "severeIssueCount": 0
+      },
+      {
+        "id": "ford-mondeo-v",
+        "name": "Mondeo V",
+        "years": [2014, 2022],
+        "bodyTypes": ["limousine", "schraegheck", "kombi"],
+        "fuels": ["petrol", "diesel", "hybrid"],
         "seats": [5],
         "automatic": true,
         "typicalPriceEur": null,
@@ -375,7 +543,7 @@
     "segment": "obere_mittelklasse",
     "twinOf": null,
     "ratings": {
-      "reliability": 3,
+      "reliability": 4,
       "runningCosts": 2,
       "space": 5,
       "comfort": 5
@@ -525,6 +693,264 @@
         "years": [2019, null],
         "bodyTypes": ["schraegheck"],
         "fuels": ["petrol", "diesel", "electric"],
+        "seats": [5],
+        "automatic": true,
+        "typicalPriceEur": null,
+        "issueCount": 0,
+        "severeIssueCount": 0
+      }
+    ]
+  },
+  {
+    "id": "opel-insignia",
+    "make": "Opel",
+    "model": "Insignia",
+    "segment": "mittelklasse",
+    "twinOf": null,
+    "ratings": {
+      "reliability": 1,
+      "runningCosts": 3,
+      "space": 3,
+      "comfort": 4
+    },
+    "generations": [
+      {
+        "id": "opel-insignia-a",
+        "name": "Insignia A",
+        "years": [2008, 2017],
+        "bodyTypes": ["limousine", "schraegheck", "kombi"],
+        "fuels": ["petrol", "diesel", "lpg"],
+        "seats": [5],
+        "automatic": true,
+        "typicalPriceEur": null,
+        "issueCount": 6,
+        "severeIssueCount": 1
+      },
+      {
+        "id": "opel-insignia-b",
+        "name": "Insignia B",
+        "years": [2017, 2022],
+        "bodyTypes": ["schraegheck", "kombi"],
+        "fuels": ["petrol", "diesel"],
+        "seats": [5],
+        "automatic": true,
+        "typicalPriceEur": null,
+        "issueCount": 0,
+        "severeIssueCount": 0
+      }
+    ]
+  },
+  {
+    "id": "opel-mokka",
+    "make": "Opel",
+    "model": "Mokka",
+    "segment": "suv_klein",
+    "twinOf": null,
+    "ratings": {
+      "reliability": 3,
+      "runningCosts": 3,
+      "space": 2,
+      "comfort": 4
+    },
+    "generations": [
+      {
+        "id": "opel-mokka-a",
+        "name": "Mokka A",
+        "years": [2012, 2019],
+        "bodyTypes": ["suv"],
+        "fuels": ["petrol", "diesel", "lpg"],
+        "seats": [5],
+        "automatic": true,
+        "typicalPriceEur": null,
+        "issueCount": 5,
+        "severeIssueCount": 0
+      },
+      {
+        "id": "opel-mokka-b",
+        "name": "Mokka B",
+        "years": [2020, null],
+        "bodyTypes": ["suv"],
+        "fuels": ["petrol", "diesel", "electric", "hybrid"],
+        "seats": [5],
+        "automatic": true,
+        "typicalPriceEur": null,
+        "issueCount": 0,
+        "severeIssueCount": 0
+      }
+    ]
+  },
+  {
+    "id": "peugeot-2008",
+    "make": "Peugeot",
+    "model": "2008",
+    "segment": "suv_klein",
+    "twinOf": null,
+    "ratings": {
+      "reliability": 4,
+      "runningCosts": 3,
+      "space": 3,
+      "comfort": 3
+    },
+    "generations": [
+      {
+        "id": "peugeot-2008-i",
+        "name": "2008 I",
+        "years": [2013, 2019],
+        "bodyTypes": ["suv"],
+        "fuels": ["petrol", "diesel"],
+        "seats": [5],
+        "automatic": true,
+        "typicalPriceEur": null,
+        "issueCount": 4,
+        "severeIssueCount": 0
+      },
+      {
+        "id": "peugeot-2008-ii",
+        "name": "2008 II",
+        "years": [2019, null],
+        "bodyTypes": ["suv"],
+        "fuels": ["petrol", "diesel", "electric", "hybrid"],
+        "seats": [5],
+        "automatic": true,
+        "typicalPriceEur": null,
+        "issueCount": 0,
+        "severeIssueCount": 0
+      }
+    ]
+  },
+  {
+    "id": "peugeot-208",
+    "make": "Peugeot",
+    "model": "208",
+    "segment": "kleinwagen",
+    "twinOf": null,
+    "ratings": {
+      "reliability": 4,
+      "runningCosts": 4,
+      "space": 3,
+      "comfort": 3
+    },
+    "generations": [
+      {
+        "id": "peugeot-208-i",
+        "name": "208 I",
+        "years": [2012, 2019],
+        "bodyTypes": ["schraegheck"],
+        "fuels": ["petrol", "diesel"],
+        "seats": [5],
+        "automatic": true,
+        "typicalPriceEur": null,
+        "issueCount": 5,
+        "severeIssueCount": 0
+      },
+      {
+        "id": "peugeot-208-ii",
+        "name": "208 II",
+        "years": [2019, null],
+        "bodyTypes": ["schraegheck"],
+        "fuels": ["petrol", "diesel", "electric", "hybrid"],
+        "seats": [5],
+        "automatic": true,
+        "typicalPriceEur": null,
+        "issueCount": 3,
+        "severeIssueCount": 1
+      }
+    ]
+  },
+  {
+    "id": "peugeot-308",
+    "make": "Peugeot",
+    "model": "308",
+    "segment": "kompakt",
+    "twinOf": null,
+    "ratings": {
+      "reliability": 2,
+      "runningCosts": 2,
+      "space": 4,
+      "comfort": 2
+    },
+    "generations": [
+      {
+        "id": "peugeot-308-i",
+        "name": "308 I",
+        "years": [2007, 2013],
+        "bodyTypes": ["schraegheck", "kombi", "cabrio"],
+        "fuels": ["petrol", "diesel"],
+        "seats": [5],
+        "automatic": true,
+        "typicalPriceEur": null,
+        "issueCount": 6,
+        "severeIssueCount": 0
+      },
+      {
+        "id": "peugeot-308-ii",
+        "name": "308 II",
+        "years": [2013, 2021],
+        "bodyTypes": ["schraegheck", "kombi"],
+        "fuels": ["petrol", "diesel"],
+        "seats": [5],
+        "automatic": true,
+        "typicalPriceEur": null,
+        "issueCount": 0,
+        "severeIssueCount": 0
+      },
+      {
+        "id": "peugeot-308-iii",
+        "name": "308 III",
+        "years": [2021, null],
+        "bodyTypes": ["schraegheck", "kombi"],
+        "fuels": ["petrol", "diesel", "plugin_hybrid", "electric", "hybrid"],
+        "seats": [5],
+        "automatic": true,
+        "typicalPriceEur": null,
+        "issueCount": 0,
+        "severeIssueCount": 0
+      }
+    ]
+  },
+  {
+    "id": "renault-clio",
+    "make": "Renault",
+    "model": "Clio",
+    "segment": "kleinwagen",
+    "twinOf": null,
+    "ratings": {
+      "reliability": 3,
+      "runningCosts": 3,
+      "space": 3,
+      "comfort": 2
+    },
+    "generations": [
+      {
+        "id": "renault-clio-iii",
+        "name": "Clio III",
+        "years": [2005, 2014],
+        "bodyTypes": ["schraegheck", "kombi"],
+        "fuels": ["petrol", "diesel"],
+        "seats": [5],
+        "automatic": true,
+        "typicalPriceEur": null,
+        "issueCount": 5,
+        "severeIssueCount": 0
+      },
+      {
+        "id": "renault-clio-iv",
+        "name": "Clio IV",
+        "years": [2012, 2020],
+        "bodyTypes": ["schraegheck", "kombi"],
+        "fuels": ["petrol", "diesel"],
+        "seats": [5],
+        "automatic": true,
+        "typicalPriceEur": null,
+        "issueCount": 4,
+        "severeIssueCount": 0
+      },
+      {
+        "id": "renault-clio-v",
+        "name": "Clio V",
+        "years": [2019, 2025],
+        "bodyTypes": ["schraegheck"],
+        "fuels": ["petrol", "diesel", "hybrid", "lpg"],
         "seats": [5],
         "automatic": true,
         "typicalPriceEur": null,

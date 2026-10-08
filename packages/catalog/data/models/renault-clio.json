@@ -1,0 +1,268 @@
+{
+  "id": "renault-clio",
+  "make": "Renault",
+  "model": "Clio",
+  "aliases": [
+    "clio",
+    "clio dci",
+    "clio e-tech",
+    "clio grandtour",
+    "clio gt",
+    "clio rs",
+    "clio tce"
+  ],
+  "segment": "kleinwagen",
+  "summary": "Französischer Kleinwagen mit sicherem Fahrverhalten und sparsamen Dieseln, auch als Kombi (Grandtour) erhältlich; in Pannen- und TÜV-Statistik schneidet er laut ADAC nur durchschnittlich bis leicht unterdurchschnittlich ab.",
+  "ratings": {
+    "reliability": 3,
+    "reliabilityNote": "Laut ADAC liegt der Clio IV (2012–2020) überwiegend im Bereich „mittel“, die Erstzulassungen 2015 und 2016 sogar bei „schlecht“; im TÜV-Report schneidet er leicht unterdurchschnittlich ab. Für Clio V und Captur weist die Pannenstatistik 2025 gemeinsame Werte aus: Erstzulassung 2021 und 2022 mit weniger Pannen als die meisten gleich alten Autos.",
+    "reliabilitySources": [
+      {
+        "label": "ADAC Gebrauchtwageninfo: Renault Clio (2012-2020)",
+        "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0280-renault-clio-2012-2020-bericht.pdf"
+      },
+      {
+        "label": "ADAC Gebrauchtwageninfo: Renault Clio (2005-2014) Benziner",
+        "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0169-renault-clio-2005-2014-benziner-bericht.pdf"
+      },
+      {
+        "label": "ADAC Pannenstatistik 2025",
+        "url": "https://assets.adac.de/image/upload/v1776261444/ADAC-eV/KOR/Text/PDF/Pannenstatistik_2025_Bericht_czmf9q.pdf"
+      }
+    ],
+    "runningCosts": 3,
+    "space": 3,
+    "comfort": 2
+  },
+  "generations": [
+    {
+      "id": "renault-clio-iii",
+      "name": "Clio III",
+      "code": null,
+      "years": [2005, 2014],
+      "bodyTypes": ["schraegheck", "kombi"],
+      "fuels": ["petrol", "diesel"],
+      "seats": [5],
+      "automatic": true,
+      "typicalPriceEur": null,
+      "priceSource": null,
+      "strengths": [
+        "Sichere Straßenlage und kräftige Bremsen.",
+        "Vorn und hinten für einen Kleinwagen genug Platz.",
+        "Großer, gut zugänglicher Kofferraum beim Kombi Grandtour (seit 2008).",
+        "Große Motorenauswahl."
+      ],
+      "issues": [
+        {
+          "title": "Brechende Fahrwerksfedern, ausgeschlagene Lenkgelenke, verschlissene Bremsen",
+          "affects": "Alle Clio III, laut TÜV-Report im ADAC-Bericht zu den Benzinern",
+          "detail": "Der Clio III schneidet im TÜV-Report schlecht ab, die Zahl der Autos ohne Mängel bei der Hauptuntersuchung ist weit unterdurchschnittlich. Bekannte Problemstellen sind brechende Fahrwerksfedern, ausgeschlagene Lenkgelenke und stark verschlissene Bremsbauteile.",
+          "check": "Fahrwerk, Lenkung und Bremsen vor dem Kauf von einer Werkstatt prüfen lassen und den Prüfbericht der letzten Hauptuntersuchung ansehen.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: Renault Clio (2005-2014) Benziner",
+              "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0169-renault-clio-2005-2014-benziner-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Beleuchtungsmängel bei der HU",
+          "affects": "Alle Clio III, laut TÜV-Report im ADAC-Bericht zu den Benzinern",
+          "detail": "Der Clio III fällt laut ADAC bei der Hauptuntersuchung in allen Bereichen der Beleuchtung auf.",
+          "check": "Alle Leuchten und Lichtfunktionen testen und den Prüfbericht der letzten Hauptuntersuchung ansehen.",
+          "severity": "gering",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: Renault Clio (2005-2014) Benziner",
+              "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0169-renault-clio-2005-2014-benziner-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Kurbelwellensensor und Wegfahrsperre bei frühen Jahrgängen",
+          "affects": "Laut ADAC-Bericht zu den Benzinern: Kurbelwellensensor bei Erstzulassung 2005–2008, Wegfahrsperre 2005",
+          "detail": "Kurbelwellensensor und Wegfahrsperre zählen laut ADAC bei den ersten Jahrgängen zu den häufigen Bauteilfehlern der Pannenstatistik.",
+          "check": "Startverhalten bei kaltem und warmem Motor prüfen und nach einem getauschten Kurbelwellensensor fragen.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: Renault Clio (2005-2014) Benziner",
+              "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0169-renault-clio-2005-2014-benziner-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Auspuff, Starterbatterie und Steuerkette bei späten Jahrgängen",
+          "affects": "Laut ADAC-Bericht zu den Benzinern: Auspuffrohr/-topf bei Erstzulassung 2012, Starterbatterie 2012–2014, Steuerkette 2014; Einstufung 2012 und 2013 „mittel“, 2014 „sehr schlecht“",
+          "detail": "Laut ADAC schneiden junge Clio III in der Pannenstatistik schlechter ab als ältere. Beim Jahrgang 2014, der als „sehr schlecht“ eingestuft ist, taucht auch die Steuerkette unter den häufigen Bauteilfehlern auf.",
+          "check": "Bei Jahrgängen ab 2012 Wartungs- und Reparaturbelege genau ansehen und beim Jahrgang 2014 nach der Steuerkette fragen.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: Renault Clio (2005-2014) Benziner",
+              "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0169-renault-clio-2005-2014-benziner-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Rückrufe: Steuergerät (Schalten) und Ventilkeile bei 1.2 16V und TCe 100",
+          "affects": "Rückrufe laut ADAC-Bericht zu den Benzinern: 12/2006 (Steuergerät, ungewolltes Schalten), 10/2011 (Motoren D4F 1.2 16V und D4FT TCe 100)",
+          "detail": "Im Dezember 2006 ging es um Anzeigefehler und eigenständiges Schalten in die dritte Fahrstufe oder in den manuellen Modus ohne Zutun des Fahrers, behoben durch Austausch des Steuergeräts. Im Oktober 2011 betraf der Rückruf Ventilkeile, die wegen unzureichender Materialeigenschaften verschleißen und die Ventilsteuerung stören können.",
+          "check": "Per Fahrgestellnummer beim Händler prüfen lassen, ob die Rückrufe erledigt sind.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: Renault Clio (2005-2014) Benziner",
+              "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0169-renault-clio-2005-2014-benziner-bericht.pdf"
+            }
+          ]
+        }
+      ],
+      "engines": {
+        "recommended": [
+          {
+            "name": "1.2 TCe (100 PS)",
+            "why": "Laut ADAC die Empfehlung: hält sich beim Kraftstoffverbrauch zurück und zieht dank Turbo kräftig durch."
+          }
+        ],
+        "caution": [
+          {
+            "name": "1.2 16V und 1.2 TCe 100 (Motoren D4F und D4FT)",
+            "why": "Laut ADAC Rückruf 10/2011: Die Ventilkeile können wegen unzureichender Materialeigenschaften verschleißen und die Ventilsteuerung stören; per Fahrgestellnummer klären, ob der Rückruf erledigt ist."
+          },
+          {
+            "name": "Benziner mit 65 und 75 PS",
+            "why": "Laut ADAC in der Stadt noch flott, bei häufigen Überlandfahrten besser eine etwas stärkere Version wählen."
+          }
+        ]
+      },
+      "tips": [
+        "Fahrwerksfedern, Lenkgelenke und Bremsen prüfen lassen: Laut TÜV-Report sind brechende Federn, ausgeschlagene Lenkgelenke und verschlissene Bremsbauteile bekannte Problemstellen.",
+        "Beleuchtung vollständig testen; der Clio III fällt bei der HU laut ADAC in allen Bereichen der Beleuchtung auf.",
+        "Bei Jahrgängen ab 2012, besonders 2014, nach Belegen zu Starterbatterie, Auspuffanlage und Steuerkette fragen."
+      ]
+    },
+    {
+      "id": "renault-clio-iv",
+      "name": "Clio IV",
+      "code": "X98",
+      "years": [2012, 2020],
+      "bodyTypes": ["schraegheck", "kombi"],
+      "fuels": ["petrol", "diesel"],
+      "seats": [5],
+      "automatic": true,
+      "typicalPriceEur": null,
+      "priceSource": null,
+      "strengths": [
+        "Sicheres, straffes Fahrverhalten und kräftige Bremsen.",
+        "Ordentliches Platzangebot vorn.",
+        "Sparsame und langlebige Dieselmotoren.",
+        "Großer Kofferraum beim Kombi (Grandtour)."
+      ],
+      "issues": [
+        {
+          "title": "Achsaufhängungen und Bremsen bei der HU",
+          "affects": "Alle Clio IV, laut TÜV-Report; teils schon bei der ersten Hauptuntersuchung",
+          "detail": "Der Clio IV schneidet beim TÜV leicht unterdurchschnittlich ab. Problematisch sind laut ADAC hauptsächlich die Achsaufhängungen, und die Funktion der Bremse entspricht bei der Hauptuntersuchung öfter nicht den Vorgaben.",
+          "check": "Achsaufhängungen und Bremsanlage von einer Werkstatt prüfen lassen und den Prüfbericht der letzten Hauptuntersuchung ansehen.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: Renault Clio (2012-2020)",
+              "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0280-renault-clio-2012-2020-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Pannenhäufung bei den Jahrgängen 2015 und 2016",
+          "affects": "Laut ADAC-Pannenstatistik 2025: Erstzulassung 2015 und 2016 „schlecht“; 2012–2014, 2017 und 2020 „mittel“; 2018 und 2019 „gut“",
+          "detail": "Laut ADAC erreicht der Clio IV in der Pannenstatistik nur unterdurchschnittliche Werte. Am schlechtesten schneiden die Erstzulassungen 2015 und 2016 ab, am besten 2018 und 2019.",
+          "check": "Bei Erstzulassung 2015 und 2016 besonders auf lückenlose Wartungs- und Reparaturbelege achten.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: Renault Clio (2012-2020)",
+              "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0280-renault-clio-2012-2020-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Starterbatterie fällt häufig aus",
+          "affects": "Laut ADAC-Pannenstatistik: Erstzulassung 2013–2020",
+          "detail": "Die Starterbatterie ist laut ADAC der einzige in der Pannenstatistik genannte häufige Bauteilfehler und taucht in allen Erstzulassungsjahren von 2013 bis 2020 auf.",
+          "check": "Das Alter der Batterie erfragen und das Startverhalten, auch bei Kälte, prüfen.",
+          "severity": "gering",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: Renault Clio (2012-2020)",
+              "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0280-renault-clio-2012-2020-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Rückrufe: Bremsschläuche, Bremssattel, Radnaben",
+          "affects": "Rückrufe laut ADAC-Bericht: 9/2014 und 8/2015 (Bremsschläuche, Radhausverkleidungen vorn), 2/2017 (Bremssattel vorne rechts), 4/2018 (vordere Radnaben)",
+          "detail": "Wegen nicht exakt eingepasster Radhausverkleidungen konnten Bremsschläuche scheuern und undicht werden (9/2014, 8/2015). Dazu kamen Rückrufe wegen eines möglichen Abreißens des Bremssattels vorne rechts durch einen platzenden Zylinder (2/2017) und wegen möglicher Rissbildung mit Bruchgefahr an den vorderen Radnaben (4/2018).",
+          "check": "Per Fahrgestellnummer beim Händler prüfen lassen, ob die Rückrufe erledigt sind.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: Renault Clio (2012-2020)",
+              "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0280-renault-clio-2012-2020-bericht.pdf"
+            }
+          ]
+        }
+      ],
+      "engines": {
+        "recommended": [
+          {
+            "name": "Dreizylinder-Turbo mit 90 PS (Benziner)",
+            "why": "Laut ADAC bringt er das Auto besser in Schwung als die schwächsten Motoren und ist für den Alltag in der Regel ausreichend kräftig und häufig am Gebrauchtwagenmarkt zu finden, spart aber nicht beim Kraftstoff."
+          },
+          {
+            "name": "1,2-Liter-Vierzylinder ab 118 PS (Benziner)",
+            "why": "Laut ADAC souveräne Fahrleistungen und gute Laufkultur."
+          },
+          {
+            "name": "Diesel mit 90 und 110 PS",
+            "why": "Laut ADAC viel souveräner als der schwächste Diesel mit 75 PS, der für den Alltag prinzipiell ausreicht; alle Diesel sind sparsam und langlebig."
+          }
+        ],
+        "caution": [
+          {
+            "name": "Benziner mit 64 bis 74 PS",
+            "why": "Laut ADAC haben die schwächsten Motoren etwas Mühe mit dem Clio und sind nicht sonderlich sparsam."
+          }
+        ]
+      },
+      "tips": [
+        "Achsaufhängungen und Bremsen prüfen lassen; sie fallen laut TÜV-Report teils schon bei der ersten Hauptuntersuchung auf.",
+        "Bei Erstzulassung 2015 und 2016 auf lückenlose Wartungs- und Reparaturbelege achten, denn diese Jahrgänge sind in der ADAC-Pannenstatistik als „schlecht“ eingestuft.",
+        "Beim Werkstattcheck auch Bremsschläuche und den Sitz der vorderen Radhausverkleidungen prüfen lassen (frühere Rückrufe).",
+        "Alter der Batterie und Startverhalten prüfen; die Starterbatterie ist laut ADAC der in der Pannenstatistik genannte häufige Bauteilfehler."
+      ]
+    },
+    {
+      "id": "renault-clio-v",
+      "name": "Clio V",
+      "code": null,
+      "years": [2019, 2025],
+      "bodyTypes": ["schraegheck"],
+      "fuels": ["petrol", "diesel", "hybrid", "lpg"],
+      "seats": [5],
+      "automatic": true,
+      "typicalPriceEur": null,
+      "priceSource": null,
+      "strengths": [],
+      "issues": [],
+      "engines": {
+        "recommended": [],
+        "caution": []
+      },
+      "tips": [
+        "Zu dieser Generation haben wir noch keine Schwachstellen ausgewertet. Lass das Auto vor dem Kauf in einer Werkstatt prüfen und Rückrufe per Fahrgestellnummer erfragen."
+      ]
+    }
+  ]
+}
