@@ -1,0 +1,127 @@
+{
+  "id": "audi-a4",
+  "make": "Audi",
+  "model": "A4",
+  "aliases": [
+    "a 4",
+    "a4",
+    "a4 allroad",
+    "a4 allroad quattro",
+    "a4 avant",
+    "a4 b8",
+    "a4 b9",
+    "a4 g-tron",
+    "a4 limousine"
+  ],
+  "segment": "mittelklasse",
+  "summary": "Hochwertig verarbeitete Mittelklasse als Limousine und Avant (Kombi), die laut ADAC sehr zuverlässig ist, im Kofferraum und im Fond aber eher eng bleibt.",
+  "ratings": {
+    "reliability": 5,
+    "reliabilityNote": "Laut ADAC-Pannenstatistik 2025 schneidet der A4 B9 in allen Erstzulassungsjahren von 2015 bis 2022 mit „sehr gut“ ab, und beim TÜV liegt er deutlich besser als der Durchschnitt. Die Bewertung beruht auf dem ADAC-Bericht zum A4 B9 (2015-2024).",
+    "reliabilitySources": [
+      {
+        "label": "ADAC Gebrauchtwageninfo: Audi A4 (2015-2024) Benziner",
+        "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0368-audi-a4-2015-2024-benziner-bericht.pdf"
+      }
+    ],
+    "runningCosts": 3,
+    "space": 3,
+    "comfort": 4
+  },
+  "generations": [
+    {
+      "id": "audi-a4-b8",
+      "name": "A4 B8",
+      "code": "B8",
+      "years": [2007, 2015],
+      "bodyTypes": ["limousine", "kombi"],
+      "fuels": ["petrol", "diesel"],
+      "seats": [5],
+      "automatic": true,
+      "typicalPriceEur": null,
+      "priceSource": null,
+      "strengths": [],
+      "issues": [],
+      "engines": {
+        "recommended": [],
+        "caution": []
+      },
+      "tips": [
+        "Zu dieser Generation haben wir noch keine Schwachstellen ausgewertet. Lass das Auto vor dem Kauf in einer Werkstatt prüfen und Rückrufe per Fahrgestellnummer erfragen."
+      ]
+    },
+    {
+      "id": "audi-a4-b9",
+      "name": "A4 B9",
+      "code": "B9",
+      "years": [2015, 2024],
+      "bodyTypes": ["limousine", "kombi"],
+      "fuels": ["petrol", "diesel", "cng", "hybrid"],
+      "seats": [5],
+      "automatic": true,
+      "typicalPriceEur": null,
+      "priceSource": null,
+      "strengths": [
+        "Hervorragende Verarbeitung und feine Materialien",
+        "Zuverlässige, wertstabile Technik",
+        "Sichere und agile Fahreigenschaften bei hohem Sicherheitsniveau",
+        "Hoher Fahrkomfort, Xenon-Scheinwerfer serienmäßig"
+      ],
+      "issues": [
+        {
+          "title": "Rückrufe: Airbags/Gurtstraffer, Vordersitz, Anhängevorrichtung",
+          "affects": "Rückrufe 12/2016 (Lehnenversteller Vordersitz), 3/2017 (Zündpillen Airbags und Gurtstraffer; beim 2.0 TFSI auch Zusatzkühlmittelpumpe), 5/2019 (Anhängevorrichtung) und 6/2020 (2.0 TFSI mit Mild-Hybridsystem: Riemenstartergenerator); laut A…",
+          "detail": "Laut ADAC gab es Rückrufe wegen nicht richtig befüllter Zündpillen für Airbags und Gurtstraffer (Verletzungsgefahr bei einem Unfall erhöht), einer möglicherweise fehlerhaften Schweißverbindung am Lehnenversteller des Vordersitzes und eines möglichen Bruchs des Sperrbolzens der Anhängevorrichtung. Beim 2.0 TFSI kamen Rückrufe zur Zusatzkühlmittelpumpe (kann überhitzen) und, mit Mild-Hybrid, zum Riemenstartergenerator (Kunststoffbeschichtung kann Risse bilden) hinzu.",
+          "check": "Per Fahrgestellnummer beim Händler prüfen lassen, ob die Rückrufe erledigt sind.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: Audi A4 (2015-2024) Benziner",
+              "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0368-audi-a4-2015-2024-benziner-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Achsaufhängungen und Feder-Dämpfer-Einheiten",
+          "affects": "A4 B9 insgesamt, ohne Eingrenzung auf bestimmte Motoren oder Baujahre (laut ADAC-Bericht zu den Benzinern)",
+          "detail": "Der TÜV bemängelt beim A4 B9 laut ADAC lediglich gelegentlich die Achsaufhängungen und die Feder-Dämpfer-Einheiten. Ansonsten gilt das Auto als sehr zuverlässig und haltbar.",
+          "check": "Bei der Probefahrt auf Fahrwerksgeräusche und Spiel achten und Achsaufhängungen sowie Feder-Dämpfer-Einheiten in der Werkstatt prüfen lassen.",
+          "severity": "gering",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: Audi A4 (2015-2024) Benziner",
+              "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0368-audi-a4-2015-2024-benziner-bericht.pdf"
+            }
+          ]
+        }
+      ],
+      "engines": {
+        "recommended": [
+          {
+            "name": "Benziner mit 190 PS sowie 245 bis 265 PS",
+            "why": "Laut ADAC merklich kraftvoller als der Basismotor und zudem häufig als Gebrauchtwagen zu finden."
+          },
+          {
+            "name": "Basisbenziner mit 150 PS",
+            "why": "Laut ADAC bereits ausreichend motorisiert."
+          },
+          {
+            "name": "g-tron (Erdgas, 170 PS, nur Avant)",
+            "why": "Laut ADAC ausreichende Fahrleistungen bei günstigen Kraftstoffkosten und schadstoffarmem Abgas."
+          }
+        ],
+        "caution": [
+          {
+            "name": "S4 und RS4 (Sechszylinder)",
+            "why": "Laut ADAC deutlich höherer Kraftstoffverbrauch und viel höhere Kosten im Einkauf und Unterhalt als bei den zivilen Varianten."
+          }
+        ]
+      },
+      "tips": [
+        "Achsaufhängungen und Feder-Dämpfer-Einheiten prüfen lassen, denn hier bemängelt der TÜV gelegentlich etwas.",
+        "Rückrufstatus per Fahrgestellnummer erfragen, besonders zu Airbags und Gurtstraffern (3/2017) und bei Anhängerkupplung zum Sperrbolzen (5/2019).",
+        "Beim 2.0 TFSI nachfragen, ob die Rückrufe zur Zusatzkühlmittelpumpe (3/2017) und, mit Mild-Hybrid, zum Riemenstartergenerator (6/2020) erledigt wurden."
+      ]
+    }
+  ]
+}

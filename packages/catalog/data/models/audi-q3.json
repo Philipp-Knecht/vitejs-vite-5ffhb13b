@@ -1,0 +1,159 @@
+{
+  "id": "audi-q3",
+  "make": "Audi",
+  "model": "Q3",
+  "aliases": ["q 3", "q3", "q3 8u", "q3 f3", "q3 quattro", "q3 sportback"],
+  "segment": "suv_kompakt",
+  "summary": "Kompakter, hochwertig verarbeiteter Premium-SUV, der laut ADAC zuverlässig ist, aber nur einen relativ kleinen Kofferraum bietet.",
+  "ratings": {
+    "reliability": 4,
+    "reliabilityNote": "Laut ADAC-Pannenstatistik 2025 hatte der Q3 der zweiten Generation (Erstzulassung 2019 bis 2022) weniger Pannen als die meisten gleich alten Autos, die erste Generation (2015 bis 2017) gehört sogar zu den 15 Prozent mit den wenigsten Pannen; die Pannenstatistik 2026 zählt den Q3 zu den zuverlässigsten seiner Klasse. Beim TÜV schneidet er laut ADAC weit überdurchschnittlich ab.",
+    "reliabilitySources": [
+      {
+        "label": "ADAC Gebrauchtwageninfo: Audi Q3 (2011-2018) Benziner",
+        "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0226-audi-q3-2011-2018-benziner-bericht.pdf"
+      },
+      {
+        "label": "ADAC Pannenstatistik 2025",
+        "url": "https://assets.adac.de/image/upload/v1776261444/ADAC-eV/KOR/Text/PDF/Pannenstatistik_2025_Bericht_czmf9q.pdf"
+      },
+      {
+        "label": "ADAC Pannenstatistik 2026",
+        "url": "https://www.adac.de/rund-ums-fahrzeug/unfall-schaden-panne/adac-pannenstatistik-2026/"
+      }
+    ],
+    "runningCosts": 3,
+    "space": 3,
+    "comfort": 4
+  },
+  "generations": [
+    {
+      "id": "audi-q3-8u",
+      "name": "Q3 8U",
+      "code": "8U",
+      "years": [2011, 2018],
+      "bodyTypes": ["suv"],
+      "fuels": ["petrol", "diesel"],
+      "seats": [5],
+      "automatic": true,
+      "typicalPriceEur": null,
+      "priceSource": null,
+      "strengths": [
+        "Gute Verarbeitung und zuverlässige Technik",
+        "Hohes Sicherheitsniveau, sichere Fahreigenschaften und gute Bremsen",
+        "Einfache Bedienung und bequemer Ein- und Ausstieg",
+        "Kompakte Außenmaße und vorn gutes Platzangebot"
+      ],
+      "issues": [
+        {
+          "title": "Hoher Ölverbrauch beim 2.0 TFSI",
+          "affects": "2.0 TFSI (170 bis 220 PS); laut ADAC-Bericht zu den Benzinern",
+          "detail": "Der ADAC nennt einen hohen Ölverbrauch als Schwäche der 2.0 TFSI. Der Q3 insgesamt fällt in der Pannenstatistik dagegen nicht negativ auf.",
+          "check": "Ölstand prüfen und den Verkäufer nach Ölverbrauch und dem Nachfüllen zwischen den Wartungen fragen.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: Audi Q3 (2011-2018) Benziner",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0226-audi-q3-2011-2018-benziner-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Rückrufe: Bremslichter bei Feststellbremse, Beifahrerairbag",
+          "affects": "Rückrufe 7/2017 (Betätigen der Feststellbremse während der Fahrt), 2/2018 (Beifahrerairbag) und 8/2019 (Body-Control-Modul, vordere LED-Blinker); laut ADAC-Bericht zu den Benzinern",
+          "detail": "Laut ADAC leuchten beim Betätigen der Feststellbremse während der Fahrt die Bremslichter nicht, und der Beifahrerairbag wird bei einem Unfall unter Umständen nicht mit dem erforderlichen Gasvolumen gefüllt. Zudem kann eine fehlerhafte Konfiguration des Body-Control-Moduls dazu führen, dass der Ausfall eines vorderen LED-Blinkers nicht angezeigt wird.",
+          "check": "Per Fahrgestellnummer beim Händler prüfen lassen, ob die Rückrufe erledigt sind.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: Audi Q3 (2011-2018) Benziner",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0226-audi-q3-2011-2018-benziner-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Gebrochene Federn und verschlissene Bremsscheiben bei älteren Modellen",
+          "affects": "Ältere Q3, Baujahre vom Bericht nicht genauer genannt; laut ADAC-Bericht zu den Benzinern",
+          "detail": "Im TÜV-Report fallen beim sonst nahezu mängelfreien Q3 vereinzelt gebrochene Federn sowie verschlissene und rostige Bremsscheiben auf.",
+          "check": "Federn und Bremsscheiben bei der Besichtigung prüfen lassen und bei der Probefahrt auf Geräusche und das Bremsverhalten achten.",
+          "severity": "gering",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: Audi Q3 (2011-2018) Benziner",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0226-audi-q3-2011-2018-benziner-bericht.pdf"
+            }
+          ]
+        }
+      ],
+      "engines": {
+        "recommended": [
+          {
+            "name": "1.4 TFSI mit 150 PS (mit Zylinderabschaltung)",
+            "why": "Laut ADAC die Empfehlung: guter Kompromiss aus Leistung und Verbrauch."
+          }
+        ],
+        "caution": [
+          {
+            "name": "2.0 TFSI (170 bis 220 PS)",
+            "why": "Laut ADAC neigen sie zu hohem Ölverbrauch und brauchen einen Extra-Schluck Kraftstoff, haben dafür aber spürbar mehr Druck."
+          },
+          {
+            "name": "1.4 TFSI mit 125 PS",
+            "why": "Laut ADAC selten und im Prinzip ausreichend, souverän ist man damit aber nicht unterwegs."
+          },
+          {
+            "name": "RS Q3 (Fünfzylinder)",
+            "why": "Laut ADAC grandiose Fahrleistungen, denen hohe Unterhaltskosten gegenüberstehen."
+          }
+        ]
+      },
+      "tips": [
+        "Beim 2.0 TFSI den Ölstand prüfen und nach Ölverbrauch und Nachfüllen fragen.",
+        "Bei älteren Fahrzeugen Federn auf Bruch und Bremsscheiben auf Rost und Verschleiß ansehen lassen.",
+        "Rückrufe zu Feststellbremse und Bremslichtern (7/2017) sowie zum Beifahrerairbag (2/2018) per Fahrgestellnummer erfragen."
+      ]
+    },
+    {
+      "id": "audi-q3-f3",
+      "name": "Q3 F3",
+      "code": "F3",
+      "years": [2018, 2025],
+      "bodyTypes": ["suv"],
+      "fuels": ["petrol", "diesel", "plugin_hybrid"],
+      "seats": [5],
+      "automatic": true,
+      "typicalPriceEur": null,
+      "priceSource": null,
+      "strengths": [],
+      "issues": [],
+      "engines": {
+        "recommended": [],
+        "caution": []
+      },
+      "tips": [
+        "Zu dieser Generation haben wir noch keine Schwachstellen ausgewertet. Lass das Auto vor dem Kauf in einer Werkstatt prüfen und Rückrufe per Fahrgestellnummer erfragen."
+      ]
+    },
+    {
+      "id": "audi-q3-fj",
+      "name": "Q3 FJ",
+      "code": "FJ",
+      "years": [2025, null],
+      "bodyTypes": ["suv"],
+      "fuels": ["petrol", "diesel"],
+      "seats": [5],
+      "automatic": true,
+      "typicalPriceEur": null,
+      "priceSource": null,
+      "strengths": [],
+      "issues": [],
+      "engines": {
+        "recommended": [],
+        "caution": []
+      },
+      "tips": [
+        "Für diese Generation liegen noch wenige Gebrauchtwagen-Erfahrungen vor; Rückrufe per Fahrgestellnummer erfragen."
+      ]
+    }
+  ]
+}

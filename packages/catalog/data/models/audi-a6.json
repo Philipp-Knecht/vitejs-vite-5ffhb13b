@@ -1,0 +1,332 @@
+{
+  "id": "audi-a6",
+  "make": "Audi",
+  "model": "A6",
+  "aliases": [
+    "a 6",
+    "a6",
+    "a6 allroad",
+    "a6 allroad quattro",
+    "a6 avant",
+    "a6 c6",
+    "a6 c7",
+    "a6 c8",
+    "a6 c9",
+    "a6 limousine"
+  ],
+  "segment": "obere_mittelklasse",
+  "summary": "Komfortable, hochwertig verarbeitete Businessklasse als Limousine und Avant für lange Strecken, die laut ADAC sehr zuverlässig, aber teuer in Kauf und Unterhalt ist.",
+  "ratings": {
+    "reliability": 4,
+    "reliabilityNote": "Laut ADAC-Pannenstatistik liegt der A6 C7 (Erstzulassung 2011 bis 2018) überwiegend bei „sehr gut“ und der jüngere A6 C8 (2018 bis 2022) durchgehend bei „gut“, und im TÜV-Report schneidet der A6 deutlich besser ab als der Durchschnitt. Weil die jüngere Generation stärker zählt, ergibt sich insgesamt „gut“.",
+    "reliabilitySources": [
+      {
+        "label": "ADAC Gebrauchtwageninfo: Audi A6 (2018-2025) Diesel",
+        "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0551-audi-a6-2018-2025-diesel-bericht.pdf"
+      },
+      {
+        "label": "ADAC Gebrauchtwageninfo: Audi A6 (2018-2025) Benziner",
+        "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0540-audi-a6-2018-2025-benziner-bericht.pdf"
+      },
+      {
+        "label": "ADAC Gebrauchtwageninfo: Audi A6 (2011-2018) Diesel",
+        "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0275-audi-a6-2011-2018-diesel-bericht.pdf"
+      },
+      {
+        "label": "ADAC Gebrauchtwageninfo: Audi A6 (2011-2018) Benziner",
+        "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0274-audi-a6-2011-2018-benziner-bericht.pdf"
+      }
+    ],
+    "runningCosts": 2,
+    "space": 4,
+    "comfort": 5
+  },
+  "generations": [
+    {
+      "id": "audi-a6-c6",
+      "name": "A6 C6",
+      "code": "C6",
+      "years": [2004, 2011],
+      "bodyTypes": ["limousine", "kombi"],
+      "fuels": ["petrol", "diesel"],
+      "seats": [5],
+      "automatic": true,
+      "typicalPriceEur": null,
+      "priceSource": null,
+      "strengths": [],
+      "issues": [],
+      "engines": {
+        "recommended": [],
+        "caution": []
+      },
+      "tips": [
+        "Zu dieser Generation haben wir noch keine Schwachstellen ausgewertet. Lass das Auto vor dem Kauf in einer Werkstatt prüfen und Rückrufe per Fahrgestellnummer erfragen."
+      ]
+    },
+    {
+      "id": "audi-a6-c7",
+      "name": "A6 C7",
+      "code": "C7",
+      "years": [2011, 2018],
+      "bodyTypes": ["limousine", "kombi"],
+      "fuels": ["petrol", "diesel", "hybrid"],
+      "seats": [5],
+      "automatic": true,
+      "typicalPriceEur": null,
+      "priceSource": null,
+      "strengths": [
+        "Sehr gute Verarbeitung und zuverlässige Technik",
+        "Wertstabil",
+        "Sichere Fahreigenschaften und hohes Sicherheitsniveau",
+        "Bequeme Sitze und gutes Platzangebot"
+      ],
+      "issues": [
+        {
+          "title": "Rückrufe: Bremskraftverstärker, Airbags, Kraftstoffdämpfe, Anhängevorrichtung",
+          "affects": "Rückrufe 8/2014 (3.0 TDI: Unterdruck-Bremskraftverstärker), 1/2015 (3.0 V6 TFSI: Einspritzleitungen und Rail), 3/2017 (Airbags und Gurtstraffer), 11/2018 (3.0 TDI und 4.2 TDI: Steuerungssoftware) und 5/2019 (Anhängevorrichtung)",
+          "detail": "Laut ADAC können Öldämpfe die Membran des Bremskraftverstärkers schädigen (3.0 TDI), wegen zu großer Toleranzen an den Dichtungsstellen von Einspritzleitungen und Rail Kraftstoffdämpfe austreten (3.0 V6 TFSI), Zündpillen von Airbags und Gurtstraffern nicht richtig befüllt sein und der Sperrbolzen der Anhängevorrichtung brechen. Beim 3.0 TDI und 4.2 TDI gab es außerdem einen Rückruf wegen einer Steuerungssoftware, die von den Zulassungsbehörden als unzulässig bewertet wird.",
+          "check": "Per Fahrgestellnummer beim Händler prüfen lassen, ob die Rückrufe erledigt sind.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: Audi A6 (2011-2018) Diesel",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0275-audi-a6-2011-2018-diesel-bericht.pdf"
+            },
+            {
+              "label": "ADAC Gebrauchtwageninfo: Audi A6 (2011-2018) Benziner",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0274-audi-a6-2011-2018-benziner-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Abgasanlage (Auspuffrohr/-topf)",
+          "affects": "A6 C7 (Diesel und Benziner); Auspuffrohr/-topf bei Erstzulassung 2013 als häufiger Bauteilfehler",
+          "detail": "Im TÜV-Report bereitet beim A6 am ehesten die Abgasanlage Sorgen, und der ADAC führt Auspuffrohr bzw. -topf bei Erstzulassung 2013 unter den häufigen Bauteilfehlern.",
+          "check": "Auspuffrohr und -topf auf Schäden und Undichtigkeiten ansehen lassen und den Bericht der letzten Hauptuntersuchung prüfen.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: Audi A6 (2011-2018) Diesel",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0275-audi-a6-2011-2018-diesel-bericht.pdf"
+            },
+            {
+              "label": "ADAC Gebrauchtwageninfo: Audi A6 (2011-2018) Benziner",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0274-audi-a6-2011-2018-benziner-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Automatikgetriebe",
+          "affects": "Erstzulassung 2011 (Diesel und Benziner); etwa 90 Prozent aller A6 haben Automatik",
+          "detail": "Der ADAC führt das Automatikgetriebe bei Erstzulassung 2011 unter den häufigen Bauteilfehlern; für spätere Jahrgänge nennt er es nicht.",
+          "check": "Auf der Probefahrt auf ruckfreies, zügiges Schalten achten und Nachweise über Wartung und Reparaturen am Getriebe verlangen.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: Audi A6 (2011-2018) Diesel",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0275-audi-a6-2011-2018-diesel-bericht.pdf"
+            },
+            {
+              "label": "ADAC Gebrauchtwageninfo: Audi A6 (2011-2018) Benziner",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0274-audi-a6-2011-2018-benziner-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Einspritzdüsen/Injektoren",
+          "affects": "Erstzulassung 2012 bis 2013 (Diesel und Benziner)",
+          "detail": "Einspritzdüsen bzw. Injektoren stehen bei den Erstzulassungsjahren 2012 und 2013 auf der ADAC-Liste häufiger Bauteilfehler.",
+          "check": "Auf unruhigen Motorlauf, Ruckeln oder Leistungsverlust achten und den Fehlerspeicher auslesen lassen.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: Audi A6 (2011-2018) Diesel",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0275-audi-a6-2011-2018-diesel-bericht.pdf"
+            },
+            {
+              "label": "ADAC Gebrauchtwageninfo: Audi A6 (2011-2018) Benziner",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0274-audi-a6-2011-2018-benziner-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Generator",
+          "affects": "Erstzulassung 2018 (Diesel und Benziner)",
+          "detail": "Der Generator steht beim Erstzulassungsjahr 2018 auf der ADAC-Liste häufiger Bauteilfehler; fällt er aus, kann das zur Panne führen.",
+          "check": "Auf Warnleuchten für Batterie und Ladesystem achten und die Ladespannung in der Werkstatt prüfen lassen.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: Audi A6 (2011-2018) Diesel",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0275-audi-a6-2011-2018-diesel-bericht.pdf"
+            },
+            {
+              "label": "ADAC Gebrauchtwageninfo: Audi A6 (2011-2018) Benziner",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0274-audi-a6-2011-2018-benziner-bericht.pdf"
+            }
+          ]
+        }
+      ],
+      "engines": {
+        "recommended": [
+          {
+            "name": "Vierzylinder-Diesel mit 177 bis 190 PS (u. a. „Ultra“)",
+            "why": "Laut ADAC genug Kraft, um den großen A6 nachdrücklich anzuschieben; die „Ultra“-Modelle bleiben dabei sehr sparsam."
+          },
+          {
+            "name": "Sechszylinder-Diesel (3.0 TDI), am besten mit quattro",
+            "why": "Laut ADAC hervorragende Laufkultur und ab 245 PS sehr souveräne Fahrleistungen bei moderatem Verbrauch; mit quattro empfehlenswert, weil der Frontantrieb vom Drehmoment schnell überfordert ist."
+          },
+          {
+            "name": "Vierzylinder-Benziner mit 180 bis 252 PS",
+            "why": "Laut ADAC bereits genug Kraft, um den großen A6 nachdrücklich anzuschieben."
+          }
+        ],
+        "caution": [
+          {
+            "name": "Diesel mit 136 und 150 PS",
+            "why": "Laut ADAC reichen sie prinzipiell aus, passen aber nicht so recht zum Anspruch des großen Audi."
+          },
+          {
+            "name": "Sechszylinder-Benziner",
+            "why": "Laut ADAC spürbar mehr Druck, aber auch deutlich mehr Kraftstoffverbrauch."
+          },
+          {
+            "name": "S6 und RS6 (Achtzylinder, nur Avant)",
+            "why": "Laut ADAC im Einkauf und Unterhalt sehr teuer und daher nur für Liebhaber eine gute Wahl."
+          }
+        ]
+      },
+      "tips": [
+        "Abgasanlage (Auspuffrohr und -topf) genau ansehen, denn sie fällt laut TÜV-Report am ehesten auf.",
+        "Bei Automatik (rund 90 Prozent der A6) auf der Probefahrt auf ruckfreies Schalten achten, vor allem bei Erstzulassung 2011.",
+        "Bei 3.0 TDI und 4.2 TDI nach den Rückrufen zum Bremskraftverstärker (nur 3.0 TDI, 8/2014) und zur Steuerungssoftware (11/2018) fragen.",
+        "Viele A6 fahren hohe Laufleistungen; Serviceheft und Rechnungen auf Lückenlosigkeit prüfen."
+      ]
+    },
+    {
+      "id": "audi-a6-c8",
+      "name": "A6 C8",
+      "code": "C8",
+      "years": [2018, 2025],
+      "bodyTypes": ["limousine", "kombi"],
+      "fuels": ["petrol", "diesel", "plugin_hybrid", "hybrid"],
+      "seats": [5],
+      "automatic": true,
+      "typicalPriceEur": null,
+      "priceSource": null,
+      "strengths": [
+        "Vorbildliche Verarbeitung und hochwertige Anmutung",
+        "Hoher Fahrkomfort",
+        "Haltbare und zuverlässige Technik",
+        "Gut nutzbarer Kofferraum (Kombi)"
+      ],
+      "issues": [
+        {
+          "title": "Rückrufe: Panoramadach-Verklebung",
+          "affects": "Rückruf 12/2018 bei Fahrzeugen mit Panoramadach (Diesel und Benziner)",
+          "detail": "Laut ADAC kann die Verklebung des hinteren Glasabschnitts im Panoramadach die erforderliche Haftkraft unterschreiten. Der Bericht nennt nur diesen Rückruf; spätere Rückrufe sind möglich.",
+          "check": "Per Fahrgestellnummer beim Händler prüfen lassen, ob die Rückrufe erledigt sind.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: Audi A6 (2018-2025) Diesel",
+              "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0551-audi-a6-2018-2025-diesel-bericht.pdf"
+            },
+            {
+              "label": "ADAC Gebrauchtwageninfo: Audi A6 (2018-2025) Benziner",
+              "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0540-audi-a6-2018-2025-benziner-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Generator",
+          "affects": "Erstzulassung 2018 bis 2020 (Diesel und Benziner)",
+          "detail": "Der Generator steht bei den Erstzulassungsjahren 2018 bis 2020 auf der ADAC-Liste häufiger Bauteilfehler; fällt er aus, kann das zur Panne führen.",
+          "check": "Nach Ausfällen von Generator oder Batterie fragen, auf Warnleuchten achten und die Ladespannung in der Werkstatt prüfen lassen.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: Audi A6 (2018-2025) Diesel",
+              "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0551-audi-a6-2018-2025-diesel-bericht.pdf"
+            },
+            {
+              "label": "ADAC Gebrauchtwageninfo: Audi A6 (2018-2025) Benziner",
+              "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0540-audi-a6-2018-2025-benziner-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Defekte Achsaufhängungen",
+          "affects": "A6 C8 insgesamt (Diesel und Benziner), ohne Eingrenzung auf bestimmte Motoren oder Baujahre",
+          "detail": "Laut TÜV-Report verwehren defekte Achsaufhängungen teilweise eine neue Plakette. In fast allen anderen Bereichen liegt der A6 laut ADAC trotz weit überdurchschnittlicher Laufleistungen im grünen Bereich.",
+          "check": "Bei der Probefahrt auf Fahrwerksgeräusche und Spiel achten, die Achsaufhängungen auf der Hebebühne prüfen lassen und den Bericht der letzten Hauptuntersuchung ansehen.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: Audi A6 (2018-2025) Diesel",
+              "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0551-audi-a6-2018-2025-diesel-bericht.pdf"
+            },
+            {
+              "label": "ADAC Gebrauchtwageninfo: Audi A6 (2018-2025) Benziner",
+              "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0540-audi-a6-2018-2025-benziner-bericht.pdf"
+            }
+          ]
+        }
+      ],
+      "engines": {
+        "recommended": [
+          {
+            "name": "40 TDI (204 PS)",
+            "why": "Laut ADAC die Empfehlung für den Durchschnittsfahrer: Verbrauch kaum höher als beim Basisdiesel, Fahrleistungen völlig ausreichend und sehr häufig auf dem Markt."
+          },
+          {
+            "name": "45 TFSI (245 bzw. 265 PS)",
+            "why": "Laut ADAC die Empfehlung beim Benziner: druckvolle Fahrleistungen bei begrenztem Verbrauch und häufig verfügbar."
+          }
+        ],
+        "caution": [
+          {
+            "name": "45 TDI und 50 TDI (Sechszylinder, 231 bis 286 PS)",
+            "why": "Laut ADAC im Einkauf und Unterhalt nochmals teurer, zudem teils unharmonisches Anfahren und überraschend wenig Druck aus dem Drehzahlkeller."
+          },
+          {
+            "name": "55 TFSI (Sechszylinder)",
+            "why": "Laut ADAC im Einkauf und Unterhalt nochmals teurer als der völlig ausreichende Vierzylinder 45 TFSI."
+          },
+          {
+            "name": "S6 und RS6",
+            "why": "Laut ADAC deutlich teurer; der RS6 (mindestens 600 PS) ist im Einkauf und Unterhalt extrem teuer und nur für zahlungskräftige Kunden geeignet."
+          }
+        ]
+      },
+      "tips": [
+        "Bei Fahrzeugen mit Panoramadach nachfragen, ob der Rückruf zur Dachverklebung (12/2018) erledigt ist.",
+        "Achsaufhängungen prüfen lassen und den Bericht der letzten Hauptuntersuchung ansehen.",
+        "Gebrauchte A6 haben oft hohe Laufleistungen; Serviceheft und Rechnungen auf Lückenlosigkeit prüfen.",
+        "Bei Sechszylinder-Dieseln (45 TDI, 50 TDI) auf der Probefahrt das Anfahren aus dem Stand prüfen."
+      ]
+    },
+    {
+      "id": "audi-a6-c9",
+      "name": "A6 C9",
+      "code": "C9",
+      "years": [2025, null],
+      "bodyTypes": ["limousine", "kombi"],
+      "fuels": ["petrol", "diesel", "hybrid"],
+      "seats": [5],
+      "automatic": true,
+      "typicalPriceEur": null,
+      "priceSource": null,
+      "strengths": [],
+      "issues": [],
+      "engines": {
+        "recommended": [],
+        "caution": []
+      },
+      "tips": [
+        "Für diese Generation liegen noch wenige Gebrauchtwagen-Erfahrungen vor; Rückrufe per Fahrgestellnummer erfragen."
+      ]
+    }
+  ]
+}

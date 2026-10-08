@@ -1,0 +1,342 @@
+{
+  "id": "kia-ceed",
+  "make": "Kia",
+  "model": "Ceed",
+  "aliases": [
+    "cee d",
+    "cee'd",
+    "cee'd sw",
+    "ceed",
+    "ceed sportswagon",
+    "ceed sw",
+    "cee´d",
+    "cee’d",
+    "pro cee'd",
+    "pro_cee'd",
+    "proceed",
+    "xceed"
+  ],
+  "segment": "kompakt",
+  "summary": "Der Kia Ceed (früher cee'd) ist ein unaufgeregter Kompaktwagen mit einfacher Bedienung und gutem Platzangebot als Schrägheck oder Kombi, in der dritten Generation auch als ProCeed und XCeed.",
+  "ratings": {
+    "reliability": 4,
+    "reliabilityNote": "Laut ADAC-Pannenstatistik 2025 hatte der Ceed der dritten Generation (Erstzulassung 2018 bis 2022, mit XCeed) in jedem Jahrgang weniger Pannen als die meisten gleich alten Autos. Den cee'd JD sah der ADAC im Mittelfeld, der TÜV-Report fällt laut ADAC leicht unterdurchschnittlich aus.",
+    "reliabilitySources": [
+      {
+        "label": "ADAC Gebrauchtwageninfo: KIA cee´d (2012-2018)",
+        "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0335-kia-ceed-2012-2018-bericht.pdf"
+      },
+      {
+        "label": "ADAC Gebrauchtwageninfo: KIA cee´d (2007-2013) Benziner",
+        "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0305-kia-ceed-2007-2013-benziner-bericht.pdf"
+      },
+      {
+        "label": "ADAC Gebrauchtwageninfo: KIA cee´d (2007-2013) Diesel",
+        "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0306-kia-ceed-2007-2013-diesel-bericht.pdf"
+      },
+      {
+        "label": "ADAC Pannenstatistik 2025",
+        "url": "https://assets.adac.de/image/upload/v1776261444/ADAC-eV/KOR/Text/PDF/Pannenstatistik_2025_Bericht_czmf9q.pdf"
+      }
+    ],
+    "runningCosts": 4,
+    "space": 4,
+    "comfort": 4
+  },
+  "generations": [
+    {
+      "id": "kia-ceed-ed",
+      "name": "cee'd ED",
+      "code": "ED",
+      "years": [2007, 2013],
+      "bodyTypes": ["schraegheck", "kombi"],
+      "fuels": ["petrol", "diesel", "lpg"],
+      "seats": [5],
+      "automatic": true,
+      "typicalPriceEur": null,
+      "priceSource": null,
+      "strengths": [
+        "Gute Platzverhältnisse",
+        "Problemlose Bedienung",
+        "Sichere Fahreigenschaften",
+        "Bequeme Sitze"
+      ],
+      "issues": [
+        {
+          "title": "Steuerkette",
+          "affects": "Erstzulassungen 2009–2010; laut ADAC-Berichten zu Benzinern und Dieseln, Motor nicht näher genannt",
+          "detail": "Laut ADAC zählt die Steuerkette bei den Erstzulassungen 2009 und 2010 zu den häufigen Bauteilfehlern der Pannenstatistik. Defekte an der Steuerkette können zu aufwendigen Motorreparaturen führen.",
+          "check": "Nach Nachweisen über Reparaturen an der Steuerkette fragen und beim Kaltstart auf rasselnde Geräusche aus dem Motor achten.",
+          "severity": "hoch",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: KIA cee´d (2007-2013) Benziner",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0305-kia-ceed-2007-2013-benziner-bericht.pdf"
+            },
+            {
+              "label": "ADAC Gebrauchtwageninfo: KIA cee´d (2007-2013) Diesel",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0306-kia-ceed-2007-2013-diesel-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Kraftstoffpumpe",
+          "affects": "Erstzulassungen 2009–2010; laut ADAC-Berichten zu Benzinern und Dieseln, Motor nicht näher genannt",
+          "detail": "Laut ADAC gehört die Kraftstoffpumpe bei den Erstzulassungen 2009 und 2010 zu den häufigen Bauteilfehlern der Pannenstatistik. Fällt sie aus, bleibt das Auto liegen.",
+          "check": "Nach bisherigen Reparaturen an der Kraftstoffpumpe fragen und bei der Probefahrt auf Startprobleme oder Ruckeln achten.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: KIA cee´d (2007-2013) Benziner",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0305-kia-ceed-2007-2013-benziner-bericht.pdf"
+            },
+            {
+              "label": "ADAC Gebrauchtwageninfo: KIA cee´d (2007-2013) Diesel",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0306-kia-ceed-2007-2013-diesel-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Zündkerzen und Zündspulen",
+          "affects": "Benziner, Erstzulassungen 2009–2012",
+          "detail": "Laut ADAC zählen Zündkerzen und Zündspulen bei den Erstzulassungen 2009 bis 2012 zu den häufigen Bauteilfehlern der Pannenstatistik.",
+          "check": "Auf unrunden Motorlauf oder Aussetzer achten und im Serviceheft den letzten Zündkerzenwechsel prüfen.",
+          "severity": "gering",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: KIA cee´d (2007-2013) Benziner",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0305-kia-ceed-2007-2013-benziner-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Achsaufhängungen",
+          "affects": "Baujahre 2007–2013 (laut TÜV-Report und Minusliste der ADAC-Berichte zu Benzinern und Dieseln)",
+          "detail": "Laut ADAC bemängelt der TÜV beim cee´d die Achsaufhängungen häufig; der Bericht führt „anfällige Achsaufhängungen“ unter den Schwächen auf.",
+          "check": "Fahrwerk auf Klappern, Spiel und Rost prüfen und sich den letzten HU-Bericht zeigen lassen.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: KIA cee´d (2007-2013) Benziner",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0305-kia-ceed-2007-2013-benziner-bericht.pdf"
+            },
+            {
+              "label": "ADAC Gebrauchtwageninfo: KIA cee´d (2007-2013) Diesel",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0306-kia-ceed-2007-2013-diesel-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Bremsscheiben und Feststellbremse",
+          "affects": "Baujahre 2007–2013 (laut TÜV-Report der ADAC-Berichte zu Benzinern und Dieseln)",
+          "detail": "Laut ADAC bemängelt der TÜV beim cee´d Bremsscheiben und Feststellbremse; mängelfreie Fahrzeuge sind bei der Hauptuntersuchung deutlich seltener als im Durchschnitt.",
+          "check": "Bremsscheiben auf Verschleiß und Rost prüfen und testen, ob die Feststellbremse sicher hält und sich sauber löst.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: KIA cee´d (2007-2013) Benziner",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0305-kia-ceed-2007-2013-benziner-bericht.pdf"
+            },
+            {
+              "label": "ADAC Gebrauchtwageninfo: KIA cee´d (2007-2013) Diesel",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0306-kia-ceed-2007-2013-diesel-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Beleuchtung beim TÜV",
+          "affects": "Baujahre 2007–2013 (laut TÜV-Report der ADAC-Berichte zu Benzinern und Dieseln)",
+          "detail": "Laut ADAC schneidet der cee´d beim Licht in der TÜV-Statistik durchweg schlecht ab; die Beleuchtung zählt zu den Bereichen, die zu viele Probleme verursachen.",
+          "check": "Alle Lichtfunktionen und die Scheinwerfereinstellung prüfen.",
+          "severity": "gering",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: KIA cee´d (2007-2013) Benziner",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0305-kia-ceed-2007-2013-benziner-bericht.pdf"
+            },
+            {
+              "label": "ADAC Gebrauchtwageninfo: KIA cee´d (2007-2013) Diesel",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0306-kia-ceed-2007-2013-diesel-bericht.pdf"
+            }
+          ]
+        }
+      ],
+      "engines": {
+        "recommended": [
+          {
+            "name": "1.6 Benziner (ab 122 PS)",
+            "why": "Laut ADAC etwas kräftiger als der 1.4 bei kaum höherem Verbrauch und gebraucht oft zu finden; für guten Durchzug muss er aber auf Drehzahl gehalten werden."
+          },
+          {
+            "name": "Diesel (115 PS)",
+            "why": "Laut ADAC völlig ausreichend: gute Fahrleistungen bei ähnlich geringem Verbrauch wie die schwächere Variante, gebraucht häufig zu finden."
+          },
+          {
+            "name": "Diesel (90 PS)",
+            "why": "Laut ADAC schiebt er den cee´d überraschend kräftig an und genügt in den meisten Situationen."
+          },
+          {
+            "name": "LPG-Versionen",
+            "why": "Laut ADAC eine Alternative mit günstigen Kraftstoffkosten."
+          }
+        ],
+        "caution": [
+          {
+            "name": "1.4 Benziner (90 bis 109 PS)",
+            "why": "Laut ADAC wirkt der Einstiegsbenziner in dieser Fahrzeugklasse relativ kraftlos und überzeugt auch nicht durch Sparsamkeit."
+          },
+          {
+            "name": "Motoren der Erstzulassungen 2009–2010",
+            "why": "Laut ADAC nennt die Pannenstatistik für diese Jahrgänge Steuerkette und Kraftstoffpumpe unter den häufigen Bauteilfehlern."
+          }
+        ]
+      },
+      "tips": [
+        "Bei Erstzulassungen 2009–2010 nach Reparaturen an Steuerkette und Kraftstoffpumpe fragen und das Startverhalten prüfen.",
+        "Achsaufhängungen, Bremsscheiben und Feststellbremse genau ansehen: Der TÜV bemängelt sie laut ADAC häufig.",
+        "Ausstattung prüfen: Laut ADAC haben die Modelle LX Basis und Attract nur eine magere Grundausstattung und teilweise nicht einmal ESP; LX, EX sowie die Sondermodelle Vision und Spirit sind besser ausgestattet."
+      ]
+    },
+    {
+      "id": "kia-ceed-jd",
+      "name": "cee'd JD",
+      "code": "JD",
+      "years": [2012, 2018],
+      "bodyTypes": ["schraegheck", "kombi"],
+      "fuels": ["petrol", "diesel"],
+      "seats": [5],
+      "automatic": true,
+      "typicalPriceEur": null,
+      "priceSource": null,
+      "strengths": [
+        "Gute Platzverhältnisse",
+        "Problemlose Bedienung",
+        "Sichere Fahreigenschaften",
+        "Gute Verarbeitung"
+      ],
+      "issues": [
+        {
+          "title": "Starterbatterie",
+          "affects": "Erstzulassungen 2012–2017",
+          "detail": "Laut ADAC ist die Starterbatterie die häufigste Ursache für Pannen beim cee´d dieser Generation. Insgesamt liegt der Kompaktwagen in der Pannenstatistik laut ADAC im oberen Mittelfeld.",
+          "check": "Alter der Batterie erfragen und beim Kaltstart auf zügiges Anspringen achten.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: KIA cee´d (2012-2018)",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0335-kia-ceed-2012-2018-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Bremse beim TÜV überdurchschnittlich oft bemängelt",
+          "affects": "Baujahre 2012–2018 (laut TÜV-Report; die Minusliste des Berichts nennt eine schwache Bremsanlage)",
+          "detail": "Laut ADAC zeigt die Bremse beim TÜV überdurchschnittlich oft Mängel; im Bericht wird zudem eine schwache Bremsanlage als Minuspunkt genannt.",
+          "check": "Bremsscheiben und Beläge prüfen, beim Probebremsen auf Wirkung, Ziehen und Rubbeln achten und den letzten HU-Bericht ansehen.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: KIA cee´d (2012-2018)",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0335-kia-ceed-2012-2018-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Achsaufhängungen",
+          "affects": "Baujahre 2012–2018 (laut TÜV-Report, keine Eingrenzung auf bestimmte Motoren)",
+          "detail": "Laut ADAC zeigen die Achsaufhängungen beim TÜV überdurchschnittlich oft Mängel.",
+          "check": "Fahrwerk auf Klappern, Spiel und Rost prüfen und sich den letzten HU-Bericht zeigen lassen.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: KIA cee´d (2012-2018)",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0335-kia-ceed-2012-2018-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Beleuchtung beim TÜV",
+          "affects": "Baujahre 2012–2018 (laut TÜV-Report, keine Eingrenzung auf bestimmte Motoren)",
+          "detail": "Laut ADAC ist die Beleuchtung die größte Quelle für Mängel bei der Hauptuntersuchung des cee´d.",
+          "check": "Alle Lichtfunktionen und die Scheinwerfereinstellung prüfen.",
+          "severity": "gering",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: KIA cee´d (2012-2018)",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0335-kia-ceed-2012-2018-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Zündkerze und Zündspule",
+          "affects": "Benziner, Erstzulassung 2012",
+          "detail": "Laut ADAC zählen Zündkerze und Zündspule bei der Erstzulassung 2012 zu den häufigen Bauteilfehlern der Pannenstatistik.",
+          "check": "Auf unrunden Motorlauf oder Aussetzer achten und im Serviceheft den letzten Zündkerzenwechsel prüfen.",
+          "severity": "gering",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: KIA cee´d (2012-2018)",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0335-kia-ceed-2012-2018-bericht.pdf"
+            }
+          ]
+        }
+      ],
+      "engines": {
+        "recommended": [
+          {
+            "name": "1.0 T-GDI (100 oder 120 PS)",
+            "why": "Laut ADAC moderne Turbomotoren, die schon bei niedrigeren Drehzahlen mehr Durchzugskraft liefern und im Alltag weniger Sprit brauchen als die Saugbenziner; die 120-PS-Version ist noch besser."
+          },
+          {
+            "name": "Diesel (136 PS)",
+            "why": "Laut ADAC passt dieser Motor am besten ins Fahrzeug; damit sind auch längere und zügige Autobahnetappen souverän machbar."
+          },
+          {
+            "name": "Diesel 1.6 (128 PS)",
+            "why": "Laut ADAC deutlich entspannter und nochmals sparsamer unterwegs als mit dem 1,4-Liter-Einstiegsdiesel."
+          },
+          {
+            "name": "Doppelkupplungsgetriebe (sechs oder sieben Gänge)",
+            "why": "Laut ADAC gelungen; sie steigern den Fahrkomfort deutlich."
+          }
+        ],
+        "caution": [
+          {
+            "name": "1.4 Benziner (100 PS)",
+            "why": "Laut ADAC wirkt der Einstiegsbenziner relativ kraftlos und überzeugt auch nicht durch Sparsamkeit."
+          },
+          {
+            "name": "1.4 Diesel (90 PS)",
+            "why": "Laut ADAC kann der Einstiegsdiesel im cee´d nicht überzeugen."
+          }
+        ]
+      },
+      "tips": [
+        "Bremse, Achsaufhängungen und Beleuchtung genau prüfen: Hier meldet der TÜV laut ADAC überdurchschnittlich oft Mängel.",
+        "Alter der Starterbatterie erfragen: Sie ist laut ADAC die häufigste Pannenursache.",
+        "Bei der Ausstattung GT Line bei der Probefahrt prüfen, ob der Komfort passt: Das Fahrwerk ist laut ADAC unnötig straff."
+      ]
+    },
+    {
+      "id": "kia-ceed-cd",
+      "name": "Ceed CD",
+      "code": "CD",
+      "years": [2018, null],
+      "bodyTypes": ["schraegheck", "kombi", "suv"],
+      "fuels": ["petrol", "diesel", "plugin_hybrid", "hybrid"],
+      "seats": [5],
+      "automatic": true,
+      "typicalPriceEur": null,
+      "priceSource": null,
+      "strengths": [],
+      "issues": [],
+      "engines": {
+        "recommended": [],
+        "caution": []
+      },
+      "tips": [
+        "Zu dieser Generation haben wir noch keine Schwachstellen ausgewertet. Lass das Auto vor dem Kauf in einer Werkstatt prüfen und Rückrufe per Fahrgestellnummer erfragen."
+      ]
+    }
+  ]
+}

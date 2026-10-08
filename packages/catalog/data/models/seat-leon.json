@@ -1,0 +1,304 @@
+{
+  "id": "seat-leon",
+  "make": "Seat",
+  "model": "Leon",
+  "aliases": [
+    "leon",
+    "leon 1p",
+    "leon 5f",
+    "leon cupra",
+    "leon fr",
+    "leon kl",
+    "leon sc",
+    "leon sportstourer",
+    "leon st",
+    "leon x-perience",
+    "león"
+  ],
+  "segment": "kompakt",
+  "summary": "Sportlich abgestimmter Kompaktwagen mit viel Platz und hoher Verarbeitungsqualität, der laut ADAC als solide und zuverlässig gilt.",
+  "ratings": {
+    "reliability": 4,
+    "reliabilityNote": "Laut ADAC-Pannenstatistik 2025 hatte der Leon mit Erstzulassung 2015 bis 2022 in jedem Jahrgang weniger Pannen als die meisten gleich alten Autos, die Pannenstatistik 2026 zählt ihn zu den zuverlässigsten seiner Klasse. Beim TÜV liegen Leon 1P und 5F laut ADAC im Durchschnitt oder leicht darüber.",
+    "reliabilitySources": [
+      {
+        "label": "ADAC Gebrauchtwageninfo: SEAT Leon (2012 - 2020) Benziner",
+        "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0268-seat-leon-2012---2020-benziner-bericht.pdf"
+      },
+      {
+        "label": "ADAC Gebrauchtwageninfo: Seat León (2005-2012) Benziner",
+        "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0516-seat-leon-2005-2012-benziner-bericht.pdf"
+      },
+      {
+        "label": "ADAC Gebrauchtwageninfo: Seat León (2005-2012) Diesel",
+        "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0148-seat-leon-2005-2012-diesel-bericht.pdf"
+      },
+      {
+        "label": "ADAC Pannenstatistik 2025",
+        "url": "https://assets.adac.de/image/upload/v1776261444/ADAC-eV/KOR/Text/PDF/Pannenstatistik_2025_Bericht_czmf9q.pdf"
+      },
+      {
+        "label": "ADAC Pannenstatistik 2026",
+        "url": "https://www.adac.de/rund-ums-fahrzeug/unfall-schaden-panne/adac-pannenstatistik-2026/"
+      }
+    ],
+    "runningCosts": 4,
+    "space": 4,
+    "comfort": 3
+  },
+  "generations": [
+    {
+      "id": "seat-leon-1p",
+      "name": "Leon 1P",
+      "code": "1P",
+      "years": [2005, 2012],
+      "bodyTypes": ["schraegheck"],
+      "fuels": ["petrol", "diesel"],
+      "seats": [5],
+      "automatic": true,
+      "typicalPriceEur": null,
+      "priceSource": null,
+      "strengths": [
+        "Hohe Qualität, gute Materialauswahl und Verarbeitung",
+        "Sehr sichere Straßenlage und kräftige Bremsen",
+        "Vorne viel Platz und körpergerechte Sitze",
+        "Gute Werte in der ADAC-Pannenstatistik"
+      ],
+      "issues": [
+        {
+          "title": "Gelängte Steuerketten bei 1.2 TSI und 1.4 TSI",
+          "affects": "1.2 TSI und 1.4 TSI (Benziner); Steuerkette bei Erstzulassung 2009 als häufiger Bauteilfehler",
+          "detail": "Laut ADAC sind gelängte Steuerketten eine bekannte Problemstelle dieser Benziner und sorgen zum Teil für Ärger. Bei der Besichtigung sollte besonders darauf geachtet werden.",
+          "check": "Beim Kaltstart auf Kettenrasseln achten, einen Nachweis über einen eventuellen Kettenwechsel verlangen und den Motor in der Werkstatt prüfen lassen.",
+          "severity": "hoch",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: Seat León (2005-2012) Benziner",
+              "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0516-seat-leon-2005-2012-benziner-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Ölverlust und rostende Abgasanlage",
+          "affects": "Benziner und Diesel des Leon 1P (2005 bis 2012), ohne Eingrenzung auf bestimmte Motoren oder Baujahre",
+          "detail": "Im TÜV-Report liegt der Leon etwa im Durchschnitt; Ölverlust und rostende Abgasanlagen verhindern laut ADAC ein besseres Ergebnis.",
+          "check": "Motor und Unterboden auf Ölspuren prüfen und die Abgasanlage auf Rost und Undichtigkeiten ansehen lassen.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: Seat León (2005-2012) Benziner",
+              "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0516-seat-leon-2005-2012-benziner-bericht.pdf"
+            },
+            {
+              "label": "ADAC Gebrauchtwageninfo: Seat León (2005-2012) Diesel",
+              "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0148-seat-leon-2005-2012-diesel-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Rückrufe: ABS-/ESP-Steuergerät, Bremsleuchten, DSG-Software",
+          "affects": "Rückrufe 11/2009 (6-Gang-DSG 02E), 10/2011 (Rückleuchten mit LED-Bremsleuchten) und 7/2017 (ABS-/ESP-Steuergerät MK-60 in einem bestimmten Fahrgestellnummern-Bereich)",
+          "detail": "Laut ADAC kann bei einigen Fahrzeugen die Masseverbindung des ABS-/ESP-Steuergeräts (MK-60) unterbrochen werden, die LED-Bremsleuchten können sporadisch ausfallen, und eine fehlerhafte Software des 6-Gang-DSG (02E) kann Schaltprobleme verursachen.",
+          "check": "Per Fahrgestellnummer beim Händler prüfen lassen, ob die Rückrufe erledigt sind.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: Seat León (2005-2012) Benziner",
+              "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0516-seat-leon-2005-2012-benziner-bericht.pdf"
+            },
+            {
+              "label": "ADAC Gebrauchtwageninfo: Seat León (2005-2012) Diesel",
+              "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0148-seat-leon-2005-2012-diesel-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Zündschloss",
+          "affects": "Benziner und Diesel; Erstzulassung 2007 bis 2009 und 2011",
+          "detail": "Das Zündschloss steht bei den Erstzulassungsjahren 2007 bis 2009 und 2011 auf der ADAC-Liste häufiger Bauteilfehler.",
+          "check": "Beim Probestart auf ein leichtgängiges Zündschloss und sofortiges Anspringen des Motors achten.",
+          "severity": "gering",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: Seat León (2005-2012) Benziner",
+              "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0516-seat-leon-2005-2012-benziner-bericht.pdf"
+            },
+            {
+              "label": "ADAC Gebrauchtwageninfo: Seat León (2005-2012) Diesel",
+              "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0148-seat-leon-2005-2012-diesel-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Zündspulen und Zündkabel (Benziner)",
+          "affects": "Benziner; Zündkabel (Hochspannungskabel) bei Erstzulassung 2011, Zündspule bei Erstzulassung 2006 und 2012",
+          "detail": "Bei einzelnen Jahrgängen zählt der ADAC Zündkabel (Hochspannungskabel) und Zündspulen zu den häufigen Bauteilfehlern der Benziner.",
+          "check": "Bei der Probefahrt auf Aussetzer und Ruckeln des Motors achten und den Fehlerspeicher auslesen lassen.",
+          "severity": "gering",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: Seat León (2005-2012) Benziner",
+              "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0516-seat-leon-2005-2012-benziner-bericht.pdf"
+            }
+          ]
+        }
+      ],
+      "engines": {
+        "recommended": [
+          {
+            "name": "1.6 (102 PS)",
+            "why": "Laut ADAC unkompliziert und problemfrei, mit etwas mehr Reserven als der 1.4 mit 85 PS."
+          },
+          {
+            "name": "1.9 TDI (Pumpe-Düse, 90 und 105 PS, bis etwa 2010)",
+            "why": "Laut ADAC nahezu unverwüstlich mit sehr hohen Laufleistungen, aber mit rauem, unkultiviertem Motorlauf."
+          },
+          {
+            "name": "1.6 TDI (Common Rail, 90 und 105 PS)",
+            "why": "Laut ADAC mit deutlich besserer Laufkultur als der ältere 1.9 TDI."
+          },
+          {
+            "name": "2.0 TDI mit etwa 140 PS",
+            "why": "Laut ADAC die goldene Mitte mit souveränem Vorankommen bei moderatem Verbrauch; die späteren Common-Rail-Motoren sind deutlich kultivierter als die Pumpe-Düse-Versionen."
+          }
+        ],
+        "caution": [
+          {
+            "name": "1.2 TSI und 1.4 TSI",
+            "why": "Laut ADAC sorgen sie zum Teil mit gelängten Steuerketten für Ärger; bei der Besichtigung sollte darauf besonders geachtet werden."
+          },
+          {
+            "name": "1.4 (85 PS)",
+            "why": "Laut ADAC unkompliziert, aber nur auf kurzen Strecken zu empfehlen, weil er sich bei höheren Geschwindigkeiten stark müht."
+          }
+        ]
+      },
+      "tips": [
+        "Bei 1.2 TSI und 1.4 TSI genau auf die Steuerkette achten (Rasseln beim Kaltstart) und einen Kettenwechsel nachweisen lassen.",
+        "Motor, Unterboden und Abgasanlage auf Ölverlust und Rost prüfen.",
+        "Bei Modellen mit 6-Gang-DSG die Schaltvorgänge auf der Probefahrt prüfen und den Rückruf zur Software (11/2009) erfragen.",
+        "Den Rückruf zum ABS-/ESP-Steuergerät (7/2017) per Fahrgestellnummer prüfen lassen."
+      ]
+    },
+    {
+      "id": "seat-leon-5f",
+      "name": "Leon 5F",
+      "code": "5F",
+      "years": [2012, 2020],
+      "bodyTypes": ["schraegheck", "kombi"],
+      "fuels": ["petrol", "diesel", "cng"],
+      "seats": [5],
+      "automatic": true,
+      "typicalPriceEur": null,
+      "priceSource": null,
+      "strengths": [
+        "Gute Verarbeitung",
+        "Zuverlässige Technik",
+        "Sichere und agile Fahreigenschaften bei hohem Sicherheitsniveau",
+        "Bequeme Sitze"
+      ],
+      "issues": [
+        {
+          "title": "Rückrufe: Fahrerairbag, Nockenwellenversteller, Kindersicherung",
+          "affects": "Rückrufe 9/2016 (hintere Türschlösser), 8/2019 (Motoren der Generation EA211) und 2/2020 (Frontairbag Fahrerseite); laut ADAC-Bericht zu den Benzinern",
+          "detail": "Rückrufe betrafen laut ADAC u. a. den Frontairbag auf der Fahrerseite (füllt sich bei einem Unfall unter Umständen nicht schnell genug bis zum Sollwert), den Nockenwellenversteller der EA211-Motoren (ein Ausfall kann zu Öl- und Spritverlust führen) und die Kindersicherungen der hinteren Türen (können sich bei Erschütterungen deaktivieren).",
+          "check": "Per Fahrgestellnummer beim Händler prüfen lassen, ob die Rückrufe erledigt sind.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: SEAT Leon (2012 - 2020) Benziner",
+              "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0268-seat-leon-2012---2020-benziner-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Defekte Feder-Dämpfer-Einheiten",
+          "affects": "Leon 5F insgesamt, ohne Eingrenzung auf bestimmte Motoren oder Baujahre (laut ADAC-Bericht zu den Benzinern)",
+          "detail": "Im TÜV-Report fallen Federung und Dämpfung beim Leon etwas schlechter aus als im Durchschnitt aller Modelle; defekte Feder-Dämpfer-Einheiten verhindern laut ADAC eine noch bessere Platzierung.",
+          "check": "Bei der Probefahrt auf Poltern und Fahrwerksgeräusche achten und die Feder-Dämpfer-Einheiten auf der Hebebühne prüfen lassen.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: SEAT Leon (2012 - 2020) Benziner",
+              "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0268-seat-leon-2012---2020-benziner-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Ruckartiges Anfahren mit DSG",
+          "affects": "Modelle mit DSG-Getriebe (laut ADAC-Bericht zu den Benzinern)",
+          "detail": "Laut ADAC fällt das Anfahren mit dem Doppelkupplungsgetriebe (DSG) teils ruckartig aus; bei der Probefahrt sollte besonders darauf geachtet werden.",
+          "check": "Bei der Probefahrt mehrfach anfahren, auch am Berg und im Stop-and-go, und auf ruckfreies Anfahren achten.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: SEAT Leon (2012 - 2020) Benziner",
+              "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0268-seat-leon-2012---2020-benziner-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Zündspulen und Zündkabel bei Erstzulassung 2012",
+          "affects": "Benziner, Erstzulassung 2012",
+          "detail": "Zündkabel (Hochspannungskabel) und Zündspulen stehen beim Erstzulassungsjahr 2012 auf der ADAC-Liste häufiger Bauteilfehler.",
+          "check": "Auf Aussetzer und Ruckeln des Motors achten und den Fehlerspeicher auslesen lassen.",
+          "severity": "gering",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: SEAT Leon (2012 - 2020) Benziner",
+              "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0268-seat-leon-2012---2020-benziner-bericht.pdf"
+            }
+          ]
+        }
+      ],
+      "engines": {
+        "recommended": [
+          {
+            "name": "1.4 TSI (122 bis 150 PS)",
+            "why": "Laut ADAC eine klare Empfehlung: laufruhig, und die stärkste Version bietet dank Zylinderabschaltung einen sehr guten Kompromiss aus Verbrauch und Fahrleistung."
+          },
+          {
+            "name": "TGI (Erdgas)",
+            "why": "Laut ADAC eine interessante Alternative mit geringen Kraftstoffkosten und ausreichenden Fahrleistungen."
+          }
+        ],
+        "caution": [
+          {
+            "name": "Basisbenziner mit 86 PS",
+            "why": "Laut ADAC grundsätzlich ausreichend, außerhalb von Städten wünscht man sich im Alltag aber oft mehr Leistung."
+          },
+          {
+            "name": "Cupra (265 bis 310 PS)",
+            "why": "Laut ADAC sehr kräftig, aber im Einkauf und Unterhalt auf einem nochmals höheren Preisniveau."
+          }
+        ]
+      },
+      "tips": [
+        "Bei DSG-Modellen auf der Probefahrt mehrfach anfahren und auf ruckfreies Anfahren achten.",
+        "Feder-Dämpfer-Einheiten prüfen lassen, denn Federung und Dämpfung sind laut ADAC die einzige Auffälligkeit im TÜV-Report.",
+        "Rückrufe per Fahrgestellnummer erfragen, besonders zum Fahrerairbag (2/2020) und zum Nockenwellenversteller bei EA211-Motoren (8/2019)."
+      ]
+    },
+    {
+      "id": "seat-leon-kl",
+      "name": "Leon KL",
+      "code": "KL",
+      "years": [2020, null],
+      "bodyTypes": ["schraegheck", "kombi"],
+      "fuels": ["petrol", "diesel", "plugin_hybrid", "hybrid"],
+      "seats": [5],
+      "automatic": true,
+      "typicalPriceEur": null,
+      "priceSource": null,
+      "strengths": [],
+      "issues": [],
+      "engines": {
+        "recommended": [],
+        "caution": []
+      },
+      "tips": [
+        "Zu dieser Generation haben wir noch keine Schwachstellen ausgewertet. Lass das Auto vor dem Kauf in einer Werkstatt prüfen und Rückrufe per Fahrgestellnummer erfragen."
+      ]
+    }
+  ]
+}

@@ -1,5 +1,197 @@
 [
   {
+    "id": "audi-a3",
+    "make": "Audi",
+    "model": "A3",
+    "segment": "kompakt",
+    "twinOf": null,
+    "ratings": {
+      "reliability": 4,
+      "runningCosts": 3,
+      "space": 3,
+      "comfort": 4
+    },
+    "generations": [
+      {
+        "id": "audi-a3-8v",
+        "name": "A3 8V",
+        "years": [2012, 2020],
+        "bodyTypes": ["schraegheck", "limousine", "cabrio"],
+        "fuels": ["petrol", "diesel", "plugin_hybrid", "cng"],
+        "seats": [4, 5],
+        "automatic": true,
+        "typicalPriceEur": null,
+        "issueCount": 6,
+        "severeIssueCount": 0
+      },
+      {
+        "id": "audi-a3-8y",
+        "name": "A3 8Y",
+        "years": [2020, null],
+        "bodyTypes": ["schraegheck", "limousine"],
+        "fuels": ["petrol", "diesel", "plugin_hybrid", "hybrid"],
+        "seats": [5],
+        "automatic": true,
+        "typicalPriceEur": null,
+        "issueCount": 0,
+        "severeIssueCount": 0
+      }
+    ]
+  },
+  {
+    "id": "audi-a4",
+    "make": "Audi",
+    "model": "A4",
+    "segment": "mittelklasse",
+    "twinOf": null,
+    "ratings": {
+      "reliability": 5,
+      "runningCosts": 3,
+      "space": 3,
+      "comfort": 4
+    },
+    "generations": [
+      {
+        "id": "audi-a4-b8",
+        "name": "A4 B8",
+        "years": [2007, 2015],
+        "bodyTypes": ["limousine", "kombi"],
+        "fuels": ["petrol", "diesel"],
+        "seats": [5],
+        "automatic": true,
+        "typicalPriceEur": null,
+        "issueCount": 0,
+        "severeIssueCount": 0
+      },
+      {
+        "id": "audi-a4-b9",
+        "name": "A4 B9",
+        "years": [2015, 2024],
+        "bodyTypes": ["limousine", "kombi"],
+        "fuels": ["petrol", "diesel", "cng", "hybrid"],
+        "seats": [5],
+        "automatic": true,
+        "typicalPriceEur": null,
+        "issueCount": 2,
+        "severeIssueCount": 0
+      }
+    ]
+  },
+  {
+    "id": "audi-a6",
+    "make": "Audi",
+    "model": "A6",
+    "segment": "obere_mittelklasse",
+    "twinOf": null,
+    "ratings": {
+      "reliability": 4,
+      "runningCosts": 2,
+      "space": 4,
+      "comfort": 5
+    },
+    "generations": [
+      {
+        "id": "audi-a6-c6",
+        "name": "A6 C6",
+        "years": [2004, 2011],
+        "bodyTypes": ["limousine", "kombi"],
+        "fuels": ["petrol", "diesel"],
+        "seats": [5],
+        "automatic": true,
+        "typicalPriceEur": null,
+        "issueCount": 0,
+        "severeIssueCount": 0
+      },
+      {
+        "id": "audi-a6-c7",
+        "name": "A6 C7",
+        "years": [2011, 2018],
+        "bodyTypes": ["limousine", "kombi"],
+        "fuels": ["petrol", "diesel", "hybrid"],
+        "seats": [5],
+        "automatic": true,
+        "typicalPriceEur": null,
+        "issueCount": 5,
+        "severeIssueCount": 0
+      },
+      {
+        "id": "audi-a6-c8",
+        "name": "A6 C8",
+        "years": [2018, 2025],
+        "bodyTypes": ["limousine", "kombi"],
+        "fuels": ["petrol", "diesel", "plugin_hybrid", "hybrid"],
+        "seats": [5],
+        "automatic": true,
+        "typicalPriceEur": null,
+        "issueCount": 3,
+        "severeIssueCount": 0
+      },
+      {
+        "id": "audi-a6-c9",
+        "name": "A6 C9",
+        "years": [2025, null],
+        "bodyTypes": ["limousine", "kombi"],
+        "fuels": ["petrol", "diesel", "hybrid"],
+        "seats": [5],
+        "automatic": true,
+        "typicalPriceEur": null,
+        "issueCount": 0,
+        "severeIssueCount": 0
+      }
+    ]
+  },
+  {
+    "id": "audi-q3",
+    "make": "Audi",
+    "model": "Q3",
+    "segment": "suv_kompakt",
+    "twinOf": null,
+    "ratings": {
+      "reliability": 4,
+      "runningCosts": 3,
+      "space": 3,
+      "comfort": 4
+    },
+    "generations": [
+      {
+        "id": "audi-q3-8u",
+        "name": "Q3 8U",
+        "years": [2011, 2018],
+        "bodyTypes": ["suv"],
+        "fuels": ["petrol", "diesel"],
+        "seats": [5],
+        "automatic": true,
+        "typicalPriceEur": null,
+        "issueCount": 3,
+        "severeIssueCount": 0
+      },
+      {
+        "id": "audi-q3-f3",
+        "name": "Q3 F3",
+        "years": [2018, 2025],
+        "bodyTypes": ["suv"],
+        "fuels": ["petrol", "diesel", "plugin_hybrid"],
+        "seats": [5],
+        "automatic": true,
+        "typicalPriceEur": null,
+        "issueCount": 0,
+        "severeIssueCount": 0
+      },
+      {
+        "id": "audi-q3-fj",
+        "name": "Q3 FJ",
+        "years": [2025, null],
+        "bodyTypes": ["suv"],
+        "fuels": ["petrol", "diesel"],
+        "seats": [5],
+        "automatic": true,
+        "typicalPriceEur": null,
+        "issueCount": 0,
+        "severeIssueCount": 0
+      }
+    ]
+  },
+  {
     "id": "bmw-1er",
     "make": "BMW",
     "model": "1er",
@@ -567,6 +759,198 @@
         "years": [2017, null],
         "bodyTypes": ["schraegheck", "kombi"],
         "fuels": ["petrol", "diesel", "hybrid"],
+        "seats": [5],
+        "automatic": true,
+        "typicalPriceEur": null,
+        "issueCount": 1,
+        "severeIssueCount": 0
+      }
+    ]
+  },
+  {
+    "id": "kia-ceed",
+    "make": "Kia",
+    "model": "Ceed",
+    "segment": "kompakt",
+    "twinOf": null,
+    "ratings": {
+      "reliability": 4,
+      "runningCosts": 4,
+      "space": 4,
+      "comfort": 4
+    },
+    "generations": [
+      {
+        "id": "kia-ceed-ed",
+        "name": "cee'd ED",
+        "years": [2007, 2013],
+        "bodyTypes": ["schraegheck", "kombi"],
+        "fuels": ["petrol", "diesel", "lpg"],
+        "seats": [5],
+        "automatic": true,
+        "typicalPriceEur": null,
+        "issueCount": 6,
+        "severeIssueCount": 1
+      },
+      {
+        "id": "kia-ceed-jd",
+        "name": "cee'd JD",
+        "years": [2012, 2018],
+        "bodyTypes": ["schraegheck", "kombi"],
+        "fuels": ["petrol", "diesel"],
+        "seats": [5],
+        "automatic": true,
+        "typicalPriceEur": null,
+        "issueCount": 5,
+        "severeIssueCount": 0
+      },
+      {
+        "id": "kia-ceed-cd",
+        "name": "Ceed CD",
+        "years": [2018, null],
+        "bodyTypes": ["schraegheck", "kombi", "suv"],
+        "fuels": ["petrol", "diesel", "plugin_hybrid", "hybrid"],
+        "seats": [5],
+        "automatic": true,
+        "typicalPriceEur": null,
+        "issueCount": 0,
+        "severeIssueCount": 0
+      }
+    ]
+  },
+  {
+    "id": "kia-picanto",
+    "make": "Kia",
+    "model": "Picanto",
+    "segment": "kleinstwagen",
+    "twinOf": null,
+    "ratings": {
+      "reliability": 3,
+      "runningCosts": 5,
+      "space": 2,
+      "comfort": 3
+    },
+    "generations": [
+      {
+        "id": "kia-picanto-ba",
+        "name": "Picanto BA",
+        "years": [2004, 2011],
+        "bodyTypes": ["schraegheck"],
+        "fuels": ["petrol", "diesel", "lpg"],
+        "seats": [4, 5],
+        "automatic": true,
+        "typicalPriceEur": null,
+        "issueCount": 6,
+        "severeIssueCount": 0
+      },
+      {
+        "id": "kia-picanto-ta",
+        "name": "Picanto TA",
+        "years": [2011, 2017],
+        "bodyTypes": ["schraegheck"],
+        "fuels": ["petrol", "lpg"],
+        "seats": [4, 5],
+        "automatic": true,
+        "typicalPriceEur": null,
+        "issueCount": 5,
+        "severeIssueCount": 0
+      },
+      {
+        "id": "kia-picanto-ja",
+        "name": "Picanto JA",
+        "years": [2017, null],
+        "bodyTypes": ["schraegheck"],
+        "fuels": ["petrol"],
+        "seats": [4, 5],
+        "automatic": true,
+        "typicalPriceEur": null,
+        "issueCount": 1,
+        "severeIssueCount": 0
+      }
+    ]
+  },
+  {
+    "id": "kia-rio",
+    "make": "Kia",
+    "model": "Rio",
+    "segment": "kleinwagen",
+    "twinOf": null,
+    "ratings": {
+      "reliability": 4,
+      "runningCosts": 4,
+      "space": 3,
+      "comfort": 3
+    },
+    "generations": [
+      {
+        "id": "kia-rio-ub",
+        "name": "Rio UB",
+        "years": [2011, 2017],
+        "bodyTypes": ["schraegheck"],
+        "fuels": ["petrol", "diesel"],
+        "seats": [5],
+        "automatic": true,
+        "typicalPriceEur": null,
+        "issueCount": 5,
+        "severeIssueCount": 0
+      },
+      {
+        "id": "kia-rio-yb",
+        "name": "Rio YB",
+        "years": [2017, 2023],
+        "bodyTypes": ["schraegheck"],
+        "fuels": ["petrol", "diesel", "hybrid"],
+        "seats": [5],
+        "automatic": true,
+        "typicalPriceEur": null,
+        "issueCount": 2,
+        "severeIssueCount": 0
+      }
+    ]
+  },
+  {
+    "id": "kia-sportage",
+    "make": "Kia",
+    "model": "Sportage",
+    "segment": "suv_kompakt",
+    "twinOf": null,
+    "ratings": {
+      "reliability": 4,
+      "runningCosts": 3,
+      "space": 3,
+      "comfort": 3
+    },
+    "generations": [
+      {
+        "id": "kia-sportage-sl",
+        "name": "Sportage SL",
+        "years": [2010, 2016],
+        "bodyTypes": ["suv"],
+        "fuels": ["petrol", "diesel"],
+        "seats": [5],
+        "automatic": true,
+        "typicalPriceEur": null,
+        "issueCount": 6,
+        "severeIssueCount": 0
+      },
+      {
+        "id": "kia-sportage-ql",
+        "name": "Sportage QL",
+        "years": [2015, 2021],
+        "bodyTypes": ["suv"],
+        "fuels": ["petrol", "diesel", "hybrid"],
+        "seats": [5],
+        "automatic": true,
+        "typicalPriceEur": null,
+        "issueCount": 1,
+        "severeIssueCount": 0
+      },
+      {
+        "id": "kia-sportage-nq5",
+        "name": "Sportage NQ5",
+        "years": [2021, null],
+        "bodyTypes": ["suv"],
+        "fuels": ["petrol", "diesel", "hybrid", "plugin_hybrid"],
         "seats": [5],
         "automatic": true,
         "typicalPriceEur": null,
@@ -1276,6 +1660,96 @@
         "automatic": true,
         "typicalPriceEur": null,
         "issueCount": 1,
+        "severeIssueCount": 0
+      }
+    ]
+  },
+  {
+    "id": "seat-ibiza",
+    "make": "Seat",
+    "model": "Ibiza",
+    "segment": "kleinwagen",
+    "twinOf": null,
+    "ratings": {
+      "reliability": 4,
+      "runningCosts": 4,
+      "space": 3,
+      "comfort": 3
+    },
+    "generations": [
+      {
+        "id": "seat-ibiza-6j",
+        "name": "Ibiza 6J",
+        "years": [2008, 2017],
+        "bodyTypes": ["schraegheck", "kombi"],
+        "fuels": ["petrol", "diesel", "lpg"],
+        "seats": [5],
+        "automatic": true,
+        "typicalPriceEur": null,
+        "issueCount": 5,
+        "severeIssueCount": 1
+      },
+      {
+        "id": "seat-ibiza-6f",
+        "name": "Ibiza 6F",
+        "years": [2017, null],
+        "bodyTypes": ["schraegheck"],
+        "fuels": ["petrol", "diesel", "cng"],
+        "seats": [5],
+        "automatic": true,
+        "typicalPriceEur": null,
+        "issueCount": 0,
+        "severeIssueCount": 0
+      }
+    ]
+  },
+  {
+    "id": "seat-leon",
+    "make": "Seat",
+    "model": "Leon",
+    "segment": "kompakt",
+    "twinOf": null,
+    "ratings": {
+      "reliability": 4,
+      "runningCosts": 4,
+      "space": 4,
+      "comfort": 3
+    },
+    "generations": [
+      {
+        "id": "seat-leon-1p",
+        "name": "Leon 1P",
+        "years": [2005, 2012],
+        "bodyTypes": ["schraegheck"],
+        "fuels": ["petrol", "diesel"],
+        "seats": [5],
+        "automatic": true,
+        "typicalPriceEur": null,
+        "issueCount": 5,
+        "severeIssueCount": 1
+      },
+      {
+        "id": "seat-leon-5f",
+        "name": "Leon 5F",
+        "years": [2012, 2020],
+        "bodyTypes": ["schraegheck", "kombi"],
+        "fuels": ["petrol", "diesel", "cng"],
+        "seats": [5],
+        "automatic": true,
+        "typicalPriceEur": null,
+        "issueCount": 4,
+        "severeIssueCount": 0
+      },
+      {
+        "id": "seat-leon-kl",
+        "name": "Leon KL",
+        "years": [2020, null],
+        "bodyTypes": ["schraegheck", "kombi"],
+        "fuels": ["petrol", "diesel", "plugin_hybrid", "hybrid"],
+        "seats": [5],
+        "automatic": true,
+        "typicalPriceEur": null,
+        "issueCount": 0,
         "severeIssueCount": 0
       }
     ]

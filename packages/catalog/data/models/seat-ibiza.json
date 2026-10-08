@@ -1,0 +1,205 @@
+{
+  "id": "seat-ibiza",
+  "make": "Seat",
+  "model": "Ibiza",
+  "aliases": ["ibiza", "ibiza 6f", "ibiza 6j", "ibiza cupra", "ibiza fr", "ibiza sc", "ibiza st"],
+  "segment": "kleinwagen",
+  "summary": "Praktischer Kleinwagen mit einfacher Bedienung und großem Kofferraum; die aktuelle Generation (ab 2017) schneidet laut ADAC in der Pannenstatistik gut ab.",
+  "ratings": {
+    "reliability": 4,
+    "reliabilityNote": "Laut ADAC-Pannenstatistik 2025 hatte der Ibiza der fünften Generation (Erstzulassung 2018 bis 2022) in jedem Jahrgang weniger Pannen als die meisten gleich alten Autos, die Pannenstatistik 2026 zählt ihn zu den zuverlässigsten Kleinwagen. Den Vorgänger (2008–2017) sah der ADAC meist im Mittelfeld, beim TÜV schneidet er unterdurchschnittlich ab.",
+    "reliabilitySources": [
+      {
+        "label": "ADAC Gebrauchtwageninfo: SEAT Ibiza (2008-2017) Benziner",
+        "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0197-seat-ibiza-2008-2017-benziner-bericht.pdf"
+      },
+      {
+        "label": "ADAC Gebrauchtwageninfo: SEAT Ibiza (2008-2017) Diesel",
+        "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0198-seat-ibiza-2008-2017-diesel-bericht.pdf"
+      },
+      {
+        "label": "ADAC Pannenstatistik 2025",
+        "url": "https://assets.adac.de/image/upload/v1776261444/ADAC-eV/KOR/Text/PDF/Pannenstatistik_2025_Bericht_czmf9q.pdf"
+      },
+      {
+        "label": "ADAC Pannenstatistik 2026",
+        "url": "https://www.adac.de/rund-ums-fahrzeug/unfall-schaden-panne/adac-pannenstatistik-2026/"
+      }
+    ],
+    "runningCosts": 4,
+    "space": 3,
+    "comfort": 3
+  },
+  "generations": [
+    {
+      "id": "seat-ibiza-6j",
+      "name": "Ibiza 6J",
+      "code": "6J",
+      "years": [2008, 2017],
+      "bodyTypes": ["schraegheck", "kombi"],
+      "fuels": ["petrol", "diesel", "lpg"],
+      "seats": [5],
+      "automatic": true,
+      "typicalPriceEur": null,
+      "priceSource": null,
+      "strengths": [
+        "Hohes Sicherheitsniveau",
+        "Einfache Bedienung",
+        "Ausgewogenes Fahrwerk und standfeste Bremsen",
+        "Bequeme Sitze und für einen Kleinwagen großer Kofferraum"
+      ],
+      "issues": [
+        {
+          "title": "Steuerkette bei 1.2 TSI und 1.4 TSI",
+          "affects": "1.2 TSI (Vierzylinder) und 1.4 TSI bis Baujahr 2015 (Motorgeneration EA111); Steuerkette bei Erstzulassung 2011 bis 2013 als häufiger Bauteilfehler (laut ADAC-Bericht zu den Benzinern)",
+          "detail": "Laut ADAC machen die Steuerketten dieser Benziner Probleme; rasselt die Kette, vor allem bei kaltem Motor, sollte sie schnellstmöglich gewechselt werden. 2015 wurden die Motoren durch Varianten mit Zahnriemen (EA211) ersetzt, die der ADAC als unproblematisch bezeichnet.",
+          "check": "Motor kalt starten und auf Rasseln achten, einen Nachweis über einen Kettenwechsel verlangen und die Motorgeneration erfragen (ab 2015 mit Zahnriemen).",
+          "severity": "hoch",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: SEAT Ibiza (2008-2017) Benziner",
+              "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0197-seat-ibiza-2008-2017-benziner-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Ölverlust und defekte Abgasanlage",
+          "affects": "Benziner und Diesel des Ibiza (2008 bis 2017), ohne Eingrenzung auf bestimmte Motoren oder Baujahre",
+          "detail": "Im TÜV-Report fallen beim Ibiza Ölverlust und defekte Abgasanlagen besonders häufig auf, weshalb er dort schlechter abschneidet als der Durchschnitt.",
+          "check": "Motor und Unterboden auf Ölspuren prüfen und die Abgasanlage auf Schäden und Undichtigkeiten ansehen lassen.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: SEAT Ibiza (2008-2017) Benziner",
+              "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0197-seat-ibiza-2008-2017-benziner-bericht.pdf"
+            },
+            {
+              "label": "ADAC Gebrauchtwageninfo: SEAT Ibiza (2008-2017) Diesel",
+              "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0198-seat-ibiza-2008-2017-diesel-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Marode Dämpfer und verschlissene Bremsbauteile",
+          "affects": "Benziner und Diesel des Ibiza (2008 bis 2017); Bremsbelag bei Erstzulassung 2010 und 2014 bis 2015, Bremstrommeln vorne und hinten bei 2014 als häufige Bauteilfehler",
+          "detail": "Der TÜV-Report nennt marode Dämpfer und verschlissene Bremsbauteile als häufige Mängel, und in der ADAC-Pannenstatistik tauchen Bremsbeläge und Bremstrommeln unter den häufigen Bauteilfehlern auf.",
+          "check": "Dämpfer, Bremsbeläge und Bremstrommeln in der Werkstatt prüfen lassen und bei der Probefahrt auf Bremsverhalten und Fahrwerksgeräusche achten.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: SEAT Ibiza (2008-2017) Benziner",
+              "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0197-seat-ibiza-2008-2017-benziner-bericht.pdf"
+            },
+            {
+              "label": "ADAC Gebrauchtwageninfo: SEAT Ibiza (2008-2017) Diesel",
+              "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0198-seat-ibiza-2008-2017-diesel-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Starterbatterie und Zündkerzen bei frühen Baujahren",
+          "affects": "Starterbatterie: Erstzulassung 2008 bis 2009 (Benziner und Diesel); Zündkerzen: Erstzulassung 2008 bis 2011 (nur Benziner)",
+          "detail": "Der ADAC führt bei frühen Jahrgängen die Starterbatterie und bei den Benzinern zusätzlich die Zündkerzen unter den häufigen Bauteilfehlern.",
+          "check": "Nach dem Alter der Batterie und dem letzten Zündkerzenwechsel fragen und auf Startverhalten und ruhigen Motorlauf achten.",
+          "severity": "gering",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: SEAT Ibiza (2008-2017) Benziner",
+              "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0197-seat-ibiza-2008-2017-benziner-bericht.pdf"
+            },
+            {
+              "label": "ADAC Gebrauchtwageninfo: SEAT Ibiza (2008-2017) Diesel",
+              "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0198-seat-ibiza-2008-2017-diesel-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Rückrufe: Feststellbremse, DSG-Wählhebel, Kraftstoffleitungen, Kindersicherung",
+          "affects": "Rückrufe 7/2009 (Modelle mit DSG), 11/2014 (Diesel), 9/2016 (hintere Türschlösser) und 2/2019 (Fahrzeuge mit Trommelbremse hinten)",
+          "detail": "Laut ADAC kann sich beim DSG der Wählhebelseilzug lösen (unbeabsichtigtes Wegrollen in der Parkstellung an steilen Abschnitten möglich), bei hinterer Trommelbremse kann die Vorspannung der Feststellbremse verloren gehen und bei Dieseln können Kraftstoffleitungen am Kraftstofffilterdeckel reißen. Außerdem können sich bei Erschütterungen die Kindersicherungen der hinteren Türen deaktivieren.",
+          "check": "Per Fahrgestellnummer beim Händler prüfen lassen, ob die Rückrufe erledigt sind.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: SEAT Ibiza (2008-2017) Benziner",
+              "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0197-seat-ibiza-2008-2017-benziner-bericht.pdf"
+            },
+            {
+              "label": "ADAC Gebrauchtwageninfo: SEAT Ibiza (2008-2017) Diesel",
+              "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0198-seat-ibiza-2008-2017-diesel-bericht.pdf"
+            }
+          ]
+        }
+      ],
+      "engines": {
+        "recommended": [
+          {
+            "name": "1.4 (Saugbenziner, 85 PS, bis Baujahr 2015)",
+            "why": "Laut ADAC uneingeschränkt empfehlenswert: ausreichend zügig, solide konstruiert und nur sehr selten mit Schwierigkeiten, idealerweise in der Ausstattung Style."
+          },
+          {
+            "name": "1.6 (105 PS, auch als LPG-Variante)",
+            "why": "Laut ADAC ähnlich problemlos wie der 1.4 mit 85 PS; es gibt auch eine Version für Flüssiggas (LPG)."
+          },
+          {
+            "name": "1.0 TSI (95 und 110 PS)",
+            "why": "Laut ADAC stets ausreichend kräftig und sparsam; die 110-PS-Version geht deutlich besser bei kaum mehr Verbrauch."
+          },
+          {
+            "name": "1.9 TDI (Pumpe-Düse, 90 und 105 PS, bis 2009)",
+            "why": "Laut ADAC fast unkaputtbar, sparsam und kräftig, läuft aber relativ laut."
+          },
+          {
+            "name": "Common-Rail-Diesel mit 90 und 105 PS (ab 2009)",
+            "why": "Laut ADAC besonders empfehlenswert, weil sie ausreichend kräftig, häufig zu finden und insgesamt unkompliziert sind."
+          }
+        ],
+        "caution": [
+          {
+            "name": "1.2 TSI und 1.4 TSI bis Baujahr 2015",
+            "why": "Laut ADAC auf die Steuerkette achten; rasselt sie bei kaltem Motor, sollte sie schnellstmöglich gewechselt werden."
+          },
+          {
+            "name": "1.0- und 1.2-Dreizylinder-Benziner (60 bis 75 PS)",
+            "why": "Laut ADAC bringen sie den Ibiza nur mühsam in Schwung und sind nur für Fahrten abseits von Autobahnen eine Empfehlung."
+          },
+          {
+            "name": "1.4 TDI (Dreizylinder, 80 PS)",
+            "why": "Laut ADAC läuft er sehr rumpelig und kann nicht empfohlen werden."
+          },
+          {
+            "name": "Cupra (180 bzw. 192 PS)",
+            "why": "Laut ADAC sehr kräftig, aber im Einkauf und Unterhalt deutlich teurer und daher nur für Liebhaber eine gute Wahl."
+          }
+        ]
+      },
+      "tips": [
+        "Bei 1.2 TSI und 1.4 TSI (bis 2015) den Motor kalt starten und auf eine rasselnde Steuerkette hören; einen Nachweis über einen Kettenwechsel verlangen.",
+        "Motor, Unterboden und Abgasanlage auf Ölverlust und Schäden prüfen, denn das sind typische TÜV-Mängel beim Ibiza.",
+        "Dämpfer und Bremsen (Beläge, bei Trommelbremse auch die Trommeln) prüfen lassen.",
+        "Bei DSG-Modellen und Fahrzeugen mit hinterer Trommelbremse nachfragen, ob die Rückrufe zum Wählhebelseilzug (7/2009) und zur Feststellbremse (2/2019) erledigt sind."
+      ]
+    },
+    {
+      "id": "seat-ibiza-6f",
+      "name": "Ibiza 6F",
+      "code": "6F",
+      "years": [2017, null],
+      "bodyTypes": ["schraegheck"],
+      "fuels": ["petrol", "diesel", "cng"],
+      "seats": [5],
+      "automatic": true,
+      "typicalPriceEur": null,
+      "priceSource": null,
+      "strengths": [],
+      "issues": [],
+      "engines": {
+        "recommended": [],
+        "caution": []
+      },
+      "tips": [
+        "Zu dieser Generation haben wir noch keine Schwachstellen ausgewertet. Lass das Auto vor dem Kauf in einer Werkstatt prüfen und Rückrufe per Fahrgestellnummer erfragen."
+      ]
+    }
+  ]
+}
