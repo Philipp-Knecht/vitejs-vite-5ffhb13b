@@ -1,0 +1,159 @@
+{
+  "id": "renault-captur",
+  "make": "Renault",
+  "model": "Captur",
+  "aliases": [
+    "captur",
+    "captur dci",
+    "captur e-tech",
+    "captur hybrid",
+    "captur i",
+    "captur ii",
+    "captur lpg",
+    "captur plug-in-hybrid",
+    "captur tce"
+  ],
+  "segment": "suv_klein",
+  "summary": "Kleines SUV auf Clio-Basis mit erhöhter Sitzposition; die erste Generation überzeugt mit viel Platz im Fond, familienfreundlichen Details und hoher Zuverlässigkeit.",
+  "ratings": {
+    "reliability": 4,
+    "reliabilityNote": "Laut ADAC kommt der Captur I in der Pannenstatistik auf sehr gute Werte, und auch der TÜV beanstandet wenig. Für den Captur II weist der ADAC nur gemeinsame Werte mit dem Clio aus: Erstzulassung 2021 und 2022 mit weniger Pannen als die meisten gleich alten Autos.",
+    "reliabilitySources": [
+      {
+        "label": "ADAC Gebrauchtwageninfo: Renault Captur (2013-2019)",
+        "url": "https://assets.adac.de/image/upload/w_120/Autodatenbank/GWInfo/gw0231-renault-captur-2013-2019-bericht.pdf"
+      },
+      {
+        "label": "ADAC Pannenstatistik 2025",
+        "url": "https://assets.adac.de/image/upload/v1776261444/ADAC-eV/KOR/Text/PDF/Pannenstatistik_2025_Bericht_czmf9q.pdf"
+      }
+    ],
+    "runningCosts": 4,
+    "space": 3,
+    "comfort": 3
+  },
+  "generations": [
+    {
+      "id": "renault-captur-i",
+      "name": "Captur I",
+      "code": "I",
+      "years": [2013, 2019],
+      "bodyTypes": ["suv"],
+      "fuels": ["petrol", "diesel"],
+      "seats": [5],
+      "automatic": true,
+      "typicalPriceEur": null,
+      "priceSource": null,
+      "strengths": [
+        "Ordentliches Platzangebot, auch im Fond, und bequemer Ein- und Ausstieg",
+        "Familienfreundliche Details wie ein riesiges Handschuhfach und waschbare Rücksitzbezüge",
+        "Hohe Zuverlässigkeit: sehr gute Werte in der ADAC-Pannenstatistik und wenig Beanstandungen beim TÜV",
+        "Sparsame Dieselmotoren"
+      ],
+      "issues": [
+        {
+          "title": "Rückrufe: Bremsschläuche, vordere Radnaben, Scheinwerfer-Höhenkorrektur",
+          "affects": "Captur I: Rückrufe 4/2015 (Bremsschläuche vorn), 4/2018 (vordere Radnaben und Scheinwerfer-Höhenkorrektur), 5/2017 (nur 1.5 dCi mit 110 PS: Motorsteuerung), 9/2020 (Zuggesamtgewicht in der Zulassungsbescheinigung)",
+          "detail": "Laut ADAC konnten ungenau montierte Radhausverkleidungen an der Vorderachse die Bremsschläuche beschädigen (4/2015), und wegen eines Wärmebehandlungsfehlers bestand bei den vorderen Radnaben die Möglichkeit von Rissen mit Bruchgefahr (4/2018). Weitere Rückrufe betrafen die Scheinwerfer-Höhenkorrektur, die Motorsteuerung des 1.5 dCi 110 und die fehlende Angabe des Zuggesamtgewichts.",
+          "check": "Per Fahrgestellnummer beim Händler prüfen lassen, ob die Rückrufe erledigt sind.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: Renault Captur (2013-2019)",
+              "url": "https://assets.adac.de/image/upload/w_120/Autodatenbank/GWInfo/gw0231-renault-captur-2013-2019-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Radaufhängung und Bremsen (TÜV)",
+          "affects": "Captur I allgemein (TÜV-Report); keine Einschränkung auf bestimmte Motoren oder Baujahre genannt",
+          "detail": "Der TÜV bemängelt laut ADAC nur einzelne, für SUV typische Probleme an Radaufhängung bzw. Achsaufhängungen und selten die Funktion der Bremsen; insgesamt schneidet der Captur deutlich besser ab als der Durchschnitt.",
+          "check": "Bei der Probefahrt auf Klopfgeräusche und Spiel an der Vorderachse achten, die Bremsen prüfen lassen und den Bericht der letzten Hauptuntersuchung ansehen.",
+          "severity": "gering",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: Renault Captur (2013-2019)",
+              "url": "https://assets.adac.de/image/upload/w_120/Autodatenbank/GWInfo/gw0231-renault-captur-2013-2019-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Anlasser",
+          "affects": "Captur I bei Erstzulassung 2016–2017",
+          "detail": "Der ADAC führt den Anlasser für diese Zulassungsjahre unter den häufigen Bauteilfehlern; ein Defekt kann dazu führen, dass der Motor nicht anspringt.",
+          "check": "Das Startverhalten bei kaltem und warmem Motor testen und fragen, ob der Anlasser schon getauscht wurde.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: Renault Captur (2013-2019)",
+              "url": "https://assets.adac.de/image/upload/w_120/Autodatenbank/GWInfo/gw0231-renault-captur-2013-2019-bericht.pdf"
+            }
+          ]
+        }
+      ],
+      "engines": {
+        "recommended": [
+          {
+            "name": "Benziner mit 118/120 PS",
+            "why": "Laut ADAC deutlich flotter als der 90-PS-Benziner und mit kaum mehr Verbrauch; auch mit Doppelkupplungsgetriebe erhältlich."
+          },
+          {
+            "name": "1.3 TCe (130 oder 150 PS)",
+            "why": "Laut ADAC gute Fahrleistungen bei akzeptablem Verbrauch; wurde erst zum Ende der Bauzeit verbaut."
+          },
+          {
+            "name": "Diesel mit 110 PS",
+            "why": "Laut ADAC passt der stärkere der beiden Diesel besser zum Auto als der 90-PS-Diesel, der grundsätzlich aber ausreicht. Beim 1.5 dCi 110 den Rückruf 5/2017 (Motorsteuerung) prüfen lassen."
+          }
+        ],
+        "caution": [
+          {
+            "name": "Benziner mit 90 PS",
+            "why": "Laut ADAC hat der schwächere der älteren Benziner etwas Mühe mit dem SUV."
+          }
+        ]
+      },
+      "tips": [
+        "Beim Probefahren auf Geräusche und Spiel an Radaufhängung und Vorderachse achten, denn hier fallen beim TÜV einzelne Mängel auf.",
+        "Nachweis verlangen, dass die Rückrufe zu den Bremsschläuchen (4/2015) und den vorderen Radnaben (4/2018) erledigt sind.",
+        "Wer einen Anhänger ziehen will: das Zuggesamtgewicht in der Zulassungsbescheinigung Teil I prüfen (Rückruf 9/2020).",
+        "Bei Erstzulassung 2016–2017 auf zuverlässiges Starten achten (Anlasser)."
+      ]
+    },
+    {
+      "id": "renault-captur-ii",
+      "name": "Captur II",
+      "code": "II",
+      "years": [2019, null],
+      "bodyTypes": ["suv"],
+      "fuels": ["petrol", "diesel", "lpg", "hybrid", "plugin_hybrid"],
+      "seats": [5],
+      "automatic": true,
+      "typicalPriceEur": null,
+      "priceSource": null,
+      "strengths": [],
+      "issues": [
+        {
+          "title": "Überdurchschnittlich oft Pannen: Starterbatterie",
+          "affects": "Erstzulassung 2020–2021 (ADAC-Pannenstatistik 2025)",
+          "detail": "Probleme mit Starterbatterie waren bei diesen Jahrgängen überdurchschnittlich oft der Grund für einen Einsatz der ADAC-Straßenwacht. Eine schwache Starterbatterie ist bei allen Autos die häufigste Pannenursache, hier aber besonders oft. Clio und Captur wertet der ADAC gemeinsam aus.",
+          "check": "Alter der Batterie erfragen und sie testen lassen; springt der Motor zögerlich an, ist ein Tausch fällig.",
+          "severity": "gering",
+          "sources": [
+            {
+              "label": "ADAC Pannenstatistik 2025",
+              "url": "https://assets.adac.de/image/upload/v1776261444/ADAC-eV/KOR/Text/PDF/Pannenstatistik_2025_Bericht_czmf9q.pdf"
+            }
+          ]
+        }
+      ],
+      "engines": {
+        "recommended": [],
+        "caution": []
+      },
+      "tips": [
+        "Weitere Schwachstellen dieser Generation haben wir noch nicht ausgewertet. Lass das Auto vor dem Kauf in einer Werkstatt prüfen und Rückrufe per Fahrgestellnummer erfragen."
+      ]
+    }
+  ]
+}

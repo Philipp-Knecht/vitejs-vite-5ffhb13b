@@ -212,13 +212,27 @@
       "typicalPriceEur": null,
       "priceSource": null,
       "strengths": [],
-      "issues": [],
+      "issues": [
+        {
+          "title": "Überdurchschnittlich oft Pannen: Starterbatterie und Leitungen am Turbolader (mit Ladeluftkühler)",
+          "affects": "Laut ADAC-Pannenstatistik 2025: Starterbatterie bei Erstzulassung 2018–2022; Leitungen am Turbolader (mit Ladeluftkühler) bei Erstzulassung 2018–2020",
+          "detail": "Probleme mit Starterbatterie und Leitungen am Turbolader (mit Ladeluftkühler) waren bei diesen Jahrgängen überdurchschnittlich oft der Grund für einen Einsatz der ADAC-Straßenwacht. Eine schwache Starterbatterie ist bei allen Autos die häufigste Pannenursache, hier aber besonders oft.",
+          "check": "Alter der Batterie erfragen und sie testen lassen; springt der Motor zögerlich an, ist ein Tausch fällig. Auf der Probefahrt kräftig beschleunigen: Leistungsloch, Pfeifen oder die Motorkontrollleuchte deuten auf Probleme am Turbo hin.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Pannenstatistik 2025",
+              "url": "https://assets.adac.de/image/upload/v1776261444/ADAC-eV/KOR/Text/PDF/Pannenstatistik_2025_Bericht_czmf9q.pdf"
+            }
+          ]
+        }
+      ],
       "engines": {
         "recommended": [],
         "caution": []
       },
       "tips": [
-        "Zu dieser Generation haben wir noch keine Schwachstellen ausgewertet. Lass das Auto vor dem Kauf in einer Werkstatt prüfen und Rückrufe per Fahrgestellnummer erfragen."
+        "Weitere Schwachstellen dieser Generation haben wir noch nicht ausgewertet. Lass das Auto vor dem Kauf in einer Werkstatt prüfen und Rückrufe per Fahrgestellnummer erfragen."
       ]
     }
   ]

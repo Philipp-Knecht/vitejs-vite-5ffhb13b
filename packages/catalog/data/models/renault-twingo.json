@@ -1,0 +1,201 @@
+{
+  "id": "renault-twingo",
+  "make": "Renault",
+  "model": "Twingo",
+  "aliases": [
+    "twingo",
+    "twingo electric",
+    "twingo gt",
+    "twingo ii",
+    "twingo iii",
+    "twingo r.s.",
+    "twingo rs",
+    "twingo z.e."
+  ],
+  "segment": "kleinstwagen",
+  "summary": "Französischer Kleinstwagen, der für seine Größe ordentlich Platz bietet, in der zweiten Generation beim TÜV aber unterdurchschnittlich abschneidet.",
+  "ratings": {
+    "reliability": 4,
+    "reliabilityNote": "Laut ADAC-Pannenstatistik 2025 liegt der Twingo III mit Erstzulassung 2015 bis 2019 überwiegend im Mittelfeld, ab 2020 hatte er weniger Pannen als die meisten gleich alten Autos. Den Twingo II sah der ADAC in der Pannenstatistik gut, beim TÜV aber unter dem Durchschnitt.",
+    "reliabilitySources": [
+      {
+        "label": "ADAC Gebrauchtwageninfo: Renault Twingo (2007-2014)",
+        "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0230-renault-twingo-2007-2014-bericht.pdf"
+      },
+      {
+        "label": "ADAC Pannenstatistik 2025",
+        "url": "https://assets.adac.de/image/upload/v1776261444/ADAC-eV/KOR/Text/PDF/Pannenstatistik_2025_Bericht_czmf9q.pdf"
+      }
+    ],
+    "runningCosts": 4,
+    "space": 2,
+    "comfort": 2
+  },
+  "generations": [
+    {
+      "id": "renault-twingo-ii",
+      "name": "Twingo II",
+      "code": "II",
+      "years": [2007, 2014],
+      "bodyTypes": ["schraegheck"],
+      "fuels": ["petrol", "diesel"],
+      "seats": [4],
+      "automatic": true,
+      "typicalPriceEur": null,
+      "priceSource": null,
+      "strengths": [
+        "Ordentliches Platzangebot und für die Fahrzeugklasse recht großer Kofferraum",
+        "Optional verschiebbare Einzelsitze hinten",
+        "Sicheres Fahrverhalten und gute Crashtestergebnisse",
+        "Sparsame Dieselmotoren, die am Gebrauchtwagenmarkt aber kaum eine Rolle spielen"
+      ],
+      "issues": [
+        {
+          "title": "Rückrufe: Fahrersitz-Verriegelung, Ventilkeile (1.2 16V, TCe 100)",
+          "affects": "Twingo II: Rückruf 11/2009 (Fahrersitz-Verriegelung); Rückruf 10/2011 nur bei den Motoren D4F (1.2 16V) und D4FT (TCe 100)",
+          "detail": "Laut ADAC konnte bei der Fahrersitz-Verriegelung in den Sitzschienen eine Ausgleichsfeder herausrutschen (11/2009). Bei den Motoren 1.2 16V (D4F) und TCe 100 (D4FT) konnten Ventilkeile verschleißen und die geregelte Ventilsteuerung stören (10/2011).",
+          "check": "Per Fahrgestellnummer beim Händler prüfen lassen, ob die Rückrufe erledigt sind.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: Renault Twingo (2007-2014)",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0230-renault-twingo-2007-2014-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Fahrwerk, Lenkung und Beleuchtung (TÜV)",
+          "affects": "Twingo II allgemein (TÜV-Report); keine Einschränkung auf bestimmte Motoren oder Baujahre genannt",
+          "detail": "Im TÜV-Report fallen Twingos laut ADAC durch Probleme mit Achsaufhängung, Lenkung und Beleuchtung auf; vor allem am Fahrwerk gibt es oft etwas zu beanstanden.",
+          "check": "Bei der Probefahrt auf Klopfgeräusche und Spiel in Lenkung und Fahrwerk achten, alle Leuchten testen und den Bericht der letzten Hauptuntersuchung ansehen.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: Renault Twingo (2007-2014)",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0230-renault-twingo-2007-2014-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Bremsen: Beläge und mechanische Feststellbremse",
+          "affects": "Twingo II allgemein (TÜV-Report); Bremsbeläge bei Erstzulassung 2007–2012, mechanische Feststellbremse bei 2010–2011",
+          "detail": "Beim TÜV gibt es laut ADAC oft etwas an den Bremsen zu beanstanden, und Bremsbeläge sowie die mechanische Feststellbremse stehen in der Liste häufiger Bauteilfehler.",
+          "check": "Bremsbeläge, Bremsscheiben und Feststellbremse prüfen lassen und nach dem letzten Bremsenservice fragen.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: Renault Twingo (2007-2014)",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0230-renault-twingo-2007-2014-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Ölverlust am Antriebsstrang",
+          "affects": "Twingo II allgemein (ADAC-Bericht und TÜV-Report); keine Einschränkung auf bestimmte Motoren oder Baujahre genannt",
+          "detail": "Laut ADAC neigt der Antriebsstrang des Twingo zu häufigem Ölverlust, und auch im TÜV-Report fällt Ölverlust auf.",
+          "check": "Motor, Getriebe und den Boden unter dem Fahrzeug auf Ölspuren prüfen und den Ölstand kontrollieren.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: Renault Twingo (2007-2014)",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0230-renault-twingo-2007-2014-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Drosselklappe, Stellglied und Schalter",
+          "affects": "Twingo II bei Erstzulassung 2008–2011 (Drosselklappe, Drosselklappenstellglied) und 2012 (Drosselklappenschalter)",
+          "detail": "Der ADAC führt Drosselklappe, Drosselklappenstellglied und Drosselklappenschalter unter den häufigen Bauteilfehlern; die Drosselklappe regelt die Luftzufuhr zum Motor.",
+          "check": "Bei der Probefahrt auf Leerlauf und Gasannahme achten und den Fehlerspeicher auslesen lassen.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: Renault Twingo (2007-2014)",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0230-renault-twingo-2007-2014-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Zündkabel, Zündkerzen und Anlasser",
+          "affects": "Twingo II: Zündkabel (Hochspannungskabel) bei Erstzulassung 2010; Zündkerzen und Anlasser bei 2014",
+          "detail": "Der ADAC nennt Zündkabel, Zündkerzen und Anlasser für diese Zulassungsjahre unter den häufigen Bauteilfehlern.",
+          "check": "Im Serviceheft nach dem Zündkerzenwechsel schauen und das Startverhalten testen.",
+          "severity": "gering",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: Renault Twingo (2007-2014)",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0230-renault-twingo-2007-2014-bericht.pdf"
+            }
+          ]
+        }
+      ],
+      "engines": {
+        "recommended": [
+          {
+            "name": "Benziner mit 75 PS (1.2 16V)",
+            "why": "Laut ADAC die Empfehlung: für die meisten Alltagssituationen völlig ausreichend und häufig am Gebrauchtwagenmarkt zu finden; nur für längere Autobahnetappen ist ein stärkerer Motor vernünftiger. Beim 1.2 16V den Rückruf 10/2011 (Ventilkeile) prüfen lassen."
+          },
+          {
+            "name": "Twingo R.S. (1.6 mit 133 PS)",
+            "why": "Laut ADAC sehr gut motorisiert und fahrfreudig, auf dem Gebrauchtwagenmarkt aber selten und wesentlich teurer als die normalen Varianten."
+          }
+        ],
+        "caution": [
+          {
+            "name": "Benziner mit 58 PS",
+            "why": "Laut ADAC der schwächste Motor, der Mühe mit dem Twingo hat."
+          },
+          {
+            "name": "Automatisiertes Schaltgetriebe",
+            "why": "Laut ADAC wegen der langen Schaltzeiten und des dadurch stark geschmälerten Spurtvermögens nicht zu empfehlen."
+          },
+          {
+            "name": "Diesel",
+            "why": "Laut ADAC am Gebrauchtwagenmarkt kaum von Bedeutung; die wenigen Exemplare haben oft hohe Laufleistungen, und Modelle mit geringer Laufleistung sind deutlich teurer und nur für Vielfahrer eine gute Wahl."
+          }
+        ]
+      },
+      "tips": [
+        "Fahrwerk und Bremsen sorgfältig prüfen lassen: Hier gibt es laut ADAC beim TÜV am häufigsten etwas zu beanstanden.",
+        "Auf Ölspuren an Motor und Getriebe und unter dem Fahrzeug achten, denn der Antriebsstrang neigt laut ADAC zu häufigem Ölverlust.",
+        "Beim 1.2 16V und TCe 100 prüfen lassen, ob der Rückruf wegen der Ventilkeile (10/2011) erledigt ist.",
+        "Fahrzeuge mit automatisiertem Schaltgetriebe ausgiebig probefahren, denn der ADAC rät wegen der langen Schaltzeiten davon ab."
+      ]
+    },
+    {
+      "id": "renault-twingo-iii",
+      "name": "Twingo III",
+      "code": "III",
+      "years": [2014, 2024],
+      "bodyTypes": ["schraegheck"],
+      "fuels": ["petrol", "electric"],
+      "seats": [4],
+      "automatic": true,
+      "typicalPriceEur": null,
+      "priceSource": null,
+      "strengths": [],
+      "issues": [
+        {
+          "title": "Überdurchschnittlich oft Pannen: Anlasser, Lichtmaschine und Starterbatterie",
+          "affects": "Laut ADAC-Pannenstatistik 2025: Anlasser bei Erstzulassung 2015–2016; Lichtmaschine bei Erstzulassung 2015; Starterbatterie bei Erstzulassung 2017–2020",
+          "detail": "Probleme mit Anlasser, Lichtmaschine und Starterbatterie waren bei diesen Jahrgängen überdurchschnittlich oft der Grund für einen Einsatz der ADAC-Straßenwacht. Eine schwache Starterbatterie ist bei allen Autos die häufigste Pannenursache, hier aber besonders oft.",
+          "check": "Mehrmals starten: Der Motor muss ohne Zögern und ohne Klacken anspringen. Die Batterie-Ladekontrollleuchte muss nach dem Start ausgehen; die Ladespannung kann eine Werkstatt messen. Alter der Batterie erfragen und sie testen lassen; springt der Motor zögerlich an, ist ein Tausch fällig.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Pannenstatistik 2025",
+              "url": "https://assets.adac.de/image/upload/v1776261444/ADAC-eV/KOR/Text/PDF/Pannenstatistik_2025_Bericht_czmf9q.pdf"
+            }
+          ]
+        }
+      ],
+      "engines": {
+        "recommended": [],
+        "caution": []
+      },
+      "tips": [
+        "Weitere Schwachstellen dieser Generation haben wir noch nicht ausgewertet. Lass das Auto vor dem Kauf in einer Werkstatt prüfen und Rückrufe per Fahrgestellnummer erfragen."
+      ]
+    }
+  ]
+}

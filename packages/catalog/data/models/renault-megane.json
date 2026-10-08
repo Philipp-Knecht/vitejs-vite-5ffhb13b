@@ -1,0 +1,252 @@
+{
+  "id": "renault-megane",
+  "make": "Renault",
+  "model": "Mégane",
+  "aliases": [
+    "megane",
+    "megane cabrio",
+    "megane cc",
+    "megane coupe",
+    "megane coupe cabriolet",
+    "megane coupé",
+    "megane e-tech",
+    "megane e-tech electric",
+    "megane gran coupe",
+    "megane grand coupe",
+    "megane grand tour",
+    "megane grandtour",
+    "megane iii",
+    "megane iv",
+    "megane r.s.",
+    "megane rs",
+    "megane sport tourer",
+    "mégane"
+  ],
+  "segment": "kompakt",
+  "summary": "Französischer Kompaktwagen als Schrägheck oder Kombi (Grandtour), dessen dritte Generation mit großem Kofferraum punktet und auch als Coupé und Cabrio erhältlich war.",
+  "ratings": {
+    "reliability": 3,
+    "reliabilityNote": "Laut ADAC-Pannenstatistik 2025 hatte der Mégane IV mit Erstzulassung 2017 und 2018 deutlich mehr Pannen als die meisten gleich alten Autos, ab 2020 dagegen weniger. Den Mégane III sah der ADAC im Mittelfeld (2016 „sehr schlecht“), beim TÜV schneidet er nicht sonderlich gut ab.",
+    "reliabilitySources": [
+      {
+        "label": "ADAC Gebrauchtwageninfo: Renault Mégane (2008-2016) Diesel",
+        "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0196-renault-megane-2008-2016-diesel-bericht.pdf"
+      },
+      {
+        "label": "ADAC Gebrauchtwageninfo: Renault Mégane (2008-2016) Benziner",
+        "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0195-renault-megane-2008-2016-benziner-bericht.pdf"
+      },
+      {
+        "label": "ADAC Pannenstatistik 2025",
+        "url": "https://assets.adac.de/image/upload/v1776261444/ADAC-eV/KOR/Text/PDF/Pannenstatistik_2025_Bericht_czmf9q.pdf"
+      }
+    ],
+    "runningCosts": 3,
+    "space": 4,
+    "comfort": 3
+  },
+  "generations": [
+    {
+      "id": "renault-megane-iii",
+      "name": "Mégane III",
+      "code": "III",
+      "years": [2008, 2016],
+      "bodyTypes": ["schraegheck", "kombi", "coupe", "cabrio"],
+      "fuels": ["petrol", "diesel"],
+      "seats": [5],
+      "automatic": true,
+      "typicalPriceEur": null,
+      "priceSource": null,
+      "strengths": [
+        "Ordentliches Platzangebot vorn und großer Kofferraum in allen Karosserievarianten, vor allem beim Kombi (Grandtour)",
+        "Hohes Sicherheitsniveau mit kräftiger Bremsanlage und guten Crashergebnissen",
+        "Sparsame Dieselmotoren",
+        "Angenehm straffe Sitze"
+      ],
+      "issues": [
+        {
+          "title": "Rückrufe: Bremskraftunterstützung, Lenksäule, Pedale, EDC-Getriebe",
+          "affects": "Mégane III (Benziner und Diesel): Rückrufe 12/2009 (Pedal), 8/2011 (Lenksäulengelenk), 1/2012 (nur mit EDC-Automatik), 10/2012 und 6/2016 (Bremskraftunterstützung)",
+          "detail": "Laut ADAC kann die Bremskraftunterstützung ausfallen (hartes Bremspedal), und zwar durch zu wenig Unterdruck im Einlasskrümmer (10/2012) oder durch den Bruch des Rotors der Unterdruckpumpe (6/2016). Weitere Rückrufe betrafen eine mögliche Rissbildung an einer Pedal-Schweißnaht (12/2009), die Klemmschraube am Lenksäulengelenk (8/2011) und bei der EDC-Automatik den Verlust der gewählten Schaltstufe, der unter 20 km/h zu Traktionsverlust führen kann (1/2012).",
+          "check": "Per Fahrgestellnummer beim Händler prüfen lassen, ob die Rückrufe erledigt sind.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: Renault Mégane (2008-2016) Diesel",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0196-renault-megane-2008-2016-diesel-bericht.pdf"
+            },
+            {
+              "label": "ADAC Gebrauchtwageninfo: Renault Mégane (2008-2016) Benziner",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0195-renault-megane-2008-2016-benziner-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Elektrik: Starterbatterie, Anlasser, Sicherungs- und Relaisbox",
+          "affects": "Mégane III (Benziner und Diesel): Starterbatterie bei Erstzulassung 2008 und 2015–2016; Anlasser sowie Sicherungs- und Relaisbox bei Erstzulassung 2016",
+          "detail": "Laut ADAC verursacht vor allem die Elektronik immer wieder Pannen; Starterbatterie, Anlasser und Sicherungs-/Relaisbox stehen in der Liste häufiger Bauteilfehler. Die Zulassungsjahre 2008, 2015 und 2016 sind in der ADAC-Pannenstatistik insgesamt mit „schlecht“ (2008, 2015) bzw. „sehr schlecht“ (2016) eingestuft.",
+          "check": "Alter und Austausch der Batterie erfragen, das Startverhalten kalt und warm testen und den Fehlerspeicher auslesen lassen.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: Renault Mégane (2008-2016) Diesel",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0196-renault-megane-2008-2016-diesel-bericht.pdf"
+            },
+            {
+              "label": "ADAC Gebrauchtwageninfo: Renault Mégane (2008-2016) Benziner",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0195-renault-megane-2008-2016-benziner-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Fahrwerk und Lenkung: Achsen, Antriebswellen, Federn, Dämpfer",
+          "affects": "Mégane III allgemein (TÜV-Report, Benziner und Diesel); keine Einschränkung auf bestimmte Motoren oder Baujahre genannt",
+          "detail": "Im TÜV-Report fallen laut ADAC Antriebswellen, Lenkgelenke, Radaufhängung sowie Federn und Dämpfung negativ auf. Häufige Probleme an Achsen, Feder-Dämpfer-Einheit und Lenkung verhindern laut ADAC ein besseres TÜV-Ergebnis.",
+          "check": "Bei der Probefahrt auf Klopfen, Knacken und Spiel in Lenkung und Fahrwerk achten und den Bericht der letzten Hauptuntersuchung ansehen.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: Renault Mégane (2008-2016) Diesel",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0196-renault-megane-2008-2016-diesel-bericht.pdf"
+            },
+            {
+              "label": "ADAC Gebrauchtwageninfo: Renault Mégane (2008-2016) Benziner",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0195-renault-megane-2008-2016-benziner-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Bremsen: hoher Verschleiß, mechanische Feststellbremse",
+          "affects": "Mégane III allgemein (Benziner und Diesel); mechanische Feststellbremse bei Erstzulassung 2013",
+          "detail": "Der ADAC nennt hohen Bremsenverschleiß als Nachteil, und beim TÜV ergeben sich bei den Bremsen häufig Fehler. Die mechanische Feststellbremse steht für Erstzulassung 2013 in der Liste häufiger Bauteilfehler.",
+          "check": "Bremsscheiben, Beläge und Feststellbremse prüfen lassen und sich Belege über zuletzt erneuerte Bremsteile zeigen lassen.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: Renault Mégane (2008-2016) Diesel",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0196-renault-megane-2008-2016-diesel-bericht.pdf"
+            },
+            {
+              "label": "ADAC Gebrauchtwageninfo: Renault Mégane (2008-2016) Benziner",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0195-renault-megane-2008-2016-benziner-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Einspritzdüsen/Injektoren",
+          "affects": "Mégane III bei Erstzulassung 2011–2013; der ADAC nennt keine bestimmte Motorisierung (die Angabe steht in den Berichten zu Benzinern und Dieseln)",
+          "detail": "Der ADAC führt Einspritzdüsen bzw. Injektoren für diese Zulassungsjahre unter den häufigen Bauteilfehlern.",
+          "check": "Nach Motorstörungen oder einem Austausch von Einspritzdüsen fragen und bei der Probefahrt auf unruhigen Motorlauf achten.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: Renault Mégane (2008-2016) Diesel",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0196-renault-megane-2008-2016-diesel-bericht.pdf"
+            },
+            {
+              "label": "ADAC Gebrauchtwageninfo: Renault Mégane (2008-2016) Benziner",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0195-renault-megane-2008-2016-benziner-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Beleuchtung, Zündkerzen, Auspuff, Kühlschlauch",
+          "affects": "Beleuchtung: Mégane III allgemein (TÜV-Report); Zündkerzen: Erstzulassung 2008 und 2011; Auspuffrohr/-topf: 2012; Kühl-/Heizungsschlauch: 2016 (Angaben stehen in beiden ADAC-Berichten)",
+          "detail": "Laut ADAC ergeben sich beim TÜV häufig Fehler an der Beleuchtung; die übrigen Teile stehen in der Liste häufiger Bauteilfehler.",
+          "check": "Alle Leuchten testen, Auspuff und Kühlschläuche auf Undichtigkeiten ansehen und im Serviceheft nach dem Zündkerzenwechsel schauen.",
+          "severity": "gering",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: Renault Mégane (2008-2016) Diesel",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0196-renault-megane-2008-2016-diesel-bericht.pdf"
+            },
+            {
+              "label": "ADAC Gebrauchtwageninfo: Renault Mégane (2008-2016) Benziner",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0195-renault-megane-2008-2016-benziner-bericht.pdf"
+            }
+          ]
+        }
+      ],
+      "engines": {
+        "recommended": [
+          {
+            "name": "Diesel mit mindestens 130 PS",
+            "why": "Laut ADAC deutlich souveränere Fahrleistungen als die kleinen 1.5 dCi und häufig am Gebrauchtwagenmarkt zu finden, besonders als Grandtour in einer mittleren Ausstattung."
+          },
+          {
+            "name": "Benziner mit 130 bis 140 PS",
+            "why": "Laut ADAC passen sie deutlich besser zum Fahrzeug als die schwächeren Benziner mit 100 bis 115 PS und schieben den Mégane souveräner an."
+          }
+        ],
+        "caution": [
+          {
+            "name": "1.5 dCi (bis 110 PS)",
+            "why": "Laut ADAC sparsam, bringt den Mégane mit höchstens 110 PS aber nur mit Mühe in Schwung; besonders in den hohen Gängen fehlt es an Durchzugskraft."
+          }
+        ]
+      },
+      "tips": [
+        "Bremsen genau prüfen lassen: Laut ADAC ist der Bremsenverschleiß hoch, und beim TÜV fallen die Bremsen häufig auf.",
+        "Bei der Probefahrt auf Klopfen, Spiel oder Knacken in Lenkung, Fahrwerk und Antriebswellen achten und den letzten HU-Bericht ansehen.",
+        "Auf ein nach Herstellervorgaben gewartetes Fahrzeug in gutem Zustand achten (Serviceheft), denn die Langzeitqualität ist laut ADAC nur mäßig.",
+        "Bei Fahrzeugen mit EDC-Automatik prüfen lassen, ob der Rückruf wegen des möglichen Verlusts der Schaltstufe (1/2012) erledigt ist."
+      ]
+    },
+    {
+      "id": "renault-megane-iv",
+      "name": "Mégane IV",
+      "code": "IV",
+      "years": [2016, null],
+      "bodyTypes": ["schraegheck", "kombi", "limousine"],
+      "fuels": ["petrol", "diesel", "plugin_hybrid"],
+      "seats": [5],
+      "automatic": true,
+      "typicalPriceEur": null,
+      "priceSource": null,
+      "strengths": [],
+      "issues": [
+        {
+          "title": "Überdurchschnittlich oft Pannen: Kühlschläuche und Starterbatterie",
+          "affects": "Laut ADAC-Pannenstatistik 2025: Kühlschläuche bei Erstzulassung 2017–2018; Starterbatterie bei Erstzulassung 2017–2019",
+          "detail": "Probleme mit Kühlschläuche und Starterbatterie waren bei diesen Jahrgängen überdurchschnittlich oft der Grund für einen Einsatz der ADAC-Straßenwacht. Eine schwache Starterbatterie ist bei allen Autos die häufigste Pannenursache, hier aber besonders oft.",
+          "check": "Kühlmittelstand prüfen und unter dem Auto nach Flecken schauen; nach der Probefahrt muss die Temperaturanzeige im Normalbereich stehen. Alter der Batterie erfragen und sie testen lassen; springt der Motor zögerlich an, ist ein Tausch fällig.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Pannenstatistik 2025",
+              "url": "https://assets.adac.de/image/upload/v1776261444/ADAC-eV/KOR/Text/PDF/Pannenstatistik_2025_Bericht_czmf9q.pdf"
+            }
+          ]
+        }
+      ],
+      "engines": {
+        "recommended": [],
+        "caution": []
+      },
+      "tips": [
+        "Weitere Schwachstellen dieser Generation haben wir noch nicht ausgewertet. Lass das Auto vor dem Kauf in einer Werkstatt prüfen und Rückrufe per Fahrgestellnummer erfragen."
+      ]
+    },
+    {
+      "id": "renault-megane-e-tech",
+      "name": "Mégane E-Tech Electric",
+      "code": null,
+      "years": [2022, null],
+      "bodyTypes": ["suv"],
+      "fuels": ["electric"],
+      "seats": [5],
+      "automatic": true,
+      "typicalPriceEur": null,
+      "priceSource": null,
+      "strengths": [],
+      "issues": [],
+      "engines": {
+        "recommended": [],
+        "caution": []
+      },
+      "tips": [
+        "Für diese Generation liegen noch wenige Gebrauchtwagen-Erfahrungen vor; Rückrufe per Fahrgestellnummer erfragen."
+      ]
+    }
+  ]
+}

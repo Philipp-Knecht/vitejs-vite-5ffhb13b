@@ -1,0 +1,326 @@
+{
+  "id": "hyundai-i30",
+  "make": "Hyundai",
+  "model": "i30",
+  "aliases": ["i30", "i30 coupe", "i30 coupé", "i30 cw", "i30 fastback", "i30 kombi", "i30 n"],
+  "segment": "kompakt",
+  "summary": "Vernünftiger, unaufgeregter Kompaktwagen mit bequemen Sitzen und gutem Platzangebot, bei dem der TÜV häufig Lenkung, Bremsen und Beleuchtung bemängelt.",
+  "ratings": {
+    "reliability": 3,
+    "reliabilityNote": "Laut ADAC-Pannenstatistik 2025 liegt der i30 der dritten Generation mit Erstzulassung 2017 bis 2019 im Mittelfeld, 2020 bis 2022 hatte er weniger Pannen als die meisten gleich alten Autos. Die zweite Generation lag laut ADAC überwiegend im Mittelfeld, die erste schnitt schwach ab; beim TÜV liegen beide unter dem Durchschnitt.",
+    "reliabilitySources": [
+      {
+        "label": "ADAC Gebrauchtwageninfo: Hyundai i30 (2007-2012)",
+        "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0293-hyundai-i30-2007-2012-bericht.pdf"
+      },
+      {
+        "label": "ADAC Gebrauchtwageninfo: Hyundai i30 (2012-2017)",
+        "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0185-hyundai-i30-2012-2017-bericht.pdf"
+      },
+      {
+        "label": "ADAC Pannenstatistik 2025",
+        "url": "https://assets.adac.de/image/upload/v1776261444/ADAC-eV/KOR/Text/PDF/Pannenstatistik_2025_Bericht_czmf9q.pdf"
+      }
+    ],
+    "runningCosts": 3,
+    "space": 3,
+    "comfort": 4
+  },
+  "generations": [
+    {
+      "id": "hyundai-i30-fd",
+      "name": "i30 FD",
+      "code": "FD",
+      "years": [2007, 2012],
+      "bodyTypes": ["schraegheck", "kombi"],
+      "fuels": ["petrol", "diesel"],
+      "seats": [5],
+      "automatic": true,
+      "typicalPriceEur": null,
+      "priceSource": null,
+      "strengths": [
+        "Gute Platzverhältnisse",
+        "Problemlose Bedienung",
+        "Sichere Fahreigenschaften",
+        "Bequeme Sitze"
+      ],
+      "issues": [
+        {
+          "title": "Steuerkette",
+          "affects": "Erstzulassungsjahre 2009–2012; welche Motoren betroffen sind, nennt der Bericht nicht",
+          "detail": "Die Steuerkette zählt laut ADAC-Pannenstatistik bei den Jahrgängen 2009 bis 2012 zu den häufigen Bauteilfehlern. Ein Defekt kann im ungünstigen Fall zu einem Motorschaden führen.",
+          "check": "Motor kalt starten und auf Rassel- oder Klappergeräusche achten; Wartungsnachweise ansehen und fragen, ob die Steuerkette schon erneuert wurde.",
+          "severity": "hoch",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: Hyundai i30 (2007-2012)",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0293-hyundai-i30-2007-2012-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Rückrufe: Handbremse, Lenkung, Airbag-Steuergerät",
+          "affects": "Rückrufe 7/2013 (Handbremse), 11/2014 (Lenkung, Typen FD/FDe) und 2/2020 (Airbag-Steuergerät)",
+          "detail": "Laut ADAC gab es Rückrufe, weil das Lösen der Handbremse behindert sein kann, wenn die Umlenkwelle zu stark korrodiert (7/2013), weil eine Schraube am Kreuzgelenk der Lenkung nicht richtig festgezogen war (11/2014) und weil eine fehlerhafte Programmierung des Airbag-Steuergeräts zu einer fehlerhaften Funktion des Airbags führen kann (2/2020).",
+          "check": "Per Fahrgestellnummer beim Händler prüfen lassen, ob die Rückrufe erledigt sind.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: Hyundai i30 (2007-2012)",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0293-hyundai-i30-2007-2012-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Achsaufhängungen und Achsfedern",
+          "affects": "Achsaufhängungen: alle Baujahre (2007–2012) laut TÜV-Report; Vorder- und Hinterachsfedern: Erstzulassungsjahr 2012",
+          "detail": "Der TÜV beanstandet die Achsaufhängungen überdurchschnittlich oft, und der ADAC nennt sie als anfällig. Beim Jahrgang 2012 führt er zudem die Vorder- und Hinterachsfedern als häufigen Bauteilfehler auf.",
+          "check": "Bei der Probefahrt auf Klopfgeräusche und unruhiges Fahrverhalten achten; Achsen und Federn in der Werkstatt prüfen lassen.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: Hyundai i30 (2007-2012)",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0293-hyundai-i30-2007-2012-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Bremsen, Lenkung und Beleuchtung beim TÜV häufig beanstandet",
+          "affects": "Alle Baujahre (2007–2012); Aussage des ADAC zum TÜV-Report, ohne Eingrenzung",
+          "detail": "Laut ADAC werden Bremsscheiben, Fuß- und Handbremse, Lenkung und Beleuchtung beim TÜV überdurchschnittlich oft bemängelt. Deshalb liegen Zuverlässigkeit und Langzeitqualität laut ADAC auf unterdurchschnittlichem Niveau.",
+          "check": "Bremsscheiben, Beläge, Handbremse, Lenkspiel und alle Lichter prüfen und den letzten TÜV-Bericht zeigen lassen.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: Hyundai i30 (2007-2012)",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0293-hyundai-i30-2007-2012-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Kraftstoffpumpe, Kurbelwellensensor, Zündspulen und Zündkerzen",
+          "affects": "Kraftstoffpumpe: Erstzulassungsjahre 2009–2011; Kurbelwellensensor: 2009; Zündspulen: 2009–2011; Zündkerzen: 2010–2012; welche Motoren betroffen sind, nennt der Bericht nicht",
+          "detail": "Der ADAC nennt diese Teile in der Pannenstatistik als häufige Bauteilfehler der jeweiligen Jahrgänge. Ausfälle können zu Motoraussetzern, Startproblemen oder einem stehenbleibenden Motor führen.",
+          "check": "Bei der Probefahrt auf Ruckeln, Aussetzer und Startprobleme achten und nach bereits erneuerten Teilen fragen.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: Hyundai i30 (2007-2012)",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0293-hyundai-i30-2007-2012-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Starterbatterie, Batteriepolklemmen und Anlasser",
+          "affects": "Starterbatterie: Erstzulassungsjahre 2008 und 2012; Batteriepolklemmen: 2010; Anlasser: 2012",
+          "detail": "Der ADAC nennt diese Teile in der Pannenstatistik als häufige Bauteilfehler einzelner Jahrgänge. Eine schwache Batterie oder ein defekter Anlasser kann dazu führen, dass der Motor nicht anspringt.",
+          "check": "Alter der Batterie erfragen und das Startverhalten bei kaltem und warmem Motor testen.",
+          "severity": "gering",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: Hyundai i30 (2007-2012)",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0293-hyundai-i30-2007-2012-bericht.pdf"
+            }
+          ]
+        }
+      ],
+      "engines": {
+        "recommended": [
+          {
+            "name": "1.6 Benziner (ab 122 PS)",
+            "why": "Laut ADAC spürbar kräftiger als der 1.4 und im Alltag kaum durstiger; der ADAC rät dazu, dafür etwas mehr Geld auszugeben."
+          },
+          {
+            "name": "2.0 Benziner (143 PS)",
+            "why": "Laut ADAC geht es damit nochmals zügiger voran."
+          },
+          {
+            "name": "Diesel mit 116 PS",
+            "why": "Laut ADAC agiert er souveräner als die 90-PS-Version und bleibt im Alltag ähnlich sparsam."
+          },
+          {
+            "name": "Diesel mit 90 PS",
+            "why": "Laut ADAC schiebt er den i30 überraschend kräftig an, genügt in den meisten Situationen und ist häufig auf dem Gebrauchtwagenmarkt zu finden."
+          }
+        ],
+        "caution": [
+          {
+            "name": "1.4 Benziner (109 PS)",
+            "why": "Laut ADAC wirkt der Einstiegsbenziner in dieser Fahrzeugklasse relativ kraftlos und überzeugt auch nicht durch Sparsamkeit."
+          }
+        ]
+      },
+      "tips": [
+        "Motor kalt starten und auf Rassel- oder Klappergeräusche (Steuerkette) achten; Wartungsnachweise ansehen und fragen, ob die Steuerkette schon erneuert wurde.",
+        "Bei der Probefahrt auf Klopfgeräusche und unruhiges Fahrverhalten (Achsaufhängung, Federn) achten und Bremsen sowie Lenkung prüfen lassen; der TÜV beanstandet sie überdurchschnittlich oft.",
+        "Die Handbremse muss sich leicht lösen lassen (Rückruf 7/2013); Rückrufe zusätzlich per Fahrgestellnummer klären.",
+        "Startverhalten und Motorlauf testen (Batterie, Kraftstoffpumpe, Zündung) und nach bereits erneuerten Teilen fragen."
+      ]
+    },
+    {
+      "id": "hyundai-i30-gd",
+      "name": "i30 GD",
+      "code": "GD",
+      "years": [2012, 2017],
+      "bodyTypes": ["schraegheck", "kombi", "coupe"],
+      "fuels": ["petrol", "diesel"],
+      "seats": [5],
+      "automatic": true,
+      "typicalPriceEur": null,
+      "priceSource": null,
+      "strengths": [
+        "Gute Platzverhältnisse",
+        "Gute Sicherheitsausstattung",
+        "Problemlose Bedienung",
+        "Sichere Fahreigenschaften"
+      ],
+      "issues": [
+        {
+          "title": "Steuerkette",
+          "affects": "Erstzulassungsjahr 2012; welche Motoren betroffen sind, nennt der Bericht nicht",
+          "detail": "Die Steuerkette zählt laut ADAC-Pannenstatistik beim Jahrgang 2012 zu den häufigen Bauteilfehlern. Ein Defekt kann im ungünstigen Fall zu einem Motorschaden führen.",
+          "check": "Motor kalt starten und auf Rasselgeräusche achten; Wartungsnachweise ansehen und fragen, ob die Steuerkette erneuert wurde.",
+          "severity": "hoch",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: Hyundai i30 (2012-2017)",
+              "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0185-hyundai-i30-2012-2017-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Ausgeschlagene Lenkgelenke",
+          "affects": "Alle Baujahre (2012–2017); Aussage des ADAC zum TÜV-Report, ohne Eingrenzung",
+          "detail": "Der TÜV bemängelt beim i30 häufig ausgeschlagene Lenkgelenke, also Spiel in der Lenkung. Das beeinträchtigt das Lenkgefühl und führt bei der Hauptuntersuchung zur Beanstandung.",
+          "check": "Bei der Probefahrt auf Spiel in der Lenkung, Klopfgeräusche und unpräzises Lenkgefühl achten; Lenkgelenke in der Werkstatt prüfen lassen.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: Hyundai i30 (2012-2017)",
+              "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0185-hyundai-i30-2012-2017-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Mangelhaft funktionierende Bremsen",
+          "affects": "Alle Baujahre (2012–2017); Aussage des ADAC zum TÜV-Report, ohne Eingrenzung",
+          "detail": "Beim TÜV werden laut ADAC häufig mangelhaft funktionierende Bremsen bemängelt. Zusammen mit Lenkung und Beleuchtung führt das zu leicht unterdurchschnittlichen TÜV-Werten.",
+          "check": "Bremsscheiben, Beläge und Bremswirkung prüfen lassen und den letzten TÜV-Bericht ansehen.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: Hyundai i30 (2012-2017)",
+              "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0185-hyundai-i30-2012-2017-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Starterbatterie und Anlasser",
+          "affects": "Starterbatterie: Erstzulassungsjahre 2012–2015 und 2017; Anlasser: 2012",
+          "detail": "Der ADAC nennt beide Teile in der Pannenstatistik als häufige Bauteilfehler. Eine schwache Batterie oder ein defekter Anlasser kann dazu führen, dass der Motor nicht anspringt.",
+          "check": "Alter der Batterie erfragen und das Startverhalten bei kaltem und warmem Motor testen.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: Hyundai i30 (2012-2017)",
+              "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0185-hyundai-i30-2012-2017-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Defekte Beleuchtungsanlagen",
+          "affects": "Alle Baujahre (2012–2017); Aussage des ADAC zum TÜV-Report, ohne Eingrenzung",
+          "detail": "Defekte Beleuchtungsanlagen gehören laut ADAC zu den häufigen TÜV-Beanstandungen beim i30.",
+          "check": "Alle Lichter rundum testen und fragen, ob die Beleuchtung bei der letzten Hauptuntersuchung bemängelt wurde.",
+          "severity": "gering",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: Hyundai i30 (2012-2017)",
+              "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0185-hyundai-i30-2012-2017-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Zündkerzen",
+          "affects": "Erstzulassungsjahre 2012–2014",
+          "detail": "Zündkerzen sind laut ADAC-Pannenstatistik bei diesen Jahrgängen ein häufiger Bauteilfehler. Defekte Zündkerzen können Motorruckeln oder Startprobleme verursachen.",
+          "check": "Auf Ruckeln und unrunden Motorlauf achten und nachfragen, wann die Zündkerzen zuletzt gewechselt wurden.",
+          "severity": "gering",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: Hyundai i30 (2012-2017)",
+              "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0185-hyundai-i30-2012-2017-bericht.pdf"
+            }
+          ]
+        }
+      ],
+      "engines": {
+        "recommended": [
+          {
+            "name": "1.6 Benziner",
+            "why": "Laut ADAC spürbar kräftiger als die Einstiegsbenziner mit etwa 100 PS und im Alltag kaum durstiger; der ADAC rät dazu, dafür etwas mehr Geld auszugeben."
+          },
+          {
+            "name": "Diesel mit 136 PS",
+            "why": "Laut ADAC passt dieser Diesel am besten in das Fahrzeug; auch längere, zügige Autobahnetappen sind damit souverän machbar."
+          },
+          {
+            "name": "Diesel mit 110 oder 128 PS",
+            "why": "Laut ADAC ist man mit diesen stärkeren Dieseln wesentlich entspannter unterwegs als mit dem 1.4-Einstiegsdiesel."
+          }
+        ],
+        "caution": [
+          {
+            "name": "Einstiegsbenziner (etwa 100 PS)",
+            "why": "Laut ADAC wirken die Einstiegsbenziner in dieser Fahrzeugklasse relativ kraftlos und überzeugen auch nicht durch Sparsamkeit."
+          },
+          {
+            "name": "Einstiegsdiesel (1.4 Liter)",
+            "why": "Laut ADAC kann der Einstiegsdiesel mit 1,4 Liter Hubraum in dem stattlichen Koreaner nicht überzeugen."
+          }
+        ]
+      },
+      "tips": [
+        "Lenkung prüfen: Der TÜV bemängelt häufig ausgeschlagene Lenkgelenke; bei der Probefahrt auf Spiel und Klopfgeräusche achten.",
+        "Bremsen und Beleuchtung gründlich prüfen lassen, denn der TÜV beanstandet beides beim i30 häufig.",
+        "Startverhalten testen und das Alter der Starterbatterie erfragen; sie ist bei den Jahrgängen 2012–2015 und 2017 ein häufiger Bauteilfehler.",
+        "Bei Erstzulassung 2012 auf Motorgeräusche achten (Steuerkette) und Wartungsnachweise ansehen."
+      ]
+    },
+    {
+      "id": "hyundai-i30-pd",
+      "name": "i30 PD",
+      "code": "PD",
+      "years": [2017, null],
+      "bodyTypes": ["schraegheck", "kombi"],
+      "fuels": ["petrol", "diesel", "hybrid"],
+      "seats": [5],
+      "automatic": true,
+      "typicalPriceEur": null,
+      "priceSource": null,
+      "strengths": [],
+      "issues": [
+        {
+          "title": "Überdurchschnittlich oft Pannen: Starterbatterie",
+          "affects": "Erstzulassung 2018–2019 (ADAC-Pannenstatistik 2025)",
+          "detail": "Probleme mit Starterbatterie waren bei diesen Jahrgängen überdurchschnittlich oft der Grund für einen Einsatz der ADAC-Straßenwacht. Eine schwache Starterbatterie ist bei allen Autos die häufigste Pannenursache, hier aber besonders oft.",
+          "check": "Alter der Batterie erfragen und sie testen lassen; springt der Motor zögerlich an, ist ein Tausch fällig.",
+          "severity": "gering",
+          "sources": [
+            {
+              "label": "ADAC Pannenstatistik 2025",
+              "url": "https://assets.adac.de/image/upload/v1776261444/ADAC-eV/KOR/Text/PDF/Pannenstatistik_2025_Bericht_czmf9q.pdf"
+            }
+          ]
+        }
+      ],
+      "engines": {
+        "recommended": [],
+        "caution": []
+      },
+      "tips": [
+        "Weitere Schwachstellen dieser Generation haben wir noch nicht ausgewertet. Lass das Auto vor dem Kauf in einer Werkstatt prüfen und Rückrufe per Fahrgestellnummer erfragen."
+      ]
+    }
+  ]
+}

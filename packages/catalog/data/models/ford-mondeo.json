@@ -165,13 +165,27 @@
       "typicalPriceEur": null,
       "priceSource": null,
       "strengths": [],
-      "issues": [],
+      "issues": [
+        {
+          "title": "Überdurchschnittlich oft Pannen: Lichtmaschine, Kraftstoffpumpe und Starterbatterie",
+          "affects": "Laut ADAC-Pannenstatistik 2025: Lichtmaschine bei Erstzulassung 2015–2016; Kraftstoffpumpe bei Erstzulassung 2019; Starterbatterie bei Erstzulassung 2015–2018, 2020–2021",
+          "detail": "Probleme mit Lichtmaschine, Kraftstoffpumpe und Starterbatterie waren bei diesen Jahrgängen überdurchschnittlich oft der Grund für einen Einsatz der ADAC-Straßenwacht. Eine schwache Starterbatterie ist bei allen Autos die häufigste Pannenursache, hier aber besonders oft.",
+          "check": "Die Batterie-Ladekontrollleuchte muss nach dem Start ausgehen; die Ladespannung kann eine Werkstatt messen. Springt der Motor schlecht an oder geht er aus, die Kraftstoffpumpe prüfen lassen und nach Reparaturen fragen. Alter der Batterie erfragen und sie testen lassen; springt der Motor zögerlich an, ist ein Tausch fällig.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Pannenstatistik 2025",
+              "url": "https://assets.adac.de/image/upload/v1776261444/ADAC-eV/KOR/Text/PDF/Pannenstatistik_2025_Bericht_czmf9q.pdf"
+            }
+          ]
+        }
+      ],
       "engines": {
         "recommended": [],
         "caution": []
       },
       "tips": [
-        "Zu dieser Generation haben wir noch keine Schwachstellen ausgewertet. Lass das Auto vor dem Kauf in einer Werkstatt prüfen und Rückrufe per Fahrgestellnummer erfragen."
+        "Weitere Schwachstellen dieser Generation haben wir noch nicht ausgewertet. Lass das Auto vor dem Kauf in einer Werkstatt prüfen und Rückrufe per Fahrgestellnummer erfragen."
       ]
     }
   ]

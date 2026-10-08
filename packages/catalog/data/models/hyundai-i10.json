@@ -1,0 +1,288 @@
+{
+  "id": "hyundai-i10",
+  "make": "Hyundai",
+  "model": "i10",
+  "aliases": ["i10"],
+  "segment": "kleinstwagen",
+  "summary": "Einfacher, unaufgeregter Kleinstwagen mit fünf Sitzen für die Stadt, der beim TÜV allerdings oft an Fahrwerk, Bremsen und Ölverlust auffällt.",
+  "ratings": {
+    "reliability": 3,
+    "reliabilityNote": "Laut ADAC-Pannenstatistik 2025 liegt der i10 der dritten Generation (Erstzulassung 2020 bis 2022) im Mittelfeld, die Jahrgänge 2017 bis 2019 des Vorgängers hatten dagegen deutlich mehr Pannen als die meisten gleich alten Autos. Beim TÜV schneidet der i10 laut ADAC unterdurchschnittlich ab.",
+    "reliabilitySources": [
+      {
+        "label": "ADAC Gebrauchtwageninfo: Hyundai i10 (2008-2013)",
+        "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0184-hyundai-i10-2008-2013-bericht.pdf"
+      },
+      {
+        "label": "ADAC Gebrauchtwageninfo: Hyundai i10 (2013-2019)",
+        "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0248-hyundai-i10-2013-2019-bericht.pdf"
+      },
+      {
+        "label": "ADAC Pannenstatistik 2025",
+        "url": "https://assets.adac.de/image/upload/v1776261444/ADAC-eV/KOR/Text/PDF/Pannenstatistik_2025_Bericht_czmf9q.pdf"
+      }
+    ],
+    "runningCosts": 4,
+    "space": 2,
+    "comfort": 3
+  },
+  "generations": [
+    {
+      "id": "hyundai-i10-pa",
+      "name": "i10 PA",
+      "code": "PA",
+      "years": [2008, 2013],
+      "bodyTypes": ["schraegheck"],
+      "fuels": ["petrol", "diesel", "lpg"],
+      "seats": [5],
+      "automatic": true,
+      "typicalPriceEur": null,
+      "priceSource": null,
+      "strengths": [
+        "Gute Platzverhältnisse vorne",
+        "Problemlose Bedienung",
+        "Übersichtliche Karosserie",
+        "Ordentliche Verarbeitung"
+      ],
+      "issues": [
+        {
+          "title": "Starterbatterie und Batteriepolklemmen",
+          "affects": "Starterbatterie: Erstzulassungsjahre 2009–2013; Batteriepolklemmen: 2009",
+          "detail": "Die Starterbatterie ist laut ADAC einer der Pannenschwerpunkte des i10; auch Batteriepolklemmen zählen zu den häufigen Bauteilfehlern. Eine schwache Batterie kann dazu führen, dass der Motor nicht anspringt.",
+          "check": "Alter und Zustand der Batterie erfragen, das Startverhalten bei kaltem Motor testen und die Polklemmen auf festen Sitz und Korrosion ansehen.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: Hyundai i10 (2008-2013)",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0184-hyundai-i10-2008-2013-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Kraftstoffpumpe",
+          "affects": "Erstzulassungsjahr 2009; der ADAC nennt die Kraftstoffpumpe zudem allgemein als Pannenschwerpunkt",
+          "detail": "Die Kraftstoffpumpe ist laut ADAC ein weiterer Pannenschwerpunkt des i10. Fällt sie aus, kann der Motor nicht anspringen oder ausgehen.",
+          "check": "Bei der Probefahrt auf Startprobleme, Ruckeln und Leistungsverlust achten und fragen, ob die Kraftstoffpumpe schon erneuert wurde.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: Hyundai i10 (2008-2013)",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0184-hyundai-i10-2008-2013-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Bremsen: Fuß- und Feststellbremse, Bremsscheiben",
+          "affects": "Alle Baujahre (2008–2013); Aussage des ADAC zum TÜV-Report, ohne Eingrenzung",
+          "detail": "Laut ADAC kommen im TÜV-Report Beanstandungen an Fuß- und Feststellbremse sowie an den Bremsscheiben häufig vor. Insgesamt reicht es für den i10 beim TÜV nur für ein unterdurchschnittliches Ergebnis.",
+          "check": "Bremsscheiben und -beläge ansehen lassen, die Feststellbremse auf sicheres Halten und leichtes Lösen testen und nach dem letzten TÜV-Bericht fragen.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: Hyundai i10 (2008-2013)",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0184-hyundai-i10-2008-2013-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Lenkung und Achsaufhängung",
+          "affects": "Alle Baujahre (2008–2013); Aussage des ADAC zum TÜV-Report, ohne Eingrenzung",
+          "detail": "Laut ADAC kommen im TÜV-Report Probleme mit der Lenkung und der Achsaufhängung häufig vor. Verschleiß an diesen Teilen kann das Fahrverhalten beeinträchtigen und wird bei der Hauptuntersuchung beanstandet.",
+          "check": "Bei der Probefahrt auf Klopf- und Knackgeräusche, Spiel in der Lenkung und geraden Lauf achten; Lenkung und Achsen in der Werkstatt prüfen lassen.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: Hyundai i10 (2008-2013)",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0184-hyundai-i10-2008-2013-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Ölverlust",
+          "affects": "Alle Baujahre (2008–2013); Aussage des ADAC zum TÜV-Report, ohne Eingrenzung",
+          "detail": "Ölverlust kommt beim i10 laut ADAC im TÜV-Report häufig vor. Er sollte vor dem Kauf geklärt werden, weil er auf undichte Stellen hinweist.",
+          "check": "Motor und Unterboden auf Ölspuren ansehen, den Ölstand kontrollieren und Rechnungen über Reparaturen zeigen lassen.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: Hyundai i10 (2008-2013)",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0184-hyundai-i10-2008-2013-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Fehler an der Beleuchtung",
+          "affects": "Alle Baujahre (2008–2013); Aussage des ADAC zum TÜV-Report, ohne Eingrenzung",
+          "detail": "Fehler an der Beleuchtung kommen laut ADAC im TÜV-Report häufig vor. Sie führen zu Beanstandungen bei der Hauptuntersuchung.",
+          "check": "Alle Lichter rundum testen und fragen, ob die Beleuchtung bei der letzten Hauptuntersuchung bemängelt wurde.",
+          "severity": "gering",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: Hyundai i10 (2008-2013)",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0184-hyundai-i10-2008-2013-bericht.pdf"
+            }
+          ]
+        }
+      ],
+      "engines": {
+        "recommended": [
+          {
+            "name": "1.1 Benziner (67 bzw. 69 PS, Vierzylinder)",
+            "why": "Laut ADAC wird der i10 damit zwar nicht zur Rakete, die Fahrleistungen reichen für einen Kleinstwagen aber aus."
+          },
+          {
+            "name": "Größerer Benziner (78 oder 86 PS)",
+            "why": "Laut ADAC hat dieser Motor spürbar mehr Kraft als der 1.1."
+          }
+        ],
+        "caution": [
+          {
+            "name": "Benziner mit Vierstufen-Automatik",
+            "why": "Laut ADAC keine Empfehlung: Den kleinen Benzinmotoren fehlt dafür die Kraft, der Verbrauch steigt spürbar und die Fahrleistungen lassen merklich nach."
+          }
+        ]
+      },
+      "tips": [
+        "Nur ein Fahrzeug mit ESP wählen: Es war laut ADAC nicht serienmäßig und anfangs nur für die seltene Diesel-Variante erhältlich.",
+        "Batterie und Startverhalten prüfen: Starterbatterie und Kraftstoffpumpe sind laut ADAC Pannenschwerpunkte.",
+        "Motor und Unterboden auf Ölspuren ansehen; Ölverlust kommt beim TÜV häufig vor.",
+        "Bremsen, Lenkung, Achsaufhängung und Licht gründlich prüfen lassen; der TÜV beanstandet sie beim i10 häufig."
+      ]
+    },
+    {
+      "id": "hyundai-i10-ia",
+      "name": "i10 IA",
+      "code": "IA",
+      "years": [2013, 2019],
+      "bodyTypes": ["schraegheck"],
+      "fuels": ["petrol", "lpg"],
+      "seats": [5],
+      "automatic": true,
+      "typicalPriceEur": null,
+      "priceSource": null,
+      "strengths": [
+        "Gute Platzverhältnisse",
+        "Fünf Sitzplätze",
+        "Problemlose Bedienung",
+        "Sichere Fahreigenschaften"
+      ],
+      "issues": [
+        {
+          "title": "Fahrwerk: Federn, Dämpfung, Antriebswellen",
+          "affects": "Alle Baujahre (2013–2019); schon bei jungen Fahrzeugen laut TÜV-Report",
+          "detail": "Federn, Dämpfung und Antriebswellen werden beim TÜV schon bei jungen Fahrzeugen überdurchschnittlich oft beanstandet. Laut ADAC kann man die Schuld bei den Fahrwerksproblemen nicht mangelnder Pflege zuschieben.",
+          "check": "Probefahrt über Unebenheiten auf Klopf- und Knackgeräusche achten; Fahrwerk und Antriebswellen in der Werkstatt prüfen lassen und nach dem letzten TÜV-Bericht fragen.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: Hyundai i10 (2013-2019)",
+              "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0248-hyundai-i10-2013-2019-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Bremsen",
+          "affects": "Alle Baujahre (2013–2019); schon bei jungen Fahrzeugen laut TÜV-Report",
+          "detail": "Auch die Bremsen sind beim TÜV schon bei jungen Fahrzeugen überdurchschnittlich oft ein Grund zur Beanstandung. Zusammen mit dem Fahrwerk führt das laut ADAC zum relativ schlechten Abschneiden bei den Hauptuntersuchungen.",
+          "check": "Bremsscheiben und -beläge ansehen lassen und die Bremswirkung bei der Probefahrt testen.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: Hyundai i10 (2013-2019)",
+              "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0248-hyundai-i10-2013-2019-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Ölverlust",
+          "affects": "Alle Baujahre (2013–2019); laut TÜV-Report schon in frühen Jahren zum Teil",
+          "detail": "Beim i10 tritt laut ADAC schon in frühen Jahren zum Teil Ölverlust auf. Er sollte vor dem Kauf geklärt werden, weil er auf undichte Stellen hinweist.",
+          "check": "Motor und Unterboden auf Ölspuren ansehen, den Ölstand kontrollieren und Rechnungen über Reparaturen zeigen lassen.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: Hyundai i10 (2013-2019)",
+              "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0248-hyundai-i10-2013-2019-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Starterbatterie",
+          "affects": "Erstzulassungsjahre 2014–2018",
+          "detail": "Die Starterbatterie zählt laut ADAC-Pannenstatistik bei diesen Jahrgängen zu den häufigen Bauteilfehlern. Eine schwache Batterie kann dazu führen, dass der Motor nicht anspringt.",
+          "check": "Alter der Batterie erfragen und das Startverhalten bei kaltem Motor testen.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: Hyundai i10 (2013-2019)",
+              "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0248-hyundai-i10-2013-2019-bericht.pdf"
+            }
+          ]
+        }
+      ],
+      "engines": {
+        "recommended": [
+          {
+            "name": "1.0 Benziner (67 PS, Dreizylinder)",
+            "why": "Laut ADAC sind die Fahrleistungen relativ verhalten, für den Stadtverkehr reichen sie aber aus."
+          },
+          {
+            "name": "1.2 Benziner (87 PS, Vierzylinder)",
+            "why": "Laut ADAC geht er besser als der Dreizylinder und braucht nur wenig mehr Sprit, ist aber viel seltener am Markt zu finden und deutlich teurer."
+          },
+          {
+            "name": "1.0 Benziner als LPG-Version (Autogas)",
+            "why": "Laut ADAC punktet sie mit günstigen Kraftstoffkosten, ist aber nur etwas für Vielfahrer, weil der Kaufpreis höher liegt."
+          }
+        ],
+        "caution": [
+          {
+            "name": "Benziner mit 4-Stufen-Wandlerautomatik",
+            "why": "Laut ADAC kann das Automatikgetriebe durch nochmals schlechtere Fahrleistungen und deutlich höheren Verbrauch nicht überzeugen."
+          }
+        ]
+      },
+      "tips": [
+        "Fahrwerk prüfen: Federn, Dämpfer und Antriebswellen werden beim TÜV schon bei jungen Fahrzeugen oft beanstandet; auf Klopf- und Knackgeräusche achten.",
+        "Bremsen prüfen (Scheiben, Beläge, Bremswirkung): Auch sie sind beim TÜV schon bei jungen Fahrzeugen oft ein Grund zur Beanstandung.",
+        "Motor und Unterboden auf Ölspuren ansehen, denn Ölverlust tritt laut ADAC schon in frühen Jahren zum Teil auf.",
+        "Alter der Starterbatterie erfragen und das Startverhalten testen; sie ist bei den Jahrgängen 2014–2018 ein häufiger Bauteilfehler."
+      ]
+    },
+    {
+      "id": "hyundai-i10-ac3",
+      "name": "i10 AC3",
+      "code": "AC3",
+      "years": [2019, 2025],
+      "bodyTypes": ["schraegheck"],
+      "fuels": ["petrol"],
+      "seats": [5],
+      "automatic": true,
+      "typicalPriceEur": null,
+      "priceSource": null,
+      "strengths": [],
+      "issues": [
+        {
+          "title": "Überdurchschnittlich oft Pannen: Zündkerzen",
+          "affects": "Erstzulassung 2020–2022 (ADAC-Pannenstatistik 2025)",
+          "detail": "Probleme mit Zündkerzen waren bei diesen Jahrgängen überdurchschnittlich oft der Grund für einen Einsatz der ADAC-Straßenwacht.",
+          "check": "Nach dem letzten Zündkerzenwechsel fragen; ruckelt der Motor, Zündkerzen und Zündspulen prüfen lassen.",
+          "severity": "gering",
+          "sources": [
+            {
+              "label": "ADAC Pannenstatistik 2025",
+              "url": "https://assets.adac.de/image/upload/v1776261444/ADAC-eV/KOR/Text/PDF/Pannenstatistik_2025_Bericht_czmf9q.pdf"
+            }
+          ]
+        }
+      ],
+      "engines": {
+        "recommended": [],
+        "caution": []
+      },
+      "tips": [
+        "Weitere Schwachstellen dieser Generation haben wir noch nicht ausgewertet. Lass das Auto vor dem Kauf in einer Werkstatt prüfen und Rückrufe per Fahrgestellnummer erfragen."
+      ]
+    }
+  ]
+}

@@ -1,0 +1,316 @@
+{
+  "id": "toyota-corolla",
+  "make": "Toyota",
+  "model": "Corolla / Auris",
+  "aliases": [
+    "auris",
+    "auris hybrid",
+    "auris touring sports",
+    "auris ts",
+    "corolla",
+    "corolla hybrid",
+    "corolla limousine",
+    "corolla sedan",
+    "corolla touring sports",
+    "corolla ts"
+  ],
+  "segment": "kompakt",
+  "summary": "Japanischer Kompaktwagen mit sparsamem Hybridantrieb, der in Europa von 2007 bis 2019 Auris hieß und seitdem wieder Corolla heißt.",
+  "ratings": {
+    "reliability": 3,
+    "reliabilityNote": "Laut ADAC-Pannenstatistik 2025 liegt der Corolla (ab 2019) in allen Jahrgängen im Mittelfeld, vor allem wegen Batteriepannen; die Pannenstatistik 2026 zählt den Jahrgang 2023 zu den Schlusslichtern seiner Klasse. Den Auris sah der ADAC früher überwiegend im Bereich „gut“, beim TÜV schneidet er sehr gut ab.",
+    "reliabilitySources": [
+      {
+        "label": "ADAC Gebrauchtwageninfo: Toyota Auris (2007-2013) Diesel",
+        "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0290-toyota-auris-2007-2013-diesel-bericht.pdf"
+      },
+      {
+        "label": "ADAC Gebrauchtwageninfo: Toyota Auris (2007-2013) Benziner",
+        "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0288-toyota-auris-2007-2013-benziner-bericht.pdf"
+      },
+      {
+        "label": "ADAC Gebrauchtwageninfo: Toyota Auris (2013-2019)",
+        "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0232-toyota-auris-2013-2019-bericht.pdf"
+      },
+      {
+        "label": "ADAC Pannenstatistik 2025",
+        "url": "https://assets.adac.de/image/upload/v1776261444/ADAC-eV/KOR/Text/PDF/Pannenstatistik_2025_Bericht_czmf9q.pdf"
+      },
+      {
+        "label": "ADAC Pannenstatistik 2026",
+        "url": "https://www.adac.de/rund-ums-fahrzeug/unfall-schaden-panne/adac-pannenstatistik-2026/"
+      }
+    ],
+    "runningCosts": 4,
+    "space": 3,
+    "comfort": 3
+  },
+  "generations": [
+    {
+      "id": "toyota-corolla-auris-i",
+      "name": "Auris I",
+      "code": "E150",
+      "years": [2007, 2013],
+      "bodyTypes": ["schraegheck"],
+      "fuels": ["petrol", "diesel", "hybrid"],
+      "seats": [5],
+      "automatic": true,
+      "typicalPriceEur": null,
+      "priceSource": null,
+      "strengths": [
+        "Ordentliches Platzangebot vorn und hinten, Kofferraum von klassenüblicher Größe",
+        "Zuverlässige Technik: sehr gute Werte im TÜV-Report, in der ADAC-Pannenstatistik meist weit vorn",
+        "Solide Verarbeitung",
+        "Sehr sparsamer Hybrid"
+      ],
+      "issues": [
+        {
+          "title": "Rückrufe: Airbags, Fensterheber (Brandgefahr), Hinterachse, Kraftstoffdämpfe",
+          "affects": "Auris I (Benziner und Diesel): Rückrufe 8/2012 (Hinterachs-Spurstangen), 10/2015 (Fensterhebermodule), 7/2016 und 12/2018 (Aktivkohlefilter-Behälter), 5/2019 (Beifahrerairbag), 11/2019 (Seitenairbags); außerdem 2/2010 (Gaspedal), nur Diese…",
+          "detail": "Laut ADAC gab es Rückrufe wegen möglicher Brandgefahr (Fensterhebermodule, 10/2015), wegen Rissen am Aktivkohlefilter-Behälter im Tank, durch die geringste Mengen Kraftstoff und Kraftstoffdämpfe austreten können (7/2016, 12/2018), und wegen möglicherweise nicht mit dem vorgeschriebenen Drehmoment angezogener Kontermuttern an den Hinterachs-Spurstangen (8/2012). Hinzu kamen Airbag-Rückrufe: ein Fehler im Gasgenerator des Beifahrerairbags (5/2019) und ein fehlerhafter Sitzbezug, der die Entfaltung der Seitenairbags einschränken kann (11/2019).",
+          "check": "Per Fahrgestellnummer beim Händler prüfen lassen, ob die Rückrufe erledigt sind.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: Toyota Auris (2007-2013) Diesel",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0290-toyota-auris-2007-2013-diesel-bericht.pdf"
+            },
+            {
+              "label": "ADAC Gebrauchtwageninfo: Toyota Auris (2007-2013) Benziner",
+              "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0288-toyota-auris-2007-2013-benziner-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Bremsen: Feststellbremse und Bremsscheiben",
+          "affects": "Auris I allgemein (TÜV-Report, Benziner und Diesel); keine Einschränkung auf bestimmte Motoren oder Baujahre genannt",
+          "detail": "Im TÜV-Report fallen beim Auris I Feststellbremsen und Bremsscheiben auf; außerdem bereiten laut ADAC stark verschlissene Bremsbauteile hin und wieder Probleme.",
+          "check": "Bremsscheiben, Beläge und Feststellbremse prüfen lassen und sich Belege über zuletzt erneuerte Bremsteile zeigen lassen.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: Toyota Auris (2007-2013) Diesel",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0290-toyota-auris-2007-2013-diesel-bericht.pdf"
+            },
+            {
+              "label": "ADAC Gebrauchtwageninfo: Toyota Auris (2007-2013) Benziner",
+              "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0288-toyota-auris-2007-2013-benziner-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Rostende Auspuffanlage",
+          "affects": "Auris I allgemein (Benziner und Diesel); keine Einschränkung auf bestimmte Motoren oder Baujahre genannt",
+          "detail": "Laut ADAC bereiten rostende Auspuffanlagen beim Auris I hin und wieder Probleme.",
+          "check": "Die Auspuffanlage auf Rost und Undichtigkeiten ansehen.",
+          "severity": "gering",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: Toyota Auris (2007-2013) Diesel",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0290-toyota-auris-2007-2013-diesel-bericht.pdf"
+            },
+            {
+              "label": "ADAC Gebrauchtwageninfo: Toyota Auris (2007-2013) Benziner",
+              "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0288-toyota-auris-2007-2013-benziner-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Starterbatterie, Zündkerzen und Zündspule",
+          "affects": "Auris I: Starterbatterie bei Erstzulassung 2011–2013 (Benziner und Diesel); Zündkerzen bei 2009–2010 und 2012 sowie Zündspule bei 2007 (nur Benziner)",
+          "detail": "Der ADAC führt diese Teile für die genannten Zulassungsjahre unter den häufigen Bauteilfehlern; in der Pannenstatistik schneidet der Auris I insgesamt meist gut bis sehr gut ab.",
+          "check": "Das Alter der Batterie erfragen, das Startverhalten testen und im Serviceheft nach dem Zündkerzenwechsel schauen.",
+          "severity": "gering",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: Toyota Auris (2007-2013) Diesel",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0290-toyota-auris-2007-2013-diesel-bericht.pdf"
+            },
+            {
+              "label": "ADAC Gebrauchtwageninfo: Toyota Auris (2007-2013) Benziner",
+              "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0288-toyota-auris-2007-2013-benziner-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Schnell verkokende AGR-Ventile (Diesel)",
+          "affects": "Dieselmotoren des Auris I (laut ADAC-Bericht zu den Dieseln); keine genauere Eingrenzung auf Motoren oder Baujahre genannt",
+          "detail": "Laut ADAC verkoken die AGR-Ventile (Abgasrückführung) der Diesel schnell, was Störungen und Reparaturen nach sich ziehen kann.",
+          "check": "Nach Störungen der Abgasrückführung sowie einer Reinigung oder einem Austausch der AGR-Ventile fragen und die Wartungsnachweise ansehen.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: Toyota Auris (2007-2013) Diesel",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0290-toyota-auris-2007-2013-diesel-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "2.2 D-Cat: Neigung zu Turboladerschäden",
+          "affects": "Motor 2.2 D-Cat (Diesel) des Auris I (laut ADAC-Bericht zu den Dieseln)",
+          "detail": "Laut ADAC neigt der 2.2 D-Cat zu Turboladerschäden; ein Turboladerschaden kann teuer werden.",
+          "check": "Bei der Probefahrt auf pfeifende Turbo-Geräusche, Leistungsmangel und Rauch aus dem Auspuff achten und nach einem Turbolader-Tausch fragen.",
+          "severity": "hoch",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: Toyota Auris (2007-2013) Diesel",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0290-toyota-auris-2007-2013-diesel-bericht.pdf"
+            }
+          ]
+        }
+      ],
+      "engines": {
+        "recommended": [
+          {
+            "name": "Hybrid (136 PS)",
+            "why": "Laut ADAC eine echte Empfehlung: sparsam, günstige Kraftstoffkosten und Langlebigkeit; wegen des stufenlosen Getriebes für sportliche Fahrer aber nicht die erste Wahl. Den Rückruf 7/2015 (Hybridregelelektronik) prüfen lassen."
+          },
+          {
+            "name": "Benziner mit mindestens 124 PS",
+            "why": "Laut ADAC souveräner unterwegs als mit den schwächeren Motoren; die Motoren gelten als robust, verlangen aber hohe Drehzahlen und sind keine Drehmomentwunder."
+          },
+          {
+            "name": "Diesel mit 126 PS",
+            "why": "Laut ADAC souveräne Fahrleistungen bei weiterhin sparsamem Verbrauch."
+          }
+        ],
+        "caution": [
+          {
+            "name": "Benziner 1.4 (97 PS) und 1.33",
+            "why": "Laut ADAC wirkt der 97-PS-Motor im stattlichen Fahrzeug etwas überfordert; der später gebaute 1,33-l-Saugbenziner fährt sich ähnlich."
+          },
+          {
+            "name": "Diesel mit 90 PS (1.4 D-4D)",
+            "why": "Laut ADAC grundsätzlich ausreichend, bei Beladung oder auf der Autobahn wünscht man sich aber mehr Leistung. Den Rückruf 3/2015 (Motoröl im Ladeluftkühler) prüfen lassen."
+          },
+          {
+            "name": "2.2 D-Cat (177 PS)",
+            "why": "Laut ADAC sehr flott und für Vielfahrer auf der Autobahn die beste Wahl, für einen Diesel aber nicht sonderlich sparsam und mit Neigung zu Turboladerschäden."
+          }
+        ]
+      },
+      "tips": [
+        "Bremsscheiben und Feststellbremse genau prüfen lassen, denn sie fallen beim TÜV auf.",
+        "Beim Diesel nach Reinigung oder Austausch der AGR-Ventile fragen; beim 2.2 D-Cat auf Turbo-Geräusche und Leistungsmangel achten.",
+        "Gaspedal und alle Fensterheber-Schalter auf Leichtgängigkeit testen; dazu gab es Rückrufe (2/2010 bzw. 10/2012).",
+        "Nachweis verlangen, dass die Rückrufe zu Fensterhebermodulen (10/2015), Aktivkohlefilter (7/2016, 12/2018) und Airbags (5/2019, 11/2019) erledigt sind."
+      ]
+    },
+    {
+      "id": "toyota-corolla-auris-ii",
+      "name": "Auris II",
+      "code": "E180",
+      "years": [2013, 2019],
+      "bodyTypes": ["schraegheck", "kombi"],
+      "fuels": ["petrol", "diesel", "hybrid"],
+      "seats": [5],
+      "automatic": true,
+      "typicalPriceEur": null,
+      "priceSource": null,
+      "strengths": [
+        "Ordentliches Platzangebot, der Kombi (Touring Sports) mit großem Kofferraum",
+        "Zuverlässige Technik: beim TÜV sehr gut, in der ADAC-Pannenstatistik im oberen Mittelfeld",
+        "Sehr sparsamer und langlebiger Hybrid",
+        "Solide Verarbeitung"
+      ],
+      "issues": [
+        {
+          "title": "Starterbatterie: häufige Batteriepannen",
+          "affects": "Auris II bei Erstzulassung 2013–2015 und 2017–2019",
+          "detail": "Laut ADAC sind häufige Batteriepannen der Grund dafür, dass der Auris II in der Pannenstatistik nur im oberen Mittelfeld liegt und nicht noch besser abschneidet.",
+          "check": "Alter und Zustand der Batterie erfragen bzw. prüfen lassen und das Startverhalten testen.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: Toyota Auris (2013-2019)",
+              "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0232-toyota-auris-2013-2019-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Rückrufe: Seitenairbags, Hybridregelelektronik",
+          "affects": "Auris II: Rückruf 11/2019 (Seitenairbags wegen fehlerhaftem Sitzbezug); nur Hybrid: Rückruf 7/2015 (Hybridregelelektronik)",
+          "detail": "Laut ADAC können die Seitenairbags wegen eines fehlerhaften Sitzbezugs nur eingeschränkt entfalten (11/2019); beim Hybrid kann unter bestimmten Einsatzbedingungen die Hybridregelelektronik überlastet werden (7/2015).",
+          "check": "Per Fahrgestellnummer beim Händler prüfen lassen, ob die Rückrufe erledigt sind.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: Toyota Auris (2013-2019)",
+              "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0232-toyota-auris-2013-2019-bericht.pdf"
+            }
+          ]
+        }
+      ],
+      "engines": {
+        "recommended": [
+          {
+            "name": "Hybrid (136 PS)",
+            "why": "Laut ADAC eine echte Empfehlung: sparsam, günstige Kraftstoffkosten und Langlebigkeit; für sportliche Fahrer wegen des stufenlosen Getriebes nicht die erste Wahl."
+          },
+          {
+            "name": "1,2-l-Turbobenziner",
+            "why": "Laut ADAC souveräner unterwegs als mit den Saugbenzinern."
+          },
+          {
+            "name": "Diesel mit 112 bis 124 PS",
+            "why": "Laut ADAC souveräne Fahrleistungen bei sparsamem Verbrauch; für Vielfahrer die beste Wahl."
+          }
+        ],
+        "caution": [
+          {
+            "name": "Benziner 1,3 l (99 PS)",
+            "why": "Laut ADAC wirkt der Motor im stattlichen Fahrzeug etwas überfordert; auch der stärkere Saugbenziner mit 132 PS ist kein Drehmomentwunder."
+          },
+          {
+            "name": "Diesel mit 90 PS (1,4 l)",
+            "why": "Laut ADAC grundsätzlich ausreichend, bei Beladung oder auf der Autobahn wünscht man sich aber mehr Leistung."
+          }
+        ]
+      },
+      "tips": [
+        "Batterie prüfen lassen und nach ihrem Alter fragen, denn häufige Batteriepannen verhindern laut ADAC eine bessere Platzierung.",
+        "Beim Hybrid per Fahrgestellnummer klären lassen, ob der Rückruf der Hybridregelelektronik (7/2015) ausgeführt wurde.",
+        "Nachweis verlangen, dass der Rückruf zu den Seitenairbags und Sitzbezügen (11/2019) erledigt ist."
+      ]
+    },
+    {
+      "id": "toyota-corolla-e210",
+      "name": "Corolla E210",
+      "code": "E210",
+      "years": [2019, null],
+      "bodyTypes": ["schraegheck", "kombi", "limousine"],
+      "fuels": ["petrol", "hybrid"],
+      "seats": [5],
+      "automatic": true,
+      "typicalPriceEur": null,
+      "priceSource": null,
+      "strengths": [],
+      "issues": [
+        {
+          "title": "Häufig leere 12-Volt-Starterbatterie",
+          "affects": "Corolla ab 2019; laut ADAC überdurchschnittlich oft bei Erstzulassung 2019–2022, die Pannenstatistik 2026 nennt den Jahrgang 2023 als besonders auffällig. Größere Batterien baut Toyota seit dem Produktionsmonat Februar 2026 ein.",
+          "detail": "Laut ADAC-Pannenstatistik ist eine defekte oder leere Startbatterie beim Corolla die häufigste Pannenursache, besonders bei Wenigfahrern.",
+          "check": "Fragen, ob die Batterie schon gegen eine größere getauscht wurde (Rechnung zeigen lassen), und die Batterie testen lassen; wer wenig fährt, sollte ein Ladegerät einplanen. Innerhalb der dreijährigen Neuwagengarantie tauscht Toyota eine auffällige Batterie laut eigener Aussage kostenlos.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Pannenstatistik 2026",
+              "url": "https://www.adac.de/rund-ums-fahrzeug/unfall-schaden-panne/adac-pannenstatistik-2026/"
+            },
+            {
+              "label": "ADAC Pannenstatistik 2025",
+              "url": "https://assets.adac.de/image/upload/v1776261444/ADAC-eV/KOR/Text/PDF/Pannenstatistik_2025_Bericht_czmf9q.pdf"
+            }
+          ]
+        }
+      ],
+      "engines": {
+        "recommended": [],
+        "caution": []
+      },
+      "tips": [
+        "Batterie und Ladezustand bei der Besichtigung testen lassen und Rückrufe per Fahrgestellnummer erfragen."
+      ]
+    }
+  ]
+}
