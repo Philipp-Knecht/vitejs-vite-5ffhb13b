@@ -69,6 +69,9 @@ export async function buildApp(
     max: 300,
     timeWindow: '1 minute',
     keyGenerator: (request) => clientAddress(request, config.clientIpHeader),
+    // Every page view loads several fingerprinted build files; they are cheap and never count.
+    allowList: (request) =>
+      (request.method === 'GET' || request.method === 'HEAD') && request.url.startsWith('/assets/'),
     // The error is handled by the common error handler (RATE_LIMITED + Retry-After).
     errorResponseBuilder: (_request, context) =>
       new AppError('RATE_LIMITED', {

@@ -19,6 +19,8 @@ describe('Custom domain', () => {
     await writeFile(path.join(webDir, '_pages', 'impressum', 'index.html'), PAGE);
     await mkdir(path.join(webDir, '_pages', 'modelle', 'vw-golf'), { recursive: true });
     await writeFile(path.join(webDir, '_pages', 'modelle', 'vw-golf', 'index.html'), PAGE);
+    await mkdir(path.join(webDir, 'assets'), { recursive: true });
+    await writeFile(path.join(webDir, 'assets', 'index-abc.js'), 'export {};');
   });
   afterAll(() => rm(webDir, { recursive: true, force: true }));
 
@@ -31,6 +33,21 @@ describe('Custom domain', () => {
       expect((await client.get('/modelle/vw-golf', { host: DOMAIN })).statusCode).toBe(200);
       expect((await client.get('/modelle/unbekannt', { host: DOMAIN })).statusCode).toBe(404);
       expect((await client.get('/modelle/../impressum', { host: DOMAIN })).statusCode).toBe(200);
+    } finally {
+      await built.app.close();
+    }
+  });
+
+  it('does not count build files against the rate limit', async () => {
+    const built = await createTestApp(web());
+    try {
+      const client = new TestClient(built.app);
+      // More than the 300 requests per minute that pages and the API allow.
+      for (let index = 0; index < 310; index += 1) {
+        expect((await client.get('/assets/index-abc.js')).statusCode).toBe(200);
+      }
+      expect((await client.get('/impressum')).statusCode).toBe(200);
+      expect((await client.get('/api/config')).statusCode).toBe(200);
     } finally {
       await built.app.close();
     }

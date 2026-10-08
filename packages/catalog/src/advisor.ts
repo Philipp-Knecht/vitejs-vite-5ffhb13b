@@ -141,7 +141,7 @@ const NEW_PRICE_EUR: Record<Segment, number> = {
   suv_gross: 65_000,
   van_klein: 27_000,
   van: 34_000,
-  hochdachkombi: 27_000,
+  hochdachkombi: 30_000,
   bus: 50_000,
   sportwagen: 45_000,
 };
