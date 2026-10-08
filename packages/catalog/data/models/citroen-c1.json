@@ -1,0 +1,166 @@
+{
+  "id": "citroen-c1",
+  "make": "Citroën",
+  "model": "C1",
+  "aliases": ["c1"],
+  "segment": "kleinstwagen",
+  "summary": "Handlicher, sparsamer Kleinstwagen für die Stadt, baugleich mit dem Toyota Aygo; die erste Generation schneidet laut ADAC in der Pannenstatistik gut ab.",
+  "ratings": {
+    "reliability": 4,
+    "reliabilityNote": "Den C1 I sah der ADAC in der Pannenstatistik im Bereich „gut“ bis „sehr gut“, beim TÜV schneidet er aber schlechter ab als der Durchschnitt. Für den C1 selbst weist der ADAC keine aktuellen Werte aus; den baugleichen Toyota Aygo zählt die Pannenstatistik 2026 zu den zuverlässigsten Kleinstwagen.",
+    "reliabilitySources": [
+      {
+        "label": "ADAC Gebrauchtwageninfo: Citroen C1 (2005-2014)",
+        "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0217-citroen-c1-2005-2014-bericht.pdf"
+      },
+      {
+        "label": "ADAC Pannenstatistik 2026",
+        "url": "https://www.adac.de/rund-ums-fahrzeug/unfall-schaden-panne/adac-pannenstatistik-2026/"
+      }
+    ],
+    "runningCosts": 5,
+    "space": 2,
+    "comfort": 2
+  },
+  "generations": [
+    {
+      "id": "citroen-c1-i",
+      "name": "C1 I",
+      "code": null,
+      "years": [2005, 2014],
+      "bodyTypes": ["schraegheck"],
+      "fuels": ["petrol", "diesel"],
+      "seats": [4],
+      "automatic": true,
+      "typicalPriceEur": null,
+      "priceSource": null,
+      "strengths": [
+        "Ordentliches Platzangebot vorn",
+        "Gut in der ADAC-Pannenstatistik: Der C1 liegt laut ADAC auf einem der vorderen Plätze und gilt als sehr zuverlässig",
+        "Sparsamer Antrieb: Der 1.0-Dreizylinder kommt laut ADAC mit wenig Kraftstoff aus"
+      ],
+      "issues": [
+        {
+          "title": "Verschlissene Bremsen, schwache Bremsanlage",
+          "affects": "Alle Baujahre (2005–2014); vom ADAC allgemein genannt, ohne Eingrenzung",
+          "detail": "Die Bremsanlage ist laut ADAC weniger kräftig als im Klassendurchschnitt und wird von den Prüfern oft beanstandet; verschlissene Bremsen werden beim TÜV häufig bemängelt. Der Verschleiß deutet laut ADAC häufig auf mangelhafte Wartung hin, nicht auf schlechte Qualität.",
+          "check": "Bremsscheiben und -beläge ansehen, bei der Probefahrt die Bremswirkung testen und nach Wartungsnachweisen sowie dem letzten TÜV-Bericht fragen.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: Citroen C1 (2005-2014)",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0217-citroen-c1-2005-2014-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Mäßiger Rostschutz",
+          "affects": "Alle Baujahre (2005–2014); vom ADAC allgemein genannt, ohne Eingrenzung",
+          "detail": "Laut ADAC ist der Rostschutz nicht ideal und trägt zum schwächeren TÜV-Abschneiden des C1 bei. Rost an tragenden Teilen kann bei der Hauptuntersuchung zu Mängeln führen.",
+          "check": "Unterboden, Radläufe und Schweller auf Rostansätze und Blasenbildung ansehen.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: Citroen C1 (2005-2014)",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0217-citroen-c1-2005-2014-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Rückrufe: Gaspedal, Anlasser, hintere Ausstellfenster",
+          "affects": "Rückrufe 2/2010 (Benziner mit ESP und elektrischem Gaspedal), 11/2011 (Anlasser) und 1/2019 (hintere Ausstellfenster)",
+          "detail": "Laut ADAC gab es Rückrufe, weil das elektrische Gaspedal schwergängig werden kann (2/2010), der Anlasser auch bei laufendem Motor weiterlaufen kann (11/2011) und sich die Verklebung der hinteren Ausstellfenster lösen kann (1/2019).",
+          "check": "Per Fahrgestellnummer beim Händler prüfen lassen, ob die Rückrufe erledigt sind.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: Citroen C1 (2005-2014)",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0217-citroen-c1-2005-2014-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Kolbenkipper bei einzelnen Baujahren",
+          "affects": "Einzelne Baujahre; der ADAC nennt sie nicht näher",
+          "detail": "Laut ADAC haben einzelne Baujahre selten mit Kolbenkippern zu kämpfen. Dabei kippen die Kolben im Zylinder, was sich meist als klopfendes Motorgeräusch bemerkbar macht.",
+          "check": "Motor kalt starten und auf klopfende Geräusche aus dem Motor achten; Wartungsnachweise und Ölwechselintervalle ansehen.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: Citroen C1 (2005-2014)",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0217-citroen-c1-2005-2014-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Defekte an der Beleuchtung",
+          "affects": "Alle Baujahre (2005–2014); vom ADAC allgemein genannt, ohne Eingrenzung",
+          "detail": "Die Lichtanlage fällt laut ADAC überdurchschnittlich oft mit Defekten auf; im TÜV-Report wird die Beleuchtung häufig beanstandet.",
+          "check": "Alle Lichter rundum testen (Abblend- und Fernlicht, Blinker, Brems- und Rückleuchten) und fragen, ob die Beleuchtung bei der letzten Hauptuntersuchung bemängelt wurde.",
+          "severity": "gering",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: Citroen C1 (2005-2014)",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0217-citroen-c1-2005-2014-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Auspuffrohr/-topf und Zündkerzen bei einzelnen Jahrgängen",
+          "affects": "Auspuffrohr/-topf: Erstzulassungsjahr 2008; Zündkerzen: Erstzulassungsjahr 2007",
+          "detail": "Der ADAC nennt diese Teile in der Pannenstatistik als häufige Bauteilfehler der jeweiligen Jahrgänge. Defekte Zündkerzen können Motorruckeln oder Startprobleme verursachen, ein defekter Auspuff fällt durch lautere Geräusche auf.",
+          "check": "Motorlauf und Startverhalten testen und die Auspuffanlage auf Rost und Löcher ansehen.",
+          "severity": "gering",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: Citroen C1 (2005-2014)",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0217-citroen-c1-2005-2014-bericht.pdf"
+            }
+          ]
+        }
+      ],
+      "engines": {
+        "recommended": [
+          {
+            "name": "1.0 Benziner (68 PS, Dreizylinder) mit Fünfganggetriebe",
+            "why": "Laut ADAC der einzige Benziner für den deutschen Markt: Er bringt den leichten C1 mühelos in Schwung, ist ausreichend kultiviert, kommt mit wenig Kraftstoff aus und reicht für den typischen Einsatz im Stadtverkehr völlig aus."
+          }
+        ],
+        "caution": [
+          {
+            "name": "1.0 Benziner mit SensoDrive-Automatik",
+            "why": "Laut ADAC stört die optionale SensoDrive-Automatik mit wenig harmonischen Gangwechseln und ist nur für gelassene Fahrer zu empfehlen; die meisten Fahrzeuge wurden ohnehin mit Schaltgetriebe ausgeliefert."
+          }
+        ]
+      },
+      "tips": [
+        "Bremsen und Beleuchtung gründlich prüfen: Beides beanstandet der TÜV beim C1 häufig, und die Bremsanlage ist laut ADAC schwächer als im Klassendurchschnitt.",
+        "Unterboden, Radläufe und Auspuffanlage auf Rost und Löcher ansehen; der Rostschutz ist laut ADAC nicht ideal.",
+        "Motor kalt starten und auf klopfende Geräusche achten; laut ADAC haben einzelne Baujahre selten Kolbenkipper.",
+        "Auf ESP achten: Serienmäßig gab es ESP erst ab 2012, davor nur als Sonderausstattung (seit Herbst 2007)."
+      ]
+    },
+    {
+      "id": "citroen-c1-ii",
+      "name": "C1 II",
+      "code": null,
+      "years": [2014, 2022],
+      "bodyTypes": ["schraegheck"],
+      "fuels": ["petrol"],
+      "seats": [4],
+      "automatic": true,
+      "typicalPriceEur": null,
+      "priceSource": null,
+      "strengths": [],
+      "issues": [],
+      "engines": {
+        "recommended": [],
+        "caution": []
+      },
+      "tips": [
+        "Zu dieser Generation haben wir noch keine Schwachstellen ausgewertet. Lass das Auto vor dem Kauf in einer Werkstatt prüfen und Rückrufe per Fahrgestellnummer erfragen."
+      ]
+    }
+  ],
+  "twinOf": "toyota-aygo"
+}

@@ -1,0 +1,323 @@
+{
+  "id": "ford-kuga",
+  "make": "Ford",
+  "model": "Kuga",
+  "aliases": [
+    "kuga",
+    "kuga ecoblue",
+    "kuga ecoboost",
+    "kuga hybrid",
+    "kuga i",
+    "kuga ii",
+    "kuga iii",
+    "kuga mk1",
+    "kuga mk2",
+    "kuga mk3",
+    "kuga phev",
+    "kuga st-line",
+    "kuga tdci",
+    "kuga titanium",
+    "kuga trend"
+  ],
+  "segment": "suv_kompakt",
+  "summary": "Kompakter SUV von Ford mit agilem, aber gut abgestimmtem Fahrwerk, ordentlichem Platzangebot und optionalem Allradantrieb.",
+  "ratings": {
+    "reliability": 2,
+    "reliabilityNote": "Laut ADAC-Pannenstatistik 2025 hatten die Kuga-Jahrgänge 2015, 2016, 2018 und 2020 deutlich mehr Pannen als die meisten gleich alten Autos, 2021 zählt er sogar zu den fünf Prozent mit den meisten Pannen; die Pannenstatistik 2026 nennt den Kuga (Erstzulassung 2021) als Schlusslicht seiner Klasse. Ältere ADAC-Auswertungen sahen Kuga I und II noch im Mittelfeld.",
+    "reliabilitySources": [
+      {
+        "label": "ADAC Gebrauchtwageninfo: Ford Kuga (2013-2019) Benziner",
+        "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0244-ford-kuga-2013-2019-benziner-bericht.pdf"
+      },
+      {
+        "label": "ADAC Gebrauchtwageninfo: Ford Kuga (2013-2019) Diesel",
+        "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0243-ford-kuga-2013-2019-diesel-bericht.pdf"
+      },
+      {
+        "label": "ADAC Gebrauchtwageninfo: Ford Kuga (2008-2012) Diesel",
+        "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0414-ford-kuga-2008-2012-diesel-bericht.pdf"
+      },
+      {
+        "label": "ADAC Pannenstatistik 2025",
+        "url": "https://assets.adac.de/image/upload/v1776261444/ADAC-eV/KOR/Text/PDF/Pannenstatistik_2025_Bericht_czmf9q.pdf"
+      },
+      {
+        "label": "ADAC Pannenstatistik 2026",
+        "url": "https://www.adac.de/rund-ums-fahrzeug/unfall-schaden-panne/adac-pannenstatistik-2026/"
+      }
+    ],
+    "runningCosts": 3,
+    "space": 4,
+    "comfort": 4
+  },
+  "generations": [
+    {
+      "id": "ford-kuga-i",
+      "name": "Kuga I",
+      "code": "Mk1",
+      "years": [2008, 2012],
+      "bodyTypes": ["suv"],
+      "fuels": ["petrol", "diesel"],
+      "seats": [5],
+      "automatic": true,
+      "typicalPriceEur": null,
+      "priceSource": null,
+      "strengths": [
+        "Solide Verarbeitung",
+        "Ausgewogenes, agiles Fahrwerk mit viel Fahrspaß",
+        "Standfeste Bremsen",
+        "Bequeme, langstreckentaugliche Sitze"
+      ],
+      "issues": [
+        {
+          "title": "Partikelfilter",
+          "affects": "2.0-Liter-Diesel, Baujahre 2009 bis 2012 (laut ADAC-Bericht zu den Dieseln); beim Baujahr 2011 zusätzlich Differenzdrucksensor.",
+          "detail": "Laut ADAC war der Partikelfilter einer der Hauptgründe für Pannen beim Kuga I; für 2011 nennt der Bericht außerdem einen defekten Differenzdrucksensor. Ein Defekt am Filter kann teuer werden.",
+          "check": "Nach Warnleuchten, Werkstattbesuchen und Rechnungen zum Partikelfilter fragen und bei der Probefahrt auf Leistungsverlust oder Warnmeldungen achten.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: Ford Kuga (2008-2012) Diesel",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0414-ford-kuga-2008-2012-diesel-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Starterbatterie und Generator",
+          "affects": "Starterbatterie: Baujahre 2010 bis 2012; Generator: 2010 bis 2011 (laut ADAC-Bericht zu den Dieseln).",
+          "detail": "Laut ADAC war die Starterbatterie neben dem Partikelfilter einer der Hauptgründe für Pannen; auch der Generator gehört bei diesen Jahrgängen zu den häufigen Bauteilfehlern.",
+          "check": "Batterie testen lassen, nach ihrem Alter fragen sowie Ladespannung und Startverhalten prüfen lassen.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: Ford Kuga (2008-2012) Diesel",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0414-ford-kuga-2008-2012-diesel-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Gebrochene Federn und verschlissene Dämpfer",
+          "affects": "Kuga I allgemein laut TÜV-Report (laut ADAC-Bericht zu den Dieseln); der ADAC nennt keine bestimmten Baujahre.",
+          "detail": "Laut ADAC bemängelt der TÜV beim Kuga I überdurchschnittlich oft verschlissene Federn und Dämpfer, gebrochene Federn bereiten bisweilen Probleme. Das sind Mängel bei der Hauptuntersuchung und verursachen Reparaturkosten.",
+          "check": "Federn und Dämpfer auf der Hebebühne prüfen lassen (Federbruch, Ölspuren am Dämpfer) und bei der Probefahrt auf Klappern und Poltern achten.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: Ford Kuga (2008-2012) Diesel",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0414-ford-kuga-2008-2012-diesel-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Ölverlust",
+          "affects": "Kuga I allgemein laut TÜV-Report (laut ADAC-Bericht zu den Dieseln); der ADAC nennt keine bestimmten Baujahre.",
+          "detail": "Laut ADAC wird beim TÜV überdurchschnittlich oft Ölverlust bemängelt. Undichte Stellen sollten vor dem Kauf geklärt sein.",
+          "check": "Motor und Unterboden auf frische Ölspuren prüfen, Ölstand kontrollieren und nach Dichtungsarbeiten fragen.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: Ford Kuga (2008-2012) Diesel",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0414-ford-kuga-2008-2012-diesel-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Rückrufe: Bremssystem, beheizbare Waschdüsen, Gurtstraffer",
+          "affects": "Unterdruckpumpe des Bremssystems (Rückruf 6/2009); optional beheizbare Waschdüsen (3/2011 und 5/2017); Gurtstraffer und Dämmmaterial der B-Säule (9/2017); laut ADAC-Bericht zu den Dieseln.",
+          "detail": "Laut ADAC gab es einen Rückruf, weil sich das Rückschlagventil in der Unterdruckpumpe des Bremssystems bei niedrigen Temperaturen und kaltem Motor möglicherweise nicht öffnet. Hinzu kamen Rückrufe wegen nicht ausreichend abgedichteter beheizbarer Waschdüsen (Kurzschluss mit Überhitzung) und wegen möglicher starker Hitzeeinwirkung auf das Dämmmaterial der B-Säulenverkleidung bei einem Aufprall mit ausgelöstem Gurtstraffer.",
+          "check": "Per Fahrgestellnummer beim Händler prüfen lassen, ob die Rückrufe erledigt sind.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: Ford Kuga (2008-2012) Diesel",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0414-ford-kuga-2008-2012-diesel-bericht.pdf"
+            }
+          ]
+        }
+      ],
+      "engines": {
+        "recommended": [
+          {
+            "name": "2.0-Liter-Diesel mit 136 und 140 PS",
+            "why": "Laut ADAC motorisieren die beiden schwächeren Aggregate den SUV völlig ausreichend und bleiben im Alltag ausreichend sparsam."
+          },
+          {
+            "name": "2.0-Liter-Diesel mit 163 PS",
+            "why": "Laut ADAC spürbar druckvoller als die schwächeren Varianten; der Top-Diesel hat immer Allradantrieb."
+          }
+        ],
+        "caution": [
+          {
+            "name": "Version mit Automatikgetriebe",
+            "why": "Laut ADAC ist die Automatik nicht ideal abgestimmt; Modelle mit Automatik haben immer Allradantrieb."
+          },
+          {
+            "name": "Benziner",
+            "why": "Laut ADAC kräftig, aber durstig; er spielt auf dem Gebrauchtwagenmarkt kaum eine Rolle."
+          }
+        ]
+      },
+      "tips": [
+        "Partikelfilter und Starterbatterie waren laut ADAC die Hauptgründe für Pannen: nach Rechnungen und Warnleuchten fragen und die Batterie testen lassen.",
+        "Federn und Dämpfer auf der Hebebühne prüfen lassen (Federbruch, undichte Dämpfer).",
+        "Motor und Unterboden auf Ölspuren kontrollieren.",
+        "Alle Lampen testen, denn defekte Beleuchtung wird laut TÜV-Report überdurchschnittlich oft bemängelt."
+      ]
+    },
+    {
+      "id": "ford-kuga-ii",
+      "name": "Kuga II",
+      "code": "Mk2",
+      "years": [2013, 2019],
+      "bodyTypes": ["suv"],
+      "fuels": ["petrol", "diesel"],
+      "seats": [5],
+      "automatic": true,
+      "typicalPriceEur": null,
+      "priceSource": null,
+      "strengths": [
+        "Gute Verarbeitung",
+        "Gutes Raumangebot",
+        "Weitgehend zuverlässige Technik",
+        "Sehr agiles Fahrverhalten und gutes Preis-Leistungs-Verhältnis"
+      ],
+      "issues": [
+        {
+          "title": "Anfällige Achsaufhängungen",
+          "affects": "Kuga II allgemein laut TÜV-Report (Diesel- und Benziner-Bericht); der ADAC nennt keine bestimmten Motoren oder Baujahre.",
+          "detail": "Laut ADAC bereiten im TÜV-Report lediglich die Achsaufhängungen und verschlissene Bremsscheiben öfter Sorgen. Achsaufhängungen sind ein Prüfpunkt bei der Hauptuntersuchung und verursachen bei Mängeln Reparaturkosten.",
+          "check": "Fahrwerk und Achsaufhängung bei der Probefahrt (Klappern, Poltern) und auf der Hebebühne prüfen lassen; den HU-Bericht ansehen.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: Ford Kuga (2013-2019) Benziner",
+              "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0244-ford-kuga-2013-2019-benziner-bericht.pdf"
+            },
+            {
+              "label": "ADAC Gebrauchtwageninfo: Ford Kuga (2013-2019) Diesel",
+              "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0243-ford-kuga-2013-2019-diesel-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Verschlissene Bremsscheiben",
+          "affects": "Kuga II allgemein laut TÜV-Report (Diesel- und Benziner-Bericht); der ADAC nennt keine bestimmten Motoren oder Baujahre.",
+          "detail": "Laut ADAC werden im TÜV-Report verschlissene Bremsscheiben öfter beanstandet. Das betrifft die Bremsanlage und verursacht Reparaturkosten.",
+          "check": "Bremsscheiben auf Riefen, Rost und Verschleißrand prüfen, auf Rubbeln und Quietschen beim Bremsen achten und nach dem Wechselzeitpunkt der Bremsen fragen.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: Ford Kuga (2013-2019) Benziner",
+              "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0244-ford-kuga-2013-2019-benziner-bericht.pdf"
+            },
+            {
+              "label": "ADAC Gebrauchtwageninfo: Ford Kuga (2013-2019) Diesel",
+              "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0243-ford-kuga-2013-2019-diesel-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Starterbatterie und Wegfahrsperre",
+          "affects": "Benziner: Starterbatterie (Baujahre 2013 bis 2016); Diesel: entladene Batterie (2013 bis 2014), defekte Wegfahrsperre (2014).",
+          "detail": "Laut ADAC gehört die Batterie bei den frühen Jahrgängen zu den häufigen Bauteilfehlern; beim Diesel nennt der Bericht für 2014 außerdem eine defekte Wegfahrsperre. Beides kann dazu führen, dass das Auto nicht startet.",
+          "check": "Batterie testen lassen, nach ihrem Alter fragen und prüfen, ob das Fahrzeug mit allen Schlüsseln zuverlässig startet.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: Ford Kuga (2013-2019) Benziner",
+              "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0244-ford-kuga-2013-2019-benziner-bericht.pdf"
+            },
+            {
+              "label": "ADAC Gebrauchtwageninfo: Ford Kuga (2013-2019) Diesel",
+              "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0243-ford-kuga-2013-2019-diesel-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Rückrufe: Gurtstraffer, Airbag-Zünder, Motorüberhitzung, Kupplung",
+          "affects": "Gurtstraffer und Dämmmaterial der B-Säule (Rückruf 9/2017); Zünder der Seiten- und Knieairbags (9/2017, laut ADAC-Bericht zu den Benzinern); nur 1.6-EcoBoost-Benziner: Überhitzung der Zylinderköpfe (1/2018); EcoBoost-Benziner mit 6-Gang-Sc…",
+          "detail": "Laut ADAC gab es Rückrufe wegen möglicher starker Hitzeeinwirkung auf das Dämmmaterial der B-Säulenverkleidung bei ausgelöstem Gurtstraffer und, laut Benziner-Bericht, wegen möglicherweise defekter Airbag-Zünder (Seiten- und Knieairbags lösen im Unfall eventuell nicht aus). Dazu kommen motorspezifische Rückrufe wegen überhitzender Zylinderköpfe (1.6 EcoBoost) und wegen Kupplungsschlupfs oder -bruchs (EcoBoost mit Schaltgetriebe).",
+          "check": "Per Fahrgestellnummer beim Händler prüfen lassen, ob die Rückrufe erledigt sind.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: Ford Kuga (2013-2019) Benziner",
+              "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0244-ford-kuga-2013-2019-benziner-bericht.pdf"
+            },
+            {
+              "label": "ADAC Gebrauchtwageninfo: Ford Kuga (2013-2019) Diesel",
+              "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0243-ford-kuga-2013-2019-diesel-bericht.pdf"
+            }
+          ]
+        }
+      ],
+      "engines": {
+        "recommended": [
+          {
+            "name": "Benziner mit 150 und 182 PS (1,6-Liter-EcoBoost, seit 2014 1,5-Liter-EcoBoost)",
+            "why": "Laut ADAC die empfohlenen Versionen mit mittlerer Leistung: ausreichende Fahrleistungen bei begrenztem Verbrauch; die stärkere Version hat stets Allradantrieb und Wandlerautomatik."
+          },
+          {
+            "name": "2.0 TDCi mit 140 und 150 PS (mittlere Leistung)",
+            "why": "Laut ADAC vollkommen ausreichende Fahrleistungen bei erträglichem Verbrauch und tolle Traktion dank Allradantrieb; etwa 50 % aller Kuga wurden mit der mittleren Dieselversion mit Allrad bestellt, sie ist deshalb häufig gebraucht zu finden."
+          }
+        ],
+        "caution": [
+          {
+            "name": "1,6-Liter-EcoBoost-Benziner",
+            "why": "Laut ADAC-Bericht Rückruf 1/2018: Zylinderköpfe können wegen unzureichender Kühlmittelmenge überhitzen."
+          },
+          {
+            "name": "Top-Versionen: 2.0 EcoBoost mit mindestens 230 PS und 2.0 TDCi mit 163 und 180 PS",
+            "why": "Laut ADAC teurer; die Benziner brauchen mehr Kraftstoff und sind deutlich seltener am Gebrauchtwagenmarkt zu finden, die Diesel bieten nur wenig bessere Fahrleistungen als die mittleren Versionen und haben einen relativ hohen Verbrauch."
+          },
+          {
+            "name": "Einstiegsversionen mit 120 PS (Diesel 1,5 l; Benziner seit 2016)",
+            "why": "Laut ADAC eher eine Option für Wenigfahrer, die es gelassen angehen, und nur selten am Markt zu finden."
+          }
+        ]
+      },
+      "tips": [
+        "Bei Erstzulassung 2013 genau hinsehen: Dieser Jahrgang liegt in der ADAC-Pannenstatistik im Bereich „schlecht“, spätere Jahrgänge schneiden besser ab.",
+        "Achsaufhängung und Bremsscheiben prüfen lassen, denn beides wird im TÜV-Report öfter bemängelt.",
+        "Batterie testen lassen und beim Diesel (Baujahr 2014) darauf achten, dass das Auto mit allen Schlüsseln zuverlässig startet.",
+        "Bei Benzinern mit Schaltgetriebe auf die Kupplung achten (Rutschen beim Anfahren) und klären, ob die Rückrufe von 2018 und 2019 erledigt sind."
+      ]
+    },
+    {
+      "id": "ford-kuga-iii",
+      "name": "Kuga III",
+      "code": "Mk3",
+      "years": [2019, null],
+      "bodyTypes": ["suv"],
+      "fuels": ["petrol", "diesel", "hybrid", "plugin_hybrid"],
+      "seats": [5],
+      "automatic": true,
+      "typicalPriceEur": null,
+      "priceSource": null,
+      "strengths": [],
+      "issues": [
+        {
+          "title": "Überdurchschnittlich oft Pannen: Starterbatterie",
+          "affects": "Erstzulassung 2020–2022 (ADAC-Pannenstatistik 2025)",
+          "detail": "Probleme mit Starterbatterie waren bei diesen Jahrgängen überdurchschnittlich oft der Grund für einen Einsatz der ADAC-Straßenwacht. Eine schwache Starterbatterie ist bei allen Autos die häufigste Pannenursache, hier aber besonders oft.",
+          "check": "Alter der Batterie erfragen und sie testen lassen; springt der Motor zögerlich an, ist ein Tausch fällig.",
+          "severity": "gering",
+          "sources": [
+            {
+              "label": "ADAC Pannenstatistik 2025",
+              "url": "https://assets.adac.de/image/upload/v1776261444/ADAC-eV/KOR/Text/PDF/Pannenstatistik_2025_Bericht_czmf9q.pdf"
+            }
+          ]
+        }
+      ],
+      "engines": {
+        "recommended": [],
+        "caution": []
+      },
+      "tips": [
+        "Weitere Schwachstellen dieser Generation haben wir noch nicht ausgewertet. Lass das Auto vor dem Kauf in einer Werkstatt prüfen und Rückrufe per Fahrgestellnummer erfragen."
+      ]
+    }
+  ]
+}

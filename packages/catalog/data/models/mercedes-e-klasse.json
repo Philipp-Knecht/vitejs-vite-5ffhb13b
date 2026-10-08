@@ -25,8 +25,8 @@
   "segment": "obere_mittelklasse",
   "summary": "Große, komfortable Mercedes-Limousine bzw. Kombi (T-Modell) der oberen Mittelklasse, bei Vielfahrern und als Taxi beliebt und daher oft mit hoher Laufleistung.",
   "ratings": {
-    "reliability": 3,
-    "reliabilityNote": "Laut ADAC-Pannenstatistik liegen die Jahrgänge 2012 bis 2016 überwiegend im Mittelfeld (2014 „gut“), die frühen Jahrgänge 2009 und 2010 sind „sehr schlecht“ und 2011 „schlecht“. Im TÜV-Report schneidet die Baureihe W212 trotz sehr hoher Laufleistungen überdurchschnittlich gut ab.",
+    "reliability": 4,
+    "reliabilityNote": "Laut ADAC-Pannenstatistik 2025 hatte die E-Klasse W213 mit Erstzulassung 2017 bis 2022 durchweg weniger Pannen als die meisten gleich alten Autos. Beim Vorgänger W212 liegen die Jahrgänge 2012 bis 2016 laut ADAC überwiegend im Mittelfeld, 2009 bis 2011 schnitt er schlecht ab; im TÜV-Report liegt der W212 über dem Durchschnitt.",
     "reliabilitySources": [
       {
         "label": "ADAC Gebrauchtwageninfo: Mercedes-Benz E-Klasse (2009-2016) Benziner",
@@ -35,6 +35,10 @@
       {
         "label": "ADAC Gebrauchtwageninfo: Mercedes-Benz E-Klasse (2009-2016) Diesel",
         "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0188-mercedes-benz-e-klasse-2009-2016-diesel-bericht.pdf"
+      },
+      {
+        "label": "ADAC Pannenstatistik 2025",
+        "url": "https://assets.adac.de/image/upload/v1776261444/ADAC-eV/KOR/Text/PDF/Pannenstatistik_2025_Bericht_czmf9q.pdf"
       }
     ],
     "runningCosts": 2,
@@ -214,7 +218,7 @@
         "caution": []
       },
       "tips": [
-        "Für diese Generation liegen noch wenige Gebrauchtwagen-Erfahrungen vor; Rückrufe per Fahrgestellnummer erfragen."
+        "Zu dieser Generation haben wir noch keine Schwachstellen ausgewertet. Lass das Auto vor dem Kauf in einer Werkstatt prüfen und Rückrufe per Fahrgestellnummer erfragen."
       ]
     },
     {

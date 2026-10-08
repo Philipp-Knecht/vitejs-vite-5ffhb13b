@@ -1,0 +1,235 @@
+{
+  "id": "ford-fiesta",
+  "make": "Ford",
+  "model": "Fiesta",
+  "aliases": [
+    "fiesta",
+    "fiesta active",
+    "fiesta ecoboost",
+    "fiesta econetic",
+    "fiesta mk7",
+    "fiesta mk8",
+    "fiesta st",
+    "fiesta st-line",
+    "fiesta st200",
+    "fiesta tdci",
+    "fiesta titanium",
+    "fiesta trend",
+    "fiesta vii",
+    "fiesta viii"
+  ],
+  "segment": "kleinwagen",
+  "summary": "Beliebter Kleinwagen von Ford mit agilem, sicherem Fahrwerk und großer Gebrauchtwagenauswahl, der im Fond allerdings eng ist.",
+  "ratings": {
+    "reliability": 4,
+    "reliabilityNote": "Laut ADAC-Pannenstatistik 2025 hatte der Fiesta VIII mit Erstzulassung 2018 bis 2020 weniger Pannen als die meisten gleich alten Autos, 2021 und 2022 lag er im Mittelfeld. Den Fiesta VII sahen ältere ADAC-Auswertungen meist im Bereich „gut“ bis „mittel“; im TÜV-Report liegt er etwa im Durchschnitt.",
+    "reliabilitySources": [
+      {
+        "label": "ADAC Gebrauchtwageninfo: Ford Fiesta (2008-2017) Diesel",
+        "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0033-ford-fiesta-2008-2017-diesel-bericht.pdf"
+      },
+      {
+        "label": "ADAC Gebrauchtwageninfo: Ford Fiesta (2008-2017) Benziner",
+        "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0168-ford-fiesta-2008-2017-benziner-bericht.pdf"
+      },
+      {
+        "label": "ADAC Pannenstatistik 2025",
+        "url": "https://assets.adac.de/image/upload/v1776261444/ADAC-eV/KOR/Text/PDF/Pannenstatistik_2025_Bericht_czmf9q.pdf"
+      }
+    ],
+    "runningCosts": 4,
+    "space": 2,
+    "comfort": 3
+  },
+  "generations": [
+    {
+      "id": "ford-fiesta-vii",
+      "name": "Fiesta VII",
+      "code": "Mk7",
+      "years": [2008, 2017],
+      "bodyTypes": ["schraegheck"],
+      "fuels": ["petrol", "diesel"],
+      "seats": [5],
+      "automatic": true,
+      "typicalPriceEur": null,
+      "priceSource": null,
+      "strengths": [
+        "Gute Verarbeitung",
+        "Sicheres Fahrwerk, agiles Fahrverhalten",
+        "Zuverlässige Technik",
+        "Große Auswahl am Gebrauchtwagenmarkt, relativ günstig"
+      ],
+      "issues": [
+        {
+          "title": "Defekte Spurstangenköpfe (Lenkung)",
+          "affects": "Fiesta VII allgemein laut TÜV-Report (Diesel- und Benziner-Bericht); der ADAC nennt keine bestimmten Motoren oder Baujahre.",
+          "detail": "Laut ADAC bereiten defekte Spurstangenköpfe und damit die Lenkung im TÜV-Report häufiger Probleme. Bei der Hauptuntersuchung ist das ein Mangel, der behoben werden muss.",
+          "check": "Bei der Probefahrt auf Spiel, Klacken und ungenaues Lenkverhalten achten und die Spurstangenköpfe auf der Hebebühne prüfen lassen.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: Ford Fiesta (2008-2017) Diesel",
+              "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0033-ford-fiesta-2008-2017-diesel-bericht.pdf"
+            },
+            {
+              "label": "ADAC Gebrauchtwageninfo: Ford Fiesta (2008-2017) Benziner",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0168-ford-fiesta-2008-2017-benziner-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Gebrochene Fahrwerksfedern",
+          "affects": "Fiesta VII allgemein laut TÜV-Report (Diesel- und Benziner-Bericht); beim Baujahr 2008 zusätzlich Vorder- und Hinterachsfedern als häufiger Bauteilfehler.",
+          "detail": "Laut ADAC werden im TÜV-Report häufig brechende Federn festgestellt; beim Baujahr 2008 nennt der Bericht Vorder- und Hinterachsfedern außerdem als häufigen Bauteilfehler. Ein Federbruch ist ein Mangel bei der Hauptuntersuchung und verursacht Reparaturkosten.",
+          "check": "Federn vorn und hinten auf der Hebebühne auf Bruch prüfen lassen; bei der Probefahrt auf Klappern und ein schiefes Fahrzeugniveau achten.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: Ford Fiesta (2008-2017) Diesel",
+              "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0033-ford-fiesta-2008-2017-diesel-bericht.pdf"
+            },
+            {
+              "label": "ADAC Gebrauchtwageninfo: Ford Fiesta (2008-2017) Benziner",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0168-ford-fiesta-2008-2017-benziner-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Gerissene Abgaskrümmer",
+          "affects": "Fiesta VII allgemein laut TÜV-Report (Diesel- und Benziner-Bericht); der ADAC nennt keine bestimmten Motoren oder Baujahre.",
+          "detail": "Laut ADAC werden im TÜV-Report häufig gerissene Abgaskrümmer festgestellt. Das fällt oft durch Geräusche oder Abgasgeruch auf und ist ein Mangel bei der Hauptuntersuchung.",
+          "check": "Beim Kaltstart auf Zischen, Klopfen und Abgasgeruch achten und die Abgasanlage auf Risse und Rost prüfen lassen.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: Ford Fiesta (2008-2017) Diesel",
+              "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0033-ford-fiesta-2008-2017-diesel-bericht.pdf"
+            },
+            {
+              "label": "ADAC Gebrauchtwageninfo: Ford Fiesta (2008-2017) Benziner",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0168-ford-fiesta-2008-2017-benziner-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Ölverlust",
+          "affects": "Fiesta VII allgemein laut TÜV-Aussage im Einleitungstext (Diesel- und Benziner-Bericht); der ADAC nennt keine bestimmten Motoren oder Baujahre.",
+          "detail": "Laut ADAC verursachen beim TÜV neben der Lenkung vor allem Ölverlust häufiger Probleme. Undichte Stellen sollten vor dem Kauf geklärt sein.",
+          "check": "Motor und Unterboden auf frische Ölspuren prüfen, Ölstand kontrollieren und nach Dichtungsarbeiten fragen.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: Ford Fiesta (2008-2017) Diesel",
+              "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0033-ford-fiesta-2008-2017-diesel-bericht.pdf"
+            },
+            {
+              "label": "ADAC Gebrauchtwageninfo: Ford Fiesta (2008-2017) Benziner",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0168-ford-fiesta-2008-2017-benziner-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Zündkabel, Zündkerzen, Anlasser und Starterbatterie",
+          "affects": "Zündkabel: Baujahre 2008 bis 2012 und 2015; Zündkerze: 2012; Anlasser: 2014; Starterbatterie: 2012 bis 2013 und 2017 (Zündkabel und Zündkerzen gibt es nur bei Benzinern).",
+          "detail": "Laut ADAC zählen diese Teile in einzelnen Jahrgängen zu den häufigen Bauteilfehlern. Mögliche Folgen sind Startprobleme oder unrunder Motorlauf; die Reparaturen sind meist günstig.",
+          "check": "Batterie testen lassen, Startverhalten und Motorlauf bei kaltem Motor prüfen und fragen, ob Zündkabel, Zündkerzen oder Anlasser schon getauscht wurden.",
+          "severity": "gering",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: Ford Fiesta (2008-2017) Diesel",
+              "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0033-ford-fiesta-2008-2017-diesel-bericht.pdf"
+            },
+            {
+              "label": "ADAC Gebrauchtwageninfo: Ford Fiesta (2008-2017) Benziner",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0168-ford-fiesta-2008-2017-benziner-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Rückrufe: Bremsleitungen, Hinterachse, Gurtschlösser, Motoren",
+          "affects": "Bremsleitungen am ABS/ESP-Aggregat (Rückruf 5/2011); Schrauben der Hinterachsaufnahmen (12/2011); hintere Gurtschlösser (2/2015); nur 1.4/1.6-TDCi-Diesel: Abgasanlage (1/2012, laut ADAC-Bericht zu den Dieseln); nur 1.6-EcoBoost-Benziner: K…",
+          "detail": "Laut ADAC gab es Rückrufe, weil Bremsleitungen am ABS/ESP-Aggregat aneinander scheuern und Bremsflüssigkeit austreten kann, weil an den Hinterachsaufnahmen Schraubenköpfe abreißen können (plötzliche Fahrstabilitätsprobleme) und weil sich hintere Gurtschlösser bei einem Frontalaufprall öffnen können. Dazu kommen motorspezifische Rückrufe wegen ausströmender heißer Abgase im Motorraum (1.4/1.6 TDCi) und überhitzender Zylinderköpfe (1.6 EcoBoost).",
+          "check": "Per Fahrgestellnummer beim Händler prüfen lassen, ob die Rückrufe erledigt sind.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: Ford Fiesta (2008-2017) Diesel",
+              "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0033-ford-fiesta-2008-2017-diesel-bericht.pdf"
+            },
+            {
+              "label": "ADAC Gebrauchtwageninfo: Ford Fiesta (2008-2017) Benziner",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0168-ford-fiesta-2008-2017-benziner-bericht.pdf"
+            }
+          ]
+        }
+      ],
+      "engines": {
+        "recommended": [
+          {
+            "name": "1,0-Liter-EcoBoost-Benziner (100, 125 oder 140 PS)",
+            "why": "Laut ADAC eine klare Empfehlung: Schon mit 100 PS hat er wenig Mühe mit dem Fiesta, die stärkeren Varianten bieten erstaunlich gute Fahrleistungen bei geringem Verbrauch; der Motor wurde mehrmals zum „Engine of the Year“ gewählt."
+          },
+          {
+            "name": "Benziner mit 1,4 und 1,6 Liter Hubraum",
+            "why": "Laut ADAC bieten sie deutlich bessere Fahrleistungen als die Basismotoren und gelten als robust."
+          },
+          {
+            "name": "Diesel mit 90 und 95 PS",
+            "why": "Laut ADAC deutlich souveräner unterwegs als mit den schwächeren Dieseln; alle Diesel sind sparsam, ein Diesel lohnt sich aber erst bei etwa 15.000 km Fahrleistung pro Jahr oder mehr."
+          }
+        ],
+        "caution": [
+          {
+            "name": "Basis-Benziner mit 1,0 und 1,25 Liter (Saugmotoren, 60 bis 82 PS)",
+            "why": "Laut ADAC bringen sie den Fiesta nur sehr mühsam in Schwung; für den Alltag abseits von Autobahnen sind sie aber ausreichend."
+          },
+          {
+            "name": "Fiesta ST (182 PS) und ST200 (200 PS)",
+            "why": "Laut ADAC im Einkauf deutlich teurer und nur für Liebhaber eine gute Wahl; der ST200 ist selten."
+          }
+        ]
+      },
+      "tips": [
+        "Lenkung bei der Probefahrt auf Spiel und Klacken prüfen und die Spurstangenköpfe kontrollieren lassen.",
+        "Federn vorn und hinten sowie die Abgasanlage (Krümmer) auf Bruch, Risse und Rost prüfen lassen.",
+        "Motor und Unterboden auf Ölspuren kontrollieren, denn Ölverlust fällt im TÜV häufiger auf.",
+        "Beim Benziner auf unrunden Motorlauf und Startprobleme achten (Zündkabel, Zündkerzen, Batterie, Anlasser)."
+      ]
+    },
+    {
+      "id": "ford-fiesta-viii",
+      "name": "Fiesta VIII",
+      "code": "Mk8",
+      "years": [2017, 2023],
+      "bodyTypes": ["schraegheck"],
+      "fuels": ["petrol", "diesel", "hybrid"],
+      "seats": [5],
+      "automatic": true,
+      "typicalPriceEur": null,
+      "priceSource": null,
+      "strengths": [],
+      "issues": [
+        {
+          "title": "Überdurchschnittlich oft Pannen: Starterbatterie",
+          "affects": "Erstzulassung 2020–2022 (ADAC-Pannenstatistik 2025)",
+          "detail": "Probleme mit Starterbatterie waren bei diesen Jahrgängen überdurchschnittlich oft der Grund für einen Einsatz der ADAC-Straßenwacht. Eine schwache Starterbatterie ist bei allen Autos die häufigste Pannenursache, hier aber besonders oft.",
+          "check": "Alter der Batterie erfragen und sie testen lassen; springt der Motor zögerlich an, ist ein Tausch fällig.",
+          "severity": "gering",
+          "sources": [
+            {
+              "label": "ADAC Pannenstatistik 2025",
+              "url": "https://assets.adac.de/image/upload/v1776261444/ADAC-eV/KOR/Text/PDF/Pannenstatistik_2025_Bericht_czmf9q.pdf"
+            }
+          ]
+        }
+      ],
+      "engines": {
+        "recommended": [],
+        "caution": []
+      },
+      "tips": [
+        "Weitere Schwachstellen dieser Generation haben wir noch nicht ausgewertet. Lass das Auto vor dem Kauf in einer Werkstatt prüfen und Rückrufe per Fahrgestellnummer erfragen."
+      ]
+    }
+  ]
+}

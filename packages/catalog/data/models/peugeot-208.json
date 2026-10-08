@@ -1,0 +1,267 @@
+{
+  "id": "peugeot-208",
+  "make": "Peugeot",
+  "model": "208",
+  "aliases": [
+    "208",
+    "208 active",
+    "208 allure",
+    "208 bluehdi",
+    "208 gt line",
+    "208 gti",
+    "208 hdi",
+    "208 puretech",
+    "e-208"
+  ],
+  "segment": "kleinwagen",
+  "summary": "Französischer Kleinwagen mit eigenständigem Design, dessen neuere Jahrgänge laut ADAC zuverlässig sind und den es seit 2019 auch als Elektroauto (e-208) gibt.",
+  "ratings": {
+    "reliability": 4,
+    "reliabilityNote": "Laut ADAC-Pannenstatistik schneiden beim 208 II die Erstzulassungen 2019 bis 2023 durchweg mit „gut“ ab, beim Vorgänger (2012–2019) liegen die frühen Jahrgänge im Mittelfeld („mittel“) und ab 2017 bei „gut“ bis „sehr gut“. Im TÜV-Report liegt der 208 II leicht über dem Durchschnitt; ein Risiko bleibt der Zahnriemen im Ölbad beim 1.2 PureTech.",
+    "reliabilitySources": [
+      {
+        "label": "ADAC Gebrauchtwageninfo: Peugeot 208 (2012-2019) Benziner",
+        "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0346-peugeot-208-2012-2019-benziner-bericht.pdf"
+      },
+      {
+        "label": "ADAC Gebrauchtwageninfo: Peugeot 208 (2012-2019) Diesel",
+        "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0347-peugeot-208-2012-2019-diesel-bericht.pdf"
+      },
+      {
+        "label": "ADAC Gebrauchtwageninfo: Peugeot 208 (seit 2019)",
+        "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0519-peugeot-208-seit-2019-bericht.pdf"
+      }
+    ],
+    "runningCosts": 4,
+    "space": 3,
+    "comfort": 3
+  },
+  "generations": [
+    {
+      "id": "peugeot-208-i",
+      "name": "208 I",
+      "code": "A9",
+      "years": [2012, 2019],
+      "bodyTypes": ["schraegheck"],
+      "fuels": ["petrol", "diesel"],
+      "seats": [5],
+      "automatic": true,
+      "typicalPriceEur": null,
+      "priceSource": null,
+      "strengths": [
+        "Für einen Kleinwagen großzügiges Platzangebot für die Insassen.",
+        "Sichere Fahreigenschaften und ausgewogenes Fahrwerk.",
+        "Stimmiges Design, das auch nach vielen Jahren noch gelungen wirkt.",
+        "Sparsame Diesel im Alltag (mit Schaltgetriebe)."
+      ],
+      "issues": [
+        {
+          "title": "Rückrufe: ABS/ESP, Starterrelais, Achsen, 1.6 HDi",
+          "affects": "Rückrufe laut ADAC-Berichten zu Benzinern und Dieseln: 12/2016 (Brems-Hydraulikblock mit ABS/ESP), 6/2017 (Starterrelais), 12/2017 (Frontachse und hinterer Querträger), 1/2018 (1.6 HDi), 5/2018 (Vorderachse); 2/2020 ein weiterer Rückruf oh…",
+          "detail": "Es gab Rückrufe wegen einer möglicherweise nicht konformen Komponente im Brems-Hydraulikblock, die ABS und ESP bei Notbremsung oder Ausweichmanöver beeinträchtigen könnte (12/2016), wegen eines mangelhaften Starterrelais, das zum Brand führen kann (6/2017), sowie wegen Schrauben und Befestigung an Vorder- und Hinterachse (12/2017, 5/2018). Beim 1.6 HDi führte ein fehlerhaft arbeitendes Motorteil zum Verlust der Antriebskraft (1/2018).",
+          "check": "Per Fahrgestellnummer beim Händler prüfen lassen, ob die Rückrufe erledigt sind.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: Peugeot 208 (2012-2019) Benziner",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0346-peugeot-208-2012-2019-benziner-bericht.pdf"
+            },
+            {
+              "label": "ADAC Gebrauchtwageninfo: Peugeot 208 (2012-2019) Diesel",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0347-peugeot-208-2012-2019-diesel-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Schwache Bremsen und Bremsbauteile bei der HU",
+          "affects": "Alle Motoren (laut ADAC-Berichten zu Benzinern und Dieseln), laut TÜV-Report",
+          "detail": "Laut ADAC gelten die Bremsen des 208 als schwach; bei der Hauptuntersuchung werden häufig Bremsscheiben und andere Bremsbauteile beanstandet.",
+          "check": "Bremsscheiben und Bremsbeläge von einer Werkstatt prüfen lassen und bei der Probefahrt auf gleichmäßiges Bremsen achten.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: Peugeot 208 (2012-2019) Benziner",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0346-peugeot-208-2012-2019-benziner-bericht.pdf"
+            },
+            {
+              "label": "ADAC Gebrauchtwageninfo: Peugeot 208 (2012-2019) Diesel",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0347-peugeot-208-2012-2019-diesel-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Rostende Abgasanlage und Katalysator",
+          "affects": "Alle Motoren (laut ADAC-Berichten zu Benzinern und Dieseln): Rost laut TÜV-Report; Katalysator in der Pannenstatistik bei Erstzulassung 2014",
+          "detail": "Rostende Auspuffanlagen verhageln laut ADAC häufig den frischen HU-Stempel; beim Jahrgang 2014 taucht in der Pannenstatistik außerdem der Katalysator unter den häufigen Bauteilfehlern auf.",
+          "check": "Auspuffanlage auf Rost und Undichtigkeiten prüfen; bei Erstzulassung 2014 nach einem Katalysatortausch fragen.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: Peugeot 208 (2012-2019) Benziner",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0346-peugeot-208-2012-2019-benziner-bericht.pdf"
+            },
+            {
+              "label": "ADAC Gebrauchtwageninfo: Peugeot 208 (2012-2019) Diesel",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0347-peugeot-208-2012-2019-diesel-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Ölverlust an Antriebseinheiten",
+          "affects": "Alle Motoren (laut ADAC-Berichten zu Benzinern und Dieseln), laut TÜV-Report",
+          "detail": "Ölfeuchte Antriebseinheiten und Ölverlust gehören laut ADAC zu den häufigen Mängeln bei der Hauptuntersuchung.",
+          "check": "Motor und Getriebe von unten auf Ölspuren ansehen, den Ölstand kontrollieren und nach bereits erledigten Reparaturen fragen.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: Peugeot 208 (2012-2019) Benziner",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0346-peugeot-208-2012-2019-benziner-bericht.pdf"
+            },
+            {
+              "label": "ADAC Gebrauchtwageninfo: Peugeot 208 (2012-2019) Diesel",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0347-peugeot-208-2012-2019-diesel-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Zündspulen und Zündkerzen bei Benzinern",
+          "affects": "Laut ADAC-Bericht zu den Benzinern: Zündspulen bei Erstzulassung 2012–2013 und 2015, Zündkerzen 2016",
+          "detail": "Zündspulen und Zündkerzen zählen laut ADAC bei einzelnen Jahrgängen zu den häufigen Bauteilfehlern der Pannenstatistik.",
+          "check": "Auf unruhigen Motorlauf, Ruckeln und Leistungsverlust achten und nach getauschten Zündspulen oder Zündkerzen fragen.",
+          "severity": "gering",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: Peugeot 208 (2012-2019) Benziner",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0346-peugeot-208-2012-2019-benziner-bericht.pdf"
+            }
+          ]
+        }
+      ],
+      "engines": {
+        "recommended": [
+          {
+            "name": "1.2 Turbo (110 PS, Benziner)",
+            "why": "Laut ADAC die „goldene Mitte“ und Empfehlung: guter Kompromiss aus Leistung und Verbrauch bei guter Laufkultur."
+          },
+          {
+            "name": "Dreizylinder-Benziner mit 82 PS",
+            "why": "Laut ADAC die bessere Wahl als die 68- und 72-PS-Sauger: Der Verbrauch ist nicht höher, und gebrauchte 208 haben sehr häufig diesen Motor."
+          },
+          {
+            "name": "Diesel HDi 92 und HDi 100",
+            "why": "Laut ADAC deutlich entspannter unterwegs als mit dem HDi 68; im Alltag sparsam (mit Schaltgetriebe) und mit akzeptabler Laufkultur."
+          },
+          {
+            "name": "Diesel HDi 115 und HDi 120",
+            "why": "Laut ADAC geht es damit richtig flott voran, auch zügige Autobahnetappen sind entspannt machbar."
+          }
+        ],
+        "caution": [
+          {
+            "name": "Dreizylinder-Sauger mit 68 und 72 PS",
+            "why": "Laut ADAC nur im innerstädtischen Betrieb mit ausreichend Leistung."
+          },
+          {
+            "name": "1.4 HDi 68 (Diesel)",
+            "why": "Laut ADAC kann der kleine Motor dem 208 nur zu moderaten Fahrleistungen verhelfen."
+          },
+          {
+            "name": "Automatisiertes Schaltgetriebe und 4-Stufen-Wandlerautomatik",
+            "why": "Laut ADAC nur für sehr zurückhaltende Fahrer geeignet, da Fahrleistungen und Verbrauch unter diesen Getrieben leiden; die 6-Stufen-Wandlerautomatik der 110-PS-Version ist deutlich moderner."
+          }
+        ]
+      },
+      "tips": [
+        "Auspuffanlage auf Rost kontrollieren und Motor sowie Getriebe von unten auf Ölspuren ansehen; beides sind laut ADAC häufige HU-Mängel.",
+        "Bremsscheiben und Bremsbeläge prüfen lassen; die Bremsen des 208 gelten laut ADAC als schwach.",
+        "Beim Benziner auf unruhigen Motorlauf achten und nach dem Alter von Zündspulen und Starterbatterie fragen (laut ADAC bei einzelnen Jahrgängen häufige Pannenursachen)."
+      ]
+    },
+    {
+      "id": "peugeot-208-ii",
+      "name": "208 II",
+      "code": "P21",
+      "years": [2019, null],
+      "bodyTypes": ["schraegheck"],
+      "fuels": ["petrol", "diesel", "electric", "hybrid"],
+      "seats": [5],
+      "automatic": true,
+      "typicalPriceEur": null,
+      "priceSource": null,
+      "strengths": [
+        "Umfangreiche Sicherheitsausstattung.",
+        "Gute Zuverlässigkeit: In der ADAC-Pannenstatistik durchweg „gut“ (Erstzulassung 2019–2023).",
+        "Durchzugsstarke Turbomotoren.",
+        "Sparsamer Diesel und spritzige Elektroversion (e-208)."
+      ],
+      "issues": [
+        {
+          "title": "Zahnriemen im Ölbad beim 1.2 PureTech",
+          "affects": "1.2 PureTech (Dreizylinder-Turbobenziner mit 100 und 130 PS); laut ADAC bis zur Ablösung durch Hybridmotoren mit Steuerkette seit Ende 2023",
+          "detail": "Der Zahnriemen dieser Motoren läuft im Ölbad und gilt laut ADAC als anfällig. Wird nicht exakt die richtige Ölsorte verwendet, drohen laut ADAC teure Motorschäden.",
+          "check": "Wartungsnachweise verlangen: Wurde bei jedem Ölwechsel die vorgeschriebene Ölsorte verwendet? Nach dem Zustand und einem eventuellen Wechsel des Zahnriemens fragen.",
+          "severity": "hoch",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: Peugeot 208 (seit 2019)",
+              "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0519-peugeot-208-seit-2019-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Bremsbauteile bei der Hauptuntersuchung",
+          "affects": "Alle Motoren, laut TÜV-Report",
+          "detail": "Im TÜV-Report liegt der 208 II leicht über dem Durchschnitt; am ehesten bereiten laut ADAC Bremsbauteile bei der Hauptuntersuchung Probleme.",
+          "check": "Bremsscheiben und Bremsbeläge von einer Werkstatt prüfen lassen.",
+          "severity": "gering",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: Peugeot 208 (seit 2019)",
+              "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0519-peugeot-208-seit-2019-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Rückrufe: Klimakompressor beim e-208",
+          "affects": "e-208 (Elektro) mit Klimakompressor; Rückruf 5/2023",
+          "detail": "Bei den betroffenen Fahrzeugen kann es bei einem Problem mit dem Klimakompressor zu einer Unterbrechung des Antriebsstrangs kommen.",
+          "check": "Per Fahrgestellnummer beim Händler prüfen lassen, ob die Rückrufe erledigt sind.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: Peugeot 208 (seit 2019)",
+              "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0519-peugeot-208-seit-2019-bericht.pdf"
+            }
+          ]
+        }
+      ],
+      "engines": {
+        "recommended": [
+          {
+            "name": "Vierzylinder-Diesel mit 102 PS",
+            "why": "Laut ADAC laufruhig, sparsam und für Langstrecken optimal, aber selten zu finden."
+          },
+          {
+            "name": "e-208 (Elektro)",
+            "why": "Laut ADAC als Pendlerauto abseits längerer Reisen eine super Figur: komfortabel, sparsam und mit souveränem Fahrverhalten; die Reichweite ist in der neueren Version mit 156 PS etwas besser als in der älteren mit 136 PS."
+          }
+        ],
+        "caution": [
+          {
+            "name": "1.2 PureTech 100 und 130 (Benziner)",
+            "why": "Laut ADAC deutlich souveräner als der 75-PS-Basisbenziner, aber der Zahnriemen läuft im Ölbad und gilt als anfällig; bei falscher Ölsorte drohen teure Motorschäden. Die Hybridversionen (101 oder 136 PS, seit Ende 2023) haben dagegen eine robuste Steuerkette, brauchen im Alltag aber kaum weniger Sprit und haben ein weniger komfortables Sechsgang-Doppelkupplungsgetriebe."
+          },
+          {
+            "name": "Basisbenziner mit 75 PS",
+            "why": "Laut ADAC reicht er für das Vorankommen in der Stadt, fühlt sich auf Schnellstraßen aber nicht mehr wohl."
+          }
+        ]
+      },
+      "tips": [
+        "Beim 1.2 PureTech mit 100 oder 130 PS Wartungsbelege prüfen: Wurde immer die vorgeschriebene Ölsorte verwendet (Zahnriemen im Ölbad)?",
+        "Bremsscheiben und Bremsbeläge prüfen lassen; Bremsbauteile bereiten laut TÜV-Report am ehesten Probleme.",
+        "Beim e-208 mit Klimakompressor per Fahrgestellnummer klären, ob der Rückruf von 5/2023 erledigt ist."
+      ]
+    }
+  ]
+}

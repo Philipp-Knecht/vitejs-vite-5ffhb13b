@@ -27,6 +27,9 @@ services:
         sync: false
       - key: VITE_CONTACT_EMAIL
         sync: false
+      # Phone number for the imprint and the Pro contract documents (required for selling Pro).
+      - key: VITE_CONTACT_PHONE
+        sync: false
       # Runtime
       - key: PORT
         value: '3000'

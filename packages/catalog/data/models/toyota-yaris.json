@@ -1,0 +1,276 @@
+{
+  "id": "toyota-yaris",
+  "make": "Toyota",
+  "model": "Yaris",
+  "aliases": [
+    "yaris",
+    "yaris d-4d",
+    "yaris hybrid",
+    "yaris ii",
+    "yaris iii",
+    "yaris iv",
+    "yaris ts"
+  ],
+  "segment": "kleinwagen",
+  "summary": "Japanischer Kleinwagen mit einfacher Bedienung, seit der dritten Generation auch als sparsamer Hybrid; die vierte Generation fällt laut ADAC durch häufige Batteriepannen auf.",
+  "ratings": {
+    "reliability": 2,
+    "reliabilityNote": "Laut ADAC-Pannenstatistik 2025 und 2026 gehört der Yaris IV (Erstzulassung 2021 bis 2023) zu den Kleinwagen mit den meisten Pannen, fast immer wegen einer leeren 12-Volt-Starterbatterie; Toyota baut seit November 2024 größere Batterien ein. Ältere ADAC-Auswertungen sahen Yaris II und III überwiegend im Bereich „gut“.",
+    "reliabilitySources": [
+      {
+        "label": "ADAC Gebrauchtwageninfo: Toyota Yaris (2006-2011)",
+        "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0150-toyota-yaris-2006-2011-bericht.pdf"
+      },
+      {
+        "label": "ADAC Gebrauchtwageninfo: Toyota Yaris (2011-2020)",
+        "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0300-toyota-yaris-2011-2020-bericht.pdf"
+      },
+      {
+        "label": "ADAC Pannenstatistik 2025",
+        "url": "https://assets.adac.de/image/upload/v1776261444/ADAC-eV/KOR/Text/PDF/Pannenstatistik_2025_Bericht_czmf9q.pdf"
+      },
+      {
+        "label": "ADAC Pannenstatistik 2026",
+        "url": "https://www.adac.de/rund-ums-fahrzeug/unfall-schaden-panne/adac-pannenstatistik-2026/"
+      }
+    ],
+    "runningCosts": 4,
+    "space": 2,
+    "comfort": 3
+  },
+  "generations": [
+    {
+      "id": "toyota-yaris-ii",
+      "name": "Yaris II",
+      "code": "XP90",
+      "years": [2006, 2011],
+      "bodyTypes": ["schraegheck"],
+      "fuels": ["petrol", "diesel"],
+      "seats": [5],
+      "automatic": true,
+      "typicalPriceEur": null,
+      "priceSource": null,
+      "strengths": [
+        "Hohe Zuverlässigkeit: laut ADAC einer der vorderen Plätze in der Pannenstatistik",
+        "Vorne viel Platz und vielfach variable Rückbank mit ebener Ladefläche nach dem Umklappen",
+        "Gute Sicherheit und kurze Bremswege"
+      ],
+      "issues": [
+        {
+          "title": "Rückrufe: Airbags, Gurtstraffer, Lenksäule, Fensterheber (Brandgefahr)",
+          "affects": "Yaris II: Rückrufe 2/2009, 9/2011, 4/2013 (erweitert 6/2014), 4/2014 und 10/2015; außerdem 6/2007 (Kopfstützen, nur Fahrzeuge aus französischer Produktion), 2/2010 (Gaspedal) und 3/2015 (nur 1.4 D-4D)",
+          "detail": "Laut ADAC gab es Rückrufe wegen möglicher Auslöseprobleme des Beifahrerairbags (4/2013, erweitert 6/2014), einer sich lösenden A-Säulenverkleidung bei Kopfairbag-Auslösung (9/2011) und eines möglichen Risses am hinteren Befestigungswinkel der Lenksäule (4/2014). Hinzu kamen Rückrufe wegen möglicher Brandgefahr (Dämmelement am Gurtstraffer 2/2009, Fensterhebermodule 10/2015).",
+          "check": "Per Fahrgestellnummer beim Händler prüfen lassen, ob die Rückrufe erledigt sind.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: Toyota Yaris (2006-2011)",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0150-toyota-yaris-2006-2011-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Gebrochene Federn und defekte Stoßdämpfer",
+          "affects": "Yaris II allgemein (TÜV-Report); keine Einschränkung auf bestimmte Motoren oder Baujahre genannt",
+          "detail": "Im TÜV-Report fallen beim Yaris II laut ADAC am ehesten gebrochene Federn und defekte Stoßdämpfer auf, obwohl er bei den Hauptuntersuchungen sonst eher unauffällig ist.",
+          "check": "Das Fahrwerk bei der Probefahrt auf Klappern und Poltern prüfen und Federn und Stoßdämpfer in der Werkstatt ansehen lassen.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: Toyota Yaris (2006-2011)",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0150-toyota-yaris-2006-2011-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Abgasanlage: Auspuff und Katalysator",
+          "affects": "Yaris II: Auspuffrohr/-topf bei Erstzulassung 2006–2007 und 2009–2011, Katalysator bei 2008; Auffälligkeiten beim TÜV allgemein",
+          "detail": "Der ADAC nennt Auspuffrohr/-topf und Katalysator unter den häufigen Bauteilfehlern, und laut TÜV-Report kommen defekte Abgasanlagen hin und wieder vor.",
+          "check": "Die Auspuffanlage auf Rost, Undichtigkeiten und Klappern prüfen lassen.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: Toyota Yaris (2006-2011)",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0150-toyota-yaris-2006-2011-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Anlasser, Anlassermagnetschalter und Generator",
+          "affects": "Yaris II bei Erstzulassung 2006–2007 (Anlasser, Anlassermagnetschalter) und 2006 (Generator)",
+          "detail": "Für die ersten Zulassungsjahre führt der ADAC Anlasser, Anlassermagnetschalter und Generator unter den häufigen Bauteilfehlern; das Zulassungsjahr 2006 ist in der ADAC-Pannenstatistik insgesamt mit „schlecht“ eingestuft.",
+          "check": "Bei Fahrzeugen der ersten Zulassungsjahre das Startverhalten testen, auf die Ladekontrollleuchte achten und fragen, ob Anlasser oder Generator ersetzt wurden.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: Toyota Yaris (2006-2011)",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0150-toyota-yaris-2006-2011-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Zündkerzen",
+          "affects": "Yaris II bei Erstzulassung 2010–2011",
+          "detail": "Der ADAC führt die Zündkerze für diese Zulassungsjahre unter den häufigen Bauteilfehlern.",
+          "check": "Im Serviceheft nach dem letzten Zündkerzenwechsel schauen.",
+          "severity": "gering",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: Toyota Yaris (2006-2011)",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0150-toyota-yaris-2006-2011-bericht.pdf"
+            }
+          ]
+        }
+      ],
+      "engines": {
+        "recommended": [
+          {
+            "name": "1.4 D-4D (Diesel)",
+            "why": "Laut ADAC flott und sparsam; der Schadstoffausstoß bleibt trotz des bis 2009 fehlenden Partikelfilters in Grenzen. Den Rückruf 3/2015 (Motoröl im Ladeluftkühler) prüfen lassen."
+          },
+          {
+            "name": "Yaris TS (133 PS)",
+            "why": "Laut ADAC macht die Sportvariante richtig Spaß, ist aber selten zu finden."
+          }
+        ],
+        "caution": [
+          {
+            "name": "Benziner mit 70 PS",
+            "why": "Laut ADAC ziemlich schlapp; er muss für einigermaßen zügiges Vorankommen weit ausgedreht werden."
+          },
+          {
+            "name": "1.3er Benziner (87 bis 101 PS)",
+            "why": "Laut ADAC etwas mehr Kraft als der Basismotor, aber eher durchzugsschwach; der Verbrauch unterscheidet sich im Alltag kaum."
+          }
+        ]
+      },
+      "tips": [
+        "Federn und Stoßdämpfer prüfen lassen und auf Klappern oder Poltern achten, denn beim TÜV fallen am ehesten gebrochene Federn und defekte Stoßdämpfer auf.",
+        "Gaspedal und alle Fensterheber-Schalter auf Leichtgängigkeit testen; dazu gab es Rückrufe (2/2010 bzw. 10/2012).",
+        "Die Auspuffanlage auf Rost und Undichtigkeiten ansehen.",
+        "Bei Fahrzeugen der ersten Zulassungsjahre 2006–2007 auf zuverlässiges Starten achten (Anlasser)."
+      ]
+    },
+    {
+      "id": "toyota-yaris-iii",
+      "name": "Yaris III",
+      "code": "XP130",
+      "years": [2011, 2020],
+      "bodyTypes": ["schraegheck"],
+      "fuels": ["petrol", "diesel", "hybrid"],
+      "seats": [5],
+      "automatic": true,
+      "typicalPriceEur": null,
+      "priceSource": null,
+      "strengths": [
+        "Gut in der ADAC-Pannenstatistik und beim TÜV",
+        "Sparsamer Hybrid",
+        "Zuverlässige Technik und einfache Bedienung",
+        "Ordentliches Platzangebot vorn wie hinten"
+      ],
+      "issues": [
+        {
+          "title": "Rückrufe: Airbags, Bremsleitung, Federbeinstützlager",
+          "affects": "Yaris III: Rückrufe 4/2013 (erweitert 6/2014), 8/2017 und 5/2019 (Airbags), 9/2013 (Bremsleitung am Radbremszylinder der Trommelbremse), 7/2016 (vordere Federbeinstützlager); nur Hybrid: 10/2019 (Gleichspannungswandler); nur 1.4-l-Diesel:…",
+          "detail": "Laut ADAC gab es mehrere Airbag-Rückrufe: Auslöseprobleme beim Beifahrerairbag (4/2013, erweitert 6/2014) sowie fehlerhafte Gasgeneratoren, die zu unkontrollierter Entfaltung von Fahrer- oder Beifahrerairbag und damit zu erhöhtem Verletzungsrisiko führen können (8/2017, 5/2019). Dazu kamen Rückrufe wegen der Verschraubung der Bremsleitung am Radbremszylinder der Trommelbremse (9/2013) und wegen vorzeitigen Verschleißes der beiden vorderen Federbeinstützlager bei hoher Last (7/2016).",
+          "check": "Per Fahrgestellnummer beim Händler prüfen lassen, ob die Rückrufe erledigt sind.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: Toyota Yaris (2011-2020)",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0300-toyota-yaris-2011-2020-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Beleuchtung: Blinker und Abblendlicht",
+          "affects": "Yaris III allgemein (TÜV-Report); keine Einschränkung auf bestimmte Motoren oder Baujahre genannt",
+          "detail": "Der TÜV beanstandet laut ADAC nur nicht funktionierende Blinker und fehlerhaft eingestelltes Abblendlicht; das kann laut ADAC an mangelnder Pflege durch die Besitzer liegen.",
+          "check": "Alle Leuchten und Blinker testen und die Einstellung des Abblendlichts prüfen lassen.",
+          "severity": "gering",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: Toyota Yaris (2011-2020)",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0300-toyota-yaris-2011-2020-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Starterbatterie, Auspuff und Zündkerzen",
+          "affects": "Yaris III: Starterbatterie bei Erstzulassung 2012–2015, Auspuffrohr/-topf bei 2012, Zündkerzen bei 2011–2012",
+          "detail": "Der ADAC nennt diese Teile für die genannten Zulassungsjahre unter den häufigen Bauteilfehlern; insgesamt schneidet der Yaris III in der Pannenstatistik dennoch durchgehend gut ab.",
+          "check": "Das Alter der Batterie erfragen, den Auspuff auf Rost und Undichtigkeiten ansehen und im Serviceheft nach dem Zündkerzenwechsel schauen.",
+          "severity": "gering",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: Toyota Yaris (2011-2020)",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0300-toyota-yaris-2011-2020-bericht.pdf"
+            }
+          ]
+        }
+      ],
+      "engines": {
+        "recommended": [
+          {
+            "name": "Yaris Hybrid",
+            "why": "Laut ADAC klare Empfehlung: ausreichend kräftig, im Alltag sparsam und als Gebrauchter häufig verfügbar. Den Hybrid-Rückruf 10/2019 (Gleichspannungswandler) prüfen lassen."
+          },
+          {
+            "name": "Diesel (1,4 l)",
+            "why": "Laut ADAC kräftig und sparsam, spielt auf dem Gebrauchtwagenmarkt aber kaum eine Rolle. Den Rückruf 3/2015 (Motoröl im Ladeluftkühler) prüfen lassen."
+          }
+        ],
+        "caution": [
+          {
+            "name": "1,0-Liter-Dreizylinder (ca. 70 PS)",
+            "why": "Laut ADAC bringt er den Toyota nur mit Mühe in Schwung und ist daher wenig empfehlenswert."
+          }
+        ]
+      },
+      "tips": [
+        "Alle Leuchten, Blinker und die Abblendlicht-Einstellung prüfen, denn hier fällt der TÜV laut ADAC am ehesten auf.",
+        "Nachweis verlangen, dass die Airbag-Rückrufe (4/2013, 8/2017, 5/2019) ausgeführt wurden.",
+        "Das Alter der Starterbatterie erfragen, denn sie steht für die Zulassungsjahre 2012–2015 in der Liste häufiger Bauteilfehler."
+      ]
+    },
+    {
+      "id": "toyota-yaris-iv",
+      "name": "Yaris IV",
+      "code": "XP210",
+      "years": [2020, null],
+      "bodyTypes": ["schraegheck"],
+      "fuels": ["petrol", "hybrid"],
+      "seats": [5],
+      "automatic": true,
+      "typicalPriceEur": null,
+      "priceSource": null,
+      "strengths": [],
+      "issues": [
+        {
+          "title": "Häufig leere 12-Volt-Starterbatterie",
+          "affects": "Yaris IV, laut ADAC vor allem Erstzulassung 2021–2023; größere Batterien baut Toyota seit dem Produktionsmonat November 2024 ein.",
+          "detail": "Laut ADAC-Pannenstatistik 2026 hat der Yaris IV sehr viele Pannen, fast immer wegen einer defekten oder leeren Startbatterie, vor allem bei Wenigfahrern. Toyota hat größere Batterien und eine Batterie-Warnung in der MyToyota-App eingeführt.",
+          "check": "Fragen, ob die Batterie schon gegen eine größere getauscht wurde (Rechnung zeigen lassen), und die Batterie testen lassen; wer wenig fährt, sollte ein Ladegerät einplanen. Innerhalb der dreijährigen Neuwagengarantie tauscht Toyota eine auffällige Batterie laut eigener Aussage kostenlos.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Pannenstatistik 2026",
+              "url": "https://www.adac.de/rund-ums-fahrzeug/unfall-schaden-panne/adac-pannenstatistik-2026/"
+            },
+            {
+              "label": "ADAC Pannenstatistik 2025",
+              "url": "https://assets.adac.de/image/upload/v1776261444/ADAC-eV/KOR/Text/PDF/Pannenstatistik_2025_Bericht_czmf9q.pdf"
+            }
+          ]
+        }
+      ],
+      "engines": {
+        "recommended": [],
+        "caution": []
+      },
+      "tips": [
+        "Batterie und Ladezustand bei der Besichtigung testen lassen und Rückrufe per Fahrgestellnummer erfragen."
+      ]
+    }
+  ]
+}

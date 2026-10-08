@@ -1,0 +1,230 @@
+{
+  "id": "peugeot-308",
+  "make": "Peugeot",
+  "model": "308",
+  "aliases": [
+    "308",
+    "308 bluehdi",
+    "308 cc",
+    "308 gti",
+    "308 hdi",
+    "308 hybrid",
+    "308 puretech",
+    "308 sw",
+    "308 thp",
+    "e-308"
+  ],
+  "segment": "kompakt",
+  "summary": "Französischer Kompaktwagen als Golf-Konkurrent mit viel Platz, dessen erste Generation (2007–2013) laut ADAC sehr pannenanfällig war.",
+  "ratings": {
+    "reliability": 2,
+    "reliabilityNote": "Laut ADAC-Pannenstatistik 2025 hatte der 308 II mit Erstzulassung 2015 bis 2017 deutlich mehr Pannen als die meisten gleich alten Autos, 2018 und 2019 lag er im Mittelfeld. Der Vorgänger 308 I (2007–2013) zählt laut ADAC zu den unzuverlässigsten Autos überhaupt; zum 308 III gibt es noch keine Daten.",
+    "reliabilitySources": [
+      {
+        "label": "ADAC Gebrauchtwageninfo: Peugeot 308 (2007-2013) Benziner",
+        "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0212-peugeot-308-2007-2013-benziner-bericht.pdf"
+      },
+      {
+        "label": "ADAC Pannenstatistik 2025",
+        "url": "https://assets.adac.de/image/upload/v1776261444/ADAC-eV/KOR/Text/PDF/Pannenstatistik_2025_Bericht_czmf9q.pdf"
+      }
+    ],
+    "runningCosts": 2,
+    "space": 4,
+    "comfort": 2
+  },
+  "generations": [
+    {
+      "id": "peugeot-308-i",
+      "name": "308 I",
+      "code": "T7",
+      "years": [2007, 2013],
+      "bodyTypes": ["schraegheck", "kombi", "cabrio"],
+      "fuels": ["petrol", "diesel"],
+      "seats": [5],
+      "automatic": true,
+      "typicalPriceEur": null,
+      "priceSource": null,
+      "strengths": [
+        "Sichere Fahreigenschaften und gutes Crashverhalten.",
+        "Großzügige Platzverhältnisse vorn.",
+        "Sehr variabler Kombi SW mit verschieb- und ausbaubaren Einzelsitzen und dem größten Kofferraum der Baureihe.",
+        "Günstige Anschaffung."
+      ],
+      "issues": [
+        {
+          "title": "Sehr hohe Pannenhäufigkeit",
+          "affects": "Laut ADAC-Bericht zu den Benzinern: Erstzulassung 2008–2013 (Pannenkennziffern nach ADAC-Schema durchweg „sehr schlecht“)",
+          "detail": "Laut ADAC zählt der 308 I in der Pannenstatistik zu den unzuverlässigsten Autos überhaupt, das Fehlerbild ist vielfältig. Beim Jahrgang 2009 taucht außerdem „Motor allgemein“ unter den häufigen Bauteilfehlern auf.",
+          "check": "Laut ADAC bei der Besichtigung unbedingt einen Fachmann hinzuziehen und vollständige Wartungs- und Reparaturbelege verlangen.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: Peugeot 308 (2007-2013) Benziner",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0212-peugeot-308-2007-2013-benziner-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Zündspulen und Zündkerzen",
+          "affects": "Laut ADAC-Bericht zu den Benzinern: Zündspulen bei Erstzulassung 2008–2013, Zündkerzen 2010 und 2012",
+          "detail": "Zündspulen und Zündkerzen zählen laut ADAC zu den häufigen Bauteilfehlern der Pannenstatistik, die Zündspulen in allen Jahrgängen von 2008 bis 2013.",
+          "check": "Auf unruhigen Motorlauf, Ruckeln und Leistungsverlust achten und nach getauschten Zündspulen oder Zündkerzen fragen.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: Peugeot 308 (2007-2013) Benziner",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0212-peugeot-308-2007-2013-benziner-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Starterbatterie, Generator und Anlasser",
+          "affects": "Laut ADAC-Bericht zu den Benzinern: Starterbatterie bei Erstzulassung 2008–2013, Generator 2009–2010, Anlasser 2011",
+          "detail": "Batterie, Generator und Anlasser tauchen laut ADAC bei mehreren Jahrgängen unter den häufigen Bauteilfehlern auf, die Starterbatterie in allen Jahren von 2008 bis 2013.",
+          "check": "Alter der Batterie erfragen, das Startverhalten bei kaltem Motor prüfen und Batterie sowie Lichtmaschine in einer Werkstatt testen lassen.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: Peugeot 308 (2007-2013) Benziner",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0212-peugeot-308-2007-2013-benziner-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Einspritzdüsen (Injektoren)",
+          "affects": "Laut ADAC-Bericht zu den Benzinern: Erstzulassung 2010–2012",
+          "detail": "Einspritzdüsen zählen laut ADAC bei den Jahrgängen 2010 bis 2012 zu den häufigen Bauteilfehlern der Pannenstatistik.",
+          "check": "Auf ruckelnden oder unrunden Motorlauf und Leistungsmangel achten und nach Reparaturen an der Einspritzanlage fragen.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: Peugeot 308 (2007-2013) Benziner",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0212-peugeot-308-2007-2013-benziner-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Verschlissene Bremsen, Ölverlust und Abgasuntersuchung bei der HU",
+          "affects": "Alle Motoren, laut TÜV-Report im ADAC-Bericht zu den Benzinern",
+          "detail": "Der 308 I schneidet im TÜV-Report unterdurchschnittlich ab: Häufig sind Bremsscheiben und Bremsleitungen verschlissen, es gibt Ölverlust, und die Abgasuntersuchung wird oft nur nach einer Reparatur bestanden.",
+          "check": "Bremsscheiben und Bremsleitungen prüfen lassen, den Motor auf Ölverlust ansehen und den Nachweis der letzten Abgasuntersuchung verlangen.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: Peugeot 308 (2007-2013) Benziner",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0212-peugeot-308-2007-2013-benziner-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Rückrufe: Hauptbremszylinder, Sicherungskasten, Elektrik-Steuergerät",
+          "affects": "Rückrufe laut ADAC-Bericht zu den Benzinern: 11/2009 (Hauptbremszylinder), 9/2008 (Sicherungskasten), 3/2009 (Steuergerät für die Elektrik), 1/2010 (Lichtschalter)",
+          "detail": "Ein falsch verbautes Teil im Hauptbremszylinder konnte die Bremskraftunterstützung beeinträchtigen und zu erhöhten Pedalkräften führen (11/2009). Weitere Rückrufe betrafen Fehler im Sicherungskasten mit möglichen Stromkreisunterbrechungen (9/2008), das Steuergerät für Batterieladung, Beleuchtung und Scheibenwischer (3/2009) und die Erkennung der Lichtschalter-Position (1/2010).",
+          "check": "Per Fahrgestellnummer beim Händler prüfen lassen, ob die Rückrufe erledigt sind.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: Peugeot 308 (2007-2013) Benziner",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0212-peugeot-308-2007-2013-benziner-bericht.pdf"
+            }
+          ]
+        }
+      ],
+      "engines": {
+        "recommended": [
+          {
+            "name": "1.6 VTi (120 PS)",
+            "why": "Laut ADAC besser passend als der 1.4 VTi, muss für flottes Vorankommen aber arg gedreht werden, was dem Verbrauch nicht zugutekommt."
+          },
+          {
+            "name": "1.6 THP (140 bis 174 PS)",
+            "why": "Laut ADAC deutlich spritziger und souveräner als die Sauger-Motoren."
+          }
+        ],
+        "caution": [
+          {
+            "name": "1.4 VTi (bis 98 PS)",
+            "why": "Laut ADAC reicht er innerorts, aber schon auf der Landstraße geht ihm bei leichten Steigungen und Beladung die Puste aus."
+          }
+        ]
+      },
+      "tips": [
+        "Wegen der insgesamt wenig zuverlässigen Technik rät der ADAC, bei der Besichtigung unbedingt einen Fachmann hinzuzuziehen.",
+        "Bremsscheiben und Bremsleitungen prüfen lassen und den Motor auf Ölverlust ansehen; beides gehört laut TÜV-Report zu den häufigen Mängeln.",
+        "Den Nachweis der letzten Abgasuntersuchung ansehen: Der 308 I besteht sie laut ADAC oft nicht ohne Reparatur.",
+        "Motorlauf und Startverhalten testen: Zündspulen, Einspritzdüsen, Batterie, Generator und Anlasser sind laut ADAC häufige Pannenursachen."
+      ]
+    },
+    {
+      "id": "peugeot-308-ii",
+      "name": "308 II",
+      "code": "T9",
+      "years": [2013, 2021],
+      "bodyTypes": ["schraegheck", "kombi"],
+      "fuels": ["petrol", "diesel"],
+      "seats": [5],
+      "automatic": true,
+      "typicalPriceEur": null,
+      "priceSource": null,
+      "strengths": [],
+      "issues": [
+        {
+          "title": "Überdurchschnittlich oft Pannen: Starterbatterie",
+          "affects": "Erstzulassung 2017 (ADAC-Pannenstatistik 2025)",
+          "detail": "Probleme mit Starterbatterie waren bei diesen Jahrgängen überdurchschnittlich oft der Grund für einen Einsatz der ADAC-Straßenwacht. Eine schwache Starterbatterie ist bei allen Autos die häufigste Pannenursache, hier aber besonders oft.",
+          "check": "Alter der Batterie erfragen und sie testen lassen; springt der Motor zögerlich an, ist ein Tausch fällig.",
+          "severity": "gering",
+          "sources": [
+            {
+              "label": "ADAC Pannenstatistik 2025",
+              "url": "https://assets.adac.de/image/upload/v1776261444/ADAC-eV/KOR/Text/PDF/Pannenstatistik_2025_Bericht_czmf9q.pdf"
+            }
+          ]
+        }
+      ],
+      "engines": {
+        "recommended": [],
+        "caution": []
+      },
+      "tips": [
+        "Weitere Schwachstellen dieser Generation haben wir noch nicht ausgewertet. Lass das Auto vor dem Kauf in einer Werkstatt prüfen und Rückrufe per Fahrgestellnummer erfragen."
+      ]
+    },
+    {
+      "id": "peugeot-308-iii",
+      "name": "308 III",
+      "code": "P5",
+      "years": [2021, null],
+      "bodyTypes": ["schraegheck", "kombi"],
+      "fuels": ["petrol", "diesel", "plugin_hybrid", "electric", "hybrid"],
+      "seats": [5],
+      "automatic": true,
+      "typicalPriceEur": null,
+      "priceSource": null,
+      "strengths": [],
+      "issues": [
+        {
+          "title": "Überdurchschnittlich oft Pannen: Starterbatterie",
+          "affects": "Erstzulassung 2022 (ADAC-Pannenstatistik 2025)",
+          "detail": "Probleme mit Starterbatterie waren bei diesen Jahrgängen überdurchschnittlich oft der Grund für einen Einsatz der ADAC-Straßenwacht. Eine schwache Starterbatterie ist bei allen Autos die häufigste Pannenursache, hier aber besonders oft.",
+          "check": "Alter der Batterie erfragen und sie testen lassen; springt der Motor zögerlich an, ist ein Tausch fällig.",
+          "severity": "gering",
+          "sources": [
+            {
+              "label": "ADAC Pannenstatistik 2025",
+              "url": "https://assets.adac.de/image/upload/v1776261444/ADAC-eV/KOR/Text/PDF/Pannenstatistik_2025_Bericht_czmf9q.pdf"
+            }
+          ]
+        }
+      ],
+      "engines": {
+        "recommended": [],
+        "caution": []
+      },
+      "tips": [
+        "Weitere Schwachstellen dieser Generation haben wir noch nicht ausgewertet. Lass das Auto vor dem Kauf in einer Werkstatt prüfen und Rückrufe per Fahrgestellnummer erfragen."
+      ]
+    }
+  ]
+}

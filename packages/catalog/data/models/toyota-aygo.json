@@ -1,0 +1,204 @@
+{
+  "id": "toyota-aygo",
+  "make": "Toyota",
+  "model": "Aygo",
+  "aliases": ["aygo", "aygo x"],
+  "segment": "kleinstwagen",
+  "summary": "Handlicher, sparsamer Kleinstwagen für die Stadt, der laut ADAC in der Pannenstatistik gut abschneidet.",
+  "ratings": {
+    "reliability": 4,
+    "reliabilityNote": "Laut ADAC-Pannenstatistik 2025 hatte der Aygo mit Erstzulassung 2015 bis 2022 in jedem Jahrgang weniger Pannen als die meisten gleich alten Autos; die Pannenstatistik 2026 zählt ihn zu den zuverlässigsten Kleinstwagen. Den Aygo I sah der ADAC überwiegend im Bereich „gut“, beim TÜV fällt er häufiger durch Bremsen und Beleuchtung auf.",
+    "reliabilitySources": [
+      {
+        "label": "ADAC Gebrauchtwageninfo: Toyota Aygo (2005 - 2014)",
+        "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0271-toyota-aygo-2005---2014-bericht.pdf"
+      },
+      {
+        "label": "ADAC Pannenstatistik 2025",
+        "url": "https://assets.adac.de/image/upload/v1776261444/ADAC-eV/KOR/Text/PDF/Pannenstatistik_2025_Bericht_czmf9q.pdf"
+      },
+      {
+        "label": "ADAC Pannenstatistik 2026",
+        "url": "https://www.adac.de/rund-ums-fahrzeug/unfall-schaden-panne/adac-pannenstatistik-2026/"
+      }
+    ],
+    "runningCosts": 5,
+    "space": 2,
+    "comfort": 2
+  },
+  "generations": [
+    {
+      "id": "toyota-aygo-i",
+      "name": "Aygo I",
+      "code": "AB10",
+      "years": [2005, 2014],
+      "bodyTypes": ["schraegheck"],
+      "fuels": ["petrol", "diesel"],
+      "seats": [4],
+      "automatic": true,
+      "typicalPriceEur": null,
+      "priceSource": null,
+      "strengths": [
+        "Ordentliches Platzangebot vorn",
+        "Gut in der ADAC-Pannenstatistik: Der Aygo liegt laut ADAC auf einem der vorderen Plätze und gilt als sehr zuverlässig",
+        "Sparsamer Antrieb: Der 1.0-Dreizylinder kommt laut ADAC mit wenig Kraftstoff aus"
+      ],
+      "issues": [
+        {
+          "title": "Verschlissene Bremsen, eher schwache Bremsanlage",
+          "affects": "1.0-Benziner, alle Baujahre (2005–2014); vom ADAC allgemein genannt, ohne Eingrenzung",
+          "detail": "Beim TÜV werden verschlissene Bremsen häufig beanstandet, und laut ADAC ist die Bremsanlage verschleißanfällig und könnte kräftiger ausfallen. Der Verschleiß deutet laut ADAC häufig auf mangelhafte Wartung hin, nicht auf schlechte Qualität.",
+          "check": "Bremsscheiben und -beläge ansehen, bei der Probefahrt die Bremswirkung testen und nach Wartungsnachweisen sowie dem letzten TÜV-Bericht fragen.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: Toyota Aygo (2005 - 2014)",
+              "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0271-toyota-aygo-2005---2014-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Mäßiger Rostschutz",
+          "affects": "Alle Baujahre (2005–2014); vom ADAC allgemein genannt, ohne Eingrenzung",
+          "detail": "Laut ADAC ist der Rostschutz nicht ideal und trägt zum schwächeren TÜV-Abschneiden des Aygo bei. Rost an tragenden Teilen kann bei der Hauptuntersuchung zu Mängeln führen.",
+          "check": "Unterboden, Radläufe und Schweller auf Rostansätze und Blasenbildung ansehen.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: Toyota Aygo (2005 - 2014)",
+              "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0271-toyota-aygo-2005---2014-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Rückrufe: Gaspedal, Anlasser, hintere Ausstellfenster",
+          "affects": "Rückrufe 2/2010 (Fahrzeuge mit elektronischem Gaspedal), 10/2011 (Anlasser) und 1/2019 (hintere Ausstellfenster)",
+          "detail": "Laut ADAC gab es Rückrufe, weil das elektronische Gaspedal schwergängig werden kann (2/2010), der Anlasser auch bei laufendem Motor weiterlaufen kann (10/2011) und sich die Verklebung der hinteren Ausstellfenster lösen kann (1/2019).",
+          "check": "Per Fahrgestellnummer beim Händler prüfen lassen, ob die Rückrufe erledigt sind.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: Toyota Aygo (2005 - 2014)",
+              "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0271-toyota-aygo-2005---2014-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Defekte an der Beleuchtung",
+          "affects": "Alle Baujahre (2005–2014); vom ADAC allgemein genannt, ohne Eingrenzung",
+          "detail": "Die Lichtanlage fällt laut ADAC überdurchschnittlich oft mit Defekten auf; im TÜV-Report wird die Beleuchtung häufig beanstandet.",
+          "check": "Alle Lichter rundum testen (Abblend- und Fernlicht, Blinker, Brems- und Rückleuchten) und fragen, ob die Beleuchtung bei der letzten Hauptuntersuchung bemängelt wurde.",
+          "severity": "gering",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: Toyota Aygo (2005 - 2014)",
+              "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0271-toyota-aygo-2005---2014-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Defekte an Auspuffrohr und -topf",
+          "affects": "Erstzulassungsjahre 2006–2007, 2009 und 2011",
+          "detail": "Auspuffrohr und -topf zählen laut ADAC-Pannenstatistik bei diesen Jahrgängen zu den häufigen Bauteilfehlern. Ein defekter Auspuff fällt meist durch lautere Geräusche auf und muss ersetzt werden.",
+          "check": "Auspuffanlage auf Rost, Löcher und ungewöhnlich laute Geräusche prüfen und fragen, ob Rohr oder Topf schon erneuert wurden.",
+          "severity": "gering",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: Toyota Aygo (2005 - 2014)",
+              "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0271-toyota-aygo-2005---2014-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Generator, Zündkerzen, Transponder und Kupplung bei einzelnen Jahrgängen",
+          "affects": "Generator: Erstzulassungsjahre 2006 und 2010; Zündkerzen: 2006 und 2008; Transponder: 2009; Kupplung: 2014",
+          "detail": "Der ADAC nennt diese Teile in der Pannenstatistik als häufige Bauteilfehler der jeweiligen Jahrgänge. Ausfälle können zu Startproblemen oder Liegenbleibern führen.",
+          "check": "Startverhalten, Ladekontrolle und Kupplung (Rutschen, Schleifpunkt) bei der Probefahrt prüfen und Belege über erneuerte Teile ansehen.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: Toyota Aygo (2005 - 2014)",
+              "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0271-toyota-aygo-2005---2014-bericht.pdf"
+            }
+          ]
+        }
+      ],
+      "engines": {
+        "recommended": [
+          {
+            "name": "1.0 Benziner (68 PS, Dreizylinder) mit Fünfganggetriebe",
+            "why": "Laut ADAC der einzige Motor für den deutschen Markt: Er bringt den leichten Aygo mühelos in Schwung, ist kultiviert, kommt mit wenig Kraftstoff aus und reicht für den typischen Einsatz im Stadtverkehr völlig aus."
+          }
+        ],
+        "caution": [
+          {
+            "name": "1.0 Benziner mit MMT-Automatik",
+            "why": "Laut ADAC stört die optionale MMT-Automatik mit unharmonischen Gangwechseln und ist nur für gelassene Fahrer zu empfehlen; die meisten Fahrzeuge wurden ohnehin mit Schaltgetriebe ausgeliefert."
+          }
+        ]
+      },
+      "tips": [
+        "Bremsen genau prüfen (Scheiben, Beläge, Bremswirkung): Der ADAC nennt die Bremsanlage verschleißanfällig, der TÜV beanstandet verschlissene Bremsen häufig.",
+        "Unterboden, Radläufe und Auspuffanlage auf Rost und Löcher ansehen; der Rostschutz ist laut ADAC nicht ideal.",
+        "Licht rundum testen, denn die Beleuchtung fällt beim TÜV überdurchschnittlich oft auf.",
+        "Auf ESP achten: Serienmäßig gab es ESP erst ab 2012, davor nur als Sonderausstattung (seit 2007)."
+      ]
+    },
+    {
+      "id": "toyota-aygo-ii",
+      "name": "Aygo II",
+      "code": "AB40",
+      "years": [2014, 2021],
+      "bodyTypes": ["schraegheck"],
+      "fuels": ["petrol"],
+      "seats": [4],
+      "automatic": true,
+      "typicalPriceEur": null,
+      "priceSource": null,
+      "strengths": [],
+      "issues": [
+        {
+          "title": "Überdurchschnittlich oft Pannen: Kupplung und Starterbatterie",
+          "affects": "Laut ADAC-Pannenstatistik 2025: Kupplung bei Erstzulassung 2015; Starterbatterie bei Erstzulassung 2017",
+          "detail": "Probleme mit Kupplung und Starterbatterie waren bei diesen Jahrgängen überdurchschnittlich oft der Grund für einen Einsatz der ADAC-Straßenwacht. Eine schwache Starterbatterie ist bei allen Autos die häufigste Pannenursache, hier aber besonders oft.",
+          "check": "Auf der Probefahrt auf eine rutschende oder ruckende Kupplung achten. Alter der Batterie erfragen und sie testen lassen; springt der Motor zögerlich an, ist ein Tausch fällig.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Pannenstatistik 2025",
+              "url": "https://assets.adac.de/image/upload/v1776261444/ADAC-eV/KOR/Text/PDF/Pannenstatistik_2025_Bericht_czmf9q.pdf"
+            }
+          ]
+        }
+      ],
+      "engines": {
+        "recommended": [],
+        "caution": []
+      },
+      "tips": [
+        "Weitere Schwachstellen dieser Generation haben wir noch nicht ausgewertet. Lass das Auto vor dem Kauf in einer Werkstatt prüfen und Rückrufe per Fahrgestellnummer erfragen."
+      ]
+    },
+    {
+      "id": "toyota-aygo-x",
+      "name": "Aygo X",
+      "code": null,
+      "years": [2022, null],
+      "bodyTypes": ["schraegheck", "suv"],
+      "fuels": ["petrol", "hybrid"],
+      "seats": [4],
+      "automatic": true,
+      "typicalPriceEur": null,
+      "priceSource": null,
+      "strengths": [],
+      "issues": [],
+      "engines": {
+        "recommended": [],
+        "caution": []
+      },
+      "tips": [
+        "Für diese Generation liegen noch wenige Gebrauchtwagen-Erfahrungen vor; Rückrufe per Fahrgestellnummer erfragen."
+      ]
+    }
+  ]
+}

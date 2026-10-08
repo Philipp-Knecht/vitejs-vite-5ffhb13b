@@ -141,7 +141,7 @@ const NEW_PRICE_EUR: Record<Segment, number> = {
   suv_gross: 65_000,
   van_klein: 27_000,
   van: 34_000,
-  hochdachkombi: 27_000,
+  hochdachkombi: 30_000,
   bus: 50_000,
   sportwagen: 45_000,
 };
@@ -161,14 +161,25 @@ const MAKE_PRICE_FACTOR: Readonly<Record<string, number>> = {
   'Alfa Romeo': 1.2,
   MINI: 1.2,
   'DS Automobiles': 1.2,
-  Dacia: 0.7,
+  Dacia: 0.8,
 };
 
-/** Share of the new price a car of this age typically fetches: −15 % in the first year, then −8 % a year. */
-const typicalShare = (age: number) => (age <= 0 ? 1 : 0.85 * 0.92 ** (age - 1));
+/** Premium makes lose value faster: −10 % a year instead of −8 %. */
+const PREMIUM = new Set(
+  Object.entries(MAKE_PRICE_FACTOR)
+    .filter(([, factor]) => factor > 1)
+    .map(([make]) => make),
+);
 
-/** Cheaper offers (more kilometres, basic trims) cost about a third less than typical ones. */
-const CHEAPER_OFFERS = 0.65;
+/** Share of the new price a car of this age typically fetches: −15 % in the first year, then yearly. */
+const typicalShare = (age: number, premium: boolean) =>
+  age <= 0 ? 1 : 0.85 * (premium ? 0.9 : 0.92) ** (age - 1);
+
+/** Cheaper offers (more kilometres, basic trims) cost less than typical ones – more so for older cars. */
+const cheaperOffers = (age: number) => Math.max(0.72, 0.95 - 0.03 * age);
+
+/** New cars got dearer: about 3 % per model year (2018 = the class price above). */
+const priceLevel = (modelYear: number) => Math.max(0.6, 1 + 0.03 * (modelYear - 2018));
 
 /** The newest model year a budget reaches at the cheaper end of the market (rough estimate). */
 export function newestAffordableYear(
@@ -176,10 +187,15 @@ export function newestAffordableYear(
   budget: number,
   year = new Date().getFullYear(),
 ): number {
-  const newPrice = NEW_PRICE_EUR[model.segment] * (MAKE_PRICE_FACTOR[model.make] ?? 1);
-  let age = 0;
-  while (age < 40 && newPrice * typicalShare(age) * CHEAPER_OFFERS > budget) age += 1;
-  return year - age;
+  const classPrice = NEW_PRICE_EUR[model.segment] * (MAKE_PRICE_FACTOR[model.make] ?? 1);
+  const premium = PREMIUM.has(model.make);
+  for (let age = 0; age < 40; age += 1) {
+    const modelYear = year - age;
+    const price =
+      classPrice * priceLevel(modelYear) * typicalShare(age, premium) * cheaperOffers(age);
+    if (price <= budget) return modelYear;
+  }
+  return year - 40;
 }
 
 function affordable(

@@ -1,0 +1,215 @@
+{
+  "id": "hyundai-i20",
+  "make": "Hyundai",
+  "model": "i20",
+  "aliases": ["i20", "i20 active", "i20 coupe", "i20 coupé"],
+  "segment": "kleinwagen",
+  "summary": "Kleinwagen mit gutem Platz vorn und großzügigem Kofferraum, dessen erste Generation (2009–2014) in der ADAC-Pannenstatistik schlecht abschneidet.",
+  "ratings": {
+    "reliability": 3,
+    "reliabilityNote": "Laut ADAC-Pannenstatistik 2025 liegt der i20 mit Erstzulassung 2015 bis 2021 überwiegend im Mittelfeld (2019 und 2020 besser), der Jahrgang 2022 hatte aber deutlich mehr Pannen als die meisten gleich alten Autos. Die erste Generation (2009–2014) schnitt laut ADAC schlecht bis sehr schlecht ab und liegt auch beim TÜV weit unter dem Durchschnitt.",
+    "reliabilitySources": [
+      {
+        "label": "ADAC Gebrauchtwageninfo: Hyundai i20 (2009-2014) Benziner",
+        "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0395-hyundai-i20-2009-2014-benziner-bericht.pdf"
+      },
+      {
+        "label": "ADAC Pannenstatistik 2025",
+        "url": "https://assets.adac.de/image/upload/v1776261444/ADAC-eV/KOR/Text/PDF/Pannenstatistik_2025_Bericht_czmf9q.pdf"
+      }
+    ],
+    "runningCosts": 3,
+    "space": 3,
+    "comfort": 3
+  },
+  "generations": [
+    {
+      "id": "hyundai-i20-pb",
+      "name": "i20 PB",
+      "code": "PB",
+      "years": [2009, 2014],
+      "bodyTypes": ["schraegheck"],
+      "fuels": ["petrol", "diesel"],
+      "seats": [5],
+      "automatic": true,
+      "typicalPriceEur": null,
+      "priceSource": null,
+      "strengths": [
+        "Gute Platzverhältnisse vorn",
+        "Großzügiger Kofferraum",
+        "Problemlose Bedienung",
+        "Präzise und leichtgängige Schaltung"
+      ],
+      "issues": [
+        {
+          "title": "Insgesamt überdurchschnittlich viele Pannen",
+          "affects": "Alle Erstzulassungsjahre (2009–2014); laut ADAC-Bericht zu den Benzinern",
+          "detail": "Laut ADAC liegt das Pannenaufkommen des i20 in allen Jahrgängen klar über dem Durchschnitt, und in der Pannenstatistik erhält er unter den Kleinwagen die mit Abstand schlechteste Bewertung. Die Ursachen verteilen sich auf mehrere Bauteile, etwa Batterie, Anlasser, Kraftstoffpumpe und Zündung.",
+          "check": "Servicehefte und Rechnungen prüfen (Batterie, Zündkerzen, Anlasser), nach früheren Pannen fragen und das Fahrzeug vor dem Kauf in einer Werkstatt durchchecken lassen.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: Hyundai i20 (2009-2014) Benziner",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0395-hyundai-i20-2009-2014-benziner-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Starterbatterie, Anlasser und Kraftstoffpumpe",
+          "affects": "Starterbatterie: Erstzulassungsjahre 2010–2014; Batteriepolklemmen: 2013; Anlasser: 2009–2011; Kraftstoffpumpe: 2010–2011; laut ADAC-Bericht zu den Benzinern",
+          "detail": "Diese Teile zählen laut ADAC-Pannenstatistik bei den genannten Jahrgängen zu den häufigen Bauteilfehlern. Typische Folgen sind Startprobleme oder ein Motor, der ausgeht.",
+          "check": "Startverhalten bei kaltem und warmem Motor testen, Alter der Batterie erfragen und prüfen, ob Anlasser oder Kraftstoffpumpe schon erneuert wurden.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: Hyundai i20 (2009-2014) Benziner",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0395-hyundai-i20-2009-2014-benziner-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Zündkerzen, Zündkabel und Zündschloss",
+          "affects": "Zündkerzen: Erstzulassungsjahre 2009–2014; Zündschloss: 2010–2014; Zündkabel (Hochspannungskabel): 2014; laut ADAC-Bericht zu den Benzinern",
+          "detail": "Der ADAC nennt diese Teile der Zündanlage als häufige Bauteilfehler. Defekte Zündteile können zu Motorruckeln oder Startproblemen führen.",
+          "check": "Auf Ruckeln, unrunden Motorlauf und Startprobleme achten und Belege über erneuerte Zündkerzen, Zündkabel oder Zündschloss ansehen.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: Hyundai i20 (2009-2014) Benziner",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0395-hyundai-i20-2009-2014-benziner-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Bremsen: Fuß- und Feststellbremse, Bremsbauteile",
+          "affects": "Alle Baujahre (2009–2014); Aussage des ADAC zum TÜV-Report, Bericht zu den Benzinern",
+          "detail": "Beim TÜV werden laut ADAC Fuß- und Feststellbremse sowie Bremsbauteile zu häufig beanstandet. Die Zahl der Autos mit geringen und erheblichen Mängeln liegt insgesamt klar über dem Durchschnitt.",
+          "check": "Bremsscheiben, Beläge und Feststellbremse prüfen lassen und die Bremswirkung bei der Probefahrt testen.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: Hyundai i20 (2009-2014) Benziner",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0395-hyundai-i20-2009-2014-benziner-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Beleuchtung und Abblendlicht",
+          "affects": "Alle Baujahre (2009–2014); Aussage des ADAC zum TÜV-Report, Bericht zu den Benzinern",
+          "detail": "Die Beleuchtung bereitet laut ADAC beim TÜV zu häufig Ärger; als Minuspunkt nennt der ADAC außerdem ein schlechtes Abblendlicht.",
+          "check": "Alle Lichter rundum testen und das Abblendlicht bei Dunkelheit beurteilen.",
+          "severity": "gering",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: Hyundai i20 (2009-2014) Benziner",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0395-hyundai-i20-2009-2014-benziner-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Rückrufe: Luftverlust an 15-Zoll-Stahlfelgen",
+          "affects": "Rückruf 5/2009: 1.2 und 1.4 in der Ausstattung Comfort mit 15-Zoll-Stahlfelgen",
+          "detail": "Laut ADAC ragt die Bohrung für das Ventil bei diesen Stahlfelgen zu weit in den Radius hinein und wird oval; das Ventil dichtet dann nicht mehr ab, und es kann zu Luftverlust an einem oder mehreren Reifen kommen.",
+          "check": "Per Fahrgestellnummer beim Händler prüfen lassen, ob die Rückrufe erledigt sind.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: Hyundai i20 (2009-2014) Benziner",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0395-hyundai-i20-2009-2014-benziner-bericht.pdf"
+            }
+          ]
+        }
+      ],
+      "engines": {
+        "recommended": [
+          {
+            "name": "1.2 Benziner (78 oder 86 PS) in der Ausstattung Trend oder Style",
+            "why": "Laut ADAC die beste Option und häufig verfügbar; in Trend und Style ist das Wichtigste serienmäßig an Bord. Die Benziner gelten laut ADAC als unkompliziert und laufruhig, liefern aber wenig Drehmoment und brauchen für zügiges Vorankommen höhere Drehzahlen."
+          }
+        ],
+        "caution": [
+          {
+            "name": "Benziner mit Viergangautomatik",
+            "why": "Laut ADAC raubt die betagte Viergangautomatik dem Motor zusätzlich Temperament und verbraucht deutlich mehr Benzin; sie ist nicht empfehlenswert."
+          }
+        ]
+      },
+      "tips": [
+        "Batterie, Zündkerzen und Startverhalten prüfen und Rechnungen zu Starterbatterie, Zündkerzen und Zündschloss zeigen lassen; sie zählen laut ADAC zu den häufigen Bauteilfehlern.",
+        "Bremsen (Scheiben, Beläge, Feststellbremse) prüfen lassen; der TÜV beanstandet Bremsbauteile beim i20 häufig.",
+        "Licht rundum und das Abblendlicht testen: Der ADAC nennt das Abblendlicht schlecht.",
+        "Bei 1.2/1.4 Comfort mit 15-Zoll-Stahlfelgen auf Luftverlust an den Reifen achten und klären, ob der Rückruf von 5/2009 erledigt ist."
+      ]
+    },
+    {
+      "id": "hyundai-i20-gb",
+      "name": "i20 GB",
+      "code": "GB",
+      "years": [2014, 2020],
+      "bodyTypes": ["schraegheck", "coupe"],
+      "fuels": ["petrol", "diesel"],
+      "seats": [5],
+      "automatic": true,
+      "typicalPriceEur": null,
+      "priceSource": null,
+      "strengths": [],
+      "issues": [
+        {
+          "title": "Überdurchschnittlich oft Pannen: Starterbatterie und Zündkerzen",
+          "affects": "Laut ADAC-Pannenstatistik 2025: Starterbatterie bei Erstzulassung 2015–2018, 2020; Zündkerzen bei Erstzulassung 2015–2018",
+          "detail": "Probleme mit Starterbatterie und Zündkerzen waren bei diesen Jahrgängen überdurchschnittlich oft der Grund für einen Einsatz der ADAC-Straßenwacht. Eine schwache Starterbatterie ist bei allen Autos die häufigste Pannenursache, hier aber besonders oft.",
+          "check": "Alter der Batterie erfragen und sie testen lassen; springt der Motor zögerlich an, ist ein Tausch fällig. Nach dem letzten Zündkerzenwechsel fragen; ruckelt der Motor, Zündkerzen und Zündspulen prüfen lassen.",
+          "severity": "gering",
+          "sources": [
+            {
+              "label": "ADAC Pannenstatistik 2025",
+              "url": "https://assets.adac.de/image/upload/v1776261444/ADAC-eV/KOR/Text/PDF/Pannenstatistik_2025_Bericht_czmf9q.pdf"
+            }
+          ]
+        }
+      ],
+      "engines": {
+        "recommended": [],
+        "caution": []
+      },
+      "tips": [
+        "Weitere Schwachstellen dieser Generation haben wir noch nicht ausgewertet. Lass das Auto vor dem Kauf in einer Werkstatt prüfen und Rückrufe per Fahrgestellnummer erfragen."
+      ]
+    },
+    {
+      "id": "hyundai-i20-bc3",
+      "name": "i20 BC3",
+      "code": "BC3",
+      "years": [2020, null],
+      "bodyTypes": ["schraegheck"],
+      "fuels": ["petrol", "hybrid"],
+      "seats": [5],
+      "automatic": true,
+      "typicalPriceEur": null,
+      "priceSource": null,
+      "strengths": [],
+      "issues": [
+        {
+          "title": "Überdurchschnittlich oft Pannen: Starterbatterie",
+          "affects": "Erstzulassung 2021–2022 (ADAC-Pannenstatistik 2025)",
+          "detail": "Probleme mit Starterbatterie waren bei diesen Jahrgängen überdurchschnittlich oft der Grund für einen Einsatz der ADAC-Straßenwacht. Eine schwache Starterbatterie ist bei allen Autos die häufigste Pannenursache, hier aber besonders oft.",
+          "check": "Alter der Batterie erfragen und sie testen lassen; springt der Motor zögerlich an, ist ein Tausch fällig.",
+          "severity": "gering",
+          "sources": [
+            {
+              "label": "ADAC Pannenstatistik 2025",
+              "url": "https://assets.adac.de/image/upload/v1776261444/ADAC-eV/KOR/Text/PDF/Pannenstatistik_2025_Bericht_czmf9q.pdf"
+            }
+          ]
+        }
+      ],
+      "engines": {
+        "recommended": [],
+        "caution": []
+      },
+      "tips": [
+        "Weitere Schwachstellen dieser Generation haben wir noch nicht ausgewertet. Lass das Auto vor dem Kauf in einer Werkstatt prüfen und Rückrufe per Fahrgestellnummer erfragen."
+      ]
+    }
+  ]
+}

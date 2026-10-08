@@ -1,0 +1,174 @@
+{
+  "id": "opel-mokka",
+  "make": "Opel",
+  "model": "Mokka",
+  "aliases": [
+    "mokka",
+    "mokka 4x4",
+    "mokka a",
+    "mokka b",
+    "mokka cdti",
+    "mokka e",
+    "mokka x",
+    "mokka-e"
+  ],
+  "segment": "suv_klein",
+  "summary": "Kleiner Opel-SUV mit bequemen Sitzen, solider Verarbeitung und viel Platz vorn, der im TÜV-Report gut und in der ADAC-Pannenstatistik durchschnittlich abschneidet (Mokka A).",
+  "ratings": {
+    "reliability": 3,
+    "reliabilityNote": "Laut ADAC-Pannenstatistik 2025 hatte der Mokka B (Erstzulassung 2021 und 2022) weniger Pannen als die meisten gleich alten Autos, der Mokka X mit Erstzulassung 2018 und 2019 dagegen deutlich mehr. Frühere ADAC-Auswertungen sahen den Mokka A im Mittelfeld; im TÜV-Report schneidet er besser als der Durchschnitt ab.",
+    "reliabilitySources": [
+      {
+        "label": "ADAC Gebrauchtwageninfo: Opel Mokka (2012-2019)",
+        "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0283-opel-mokka-2012-2019-bericht.pdf"
+      },
+      {
+        "label": "ADAC Pannenstatistik 2025",
+        "url": "https://assets.adac.de/image/upload/v1776261444/ADAC-eV/KOR/Text/PDF/Pannenstatistik_2025_Bericht_czmf9q.pdf"
+      }
+    ],
+    "runningCosts": 3,
+    "space": 2,
+    "comfort": 4
+  },
+  "generations": [
+    {
+      "id": "opel-mokka-a",
+      "name": "Mokka A",
+      "code": "A",
+      "years": [2012, 2019],
+      "bodyTypes": ["suv"],
+      "fuels": ["petrol", "diesel", "lpg"],
+      "seats": [5],
+      "automatic": true,
+      "typicalPriceEur": null,
+      "priceSource": null,
+      "strengths": [
+        "Komfortables Fahrverhalten",
+        "Sehr bequeme Sitze (v. a. AGR-Sitze)",
+        "Solide Verarbeitung",
+        "Vorn viel Platz"
+      ],
+      "issues": [
+        {
+          "title": "Ölverlust",
+          "affects": "Mokka A allgemein laut TÜV-Report, auch schon bei noch jungen Fahrzeugen; der ADAC nennt keine bestimmten Motoren.",
+          "detail": "Laut ADAC bereitet im TÜV-Report lediglich Ölverlust Probleme, auch schon bei noch jungen Mokka. Undichte Stellen werden bei der Hauptuntersuchung beanstandet.",
+          "check": "Motor und Unterboden auf frische Ölspuren prüfen, Ölstand kontrollieren und nach bereits erfolgten Dichtungsarbeiten fragen.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: Opel Mokka (2012-2019)",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0283-opel-mokka-2012-2019-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Kühlwasserpumpe und Lüfter",
+          "affects": "Kühlwasserpumpe: Baujahre 2016 bis 2017; Lüfter: Baujahr 2014; Motoren nicht genannt.",
+          "detail": "Laut ADAC gehören die Kühlwasserpumpe und der Lüfter in diesen Jahrgängen zu den häufigen Bauteilfehlern. Eine gestörte Kühlung kann zur Überhitzung des Motors führen.",
+          "check": "Kühlmittelstand und Spuren von Kühlmittel am Motor prüfen, bei der Probefahrt die Temperaturanzeige beobachten und fragen, ob Pumpe oder Lüfter schon getauscht wurden.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: Opel Mokka (2012-2019)",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0283-opel-mokka-2012-2019-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Starterbatterie",
+          "affects": "Baujahre 2016 bis 2019; Motoren nicht genannt.",
+          "detail": "Laut ADAC gehört die Starterbatterie bei den Jahrgängen 2016 bis 2019 zu den häufigen Bauteilfehlern und ist damit eine typische Pannenursache. Der Austausch ist meist günstig.",
+          "check": "Batterie testen lassen, nach ihrem Alter fragen und das Startverhalten bei kaltem Motor prüfen.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: Opel Mokka (2012-2019)",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0283-opel-mokka-2012-2019-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Zündspule",
+          "affects": "Baujahr 2016; Motoren nicht genannt (Zündspulen gibt es nur bei Benzinern).",
+          "detail": "Laut ADAC gehört die Zündspule beim Jahrgang 2016 zu den häufigen Bauteilfehlern. Eine defekte Zündspule führt zu Zündaussetzern und unrundem Motorlauf; der Tausch ist meist günstig.",
+          "check": "Bei der Probefahrt auf Ruckeln, unrunden Leerlauf und eine leuchtende Motorwarnleuchte achten.",
+          "severity": "gering",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: Opel Mokka (2012-2019)",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0283-opel-mokka-2012-2019-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Rückrufe: Airbag-Module, Allrad-Software",
+          "affects": "Airbag-Module (Rückruf 2/2017); Allradversionen (Software des Hinterachsantriebs, Rückruf 5/2014).",
+          "detail": "Laut ADAC gab es einen Rückruf wegen Airbag-Modulen mit fehlerhafter Zündchemikalie (der Airbag kann unvollständig oder falsch zünden). Bei Allradversionen konnte ein Softwarefehler den Hinterachsantrieb abschalten (Rückruf 5/2014).",
+          "check": "Per Fahrgestellnummer beim Händler prüfen lassen, ob die Rückrufe erledigt sind.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: Opel Mokka (2012-2019)",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0283-opel-mokka-2012-2019-bericht.pdf"
+            }
+          ]
+        }
+      ],
+      "engines": {
+        "recommended": [
+          {
+            "name": "Turbobenziner mit 120, 140 und 152 PS",
+            "why": "Laut ADAC deutlich spritziger und kräftiger als der Saugmotor, mit angemessenen Fahrleistungen und häufig auf dem Gebrauchtwagenmarkt vertreten; sparsam ist allerdings keiner der Benziner."
+          },
+          {
+            "name": "1,6 CDTI (Diesel) mit 110 und 136 PS",
+            "why": "Laut ADAC deutlich leiser und unauffälliger als der ältere 1,7 CDTI; die 136-PS-Version bringt souveräne Fahrleistungen, die 110-PS-Version reicht im Alltag, außer bei häufigen zügigen Autobahnfahrten."
+          },
+          {
+            "name": "1,7 CDTI (Diesel, älteres Modell)",
+            "why": "Laut ADAC läuft er relativ rau und nagelt deutlich, gilt aber als robust und hat wenig Mühe mit dem Mokka."
+          },
+          {
+            "name": "Version mit Flüssiggasantrieb (LPG)",
+            "why": "Laut ADAC eine interessante Alternative."
+          }
+        ],
+        "caution": [
+          {
+            "name": "1,6-Liter-Saugbenziner mit 115 PS",
+            "why": "Laut ADAC der schwächste Benziner, der den Mokka nur mühsam in Schwung bringt."
+          }
+        ]
+      },
+      "tips": [
+        "Motor und Unterboden auf Ölspuren prüfen, denn Ölverlust ist laut ADAC das einzige häufige Problem im TÜV-Report, auch schon bei jungen Fahrzeugen.",
+        "Kühlmittelstand und Temperaturanzeige beobachten, besonders bei Baujahren 2014 sowie 2016 bis 2017 (Lüfter, Kühlwasserpumpe).",
+        "Starterbatterie testen lassen, denn sie ist bei Baujahren 2016 bis 2019 ein häufiger Fehler.",
+        "Bei Allradversionen klären, ob der Software-Rückruf zum Hinterachsantrieb (5/2014) erledigt wurde."
+      ]
+    },
+    {
+      "id": "opel-mokka-b",
+      "name": "Mokka B",
+      "code": "B",
+      "years": [2020, null],
+      "bodyTypes": ["suv"],
+      "fuels": ["petrol", "diesel", "electric", "hybrid"],
+      "seats": [5],
+      "automatic": true,
+      "typicalPriceEur": null,
+      "priceSource": null,
+      "strengths": [],
+      "issues": [],
+      "engines": {
+        "recommended": [],
+        "caution": []
+      },
+      "tips": [
+        "Zu dieser Generation haben wir noch keine Schwachstellen ausgewertet. Lass das Auto vor dem Kauf in einer Werkstatt prüfen und Rückrufe per Fahrgestellnummer erfragen."
+      ]
+    }
+  ]
+}
