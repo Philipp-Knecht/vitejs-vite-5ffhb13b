@@ -33,31 +33,16 @@ Behörden, Dashboards); **(Code)** = Entwicklungsarbeit.
      skoda-kamiq, skoda-karoq, skoda-kodiaq, skoda-scala, toyota-c-hr, toyota-prius, toyota-rav4, volvo-v40,
      volvo-v60, volvo-xc40, vw-t-cross. (Prüfen, ob die ID jeweils im Katalog existiert.)
 
-   **Wichtig:** Die bisherige Recherche-Werkzeugkette lag nur im temporären Arbeitsverzeichnis der alten
-   Claude-Sitzung und ist **nicht im Repository** (Skripte `import_research.py`, `check_sources.py`,
-   `pannen2025.py`, `pannen2025_defects.py`, `pannen_issues.py`, Aufträge `BRIEF_ADAC.md`/`BRIEF_WEB.md`,
-   Dossiers aus den ADAC-PDFs). Sie muss bei Bedarf neu aufgebaut werden. Bewährter Ablauf:
-   1. ADAC-„Gebrauchtwageninfo“-PDF(s) des Modells auf `assets.adac.de` finden (Websuche auf diese Domain),
-      Text extrahieren (z. B. pypdf).
-   2. JSON nach dem Format in `packages/catalog/data/models/README.md` erstellen. Regeln: jede Schwachstelle nur
-      mit Quelle aus dem Bericht; `make`, `model`, `segment` exakt wie im Katalog; eine Generation je Baureihe
-      ab ca. 2010, Facelifts gehören dazu; Grunddaten (Kraftstoffe, Automatik, Sitze, Karosserien) vollständig,
-      milde Hybride als `hybrid`; `typicalPriceEur`/`priceSource` = `null`; Rückrufe zu einer Schwachstelle
-      „Rückrufe: …“ zusammenfassen; Generationen ohne Bericht bekommen leere `issues` und den Tipp
-      „Zu dieser Generation haben wir noch keine Schwachstellen ausgewertet. Lass das Auto vor dem Kauf in einer
-      Werkstatt prüfen und Rückrufe per Fahrgestellnummer erfragen.“
-   3. Zuverlässigkeitsnote (1–5) mit der ADAC-Pannenstatistik 2025 (PDF,
-      `https://assets.adac.de/image/upload/v1776261444/ADAC-eV/KOR/Text/PDF/Pannenstatistik_2025_Bericht_czmf9q.pdf`,
-      Grenzwerte je Erstzulassungsjahr auf S. „Farbschema“) und der Seite
-      `https://www.adac.de/rund-ums-fahrzeug/unfall-schaden-panne/adac-pannenstatistik-2026/` (Beste/Schlusslichter je
-      Klasse) abgleichen; jüngste Generation zählt mehr. Für Generationen ohne Schwachstellen ggf. die
-      „überdurchschnittlich häufigen Mängel“ aus dem Anhang der Pannenstatistik 2025 als eine Schwachstelle
-      „Überdurchschnittlich oft Pannen: …“ eintragen (Jahr der Modellwechsel zählt zur älteren Generation).
-   4. Längenlimits des Schemas beachten (`packages/catalog/src/types.ts`, z. B. `affects` ≤ 240 Zeichen).
-   5. `npm run catalog:index`, `npx vitest run --project catalog`, alle Quell-URLs auf Erreichbarkeit prüfen.
-      Erfahrungen: Recherche-Agenten waren bei Generations-Grunddaten zu zurückhaltend (fehlende Kraftstoffe/Automatik
-      nachprüfen); bei Nutzungslimits brachen parallele Agenten ab → höchstens 2 parallel, je Modell eine Datei.
-      Teilergebnisse der abgebrochenen Pakete A12/A13 wurden nie geprüft und sind nicht im Repository.
+   **Werkzeuge und Ablauf:** [`tools/model-research/README.md`](tools/model-research/README.md) (Skripte,
+   Recherche-Aufträge, Paketliste, ADAC-PDF-URLs, ausgewertete Pannenstatistik 2025). Kurz: Dossiers aus den
+   ADAC-Gebrauchtwageninfos bauen → Recherche-Agent mit `BRIEF_ADAC.md` → `import_research.py` → Grunddaten von
+   Hand prüfen → Zuverlässigkeit mit Pannenstatistik 2025/2026 abgleichen → `pannen_issues.py` →
+   `npm run catalog:index`, Katalog-Tests, `check_sources.py`. Jede Schwachstelle nur mit Quelle; `make`,
+   `model`, `segment` exakt wie im Katalog; Längenlimits aus `packages/catalog/src/types.ts` beachten.
+   Erfahrungen: Recherche-Agenten waren bei Generations-Grunddaten zu zurückhaltend (Kraftstoffe/Automatik
+   nachprüfen); bei Nutzungslimits brachen parallele Agenten ab → höchstens 2 parallel, je Modell eine Datei.
+   Teilergebnisse der abgebrochenen Pakete A12/A13 wurden nie geprüft und sind nicht im Repository. Nicht
+   gesichert sind das Hilfsskript für die Dossiers zu `BRIEF_WEB.md` und die PDF-Suche (siehe README dort).
 
 ## Priorität 2 – Betrieb und Recht
 

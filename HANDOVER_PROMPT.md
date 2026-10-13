@@ -12,8 +12,8 @@ deutschsprachigen Web-App für den Gebrauchtwagenkauf. Sie läuft live unter htt
 Vorgehen – bitte genau in dieser Reihenfolge:
 
 1. Lies zuerst die Übergabedokumentation im Repository-Wurzelverzeichnis:
-   PROJECT_CONTEXT.md, DECISIONS.md, TODO.md, danach README.md und
-   packages/catalog/data/models/README.md.
+   PROJECT_CONTEXT.md, DECISIONS.md, TODO.md, danach README.md,
+   packages/catalog/data/models/README.md und tools/model-research/README.md.
 2. Analysiere danach den Quellcode, bevor du etwas änderst: Struktur der Workspaces (apps/api, apps/web,
    packages/shared, packages/domain, packages/catalog, e2e), die Stellen, die deine Aufgabe betrifft, und
    die zugehörigen Tests. Prüfe mit git log und git status, ob der Stand noch der Dokumentation entspricht
@@ -44,7 +44,7 @@ Arbeitsregeln:
   Ein Merge in main geht automatisch live.
 
 Erste sinnvolle Aufgaben laut TODO.md (Priorität 1): den offenen Commit mit 10 Modellen per PR nach main
-bringen und das Modellwissen nach dem dokumentierten Ablauf weiter ausbauen. Die frühere
-Recherche-Werkzeugkette ist nicht im Repository und müsste neu aufgebaut werden – schlag mir dafür
-zuerst einen Plan vor.
+bringen und das Modellwissen nach dem dokumentierten Ablauf weiter ausbauen. Die
+Recherche-Werkzeuge und der Ablauf dafür liegen in tools/model-research (README.md dort lesen); schlag
+mir vor dem ersten Paket kurz vor, wie du vorgehst.
 ```

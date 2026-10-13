@@ -1,0 +1,322 @@
+{
+  "Audi A6": [["Generator", [2018, 2019, 2020]]],
+  "BMW 2er-Reihe (inkl. Grand- und Active-Tourer)": [["Starterbatterie", [2016]]],
+  "BMW 3er-Reihe": [["Motorkühlung allgemein", [2018]]],
+  "BMW 4er-Reihe": [
+    ["Kühl-/Heizungsschlauch", [2018, 2019]],
+    ["Motorkühlung allgemein", [2017]]
+  ],
+  "BMW X1": [["Starterbatterie", [2016, 2017, 2018]]],
+  "Citroen Berlingo, Fiat Doblò, Peugeot Partner/Rifter": [["AdBlue", [2019]]],
+  "Dacia Dokker": [["Zündschloss", [2016]]],
+  "Dacia Duster": [
+    ["Bremsbelag", [2015, 2016]],
+    ["Starterbatterie", [2018]]
+  ],
+  "Dacia Logan": [
+    ["Starterbatterie", [2015, 2016, 2017]],
+    ["Zündschloss", [2015, 2016, 2018]],
+    ["Zündspule", [2015]]
+  ],
+  "Dacia Sandero": [["Zündschloss", [2016, 2017]]],
+  "DS Automobiles DS3, Citroen C3/DS 3": [
+    ["Öldruck", [2017]],
+    ["Starterbatterie", [2015]],
+    ["Zündkerze", [2016]],
+    ["Zündspule", [2016]]
+  ],
+  "Fiat 500": [["Starterbatterie", [2015, 2016, 2017, 2018]]],
+  "Fiat Ducato": [
+    ["AdBlue", [2020, 2021]],
+    ["Anlasser", [2015, 2018, 2019, 2021]],
+    ["Fahrzeugelektrik allgemein", [2016, 2017, 2020]],
+    ["Generator", [2015]],
+    ["Ladedruckregelung", [2019]],
+    ["Partikelfilter", [2015, 2020, 2021]],
+    ["Sicherungs- und Relaisbox", [2015]],
+    ["Starterbatterie", [2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022]],
+    ["Turbo-Lader Saug-, Druckleitung, Ladeluftkühler", [2020]],
+    ["Zündschloss", [2019]]
+  ],
+  "Fiat Panda": [["Starterbatterie", [2015, 2016, 2017, 2018]]],
+  "Fiat Tipo": [
+    ["Kraftstoffpumpe", [2017]],
+    ["Starterbatterie", [2016, 2017, 2018]]
+  ],
+  "Ford B-MAX": [["Starterbatterie", [2015, 2016, 2017]]],
+  "Ford C-MAX": [["Starterbatterie", [2015, 2016, 2017, 2018]]],
+  "Ford EcoSport": [
+    ["Anlasser", [2015, 2016, 2017]],
+    ["Starterbatterie", [2015, 2016, 2017, 2019, 2020, 2022]]
+  ],
+  "Ford Fiesta (Courier)": [["Starterbatterie", [2015, 2016, 2017, 2020, 2021, 2022]]],
+  "Ford Focus": [
+    ["Anlasser", [2015, 2016]],
+    ["Starterbatterie", [2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022]],
+    ["Zahnriemen", [2016]]
+  ],
+  "Ford Kuga": [["Starterbatterie", [2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022]]],
+  "Ford Mondeo": [
+    ["Generator", [2015, 2016]],
+    ["Kraftstoffpumpe", [2019]],
+    ["Starterbatterie", [2015, 2016, 2017, 2018, 2020, 2021]]
+  ],
+  "Ford Puma": [["Starterbatterie", [2020, 2021]]],
+  "Ford Ranger": [["Starterbatterie", [2020, 2021]]],
+  "Ford S-MAX": [
+    ["Generator", [2015, 2016, 2017]],
+    ["Starterbatterie", [2015, 2016, 2017, 2018, 2020]],
+    ["Thermostat", [2016]]
+  ],
+  "Ford Tourneo/Transit Connect": [
+    ["Anlasser", [2015, 2016, 2017, 2018]],
+    ["Einspritzdüse/Injektor", [2015]],
+    ["Partikelfilter", [2018, 2019, 2020]],
+    ["Starterbatterie", [2018, 2022]],
+    ["Zahnriemen", [2016]]
+  ],
+  "Ford Tourneo/Transit Courier": [
+    ["Anlasser", [2017, 2018]],
+    ["Starterbatterie", [2016, 2017, 2018]]
+  ],
+  "Ford Tourneo/Transit Custom": [
+    ["Generator", [2016]],
+    ["Zündschloss", [2015, 2018]]
+  ],
+  "Ford Transit": [
+    ["Anlasser", [2015, 2016]],
+    ["Generator", [2015, 2019]],
+    ["Motor allgemein", [2015, 2019]],
+    ["Starterbatterie", [2019]],
+    ["Zündschloss", [2015, 2016, 2019, 2020]]
+  ],
+  "Hyundai i10": [
+    ["Starterbatterie", [2015, 2016, 2017, 2018, 2019]],
+    ["Zündkerze", [2017, 2018, 2019, 2020, 2021, 2022]]
+  ],
+  "Hyundai i20": [
+    ["Starterbatterie", [2015, 2016, 2017, 2018, 2020, 2021, 2022]],
+    ["Zündkerze", [2015, 2016, 2017, 2018]]
+  ],
+  "Hyundai i30": [["Starterbatterie", [2015, 2016, 2017, 2018, 2019]]],
+  "Hyundai IONIQ 5": [
+    ["Fahrzeugelektrik allgemein", [2022]],
+    ["Starterbatterie", [2021, 2022]]
+  ],
+  "Hyundai ix20": [
+    ["Kraftstoffpumpe", [2015]],
+    ["Starterbatterie", [2015, 2016, 2017, 2018, 2019]]
+  ],
+  "Hyundai Kona": [["Starterbatterie", [2018, 2019, 2020, 2021]]],
+  "Hyundai Tucson": [["Starterbatterie", [2015, 2016]]],
+  "KIA Ceed/XCeed": [["Starterbatterie", [2015, 2016, 2017]]],
+  "Kia Picanto": [
+    ["Starterbatterie", [2015, 2016, 2017, 2018, 2019]],
+    ["Zündkerze", [2015, 2016, 2017, 2021, 2022]]
+  ],
+  "Kia Sportage": [["Starterbatterie", [2015, 2016, 2017, 2022]]],
+  "Mazda 3": [["Starterbatterie", [2019, 2020, 2021]]],
+  "Mazda CX-30": [["Starterbatterie", [2020, 2021, 2022]]],
+  "Mazda CX-5": [["Öldruck", [2015, 2016]]],
+  "Mercedes-Benz A-Klasse": [["Starterbatterie", [2016, 2017]]],
+  "Mercedes-Benz B-Klasse": [["Starterbatterie", [2016, 2017]]],
+  "Mercedes-Benz Citan": [
+    ["Fahrzeugelektrik allgemein", [2018]],
+    ["Kraftstoffpumpe", [2015, 2016, 2017, 2018]],
+    ["Starterbatterie", [2016, 2017, 2018, 2019, 2020, 2021, 2022]]
+  ],
+  "Mercedes-Benz CLA": [
+    ["Anlasser", [2015]],
+    ["Starterbatterie", [2016, 2017, 2018]]
+  ],
+  "Mercedes-Benz GLA": [["Starterbatterie", [2016, 2017]]],
+  "Mercedes-Benz Sprinter": [["Generator", [2015]]],
+  "Mercedes-Benz Viano/Vito/V-Klasse": [
+    ["Generator", [2015]],
+    ["Zündschloss", [2015, 2017, 2019]]
+  ],
+  "MINI MINI": [["Starterbatterie", [2016, 2017]]],
+  "Mitsubishi ASX": [["Transponder", [2016]]],
+  "Mitsubishi Outlander": [["Starterbatterie", [2015, 2016, 2017, 2018, 2020]]],
+  "Mitsubishi Space Star": [
+    ["Transponder", [2015]],
+    ["Zündkerze", [2015, 2016, 2017, 2018, 2019, 2020]]
+  ],
+  "Nissan Micra": [
+    ["Starterbatterie", [2015, 2017, 2018, 2019]],
+    ["Zündkerze", [2015, 2016]]
+  ],
+  "Nissan Qashqai": [
+    ["Starterbatterie", [2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022]],
+    ["Thermostat", [2019]]
+  ],
+  "Opel ADAM": [
+    ["Kraftstoffpumpe", [2015, 2016]],
+    ["Starterbatterie", [2016, 2017]]
+  ],
+  "Opel Astra": [
+    ["Ladedruckregelung", [2020, 2021]],
+    ["Starterbatterie", [2015]],
+    ["Turbo-Lader", [2020, 2021]]
+  ],
+  "Opel Combo": [
+    ["AdBlue", [2019, 2020]],
+    ["Starterbatterie", [2018]]
+  ],
+  "Opel Corsa": [
+    ["Anlasser", [2015]],
+    ["Starterbatterie", [2016]]
+  ],
+  "Opel Crossland": [
+    ["Zündkerze", [2020]],
+    ["Zündspule", [2020]]
+  ],
+  "Opel Grandland": [["Starterbatterie", [2018]]],
+  "Opel Insignia": [
+    ["Fahrzeugelektrik allgemein", [2015]],
+    ["Schaltgestänge", [2016]],
+    ["Starterbatterie", [2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022]],
+    ["Turbo-Lader Saug-, Druckleitung, Ladeluftkühler", [2015, 2016, 2017, 2018, 2019, 2020]]
+  ],
+  "Opel KARL": [["Starterbatterie", [2015, 2016, 2017, 2018]]],
+  "Opel Meriva": [
+    ["Anlasser", [2015, 2016]],
+    ["Kühl-/Heizungsschlauch", [2015, 2016, 2017]],
+    ["Kühlwasserpumpe", [2015, 2017]],
+    ["Motorkühlung allgemein", [2016]],
+    ["Starterbatterie", [2015, 2016, 2017]],
+    ["Wegfahrsperre", [2016, 2017]],
+    ["WFS/DWA allgemein", [2016]]
+  ],
+  "Opel Mokka": [
+    ["Kühlwasserpumpe", [2017, 2018, 2019]],
+    ["Starterbatterie", [2017, 2018, 2019]]
+  ],
+  "Opel Zafira": [
+    ["Generator", [2015]],
+    ["Starterbatterie", [2015, 2017, 2018]],
+    ["Turbo-Lader", [2015]]
+  ],
+  "Peugeot 2008": [
+    ["Öldruck", [2017]],
+    ["Zündkerze", [2016, 2017]]
+  ],
+  "Peugeot 208": [["Zündspule", [2016]]],
+  "Peugeot 3008": [
+    ["AdBlue", [2018]],
+    ["Starterbatterie", [2017]]
+  ],
+  "Peugeot 308": [["Starterbatterie", [2017, 2022]]],
+  "Peugeot Expert/Traveller, Opel Vivaro/Zafira Life, Fiat Scudo": [
+    ["Abgasrückführung", [2016]],
+    ["Anlasser", [2015, 2017]],
+    ["Antriebsriemen", [2017, 2019, 2020]],
+    ["Partikelfilter", [2018, 2019]],
+    ["Starterbatterie", [2017, 2018, 2019]]
+  ],
+  "Renault Clio/Captur": [["Starterbatterie", [2015, 2016, 2017, 2018, 2019, 2020, 2021]]],
+  "Renault Kadjar": [["Starterbatterie", [2015, 2016, 2017, 2018, 2019, 2020]]],
+  "Renault Kangoo/Rapid": [
+    ["Anlasser", [2016]],
+    ["Fahrzeugelektrik allgemein", [2016, 2017, 2018]],
+    ["Kraftstoffpumpe", [2015, 2016, 2017, 2018, 2019]],
+    ["Starterbatterie", [2018, 2020]]
+  ],
+  "Renault Master": [
+    ["Anlasser", [2019]],
+    ["Fahrzeugelektrik allgemein", [2019, 2020, 2021]],
+    ["Kraftstoffpumpe", [2015, 2016]],
+    ["Starterbatterie", [2019, 2020, 2021, 2022]],
+    ["Zündschloss", [2020]]
+  ],
+  "Renault Mégane": [
+    ["Einspritzdüse/Injektor", [2015]],
+    ["Feststellbremse mechanisch", [2015]],
+    ["Kühl-/Heizungsschlauch", [2017, 2018]],
+    ["Starterbatterie", [2015, 2016, 2017, 2018, 2019]]
+  ],
+  "Renault Scénic": [
+    ["Einspritzdüse/Injektor", [2015]],
+    ["Kühl-/Heizungsschlauch", [2017, 2018]],
+    ["Motorkühlung allgemein", [2018]],
+    ["Sicherungs- und Relaisbox", [2017]],
+    ["Starterbatterie", [2015, 2016, 2017, 2018, 2019, 2020]]
+  ],
+  "Renault Trafic": [
+    ["AdBlue", [2020]],
+    ["Anlasser", [2015, 2016, 2017]],
+    ["Generator", [2015, 2016]],
+    ["Partikelfilter", [2017, 2018, 2019]],
+    ["Starterbatterie", [2016, 2020, 2021, 2022]]
+  ],
+  "Renault Twingo": [
+    ["Anlasser", [2015, 2016]],
+    ["Generator", [2015]],
+    ["Starterbatterie", [2017, 2018, 2019, 2020]]
+  ],
+  "SEAT Alhambra": [["Starterbatterie", [2015, 2016, 2017, 2018]]],
+  "SEAT Mii": [
+    ["Bremsbelag", [2016, 2017, 2018]],
+    ["Bremstrommel vorne/hinten", [2016]],
+    ["Feststellbremse mechanisch", [2015, 2016]],
+    ["Starterbatterie", [2015]],
+    ["Zündkerze", [2015]]
+  ],
+  "Skoda Citigo": [
+    ["Bremsbelag", [2015, 2016, 2017, 2018]],
+    ["Feststellbremse mechanisch", [2015, 2016, 2017, 2018]],
+    ["Starterbatterie", [2015]]
+  ],
+  "Skoda Kodiaq": [["Starterbatterie", [2018, 2021, 2022]]],
+  "Skoda Octavia": [["Starterbatterie", [2020, 2021]]],
+  "Skoda Superb": [["Starterbatterie", [2018, 2019, 2020, 2022]]],
+  "smart forfour": [
+    ["Anlasser", [2015, 2016]],
+    ["Generator", [2015, 2016]],
+    ["Starterbatterie", [2015, 2016, 2017, 2018, 2019, 2020]],
+    ["Zündschloss", [2016, 2017, 2018]]
+  ],
+  "smart fortwo": [
+    ["Anlasser", [2015]],
+    ["Fahrzeugelektrik allgemein", [2020, 2022]],
+    ["Starterbatterie", [2015, 2016, 2017, 2018, 2019, 2020]],
+    ["Zündschloss", [2016, 2017, 2018]]
+  ],
+  "Suzuki Swift": [
+    ["Starterbatterie", [2016]],
+    ["Zündkerze", [2015]]
+  ],
+  "Toyota Auris": [["Starterbatterie", [2015, 2016, 2017, 2018, 2019]]],
+  "Toyota Aygo": [
+    ["Kupplung allgemein", [2015]],
+    ["Starterbatterie", [2017]]
+  ],
+  "Toyota C-HR": [["Starterbatterie", [2017, 2018, 2019, 2020, 2021, 2022]]],
+  "Toyota Corolla": [["Starterbatterie", [2019, 2020, 2021, 2022]]],
+  "Toyota RAV4": [["Fahrzeugelektrik allgemein", [2019]]],
+  "Toyota Yaris": [["Starterbatterie", [2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022]]],
+  "Toyota Yaris Cross": [["Starterbatterie", [2022]]],
+  "Volvo XC60": [
+    ["Antriebsriemen", [2016, 2017]],
+    ["Fahrzeugelektrik allgemein", [2018]]
+  ],
+  "VW Nutzfahrzeuge Caddy": [["Einspritzdüse/Injektor", [2015]]],
+  "VW Nutzfahrzeuge Crafter/Grand California": [["Starterbatterie", [2022]]],
+  "VW Nutzfahrzeuge Transporter": [
+    ["Abgasrückführung", [2016, 2017]],
+    ["Anlasser", [2015]],
+    ["Starterbatterie", [2022]]
+  ],
+  "VW Sharan": [
+    ["Motor allgemein", [2018]],
+    ["Starterbatterie", [2015, 2016, 2017, 2018]]
+  ],
+  "VW Touran": [["Starterbatterie", [2015]]],
+  "VW up!": [
+    ["Bremsbelag", [2015, 2017, 2018]],
+    ["Bremstrommel vorne/hinten", [2015]],
+    ["Feststellbremse mechanisch", [2015, 2016, 2017]],
+    ["Starterbatterie", [2015]],
+    ["Zündkerze", [2015]]
+  ]
+}

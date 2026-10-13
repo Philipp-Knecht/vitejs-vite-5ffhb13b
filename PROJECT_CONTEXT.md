@@ -84,6 +84,7 @@ packages/catalog/
   data/index.json                             Kurzfassung für den Berater, erzeugt mit npm run catalog:index
 packages/shared/src/comparison-ranking.ts     „Deine Reihenfolge“ im Vergleich
 e2e/                                          Playwright-Tests
+tools/model-research/                         Recherche-Werkzeuge für das Modellwissen (nicht Teil der App)
 render.yaml, Dockerfile, docker-compose.yml   Deployment
 ```
 
