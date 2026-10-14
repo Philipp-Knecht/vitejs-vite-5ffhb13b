@@ -72,6 +72,14 @@ function rows(
       cells: [flag(plans.anonymous.history), flag(plans.free.history), flag(plans.pro.history)],
     },
     {
+      label: 'Prüfung als PDF-Mappe',
+      cells: [
+        flag(plans.anonymous.pdfExport),
+        flag(plans.free.pdfExport),
+        flag(plans.pro.pdfExport),
+      ],
+    },
+    {
       label: photoAnalysisAvailable ? 'Fotoanalyse' : 'Fotoanalyse (derzeit nicht verfügbar)',
       cells: [
         flag(plans.anonymous.photoAnalysis),

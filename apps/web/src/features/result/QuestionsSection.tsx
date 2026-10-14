@@ -11,8 +11,7 @@ import { copyText } from '../../lib/clipboard';
 import { listingPlatformName } from '../../lib/platform';
 import { isBoolean, readJson, writeJson } from '../../lib/storage';
 import { ResultSection } from './Section';
-
-const FORMAL_KEY = 'kc:formal-address';
+import { FORMAL_ADDRESS_KEY } from './storage-keys';
 
 function questionText(question: SellerQuestion, formal: boolean): string {
   return formal ? question.text : question.textInformal;
@@ -28,7 +27,7 @@ export function QuestionsSection({
   listingUrl: string | null;
 }) {
   const toast = useToast();
-  const [formal, setFormalState] = useState(() => readJson(FORMAL_KEY, true, isBoolean));
+  const [formal, setFormalState] = useState(() => readJson(FORMAL_ADDRESS_KEY, true, isBoolean));
   const [deselected, setDeselected] = useState<ReadonlySet<string>>(() => new Set());
   const [composerOpen, setComposerOpen] = useState(false);
   const [message, setMessage] = useState('');
@@ -36,7 +35,7 @@ export function QuestionsSection({
 
   const setFormal = (value: boolean) => {
     setFormalState(value);
-    writeJson(FORMAL_KEY, value);
+    writeJson(FORMAL_ADDRESS_KEY, value);
   };
 
   const selected = questions.filter((question) => !deselected.has(question.id));

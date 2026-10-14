@@ -8,3 +8,4 @@ export * from './knowledge-index';
 export * from './advisor';
 export * from './advisor-query';
 export * from './recalls';
+export * from './generations';

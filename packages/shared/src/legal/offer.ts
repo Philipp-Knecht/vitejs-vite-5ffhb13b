@@ -69,6 +69,7 @@ export function proFeatures(pro: Entitlements, options: { photoAnalysis: boolean
     features.push(`bis zu ${pro.savedSearchesMax} gespeicherte Gebrauchtwagen-Suchen`);
   }
   if (pro.history) features.push('Verlauf aller deiner Prüfungen');
+  if (pro.pdfExport) features.push('jede Prüfung als PDF-Mappe für die Besichtigung');
   if (pro.photoAnalysis && options.photoAnalysis) {
     features.push('KI-Fotoanalyse bei Inseraten mit Fotos');
   }

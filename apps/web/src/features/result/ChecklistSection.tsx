@@ -5,8 +5,7 @@ import { Button } from '../../components/ui/Button';
 import { track } from '../../lib/analytics';
 import { isStringArray, readJson, removeItem, writeJson } from '../../lib/storage';
 import { ResultSection } from './Section';
-
-const storageKey = (analysisId: string) => `kc:checklist:${analysisId}`;
+import { checklistStorageKey as storageKey } from './storage-keys';
 
 /** Inspection checklist; progress is stored only in this browser. */
 export function ChecklistSection({

@@ -551,6 +551,12 @@
   font-weight: 600;
 }
 
+.tag--pro {
+  margin-left: 2px;
+  background: var(--c-primary-100);
+  color: var(--c-primary);
+}
+
 .tag--important {
   background: var(--c-warning-bg);
   color: var(--c-warning);

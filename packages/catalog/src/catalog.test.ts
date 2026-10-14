@@ -5,6 +5,9 @@ import { describe, expect, it } from 'vitest';
 import {
   buildPlatformLinks,
   CarModelSchema,
+  defaultGeneration,
+  generationYearsLabel,
+  type CarModel,
   EMPTY_SEARCH,
   findModel,
   MAKES,
@@ -42,6 +45,37 @@ describe('makes and models', () => {
     expect(findModel('mercedes', 'C-Klasse')?.id).toBe('mercedes-c-klasse');
     expect(findModel('skoda', 'Octavia Combi')?.id).toBe('skoda-octavia');
     expect(findModel('vw', 'Phaeton')).toBeNull();
+  });
+});
+
+describe('generations', () => {
+  const generation = (id: string, years: [number, number | null]) => ({ id, name: id, years });
+  const model = {
+    generations: [
+      generation('g6', [2008, 2012]),
+      generation('g7', [2012, 2020]),
+      generation('g8', [2019, null]),
+    ],
+  } as unknown as CarModel;
+  const id = (yearMin: number | null, yearMax: number | null) =>
+    defaultGeneration(model, yearMin, yearMax)?.id;
+
+  it('picks the generation that fits the years best', () => {
+    expect(id(2010, 2010)).toBe('g6');
+    expect(id(2016, 2016)).toBe('g7');
+    expect(id(2023, 2023)).toBe('g8');
+    expect(id(2014, 2018)).toBe('g7');
+  });
+
+  it('falls back to the newest generation older than three years', () => {
+    expect(id(null, null)).toBe('g8');
+    expect(id(1995, 1995)).toBe('g8');
+  });
+
+  it('labels the years', () => {
+    expect(generationYearsLabel([2012, 2020])).toBe('2012–2020');
+    expect(generationYearsLabel([2019, null])).toBe('seit 2019');
+    expect(generationYearsLabel([2015, 2015])).toBe('2015');
   });
 });
 
