@@ -37,6 +37,12 @@ function hasIbanChecksum(candidate: string): boolean {
   return remainder === 1;
 }
 
+function redactPhones(text: string): string {
+  return text.replace(PHONE_CANDIDATE, (match) =>
+    looksLikePhoneNumber(match) ? REDACTED_PHONE : match,
+  );
+}
+
 export function redactContactData(text: string): string {
   const redacted = text
     .replace(EMAIL, REDACTED_EMAIL)
@@ -44,11 +50,13 @@ export function redactContactData(text: string): string {
     .replace(IBAN, (match) =>
       isPlausibleVin(match) && !hasIbanChecksum(match) ? match : REDACTED_IBAN,
     );
-  // Digits inside a FIN (W0L0XCF0844012345) are not a phone number.
-  const vins = findVins(redacted).map(({ index }) => [index, index + 17] as const);
-  return redacted.replace(PHONE_CANDIDATE, (match: string, offset: number) =>
-    looksLikePhoneNumber(match) && !vins.some(([start, end]) => offset >= start && offset < end)
-      ? REDACTED_PHONE
-      : match,
-  );
+  // Phone numbers are searched between FINs only: digits of a FIN (W0L0XCF0844012345) are
+  // no phone number, and a phone number right after a FIN is still found.
+  let out = '';
+  let last = 0;
+  for (const { index } of findVins(redacted)) {
+    out += redactPhones(redacted.slice(last, index)) + redacted.slice(index, index + 17);
+    last = index + 17;
+  }
+  return out + redactPhones(redacted.slice(last));
 }

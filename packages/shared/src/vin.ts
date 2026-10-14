@@ -3,8 +3,9 @@
  * URL. No lookbehind: Safari supports it only from version 16.4.
  */
 const VIN_PATTERN = /(^|[^\p{L}\p{N}_/=?&#])([A-HJ-NPR-Z0-9]{17})(?![\p{L}\p{N}_])/giu;
+// Keyword before the FIN, as a whole word (no lookbehind: Safari supports it only from 16.4).
 const VIN_KEYWORD =
-  /(?:fin|vin|fahrgestell\S*|identifizierungsnummer|ident-?nr\.?|chassis\S*)\W*$/i;
+  /(?:^|[^\p{L}\p{N}])(?:(?:fin|vin)(?:[\s.-]*(?:nr|nummer|no)\.?)?|fahrgestell\S*|fahrzeug-?ident\S*|identifi\S*nummer|ident-?nr\.?|chassis\S*)[^\p{L}\p{N}]*$/iu;
 
 /**
  * A FIN as written in papers and listings: one letter case and letters as well
