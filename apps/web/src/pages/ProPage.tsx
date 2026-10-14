@@ -48,6 +48,14 @@ function rows(
     entitlements.compareMax > 0 ? <Yes>bis zu {entitlements.compareMax} Angebote</Yes> : <No />;
   const searches = (entitlements: Entitlements) =>
     entitlements.savedSearchesMax > 0 ? <Yes>bis zu {entitlements.savedSearchesMax}</Yes> : <No />;
+  const cars = (entitlements: Entitlements) =>
+    entitlements.ownedCarsMax === 0 ? (
+      <No />
+    ) : (
+      <Yes>
+        {entitlements.ownedCarsMax === 1 ? '1 Auto' : `bis zu ${entitlements.ownedCarsMax} Autos`}
+      </Yes>
+    );
   const flag = (value: boolean) => (value ? <Yes /> : <No />);
   return [
     { label: 'Inserate prüfen', cells: [per(plans.anonymous), per(plans.free), per(plans.pro)] },
@@ -66,6 +74,10 @@ function rows(
     {
       label: 'Suchen speichern',
       cells: [searches(plans.anonymous), searches(plans.free), searches(plans.pro)],
+    },
+    {
+      label: 'Mein Auto',
+      cells: [cars(plans.anonymous), cars(plans.free), cars(plans.pro)],
     },
     {
       label: 'Verlauf aller Prüfungen',

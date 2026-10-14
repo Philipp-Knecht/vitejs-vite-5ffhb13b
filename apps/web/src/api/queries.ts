@@ -8,6 +8,9 @@ import type {
   OrderCreated,
   OrderDto,
   OrderRequest,
+  OwnedCarDto,
+  OwnedCarInput,
+  OwnedCarsResponse,
   PublicConfig,
   RedirectResponse,
   SavedListingDto,
@@ -26,6 +29,7 @@ export const queryKeys = {
   analysis: (id: string) => ['analysis', id] as const,
   savedListings: ['saved-listings'] as const,
   savedSearches: ['saved-searches'] as const,
+  ownedCars: ['owned-cars'] as const,
   history: ['history'] as const,
   comparison: (ids: readonly string[]) => ['comparison', ...ids] as const,
   order: (number: string) => ['order', number] as const,
@@ -68,12 +72,13 @@ export function useMe(options: { poll?: MePolling } = {}) {
   });
 }
 
-export function useAnalysis(id: string) {
+export function useAnalysis(id: string, enabled = true) {
   return useQuery({
     queryKey: queryKeys.analysis(id),
     queryFn: ({ signal }) =>
       api.get<AnalysisDto>(`/api/analyses/${encodeURIComponent(id)}`, signal),
     staleTime: Infinity,
+    enabled,
   });
 }
 
@@ -99,6 +104,39 @@ export function useSaveSearch() {
     mutationFn: (input: SaveSearchRequest) =>
       api.post<SavedSearchDto>('/api/saved-searches', input),
     onSuccess: () => queryClient.invalidateQueries({ queryKey: queryKeys.savedSearches }),
+  });
+}
+
+export function useOwnedCars(enabled: boolean) {
+  return useQuery({
+    queryKey: queryKeys.ownedCars,
+    queryFn: ({ signal }) => api.get<OwnedCarsResponse>('/api/owned-cars', signal),
+    enabled,
+  });
+}
+
+export function useAddOwnedCar() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (input: OwnedCarInput) => api.post<OwnedCarDto>('/api/owned-cars', input),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: queryKeys.ownedCars }),
+  });
+}
+
+export function useUpdateOwnedCar() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: ({ id, input }: { id: string; input: OwnedCarInput }) =>
+      api.patch<OwnedCarDto>(`/api/owned-cars/${encodeURIComponent(id)}`, input),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: queryKeys.ownedCars }),
+  });
+}
+
+export function useDeleteOwnedCar() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (id: string) => api.delete(`/api/owned-cars/${encodeURIComponent(id)}`),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: queryKeys.ownedCars }),
   });
 }
 
@@ -135,6 +173,7 @@ function useInvalidateSession() {
   return async () => {
     queryClient.removeQueries({ queryKey: queryKeys.savedListings });
     queryClient.removeQueries({ queryKey: queryKeys.savedSearches });
+    queryClient.removeQueries({ queryKey: queryKeys.ownedCars });
     queryClient.removeQueries({ queryKey: queryKeys.history });
     queryClient.removeQueries({ queryKey: ['comparison'] });
     queryClient.removeQueries({ queryKey: ['analysis'] });

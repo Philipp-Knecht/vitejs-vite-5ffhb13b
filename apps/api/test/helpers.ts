@@ -74,6 +74,7 @@ const TABLES = [
   'SellerQuestion',
   'SavedListing',
   'SavedSearch',
+  'OwnedCar',
   'Usage',
   'Subscription',
   'BillingEvent',

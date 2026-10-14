@@ -67,7 +67,7 @@ export function ImprintPage() {
   );
 }
 
-const PRIVACY_POLICY_DATE = '14. Oktober 2026';
+const PRIVACY_POLICY_DATE = '15. Oktober 2026';
 const AI_PROVIDER_NAMES = { anthropic: 'Anthropic', openai: 'OpenAI' } as const;
 
 /**
@@ -178,11 +178,12 @@ export function PrivacyPage() {
       <h2>Konto</h2>
       <p>
         Ein Konto ist freiwillig. Dafür speichern wir deine E-Mail-Adresse und einen Hash deines
-        Passworts (nicht das Passwort selbst), dazu deine gespeicherten Angebote, Prüfungen und –
-        mit KaufCheck Pro – gespeicherten Suchen (nur deine Suchangaben wie Marke, Preis und PLZ).
-        Ohne E-Mail-Adresse und Passwort kann kein Konto angelegt werden. Du kannst dein Konto
-        jederzeit selbst in den Kontoeinstellungen löschen; dabei werden alle zugehörigen Daten
-        entfernt.
+        Passworts (nicht das Passwort selbst), dazu deine gespeicherten Angebote, Prüfungen, unter
+        „Mein Auto“ deine Angaben zu deinem Auto (Marke, Modell, Erstzulassung, Kilometerstand,
+        HU-Termin – keine FIN und kein Kennzeichen) und – mit KaufCheck Pro – gespeicherten Suchen
+        (nur deine Suchangaben wie Marke, Preis und PLZ). Ohne E-Mail-Adresse und Passwort kann kein
+        Konto angelegt werden. Du kannst dein Konto jederzeit selbst in den Kontoeinstellungen
+        löschen; dabei werden alle zugehörigen Daten entfernt.
         {features?.passwordReset === true &&
           ' Wenn du dein Passwort zurücksetzt, schicken wir dir eine E-Mail (siehe „E-Mails“).'}{' '}
         Rechtsgrundlage ist Art. 6 Abs. 1 lit. b DSGVO.

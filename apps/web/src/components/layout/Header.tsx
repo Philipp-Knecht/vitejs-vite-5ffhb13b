@@ -9,6 +9,7 @@ const NAV = [
   { to: '/auto-finden', label: 'Auto finden' },
   { to: '/inserat-pruefen', label: 'Inserat prüfen' },
   { to: '/meine-angebote', label: 'Meine Angebote' },
+  { to: '/mein-auto', label: 'Mein Auto' },
   { to: '/gebrauchtwagen-kaufen', label: 'Ratgeber' },
   { to: '/pro', label: 'Pro' },
 ];

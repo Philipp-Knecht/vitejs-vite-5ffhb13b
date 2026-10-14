@@ -138,6 +138,8 @@ interface ModelKnowledgeViewProps {
   generationHeading?: 'h2' | 'h3';
   /** Weaknesses as expandable rows, without strengths – inside a listing check. */
   compact?: boolean;
+  /** Generation shown first, e.g. the one a user chose for their car. */
+  initialGenerationId?: string | null;
 }
 
 /** Generations with strengths, weaknesses (with sources), engines and inspection tips. */
@@ -147,8 +149,9 @@ export function ModelKnowledgeView({
   yearMax = null,
   generationHeading: GenerationHeading = 'h3',
   compact = false,
+  initialGenerationId = null,
 }: ModelKnowledgeViewProps) {
-  const [selected, setSelected] = useState<string | null>(null);
+  const [selected, setSelected] = useState<string | null>(initialGenerationId);
   const generation =
     model.generations.find((item) => item.id === selected) ??
     defaultGeneration(model, yearMin, yearMax);

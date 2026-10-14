@@ -13,7 +13,9 @@ const DRIVE_PARAM: Partial<Record<FuelType, string>> = {
 };
 
 /** Link to the tax calculator, prefilled with what the listing says (month of first registration, drive). */
-export function taxCalculatorLink(vehicle: Vehicle | null): string {
+export function taxCalculatorLink(
+  vehicle: Pick<Vehicle, 'firstRegistration' | 'fuel'> | null,
+): string {
   const params = new URLSearchParams();
   const registration = vehicle?.firstRegistration;
   if (registration?.month) {
