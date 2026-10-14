@@ -1,5 +1,6 @@
 import {
   defaultGeneration,
+  generationYearsLabel as yearsLabel,
   KBA_RECALL_DATABASE_URL,
   findMake,
   recallCheckFor,
@@ -79,9 +80,9 @@ class Writer {
     this.text(`${label}: ${url}`, style);
   }
 
-  /** Headings keep at least two lines of what follows on the same page. */
-  heading(text: string) {
-    this.ensure(28);
+  /** A heading stays on the page with `keepWith` mm of what follows it. */
+  heading(text: string, keepWith = 21) {
+    this.ensure(13 + keepWith);
     this.y += 3;
     this.text(text, { size: 14, bold: true, gap: 1 });
     this.doc.setDrawColor(COLORS.rule);
@@ -89,8 +90,8 @@ class Writer {
     this.y += 3;
   }
 
-  subheading(text: string) {
-    this.ensure(18);
+  subheading(text: string, keepWith = 12) {
+    this.ensure(6 + keepWith);
     this.text(text, { size: 11, bold: true, gap: 1 });
   }
 
@@ -155,9 +156,6 @@ class Writer {
     }
   }
 }
-
-const yearsLabel = ([from, to]: readonly [number, number | null]) =>
-  to === null ? `seit ${from}` : `${from}–${to}`;
 
 const SEVERITY_LABELS = { hoch: 'Wichtig', mittel: 'Beachten', gering: 'Am Rande' } as const;
 
@@ -227,7 +225,8 @@ export function buildAnalysisPdf(input: AnalysisPdfInput): jsPDF {
     }
   }
 
-  // Known weaknesses of the generation (the one the result page shows)
+  // Known weaknesses of the generation that fits the first registration (else the result
+  // page's default generation, with a note)
   if (model) {
     const year = listing.vehicle?.firstRegistration?.year ?? null;
     const generation = defaultGeneration(model, year, year);
@@ -236,7 +235,8 @@ export function buildAnalysisPdf(input: AnalysisPdfInput): jsPDF {
       year !== null &&
       generation.years[0] <= year &&
       (generation.years[1] ?? year) >= year;
-    w.heading(`${model.make} ${model.model}: bekannte Schwachstellen`);
+    // With the note and the generation subheading below it.
+    w.heading(`${model.make} ${model.model}: bekannte Schwachstellen`, 42);
     if (generation && year === null) {
       w.text(
         `Die Erstzulassung ist nicht bekannt. Gezeigt wird der ${generation.name} (${yearsLabel(generation.years)}) – prüfe, ob das Auto zu dieser Generation gehört.`,
@@ -244,7 +244,8 @@ export function buildAnalysisPdf(input: AnalysisPdfInput): jsPDF {
       );
     }
     if (generation && (fits || year === null)) {
-      w.subheading(`${generation.name} (${yearsLabel(generation.years)})`);
+      // With the first weakness (keep(24)) on the same page.
+      w.subheading(`${generation.name} (${yearsLabel(generation.years)})`, 24);
       if (generation.issues.length === 0) {
         w.text('Für diese Generation sind keine Schwachstellen mit Quelle erfasst.', {
           muted: true,
@@ -325,7 +326,7 @@ export function buildAnalysisPdf(input: AnalysisPdfInput): jsPDF {
     }
   }
 
-  w.heading('Notizen');
+  w.heading('Notizen', 67);
   w.noteLines(8);
 
   w.footer('KaufCheck · keine Kaufempfehlung, Angaben ohne Gewähr');

@@ -23,3 +23,8 @@ export function defaultGeneration(
     generations[generations.length - 1]
   );
 }
+
+/** „2012–2020“, „seit 2019“ or a single year. */
+export function generationYearsLabel([from, to]: readonly [number, number | null]): string {
+  return to === null ? `seit ${from}` : from === to ? String(from) : `${from}–${to}`;
+}

@@ -1,5 +1,6 @@
 import {
   defaultGeneration,
+  generationYearsLabel as yearsLabel,
   makeById,
   modelById,
   SEGMENT_LABELS,
@@ -13,9 +14,6 @@ import { Link } from 'react-router';
 import { cn } from '../../lib/format';
 
 const SEVERITY_LABELS = { hoch: 'Wichtig', mittel: 'Beachten', gering: 'Am Rande' } as const;
-
-const yearsLabel = ([from, to]: readonly [number, number | null]) =>
-  to === null ? `seit ${from}` : from === to ? String(from) : `${from}–${to}`;
 
 function IssueBody({ issue }: { issue: Generation['issues'][number] }) {
   return (

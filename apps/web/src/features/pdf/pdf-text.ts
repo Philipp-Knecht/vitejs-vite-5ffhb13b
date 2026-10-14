@@ -52,6 +52,6 @@ export function toPdfText(text: string): string {
     else if (isEmojiPart(char)) continue;
     else out += /\s/.test(char) ? ' ' : '?';
   }
-  // Dropped emoji leave double spaces behind.
-  return out.replace(/ {2,}/g, ' ');
+  // Dropped emoji leave double, leading or trailing spaces behind.
+  return out.replace(/ {2,}/g, ' ').replace(/^ +| +$/gm, '');
 }
