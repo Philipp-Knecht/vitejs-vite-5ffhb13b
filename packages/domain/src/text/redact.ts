@@ -37,16 +37,10 @@ function hasIbanChecksum(candidate: string): boolean {
   return remainder === 1;
 }
 
-/**
- * A candidate that is no phone number may still have swallowed one, e.g.
- * „Baujahr 2018 0171 1234567“: then the rest after its first group is checked again.
- */
 function redactPhones(text: string): string {
-  return text.replace(PHONE_CANDIDATE, (match: string) => {
-    if (looksLikePhoneNumber(match)) return REDACTED_PHONE;
-    const cut = match.search(/[\s\-/.]/);
-    return cut > 0 ? match.slice(0, cut) + redactPhones(match.slice(cut)) : match;
-  });
+  return text.replace(PHONE_CANDIDATE, (match) =>
+    looksLikePhoneNumber(match) ? REDACTED_PHONE : match,
+  );
 }
 
 export function redactContactData(text: string): string {

@@ -20,6 +20,11 @@ describe('findVin', () => {
     ['FIN-Nr.: WVWZZZAUZFW123456', 'WVWZZZAUZFW123456'],
     ['VIN-Nummer WVWZZZAUZFW123456', 'WVWZZZAUZFW123456'],
     ['Fahrzeugidentifikationsnummer: WVWZZZAUZFW123456', 'WVWZZZAUZFW123456'],
+    ['FIN Nr. WVWZZZAUZFW123456', 'WVWZZZAUZFW123456'],
+    ['VIN-No. WVWZZZAUZFW123456', 'WVWZZZAUZFW123456'],
+    ['Identifikationsnummer: WVWZZZAUZFW123456', 'WVWZZZAUZFW123456'],
+    ['FIN (siehe Foto): WVWZZZAUZFW123456', null], // too far from the keyword pattern
+    ['ÜFIN ERSTZULASSUNG2018', null],
     ['Kevin: ERSTZULASSUNG2018', null], // keyword only as a whole word
     ['Delfin ERSTZULASSUNG2018', null],
     ['FIN: WVWZZZ1KZAWXXXXXX (Rest auf Anfrage)', null], // masked
