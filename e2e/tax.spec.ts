@@ -31,6 +31,7 @@ test('the tax calculator computes the Kfz-Steuer from the registration values', 
 
 test('a link from a check prefills first registration and drive', async ({ page }) => {
   await page.goto('/kfz-steuer-rechner?ez=2016-09&antrieb=diesel');
-  await expect(page.getByLabel('Erstzulassung')).toHaveValue('2016-09-01');
+  await expect(page.getByLabel('Erstzulassung')).toHaveValue('');
+  await expect(page.getByText('Laut Inserat 09/2016')).toBeVisible();
   await expect(page.getByLabel('Antrieb')).toHaveValue('diesel');
 });

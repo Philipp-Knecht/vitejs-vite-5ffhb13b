@@ -95,15 +95,38 @@ describe('vehicleTax (§ 9 KraftStG)', () => {
         emissionClass: 'euro3',
       }),
     ).toBe(32);
-    // Without a CO₂ value only the class rate can be computed.
+    // The cheaper tariff needs the CO₂ value.
+    expect(
+      vehicleTax(
+        car({ firstRegistration: '2009-03-01', co2GPerKm: null, emissionClass: 'euro3' }),
+        TODAY,
+      ),
+    ).toEqual({ kind: 'missing', fields: ['co2GPerKm'] });
+    // Before 5 Nov 2008 the CO₂ value is not needed.
     expect(
       annual({
-        firstRegistration: '2009-03-01',
+        firstRegistration: '2008-11-04',
         displacementCcm: 1598,
         co2GPerKm: null,
         emissionClass: 'euro3',
       }),
     ).toBe(108);
+  });
+
+  it('dd: not low-emission, but exempt from the ozone driving ban', () => {
+    expect(
+      annual({
+        firstRegistration: '1990-01-01',
+        displacementCcm: 1800,
+        emissionClass: 'ozoneExempt',
+      }),
+    ).toBe(Math.floor(18 * 21.07));
+  });
+
+  it('counts only full grams of CO₂', () => {
+    expect(annual({ firstRegistration: '2016-05-01', displacementCcm: 999, co2GPerKm: 95.9 })).toBe(
+      20,
+    );
   });
 
   it('rounds down to full euros (§ 11 Abs. 5)', () => {
@@ -146,7 +169,11 @@ describe('vehicleTax (§ 9 KraftStG)', () => {
         car({ firstRegistration: '2015-06-01', drive: 'electric', grossWeightKg: null }),
         TODAY,
       ),
-    ).toEqual({ kind: 'missing', fields: ['grossWeightKg'] });
+    ).toEqual({
+      kind: 'missing',
+      fields: ['grossWeightKg'],
+      note: 'Die Steuerbefreiung endete am 31.05.2025.',
+    });
   });
 
   it('weight bands for electric cars (§ 9 Abs. 1 Nr. 3, halved)', () => {
@@ -154,5 +181,8 @@ describe('vehicleTax (§ 9 KraftStG)', () => {
     expect(electricCarTaxEur(2232)).toBe(68);
     // 3,100 kg: 10 × 11.25 + 5 × 12.02 + 1 × 12.78 = 185.38 → 92
     expect(electricCarTaxEur(3100)).toBe(92);
+    // 3,500 kg: the last band has 3 started units (500 kg) → 210.94 / 2 → 105
+    expect(electricCarTaxEur(3500)).toBe(105);
+    expect(electricCarTaxEur(3401)).toBe(105);
   });
 });

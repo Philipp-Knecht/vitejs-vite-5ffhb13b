@@ -1337,6 +1337,15 @@
   gap: 12px;
 }
 
+.tax-result__value {
+  white-space: nowrap;
+}
+
+.tax-result__monthly {
+  margin-top: -4px;
+  color: var(--c-text-2);
+}
+
 .tax-result__hint,
 .tax-result__rule {
   font-size: 0.925rem;

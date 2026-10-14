@@ -2,8 +2,7 @@ import type { FuelType, Vehicle } from '@kaufcheck/shared';
 
 const DRIVE_PARAM: Partial<Record<FuelType, string>> = {
   petrol: 'benzin',
-  hybrid: 'benzin',
-  plugin_hybrid: 'benzin',
+  // Hybrids are not prefilled: they can have a petrol or a diesel engine.
   lpg: 'benzin',
   cng: 'benzin',
   ethanol: 'benzin',
