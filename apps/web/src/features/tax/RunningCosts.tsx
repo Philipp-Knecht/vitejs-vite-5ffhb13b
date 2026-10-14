@@ -38,7 +38,8 @@ function parse(
   max: number,
   tooHigh: string,
 ): Parsed {
-  if (raw.trim() === '') return { value: null };
+  // Empty, or only the first keystroke of „,35“.
+  if (/^\s*[.,]?\s*$/.test(raw)) return { value: null };
   const value = read(raw);
   if (value === null) return { value: null, error: 'Bitte gib nur eine Zahl ein.' };
   if (value > max) return { value: null, error: tooHigh };
@@ -124,7 +125,7 @@ export function RunningCosts({
           label={electric ? 'Verbrauch in kWh je 100 km' : 'Verbrauch in Litern je 100 km'}
           hint={
             electric
-              ? 'Laut Inserat oder Hersteller (WLTP, Ladeverluste schon enthalten); im Alltag meist etwas mehr. Werte vom Bordcomputer enthalten keine Ladeverluste. Wasserstoff: kg je 100 km und Preis je kg.'
+              ? 'WLTP-Wert aus Inserat oder Datenblatt (mit Ladeverlusten); Bordcomputer-Werte ohne Ladeverluste. Wasserstoff: kg je 100 km.'
               : 'Laut Inserat oder Hersteller; im Alltag meist etwas mehr. Erdgas (CNG): kg je 100 km und Preis je kg.'
           }
           inputMode="decimal"
@@ -136,7 +137,7 @@ export function RunningCosts({
           label={electric ? 'Strompreis in € je kWh' : 'Kraftstoffpreis in € je Liter'}
           hint={
             electric
-              ? 'Dein Haushaltsstrom- oder Ladetarif'
+              ? 'Dein Haushaltsstrom- oder Ladetarif; Wasserstoff: Preis je kg'
               : 'Aktueller Preis an der Tankstelle oder in einer Spritpreis-App'
           }
           inputMode="decimal"

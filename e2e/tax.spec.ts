@@ -58,7 +58,7 @@ test('the tax calculator computes the Kfz-Steuer from the registration values', 
   // 120 × 17 × 0.35 = 714 € a year
   await expect(costs).toContainText('714 € im Jahr');
   await expect(costs).toContainText(
-    'Kfz-Steuer: steuerfrei bis 29.02.2032, danach nach zulässigem Gesamtgewicht.',
+    'Kfz-Steuer: steuerfrei bis 29.02.2032, danach richtet sie sich nach dem zulässigen Gesamtgewicht',
   );
 
   // An exemption that ends within a year: the tax afterwards is included.
@@ -70,7 +70,7 @@ test('the tax calculator computes the Kfz-Steuer from the registration values', 
     .getByLabel('Erstzulassung')
     .fill(`${soon.getFullYear()}-${pad(soon.getMonth() + 1)}-${pad(soon.getDate())}`);
   await page.getByLabel('Zulässiges Gesamtgewicht in kg').fill('2232');
-  await expect(costs).toContainText('eingerechnet ist die Steuer danach.');
+  await expect(costs).toContainText('eingerechnet sind schon die 68 € im Jahr danach.');
   await expect(costs).toContainText('782 € im Jahr'); // 714 € + 68 € tax
 });
 

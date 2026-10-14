@@ -156,9 +156,9 @@ export function TaxCalculator({
   if (result?.kind === 'exempt') {
     const until = `Kfz-Steuer: steuerfrei bis ${day(result.until)}`;
     if (result.afterwardsEur === null) {
-      taxNote = `${until}, danach nach zulässigem Gesamtgewicht.`;
+      taxNote = `${until}, danach richtet sie sich nach dem zulässigen Gesamtgewicht – gib es oben an, dann ist sie eingerechnet.`;
     } else if (endsSoon) {
-      taxNote = `${until}; eingerechnet ist die Steuer danach.`;
+      taxNote = `${until}; eingerechnet sind schon die ${euros(result.afterwardsEur)} im Jahr danach.`;
     } else {
       taxNote = `${until}, danach voraussichtlich ${euros(result.afterwardsEur)} im Jahr.`;
     }
