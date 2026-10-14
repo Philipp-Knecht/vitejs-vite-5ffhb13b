@@ -4,7 +4,7 @@ import { analyzeFromHomepage, LISTINGS, makePro, uniqueEmail } from './helpers';
 
 test('the PDF folder is part of Pro', async ({ page }) => {
   await analyzeFromHomepage(page, LISTINGS.audi);
-  await page.getByRole('button', { name: 'PDF-Mappe' }).click();
+  await page.getByRole('button', { name: /Als PDF herunterladen/ }).click();
   const dialog = page.getByRole('dialog', { name: 'Prüfung als PDF-Mappe' });
   await expect(dialog.getByRole('link', { name: 'KaufCheck Pro ansehen' })).toBeVisible();
 });
@@ -21,7 +21,7 @@ test('Pro members download an analysis as a PDF', async ({ page }) => {
   await analyzeFromHomepage(page, LISTINGS.audi);
   await page.getByRole('checkbox', { name: /Fahrzeugschein/ }).check();
   const downloading = page.waitForEvent('download');
-  await page.getByRole('button', { name: 'PDF-Mappe' }).click();
+  await page.getByRole('button', { name: /Als PDF herunterladen/ }).click();
   const download = await downloading;
   expect(download.suggestedFilename()).toMatch(/^kaufcheck-audi-a7-[\w-]+-\d{4}-\d{2}-\d{2}\.pdf$/);
   const file = readFileSync(await download.path());

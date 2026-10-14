@@ -22,8 +22,18 @@ export function PdfButton({ dto }: { dto: AnalysisDto }) {
   const [busy, setBusy] = useState(false);
   const [upsell, setUpsell] = useState(false);
 
+  const isPro = me.data?.entitlements.pdfExport ?? false;
+
   const download = async () => {
-    if (!me.data?.entitlements.pdfExport) {
+    if (!me.data) {
+      toast.show(
+        me.isError
+          ? 'Dein Konto konnte nicht geladen werden. Bitte lade die Seite neu.'
+          : 'Dein Konto wird noch geladen. Bitte versuch es gleich noch einmal.',
+      );
+      return;
+    }
+    if (!isPro) {
       setUpsell(true);
       return;
     }
@@ -32,7 +42,8 @@ export function PdfButton({ dto }: { dto: AnalysisDto }) {
       const modelId = knownModelId(dto.listing.vehicle);
       const [{ buildAnalysisPdf, analysisPdfFileName }, model] = await Promise.all([
         import('../pdf/analysis-pdf'),
-        modelId ? loadKnowledge(modelId) : Promise.resolve(null),
+        // Without the model knowledge the PDF is still useful.
+        modelId ? loadKnowledge(modelId).catch(() => null) : Promise.resolve(null),
       ]);
       const createdAt = new Date();
       const doc = buildAnalysisPdf({
@@ -45,8 +56,11 @@ export function PdfButton({ dto }: { dto: AnalysisDto }) {
       });
       doc.save(analysisPdfFileName(vehicleTitle(dto), createdAt));
       track('analysis_pdf_downloaded');
-    } catch {
-      toast.show('Das PDF konnte nicht erstellt werden. Bitte versuch es noch einmal.');
+    } catch (error) {
+      console.error(error);
+      toast.show(
+        'Das PDF konnte nicht erstellt werden. Bitte lade die Seite neu und versuch es noch einmal.',
+      );
     } finally {
       setBusy(false);
     }
@@ -56,11 +70,12 @@ export function PdfButton({ dto }: { dto: AnalysisDto }) {
     <>
       <Button
         variant="secondary"
-        loading={busy}
+        loading={busy || me.isPending}
         icon={<FileDown aria-hidden size={18} />}
         onClick={() => void download()}
       >
-        PDF-Mappe
+        Als PDF herunterladen
+        {me.data && !isPro && <span className="tag tag--pro">Pro</span>}
       </Button>
       <Dialog
         open={upsell}

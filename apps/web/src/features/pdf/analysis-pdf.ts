@@ -1,9 +1,9 @@
 import {
+  defaultGeneration,
   KBA_RECALL_DATABASE_URL,
   findMake,
   recallCheckFor,
   type CarModel,
-  type Generation,
 } from '@kaufcheck/catalog';
 import { EVIDENCE_LABELS, type AnalysisDto } from '@kaufcheck/shared';
 import { jsPDF } from 'jspdf';
@@ -126,13 +126,18 @@ class Writer {
 
   /** Empty lines for handwritten notes. */
   noteLines(count: number) {
+    this.ensure(count * 8 + 3);
     this.doc.setDrawColor(COLORS.rule);
     for (let i = 0; i < count; i++) {
-      this.ensure(8);
       this.y += 8;
       this.doc.line(PAGE.margin, this.y, PAGE.width - PAGE.margin, this.y);
     }
     this.y += 3;
+  }
+
+  /** Moves to the next page unless `mm` of space are left, e.g. for a title with its first lines. */
+  keep(mm: number) {
+    this.ensure(mm);
   }
 
   space(mm: number) {
@@ -154,13 +159,7 @@ class Writer {
 const yearsLabel = ([from, to]: readonly [number, number | null]) =>
   to === null ? `seit ${from}` : `${from}–${to}`;
 
-/** Generations built in the year of first registration (several around a model change). */
-function generationsFor(model: CarModel, year: number | null): Generation[] {
-  if (year === null) return [];
-  return model.generations.filter(
-    (generation) => generation.years[0] <= year && (generation.years[1] ?? year) >= year,
-  );
-}
+const SEVERITY_LABELS = { hoch: 'Wichtig', mittel: 'Beachten', gering: 'Am Rande' } as const;
 
 function formatDay(date: Date): string {
   return date.toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit', year: 'numeric' });
@@ -204,37 +203,47 @@ export function buildAnalysisPdf(input: AnalysisPdfInput): jsPDF {
   }
 
   // Overview
-  w.heading('Überblick');
-  for (const item of analysis.overview) {
-    const value = item.value ?? 'nicht angegeben';
-    const evidence = item.value === null ? '' : ` (${EVIDENCE_LABELS[item.evidence]})`;
-    w.bullet(`${item.label}: ${value}${evidence}`);
+  if (analysis.overview.length > 0) {
+    w.heading('Überblick');
+    for (const item of analysis.overview) {
+      const value = item.value ?? 'nicht angegeben';
+      const evidence = item.value === null ? '' : ` (${EVIDENCE_LABELS[item.evidence]})`;
+      w.bullet(`${item.label}: ${value}${evidence}`);
+    }
   }
 
   // Findings and checks
   if (analysis.observations.length > 0 || analysis.checks.length > 0) {
     w.heading('Darauf solltest du achten');
     for (const observation of analysis.observations) {
+      w.keep(16);
       w.text(observation.title, { bold: true, gap: 0.5 });
       w.text(observation.detail, { gap: 2.5 });
     }
     for (const check of analysis.checks) {
+      w.keep(16);
       w.text(check.title, { bold: true, gap: 0.5 });
       w.text(check.detail, { gap: 2.5 });
     }
   }
 
-  // Known weaknesses of the generation
-  const year = listing.vehicle?.firstRegistration?.year ?? null;
-  const generations = model ? generationsFor(model, year) : [];
+  // Known weaknesses of the generation (the one the result page shows)
   if (model) {
+    const year = listing.vehicle?.firstRegistration?.year ?? null;
+    const generation = defaultGeneration(model, year, year);
+    const fits =
+      generation !== undefined &&
+      year !== null &&
+      generation.years[0] <= year &&
+      (generation.years[1] ?? year) >= year;
     w.heading(`${model.make} ${model.model}: bekannte Schwachstellen`);
-    if (generations.length === 0) {
+    if (generation && year === null) {
       w.text(
-        'Ohne Erstzulassung lässt sich die Generation nicht zuordnen. Alle Generationen stehen auf der Modellseite.',
+        `Die Erstzulassung ist nicht bekannt. Gezeigt wird der ${generation.name} (${yearsLabel(generation.years)}) – prüfe, ob das Auto zu dieser Generation gehört.`,
+        { muted: true },
       );
     }
-    for (const generation of generations) {
+    if (generation && (fits || year === null)) {
       w.subheading(`${generation.name} (${yearsLabel(generation.years)})`);
       if (generation.issues.length === 0) {
         w.text('Für diese Generation sind keine Schwachstellen mit Quelle erfasst.', {
@@ -242,8 +251,10 @@ export function buildAnalysisPdf(input: AnalysisPdfInput): jsPDF {
         });
       }
       for (const issue of generation.issues) {
-        w.text(issue.title, { bold: true, gap: 0.3 });
+        w.keep(24);
+        w.text(`${issue.title} (${SEVERITY_LABELS[issue.severity]})`, { bold: true, gap: 0.3 });
         w.text(`Betrifft: ${issue.affects}`, { size: 9, muted: true, gap: 0.3 });
+        w.text(issue.detail, { gap: 0.3 });
         w.text(`Darauf achten: ${issue.check}`, { gap: 0.3 });
         w.text(`Quelle: ${issue.sources.map((source) => source.label).join(', ')}`, {
           size: 8,
@@ -252,16 +263,23 @@ export function buildAnalysisPdf(input: AnalysisPdfInput): jsPDF {
         });
       }
       if (generation.tips.length > 0) {
+        w.keep(14);
         w.text('Tipps für die Besichtigung', { bold: true, gap: 0.5 });
         for (const tip of generation.tips) w.bullet(tip);
       }
+      w.text('Nicht jedes Auto ist betroffen; nur die Besichtigung zeigt den Zustand.', {
+        size: 9,
+        muted: true,
+        gap: 0.5,
+      });
+    } else {
+      w.text(
+        year === null
+          ? 'Zu diesem Modell liegen keine Generationsdaten vor.'
+          : `Für die Erstzulassung ${year} liegen KaufCheck zu diesem Modell keine Daten vor.`,
+      );
     }
-    w.text('Nicht jedes Auto ist betroffen; nur die Besichtigung zeigt den Zustand.', {
-      size: 9,
-      muted: true,
-      gap: 0.5,
-    });
-    w.link('Alle Infos', `${siteUrl}/modelle/${model.id}`, { size: 9, muted: true });
+    w.link('Alle Generationen', `${siteUrl}/modelle/${model.id}`, { size: 9, muted: true });
   }
 
   // Seller questions
@@ -298,11 +316,13 @@ export function buildAnalysisPdf(input: AnalysisPdfInput): jsPDF {
   );
 
   // Checklist
-  w.heading('Checkliste für die Besichtigung');
-  for (const section of analysis.inspectionChecklist) {
-    w.subheading(section.title);
-    for (const item of section.items) w.checkbox(item.label, item.hint, checked.has(item.id));
-    w.space(1);
+  if (analysis.inspectionChecklist.length > 0) {
+    w.heading('Checkliste für die Besichtigung');
+    for (const section of analysis.inspectionChecklist) {
+      w.subheading(section.title);
+      for (const item of section.items) w.checkbox(item.label, item.hint, checked.has(item.id));
+      w.space(1);
+    }
   }
 
   w.heading('Notizen');
@@ -323,6 +343,7 @@ export function analysisPdfFileName(title: string, createdAt: Date): string {
     .replace(/^-+|-+$/g, '')
     .slice(0, 50)
     .replace(/-+$/, '');
-  const day = createdAt.toISOString().slice(0, 10);
+  const pad = (value: number) => String(value).padStart(2, '0');
+  const day = `${createdAt.getFullYear()}-${pad(createdAt.getMonth() + 1)}-${pad(createdAt.getDate())}`;
   return `kaufcheck-${slug || 'pruefung'}-${day}.pdf`;
 }
