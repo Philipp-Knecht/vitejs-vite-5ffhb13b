@@ -2,10 +2,10 @@
  * 17 characters without I, O and Q (ISO 3779), not part of a longer word or a
  * URL. No lookbehind: Safari supports it only from version 16.4.
  */
-const VIN_PATTERN = /(^|[^\p{L}\p{N}_/=?&#])([A-HJ-NPR-Z0-9]{17})(?![\p{L}\p{N}_])/giu;
+const VIN_PATTERN = /(^|[^\p{L}\p{M}\p{N}_/=?&#])([A-HJ-NPR-Z0-9]{17})(?![\p{L}\p{N}_])/giu;
 // Keyword before the FIN, as a whole word (no lookbehind: Safari supports it only from 16.4).
 const VIN_KEYWORD =
-  /(?:^|[^\p{L}\p{N}])(?:(?:fin|vin)(?:[\s.-]*(?:nr|nummer|no)\.?)?|fahrgestell\S*|fahrzeug-?ident\S*|identifi\S*nummer|ident-?nr\.?|chassis\S*)[^\p{L}\p{N}]*$/iu;
+  /[^\p{L}\p{M}\p{N}](?:(?:fin|vin)(?:[\s.-]*(?:nr|nummer|no)\.?)?|fahrgestell\S*|fahrzeug-?ident\S*|identifi\S*nummer|ident\.?-?nr\.?|chassis\S*)[^\p{L}\p{N}]*$/iu;
 
 /**
  * A FIN as written in papers and listings: one letter case and letters as well
@@ -34,7 +34,10 @@ export function findVins(text: string | null | undefined): { vin: string; index:
     const token = match[2] ?? '';
     const index = match.index + prefix.length;
     if (!isPlausibleVin(token)) continue;
-    const keyword = VIN_KEYWORD.test(text.slice(Math.max(0, index - 40), index));
+    // The keyword needs a non-letter in front: a space stands in for the text start, and a
+    // word cut at the window start cannot match.
+    const start = Math.max(0, index - 40);
+    const keyword = VIN_KEYWORD.test((start === 0 ? ' ' : '') + text.slice(start, index));
     if (keyword || /\d/.test(token.slice(0, 11))) found.push({ vin: token.toUpperCase(), index });
   }
   return found;

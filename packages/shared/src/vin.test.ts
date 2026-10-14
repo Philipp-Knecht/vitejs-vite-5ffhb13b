@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { findVin } from './vin';
 
 describe('findVin', () => {
-  it.each([
+  it.each<[string | null, string | null]>([
     ['FIN: WVWZZZ1KZAW123456', 'WVWZZZ1KZAW123456'],
     ['Fahrgestellnummer wvwzzz1kzaw123456 auf Anfrage', 'WVWZZZ1KZAW123456'],
     ['(WBA8E9C50GK123456)', 'WBA8E9C50GK123456'],
@@ -25,6 +25,12 @@ describe('findVin', () => {
     ['Identifikationsnummer: WVWZZZAUZFW123456', 'WVWZZZAUZFW123456'],
     ['FIN (siehe Foto): WVWZZZAUZFW123456', null], // too far from the keyword pattern
     ['ÜFIN ERSTZULASSUNG2018', null],
+    ['U\u0308FIN ERSTZULASSUNG2018', null], // decomposed umlaut
+    [`Delfin${' '.repeat(36)}ERSTZULASSUNG2018`, null], // a word cut at the window start
+    [`Delfin${' '.repeat(37)}ERSTZULASSUNG2018`, null],
+    [`Delfin${' '.repeat(38)}ERSTZULASSUNG2018`, null],
+    ['FIN: WVWZZZAUZFW123456', 'WVWZZZAUZFW123456'],
+    ['Ident.-Nr. WVWZZZAUZFW123456', 'WVWZZZAUZFW123456'],
     ['Kevin: ERSTZULASSUNG2018', null], // keyword only as a whole word
     ['Delfin ERSTZULASSUNG2018', null],
     ['FIN: WVWZZZ1KZAWXXXXXX (Rest auf Anfrage)', null], // masked
