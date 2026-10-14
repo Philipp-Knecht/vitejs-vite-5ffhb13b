@@ -96,13 +96,14 @@ export function NegotiationSection({
     };
   });
   const [draft, setDraft] = useState('');
-  const findingInputId = useId();
+  const findingsTitleId = useId();
   const refocus = useRef(false);
-  // After removing a finding its button is gone; the input exists again after the render.
+  // After removing a finding its button is gone. The heading keeps the place without opening the
+  // on-screen keyboard, as the input would on a phone.
   useEffect(() => {
     if (!refocus.current) return;
     refocus.current = false;
-    document.getElementById(findingInputId)?.focus();
+    document.getElementById(findingsTitleId)?.focus();
   });
 
   const isPro = me.data?.entitlements.negotiationHelp ?? false;
@@ -206,7 +207,9 @@ export function NegotiationSection({
           )}
 
           <div className="negotiation__group">
-            <h3 className="negotiation__title">Deine Funde bei der Besichtigung</h3>
+            <h3 id={findingsTitleId} className="negotiation__title" tabIndex={-1}>
+              Deine Funde bei der Besichtigung
+            </h3>
             {state.findings.length > 0 && (
               <ul className="negotiation__list">
                 {state.findings.map((finding, index) => (
@@ -227,7 +230,6 @@ export function NegotiationSection({
             {state.findings.length < MAX_FINDINGS ? (
               <form className="negotiation__add no-print" onSubmit={addFinding}>
                 <TextField
-                  id={findingInputId}
                   label="Mangel oder Auffälligkeit"
                   hint="Zum Beispiel: Bremsen quietschen bei der Probefahrt"
                   maxLength={MAX_FINDING_LENGTH}

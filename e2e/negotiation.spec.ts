@@ -73,7 +73,9 @@ test('Pro members turn their findings into a message to the seller', async ({ pa
     .getByRole('button', { name: '„Bremsen quietschen bei der Probefahrt“ entfernen' })
     .click();
   await expect(section.locator('.negotiation__message')).not.toContainText('Bremsen quietschen');
-  await expect(section.getByLabel('Mangel oder Auffälligkeit')).toBeFocused();
+  await expect(
+    section.getByRole('heading', { name: 'Deine Funde bei der Besichtigung' }),
+  ).toBeFocused();
   await section
     .getByRole('checkbox', { name: /^Wie im Inserat beschrieben/ })
     .first()

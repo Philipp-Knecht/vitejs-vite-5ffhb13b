@@ -120,7 +120,9 @@ export function buildNegotiationMessage({
  * plausible amount (e.g. „12,5“ or „9999.99“).
  */
 export function parseOfferEur(value: string): number | null | undefined {
-  const compact = value.replace(/\s|€|euro?\b/gi, '').replace(/(?:,(?:00|-{1,2})|\.-{1,2})$/, '');
+  const compact = value
+    .replace(/\s|€|euro?(?![a-z])/gi, '')
+    .replace(/(?:,(?:00|[-–]{1,2})|\.[-–]{1,2})$/, '');
   if (compact === '') return null;
   if (!/^(?:[1-9]\d{0,2}(?:\.\d{3})+|[1-9]\d{0,7})$/.test(compact)) return undefined;
   const amount = Number(compact.replace(/\./g, ''));
