@@ -49,6 +49,11 @@ export const STATIC_PAGE_META: Readonly<Record<string, PageMeta>> = {
     description:
       'So besichtigst du einen Gebrauchtwagen richtig: was du mitnimmst, worauf du bei Lack, Rost, Motor und Reifen achtest und wie eine aussagekräftige Probefahrt abläuft.',
   },
+  '/kfz-steuer-rechner': {
+    title: 'Kfz-Steuer-Rechner für Gebrauchtwagen | KaufCheck',
+    description:
+      'Kfz-Steuer berechnen mit den Werten aus dem Fahrzeugschein – nach dem Kraftfahrzeugsteuergesetz, auch für ältere Autos und Elektroautos – und die laufenden Kosten im Monat überschlagen.',
+  },
   '/pro': {
     title: 'KaufCheck Pro – mehr Prüfungen, Verlauf und keine Werbung',
     description:

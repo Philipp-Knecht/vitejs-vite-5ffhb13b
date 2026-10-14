@@ -1033,3 +1033,8 @@
 .analysis-meta__legend .evidence-legend {
   margin-top: 12px;
 }
+
+.price-costs {
+  margin-top: 12px;
+  font-size: 0.95rem;
+}

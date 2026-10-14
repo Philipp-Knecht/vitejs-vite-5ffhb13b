@@ -45,10 +45,13 @@ test('a model typed without make is recognized', async ({ page }) => {
 test('the check tab is remembered and reachable with the keyboard', async ({ page }) => {
   await page.goto('/');
   const findTab = page.getByRole('tab', { name: 'Auto finden' });
-  await findTab.focus();
-  await page.keyboard.press('ArrowRight');
   const checkTab = page.getByRole('tab', { name: 'Inserat prüfen' });
-  await expect(checkTab).toBeFocused();
+  // The page is prerendered: keys pressed before hydration have no handler yet.
+  await expect(async () => {
+    await findTab.focus();
+    await page.keyboard.press('ArrowRight');
+    await expect(checkTab).toBeFocused({ timeout: 1_000 });
+  }).toPass();
   await expect(checkTab).toHaveAttribute('aria-selected', 'true');
   await expect(page.getByLabel('Inseratstext oder Link zum Auto-Inserat')).toBeVisible();
   await page.reload();
