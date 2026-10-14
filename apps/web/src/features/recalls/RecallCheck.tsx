@@ -4,9 +4,7 @@ import { track } from '../../lib/analytics';
 
 const LOOKUP_TEXT = {
   vin: 'Dort gibst du die FIN ein und siehst, ob für dieses Auto Rückrufe offen sind.',
-  account:
-    'Mit der FIN siehst du offene Rückrufe nach der Anmeldung im Kundenportal des Herstellers.',
-  info: 'Dort informiert der Hersteller über laufende Rückrufe; eine Abfrage per FIN bietet die Seite nicht.',
+  info: 'Dort informiert der Hersteller über Rückrufe; eine allgemeine Abfrage per FIN gibt es dort nicht.',
 } as const;
 
 function OutLink({

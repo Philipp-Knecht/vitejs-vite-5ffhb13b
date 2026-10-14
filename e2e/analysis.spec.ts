@@ -41,6 +41,10 @@ test('homepage → analysis result with all sections', async ({ page, context })
 
   // Recalls: ask for the FIN, then check it with the manufacturer or the KBA database.
   await expect(page.getByText(/Fahrgestellnummer \(FIN\) schicken/)).toBeVisible();
+  await expect(page.getByRole('link', { name: /Rückrufe bei Audi/ })).toHaveAttribute(
+    'href',
+    'https://www.audi.de/de/kundenservice/feldmassnahmen/',
+  );
   await expect(page.getByRole('link', { name: /Rückrufdatenbank des KBA/ })).toHaveAttribute(
     'href',
     'https://www.kba-online.de/rrdb/buerger/',
