@@ -6,7 +6,7 @@ import {
   type Vehicle,
 } from '@kaufcheck/shared';
 import { Copy, Plus, X } from 'lucide-react';
-import { useId, useState, type FormEvent } from 'react';
+import { useEffect, useId, useRef, useState, type FormEvent } from 'react';
 import { useMe } from '../../api/queries';
 import { Button, ButtonLink } from '../../components/ui/Button';
 import { TextField } from '../../components/ui/Field';
@@ -56,8 +56,8 @@ function Tips() {
         Kaufvertrag fest, damit klar ist, was vereinbart wurde.
       </li>
       <li>
-        Lass dir Zusagen wie Unfallfreiheit oder Kilometerstand und vereinbarte Reparaturen
-        schriftlich geben.
+        Lass dir Zusagen wie Unfallfreiheit oder Kilometerstand schriftlich geben, ebenso
+        vereinbarte Reparaturen.
       </li>
     </ul>
   );
@@ -97,6 +97,13 @@ export function NegotiationSection({
   });
   const [draft, setDraft] = useState('');
   const findingInputId = useId();
+  const refocus = useRef(false);
+  // After removing a finding its button is gone; the input exists again after the render.
+  useEffect(() => {
+    if (!refocus.current) return;
+    refocus.current = false;
+    document.getElementById(findingInputId)?.focus();
+  });
 
   const isPro = me.data?.entitlements.negotiationHelp ?? false;
   const suggestions = negotiationSuggestions(observations, vehicle);
@@ -124,8 +131,7 @@ export function NegotiationSection({
 
   const removeFinding = (index: number) => {
     update({ ...state, findings: state.findings.filter((_, i) => i !== index) });
-    // The button is gone; keep the focus in the list's form.
-    document.getElementById(findingInputId)?.focus();
+    refocus.current = true;
   };
 
   const offer = parseOfferEur(state.offer);
@@ -157,7 +163,7 @@ export function NegotiationSection({
     >
       {me.isPending ? null : me.isError ? (
         <p className="negotiation__hint">
-          Dein Konto konnte nicht geladen werden. Bitte lade die Seite neu.
+          Die Seite konnte nicht vollständig geladen werden. Bitte lade sie neu.
         </p>
       ) : !isPro ? (
         <div className="negotiation__upsell no-print">

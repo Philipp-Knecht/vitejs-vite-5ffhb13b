@@ -116,13 +116,13 @@ export function buildNegotiationMessage({
 
 /**
  * The buyer's offer in whole euros as typed: „12500“, „12.500“, „12 500 €“,
- * „12.500,00“ or „12.500,-“. `null` when empty, `undefined` when it is not a
+ * „12.500,00“, „12.500,-“ or „12.500 EUR“. `null` when empty, `undefined` when it is not a
  * plausible amount (e.g. „12,5“ or „9999.99“).
  */
 export function parseOfferEur(value: string): number | null | undefined {
-  const compact = value.replace(/[\s€]/g, '').replace(/,(?:00|-{1,2})$/, '');
+  const compact = value.replace(/\s|€|euro?\b/gi, '').replace(/(?:,(?:00|-{1,2})|\.-{1,2})$/, '');
   if (compact === '') return null;
-  if (!/^(?:\d{1,3}(?:\.\d{3})+|\d{1,8})$/.test(compact)) return undefined;
+  if (!/^(?:[1-9]\d{0,2}(?:\.\d{3})+|[1-9]\d{0,7})$/.test(compact)) return undefined;
   const amount = Number(compact.replace(/\./g, ''));
   return amount > 0 && amount < 100_000_000 ? amount : undefined;
 }
