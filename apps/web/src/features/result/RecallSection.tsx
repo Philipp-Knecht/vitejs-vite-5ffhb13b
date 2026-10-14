@@ -1,17 +1,23 @@
 import { findMake } from '@kaufcheck/catalog';
-import type { Vehicle } from '@kaufcheck/shared';
+import { findVin, type NormalizedListing } from '@kaufcheck/shared';
 import { RecallCheck } from '../recalls/RecallCheck';
+import { RECALL_LEAD } from '../recalls/texts';
 import { ResultSection } from './Section';
 
 /** Whether recalls are open for this car: links to the manufacturer and the KBA database. */
-export function RecallSection({ vehicle }: { vehicle: Vehicle | null }) {
+export function RecallSection({
+  listing,
+}: {
+  listing: Pick<NormalizedListing, 'title' | 'description' | 'vehicle'>;
+}) {
+  const vin = findVin(`${listing.title ?? ''}\n${listing.description ?? ''}`);
   return (
-    <ResultSection
-      id="rueckrufe"
-      title="Rückrufe prüfen"
-      lead="Mit Rückrufen beheben Hersteller Mängel, etwa an Bremsen, Airbags oder der Abgasreinigung – kostenlos, aber nur, wenn eine Werkstatt sie erledigt hat. Ob ein bestimmtes Auto betroffen ist, zeigt die Fahrgestellnummer."
-    >
-      <RecallCheck makeId={findMake(vehicle?.make)?.id ?? null} placement="result" />
+    <ResultSection id="rueckrufe" title="Rückrufe prüfen" lead={RECALL_LEAD}>
+      <RecallCheck
+        makeId={findMake(listing.vehicle?.make)?.id ?? null}
+        placement="result"
+        listingVin={vin?.vin ?? null}
+      />
     </ResultSection>
   );
 }

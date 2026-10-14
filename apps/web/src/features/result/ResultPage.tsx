@@ -100,7 +100,7 @@ function ResultView({ dto }: { dto: AnalysisDto }) {
             vehicleTitle={analysis.vehicleSummary?.title ?? null}
             listingUrl={listing.source.url}
           />
-          <RecallSection vehicle={listing.vehicle} />
+          <RecallSection listing={listing} />
           <ChecklistSection analysisId={dto.id} sections={analysis.inspectionChecklist} />
           <PhotosSection
             images={listing.images}

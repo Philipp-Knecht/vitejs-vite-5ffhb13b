@@ -1,11 +1,8 @@
 import { KBA_RECALL_DATABASE_URL, makeById, recallCheckFor } from '@kaufcheck/catalog';
-import { ExternalLink } from 'lucide-react';
+import type { ReactNode } from 'react';
 import { track } from '../../lib/analytics';
 
-const LOOKUP_TEXT = {
-  vin: 'Dort gibst du die FIN ein und siehst, ob für dieses Auto Rückrufe offen sind.',
-  info: 'Dort informiert der Hersteller über Rückrufe; eine allgemeine Abfrage per FIN gibt es dort nicht.',
-} as const;
+type Placement = 'result' | 'model';
 
 function OutLink({
   href,
@@ -15,19 +12,18 @@ function OutLink({
 }: {
   href: string;
   source: string;
-  placement: 'result' | 'model';
-  children: string;
+  placement: Placement;
+  children: ReactNode;
 }) {
   return (
     <a
-      className="btn btn--secondary btn--md"
+      className="recall-check__link"
       href={href}
       target="_blank"
-      rel="noopener nofollow"
+      rel="noopener noreferrer nofollow"
       onClick={() => track('recall_check_opened', { source, placement })}
     >
-      <span>{children}</span>
-      <ExternalLink aria-hidden size={18} />
+      {children}
       <span className="visually-hidden"> (öffnet in neuem Tab)</span>
     </a>
   );
@@ -41,54 +37,78 @@ function OutLink({
 export function RecallCheck({
   makeId,
   placement,
+  listingVin = null,
 }: {
   makeId: string | null;
-  placement: 'result' | 'model';
+  placement: Placement;
+  /** A FIN found in the listing text, shown for comparison with the papers. */
+  listingVin?: string | null;
 }) {
   const make = makeById(makeId);
-  const check = recallCheckFor(make?.id);
+  const check = make ? recallCheckFor(make.id) : null;
+  const vinCheck = make && check?.lookup === 'vin' ? check : null;
+  const infoPage = make && check?.lookup === 'info' ? check : null;
+  const english = check?.language === 'en' ? ' (englisch)' : '';
 
   return (
     <div className="recall-check">
       <ol className="recall-check__steps">
         <li>
-          <strong>Fahrgestellnummer (FIN) erfragen.</strong> Sie steht im Fahrzeugschein
-          (Zulassungsbescheinigung Teil I, Feld E) und meist gut lesbar unten an der
-          Windschutzscheibe.
+          <strong>FIN erfragen.</strong> Die Fahrzeug-Identifizierungsnummer (FIN, auch
+          Fahrgestellnummer) steht im Fahrzeugschein (Zulassungsbescheinigung Teil I, Feld E) und
+          oft unten an der Windschutzscheibe oder auf dem Typschild.
+          {listingVin && (
+            <>
+              {' '}
+              Im Inserat steht eine mögliche FIN:{' '}
+              <span className="recall-check__vin">{listingVin}</span>. Vergleiche sie bei der
+              Besichtigung mit dem Fahrzeugschein.
+            </>
+          )}
         </li>
-        {make && check && (
+        {make && vinCheck && (
           <li>
-            <strong>Beim Hersteller prüfen.</strong> {LOOKUP_TEXT[check.lookup]}
+            <strong>Beim Hersteller prüfen.</strong> In der{' '}
+            <OutLink href={vinCheck.url} source={make.id} placement={placement}>
+              {`FIN-Abfrage von ${make.name}${english}`}
+            </OutLink>{' '}
+            siehst du, ob für dieses Auto laut Hersteller Rückrufe offen sind.
           </li>
         )}
         <li>
           <strong>
-            {check
-              ? 'Oder in einer Vertragswerkstatt fragen.'
-              : 'In einer Vertragswerkstatt fragen.'}
+            {vinCheck ? 'Oder in einer Vertragswerkstatt' : 'In einer Vertragswerkstatt'} oder bei
+            der Kundenhotline des Herstellers fragen.
           </strong>{' '}
-          Sie sieht offene Rückrufe zur FIN im System des Herstellers. Die Reparatur bei einem
-          Rückruf ist kostenlos.
+          Dort sind offene Rückrufe zur FIN bekannt. Die Reparatur ist kostenlos (Material und
+          Arbeitszeit).
+        </li>
+        {make && infoPage && (
+          <li>
+            <strong>Beim Hersteller nachlesen.</strong> Auf der{' '}
+            <OutLink href={infoPage.url} source={make.id} placement={placement}>
+              {`Rückrufseite von ${make.name}${english}`}
+            </OutLink>{' '}
+            informiert der Hersteller über Rückrufe; eine allgemeine Abfrage per FIN gibt es dort
+            nicht.
+          </li>
+        )}
+        <li>
+          <strong>Rückrufe für das Modell nachschlagen.</strong> Die{' '}
+          <OutLink href={KBA_RECALL_DATABASE_URL} source="kba" placement={placement}>
+            Rückrufdatenbank des Kraftfahrt-Bundesamts
+          </OutLink>{' '}
+          zeigt Rückrufe nach Hersteller, Modell und Baujahr – nicht für ein einzelnes Auto und
+          nicht jede Maßnahme der Hersteller.
         </li>
         <li>
-          <strong>Erledigte Rückrufe belegen lassen.</strong> Sie stehen meist im Serviceheft oder
-          auf Werkstattrechnungen.
+          <strong>Belege zeigen lassen.</strong> Frag nach Werkstattbelegen zu erledigten Rückrufen.
         </li>
       </ol>
-      <div className="button-row">
-        {make && check && (
-          <OutLink href={check.url} source={make.id} placement={placement}>
-            {`Rückrufe bei ${make.name}`}
-          </OutLink>
-        )}
-        <OutLink href={KBA_RECALL_DATABASE_URL} source="kba" placement={placement}>
-          Rückrufdatenbank des KBA
-        </OutLink>
-      </div>
       <p className="recall-check__note">
-        Die Datenbank des Kraftfahrt-Bundesamts zeigt Rückrufe nach Hersteller, Modell und Baujahr –
-        nicht für ein einzelnes Auto und nicht jede Maßnahme der Hersteller. Ob dein Wunschauto
-        betroffen ist, sagt nur der Hersteller.
+        Anders als bei freiwilligen Serviceaktionen ist die Teilnahme an einem Rückruf Pflicht. Die
+        Schreiben des Herstellers gehen an den eingetragenen Halter – nach dem Kauf also an dich.
+        Wer sie ignoriert, riskiert, dass die Zulassungsbehörde den Betrieb des Autos untersagt.
       </p>
     </div>
   );

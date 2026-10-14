@@ -8,6 +8,8 @@ export interface RecallCheck {
   url: string;
   /** `vin`: the page checks a FIN; `info`: recall information without a general FIN check. */
   lookup: 'vin' | 'info';
+  /** Set when the page is not in German. */
+  language?: 'en';
 }
 
 /** Recall database of the Kraftfahrt-Bundesamt: recalls by make, model and year, not by FIN. */
@@ -57,6 +59,7 @@ const RECALL_CHECKS: Readonly<Record<string, RecallCheck>> = {
   kia: {
     url: 'https://www.kia.com/eu/service/kia-overview/service-and-maintenance/kia-recalls/',
     lookup: 'vin',
+    language: 'en',
   },
   nissan: {
     url: 'https://www.nissan.de/kunden/rueckruf-oder-serviceaktionen.html',
@@ -73,7 +76,6 @@ const RECALL_CHECKS: Readonly<Record<string, RecallCheck>> = {
   },
   suzuki: { url: 'https://auto.suzuki.de/service/rueckrufaktionen', lookup: 'vin' },
   honda: { url: 'https://www.honda.de/cars/services/recalls-and-updates.html', lookup: 'vin' },
-  tesla: { url: 'https://service.tesla.com/de-DE/vin-recall-search', lookup: 'vin' },
   ds: {
     url: 'https://www.dsautomobiles.de/mein-ds/ueberblick/rueckrufaktionen.html',
     lookup: 'vin',

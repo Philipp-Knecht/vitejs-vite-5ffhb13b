@@ -15,7 +15,10 @@ about budget, use and space and ranks the researched models with a transparent p
 (`packages/catalog/src/advisor.ts`); it is linked once at least 40 models are researched
 (`apps/web/src/features/advisor/availability.ts`). The listing check shows the known weaknesses of
 the listed model's generation, the comparison orders saved offers by the buyer's own priorities
-(`packages/shared/src/comparison-ranking.ts`), and Pro members can save searches.
+(`packages/shared/src/comparison-ranking.ts`), and Pro members can save searches. Result and
+model pages explain how to check recalls with the FIN and link the manufacturers' official recall
+pages and the KBA recall database (`packages/catalog/src/recalls.ts`); KaufCheck queries none of
+them itself.
 
 For the listing check, a user pastes the listing text (or a link); KaufCheck extracts and
 normalizes the vehicle data and shows a mobile-first dashboard:
@@ -326,7 +329,8 @@ First-party and cookieless: only an event name, a timestamp and a few allowliste
 ids, IP addresses or free text. The browser sends nothing when „Do Not Track“ or „Global Privacy
 Control“ is set. Events: `landing_page_view`, `listing_analysis_started`, `listing_analysis_completed`,
 `listing_analysis_failed` (recorded by the server), `seller_questions_copied`,
-`seller_message_created`, `checklist_started`, `listing_saved`, `comparison_created`, `pro_clicked`.
+`seller_message_created`, `checklist_started`, `listing_saved`, `search_saved`, `comparison_created`,
+`pro_clicked`, `car_search_started`, `platform_search_opened`, `recall_check_opened`.
 Disable with `ANALYTICS_ENABLED=false`. Events are kept for 400 days, for example:
 
 ```sql

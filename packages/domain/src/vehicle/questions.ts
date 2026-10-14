@@ -304,8 +304,8 @@ export function generateSellerQuestions(
     questions.push(
       question(
         'vin',
-        'Können Sie mir die Fahrgestellnummer (FIN) schicken? Dann kann ich vorab prüfen, ob Rückrufe offen sind.',
-        'Kannst du mir die Fahrgestellnummer (FIN) schicken? Dann kann ich vorab prüfen, ob Rückrufe offen sind.',
+        'Können Sie mir die Fahrgestellnummer (FIN) schicken? Dann kann ich vorab klären, ob Rückrufe offen sind.',
+        'Kannst du mir die Fahrgestellnummer (FIN) schicken? Dann kann ich vorab klären, ob Rückrufe offen sind.',
         'Mit der FIN lässt sich beim Hersteller prüfen, ob Rückrufe erledigt sind.',
         2,
       ),

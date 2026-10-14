@@ -1,3 +1,5 @@
+import { isPlausibleVin } from '@kaufcheck/shared';
+
 /**
  * Removes contact and payment data from listing text before it is stored or
  * sent to an AI provider (data minimisation). The analysis never needs it.
@@ -24,9 +26,26 @@ function looksLikePhoneNumber(candidate: string): boolean {
   return true;
 }
 
+/** ISO 13616 check: the rearranged number modulo 97 is 1. */
+function hasIbanChecksum(candidate: string): boolean {
+  const compact = candidate.replace(/ /g, '').toUpperCase();
+  const rearranged = compact.slice(4) + compact.slice(0, 4);
+  let remainder = 0;
+  for (const char of rearranged) {
+    const value = Number.parseInt(char, 36);
+    remainder = Number((BigInt(remainder) * (value > 9 ? 100n : 10n) + BigInt(value)) % 97n);
+  }
+  return remainder === 1;
+}
+
 export function redactContactData(text: string): string {
-  return text
-    .replace(EMAIL, REDACTED_EMAIL)
-    .replace(IBAN, REDACTED_IBAN)
-    .replace(PHONE_CANDIDATE, (match) => (looksLikePhoneNumber(match) ? REDACTED_PHONE : match));
+  return (
+    text
+      .replace(EMAIL, REDACTED_EMAIL)
+      // A FIN such as VF33C9HZC84123456 has the shape of an IBAN but no valid checksum.
+      .replace(IBAN, (match) =>
+        isPlausibleVin(match) && !hasIbanChecksum(match) ? match : REDACTED_IBAN,
+      )
+      .replace(PHONE_CANDIDATE, (match) => (looksLikePhoneNumber(match) ? REDACTED_PHONE : match))
+  );
 }

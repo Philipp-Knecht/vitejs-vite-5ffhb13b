@@ -5,6 +5,7 @@ import type {
   TransmissionType,
   YearMonth,
 } from '@kaufcheck/shared';
+import { findVin } from '@kaufcheck/shared';
 import { parseYearMonth } from '../text/dates';
 import { parseMileageKm, parsePower } from '../text/numbers';
 import { snippetAround } from '../text/text';
@@ -658,10 +659,7 @@ export function extractDescriptionSignals(
     combined,
   );
 
-  // 17 characters without I, O and Q (ISO 3779), with letters and digits.
-  const vin = allMatches(/\b[A-HJ-NPR-Z0-9]{17}\b/i, combined).find(
-    (match) => /\d/.test(match.text) && /[a-z]/i.test(match.text),
-  );
+  const vin = findVin(combined);
 
   return {
     mileageMentions: extractMileage(text),
@@ -693,6 +691,8 @@ export function extractDescriptionSignals(
       text,
     ),
     batteryInfo: battery ? { quote: quote(combined, battery) } : null,
-    vinMention: vin ? { quote: quote(combined, vin) } : null,
+    vinMention: vin
+      ? { quote: quote(combined, { index: vin.index, text: vin.vin, groups: [] }) }
+      : null,
   };
 }

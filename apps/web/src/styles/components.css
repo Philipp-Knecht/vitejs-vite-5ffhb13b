@@ -803,8 +803,16 @@
   display: grid;
   gap: 10px;
   max-width: 70ch;
-  margin-bottom: 20px;
   padding-left: 1.4em;
+}
+
+.recall-check__link {
+  font-weight: 600;
+}
+
+.recall-check__vin {
+  font-family: var(--font-mono);
+  overflow-wrap: anywhere;
 }
 
 .recall-check__note {

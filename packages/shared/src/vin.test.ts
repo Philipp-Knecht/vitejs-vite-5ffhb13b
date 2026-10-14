@@ -1,0 +1,22 @@
+import { describe, expect, it } from 'vitest';
+import { findVin } from './vin';
+
+describe('findVin', () => {
+  it.each([
+    ['FIN: WVWZZZ1KZAW123456', 'WVWZZZ1KZAW123456'],
+    ['Fahrgestellnummer wvwzzz1kzaw123456 auf Anfrage', 'WVWZZZ1KZAW123456'],
+    ['(WBA8E9C50GK123456)', 'WBA8E9C50GK123456'],
+    ['Teilenummer 12345678901234567', null], // digits only
+    ['Ausstattungspaket ABCDEFGHJKLMNPRST', null], // letters only
+    ['Code WVWZZZ1KZAW12345O', null], // O is not allowed
+    ['Code WVWZZZ1KZAW1234567', null], // 18 characters
+    ['ÄWVWZZZ1KZAW123456', null], // part of a longer word
+    ['Fotos: https://photos.app.goo.gl/kCm7dWuHmKXpYhBv8', null], // URL id, mixed case
+    ['Erstzulassung2018 Scheckheft', null], // words run together
+    ['FIN: WVWZZZ1KZAWXXXXXX (Rest auf Anfrage)', null], // masked
+    ['FIN: VF33C9HZC84123456', 'VF33C9HZC84123456'],
+    [null, null],
+  ])('%s → %s', (text, expected) => {
+    expect(findVin(text)?.vin ?? null).toBe(expected);
+  });
+});

@@ -11,6 +11,7 @@ import {
   parsePrice,
   parseYearMonth,
   redactContactData,
+  REDACTED_IBAN,
   REDACTED_EMAIL,
   REDACTED_PHONE,
   snippetAround,
@@ -123,6 +124,13 @@ describe('redactContactData', () => {
       2,
     );
     expect(redacted).toContain(REDACTED_EMAIL);
+  });
+
+  it('removes IBANs but keeps a FIN of the same shape', () => {
+    expect(redactContactData('Anzahlung auf DE89 3704 0044 0532 0130 00')).toBe(
+      `Anzahlung auf ${REDACTED_IBAN}`,
+    );
+    expect(redactContactData('FIN: VF33C9HZC84123456')).toBe('FIN: VF33C9HZC84123456');
   });
 
   it('keeps mileages, prices, postal codes and dates', () => {
