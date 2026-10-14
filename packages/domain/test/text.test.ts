@@ -144,6 +144,18 @@ describe('redactContactData', () => {
     ['Tel 01 71 12 34 56 7', `Tel ${P}`],
     ['(0171) 123 45 67', P],
     ['030/12345678', P],
+    ['Audi A4 0171 1234567', `Audi A4 ${P}`],
+    ['BMW X5 - 0171 1234567', `BMW X5 - ${P}`],
+    ['W0L0XCF0844012345 0171 1234567', `W0L0XCF0844012345 ${P}`],
+    ['Handy: 0151 – 12345678', `Handy: ${P}`],
+    ['wa.me/491711234567', `wa.me/${P}`],
+    ['+49(0)171-1234567', P],
+    ['(Tel. 0171 1234567)', `(Tel. ${P})`],
+    ['Tel 0171 1234567 120.000 km', `Tel ${P} 120.000 km`],
+    ['Tel 0171 1234567 12/2019', `Tel ${P} 12/2019`],
+    ['0171 1234567 1.4 TSI', `${P} 1.4 TSI`],
+    ['0171 1234567 12.05.2012', `${P} 12.05.2012`],
+    ['0171 123.45.67', P],
   ])('redacts the phone number in „%s“', (text, expected) => {
     expect(redactContactData(text)).toBe(expected);
   });
@@ -160,6 +172,8 @@ describe('redactContactData', () => {
     'Öffnungszeiten 10:00 - 18:00',
     '1 234 567 €, 9.990,- €, 2x 0,5 l, 205/55 R16',
     'FIN: W0L0XCF0844012345',
+    'Garantie 09/2016 – 09/2018',
+    '2012-05-01 - 2013-06-01',
   ])('keeps „%s“', (text) => {
     expect(redactContactData(text)).toBe(text);
   });
