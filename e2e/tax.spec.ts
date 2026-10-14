@@ -25,19 +25,36 @@ test('the tax calculator computes the Kfz-Steuer from the registration values', 
 
   // Running costs include the tax.
   const costs = page.getByRole('region', { name: 'Laufende Kosten' });
+  // The tax alone is no estimate yet.
+  await expect(costs).toContainText('Trag deine Werte ein.');
   await page.getByLabel('Fahrleistung in km pro Jahr').fill('12.000');
   await page.getByLabel('Verbrauch in Litern je 100 km').fill('6,5');
-  await page.getByLabel('Kraftstoffpreis in € je Liter').fill('1,80');
+  // A point is a decimal point here, not a thousands separator.
+  await page.getByLabel('Kraftstoffpreis in € je Liter').fill('1.80');
   // 247 € tax + 120 × 6.5 × 1.80 = 1,404 € fuel = 1,651 € a year
   await expect(costs).toContainText('1.651 € im Jahr');
   await expect(costs).toContainText(
     'Noch nicht eingerechnet: Versicherung, Werkstatt und Wartung.',
   );
 
+  await page.getByLabel('Versicherung in € pro Jahr').fill('1e5');
+  await expect(page.getByText('Bitte nur eine Zahl eingeben.')).toBeVisible();
+
   // Electric cars are exempt for ten years.
   await page.getByLabel('Antrieb').selectOption('electric');
   await page.getByLabel('Erstzulassung').fill('2022-03-01');
   await expect(result).toContainText('steuerfrei bis 29.02.2032');
+  // Consumption and price change their unit, so they start empty again.
+  await expect(page.getByLabel('Verbrauch in kWh je 100 km')).toHaveValue('');
+  await expect(page.getByLabel('Fahrleistung in km pro Jahr')).toHaveValue('12.000');
+  await page.getByLabel('Versicherung in € pro Jahr').fill('');
+  await page.getByLabel('Verbrauch in kWh je 100 km').fill('17');
+  await page.getByLabel('Strompreis in € je kWh').fill('3,50');
+  await expect(page.getByText('Bitte prüfe den Preis je kWh, z. B. 0,35.')).toBeVisible();
+  await page.getByLabel('Strompreis in € je kWh').fill('0,35');
+  // 120 × 17 × 0.35 = 714 € a year
+  await expect(costs).toContainText('714 € im Jahr');
+  await expect(costs).toContainText('Kfz-Steuer: steuerfrei bis 29.02.2032.');
 });
 
 test('a link from a check prefills first registration and drive', async ({ page }) => {

@@ -68,10 +68,6 @@ export function TaxGuidePage() {
         initial={prefill.initial}
         listingRegistration={prefill.hint}
       />
-      <p>
-        Verbindlich ist der Steuerbescheid des Hauptzollamts. Fehlt dir ein Wert, frag den Verkäufer
-        nach einem Foto des Fahrzeugscheins – darauf stehen alle Angaben.
-      </p>
 
       <h2 id="so-wird-gerechnet">So wird gerechnet</h2>
       <p>Maßgeblich ist das Datum der Erstzulassung (§ 9 Kraftfahrzeugsteuergesetz):</p>
