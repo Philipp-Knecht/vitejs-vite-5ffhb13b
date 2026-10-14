@@ -32,11 +32,22 @@ test('Pro members turn their findings into a message to the seller', async ({ pa
   await expect(message).toContainText('1. Bremsen quietschen bei der Probefahrt');
   await expect(message).toContainText('Wie kommen Sie mir beim Preis entgegen?');
 
+  // Points from the listing are only suggestions to pick.
+  await section
+    .getByRole('checkbox', { name: /^Wie im Inserat beschrieben/ })
+    .first()
+    .check();
+  await expect(message).toContainText('1. Wie im Inserat beschrieben: „');
+
+  // An offer that is not below the asking price gets a hint.
+  await section.getByLabel('Dein Angebot in € (optional)').fill('1.000.000');
+  await expect(section).toContainText('Dein Angebot liegt nicht unter dem Preis im Inserat');
+
   // The buyer's own offer – KaufCheck never suggests one.
   await section.getByLabel('Dein Angebot in € (optional)').fill('12,5');
   await expect(section.getByText('Bitte gib einen Betrag in vollen Euro ein.')).toBeVisible();
   await section.getByLabel('Dein Angebot in € (optional)').fill('12.500');
-  await expect(message).toContainText('Deshalb kann ich Ihnen 12.500 € anbieten.');
+  await expect(message).toContainText(/Deshalb kann ich Ihnen 12\.500\s€ anbieten\./);
   const axe = await new AxeBuilder({ page })
     .include('#verhandlung')
     .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa'])
@@ -45,7 +56,7 @@ test('Pro members turn their findings into a message to the seller', async ({ pa
 
   // The form of address is shared with the seller questions.
   await section.getByRole('button', { name: 'du', exact: true }).click();
-  await expect(message).toContainText('Deshalb kann ich dir 12.500 € anbieten.');
+  await expect(message).toContainText(/Deshalb kann ich dir 12\.500\s€ anbieten\./);
   await expect(page.locator('.question-list')).not.toContainText('Können Sie');
 
   await context.grantPermissions(['clipboard-read', 'clipboard-write']);
@@ -57,9 +68,15 @@ test('Pro members turn their findings into a message to the seller', async ({ pa
 
   // Stored in this browser only; removable.
   await page.reload();
-  await expect(section.locator('.negotiation__message')).toContainText('1. Bremsen quietschen');
+  await expect(section.locator('.negotiation__message')).toContainText('2. Bremsen quietschen');
   await section
     .getByRole('button', { name: '„Bremsen quietschen bei der Probefahrt“ entfernen' })
     .click();
+  await expect(section.locator('.negotiation__message')).not.toContainText('Bremsen quietschen');
+  await expect(section.getByLabel('Mangel oder Auffälligkeit')).toBeFocused();
+  await section
+    .getByRole('checkbox', { name: /^Wie im Inserat beschrieben/ })
+    .first()
+    .uncheck();
   await expect(section).toContainText('Wähle oder ergänze mindestens einen Punkt');
 });

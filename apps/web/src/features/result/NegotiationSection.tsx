@@ -1,11 +1,12 @@
 import {
   buildNegotiationMessage,
   negotiationSuggestions,
+  parseOfferEur,
   type Observation,
   type Vehicle,
 } from '@kaufcheck/shared';
 import { Copy, Plus, X } from 'lucide-react';
-import { useState, type FormEvent } from 'react';
+import { useId, useState, type FormEvent } from 'react';
 import { useMe } from '../../api/queries';
 import { Button, ButtonLink } from '../../components/ui/Button';
 import { TextField } from '../../components/ui/Field';
@@ -38,15 +39,6 @@ const isState = (value: unknown): value is NegotiationState => {
   return strings(state.picked) && strings(state.findings) && typeof state.offer === 'string';
 };
 
-/** Whole euros as typed („12.500“ or „12500“); `undefined` when invalid. */
-function parseOffer(value: string): number | null | undefined {
-  const compact = value.replace(/[\s.€]/g, '');
-  if (compact === '') return null;
-  if (!/^\d{1,8}$/.test(compact)) return undefined;
-  const amount = Number(compact);
-  return amount > 0 ? amount : undefined;
-}
-
 function Tips() {
   return (
     <ul className="negotiation__tips">
@@ -59,11 +51,14 @@ function Tips() {
         Gebrauchtwagenchecks, etwa von TÜV, DEKRA oder ADAC.
       </li>
       <li>
-        Schreib bekannte Mängel konkret in den Kaufvertrag. Wegen eines Mangels, den du beim Kauf
-        kennst, kannst du später keine Rechte mehr geltend machen (§ 442 BGB) – verhandle also
-        vorher.
+        Wegen eines Mangels, den du beim Kauf kennst, kannst du später keine Rechte mehr geltend
+        machen (§ 442 BGB). Verhandle deshalb vorher und halte die bekannten Mängel konkret im
+        Kaufvertrag fest, damit klar ist, was vereinbart wurde.
       </li>
-      <li>Lass dir Zusagen wie Unfallfreiheit oder Kilometerstand schriftlich geben.</li>
+      <li>
+        Lass dir Zusagen wie Unfallfreiheit oder Kilometerstand und vereinbarte Reparaturen
+        schriftlich geben.
+      </li>
     </ul>
   );
 }
@@ -78,11 +73,14 @@ export function NegotiationSection({
   observations,
   vehicle,
   vehicleTitle,
+  askingPriceEur,
 }: {
   analysisId: string;
   observations: Observation[];
   vehicle: Vehicle | null;
   vehicleTitle: string | null;
+  /** Price in the listing, to point out an offer that is not below it. */
+  askingPriceEur: number | null;
 }) {
   const me = useMe();
   const toast = useToast();
@@ -92,11 +90,13 @@ export function NegotiationSection({
     return {
       ...stored,
       findings: stored.findings
+        .filter((finding) => finding.trim() !== '')
         .slice(0, MAX_FINDINGS)
         .map((finding) => finding.slice(0, MAX_FINDING_LENGTH)),
     };
   });
   const [draft, setDraft] = useState('');
+  const findingInputId = useId();
 
   const isPro = me.data?.entitlements.negotiationHelp ?? false;
   const suggestions = negotiationSuggestions(observations, vehicle);
@@ -122,10 +122,17 @@ export function NegotiationSection({
     setDraft('');
   };
 
-  const removeFinding = (index: number) =>
+  const removeFinding = (index: number) => {
     update({ ...state, findings: state.findings.filter((_, i) => i !== index) });
+    // The button is gone; keep the focus in the list's form.
+    document.getElementById(findingInputId)?.focus();
+  };
 
-  const offer = parseOffer(state.offer);
+  const offer = parseOfferEur(state.offer);
+  const offerHint =
+    offer !== null && offer !== undefined && askingPriceEur !== null && offer >= askingPriceEur
+      ? `Dein Angebot liegt nicht unter dem Preis im Inserat (${askingPriceEur.toLocaleString('de-DE')}\u00a0€).`
+      : 'Ohne Angebot fragt die Nachricht, wie der Verkäufer dir entgegenkommt.';
   const points = [
     ...suggestions.filter((item) => state.picked.includes(item.id)).map((item) => item.text),
     ...state.findings,
@@ -146,23 +153,25 @@ export function NegotiationSection({
     <ResultSection
       id="verhandlung"
       title="Verhandlung vorbereiten"
-      lead="Halte nach der Besichtigung fest, was dir aufgefallen ist, und mach daraus eine sachliche Nachricht an den Verkäufer. Beträge schlägt KaufCheck nicht vor – dafür fehlen echte Reparatur- und Marktdaten."
+      lead="Was dir bei der Besichtigung auffällt, sind deine Argumente beim Preis. Beträge schlägt KaufCheck nicht vor – dafür fehlen echte Reparatur- und Marktdaten."
     >
-      {!isPro ? (
-        <div className="negotiation__upsell">
+      {me.isPending ? null : me.isError ? (
+        <p className="negotiation__hint">
+          Dein Konto konnte nicht geladen werden. Bitte lade die Seite neu.
+        </p>
+      ) : !isPro ? (
+        <div className="negotiation__upsell no-print">
           <p>
             Mit KaufCheck Pro hältst du deine Funde fest, wählst passende Punkte aus dem Inserat und
             erhältst eine fertige Nachricht in der Sie- oder Du-Form.
           </p>
-          {me.data && (
-            <ButtonLink
-              to="/pro"
-              variant="secondary"
-              onClick={() => track('pro_clicked', { placement: 'negotiation' })}
-            >
-              KaufCheck Pro ansehen
-            </ButtonLink>
-          )}
+          <ButtonLink
+            to="/pro"
+            variant="secondary"
+            onClick={() => track('pro_clicked', { placement: 'negotiation' })}
+          >
+            KaufCheck Pro ansehen
+          </ButtonLink>
         </div>
       ) : (
         <div className="negotiation">
@@ -200,6 +209,7 @@ export function NegotiationSection({
                     <Button
                       variant="quiet"
                       size="sm"
+                      className="no-print"
                       icon={<X aria-hidden size={16} />}
                       aria-label={`„${finding}“ entfernen`}
                       onClick={() => removeFinding(index)}
@@ -209,8 +219,9 @@ export function NegotiationSection({
               </ul>
             )}
             {state.findings.length < MAX_FINDINGS ? (
-              <form className="negotiation__add" onSubmit={addFinding}>
+              <form className="negotiation__add no-print" onSubmit={addFinding}>
                 <TextField
+                  id={findingInputId}
                   label="Mangel oder Auffälligkeit"
                   hint="Zum Beispiel: Bremsen quietschen bei der Probefahrt"
                   maxLength={MAX_FINDING_LENGTH}
@@ -234,7 +245,7 @@ export function NegotiationSection({
           <div className="negotiation__group">
             <h3 className="negotiation__title">Nachricht an den Verkäufer</h3>
             <div className="negotiation__options">
-              <div className="segmented" role="group" aria-label="Anrede">
+              <div className="segmented no-print" role="group" aria-label="Anrede">
                 <button
                   type="button"
                   aria-pressed={formal}
@@ -254,7 +265,7 @@ export function NegotiationSection({
               </div>
               <TextField
                 label="Dein Angebot in € (optional)"
-                hint="Ohne Angebot fragt die Nachricht, wie der Verkäufer dir entgegenkommt."
+                hint={offerHint}
                 inputMode="numeric"
                 error={offer === undefined ? 'Bitte gib einen Betrag in vollen Euro ein.' : null}
                 value={state.offer}
@@ -264,7 +275,11 @@ export function NegotiationSection({
             {message ? (
               <>
                 <p className="negotiation__message">{message}</p>
-                <Button icon={<Copy aria-hidden size={18} />} onClick={() => void copyMessage()}>
+                <Button
+                  className="no-print"
+                  icon={<Copy aria-hidden size={18} />}
+                  onClick={() => void copyMessage()}
+                >
                   Nachricht kopieren
                 </Button>
               </>

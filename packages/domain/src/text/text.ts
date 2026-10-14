@@ -65,11 +65,14 @@ export function snippetAround(
   matchLength: number,
   maxLength = 180,
 ): string {
-  const boundary = /[.!?\n]/;
+  // A point between digits („120.000 km“) does not end a sentence.
+  const isBoundary = (at: number) =>
+    /[.!?\n]/.test(text[at] ?? '') &&
+    !(text[at] === '.' && /\d/.test(text[at - 1] ?? '') && /\d/.test(text[at + 1] ?? ''));
   let start = index;
-  while (start > 0 && !boundary.test(text[start - 1] ?? '')) start -= 1;
+  while (start > 0 && !isBoundary(start - 1)) start -= 1;
   let end = index + matchLength;
-  while (end < text.length && !boundary.test(text[end] ?? '')) end += 1;
+  while (end < text.length && !isBoundary(end)) end += 1;
   if (end < text.length && text[end] !== '\n') end += 1;
 
   let snippet = text.slice(start, end).replace(/\s+/g, ' ').trim();

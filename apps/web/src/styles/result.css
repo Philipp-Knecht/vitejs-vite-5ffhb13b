@@ -1113,15 +1113,12 @@
   flex-wrap: wrap;
   align-items: flex-start;
   gap: 8px 16px;
+  margin-bottom: 12px;
 }
 
 .negotiation__options .field {
   flex: 1 1 260px;
   min-width: 0;
-}
-
-.negotiation__options {
-  margin-bottom: 12px;
 }
 
 .negotiation__message {

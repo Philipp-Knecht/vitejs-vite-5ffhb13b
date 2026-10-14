@@ -7,17 +7,22 @@ export interface NegotiationSuggestion {
   text: string;
 }
 
-const MAX_QUOTE_LENGTH = 120;
+/** Quotes are already windowed around the defect (about 180 characters); this only guards the length. */
+const MAX_QUOTE_LENGTH = 240;
 
 function yearMonth(value: YearMonth): string {
   return value.month ? `${String(value.month).padStart(2, '0')}/${value.year}` : String(value.year);
 }
 
 function shorten(quote: string): string {
-  const text = quote.replace(/\s+/g, ' ').trim();
-  return text.length > MAX_QUOTE_LENGTH
-    ? `${text.slice(0, MAX_QUOTE_LENGTH - 1).trimEnd()}…`
-    : text;
+  // By code point, so that no emoji is cut in half.
+  const chars = Array.from(quote.replace(/\s+/g, ' ').trim());
+  return chars.length > MAX_QUOTE_LENGTH
+    ? `${chars
+        .slice(0, MAX_QUOTE_LENGTH - 1)
+        .join('')
+        .trimEnd()}…`
+    : chars.join('');
 }
 
 /**
@@ -31,33 +36,39 @@ export function negotiationSuggestions(
   vehicle: Vehicle | null,
 ): NegotiationSuggestion[] {
   const suggestions: NegotiationSuggestion[] = [];
+  const add = (suggestion: NegotiationSuggestion) => {
+    // Several defects in one sentence share its quote.
+    if (!suggestions.some((existing) => existing.text === suggestion.text)) {
+      suggestions.push(suggestion);
+    }
+  };
   const hu = vehicle?.huUntil ?? null;
   for (const observation of observations) {
     // Only the rule-based findings; their ids and quotes are known.
     if (observation.origin !== 'rules') continue;
     if (observation.id === 'hu_expired' && hu) {
-      suggestions.push({
+      add({
         id: observation.id,
         text: `Die HU ist abgelaufen (gültig bis ${yearMonth(hu)}).`,
       });
     } else if (observation.id === 'hu_expiring' && hu) {
-      suggestions.push({
+      add({
         id: observation.id,
         text: `Die nächste HU ist schon ${yearMonth(hu)} fällig.`,
       });
     } else if (observation.id.startsWith('damage_')) {
       for (const [index, quote] of observation.quotes.entries()) {
-        suggestions.push({
+        add({
           id: `${observation.id}:${index}`,
-          text: `Im Inserat genannt: „${shorten(quote)}“`,
+          text: `Wie im Inserat beschrieben: „${shorten(quote)}“`,
         });
       }
     }
   }
   if (vehicle?.serviceHistory === 'none') {
-    suggestions.push({ id: 'service_none', text: 'Es gibt keine Wartungsnachweise.' });
+    add({ id: 'service_none', text: 'Es gibt keine Wartungsnachweise.' });
   } else if (vehicle?.serviceHistory === 'claimed') {
-    suggestions.push({
+    add({
       id: 'service_claimed',
       text: 'Die Wartung ist nicht mit Nachweisen belegt.',
     });
@@ -87,18 +98,31 @@ export function buildNegotiationMessage({
 }: NegotiationMessageInput): string {
   const subject = formal ? 'Ihr Fahrzeug' : 'dein Auto';
   const title = vehicleTitle ? ` „${vehicleTitle}“` : '';
-  const intro = `vielen Dank, dass ich ${subject}${title} ansehen konnte. Dabei ${
-    points.length === 1 ? 'ist mir ein Punkt' : 'sind mir einige Punkte'
-  } aufgefallen:`;
+  const intro = `vielen Dank, dass ich ${subject}${title} ansehen konnte. ${
+    points.length === 1 ? 'Einen Punkt' : 'Einige Punkte'
+  } möchte ich noch ansprechen:`;
   const list = points.map((point, index) => `${index + 1}. ${point}`).join('\n');
   const consequence = `${
     points.length === 1 ? 'Das muss ich' : 'Diese Punkte muss ich'
   } nach dem Kauf erledigen lassen oder einplanen.`;
   const ask =
     offerEur !== null
-      ? `Deshalb kann ich ${formal ? 'Ihnen' : 'dir'} ${offerEur.toLocaleString('de-DE')} € anbieten.`
+      ? `Deshalb kann ich ${formal ? 'Ihnen' : 'dir'} ${offerEur.toLocaleString('de-DE')}\u00a0€ anbieten.`
       : formal
-        ? 'Wie kommen Sie mir beim Preis entgegen? Alternativ könnten Sie die Punkte vor der Übergabe erledigen lassen.'
-        : 'Wie kommst du mir beim Preis entgegen? Alternativ könntest du die Punkte vor der Übergabe erledigen lassen.';
+        ? 'Wie kommen Sie mir beim Preis entgegen? Alternativ könnten Sie Mängel vor der Übergabe beheben lassen.'
+        : 'Wie kommst du mir beim Preis entgegen? Alternativ könntest du Mängel vor der Übergabe beheben lassen.';
   return ['Hallo,', intro, list, `${consequence} ${ask}`, 'Viele Grüße'].join('\n\n');
+}
+
+/**
+ * The buyer's offer in whole euros as typed: „12500“, „12.500“, „12 500 €“,
+ * „12.500,00“ or „12.500,-“. `null` when empty, `undefined` when it is not a
+ * plausible amount (e.g. „12,5“ or „9999.99“).
+ */
+export function parseOfferEur(value: string): number | null | undefined {
+  const compact = value.replace(/[\s€]/g, '').replace(/,(?:00|-{1,2})$/, '');
+  if (compact === '') return null;
+  if (!/^(?:\d{1,3}(?:\.\d{3})+|\d{1,8})$/.test(compact)) return undefined;
+  const amount = Number(compact.replace(/\./g, ''));
+  return amount > 0 && amount < 100_000_000 ? amount : undefined;
 }

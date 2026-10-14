@@ -109,6 +109,7 @@ function ResultView({ dto }: { dto: AnalysisDto }) {
             observations={analysis.observations}
             vehicle={listing.vehicle}
             vehicleTitle={analysis.vehicleSummary?.title ?? null}
+            askingPriceEur={listing.price?.amountEur ?? null}
           />
           <PhotosSection
             images={listing.images}
