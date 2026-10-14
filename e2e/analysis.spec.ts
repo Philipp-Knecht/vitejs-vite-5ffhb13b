@@ -18,6 +18,7 @@ test('homepage → analysis result with all sections', async ({ page, context })
     'Was wissen wir?',
     'Darauf solltest du achten',
     'Fragen an den Verkäufer',
+    'Rückrufe prüfen',
     'Checkliste für die Besichtigung',
     'Fotos',
   ]) {
@@ -37,6 +38,13 @@ test('homepage → analysis result with all sections', async ({ page, context })
   await expect(
     page.getByText('Simulierte KI-Einschätzung (Entwicklungsmodus)', { exact: true }),
   ).toBeVisible();
+
+  // Recalls: ask for the FIN, then check it with the manufacturer or the KBA database.
+  await expect(page.getByText(/Fahrgestellnummer \(FIN\) schicken/)).toBeVisible();
+  await expect(page.getByRole('link', { name: /Rückrufdatenbank des KBA/ })).toHaveAttribute(
+    'href',
+    'https://www.kba-online.de/rrdb/buerger/',
+  );
 
   // Seller questions: copy, switch form of address, compose a message.
   await context.grantPermissions(['clipboard-read', 'clipboard-write']);

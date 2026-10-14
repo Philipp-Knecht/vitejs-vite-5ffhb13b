@@ -13,6 +13,7 @@ import { ClipboardCheck, Search } from 'lucide-react';
 import { Link, useParams } from 'react-router';
 import { PageLoading } from '../components/ui/Spinner';
 import { usePreloadedModel } from '../features/models/preloaded';
+import { RecallCheck } from '../features/recalls/RecallCheck';
 import { ModelKnowledgeView } from '../features/search/ModelInsights';
 import { modelPageMeta } from '../seo/model-meta';
 import { usePageMeta } from '../seo/use-page-meta';
@@ -93,6 +94,18 @@ function ModelContent({ model }: { model: CarModel }) {
       <section className="section" aria-label="Generationen, Schwachstellen und Motoren">
         <div className="container">
           <ModelKnowledgeView model={model} generationHeading="h2" />
+        </div>
+      </section>
+      <section className="section" aria-labelledby="recalls-title">
+        <div className="container">
+          <h2 id="recalls-title" className="section__title">
+            Rückrufe für einen {model.make} {model.model} prüfen
+          </h2>
+          <p className="section__lead">
+            Mit Rückrufen beheben Hersteller Mängel, etwa an Bremsen, Airbags oder der
+            Abgasreinigung – kostenlos, aber nur, wenn eine Werkstatt sie erledigt hat.
+          </p>
+          <RecallCheck makeId={entry?.makeId ?? null} placement="model" />
         </div>
       </section>
       {alternatives.length > 0 && (

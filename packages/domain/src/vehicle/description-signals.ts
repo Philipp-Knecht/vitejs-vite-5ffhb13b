@@ -79,6 +79,8 @@ export interface DescriptionSignals {
   deregistered: Quoted | null;
   testDriveOffered: boolean;
   batteryInfo: Quoted | null;
+  /** A vehicle identification number (FIN) in the listing. */
+  vinMention: Quoted | null;
 }
 
 interface Match {
@@ -656,6 +658,11 @@ export function extractDescriptionSignals(
     combined,
   );
 
+  // 17 characters without I, O and Q (ISO 3779), with letters and digits.
+  const vin = allMatches(/\b[A-HJ-NPR-Z0-9]{17}\b/i, combined).find(
+    (match) => /\d/.test(match.text) && /[a-z]/i.test(match.text),
+  );
+
   return {
     mileageMentions: extractMileage(text),
     registrationMentions,
@@ -686,5 +693,6 @@ export function extractDescriptionSignals(
       text,
     ),
     batteryInfo: battery ? { quote: quote(combined, battery) } : null,
+    vinMention: vin ? { quote: quote(combined, vin) } : null,
   };
 }

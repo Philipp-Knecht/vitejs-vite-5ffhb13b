@@ -797,3 +797,19 @@
   font-size: 0.85rem;
   color: var(--c-text-3);
 }
+
+/* ---------- Recall check ---------- */
+.recall-check__steps {
+  display: grid;
+  gap: 10px;
+  max-width: 70ch;
+  margin-bottom: 20px;
+  padding-left: 1.4em;
+}
+
+.recall-check__note {
+  max-width: 70ch;
+  margin-top: 16px;
+  font-size: 0.925rem;
+  color: var(--c-text-2);
+}

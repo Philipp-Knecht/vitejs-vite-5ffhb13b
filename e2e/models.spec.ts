@@ -61,6 +61,10 @@ test('model pages are prerendered and hydrate without errors', async ({ page, re
       page.getByRole('heading', { level: 2, name: new RegExp(`^${escaped}(?: \\(|,)`) }),
     ).toBeVisible();
   }
+  await expect(
+    page.getByRole('heading', { level: 2, name: `Rückrufe für einen ${name} prüfen` }),
+  ).toBeVisible();
+  await expect(page.getByRole('link', { name: /Rückrufdatenbank des KBA/ })).toBeVisible();
   await page.getByRole('link', { name: `${name} finden` }).click();
   await expect(page).toHaveURL(new RegExp(`/auto-finden\\?marke=[a-z-]+&modell=${id}$`));
   await expect(page.getByRole('heading', { level: 2, name: /Deine Suche auf/ })).toBeVisible();

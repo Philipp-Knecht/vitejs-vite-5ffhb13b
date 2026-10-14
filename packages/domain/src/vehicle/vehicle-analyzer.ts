@@ -17,7 +17,7 @@ import { buildRuleContext } from './rule-context';
 import { buildSummary } from './summary';
 
 /** Bump when rules change in a way that affects results. Stored with each analysis. */
-export const VEHICLE_RULES_VERSION = '2026.09.1';
+export const VEHICLE_RULES_VERSION = '2026.10.1';
 
 function initialPhotoAnalysis(listing: NormalizedListing): PhotoAnalysis {
   if (listing.images.length === 0) {

@@ -14,6 +14,8 @@ import {
   modelById,
   MODELS,
   parseSearchParams,
+  RECALL_CHECK_MAKE_IDS,
+  recallCheckFor,
   summarize,
   toSearchParams,
   type SearchQuery,
@@ -40,6 +42,20 @@ describe('makes and models', () => {
     expect(findModel('mercedes', 'C-Klasse')?.id).toBe('mercedes-c-klasse');
     expect(findModel('skoda', 'Octavia Combi')?.id).toBe('skoda-octavia');
     expect(findModel('vw', 'Phaeton')).toBeNull();
+  });
+});
+
+describe('recall checks', () => {
+  it('belong to catalog makes and link to https pages of the manufacturer', () => {
+    for (const id of RECALL_CHECK_MAKE_IDS) {
+      expect(makeById(id), id).not.toBeNull();
+      expect(recallCheckFor(id)?.url, id).toMatch(/^https:\/\/[^/]+\//);
+    }
+  });
+
+  it('returns nothing for unknown makes', () => {
+    expect(recallCheckFor(null)).toBeNull();
+    expect(recallCheckFor('trabant')).toBeNull();
   });
 });
 
