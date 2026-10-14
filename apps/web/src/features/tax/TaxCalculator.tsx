@@ -18,10 +18,11 @@ const DRIVES: readonly { value: TaxDrive; label: string }[] = [
 const EMISSION_CLASSES: readonly { value: TaxEmissionClass; label: string }[] = [
   { value: 'euro3', label: 'Euro 3 oder besser – auch Euro 4/II, Euro 4/III, D3, D4, „3 L“' },
   { value: 'euro2', label: 'Euro 2 – auch Euro 3/II oder Euro 3/III (ohne D4)' },
-  { value: 'euro1', label: 'Euro 1 – auch Euro 2/II oder Euro 2/III' },
+  { value: 'euro1', label: 'Euro 1 – auch Euro 2/II, Euro 2/III und „E 2“ ohne „3 L“' },
   {
     value: 'ozoneExempt',
-    label: 'nicht schadstoffarm, ozonbefreit (Schlüsselnummer 17, 19, 20, 23 oder 24)',
+    label:
+      'nicht schadstoffarm, ozonbefreit (Schlüsselnummer 17, 19, 20, 23, 24 oder 10/15 mit G-Kat-Nachrüstung)',
   },
   { value: 'older', label: 'älter oder unbekannt (höchster Satz)' },
 ];
