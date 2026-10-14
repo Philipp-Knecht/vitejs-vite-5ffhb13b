@@ -8,6 +8,8 @@ import {
 import { useState } from 'react';
 import { SelectField, TextField } from '../../components/ui/Field';
 import type { TaxFormValues } from './form';
+import { toNumber } from './numbers';
+import { RunningCosts } from './RunningCosts';
 
 const DRIVES: readonly { value: TaxDrive; label: string }[] = [
   { value: 'petrol', label: 'Benzin, auch Hybrid, Autogas (LPG) oder Erdgas (CNG)' },
@@ -45,19 +47,6 @@ const euros = (value: number, fractions = 0) =>
 const day = (iso: string) => iso.split('-').reverse().join('.');
 
 const BINDING = 'Verbindlich ist der Steuerbescheid des Hauptzollamts.';
-
-/**
- * A number as typed: „1.530“ (thousands separator) or „1530“; a decimal comma
- * or point stays a decimal. Empty or invalid input counts as „not given“.
- */
-function toNumber(value: string): number | null {
-  const normalized = value
-    .replace(/\s/g, '')
-    .replace(/\.(?=\d{3}(?!\d))/g, '')
-    .replace(',', '.');
-  if (!/^\d+(?:\.\d+)?$/.test(normalized)) return null;
-  return Number(normalized);
-}
 
 function todayIso(): string {
   const now = new Date();
@@ -151,90 +140,101 @@ export function TaxCalculator({
   const errorFor = (field: VehicleTaxField) =>
     result?.kind === 'invalid' && result.field === field ? result.message : undefined;
 
+  const taxAnnualEur =
+    result?.kind === 'amount' ? result.annualEur : result?.kind === 'exempt' ? 0 : null;
+
   return (
-    <div className="tax-calculator">
-      <form className="tax-form" onSubmit={(event) => event.preventDefault()} noValidate>
-        <TextField
-          label="Erstzulassung"
-          type="date"
-          hint={
-            listingRegistration
-              ? `Laut Inserat ${listingRegistration} – den Tag findest du im Fahrzeugschein, Feld B`
-              : 'Fahrzeugschein, Feld B'
-          }
-          error={errorFor('firstRegistration')}
-          value={values.firstRegistration}
-          onChange={set('firstRegistration')}
-        />
-        <SelectField label="Antrieb" value={values.drive} onChange={set('drive')}>
-          <option value="">Bitte wählen</option>
-          {DRIVES.map((drive) => (
-            <option key={drive.value} value={drive.value}>
-              {drive.label}
-            </option>
-          ))}
-        </SelectField>
-        {electric ? (
+    <>
+      <div className="tax-calculator">
+        <form className="tax-form" onSubmit={(event) => event.preventDefault()} noValidate>
           <TextField
-            label="Zulässiges Gesamtgewicht in kg"
-            hint="Fahrzeugschein, Feld F.2 – nur nötig, wenn die Steuerbefreiung endet"
-            inputMode="numeric"
-            error={errorFor('grossWeightKg')}
-            value={values.grossWeightKg}
-            onChange={set('grossWeightKg')}
+            label="Erstzulassung"
+            type="date"
+            hint={
+              listingRegistration
+                ? `Laut Inserat ${listingRegistration} – den Tag findest du im Fahrzeugschein, Feld B`
+                : 'Fahrzeugschein, Feld B'
+            }
+            error={errorFor('firstRegistration')}
+            value={values.firstRegistration}
+            onChange={set('firstRegistration')}
           />
-        ) : (
-          <>
+          <SelectField label="Antrieb" value={values.drive} onChange={set('drive')}>
+            <option value="">Bitte wählen</option>
+            {DRIVES.map((drive) => (
+              <option key={drive.value} value={drive.value}>
+                {drive.label}
+              </option>
+            ))}
+          </SelectField>
+          {electric ? (
             <TextField
-              label="Hubraum in cm³"
-              hint="Fahrzeugschein, Feld P.1"
+              label="Zulässiges Gesamtgewicht in kg"
+              hint="Fahrzeugschein, Feld F.2 – nur nötig, wenn die Steuerbefreiung endet"
               inputMode="numeric"
-              error={errorFor('displacementCcm')}
-              value={values.displacementCcm}
-              onChange={set('displacementCcm')}
+              error={errorFor('grossWeightKg')}
+              value={values.grossWeightKg}
+              onChange={set('grossWeightKg')}
             />
-            <TextField
-              label="CO₂-Wert in g/km"
-              hint={
-                before2009
-                  ? 'Fahrzeugschein, Feld V.7 – bei Erstzulassung vor Juli 2009 nur für Autos ab 05.11.2008 nötig'
-                  : 'Fahrzeugschein, Feld V.7'
-              }
-              inputMode="numeric"
-              error={errorFor('co2GPerKm')}
-              value={values.co2GPerKm}
-              onChange={set('co2GPerKm')}
-            />
-            {before2009 && (
-              <SelectField
-                label="Schadstoffklasse"
-                hint="Fahrzeugschein, Feld 14 und Schlüsselnummer 14.1 (alter Fahrzeugschein: letzte zwei Ziffern im Feld „zu 1“). „/II“ und „/III“ stehen für schwere Pkw über 2,5 t – die Auswahl nennt, wie sie zählen."
-                value={values.emissionClass}
-                onChange={set('emissionClass')}
-              >
-                <option value="">Bitte wählen</option>
-                {EMISSION_CLASSES.map((item) => (
-                  <option key={item.value} value={item.value}>
-                    {item.label}
-                  </option>
-                ))}
-              </SelectField>
-            )}
-          </>
-        )}
-      </form>
-      <section className="tax-result" aria-labelledby="tax-result-title">
-        <h2 id="tax-result-title" className="tax-result__title">
-          Kfz-Steuer
-        </h2>
-        <div aria-live="polite">
-          {result ? (
-            <Result result={result} />
           ) : (
-            <p className="tax-result__hint">Gib Erstzulassung und Antrieb an.</p>
+            <>
+              <TextField
+                label="Hubraum in cm³"
+                hint="Fahrzeugschein, Feld P.1"
+                inputMode="numeric"
+                error={errorFor('displacementCcm')}
+                value={values.displacementCcm}
+                onChange={set('displacementCcm')}
+              />
+              <TextField
+                label="CO₂-Wert in g/km"
+                hint={
+                  before2009
+                    ? 'Fahrzeugschein, Feld V.7 – bei Erstzulassung vor Juli 2009 nur für Autos ab 05.11.2008 nötig'
+                    : 'Fahrzeugschein, Feld V.7'
+                }
+                inputMode="numeric"
+                error={errorFor('co2GPerKm')}
+                value={values.co2GPerKm}
+                onChange={set('co2GPerKm')}
+              />
+              {before2009 && (
+                <SelectField
+                  label="Schadstoffklasse"
+                  hint="Fahrzeugschein, Feld 14 und Schlüsselnummer 14.1 (alter Fahrzeugschein: letzte zwei Ziffern im Feld „zu 1“). „/II“ und „/III“ stehen für schwere Pkw über 2,5 t – die Auswahl nennt, wie sie zählen."
+                  value={values.emissionClass}
+                  onChange={set('emissionClass')}
+                >
+                  <option value="">Bitte wählen</option>
+                  {EMISSION_CLASSES.map((item) => (
+                    <option key={item.value} value={item.value}>
+                      {item.label}
+                    </option>
+                  ))}
+                </SelectField>
+              )}
+            </>
           )}
-        </div>
-      </section>
-    </div>
+        </form>
+        <section className="tax-result" aria-labelledby="tax-result-title">
+          <h2 id="tax-result-title" className="tax-result__title">
+            Kfz-Steuer
+          </h2>
+          <div aria-live="polite">
+            {result ? (
+              <Result result={result} />
+            ) : (
+              <p className="tax-result__hint">Gib Erstzulassung und Antrieb an.</p>
+            )}
+          </div>
+        </section>
+      </div>
+      <h2 id="unterhalt">Laufende Kosten überschlagen</h2>
+      <p>
+        Mit deiner Fahrleistung, dem Verbrauch und deinen Preisen rechnest du grob aus, was das Auto
+        im Monat kostet. Die Kfz-Steuer von oben ist schon eingerechnet.
+      </p>
+      <RunningCosts taxAnnualEur={taxAnnualEur} electric={electric} />
+    </>
   );
 }

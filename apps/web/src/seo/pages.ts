@@ -52,7 +52,7 @@ export const STATIC_PAGE_META: Readonly<Record<string, PageMeta>> = {
   '/kfz-steuer-rechner': {
     title: 'Kfz-Steuer-Rechner für Gebrauchtwagen | KaufCheck',
     description:
-      'Kfz-Steuer berechnen mit den Werten aus dem Fahrzeugschein: Erstzulassung, Hubraum und CO₂ – nach dem Kraftfahrzeugsteuergesetz, auch für ältere Autos und Elektroautos.',
+      'Kfz-Steuer berechnen mit den Werten aus dem Fahrzeugschein – nach dem Kraftfahrzeugsteuergesetz, auch für ältere Autos und Elektroautos – und die laufenden Kosten im Monat überschlagen.',
   },
   '/pro': {
     title: 'KaufCheck Pro – mehr Prüfungen, Verlauf und keine Werbung',

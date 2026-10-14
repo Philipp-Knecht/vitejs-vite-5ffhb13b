@@ -7,6 +7,7 @@ import { GuideLayout, type TocEntry } from './GuideLayout';
 
 const TOC: TocEntry[] = [
   { id: 'rechner', title: 'Rechner' },
+  { id: 'unterhalt', title: 'Laufende Kosten' },
   { id: 'so-wird-gerechnet', title: 'So wird gerechnet' },
   { id: 'werte', title: 'Wo stehen die Werte?' },
   { id: 'elektro', title: 'Elektroautos' },

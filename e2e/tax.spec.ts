@@ -23,6 +23,17 @@ test('the tax calculator computes the Kfz-Steuer from the registration values', 
   await page.getByLabel('Schadstoffklasse').selectOption('euro3');
   await expect(result).toContainText('247 €'); // 16 × 15,44 € = 247,04 €
 
+  // Running costs include the tax.
+  const costs = page.getByRole('region', { name: 'Laufende Kosten' });
+  await page.getByLabel('Fahrleistung in km pro Jahr').fill('12.000');
+  await page.getByLabel('Verbrauch in Litern je 100 km').fill('6,5');
+  await page.getByLabel('Kraftstoffpreis in € je Liter').fill('1,80');
+  // 247 € tax + 120 × 6.5 × 1.80 = 1,404 € fuel = 1,651 € a year
+  await expect(costs).toContainText('1.651 € im Jahr');
+  await expect(costs).toContainText(
+    'Noch nicht eingerechnet: Versicherung, Werkstatt und Wartung.',
+  );
+
   // Electric cars are exempt for ten years.
   await page.getByLabel('Antrieb').selectOption('electric');
   await page.getByLabel('Erstzulassung').fill('2022-03-01');
