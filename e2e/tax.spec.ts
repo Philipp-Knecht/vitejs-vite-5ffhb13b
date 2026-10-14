@@ -38,7 +38,7 @@ test('the tax calculator computes the Kfz-Steuer from the registration values', 
   );
 
   await page.getByLabel('Versicherung in € pro Jahr').fill('1e5');
-  await expect(page.getByText('Bitte nur eine Zahl eingeben.')).toBeVisible();
+  await expect(page.getByText('Bitte gib nur eine Zahl ein.')).toBeVisible();
 
   // Electric cars are exempt for ten years.
   await page.getByLabel('Antrieb').selectOption('electric');
@@ -49,12 +49,29 @@ test('the tax calculator computes the Kfz-Steuer from the registration values', 
   await expect(page.getByLabel('Fahrleistung in km pro Jahr')).toHaveValue('12.000');
   await page.getByLabel('Versicherung in € pro Jahr').fill('');
   await page.getByLabel('Verbrauch in kWh je 100 km').fill('17');
-  await page.getByLabel('Strompreis in € je kWh').fill('3,50');
-  await expect(page.getByText('Bitte prüfe den Preis je kWh, z. B. 0,35.')).toBeVisible();
+  await page.getByLabel('Strompreis in € je kWh').fill('35');
+  await expect(page.getByText('Bitte prüfe den Preis, z. B. 0,35 je kWh.')).toBeVisible();
+  // No error while a decimal is being typed.
+  await page.getByLabel('Strompreis in € je kWh').fill('0,');
+  await expect(page.getByText('Bitte gib nur eine Zahl ein.')).toHaveCount(0);
   await page.getByLabel('Strompreis in € je kWh').fill('0,35');
   // 120 × 17 × 0.35 = 714 € a year
   await expect(costs).toContainText('714 € im Jahr');
-  await expect(costs).toContainText('Kfz-Steuer: steuerfrei bis 29.02.2032.');
+  await expect(costs).toContainText(
+    'Kfz-Steuer: steuerfrei bis 29.02.2032, danach nach zulässigem Gesamtgewicht.',
+  );
+
+  // An exemption that ends within a year: the tax afterwards is included.
+  const soon = new Date();
+  soon.setFullYear(soon.getFullYear() - 10);
+  soon.setDate(soon.getDate() + 30);
+  const pad = (value: number) => String(value).padStart(2, '0');
+  await page
+    .getByLabel('Erstzulassung')
+    .fill(`${soon.getFullYear()}-${pad(soon.getMonth() + 1)}-${pad(soon.getDate())}`);
+  await page.getByLabel('Zulässiges Gesamtgewicht in kg').fill('2232');
+  await expect(costs).toContainText('eingerechnet ist die Steuer danach.');
+  await expect(costs).toContainText('782 € im Jahr'); // 714 € + 68 € tax
 });
 
 test('a link from a check prefills first registration and drive', async ({ page }) => {
