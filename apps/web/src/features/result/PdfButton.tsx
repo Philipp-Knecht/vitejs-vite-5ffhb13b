@@ -56,6 +56,7 @@ export function PdfButton({ dto }: { dto: AnalysisDto }) {
       });
       doc.save(analysisPdfFileName(vehicleTitle(dto), createdAt));
       track('analysis_pdf_downloaded');
+      toast.show('PDF erstellt');
     } catch (error) {
       console.error('PDF export failed', error);
       toast.show(

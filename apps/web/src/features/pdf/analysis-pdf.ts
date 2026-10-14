@@ -33,6 +33,8 @@ const PAGE = { width: 210, height: 297, margin: 18, footer: 12 } as const;
 const CONTENT_WIDTH = PAGE.width - 2 * PAGE.margin;
 const LINE = 0.42; // line height factor: mm per pt of font size
 const COLORS = { text: 20, muted: 90, rule: 200 } as const;
+/** Space kept for the start of a weakness (title and first lines). */
+const ISSUE_KEEP = 24;
 
 type Style = { size?: number; bold?: boolean; muted?: boolean; indent?: number; gap?: number };
 
@@ -60,6 +62,14 @@ class Writer {
   private lines(text: string, size: number, bold: boolean, width: number): string[] {
     this.font(size, bold, false);
     return this.doc.splitTextToSize(toPdfText(text), width) as string[];
+  }
+
+  /** Height of a paragraph as `text()` would write it. */
+  height(text: string, style: Style = {}) {
+    const { size = 10, bold = false, indent = 0, gap = 1.5 } = style;
+    return (
+      this.lines(text, size, bold, CONTENT_WIDTH - indent).length * this.lineHeight(size) + gap
+    );
   }
 
   text(text: string, style: Style = {}) {
@@ -168,6 +178,7 @@ export function buildAnalysisPdf(input: AnalysisPdfInput): jsPDF {
   const { analysis, listing } = dto;
   const title = analysis.vehicleSummary?.title ?? listing.title ?? 'Auto-Inserat';
   const w = new Writer();
+  w.doc.setLanguage('de-DE');
   w.doc.setProperties({
     title: `KaufCheck – ${toPdfText(title)}`,
     subject: 'Besichtigungsmappe',
@@ -235,24 +246,25 @@ export function buildAnalysisPdf(input: AnalysisPdfInput): jsPDF {
       year !== null &&
       generation.years[0] <= year &&
       (generation.years[1] ?? year) >= year;
-    // With the note and the generation subheading below it.
-    w.heading(`${model.make} ${model.model}: bekannte Schwachstellen`, 42);
-    if (generation && year === null) {
-      w.text(
-        `Die Erstzulassung ist nicht bekannt. Gezeigt wird der ${generation.name} (${yearsLabel(generation.years)}) – prüfe, ob das Auto zu dieser Generation gehört.`,
-        { muted: true },
-      );
-    }
+    const note =
+      generation && year === null
+        ? `Die Erstzulassung ist nicht bekannt. Gezeigt wird der ${generation.name} (${yearsLabel(generation.years)}) – prüfe, ob das Auto zu dieser Generation gehört.`
+        : null;
+    // With the note, the generation subheading and the first weakness below it.
+    w.heading(
+      `${model.make} ${model.model}: bekannte Schwachstellen`,
+      6 + ISSUE_KEEP + (note ? w.height(note) : 0),
+    );
+    if (note) w.text(note, { muted: true });
     if (generation && (fits || year === null)) {
-      // With the first weakness (keep(24)) on the same page.
-      w.subheading(`${generation.name} (${yearsLabel(generation.years)})`, 24);
+      w.subheading(`${generation.name} (${yearsLabel(generation.years)})`, ISSUE_KEEP);
       if (generation.issues.length === 0) {
         w.text('Für diese Generation sind keine Schwachstellen mit Quelle erfasst.', {
           muted: true,
         });
       }
       for (const issue of generation.issues) {
-        w.keep(24);
+        w.keep(ISSUE_KEEP);
         w.text(`${issue.title} (${SEVERITY_LABELS[issue.severity]})`, { bold: true, gap: 0.3 });
         w.text(`Betrifft: ${issue.affects}`, { size: 9, muted: true, gap: 0.3 });
         w.text(issue.detail, { gap: 0.3 });
