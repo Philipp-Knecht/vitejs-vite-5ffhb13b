@@ -174,7 +174,7 @@ const lineOfText = (max: number) =>
   z
     .string()
     .trim()
-    .max(max)
+    .max(max, `Bitte höchstens ${max} Zeichen.`)
     .refine(
       (value) => ![...value].some((char) => char.charCodeAt(0) < 32 || char.charCodeAt(0) === 127),
       'Bitte ohne Zeilenumbrüche und Steuerzeichen.',
@@ -189,7 +189,7 @@ export const OwnedCarInputSchema = z.object({
   /** Catalog model id when the model is known, e.g. `vw-golf`. */
   modelId: z.string().min(1).max(80).nullable(),
   /** The model as the user calls it, shown when there is no catalog model. */
-  modelName: lineOfText(60).pipe(z.string().min(1)),
+  modelName: lineOfText(60).pipe(z.string().min(1, 'Bitte nenne das Modell.')),
   generationId: z.string().min(1).max(80).nullable(),
   fuel: z.enum(FUEL_TYPES).nullable(),
   firstRegistration: z.object({ year: CarYearSchema, month: CarMonthSchema.nullable() }),

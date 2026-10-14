@@ -138,7 +138,13 @@ export class OwnedCarService {
     const data = toColumns(input, this.now());
     const row = await this.db.$transaction(async (tx) => {
       // Locks the user so that parallel requests cannot pass the limit together.
-      await tx.$queryRaw`SELECT "id" FROM "User" WHERE "id" = ${userId}::uuid FOR UPDATE`;
+      const locked = await tx.$queryRaw<{ id: string }[]>`
+        SELECT "id" FROM "User" WHERE "id" = ${userId}::uuid FOR NO KEY UPDATE`;
+      // The account was deleted in the meantime.
+      if (locked.length === 0)
+        throw new AppError('UNAUTHENTICATED', {
+          message: 'Melde dich an, um dein Auto anzulegen.',
+        });
       const used = await tx.ownedCar.count({ where: { userId } });
       if (used >= max)
         throw new AppError('PLAN_LIMIT_REACHED', {
