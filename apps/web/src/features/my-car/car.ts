@@ -144,6 +144,22 @@ export function inputFromForm(
     };
   const month = values.registrationMonth ? Number(values.registrationMonth) : null;
 
+  if (catalogModel && values.generationId) {
+    const generation = GENERATIONS.get(catalogModel)?.find(
+      (item) => item.id === values.generationId,
+    );
+    // The server allows a year of tolerance at model changes, too.
+    if (
+      generation &&
+      (year < generation.years[0] - 1 ||
+        (generation.years[1] !== null && year > generation.years[1] + 1))
+    )
+      return {
+        field: 'generation',
+        message: 'Diese Generation passt nicht zur Erstzulassung.',
+      };
+  }
+
   let mileageKm: number | null = null;
   if (values.mileageKm.trim()) {
     mileageKm = wholeNumber(values.mileageKm);

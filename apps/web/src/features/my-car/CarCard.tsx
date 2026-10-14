@@ -87,19 +87,17 @@ export function CarCard({
             variant="quiet"
             size="sm"
             icon={<Pencil aria-hidden size={16} />}
-            aria-label={`${carName(car)} bearbeiten`}
             onClick={onEdit}
           >
-            Bearbeiten
+            Bearbeiten<span className="visually-hidden">: {carName(car)}</span>
           </Button>
           <Button
             variant="quiet"
             size="sm"
             icon={<Trash2 aria-hidden size={16} />}
-            aria-label={`${carName(car)} löschen`}
             onClick={onDelete}
           >
-            Löschen
+            Löschen<span className="visually-hidden">: {carName(car)}</span>
           </Button>
         </div>
       </header>
@@ -128,12 +126,14 @@ export function CarCard({
         {car.huUntil && hu ? (
           <>
             <p className={`car-card__hu car-card__hu--${hu.tone}`}>{hu.text}</p>
-            {hu.tone === 'overdue' ? (
+            {hu.tone === 'overdue' && (
               <p className="muted">
                 Vereinbare bald einen Termin. Ist die HU mehr als zwei Monate überzogen, wird eine
                 teurere Ergänzungsuntersuchung fällig.
               </p>
-            ) : (
+            )}
+            {/* From this month on the calendar entry would lie in the past. */}
+            {hu.monthsLeft >= 1 && (
               <div className="no-print">
                 <Button
                   variant="secondary"

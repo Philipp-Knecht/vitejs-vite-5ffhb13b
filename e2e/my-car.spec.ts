@@ -95,7 +95,7 @@ test('a bought car is taken over from its check and kept in view', async ({ page
   await expect(page.getByRole('heading', { level: 2, name: 'Familienauto' })).toBeFocused();
 
   // A wrong year is reported at its field.
-  await page.getByRole('button', { name: 'Familienauto bearbeiten' }).click();
+  await page.getByRole('button', { name: /^Bearbeiten.*Familienauto/ }).click();
   await edit.getByRole('group', { name: 'Erstzulassung' }).getByLabel('Jahr').fill('2005');
   await edit.getByRole('button', { name: 'Speichern' }).click();
   await expect(edit.getByLabel('Generation')).toBeFocused();

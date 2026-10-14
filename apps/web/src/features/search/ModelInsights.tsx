@@ -72,7 +72,7 @@ function GenerationDetails({
         </section>
       )}
       {generation.issues.length > 0 && (
-        <section aria-label="Bekannte Schwachstellen">
+        <section aria-label={owner ? undefined : 'Bekannte Schwachstellen'}>
           {IssuesHeading && <IssuesHeading>Bekannte Schwachstellen</IssuesHeading>}
           <ul className="issue-list">
             {generation.issues.map((issue) =>

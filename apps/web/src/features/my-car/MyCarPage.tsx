@@ -79,6 +79,8 @@ function AddCar({
   const toast = useToast();
   const add = useAddOwnedCar();
   const analysis = useAnalysis(analysisId ?? '', analysisId !== null);
+  // Stable per error, so that the form moves the focus only for a new one.
+  const addError = useMemo(() => formError(add.error), [add.error]);
 
   if (analysisId && analysis.isPending) return <PageLoading label="Angaben aus der Prüfung …" />;
   const vehicle = analysis.data?.listing.vehicle ?? null;
@@ -113,7 +115,7 @@ function AddCar({
         initial={initial}
         submitLabel="Auto anlegen"
         busy={add.isPending}
-        serverError={formError(add.error)}
+        serverError={addError}
         onSubmit={submit}
         onCancel={onCancel}
       />
@@ -137,16 +139,14 @@ export function MyCarPage() {
   const [editing, setEditing] = useState<string | null>(null);
   const [deleting, setDeleting] = useState<OwnedCarDto | null>(null);
   const now = useMemo(() => new Date(), []);
+  const updateError = useMemo(() => formError(update.error), [update.error]);
 
   // In-place changes remove the focused element; the focus moves to the matching heading.
   const focusNext = useRef<string | null>(null);
   useEffect(() => {
     if (!focusNext.current) return;
-    const target = document.getElementById(focusNext.current);
-    if (target) {
-      target.focus();
-      focusNext.current = null;
-    }
+    document.getElementById(focusNext.current)?.focus();
+    focusNext.current = null;
   });
   const moveFocus = (id: string) => {
     focusNext.current = id;
@@ -232,7 +232,7 @@ export function MyCarPage() {
                   initial={formFromCar(car)}
                   submitLabel="Speichern"
                   busy={update.isPending}
-                  serverError={formError(update.error)}
+                  serverError={updateError}
                   onSubmit={(input) => save(car, input)}
                   onCancel={() => {
                     update.reset();
@@ -259,7 +259,7 @@ export function MyCarPage() {
           {full ? (
             <p className="my-car__limit">
               {analysisId &&
-                'Du hast schon ein Auto angelegt. Bearbeite oder lösche es, um das Auto aus der Prüfung zu übernehmen. '}
+                'Um das Auto aus der Prüfung zu übernehmen, lösch zuerst ein angelegtes Auto – danach ist das Formular vorausgefüllt. '}
               {limit <= 1 ? (
                 <>
                   Mit dem kostenlosen Konto kannst du ein Auto anlegen. Für mehrere Autos gibt es{' '}

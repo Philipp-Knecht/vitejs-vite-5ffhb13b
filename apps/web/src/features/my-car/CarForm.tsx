@@ -110,6 +110,7 @@ export function CarForm({
 
   return (
     <form ref={form} className="car-form" onSubmit={submit} noValidate>
+      <p className="field__hint">Pflichtangaben: Marke, Modell und Jahr der Erstzulassung.</p>
       <div className="car-form__grid">
         <SelectField
           label="Marke"
@@ -241,19 +242,21 @@ export function CarForm({
         />
       </div>
 
-      {/* Errors without a field (e.g. the plan limit); field errors sit at their field. */}
-      <p className="field__error" role="alert">
-        {error && !error.field ? error.message : null}
-      </p>
-      <div className="button-row">
-        <Button type="submit" loading={busy}>
-          {submitLabel}
-        </Button>
-        {onCancel && (
-          <Button variant="secondary" onClick={onCancel}>
-            Abbrechen
+      <div>
+        {/* Errors without a field (e.g. the plan limit); field errors sit at their field. */}
+        <p className="field__error" role="alert">
+          {error && !error.field ? error.message : null}
+        </p>
+        <div className="button-row">
+          <Button type="submit" loading={busy}>
+            {submitLabel}
           </Button>
-        )}
+          {onCancel && (
+            <Button variant="secondary" onClick={onCancel}>
+              Abbrechen
+            </Button>
+          )}
+        </div>
       </div>
     </form>
   );

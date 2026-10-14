@@ -138,8 +138,8 @@
   color: var(--c-text-3);
 }
 
-/* Six links and the account button need about 950 px. */
-@media (min-width: 1080px) {
+/* Six links and the account button need about 950 px at 16 px; em scales with the font size. */
+@media (min-width: 67.5em) {
   .header__nav {
     display: flex;
   }
