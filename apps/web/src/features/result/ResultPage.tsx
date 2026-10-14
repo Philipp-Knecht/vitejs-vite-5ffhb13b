@@ -14,6 +14,7 @@ import { ChecklistSection } from './ChecklistSection';
 import { CompletenessSection } from './CompletenessSection';
 import { knownModelId } from './known-model';
 import { ModelKnowledgeSection } from './ModelKnowledgeSection';
+import { NegotiationSection } from './NegotiationSection';
 import { OverviewSection } from './OverviewSection';
 import { PhotosSection } from './PhotosSection';
 import { PriceSection } from './PriceSection';
@@ -33,6 +34,7 @@ const SECTIONS = [
   { id: 'fragen', label: 'Fragen' },
   { id: 'rueckrufe', label: 'Rückrufe' },
   { id: 'besichtigung', label: 'Checkliste' },
+  { id: 'verhandlung', label: 'Verhandlung' },
   { id: 'fotos', label: 'Fotos' },
 ];
 
@@ -102,6 +104,12 @@ function ResultView({ dto }: { dto: AnalysisDto }) {
           />
           <RecallSection listing={listing} />
           <ChecklistSection analysisId={dto.id} sections={analysis.inspectionChecklist} />
+          <NegotiationSection
+            analysisId={dto.id}
+            observations={analysis.observations}
+            vehicle={listing.vehicle}
+            vehicleTitle={analysis.vehicleSummary?.title ?? null}
+          />
           <PhotosSection
             images={listing.images}
             photoAnalysis={analysis.photoAnalysis}

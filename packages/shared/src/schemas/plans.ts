@@ -13,6 +13,8 @@ export const EntitlementsSchema = z.object({
   history: z.boolean(),
   /** Download an analysis with checklist as a PDF file. */
   pdfExport: z.boolean(),
+  /** Negotiation help: own findings and a message to the seller. */
+  negotiationHelp: z.boolean(),
   photoAnalysis: z.boolean(),
   showAds: z.boolean(),
 });

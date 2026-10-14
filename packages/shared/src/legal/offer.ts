@@ -70,6 +70,9 @@ export function proFeatures(pro: Entitlements, options: { photoAnalysis: boolean
   }
   if (pro.history) features.push('Verlauf aller deiner Prüfungen');
   if (pro.pdfExport) features.push('jede Prüfung als PDF-Mappe für die Besichtigung');
+  if (pro.negotiationHelp) {
+    features.push('Verhandlungshilfe: eigene Mängel festhalten und als Nachricht an den Verkäufer');
+  }
   if (pro.photoAnalysis && options.photoAnalysis) {
     features.push('KI-Fotoanalyse bei Inseraten mit Fotos');
   }
