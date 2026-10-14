@@ -12,9 +12,10 @@ const WHATSAPP_LINK = /(wa\.me\/)\+?\d{6,15}/gi;
 /**
  * Runs of digit groups joined by one separator (spaces, a hyphen or dash, „/“
  * or „.“, not a line break) – the shape of a phone number, but also of prices,
- * dates and mileages. A group may be „+49“, „+49(0)171“, „+49(171)“ or „(0171)“. Every group is
- * followed by a mandatory separator, so the pattern cannot split a digit run
- * in many ways (it runs in linear time even on long digit runs).
+ * dates and mileages. A group may be „+49“, „+49(0)171“, „+49(171)“ or
+ * „(0171)“. Every group is followed by a mandatory separator, so the pattern
+ * cannot split a digit run in many ways (it runs in linear time even on long
+ * digit runs).
  */
 const GROUP = String.raw`(?:\+[^\S\n]?)?\d+(?:\(\d+\)\d*)?|\(\+?\d+\)\d*`;
 const SEPARATOR = String.raw`[^\S\n]*[-‐‑‒–—−/.][^\S\n]*|[^\S\n]+`;
@@ -27,9 +28,9 @@ export const REDACTED_IBAN = '[IBAN entfernt]';
 
 const digitCount = (text: string) => text.replace(/\D/g, '').length;
 
-/** German numbers start with 0, +49 (also „+ 49“) or 0049 („000“ is no area code). */
+/** German numbers start with 0, +49 (also „+ 49“, „+0171“) or 0049 („000“ is no area code). */
 const startsPhoneNumber = (group: string) =>
-  /^\(?(?:\+\s?[1-9]|00[1-9]|0)/.test(group) && (/[1-9]/.test(group) || group === '(0)');
+  /^\(?(?:\+\s?0?[1-9]|00[1-9]|0)/.test(group) && (/[1-9]/.test(group) || group === '(0)');
 
 /** „1.4“, „120.000“, „12/2019“: groups joined without spaces belong together. */
 const isCompactJoin = (separator: string) => /^[./]$/.test(separator);
@@ -68,6 +69,7 @@ function redactPhonesInRun(run: string, gluedToCode: boolean): string {
   const endOf = (i: number): number => {
     const first = groups[i]!;
     if (!startsPhoneNumber(first.text)) return -1;
+    const national = /^\(?0[1-9]/.test(first.text);
     let found = -1;
     let digits = 0;
     for (let j = i; j < groups.length; j++) {
@@ -82,9 +84,13 @@ function redactPhonesInRun(run: string, gluedToCode: boolean): string {
         }
         // A token like „120.000“ after a space is the next value, not the number.
         if (digits >= 9 && spaced && isCompactJoin(separatorAfter(j))) break;
-        // Complete: ends with a subscriber block of 4+ digits („0171 1234567“, not „… 123 45“).
+        // Complete: a national number with 11 digits, or one ending with a subscriber block of
+        // 4+ digits („0171 1234567“, not „+49 171 123 45“).
         const complete =
-          found === j - 1 && ((digits >= 11 && last >= 4) || (digits >= 10 && last >= 5));
+          found === j - 1 &&
+          ((national && digits >= 11) ||
+            (digits >= 11 && last >= 4) ||
+            (digits >= 10 && last >= 5));
         if (spaced && complete) break;
       }
       digits += digitCount(group.text);
@@ -130,7 +136,10 @@ export function redactContactData(text: string): string {
       .replace(NUMBER_RUN, (run: string, offset: number, whole: string) =>
         redactPhonesInRun(
           run,
-          /\p{N}/u.test(/[\p{L}\p{N}]*$/u.exec(whole.slice(Math.max(0, offset - 20), offset))![0]),
+          /\p{L}/u.test(whole.charAt(offset - 1)) &&
+            /\p{N}/u.test(
+              /[\p{L}\p{N}]*$/u.exec(whole.slice(Math.max(0, offset - 20), offset))![0],
+            ),
         ),
       )
   );
