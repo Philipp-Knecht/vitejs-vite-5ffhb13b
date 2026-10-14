@@ -129,6 +129,76 @@ describe('redactContactData', () => {
     const text = '185.000 km, 12.900 €, 01067 Dresden, EZ 01.05.2012, 2012';
     expect(redactContactData(text)).toBe(text);
   });
+  const P = REDACTED_PHONE;
+  it.each([
+    ['+49 (0)171 1234567', P],
+    ['0049 (0) 171 1234567', P],
+    ['Tel.0171 1234567', `Tel.${P}`],
+    ['Tel 0171 1234567\n150000 km', `Tel ${P}\n150000 km`],
+    ['Tel 0171 1234567 185000 km', `Tel ${P} 185000 km`],
+    ['Tel 0171 1234567 06/2019 TÜV neu', `Tel ${P} 06/2019 TÜV neu`],
+    ['Tel. 0171 1234567 / 0172 7654321', `Tel. ${P} / ${P}`],
+    ['0171 1234567 - 0351 7654321', `${P} - ${P}`],
+    ['Baujahr 2018 0171 1234567', `Baujahr 2018 ${P}`],
+    ['Bj. 2018,0171 1234567', `Bj. 2018,${P}`],
+    ['Tel 01 71 12 34 56 7', `Tel ${P}`],
+    ['(0171) 123 45 67', P],
+    ['030/12345678', P],
+    ['Audi A4 0171 1234567', `Audi A4 ${P}`],
+    ['BMW X5 - 0171 1234567', `BMW X5 - ${P}`],
+    ['W0L0XCF0844012345 0171 1234567', `W0L0XCF0844012345 ${P}`],
+    ['Handy: 0151 – 12345678', `Handy: ${P}`],
+    ['wa.me/491711234567', `wa.me/${P}`],
+    ['+49(0)171-1234567', P],
+    ['(Tel. 0171 1234567)', `(Tel. ${P})`],
+    ['Tel 0171 1234567 120.000 km', `Tel ${P} 120.000 km`],
+    ['Tel 0171 1234567 12/2019', `Tel ${P} 12/2019`],
+    ['0171 1234567 1.4 TSI', `${P} 1.4 TSI`],
+    ['0171 1234567 12.05.2012', `${P} 12.05.2012`],
+    ['0171 123.45.67', P],
+    ['Tel 0171 1234567/0172 7654321', `Tel ${P}/${P}`],
+    ['0171 1234567 2 Vorbesitzer', `${P} 2 Vorbesitzer`],
+    ['+49 171 1234567 1 Hand', `${P} 1 Hand`],
+    ['Tel 0171 1234567 2019', `Tel ${P} 2019`],
+    ['0171 1234567 150 000 km', `${P} 150 000 km`],
+    ['PLZ 01067 0171 1234567', `PLZ 01067 ${P}`],
+    ['+49 1511 2345 678', P],
+    ['+49 (0) 171-123 45 67', P],
+    ['+ 49 171 1234567', P],
+    ['+0171 1234567', P],
+    ['0171 123 45 67 2 Vorbesitzer', `${P} 2 Vorbesitzer`],
+    ['+49(171)1234567', P],
+    ['Tel0171 1234567', `Tel${P}`],
+    ['0171\u20111234567', P],
+  ])('redacts the phone number in „%s“', (text, expected) => {
+    expect(redactContactData(text)).toBe(expected);
+  });
+
+  it.each([
+    'Zahnriemen bei 120 000 06/2019 gewechselt',
+    'Service 2016 06/2018 06/2020',
+    'EZ 2014 01/2015 - 03/2016',
+    'HU 2025 06.2025 - 06.2027',
+    'Garantie 06/2018 - 06/2020',
+    'Laufleistung 100 000 05/2026',
+    'Preis 12 000 2016 - 2018',
+    '01.05.2012 - 01.06.2012',
+    'Öffnungszeiten 10:00 - 18:00',
+    '1 234 567 €, 9.990,- €, 2x 0,5 l, 205/55 R16',
+    'FIN: W0L0XCF0844012345',
+    'Bosch 0 445 110 183',
+    'Garantie 09/2016 – 09/2018',
+    '2012-05-01 - 2013-06-01',
+  ])('keeps „%s“', (text) => {
+    expect(redactContactData(text)).toBe(text);
+  });
+
+  it('stays fast on long digit runs', () => {
+    const text = `${'1'.repeat(200)},`.repeat(100) + `${'x'.repeat(50_000)}`;
+    const start = performance.now();
+    redactContactData(text);
+    expect(performance.now() - start).toBeLessThan(500);
+  });
 });
 
 describe('quotes', () => {
