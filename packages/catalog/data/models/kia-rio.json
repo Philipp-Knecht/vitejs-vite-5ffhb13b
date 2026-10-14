@@ -1,0 +1,217 @@
+{
+  "id": "kia-rio",
+  "make": "Kia",
+  "model": "Rio",
+  "aliases": ["rio", "rio 1.0 t-gdi", "rio 1.2", "rio 1.4", "rio crdi"],
+  "segment": "kleinwagen",
+  "summary": "Der Kia Rio ist ein unkomplizierter Kleinwagen mit einfacher Bedienung und für die Klasse ordentlichem Platzangebot.",
+  "ratings": {
+    "reliability": 4,
+    "reliabilityNote": "Laut ADAC liegt der Rio der vierten Generation (ab 2017) in der Pannenstatistik 2023 in allen Jahren bei niedrigen Pannenkennziffern, und der TÜV-Report fällt leicht überdurchschnittlich gut aus. Die dritte Generation (2011–2017) lag in der Pannenstatistik im Mittelfeld und schnitt beim TÜV schwächer ab.",
+    "reliabilitySources": [
+      {
+        "label": "ADAC Gebrauchtwageninfo: Kia Rio (ab 2017)",
+        "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0507-kia-rio-ab-2017-bericht.pdf"
+      },
+      {
+        "label": "ADAC Gebrauchtwageninfo: KIA Rio (2011-2017)",
+        "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0328-kia-rio-2011-2017-bericht.pdf"
+      }
+    ],
+    "runningCosts": 4,
+    "space": 3,
+    "comfort": 3
+  },
+  "generations": [
+    {
+      "id": "kia-rio-ub",
+      "name": "Rio UB",
+      "code": "UB",
+      "years": [2011, 2017],
+      "bodyTypes": ["schraegheck"],
+      "fuels": ["petrol", "diesel"],
+      "seats": [5],
+      "automatic": true,
+      "typicalPriceEur": null,
+      "priceSource": null,
+      "strengths": [
+        "Für die Klasse gutes Platzangebot, vorn und auf der Rückbank",
+        "Einfache, problemlose Bedienung",
+        "Ordentliche Verarbeitung",
+        "Präzise und leichtgängige Schaltung"
+      ],
+      "issues": [
+        {
+          "title": "Achsaufhängungen und Lenkgelenke",
+          "affects": "Baujahre 2011–2017 (laut TÜV-Report, keine Eingrenzung auf bestimmte Motoren)",
+          "detail": "Laut ADAC schneidet der Rio beim TÜV schwächer ab; zu den Hauptgründen zählen Mängel an Achsaufhängung und Lenkgelenken. Das kann bei der Hauptuntersuchung zu Beanstandungen und Reparaturkosten führen.",
+          "check": "Auf Spiel in der Lenkung, Klappern und ungleichmäßigen Reifenverschleiß achten und den letzten HU-Bericht zeigen lassen.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: KIA Rio (2011-2017)",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0328-kia-rio-2011-2017-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Fußbremse, Bremsscheiben und Bremsleitungen",
+          "affects": "Baujahre 2011–2017 (laut TÜV-Report, keine Eingrenzung auf bestimmte Motoren)",
+          "detail": "Laut ADAC nennt der TÜV beim Rio häufig Mängel an Fußbremse, Bremsscheiben und Bremsleitungen. Wer ein Fahrzeug mit solchen Mängeln kauft, muss mit Reparaturen an der Bremsanlage rechnen.",
+          "check": "Bremsscheiben, Beläge und Bremsleitungen (Rost, Undichtigkeiten) prüfen und beim Probebremsen auf Ziehen oder Rubbeln achten.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: KIA Rio (2011-2017)",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0328-kia-rio-2011-2017-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Erhöhter Ölverlust",
+          "affects": "Baujahre 2011–2017 (laut TÜV-Report „zum Teil“, keine Eingrenzung auf bestimmte Motoren)",
+          "detail": "Laut ADAC bereitet beim TÜV auch erhöhter Ölverlust zum Teil Ärger. Undichtigkeiten sollten vor dem Kauf geklärt werden, weil sie weitere Reparaturen nach sich ziehen können.",
+          "check": "Motorraum und Unterboden auf frische Ölspuren prüfen, den Ölstand kontrollieren und nach bisherigen Reparaturen fragen.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: KIA Rio (2011-2017)",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0328-kia-rio-2011-2017-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Starterbatterie und Zündkerzen",
+          "affects": "Starterbatterie: Erstzulassungen 2013 und 2016; Zündkerzen: Erstzulassungen 2011–2015 (Benziner)",
+          "detail": "Laut ADAC sind Zündkerzen und Starterbatterie häufige Gründe für Pannen beim Rio. Insgesamt liegt der Rio in der Pannenstatistik im Mittelfeld.",
+          "check": "Alter der Batterie erfragen, das Startverhalten testen und im Serviceheft den letzten Zündkerzenwechsel prüfen.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: KIA Rio (2011-2017)",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0328-kia-rio-2011-2017-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Beleuchtung beim TÜV",
+          "affects": "Baujahre 2011–2017 (laut TÜV-Report, keine Eingrenzung auf bestimmte Motoren)",
+          "detail": "Laut ADAC beanstandet der TÜV beim Rio häufig die Beleuchtung.",
+          "check": "Alle Lichtfunktionen und die Scheinwerfereinstellung prüfen.",
+          "severity": "gering",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: KIA Rio (2011-2017)",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0328-kia-rio-2011-2017-bericht.pdf"
+            }
+          ]
+        }
+      ],
+      "engines": {
+        "recommended": [
+          {
+            "name": "Saugbenziner (84 bis 109 PS)",
+            "why": "Laut ADAC reichen sie für das Mitschwimmen im täglichen Verkehr und gelten als unkompliziert; sie liefern aber wenig Drehmoment und müssen für zügiges Vorankommen höher gedreht werden."
+          },
+          {
+            "name": "Diesel (75 oder 90 PS)",
+            "why": "Laut ADAC sehr sparsam und interessant, gebrauchte Rio haben den Diesel allerdings relativ selten."
+          }
+        ],
+        "caution": [
+          {
+            "name": "Vierstufen-Automatik",
+            "why": "Laut ADAC nicht zu empfehlen: Das Getriebe raubt dem Motor Temperament und verbraucht einen deutlichen Extraschluck Benzin."
+          }
+        ]
+      },
+      "tips": [
+        "Motorraum und Unterboden auf frische Ölspuren prüfen: Laut ADAC bereitet erhöhter Ölverlust beim TÜV zum Teil Ärger.",
+        "Achsaufhängungen, Lenkgelenke, Bremsscheiben und Bremsleitungen genau ansehen, denn sie werden beim TÜV häufig beanstandet.",
+        "Besser ein Schaltgetriebe wählen: Von der Vierstufen-Automatik rät der ADAC ab.",
+        "Alter der Starterbatterie erfragen und den letzten Zündkerzenwechsel im Serviceheft prüfen."
+      ]
+    },
+    {
+      "id": "kia-rio-yb",
+      "name": "Rio YB",
+      "code": "YB",
+      "years": [2017, 2023],
+      "bodyTypes": ["schraegheck"],
+      "fuels": ["petrol", "diesel", "hybrid"],
+      "seats": [5],
+      "automatic": true,
+      "typicalPriceEur": null,
+      "priceSource": null,
+      "strengths": [
+        "Sicheres und agiles Fahrverhalten",
+        "Günstiger Unterhalt und zuverlässige Technik",
+        "Gutes Platzangebot vorn, klassenübliche Kofferraumgröße",
+        "Sieben Jahre Herstellergarantie von Kia – laut ADAC sind auch Gebrauchte oft noch abgedeckt (Restlaufzeit prüfen)"
+      ],
+      "issues": [
+        {
+          "title": "Beleuchtung beim TÜV",
+          "affects": "Rio ab 2017 (laut TÜV-Report, keine Eingrenzung auf bestimmte Motoren)",
+          "detail": "Laut ADAC ist die Beleuchtung die Problemzone des Rio beim TÜV, sie entsteht aber oft durch mangelhafte Wartung. Insgesamt schneidet die vierte Generation beim TÜV leicht überdurchschnittlich gut ab.",
+          "check": "Alle Lichtfunktionen (Abblend-, Fern-, Brems- und Blinklicht) prüfen und sich Wartungsnachweise zeigen lassen.",
+          "severity": "gering",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: Kia Rio (ab 2017)",
+              "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0507-kia-rio-ab-2017-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Rückrufe: Kindersicherung an den hinteren Türen",
+          "affects": "Rückruf 5/2018; der Bericht nennt keine genaueren Baujahre oder Motoren",
+          "detail": "Laut ADAC gab es 5/2018 einen Rückruf: Ein zu kurzer Bowdenzug der Innenbetätigung an den hinteren Türen kann den Verriegelungsmechanismus der Kindersicherung am Türschloss beeinträchtigen.",
+          "check": "Per Fahrgestellnummer beim Händler prüfen lassen, ob die Rückrufe erledigt sind.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: Kia Rio (ab 2017)",
+              "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0507-kia-rio-ab-2017-bericht.pdf"
+            }
+          ]
+        }
+      ],
+      "engines": {
+        "recommended": [
+          {
+            "name": "1.0 T-GDI (100 PS)",
+            "why": "Laut ADAC die ideale Motorisierung: spritzige Fahrleistungen bei niedrigem Verbrauch, zudem gebraucht häufig zu finden. Der Dreizylinder ist ständig wahrnehmbar."
+          },
+          {
+            "name": "1.0 T-GDI (120 PS)",
+            "why": "Laut ADAC mit noch besseren Fahrleistungen als die 100-PS-Variante."
+          },
+          {
+            "name": "1.0 T-GDI mit Siebengang-Doppelkupplungsgetriebe",
+            "why": "Laut ADAC die bessere Wahl für alle, die eine Automatik möchten."
+          },
+          {
+            "name": "1,2- und 1,4-Liter-Saugbenziner",
+            "why": "Laut ADAC im Alltag ausreichend und unkompliziert, bieten aber nicht das Durchzugsvermögen des 1.0 T-GDI."
+          },
+          {
+            "name": "1.4 CRDi (75 oder 90 PS)",
+            "why": "Laut ADAC bei ordentlichen Fahrleistungen enorm sparsam, spielt auf dem Gebrauchtwagenmarkt aber eine untergeordnete Rolle."
+          }
+        ],
+        "caution": [
+          {
+            "name": "1.4 mit Vierstufen-Wandlerautomatik",
+            "why": "Laut ADAC nicht empfehlenswert: Das Getriebe raubt dem Motor den letzten Funken Temperament und sorgt für einen satten Mehrverbrauch."
+          }
+        ]
+      },
+      "tips": [
+        "Per Fahrgestellnummer prüfen lassen, ob der Rückruf von 5/2018 (Kindersicherung der hinteren Türen) erledigt ist, und die Kindersicherung ausprobieren.",
+        "Beleuchtung vollständig prüfen und Wartungsnachweise ansehen: Mängel entstehen laut ADAC oft durch mangelhafte Wartung.",
+        "Auf die Motor-Getriebe-Kombination achten: Wer eine Automatik möchte, wählt laut ADAC besser den 1.0 T-GDI mit Doppelkupplungsgetriebe als den 1.4 mit Vierstufenautomatik."
+      ]
+    }
+  ]
+}

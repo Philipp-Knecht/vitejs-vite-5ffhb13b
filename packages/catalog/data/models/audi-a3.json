@@ -1,0 +1,220 @@
+{
+  "id": "audi-a3",
+  "make": "Audi",
+  "model": "A3",
+  "aliases": [
+    "a3",
+    "a3 8v",
+    "a3 8y",
+    "a3 cabrio",
+    "a3 cabriolet",
+    "a3 e-tron",
+    "a3 g-tron",
+    "a3 limousine",
+    "a3 sportback"
+  ],
+  "segment": "kompakt",
+  "summary": "Der Audi A3 ist ein hochwertig verarbeiteter Kompaktwagen, der technisch eng mit dem VW Golf verwandt ist.",
+  "ratings": {
+    "reliability": 4,
+    "reliabilityNote": "Laut ADAC-Pannenstatistik 2025 hatte der A3 mit Erstzulassung 2015 bis 2022 in jedem Jahrgang weniger Pannen als die meisten gleich alten Autos, die Pannenstatistik 2026 zählt ihn zu den zuverlässigsten seiner Klasse. Beim TÜV schneidet der A3 8V laut ADAC deutlich besser ab als der Durchschnitt.",
+    "reliabilitySources": [
+      {
+        "label": "ADAC Gebrauchtwageninfo: Audi A3 (2012-2020) Benziner",
+        "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0265-audi-a3-2012-2020-benziner-bericht.pdf"
+      },
+      {
+        "label": "ADAC Gebrauchtwageninfo: Audi A3 (2012-2020) Diesel",
+        "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0266-audi-a3-2012-2020-diesel-bericht.pdf"
+      },
+      {
+        "label": "ADAC Pannenstatistik 2025",
+        "url": "https://assets.adac.de/image/upload/v1776261444/ADAC-eV/KOR/Text/PDF/Pannenstatistik_2025_Bericht_czmf9q.pdf"
+      },
+      {
+        "label": "ADAC Pannenstatistik 2026",
+        "url": "https://www.adac.de/rund-ums-fahrzeug/unfall-schaden-panne/adac-pannenstatistik-2026/"
+      }
+    ],
+    "runningCosts": 3,
+    "space": 3,
+    "comfort": 4
+  },
+  "generations": [
+    {
+      "id": "audi-a3-8v",
+      "name": "A3 8V",
+      "code": "8V",
+      "years": [2012, 2020],
+      "bodyTypes": ["schraegheck", "limousine", "cabrio"],
+      "fuels": ["petrol", "diesel", "plugin_hybrid", "cng"],
+      "seats": [4, 5],
+      "automatic": true,
+      "typicalPriceEur": null,
+      "priceSource": null,
+      "strengths": [
+        "Sehr hochwertige Verarbeitung und feine Materialien",
+        "Zuverlässige Technik, laut ADAC wertstabil",
+        "Sehr sicheres Fahrverhalten",
+        "Bequeme Sitze"
+      ],
+      "issues": [
+        {
+          "title": "S tronic: ruckartiges Anfahren, Automatikgetriebe",
+          "affects": "Modelle mit S tronic (Doppelkupplungsgetriebe); Automatikgetriebe als Pannenursache bei der Erstzulassung 2014 (Benziner und Diesel)",
+          "detail": "Laut ADAC steht das Automatikgetriebe bei der Erstzulassung 2014 unter den häufigen Bauteilfehlern der Pannenstatistik, und das Anfahren mit der S tronic ist teils ruckartig.",
+          "check": "Bei der Probefahrt mehrmals aus dem Stand anfahren und auf ruckfreies Anfahren achten; nach Wartungs- und Reparaturnachweisen zum Getriebe fragen.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: Audi A3 (2012-2020) Benziner",
+              "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0265-audi-a3-2012-2020-benziner-bericht.pdf"
+            },
+            {
+              "label": "ADAC Gebrauchtwageninfo: Audi A3 (2012-2020) Diesel",
+              "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0266-audi-a3-2012-2020-diesel-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Abgasrückführung (Diesel)",
+          "affects": "Diesel, Erstzulassung 2012",
+          "detail": "Laut ADAC zählt die Abgasrückführung bei den Dieseln der Erstzulassung 2012 zu den häufigen Bauteilfehlern der Pannenstatistik.",
+          "check": "Nach Reparaturen an der Abgasrückführung fragen und bei der Probefahrt auf Leistungsverlust, Ruckeln oder Warnleuchten achten.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: Audi A3 (2012-2020) Diesel",
+              "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0266-audi-a3-2012-2020-diesel-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Gebrochene Federn",
+          "affects": "Baujahre 2012–2020 (laut TÜV-Report der ADAC-Berichte zu Benzinern und Dieseln, keine Eingrenzung auf bestimmte Motoren)",
+          "detail": "Laut ADAC sind gebrochene Federn der Punkt, der beim sonst sehr guten TÜV-Ergebnis des A3 hin und wieder Probleme bereitet.",
+          "check": "Bei der Probefahrt auf Klappergeräusche und Schieflage achten und die Federn auf der Hebebühne ansehen lassen.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: Audi A3 (2012-2020) Benziner",
+              "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0265-audi-a3-2012-2020-benziner-bericht.pdf"
+            },
+            {
+              "label": "ADAC Gebrauchtwageninfo: Audi A3 (2012-2020) Diesel",
+              "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0266-audi-a3-2012-2020-diesel-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Abgefahrene Bremsscheiben",
+          "affects": "Baujahre 2012–2020 (laut TÜV-Report der ADAC-Berichte zu Benzinern und Dieseln, keine Eingrenzung auf bestimmte Motoren)",
+          "detail": "Laut ADAC kommen beim A3 abgefahrene Bremsscheiben etwas öfter vor; ansonsten gibt es bei der Hauptuntersuchung wenige Mängel.",
+          "check": "Zustand der Bremsscheiben (Verschleißkante, Riefen) prüfen und nach dem letzten Wechsel fragen.",
+          "severity": "gering",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: Audi A3 (2012-2020) Benziner",
+              "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0265-audi-a3-2012-2020-benziner-bericht.pdf"
+            },
+            {
+              "label": "ADAC Gebrauchtwageninfo: Audi A3 (2012-2020) Diesel",
+              "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0266-audi-a3-2012-2020-diesel-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Zündkabel (Hochspannungskabel)",
+          "affects": "Benziner, Erstzulassung 2012",
+          "detail": "Laut ADAC gehören die Zündkabel (Hochspannungskabel) bei den Benzinern der Erstzulassung 2012 zu den häufigen Bauteilfehlern der Pannenstatistik.",
+          "check": "Auf Aussetzer und unrunden Motorlauf achten und im Serviceheft nach Reparaturen an der Zündanlage schauen.",
+          "severity": "gering",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: Audi A3 (2012-2020) Benziner",
+              "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0265-audi-a3-2012-2020-benziner-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Rückrufe: Rücksitzlehne",
+          "affects": "Rückruf 1/2019; der Bericht nennt keine genaueren Baujahre oder Motoren",
+          "detail": "Laut ADAC wird nach einem Rückruf 1/2019 die Schweißnaht der Führungshülse auf dem Lehnenrahmen der Rücksitzlehne überprüft.",
+          "check": "Per Fahrgestellnummer beim Händler prüfen lassen, ob die Rückrufe erledigt sind.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: Audi A3 (2012-2020) Benziner",
+              "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0265-audi-a3-2012-2020-benziner-bericht.pdf"
+            },
+            {
+              "label": "ADAC Gebrauchtwageninfo: Audi A3 (2012-2020) Diesel",
+              "url": "https://assets.adac.de/Autodatenbank/GWInfo/gw0266-audi-a3-2012-2020-diesel-bericht.pdf"
+            }
+          ]
+        }
+      ],
+      "engines": {
+        "recommended": [
+          {
+            "name": "1.4 TFSI und 1.5 TFSI (140 bis 150 PS)",
+            "why": "Laut ADAC eine klare Empfehlung: laufruhig und dank Zylinderabschaltung ein sehr guter Kompromiss aus Verbrauch und Fahrleistung."
+          },
+          {
+            "name": "2.0 TDI (150 PS)",
+            "why": "Laut ADAC die goldene Mitte: laufruhiger als der 1.6 TDI, sehr zügige Fahrleistungen bei moderatem Verbrauch, am besten in den Ausstattungen Ambition oder Ambiente und mit S tronic; gebraucht gibt es eine breite Auswahl."
+          },
+          {
+            "name": "1.6 TDI (105 bis 116 PS)",
+            "why": "Laut ADAC bringen schon diese Basisversionen den A3 munter in Schwung und reichen für den Alltag prinzipiell aus."
+          },
+          {
+            "name": "Plug-in-Hybrid e-tron (204 PS Systemleistung)",
+            "why": "Laut ADAC eine interessante Alternative: Kurze Pendelstrecken lassen sich rein elektrisch fahren, dank Benzinmotor ist das Auto trotzdem langstreckentauglich."
+          },
+          {
+            "name": "g-tron (Erdgas)",
+            "why": "Laut ADAC eine weitere Alternative mit geringen Kraftstoffkosten, die allerdings mit eher verhaltenen Fahrleistungen erkauft werden."
+          }
+        ],
+        "caution": [
+          {
+            "name": "S tronic (Doppelkupplungsgetriebe)",
+            "why": "Laut ADAC ist das Anfahren teils ruckartig, darauf sollte bei der Probefahrt vor allem geachtet werden; für die Erstzulassung 2014 nennt der Bericht zudem das Automatikgetriebe unter den häufigen Bauteilfehlern."
+          },
+          {
+            "name": "Diesel der Erstzulassung 2012",
+            "why": "Laut ADAC gehört bei diesen Dieseln die Abgasrückführung zu den häufigen Bauteilfehlern."
+          }
+        ]
+      },
+      "tips": [
+        "Bei Modellen mit S tronic bei der Probefahrt mehrmals anfahren und auf ruckfreies Anfahren achten.",
+        "Federn und Bremsscheiben prüfen (lassen): Beides fällt beim TÜV laut ADAC etwas öfter auf.",
+        "Per Fahrgestellnummer klären, ob der Rückruf wegen der Rücksitzlehne (1/2019) erledigt ist.",
+        "Platzangebot selbst testen: Laut ADAC ist der Zustieg zum Fond beim Dreitürer erschwert und der Kofferraum klein."
+      ]
+    },
+    {
+      "id": "audi-a3-8y",
+      "name": "A3 8Y",
+      "code": "8Y",
+      "years": [2020, null],
+      "bodyTypes": ["schraegheck", "limousine"],
+      "fuels": ["petrol", "diesel", "plugin_hybrid", "hybrid"],
+      "seats": [5],
+      "automatic": true,
+      "typicalPriceEur": null,
+      "priceSource": null,
+      "strengths": [],
+      "issues": [],
+      "engines": {
+        "recommended": [],
+        "caution": []
+      },
+      "tips": [
+        "Zu dieser Generation haben wir noch keine Schwachstellen ausgewertet. Lass das Auto vor dem Kauf in einer Werkstatt prüfen und Rückrufe per Fahrgestellnummer erfragen."
+      ]
+    }
+  ]
+}

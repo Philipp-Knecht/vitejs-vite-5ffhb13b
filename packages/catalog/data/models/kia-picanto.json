@@ -1,0 +1,300 @@
+{
+  "id": "kia-picanto",
+  "make": "Kia",
+  "model": "Picanto",
+  "aliases": ["picanto", "picanto gt line", "picanto x-line"],
+  "segment": "kleinstwagen",
+  "summary": "Der Kia Picanto ist ein kleiner, einfach zu bedienender Stadtwagen, der vorne ordentlich Platz bietet, hinten und im Kofferraum aber eng ist.",
+  "ratings": {
+    "reliability": 3,
+    "reliabilityNote": "Laut ADAC-Pannenstatistik 2025 liegt der Picanto der dritten Generation (ab 2017) im Mittelfeld, 2020 und 2021 hatte er weniger Pannen als die meisten gleich alten Autos. Die älteren Generationen schnitten laut ADAC unterdurchschnittlich ab (Erstzulassung 2011–2014 „schlecht“), auch beim TÜV.",
+    "reliabilitySources": [
+      {
+        "label": "ADAC Gebrauchtwageninfo: KIA Picanto (2011-2017)",
+        "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0325-kia-picanto-2011-2017-bericht.pdf"
+      },
+      {
+        "label": "ADAC Gebrauchtwageninfo: KIA Picanto (2004-2011)",
+        "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0291-kia-picanto-2004-2011-bericht.pdf"
+      },
+      {
+        "label": "ADAC Pannenstatistik 2025",
+        "url": "https://assets.adac.de/image/upload/v1776261444/ADAC-eV/KOR/Text/PDF/Pannenstatistik_2025_Bericht_czmf9q.pdf"
+      }
+    ],
+    "runningCosts": 5,
+    "space": 2,
+    "comfort": 3
+  },
+  "generations": [
+    {
+      "id": "kia-picanto-ba",
+      "name": "Picanto BA",
+      "code": "BA",
+      "years": [2004, 2011],
+      "bodyTypes": ["schraegheck"],
+      "fuels": ["petrol", "diesel", "lpg"],
+      "seats": [4, 5],
+      "automatic": true,
+      "typicalPriceEur": null,
+      "priceSource": null,
+      "strengths": [
+        "Gute Platzverhältnisse vorne",
+        "Problemlose Bedienung",
+        "Ausgewogene Federung",
+        "Übersichtliche Karosserie"
+      ],
+      "issues": [
+        {
+          "title": "Bremsen beim TÜV überdurchschnittlich oft bemängelt",
+          "affects": "Baujahre 2004–2011 (laut TÜV-Report, keine Eingrenzung auf bestimmte Motoren)",
+          "detail": "Laut ADAC bemängelt der TÜV bei diesem Modell überdurchschnittlich oft die Bremsen. Das bedeutet häufiger Reparaturbedarf an der Bremsanlage.",
+          "check": "Bremsscheiben und Beläge prüfen, beim Probebremsen auf Ziehen oder Rubbeln achten und den letzten HU-Bericht ansehen.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: KIA Picanto (2004-2011)",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0291-kia-picanto-2004-2011-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Marode Auspuffanlagen",
+          "affects": "Baujahre 2004–2011 (laut TÜV-Report, keine Eingrenzung auf bestimmte Motoren)",
+          "detail": "Laut ADAC verwehren marode Abgasanlagen beim Picanto oftmals die neue Plakette; die Auspuffanlage zählt zu den Bereichen, die beim TÜV zu oft Probleme bereiten.",
+          "check": "Den Auspuff von unten auf Rost, Löcher und undichte Stellen prüfen und auf Abgasgeruch oder laute Geräusche achten.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: KIA Picanto (2004-2011)",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0291-kia-picanto-2004-2011-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Beleuchtung beim TÜV häufig bemängelt",
+          "affects": "Baujahre 2004–2011 (laut TÜV-Report, keine Eingrenzung auf bestimmte Motoren)",
+          "detail": "Laut ADAC bereitet beim TÜV vor allem die Beleuchtung zu oft Probleme.",
+          "check": "Alle Lichtfunktionen und die Scheinwerfereinstellung prüfen.",
+          "severity": "gering",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: KIA Picanto (2004-2011)",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0291-kia-picanto-2004-2011-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Starterbatterie",
+          "affects": "Erstzulassungen 2008 und 2011",
+          "detail": "Laut ADAC ist die Starterbatterie die größte Fehlerquelle bei Pannen des Picanto. In der Pannenstatistik liegt der Picanto der ersten Generation insgesamt im vorderen Mittelfeld.",
+          "check": "Alter der Batterie erfragen und das Startverhalten (auch kalt) testen.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: KIA Picanto (2004-2011)",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0291-kia-picanto-2004-2011-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Kupplung",
+          "affects": "Erstzulassung 2006; im Bericht als „Kupplung allgemein“ geführt, keine Eingrenzung auf bestimmte Motoren",
+          "detail": "Laut ADAC zählt die Kupplung bei der Erstzulassung 2006 zu den häufigen Bauteilfehlern der Pannenstatistik.",
+          "check": "Bei der Probefahrt prüfen, ob die Kupplung sauber greift und nicht rutscht, und nach einem bereits erfolgten Kupplungswechsel fragen.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: KIA Picanto (2004-2011)",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0291-kia-picanto-2004-2011-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Rückrufe: hintere Bremssättel",
+          "affects": "Rückruf 2/2013, nur Fahrzeuge mit Schaltgetriebe; der Bericht nennt keine genaueren Baujahre",
+          "detail": "Laut ADAC korrodierte bei Fahrzeugen mit Schaltgetriebe durch Feuchtigkeit die Mechanik der hinteren Bremssättel, die Sättel wurden dadurch schwergängig (Rückruf 2/2013).",
+          "check": "Per Fahrgestellnummer beim Händler prüfen lassen, ob die Rückrufe erledigt sind.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: KIA Picanto (2004-2011)",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0291-kia-picanto-2004-2011-bericht.pdf"
+            }
+          ]
+        }
+      ],
+      "engines": {
+        "recommended": [
+          {
+            "name": "Vierzylinder-Benziner (65 PS)",
+            "why": "Laut ADAC reichen die Fahrleistungen für einen Kleinstwagen aus, auch wenn der Kia dadurch nicht zur Rakete wird."
+          },
+          {
+            "name": "LPG-Version (65 PS)",
+            "why": "Laut ADAC punktet sie im Alltag vor allem mit niedrigen Kraftstoffkosten."
+          }
+        ],
+        "caution": [
+          {
+            "name": "Automatik",
+            "why": "Laut ADAC keine Empfehlung: Der kleine Benzinmotor hat dafür zu wenig Kraft, der Verbrauch steigt spürbar und die Fahrleistungen lassen deutlich nach."
+          }
+        ]
+      },
+      "tips": [
+        "Bremsen und Auspuffanlage genau ansehen (Auspuff auch von unten): Der TÜV bemängelt sie laut ADAC überdurchschnittlich oft.",
+        "Ausstattung prüfen: ESP war nicht serienmäßig und für die Basisausstattung nicht erhältlich; laut ADAC haben die Ausstattung EX und das Sondermodell Cool ESP und Klimaanlage.",
+        "Bei Fahrzeugen mit Schaltgetriebe per Fahrgestellnummer klären, ob der Rückruf wegen schwergängiger hinterer Bremssättel (2/2013) erledigt ist."
+      ]
+    },
+    {
+      "id": "kia-picanto-ta",
+      "name": "Picanto TA",
+      "code": "TA",
+      "years": [2011, 2017],
+      "bodyTypes": ["schraegheck"],
+      "fuels": ["petrol", "lpg"],
+      "seats": [4, 5],
+      "automatic": true,
+      "typicalPriceEur": null,
+      "priceSource": null,
+      "strengths": [
+        "Gute Platzverhältnisse vorne",
+        "Problemlose Bedienung",
+        "Komfortable Federung",
+        "Ordentliche Verarbeitung"
+      ],
+      "issues": [
+        {
+          "title": "Starterbatterie und Zündkerzen",
+          "affects": "Starterbatterie: Erstzulassungen 2011–2017; Zündkerzen: Erstzulassungen 2011–2016 (Benziner)",
+          "detail": "Laut ADAC sind hauptsächlich Starterbatterie und Zündkerzen die Ursache für Pannen beim Picanto. Insgesamt liegt die Zahl der Pannen laut ADAC etwa im Mittelfeld.",
+          "check": "Alter der Batterie erfragen, das Startverhalten (auch kalt) testen und im Serviceheft den letzten Zündkerzenwechsel prüfen.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: KIA Picanto (2011-2017)",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0325-kia-picanto-2011-2017-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Bremsen beim TÜV häufig bemängelt",
+          "affects": "Baujahre 2011–2017 (laut TÜV-Report, keine Eingrenzung auf bestimmte Motoren)",
+          "detail": "Laut ADAC bemängelt der TÜV beim Picanto häufig die Bremsen; auch in der ADAC-Bewertung verliert er im Bremsenkapitel Punkte.",
+          "check": "Bremsscheiben, Beläge und Bremsleitungen prüfen, beim Probebremsen auf Ziehen oder Rubbeln achten und den letzten HU-Bericht ansehen.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: KIA Picanto (2011-2017)",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0325-kia-picanto-2011-2017-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Achsaufhängungen und Lenkgelenke",
+          "affects": "Baujahre 2011–2017 (laut TÜV-Report, keine Eingrenzung auf bestimmte Motoren)",
+          "detail": "Laut ADAC verwehren defekte Achsaufhängungen und ausgeschlagene Lenkgelenke dem Picanto bei der Hauptuntersuchung öfter die neue Plakette.",
+          "check": "Auf Spiel in der Lenkung, Klappergeräusche und unruhiges Fahrverhalten achten und sich HU-Bericht und Reparaturnachweise zeigen lassen.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: KIA Picanto (2011-2017)",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0325-kia-picanto-2011-2017-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Beleuchtung beim TÜV häufig bemängelt",
+          "affects": "Baujahre 2011–2017 (laut TÜV-Report, keine Eingrenzung auf bestimmte Motoren)",
+          "detail": "Laut ADAC beanstandet der TÜV beim Picanto häufig die Beleuchtung.",
+          "check": "Alle Lichtfunktionen und die Scheinwerfereinstellung prüfen.",
+          "severity": "gering",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: KIA Picanto (2011-2017)",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0325-kia-picanto-2011-2017-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Rückrufe: hintere Bremssättel und Kraftstoffschläuche",
+          "affects": "Rückruf 2/2013 (nur mit Schaltgetriebe) und Rückruf 10/2018; der Bericht nennt keine genaueren Baujahre",
+          "detail": "Laut ADAC korrodierte bei Fahrzeugen mit Schaltgetriebe durch Feuchtigkeit die Mechanik der hinteren Bremssättel, die Sättel wurden schwergängig (Rückruf 2/2013). 10/2018 folgte ein Rückruf wegen möglichen erhöhten Verschleißes der äußeren Beschichtung an Kraftstoffeinfüll- und Ausgleichsschläuchen.",
+          "check": "Per Fahrgestellnummer beim Händler prüfen lassen, ob die Rückrufe erledigt sind.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: KIA Picanto (2011-2017)",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0325-kia-picanto-2011-2017-bericht.pdf"
+            }
+          ]
+        }
+      ],
+      "engines": {
+        "recommended": [
+          {
+            "name": "1,0-Liter-Dreizylinder",
+            "why": "Laut ADAC reichen die Fahrleistungen für einen Kleinstwagen aus, vor allem im Stadtbetrieb."
+          },
+          {
+            "name": "Vierzylinder-Benziner (86 PS)",
+            "why": "Laut ADAC hat er spürbar mehr Kraft als der Dreizylinder; wer häufiger längere Strecken fährt, sollte diesen Motor wählen."
+          },
+          {
+            "name": "Autogas-Varianten (LPG)",
+            "why": "Laut ADAC interessante Alternativen mit günstigen Kraftstoffkosten."
+          }
+        ],
+        "caution": [
+          {
+            "name": "Vierstufen-Automatik",
+            "why": "Laut ADAC keine Empfehlung: Der Verbrauch steigt spürbar an und die Fahrleistungen lassen merklich nach."
+          }
+        ]
+      },
+      "tips": [
+        "Bei Fahrzeugen mit Schaltgetriebe per Fahrgestellnummer klären, ob die Rückrufe wegen schwergängiger hinterer Bremssättel (2/2013) und wegen der Kraftstoffschläuche (10/2018) erledigt sind.",
+        "Bremsen, Achsaufhängungen und Lenkgelenke bei der Probefahrt und auf der Hebebühne prüfen und den letzten HU-Bericht ansehen.",
+        "Ausstattung vergleichen: Viele Gebrauchte sind einfach ausgestattet; die Linie Start hat laut ADAC immerhin Klimaanlage und Zentralverriegelung serienmäßig, Edition 7 ist deutlich besser ausgestattet, aber teurer.",
+        "Alter der Starterbatterie erfragen und den letzten Zündkerzenwechsel im Serviceheft prüfen."
+      ]
+    },
+    {
+      "id": "kia-picanto-ja",
+      "name": "Picanto JA",
+      "code": "JA",
+      "years": [2017, null],
+      "bodyTypes": ["schraegheck"],
+      "fuels": ["petrol"],
+      "seats": [4, 5],
+      "automatic": true,
+      "typicalPriceEur": null,
+      "priceSource": null,
+      "strengths": [],
+      "issues": [
+        {
+          "title": "Überdurchschnittlich oft Pannen: Starterbatterie und Zündkerzen",
+          "affects": "Laut ADAC-Pannenstatistik 2025: Starterbatterie bei Erstzulassung 2018–2019; Zündkerzen bei Erstzulassung 2021–2022",
+          "detail": "Probleme mit Starterbatterie und Zündkerzen waren bei diesen Jahrgängen überdurchschnittlich oft der Grund für einen Einsatz der ADAC-Straßenwacht. Eine schwache Starterbatterie ist bei allen Autos die häufigste Pannenursache, hier aber besonders oft.",
+          "check": "Alter der Batterie erfragen und sie testen lassen; springt der Motor zögerlich an, ist ein Tausch fällig. Nach dem letzten Zündkerzenwechsel fragen; ruckelt der Motor, Zündkerzen und Zündspulen prüfen lassen.",
+          "severity": "gering",
+          "sources": [
+            {
+              "label": "ADAC Pannenstatistik 2025",
+              "url": "https://assets.adac.de/image/upload/v1776261444/ADAC-eV/KOR/Text/PDF/Pannenstatistik_2025_Bericht_czmf9q.pdf"
+            }
+          ]
+        }
+      ],
+      "engines": {
+        "recommended": [],
+        "caution": []
+      },
+      "tips": [
+        "Weitere Schwachstellen dieser Generation haben wir noch nicht ausgewertet. Lass das Auto vor dem Kauf in einer Werkstatt prüfen und Rückrufe per Fahrgestellnummer erfragen."
+      ]
+    }
+  ]
+}

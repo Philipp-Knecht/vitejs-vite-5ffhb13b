@@ -34,3 +34,6 @@ npm-debug.log*
 .DS_Store
 *.suo
 *.sw?
+
+# Model research working files (PDFs, dossiers, agent output)
+tools/model-research/work/

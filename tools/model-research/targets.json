@@ -1,0 +1,836 @@
+[
+  {
+    "id": "vw-golf",
+    "make": "Volkswagen",
+    "model": "Golf",
+    "segment": "kompakt"
+  },
+  {
+    "id": "vw-polo",
+    "make": "Volkswagen",
+    "model": "Polo",
+    "segment": "kleinwagen"
+  },
+  {
+    "id": "vw-up",
+    "make": "Volkswagen",
+    "model": "up!",
+    "segment": "kleinstwagen"
+  },
+  {
+    "id": "vw-t-roc",
+    "make": "Volkswagen",
+    "model": "T-Roc",
+    "segment": "suv_klein"
+  },
+  {
+    "id": "skoda-citigo",
+    "make": "Škoda",
+    "model": "Citigo",
+    "segment": "kleinstwagen"
+  },
+  {
+    "id": "seat-mii",
+    "make": "Seat",
+    "model": "Mii",
+    "segment": "kleinstwagen"
+  },
+  {
+    "id": "bmw-1er",
+    "make": "BMW",
+    "model": "1er",
+    "segment": "kompakt"
+  },
+  {
+    "id": "bmw-2er-active-tourer",
+    "make": "BMW",
+    "model": "2er Active Tourer",
+    "segment": "van_klein"
+  },
+  {
+    "id": "bmw-3er",
+    "make": "BMW",
+    "model": "3er",
+    "segment": "mittelklasse"
+  },
+  {
+    "id": "bmw-5er",
+    "make": "BMW",
+    "model": "5er",
+    "segment": "obere_mittelklasse"
+  },
+  {
+    "id": "skoda-fabia",
+    "make": "Škoda",
+    "model": "Fabia",
+    "segment": "kleinwagen"
+  },
+  {
+    "id": "skoda-octavia",
+    "make": "Škoda",
+    "model": "Octavia",
+    "segment": "kompakt"
+  },
+  {
+    "id": "skoda-superb",
+    "make": "Škoda",
+    "model": "Superb",
+    "segment": "mittelklasse"
+  },
+  {
+    "id": "skoda-kamiq",
+    "make": "Škoda",
+    "model": "Kamiq",
+    "segment": "suv_klein"
+  },
+  {
+    "id": "mercedes-c-klasse",
+    "make": "Mercedes-Benz",
+    "model": "C-Klasse",
+    "segment": "mittelklasse"
+  },
+  {
+    "id": "mercedes-e-klasse",
+    "make": "Mercedes-Benz",
+    "model": "E-Klasse",
+    "segment": "obere_mittelklasse"
+  },
+  {
+    "id": "mercedes-a-klasse",
+    "make": "Mercedes-Benz",
+    "model": "A-Klasse",
+    "segment": "kompakt"
+  },
+  {
+    "id": "mercedes-b-klasse",
+    "make": "Mercedes-Benz",
+    "model": "B-Klasse",
+    "segment": "van_klein"
+  },
+  {
+    "id": "vw-passat",
+    "make": "Volkswagen",
+    "model": "Passat",
+    "segment": "mittelklasse"
+  },
+  {
+    "id": "vw-tiguan",
+    "make": "Volkswagen",
+    "model": "Tiguan",
+    "segment": "suv_kompakt"
+  },
+  {
+    "id": "vw-touran",
+    "make": "Volkswagen",
+    "model": "Touran",
+    "segment": "van"
+  },
+  {
+    "id": "vw-caddy",
+    "make": "Volkswagen",
+    "model": "Caddy",
+    "segment": "hochdachkombi"
+  },
+  {
+    "id": "opel-corsa",
+    "make": "Opel",
+    "model": "Corsa",
+    "segment": "kleinwagen"
+  },
+  {
+    "id": "opel-astra",
+    "make": "Opel",
+    "model": "Astra",
+    "segment": "kompakt"
+  },
+  {
+    "id": "opel-insignia",
+    "make": "Opel",
+    "model": "Insignia",
+    "segment": "mittelklasse"
+  },
+  {
+    "id": "opel-mokka",
+    "make": "Opel",
+    "model": "Mokka",
+    "segment": "suv_klein"
+  },
+  {
+    "id": "ford-fiesta",
+    "make": "Ford",
+    "model": "Fiesta",
+    "segment": "kleinwagen"
+  },
+  {
+    "id": "ford-focus",
+    "make": "Ford",
+    "model": "Focus",
+    "segment": "kompakt"
+  },
+  {
+    "id": "ford-kuga",
+    "make": "Ford",
+    "model": "Kuga",
+    "segment": "suv_kompakt"
+  },
+  {
+    "id": "ford-mondeo",
+    "make": "Ford",
+    "model": "Mondeo",
+    "segment": "mittelklasse"
+  },
+  {
+    "id": "peugeot-208",
+    "make": "Peugeot",
+    "model": "208",
+    "segment": "kleinwagen"
+  },
+  {
+    "id": "peugeot-308",
+    "make": "Peugeot",
+    "model": "308",
+    "segment": "kompakt"
+  },
+  {
+    "id": "peugeot-2008",
+    "make": "Peugeot",
+    "model": "2008",
+    "segment": "suv_klein"
+  },
+  {
+    "id": "peugeot-3008",
+    "make": "Peugeot",
+    "model": "3008",
+    "segment": "suv_kompakt"
+  },
+  {
+    "id": "renault-clio",
+    "make": "Renault",
+    "model": "Clio",
+    "segment": "kleinwagen"
+  },
+  {
+    "id": "renault-megane",
+    "make": "Renault",
+    "model": "Mégane",
+    "segment": "kompakt"
+  },
+  {
+    "id": "renault-captur",
+    "make": "Renault",
+    "model": "Captur",
+    "segment": "suv_klein"
+  },
+  {
+    "id": "renault-twingo",
+    "make": "Renault",
+    "model": "Twingo",
+    "segment": "kleinstwagen"
+  },
+  {
+    "id": "toyota-yaris",
+    "make": "Toyota",
+    "model": "Yaris",
+    "segment": "kleinwagen"
+  },
+  {
+    "id": "toyota-corolla",
+    "make": "Toyota",
+    "model": "Corolla / Auris",
+    "segment": "kompakt"
+  },
+  {
+    "id": "toyota-aygo",
+    "make": "Toyota",
+    "model": "Aygo",
+    "segment": "kleinstwagen"
+  },
+  {
+    "id": "citroen-c1",
+    "make": "Citroën",
+    "model": "C1",
+    "segment": "kleinstwagen"
+  },
+  {
+    "id": "peugeot-108",
+    "make": "Peugeot",
+    "model": "108",
+    "segment": "kleinstwagen"
+  },
+  {
+    "id": "toyota-rav4",
+    "make": "Toyota",
+    "model": "RAV4",
+    "segment": "suv_mittel"
+  },
+  {
+    "id": "hyundai-i10",
+    "make": "Hyundai",
+    "model": "i10",
+    "segment": "kleinstwagen"
+  },
+  {
+    "id": "hyundai-i20",
+    "make": "Hyundai",
+    "model": "i20",
+    "segment": "kleinwagen"
+  },
+  {
+    "id": "hyundai-i30",
+    "make": "Hyundai",
+    "model": "i30",
+    "segment": "kompakt"
+  },
+  {
+    "id": "hyundai-tucson",
+    "make": "Hyundai",
+    "model": "Tucson",
+    "segment": "suv_kompakt"
+  },
+  {
+    "id": "kia-picanto",
+    "make": "Kia",
+    "model": "Picanto",
+    "segment": "kleinstwagen"
+  },
+  {
+    "id": "kia-rio",
+    "make": "Kia",
+    "model": "Rio",
+    "segment": "kleinwagen"
+  },
+  {
+    "id": "kia-ceed",
+    "make": "Kia",
+    "model": "Ceed",
+    "segment": "kompakt"
+  },
+  {
+    "id": "kia-sportage",
+    "make": "Kia",
+    "model": "Sportage",
+    "segment": "suv_kompakt"
+  },
+  {
+    "id": "audi-a3",
+    "make": "Audi",
+    "model": "A3",
+    "segment": "kompakt"
+  },
+  {
+    "id": "audi-a4",
+    "make": "Audi",
+    "model": "A4",
+    "segment": "mittelklasse"
+  },
+  {
+    "id": "audi-a6",
+    "make": "Audi",
+    "model": "A6",
+    "segment": "obere_mittelklasse"
+  },
+  {
+    "id": "audi-q3",
+    "make": "Audi",
+    "model": "Q3",
+    "segment": "suv_kompakt"
+  },
+  {
+    "id": "seat-ibiza",
+    "make": "Seat",
+    "model": "Ibiza",
+    "segment": "kleinwagen"
+  },
+  {
+    "id": "seat-leon",
+    "make": "Seat",
+    "model": "Leon",
+    "segment": "kompakt"
+  },
+  {
+    "id": "seat-arona",
+    "make": "Seat",
+    "model": "Arona",
+    "segment": "suv_klein"
+  },
+  {
+    "id": "seat-ateca",
+    "make": "Seat",
+    "model": "Ateca",
+    "segment": "suv_kompakt"
+  },
+  {
+    "id": "dacia-sandero",
+    "make": "Dacia",
+    "model": "Sandero",
+    "segment": "kleinwagen"
+  },
+  {
+    "id": "dacia-logan",
+    "make": "Dacia",
+    "model": "Logan",
+    "segment": "kleinwagen"
+  },
+  {
+    "id": "dacia-duster",
+    "make": "Dacia",
+    "model": "Duster",
+    "segment": "suv_kompakt"
+  },
+  {
+    "id": "dacia-jogger",
+    "make": "Dacia",
+    "model": "Jogger",
+    "segment": "van"
+  },
+  {
+    "id": "fiat-500",
+    "make": "Fiat",
+    "model": "500",
+    "segment": "kleinstwagen"
+  },
+  {
+    "id": "fiat-panda",
+    "make": "Fiat",
+    "model": "Panda",
+    "segment": "kleinstwagen"
+  },
+  {
+    "id": "fiat-punto",
+    "make": "Fiat",
+    "model": "Punto",
+    "segment": "kleinwagen"
+  },
+  {
+    "id": "fiat-tipo",
+    "make": "Fiat",
+    "model": "Tipo",
+    "segment": "kompakt"
+  },
+  {
+    "id": "nissan-micra",
+    "make": "Nissan",
+    "model": "Micra",
+    "segment": "kleinwagen"
+  },
+  {
+    "id": "nissan-qashqai",
+    "make": "Nissan",
+    "model": "Qashqai",
+    "segment": "suv_kompakt"
+  },
+  {
+    "id": "nissan-juke",
+    "make": "Nissan",
+    "model": "Juke",
+    "segment": "suv_klein"
+  },
+  {
+    "id": "nissan-leaf",
+    "make": "Nissan",
+    "model": "Leaf",
+    "segment": "kompakt"
+  },
+  {
+    "id": "skoda-karoq",
+    "make": "Škoda",
+    "model": "Karoq",
+    "segment": "suv_kompakt"
+  },
+  {
+    "id": "skoda-kodiaq",
+    "make": "Škoda",
+    "model": "Kodiaq",
+    "segment": "suv_mittel"
+  },
+  {
+    "id": "skoda-yeti",
+    "make": "Škoda",
+    "model": "Yeti",
+    "segment": "suv_kompakt"
+  },
+  {
+    "id": "skoda-scala",
+    "make": "Škoda",
+    "model": "Scala",
+    "segment": "kompakt"
+  },
+  {
+    "id": "bmw-x1",
+    "make": "BMW",
+    "model": "X1",
+    "segment": "suv_kompakt"
+  },
+  {
+    "id": "bmw-x3",
+    "make": "BMW",
+    "model": "X3",
+    "segment": "suv_mittel"
+  },
+  {
+    "id": "mercedes-glc",
+    "make": "Mercedes-Benz",
+    "model": "GLC",
+    "segment": "suv_mittel"
+  },
+  {
+    "id": "mercedes-gla",
+    "make": "Mercedes-Benz",
+    "model": "GLA",
+    "segment": "suv_kompakt"
+  },
+  {
+    "id": "vw-t-cross",
+    "make": "Volkswagen",
+    "model": "T-Cross",
+    "segment": "suv_klein"
+  },
+  {
+    "id": "vw-id-3",
+    "make": "Volkswagen",
+    "model": "ID.3",
+    "segment": "kompakt"
+  },
+  {
+    "id": "vw-sharan",
+    "make": "Volkswagen",
+    "model": "Sharan",
+    "segment": "van"
+  },
+  {
+    "id": "seat-alhambra",
+    "make": "Seat",
+    "model": "Alhambra",
+    "segment": "van"
+  },
+  {
+    "id": "vw-multivan",
+    "make": "Volkswagen",
+    "model": "Multivan / Transporter",
+    "segment": "bus"
+  },
+  {
+    "id": "citroen-c3",
+    "make": "Citroën",
+    "model": "C3",
+    "segment": "kleinwagen"
+  },
+  {
+    "id": "citroen-c4",
+    "make": "Citroën",
+    "model": "C4",
+    "segment": "kompakt"
+  },
+  {
+    "id": "citroen-berlingo",
+    "make": "Citroën",
+    "model": "Berlingo",
+    "segment": "hochdachkombi"
+  },
+  {
+    "id": "peugeot-rifter",
+    "make": "Peugeot",
+    "model": "Rifter / Partner",
+    "segment": "hochdachkombi"
+  },
+  {
+    "id": "opel-combo",
+    "make": "Opel",
+    "model": "Combo",
+    "segment": "hochdachkombi"
+  },
+  {
+    "id": "citroen-c4-picasso",
+    "make": "Citroën",
+    "model": "C4 Picasso / SpaceTourer",
+    "segment": "van"
+  },
+  {
+    "id": "ford-ka",
+    "make": "Ford",
+    "model": "Ka",
+    "segment": "kleinstwagen"
+  },
+  {
+    "id": "ford-puma",
+    "make": "Ford",
+    "model": "Puma",
+    "segment": "suv_klein"
+  },
+  {
+    "id": "ford-c-max",
+    "make": "Ford",
+    "model": "C-Max",
+    "segment": "van_klein"
+  },
+  {
+    "id": "ford-s-max",
+    "make": "Ford",
+    "model": "S-Max / Galaxy",
+    "segment": "van"
+  },
+  {
+    "id": "opel-zafira",
+    "make": "Opel",
+    "model": "Zafira",
+    "segment": "van"
+  },
+  {
+    "id": "opel-meriva",
+    "make": "Opel",
+    "model": "Meriva",
+    "segment": "van_klein"
+  },
+  {
+    "id": "opel-grandland",
+    "make": "Opel",
+    "model": "Grandland",
+    "segment": "suv_kompakt"
+  },
+  {
+    "id": "opel-crossland",
+    "make": "Opel",
+    "model": "Crossland",
+    "segment": "suv_klein"
+  },
+  {
+    "id": "audi-a1",
+    "make": "Audi",
+    "model": "A1",
+    "segment": "kleinwagen"
+  },
+  {
+    "id": "audi-q5",
+    "make": "Audi",
+    "model": "Q5",
+    "segment": "suv_mittel"
+  },
+  {
+    "id": "audi-q2",
+    "make": "Audi",
+    "model": "Q2",
+    "segment": "suv_klein"
+  },
+  {
+    "id": "audi-a5",
+    "make": "Audi",
+    "model": "A5",
+    "segment": "mittelklasse"
+  },
+  {
+    "id": "renault-zoe",
+    "make": "Renault",
+    "model": "Zoe",
+    "segment": "kleinwagen"
+  },
+  {
+    "id": "renault-scenic",
+    "make": "Renault",
+    "model": "Scénic",
+    "segment": "van"
+  },
+  {
+    "id": "renault-kadjar",
+    "make": "Renault",
+    "model": "Kadjar",
+    "segment": "suv_kompakt"
+  },
+  {
+    "id": "dacia-spring",
+    "make": "Dacia",
+    "model": "Spring",
+    "segment": "kleinstwagen"
+  },
+  {
+    "id": "toyota-c-hr",
+    "make": "Toyota",
+    "model": "C-HR",
+    "segment": "suv_kompakt"
+  },
+  {
+    "id": "toyota-prius",
+    "make": "Toyota",
+    "model": "Prius",
+    "segment": "kompakt"
+  },
+  {
+    "id": "mazda-3",
+    "make": "Mazda",
+    "model": "Mazda3",
+    "segment": "kompakt"
+  },
+  {
+    "id": "mazda-cx-5",
+    "make": "Mazda",
+    "model": "CX-5",
+    "segment": "suv_kompakt"
+  },
+  {
+    "id": "mazda-2",
+    "make": "Mazda",
+    "model": "Mazda2",
+    "segment": "kleinwagen"
+  },
+  {
+    "id": "mazda-6",
+    "make": "Mazda",
+    "model": "Mazda6",
+    "segment": "mittelklasse"
+  },
+  {
+    "id": "mazda-cx-30",
+    "make": "Mazda",
+    "model": "CX-30",
+    "segment": "suv_kompakt"
+  },
+  {
+    "id": "mazda-mx-5",
+    "make": "Mazda",
+    "model": "MX-5",
+    "segment": "sportwagen"
+  },
+  {
+    "id": "volvo-xc60",
+    "make": "Volvo",
+    "model": "XC60",
+    "segment": "suv_mittel"
+  },
+  {
+    "id": "volvo-v60",
+    "make": "Volvo",
+    "model": "V60",
+    "segment": "mittelklasse"
+  },
+  {
+    "id": "volvo-xc40",
+    "make": "Volvo",
+    "model": "XC40",
+    "segment": "suv_kompakt"
+  },
+  {
+    "id": "volvo-v40",
+    "make": "Volvo",
+    "model": "V40",
+    "segment": "kompakt"
+  },
+  {
+    "id": "mini-cooper",
+    "make": "MINI",
+    "model": "Cooper / One",
+    "segment": "kleinwagen"
+  },
+  {
+    "id": "mini-countryman",
+    "make": "MINI",
+    "model": "Countryman",
+    "segment": "suv_klein"
+  },
+  {
+    "id": "smart-fortwo",
+    "make": "smart",
+    "model": "fortwo",
+    "segment": "kleinstwagen"
+  },
+  {
+    "id": "suzuki-swift",
+    "make": "Suzuki",
+    "model": "Swift",
+    "segment": "kleinwagen"
+  },
+  {
+    "id": "tesla-model-3",
+    "make": "Tesla",
+    "model": "Model 3",
+    "segment": "mittelklasse"
+  },
+  {
+    "id": "tesla-model-y",
+    "make": "Tesla",
+    "model": "Model Y",
+    "segment": "suv_mittel"
+  },
+  {
+    "id": "hyundai-kona",
+    "make": "Hyundai",
+    "model": "Kona",
+    "segment": "suv_klein"
+  },
+  {
+    "id": "kia-niro",
+    "make": "Kia",
+    "model": "Niro",
+    "segment": "suv_kompakt"
+  },
+  {
+    "id": "honda-jazz",
+    "make": "Honda",
+    "model": "Jazz",
+    "segment": "kleinwagen"
+  },
+  {
+    "id": "honda-civic",
+    "make": "Honda",
+    "model": "Civic",
+    "segment": "kompakt"
+  },
+  {
+    "id": "suzuki-vitara",
+    "make": "Suzuki",
+    "model": "Vitara",
+    "segment": "suv_klein"
+  },
+  {
+    "id": "mitsubishi-asx",
+    "make": "Mitsubishi",
+    "model": "ASX",
+    "segment": "suv_kompakt"
+  },
+  {
+    "id": "hyundai-ioniq",
+    "make": "Hyundai",
+    "model": "Ioniq",
+    "segment": "kompakt"
+  },
+  {
+    "id": "vw-id-4",
+    "make": "Volkswagen",
+    "model": "ID.4",
+    "segment": "suv_mittel"
+  },
+  {
+    "id": "skoda-enyaq",
+    "make": "Škoda",
+    "model": "Enyaq",
+    "segment": "suv_mittel"
+  },
+  {
+    "id": "cupra-formentor",
+    "make": "Cupra",
+    "model": "Formentor",
+    "segment": "suv_kompakt"
+  },
+  {
+    "id": "audi-q7",
+    "make": "Audi",
+    "model": "Q7",
+    "segment": "suv_gross"
+  },
+  {
+    "id": "bmw-x5",
+    "make": "BMW",
+    "model": "X5",
+    "segment": "suv_gross"
+  },
+  {
+    "id": "mercedes-cla",
+    "make": "Mercedes-Benz",
+    "model": "CLA",
+    "segment": "kompakt"
+  },
+  {
+    "id": "opel-adam",
+    "make": "Opel",
+    "model": "Adam",
+    "segment": "kleinstwagen"
+  }
+]

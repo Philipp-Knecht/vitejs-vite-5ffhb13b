@@ -1,0 +1,218 @@
+{
+  "id": "kia-sportage",
+  "make": "Kia",
+  "model": "Sportage",
+  "aliases": ["sportage", "sportage gt line", "sportage hybrid", "sportage phev"],
+  "segment": "suv_kompakt",
+  "summary": "Der Kia Sportage ist ein kompakter SUV mit einfacher Bedienung und viel Platz auf den Vordersitzen.",
+  "ratings": {
+    "reliability": 4,
+    "reliabilityNote": "Laut ADAC-Pannenstatistik 2025 hatte der Sportage der vierten Generation (Erstzulassung 2017 bis 2021) weniger Pannen als die meisten gleich alten Autos; der neue Sportage (2022) liegt im Mittelfeld. Die dritte Generation sah der ADAC im Mittelfeld, beim TÜV schnitt sie klar unterdurchschnittlich ab.",
+    "reliabilitySources": [
+      {
+        "label": "ADAC Gebrauchtwageninfo: KIA Sportage (2010-2016)",
+        "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0304-kia-sportage-2010-2016-bericht.pdf"
+      },
+      {
+        "label": "ADAC Pannenstatistik 2025",
+        "url": "https://assets.adac.de/image/upload/v1776261444/ADAC-eV/KOR/Text/PDF/Pannenstatistik_2025_Bericht_czmf9q.pdf"
+      }
+    ],
+    "runningCosts": 3,
+    "space": 3,
+    "comfort": 3
+  },
+  "generations": [
+    {
+      "id": "kia-sportage-sl",
+      "name": "Sportage SL",
+      "code": "SL",
+      "years": [2010, 2016],
+      "bodyTypes": ["suv"],
+      "fuels": ["petrol", "diesel"],
+      "seats": [5],
+      "automatic": true,
+      "typicalPriceEur": null,
+      "priceSource": null,
+      "strengths": ["Problemlose Bedienung", "Gutes Raumangebot vorne", "Gute Crashsicherheit"],
+      "issues": [
+        {
+          "title": "Starterbatterie",
+          "affects": "Erstzulassungen 2011–2016",
+          "detail": "Laut ADAC ist die Starterbatterie das größte Sorgenkind in der Pannenstatistik des Sportage. Insgesamt erreicht der SUV in der Pannenstatistik durchschnittliche Werte.",
+          "check": "Alter der Batterie erfragen und das Startverhalten (auch kalt) testen.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: KIA Sportage (2010-2016)",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0304-kia-sportage-2010-2016-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Feststellbremse, Bremsscheiben und Bremsanlage",
+          "affects": "Feststellbremse und Bremsscheiben: Baujahre 2010–2016 laut TÜV-Report; schwache Bremsanlage: laut Bericht bis zum Facelift (2014)",
+          "detail": "Laut ADAC ist die Feststellbremse beim TÜV ein großes Problem, auch die Bremsscheiben machen Ärger. Zusätzlich gilt die Bremsanlage im Bericht bis zum Facelift als schwach.",
+          "check": "Feststellbremse auf sicheres Halten und sauberes Lösen testen, Bremsscheiben und Beläge prüfen und bei Modellen vor dem Facelift beim Probebremsen auf die Bremswirkung achten.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: KIA Sportage (2010-2016)",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0304-kia-sportage-2010-2016-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Lenkgelenke und Achsaufhängungen",
+          "affects": "Baujahre 2010–2016 (laut TÜV-Report, keine Eingrenzung auf bestimmte Motoren)",
+          "detail": "Laut ADAC bereiten die Lenkgelenke im TÜV-Report häufig Sorgen, und der TÜV bemängelt etwas häufiger auch die Lenkung und die Achsaufhängungen.",
+          "check": "Auf Spiel in der Lenkung, Klappern und unruhiges Fahrverhalten achten und den letzten HU-Bericht ansehen.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: KIA Sportage (2010-2016)",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0304-kia-sportage-2010-2016-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Kupplung bei häufigem Anhängerbetrieb",
+          "affects": "Modelle mit Schaltgetriebe, die häufig als Zugfahrzeug genutzt wurden; der Bericht nennt keine genaueren Baujahre oder Motoren",
+          "detail": "Laut ADAC quittieren die Kupplungen der Schaltgetriebe bei häufigem Einsatz als Zugfahrzeug überdurchschnittlich schnell ihren Dienst.",
+          "check": "Fragen, ob regelmäßig mit Anhänger gefahren wurde, und bei der Probefahrt prüfen, ob die Kupplung sauber greift und nicht rutscht.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: KIA Sportage (2010-2016)",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0304-kia-sportage-2010-2016-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Beleuchtung beim TÜV",
+          "affects": "Baujahre 2010–2016 (laut TÜV-Report, keine Eingrenzung auf bestimmte Motoren)",
+          "detail": "Laut ADAC bereitet beim TÜV teils auch die Beleuchtung Sorgen.",
+          "check": "Alle Lichtfunktionen und die Scheinwerfereinstellung prüfen.",
+          "severity": "gering",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: KIA Sportage (2010-2016)",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0304-kia-sportage-2010-2016-bericht.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Rückrufe: Bremskraftverstärkung (1.7 CRDi) und Gurtstraffer",
+          "affects": "Rückruf 3/2012 (nur 1.7 CRDi) und Rückruf 6/2014 (Gurtstraffer Fahrerseite); der Bericht nennt keine genaueren Baujahre",
+          "detail": "Laut ADAC betraf der Rückruf 3/2012 den 1.7 CRDi: Die Vakuumpumpe, die den Unterdruck für die Bremskraftverstärkung erzeugt, fällt aus. Beim Rückruf 6/2014 funktioniert der Gurtstraffer der Fahrerseite wegen eines fehlerhaft gekrimpten Seils nicht richtig (zu große Gurtlose).",
+          "check": "Per Fahrgestellnummer beim Händler prüfen lassen, ob die Rückrufe erledigt sind.",
+          "severity": "mittel",
+          "sources": [
+            {
+              "label": "ADAC Gebrauchtwageninfo: KIA Sportage (2010-2016)",
+              "url": "https://assets.adac.de/image/upload/Autodatenbank/GWInfo/gw0304-kia-sportage-2010-2016-bericht.pdf"
+            }
+          ]
+        }
+      ],
+      "engines": {
+        "recommended": [
+          {
+            "name": "Diesel 2.0 CRDi (136 PS)",
+            "why": "Laut ADAC die goldene Mitte: Gebrauchte Sportage sind oft mit dieser Motorisierung ausgestattet, und die Diesel-Charakteristik passt viel besser zu einem SUV als die Benziner."
+          },
+          {
+            "name": "Diesel 2.0 CRDi (184 PS) mit Allrad und Automatik",
+            "why": "Laut ADAC die beste Wahl für alle, die öfter mit einem Anhänger unterwegs sind."
+          }
+        ],
+        "caution": [
+          {
+            "name": "Benziner ohne Turbo (135 bis 166 PS)",
+            "why": "Laut ADAC wirken sie relativ kraftlos, weil das Drehmoment erst spät anliegt; für flottes Vorankommen steigt der Verbrauch stark an, und bei höheren Drehzahlen sind sie nicht leise. Der Basisbenziner wirkt mit dem großen Auto überfordert."
+          },
+          {
+            "name": "1.7 CRDi (115 PS)",
+            "why": "Laut ADAC reicht er für den Alltag, fühlt sich auf der Autobahn aber nicht richtig wohl; für diesen Motor gab es 3/2012 einen Rückruf wegen der Vakuumpumpe der Bremskraftverstärkung."
+          }
+        ]
+      },
+      "tips": [
+        "Feststellbremse, Bremsscheiben, Lenkgelenke und Achsaufhängungen genau prüfen: Der TÜV bemängelt sie laut ADAC häufig.",
+        "Beim 1.7 CRDi (115 PS) per Fahrgestellnummer klären, ob der Rückruf wegen der Vakuumpumpe der Bremskraftverstärkung (3/2012) erledigt ist.",
+        "Bei Schaltgetriebe nach Anhängerbetrieb fragen und die Kupplung bei der Probefahrt prüfen.",
+        "Alter der Starterbatterie erfragen: Sie ist laut ADAC das größte Sorgenkind in der Pannenstatistik."
+      ]
+    },
+    {
+      "id": "kia-sportage-ql",
+      "name": "Sportage QL",
+      "code": "QL",
+      "years": [2015, 2021],
+      "bodyTypes": ["suv"],
+      "fuels": ["petrol", "diesel", "hybrid"],
+      "seats": [5],
+      "automatic": true,
+      "typicalPriceEur": null,
+      "priceSource": null,
+      "strengths": [],
+      "issues": [
+        {
+          "title": "Überdurchschnittlich oft Pannen: Starterbatterie",
+          "affects": "Erstzulassung 2017 (ADAC-Pannenstatistik 2025)",
+          "detail": "Probleme mit Starterbatterie waren bei diesen Jahrgängen überdurchschnittlich oft der Grund für einen Einsatz der ADAC-Straßenwacht. Eine schwache Starterbatterie ist bei allen Autos die häufigste Pannenursache, hier aber besonders oft.",
+          "check": "Alter der Batterie erfragen und sie testen lassen; springt der Motor zögerlich an, ist ein Tausch fällig.",
+          "severity": "gering",
+          "sources": [
+            {
+              "label": "ADAC Pannenstatistik 2025",
+              "url": "https://assets.adac.de/image/upload/v1776261444/ADAC-eV/KOR/Text/PDF/Pannenstatistik_2025_Bericht_czmf9q.pdf"
+            }
+          ]
+        }
+      ],
+      "engines": {
+        "recommended": [],
+        "caution": []
+      },
+      "tips": [
+        "Weitere Schwachstellen dieser Generation haben wir noch nicht ausgewertet. Lass das Auto vor dem Kauf in einer Werkstatt prüfen und Rückrufe per Fahrgestellnummer erfragen."
+      ]
+    },
+    {
+      "id": "kia-sportage-nq5",
+      "name": "Sportage NQ5",
+      "code": "NQ5",
+      "years": [2021, null],
+      "bodyTypes": ["suv"],
+      "fuels": ["petrol", "diesel", "hybrid", "plugin_hybrid"],
+      "seats": [5],
+      "automatic": true,
+      "typicalPriceEur": null,
+      "priceSource": null,
+      "strengths": [],
+      "issues": [
+        {
+          "title": "Überdurchschnittlich oft Pannen: Starterbatterie",
+          "affects": "Erstzulassung 2022 (ADAC-Pannenstatistik 2025)",
+          "detail": "Probleme mit Starterbatterie waren bei diesen Jahrgängen überdurchschnittlich oft der Grund für einen Einsatz der ADAC-Straßenwacht. Eine schwache Starterbatterie ist bei allen Autos die häufigste Pannenursache, hier aber besonders oft.",
+          "check": "Alter der Batterie erfragen und sie testen lassen; springt der Motor zögerlich an, ist ein Tausch fällig.",
+          "severity": "gering",
+          "sources": [
+            {
+              "label": "ADAC Pannenstatistik 2025",
+              "url": "https://assets.adac.de/image/upload/v1776261444/ADAC-eV/KOR/Text/PDF/Pannenstatistik_2025_Bericht_czmf9q.pdf"
+            }
+          ]
+        }
+      ],
+      "engines": {
+        "recommended": [],
+        "caution": []
+      },
+      "tips": [
+        "Weitere Schwachstellen dieser Generation haben wir noch nicht ausgewertet. Lass das Auto vor dem Kauf in einer Werkstatt prüfen und Rückrufe per Fahrgestellnummer erfragen."
+      ]
+    }
+  ]
+}

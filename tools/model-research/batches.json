@@ -1,0 +1,23 @@
+{
+  "A01": ["bmw-1er", "bmw-2er-active-tourer", "bmw-5er", "skoda-fabia"],
+  "A02": ["skoda-octavia", "skoda-superb", "mercedes-c-klasse"],
+  "A03": ["mercedes-e-klasse", "mercedes-a-klasse", "mercedes-b-klasse"],
+  "A04": ["vw-passat", "vw-tiguan", "vw-touran"],
+  "A05": ["vw-caddy", "opel-corsa", "opel-astra"],
+  "A06": ["opel-insignia", "opel-mokka", "ford-fiesta", "ford-focus", "ford-kuga"],
+  "A07": ["ford-mondeo", "peugeot-208", "peugeot-308", "peugeot-2008", "renault-clio"],
+  "A08": ["renault-megane", "renault-captur", "renault-twingo", "toyota-yaris", "toyota-corolla"],
+  "A09": ["toyota-aygo", "citroen-c1", "hyundai-i10", "hyundai-i20", "hyundai-i30"],
+  "A10": ["kia-picanto", "kia-rio", "kia-ceed", "kia-sportage", "audi-a3"],
+  "A11": ["audi-a4", "audi-a6", "audi-q3", "seat-ibiza", "seat-leon"],
+  "A12": ["dacia-sandero", "dacia-logan", "dacia-duster", "fiat-500", "fiat-panda"],
+  "A13": ["fiat-punto", "fiat-tipo", "nissan-micra", "nissan-juke", "nissan-leaf"],
+  "A14": ["skoda-yeti", "bmw-x1", "bmw-x3", "vw-id-3", "vw-sharan"],
+  "A15": ["seat-alhambra", "vw-multivan", "citroen-c3", "citroen-c4", "citroen-berlingo"],
+  "A16": ["ford-ka", "ford-c-max", "ford-s-max", "opel-zafira", "opel-meriva"],
+  "A17": ["audi-a5", "renault-zoe", "renault-scenic", "renault-kadjar", "mazda-3"],
+  "A18": ["mazda-cx-5", "mazda-2", "mazda-6", "mazda-mx-5", "volvo-xc60"],
+  "A19": ["smart-fortwo", "suzuki-swift", "tesla-model-3", "tesla-model-y", "hyundai-kona"],
+  "A20": ["honda-jazz", "honda-civic", "suzuki-vitara", "vw-id-4", "audi-q7"],
+  "A21": ["bmw-x5", "mercedes-cla", "opel-adam"]
+}
