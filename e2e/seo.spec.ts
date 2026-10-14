@@ -24,6 +24,7 @@ test('guides are readable without JavaScript', async ({ browser }) => {
     ['/gebrauchtwagen-kaufen', 'Gebrauchtwagen privat kaufen'],
     ['/gebrauchtwagen-checkliste', 'Gebrauchtwagen-Checkliste'],
     ['/auto-besichtigung-checkliste', 'Auto-Besichtigung'],
+    ['/kfz-steuer-rechner', 'Kfz-Steuer'],
   ] as const) {
     await page.goto(path);
     await expect(page.getByRole('heading', { level: 1 })).toContainText(heading);
@@ -38,6 +39,7 @@ test('sitemap, robots.txt, noindex and real 404 status codes', async ({ request 
     '/gebrauchtwagen-kaufen',
     '/gebrauchtwagen-checkliste',
     '/auto-besichtigung-checkliste',
+    '/kfz-steuer-rechner',
     '/pro',
   ]) {
     expect(sitemap).toContain(`${path}</loc>`);

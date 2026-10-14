@@ -18,6 +18,7 @@ export const STATIC_PAGES: readonly StaticPage[] = [
   { path: '/gebrauchtwagen-kaufen', indexable: true },
   { path: '/gebrauchtwagen-checkliste', indexable: true },
   { path: '/auto-besichtigung-checkliste', indexable: true },
+  { path: '/kfz-steuer-rechner', indexable: true },
   { path: '/pro', indexable: true },
   { path: '/bot', indexable: false },
   { path: '/datenschutz', indexable: false },

@@ -1,6 +1,8 @@
-import { PRICE_KIND_LABELS, type PriceContext } from '@kaufcheck/shared';
+import { PRICE_KIND_LABELS, type PriceContext, type Vehicle } from '@kaufcheck/shared';
+import { Link } from 'react-router';
 import { EvidenceBadge } from '../../components/EvidenceBadge';
 import { formatEuro, formatNumber } from '../../lib/format';
+import { taxCalculatorLink } from '../tax/tax-link';
 import { ResultSection } from './Section';
 
 function MarketRange({
@@ -40,7 +42,7 @@ function MarketRange({
   );
 }
 
-export function PriceSection({ price }: { price: PriceContext }) {
+export function PriceSection({ price, vehicle }: { price: PriceContext; vehicle: Vehicle | null }) {
   const { askingPrice, metrics, market, notes } = price;
   return (
     <ResultSection id="preis" title="Preis einordnen">
@@ -126,6 +128,10 @@ export function PriceSection({ price }: { price: PriceContext }) {
           ))}
         </ul>
       )}
+      <p className="price-costs">
+        Zum Kaufpreis kommen laufende Kosten:{' '}
+        <Link to={taxCalculatorLink(vehicle)}>Kfz-Steuer für dieses Auto berechnen</Link>
+      </p>
     </ResultSection>
   );
 }

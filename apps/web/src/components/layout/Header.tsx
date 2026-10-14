@@ -17,6 +17,7 @@ const GUIDES = [
   { to: '/gebrauchtwagen-kaufen', label: 'Gebrauchtwagen kaufen' },
   { to: '/gebrauchtwagen-checkliste', label: 'Checkliste Gebrauchtwagen' },
   { to: '/auto-besichtigung-checkliste', label: 'Checkliste Besichtigung' },
+  { to: '/kfz-steuer-rechner', label: 'Kfz-Steuer-Rechner' },
 ];
 
 function AccountLink({ onNavigate }: { onNavigate?: () => void }) {

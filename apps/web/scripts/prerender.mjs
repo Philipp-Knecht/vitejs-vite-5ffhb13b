@@ -44,6 +44,7 @@ const GUIDES = new Set([
   '/gebrauchtwagen-kaufen',
   '/gebrauchtwagen-checkliste',
   '/auto-besichtigung-checkliste',
+  '/kfz-steuer-rechner',
 ]);
 
 function structuredData(pagePath, meta) {

@@ -26,6 +26,11 @@ const GUIDES = [
     title: 'Auto richtig besichtigen',
     text: 'Lack, Rost, Motor, Reifen und Probefahrt.',
   },
+  {
+    to: '/kfz-steuer-rechner',
+    title: 'Kfz-Steuer-Rechner',
+    text: 'Steuer aus den Werten im Fahrzeugschein.',
+  },
 ];
 
 export function GuideLayout({

@@ -9,6 +9,7 @@ import { configureAnalytics } from './lib/analytics';
 import { BuyingGuidePage } from './pages/guides/BuyingGuidePage';
 import { ChecklistGuidePage } from './pages/guides/ChecklistGuidePage';
 import { InspectionGuidePage } from './pages/guides/InspectionGuidePage';
+import { TaxGuidePage } from './pages/guides/TaxGuidePage';
 import { AdvisorPage } from './pages/AdvisorPage';
 import { CheckListingPage } from './pages/CheckListingPage';
 import { FindCarPage } from './pages/FindCarPage';
@@ -104,6 +105,7 @@ export function App({ queryClient }: { queryClient: QueryClient }) {
               <Route path="/gebrauchtwagen-kaufen" element={<BuyingGuidePage />} />
               <Route path="/gebrauchtwagen-checkliste" element={<ChecklistGuidePage />} />
               <Route path="/auto-besichtigung-checkliste" element={<InspectionGuidePage />} />
+              <Route path="/kfz-steuer-rechner" element={<TaxGuidePage />} />
               <Route path="/pro" element={<ProPage />} />
               <Route path="/bot" element={<BotPage />} />
               <Route path="/datenschutz" element={<PrivacyPage />} />
