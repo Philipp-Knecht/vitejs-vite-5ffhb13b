@@ -38,9 +38,10 @@ function parse(
   max: number,
   tooHigh: string,
 ): Parsed {
-  if (raw.trim() === '') return { value: null };
+  // Empty, or only the first keystroke of „,35“.
+  if (/^\s*[.,]?\s*$/.test(raw)) return { value: null };
   const value = read(raw);
-  if (value === null) return { value: null, error: 'Bitte nur eine Zahl eingeben.' };
+  if (value === null) return { value: null, error: 'Bitte gib nur eine Zahl ein.' };
   if (value > max) return { value: null, error: tooHigh };
   return { value };
 }
@@ -81,10 +82,11 @@ export function RunningCosts({
   const price = parse(
     values.price,
     toDecimal,
-    electric ? 2 : 5,
+    // Hydrogen costs well over 10 € per kg.
+    electric ? 20 : 5,
     electric
-      ? 'Bitte prüfe den Preis je kWh, z. B. 0,35.'
-      : 'Bitte prüfe den Preis je Liter, z. B. 1,79.',
+      ? 'Bitte prüfe den Preis, z. B. 0,35 je kWh.'
+      : 'Bitte prüfe den Preis, z. B. 1,79 je Liter.',
   );
   const insurance = parse(values.insurance, toNumber, 100_000, 'Bitte prüfe den Jahresbeitrag.');
   const maintenance = parse(values.maintenance, toNumber, 100_000, 'Bitte prüfe den Betrag.');
@@ -93,11 +95,13 @@ export function RunningCosts({
       ? (km.value / 100) * consumption.value * price.value
       : null;
 
+  // Rounded per row, so that the rows add up to the total shown.
+  const round = (value: number | null) => (value === null ? null : Math.round(value));
   const parts = [
-    { label: 'Kfz-Steuer', value: taxAnnualEur },
-    { label: electric ? 'Strom' : 'Kraftstoff', value: energy },
-    { label: 'Versicherung', value: insurance.value },
-    { label: 'Werkstatt und Wartung', value: maintenance.value },
+    { label: 'Kfz-Steuer', value: round(taxAnnualEur) },
+    { label: electric ? 'Strom' : 'Kraftstoff', value: round(energy) },
+    { label: 'Versicherung', value: round(insurance.value) },
+    { label: 'Werkstatt und Wartung', value: round(maintenance.value) },
   ];
   const known = parts.filter(
     (part): part is { label: string; value: number } => part.value !== null,
@@ -121,8 +125,8 @@ export function RunningCosts({
           label={electric ? 'Verbrauch in kWh je 100 km' : 'Verbrauch in Litern je 100 km'}
           hint={
             electric
-              ? 'Laut Inserat oder Hersteller; im Alltag meist etwas mehr, dazu kommen Ladeverluste'
-              : 'Laut Inserat oder Hersteller; im Alltag meist etwas mehr'
+              ? 'WLTP-Wert aus Inserat oder Datenblatt (mit Ladeverlusten); Bordcomputer-Werte ohne Ladeverluste. Wasserstoff: kg je 100 km.'
+              : 'Laut Inserat oder Hersteller; im Alltag meist etwas mehr. Erdgas (CNG): kg je 100 km und Preis je kg.'
           }
           inputMode="decimal"
           error={consumption.error}
@@ -133,7 +137,7 @@ export function RunningCosts({
           label={electric ? 'Strompreis in € je kWh' : 'Kraftstoffpreis in € je Liter'}
           hint={
             electric
-              ? 'Dein Haushaltsstrom- oder Ladetarif'
+              ? 'Dein Haushaltsstrom- oder Ladetarif; Wasserstoff: Preis je kg'
               : 'Aktueller Preis an der Tankstelle oder in einer Spritpreis-App'
           }
           inputMode="decimal"
@@ -165,7 +169,8 @@ export function RunningCosts({
         <p className={started ? 'tax-result__amount' : 'tax-result__hint'} aria-live="polite">
           {started ? (
             <>
-              rund {euros(total / 12)} <span>im Monat</span>
+              <span className="visually-hidden">Laufende Kosten: </span>rund {euros(total / 12)}{' '}
+              <span>im Monat</span>
             </>
           ) : (
             'Trag deine Werte ein.'
@@ -175,7 +180,7 @@ export function RunningCosts({
           <>
             <p className="tax-result__monthly">
               {euros(total)} im Jahr
-              {km.value ? `, ${euros(total / km.value, 2)} je km` : ''}
+              {km.value && energy !== null ? `, ${euros(total / km.value, 2)} je km` : ''}
             </p>
             <ul className="tax-result__parts">
               {known.map((part) => (

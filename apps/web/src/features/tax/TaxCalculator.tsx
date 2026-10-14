@@ -124,6 +124,7 @@ export function TaxCalculator({
   const before2009 = values.firstRegistration !== '' && values.firstRegistration < '2009-07-01';
   const electric = values.drive === 'electric';
   const ready = values.firstRegistration !== '' && values.drive !== '';
+  const today = todayIso();
   const result = ready
     ? vehicleTax(
         {
@@ -134,22 +135,34 @@ export function TaxCalculator({
           emissionClass: values.emissionClass || null,
           grossWeightKg: toNumber(values.grossWeightKg),
         },
-        todayIso(),
+        today,
       )
     : null;
   const errorFor = (field: VehicleTaxField) =>
     result?.kind === 'invalid' && result.field === field ? result.message : undefined;
 
+  // An exemption that ends within a year: the running costs use the tax afterwards.
+  const nextYear = `${Number(today.slice(0, 4)) + 1}${today.slice(4)}`;
+  const endsSoon = result?.kind === 'exempt' && result.until < nextYear;
   const taxAnnualEur =
-    result?.kind === 'amount' ? result.annualEur : result?.kind === 'exempt' ? 0 : null;
-  const taxNote =
-    result?.kind === 'exempt'
-      ? `Kfz-Steuer: steuerfrei bis ${day(result.until)}${
-          result.afterwardsEur === null
-            ? '.'
-            : `, danach voraussichtlich ${euros(result.afterwardsEur)} im Jahr.`
-        }`
-      : null;
+    result?.kind === 'amount'
+      ? result.annualEur
+      : result?.kind === 'exempt'
+        ? endsSoon
+          ? result.afterwardsEur
+          : 0
+        : null;
+  let taxNote: string | null = null;
+  if (result?.kind === 'exempt') {
+    const until = `Kfz-Steuer: steuerfrei bis ${day(result.until)}`;
+    if (result.afterwardsEur === null) {
+      taxNote = `${until}, danach richtet sie sich nach dem zulässigen Gesamtgewicht – gib es oben an, dann ist sie eingerechnet.`;
+    } else if (endsSoon) {
+      taxNote = `${until}; eingerechnet sind schon die ${euros(result.afterwardsEur)} im Jahr danach.`;
+    } else {
+      taxNote = `${until}, danach voraussichtlich ${euros(result.afterwardsEur)} im Jahr.`;
+    }
+  }
 
   return (
     <>
@@ -238,8 +251,8 @@ export function TaxCalculator({
         </section>
       </div>
       <p>
-        Verbindlich ist der Steuerbescheid des Hauptzollamts. Fehlt dir ein Wert, frag den Verkäufer
-        nach einem Foto des Fahrzeugscheins – darauf stehen alle Angaben.
+        Fehlt dir ein Wert, frag den Verkäufer nach einem Foto des Fahrzeugscheins – darauf stehen
+        alle Angaben.
       </p>
       <h2 id="unterhalt">Laufende Kosten überschlagen</h2>
       <p>
