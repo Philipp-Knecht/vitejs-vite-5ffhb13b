@@ -25,7 +25,9 @@ export function buildInspectionChecklist(ctx: VehicleRuleContext): ChecklistSect
     item(
       'docs.title',
       'Fahrzeugbrief (Zulassungsbescheinigung Teil II)',
-      'Ist der Verkäufer eingetragen? Anzahl der Halter ansehen.',
+      dealer
+        ? 'Anzahl der Halter ansehen – der Händler selbst steht dort meist nicht.'
+        : 'Ist der Verkäufer eingetragen? Anzahl der Halter ansehen.',
     ),
     item('docs.hu_report', 'HU-Bericht', 'Mängel und Kilometerstand der letzten Prüfung ansehen.'),
     item('docs.service_records', 'Serviceunterlagen', 'Serviceheft oder digitale Servicehistorie.'),
@@ -181,7 +183,9 @@ export function buildInspectionChecklist(ctx: VehicleRuleContext): ChecklistSect
       item(
         'buy.contract',
         'Schriftlicher Kaufvertrag',
-        'Zum Beispiel ein Mustervertrag eines Automobilclubs.',
+        dealer
+          ? 'Zum Beispiel ein Mustervertrag eines Automobilclubs.'
+          : 'Zum Beispiel ein Mustervertrag eines Automobilclubs; trag die Ausweisnummer des Verkäufers ein.',
       ),
       dealer
         ? item(
@@ -192,7 +196,7 @@ export function buildInspectionChecklist(ctx: VehicleRuleContext): ChecklistSect
         : item(
             'buy.identity',
             'Ausweis des Verkäufers ansehen',
-            'Der Name sollte zum Halter in den Zulassungsbescheinigungen passen, die aktuelle Anschrift steht im Fahrzeugschein. Weicht etwas ab, lass dir den Grund erklären – wer im Auftrag verkauft, braucht eine Vollmacht. Ausweisnummer im Vertrag notieren.',
+            'Der Name sollte zum Halter in den Fahrzeugpapieren passen. Weicht etwas ab, lass dir den Grund erklären – wer im Auftrag verkauft, braucht eine Vollmacht.',
           ),
       item(
         'buy.promises',
@@ -225,7 +229,7 @@ export function buildInspectionChecklist(ctx: VehicleRuleContext): ChecklistSect
       item(
         'reg.documents',
         'Unterlagen für die Zulassung bereitlegen',
-        'Ausweis, Zulassungsbescheinigung Teil I und II, eVB-Nummer, HU-Nachweis, ein SEPA-Mandat für die Kfz-Steuer und die alten Kennzeichen, falls neue nötig sind. Lässt jemand anderes zu, braucht er eine Vollmacht.',
+        'Ausweis, Zulassungsbescheinigung Teil I und II, eVB-Nummer, HU-Nachweis, ein SEPA-Mandat für die Kfz-Steuer und die alten Kennzeichen, falls neue nötig sind. Lässt jemand anderes zu, braucht er eine Vollmacht, eine Kopie deines Ausweises und seinen eigenen.',
       ),
       item(
         'reg.register',
@@ -235,7 +239,7 @@ export function buildInspectionChecklist(ctx: VehicleRuleContext): ChecklistSect
       item(
         'reg.drive_home',
         'Heimfahrt klären',
-        'Ist das Auto noch angemeldet, sprich Kennzeichen und Versicherung mit dem Verkäufer ab. Ist es abgemeldet: vorher auf dich zulassen oder ein Kurzzeitkennzeichen holen – nur mit eVB und gültiger HU, ohne HU nur für die Fahrt zur Prüfstelle.',
+        'Ist das Auto noch angemeldet, sprich Kennzeichen und Versicherung mit dem Verkäufer ab. Ist es abgemeldet: vorher auf dich zulassen oder ein Kurzzeitkennzeichen holen – nur mit eVB und gültiger HU, ohne HU nur zu einer Prüfstelle in der Nähe und zurück.',
       ),
     ],
   });
