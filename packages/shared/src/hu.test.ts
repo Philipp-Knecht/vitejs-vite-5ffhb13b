@@ -4,16 +4,16 @@ import { huCalendarFile, huStatus } from './hu';
 const NOW = new Date(2026, 9, 14); // 14 Oct 2026
 
 describe('huStatus', () => {
-  it.each<[number, number, 'ok' | 'soon' | 'overdue', string]>([
-    [2028, 10, 'ok', 'Die nächste HU ist bis 10/2028 fällig.'],
-    [2027, 1, 'ok', 'Die nächste HU ist bis 01/2027 fällig.'],
-    [2026, 12, 'soon', 'Die HU ist bis 12/2026 fällig – in 2 Monaten.'],
-    [2026, 11, 'soon', 'Die HU ist bis 11/2026 fällig – in einem Monat.'],
-    [2026, 10, 'soon', 'Die HU ist diesen Monat fällig (10/2026).'],
-    [2026, 9, 'overdue', 'Die HU ist seit einem Monat abgelaufen (gültig bis 09/2026).'],
-    [2025, 10, 'overdue', 'Die HU ist seit 12 Monaten abgelaufen (gültig bis 10/2025).'],
-  ])('%i-%i → %s', (year, month, tone, text) => {
-    expect(huStatus({ year, month }, NOW)).toEqual({ tone, text });
+  it.each<[number, number, 'ok' | 'soon' | 'overdue', number, string]>([
+    [2028, 10, 'ok', 24, 'Die nächste HU ist bis Ende 10/2028 fällig.'],
+    [2027, 1, 'ok', 3, 'Die nächste HU ist bis Ende 01/2027 fällig.'],
+    [2026, 12, 'soon', 2, 'Die HU ist bis Ende 12/2026 fällig.'],
+    [2026, 11, 'soon', 1, 'Die HU ist bis Ende 11/2026 fällig.'],
+    [2026, 10, 'soon', 0, 'Die HU ist bis Ende 10/2026 fällig – also diesen Monat.'],
+    [2026, 9, 'overdue', -1, 'Die HU ist seit Ende 09/2026 abgelaufen.'],
+    [2025, 10, 'overdue', -12, 'Die HU ist seit Ende 10/2025 abgelaufen.'],
+  ])('%i-%i → %s', (year, month, tone, monthsLeft, text) => {
+    expect(huStatus({ year, month }, NOW)).toEqual({ tone, monthsLeft, text });
   });
 });
 
@@ -42,6 +42,16 @@ describe('huCalendarFile', () => {
       now: new Date(0),
     });
     expect(escaped).toContain('SUMMARY:HU fällig: A\\\\B\\nC\r\n');
+  });
+
+  it('drops other control characters', () => {
+    const file = huCalendarFile({
+      uid: 'hu-3@kaufcheck',
+      title: 'Papas\rAuto\u0007',
+      hu: { year: 2027, month: 1 },
+      now: new Date(0),
+    });
+    expect(file).toContain('SUMMARY:HU fällig: Papas\\nAuto\r\n');
   });
 
   it('escapes text and folds long lines at 75 octets', () => {

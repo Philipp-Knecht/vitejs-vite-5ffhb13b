@@ -89,7 +89,36 @@ export function formFromListing(vehicle: Vehicle | null): CarFormValues {
   };
 }
 
-export type CarFormField = 'makeId' | 'modelName' | 'registration' | 'mileageKm' | 'hu';
+export type CarFormField =
+  'makeId' | 'modelName' | 'generation' | 'registration' | 'mileageKm' | 'hu' | 'nickname';
+
+export interface CarFormError {
+  field: CarFormField | null;
+  message: string;
+}
+
+const SERVER_FIELDS: Record<string, CarFormField> = {
+  makeId: 'makeId',
+  modelId: 'modelName',
+  modelName: 'modelName',
+  generationId: 'generation',
+  firstRegistration: 'registration',
+  mileageKm: 'mileageKm',
+  huUntil: 'hu',
+  nickname: 'nickname',
+};
+
+/** A server validation error, attached to its field when the server names one. */
+export function formErrorFromServer(
+  message: string,
+  fieldErrors: Record<string, string[]> | undefined,
+): CarFormError {
+  for (const [key, messages] of Object.entries(fieldErrors ?? {})) {
+    const field = SERVER_FIELDS[key.split('.')[0] ?? ''];
+    if (field) return { field, message: messages[0] ?? message };
+  }
+  return { field: null, message };
+}
 
 const wholeNumber = (value: string) => {
   const compact = value.replace(/[\s.]/g, '');
@@ -99,17 +128,19 @@ const wholeNumber = (value: string) => {
 /** The request body, or the first field to fix. */
 export function inputFromForm(
   values: CarFormValues,
+  now: Date,
 ): { input: OwnedCarInput } | { field: CarFormField; message: string } {
+  const thisYear = now.getFullYear();
   if (!values.makeId) return { field: 'makeId', message: 'Bitte wähle die Marke.' };
   const catalogModel = values.modelId && values.modelId !== OTHER_MODEL ? values.modelId : null;
   const modelName = values.modelName.trim();
   if (!modelName) return { field: 'modelName', message: 'Bitte wähle oder nenne das Modell.' };
 
   const year = wholeNumber(values.registrationYear);
-  if (year === null || year < 1950)
+  if (year === null || year < 1950 || year > thisYear)
     return {
       field: 'registration',
-      message: 'Bitte gib das Jahr der Erstzulassung an, z. B. 2017.',
+      message: `Bitte gib das Jahr der Erstzulassung an, zwischen 1950 und ${thisYear}.`,
     };
   const month = values.registrationMonth ? Number(values.registrationMonth) : null;
 
@@ -125,6 +156,8 @@ export function inputFromForm(
     const huYear = wholeNumber(values.huYear);
     if (!values.huMonth || huYear === null || huYear < 1950)
       return { field: 'hu', message: 'Bitte gib Monat und Jahr von der HU-Plakette an.' };
+    if (huYear > thisYear + 3)
+      return { field: 'hu', message: 'Die HU kann höchstens drei Jahre im Voraus gültig sein.' };
     huUntil = { year: huYear, month: Number(values.huMonth) };
   }
 
@@ -142,6 +175,12 @@ export function inputFromForm(
     },
   };
 }
+
+export const carHeadingId = (id: string) => `car-${id}-title`;
+
+/** The nickname, or make and model. */
+export const carName = (car: Pick<OwnedCarDto, 'makeId' | 'modelName' | 'nickname'>) =>
+  car.nickname ?? carTitle(car);
 
 export function carTitle(car: Pick<OwnedCarDto, 'makeId' | 'modelName'>): string {
   return `${makeById(car.makeId)?.name ?? car.makeId} ${car.modelName}`;

@@ -10,6 +10,8 @@ export const monthYear = (value: { year: number; month: number | null }) =>
 export interface HuStatus {
   tone: 'ok' | 'soon' | 'overdue';
   text: string;
+  /** Calendar months from now to the HU month; negative when it has expired. */
+  monthsLeft: number;
 }
 
 /**
@@ -17,26 +19,25 @@ export interface HuStatus {
  * of that month (§ 29 Abs. 7 StVZO).
  */
 export function huStatus(hu: HuMonth, now: Date): HuStatus {
-  const months = hu.year * 12 + hu.month - (now.getFullYear() * 12 + now.getMonth() + 1);
-  const until = monthYear(hu);
-  if (months < 0) {
-    const overdue = -months;
-    return {
-      tone: 'overdue',
-      text: `Die HU ist seit ${overdue === 1 ? 'einem Monat' : `${overdue} Monaten`} abgelaufen (gültig bis ${until}).`,
-    };
-  }
-  if (months === 0) return { tone: 'soon', text: `Die HU ist diesen Monat fällig (${until}).` };
-  if (months <= 2)
+  const monthsLeft = hu.year * 12 + hu.month - (now.getFullYear() * 12 + now.getMonth() + 1);
+  const until = `Ende ${monthYear(hu)}`;
+  if (monthsLeft < 0)
+    return { tone: 'overdue', monthsLeft, text: `Die HU ist seit ${until} abgelaufen.` };
+  if (monthsLeft === 0)
     return {
       tone: 'soon',
-      text: `Die HU ist bis ${until} fällig – in ${months === 1 ? 'einem Monat' : `${months} Monaten`}.`,
+      monthsLeft,
+      text: `Die HU ist bis ${until} fällig – also diesen Monat.`,
     };
-  return { tone: 'ok', text: `Die nächste HU ist bis ${until} fällig.` };
+  if (monthsLeft <= 2) return { tone: 'soon', monthsLeft, text: `Die HU ist bis ${until} fällig.` };
+  return { tone: 'ok', monthsLeft, text: `Die nächste HU ist bis ${until} fällig.` };
 }
 
 const icsText = (value: string) =>
-  value.replace(/[\\;,]/g, (char) => `\\${char}`).replace(/\r?\n/g, '\\n');
+  [...value.replace(/[\\;,]/g, (char) => `\\${char}`).replace(/\r\n|\r|\n/g, '\\n')]
+    // TEXT allows no other control characters (RFC 5545, 3.3.11).
+    .filter((char) => char === '\t' || (char.charCodeAt(0) >= 32 && char.charCodeAt(0) !== 127))
+    .join('');
 
 /** Folds a content line at 75 octets (RFC 5545, 3.1) without splitting a character. */
 function fold(line: string): string {

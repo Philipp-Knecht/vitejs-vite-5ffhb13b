@@ -1,6 +1,6 @@
 import type { OwnedCarDto, OwnedCarInput } from '@kaufcheck/shared';
 import { Plus } from 'lucide-react';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { Link, useLocation, useSearchParams } from 'react-router';
 import { ApiRequestError } from '../../api/client';
 import {
@@ -19,17 +19,30 @@ import { useToast } from '../../components/ui/toast-context';
 import { track } from '../../lib/analytics';
 import { appPageMeta } from '../../seo/pages';
 import { usePageMeta } from '../../seo/use-page-meta';
-import { carTitle, EMPTY_CAR_FORM, formFromCar, formFromListing } from './car';
+import {
+  carHeadingId,
+  carName,
+  EMPTY_CAR_FORM,
+  formErrorFromServer,
+  formFromCar,
+  formFromListing,
+  type CarFormError,
+} from './car';
 import { CarCard } from './CarCard';
 import { CarForm } from './CarForm';
 
 const META = appPageMeta('Mein Auto');
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+const PAGE_TITLE_ID = 'my-car-title';
+const ADD_TITLE_ID = 'add-car-title';
+const editTitleId = (id: string) => `car-${id}-edit`;
 
-const errorText = (error: unknown) =>
-  error instanceof ApiRequestError
-    ? error.message
-    : 'Das hat nicht geklappt. Bitte versuch es noch einmal.';
+function formError(error: unknown): CarFormError | null {
+  if (!error) return null;
+  if (error instanceof ApiRequestError)
+    return formErrorFromServer(error.message, error.details?.fieldErrors);
+  return { field: null, message: 'Das hat nicht geklappt. Bitte versuch es noch einmal.' };
+}
 
 function SignedOut() {
   const location = useLocation();
@@ -56,11 +69,11 @@ function SignedOut() {
 /** The form for a new car, prefilled from a check when the page is opened with ?analyse=<id>. */
 function AddCar({
   analysisId,
-  onDone,
+  onAdded,
   onCancel,
 }: {
   analysisId: string | null;
-  onDone: () => void;
+  onAdded: (car: OwnedCarDto) => void;
   onCancel?: () => void;
 }) {
   const toast = useToast();
@@ -68,30 +81,39 @@ function AddCar({
   const analysis = useAnalysis(analysisId ?? '', analysisId !== null);
 
   if (analysisId && analysis.isPending) return <PageLoading label="Angaben aus der Prüfung …" />;
-  const initial = analysis.data ? formFromListing(analysis.data.listing.vehicle) : EMPTY_CAR_FORM;
+  const vehicle = analysis.data?.listing.vehicle ?? null;
+  const initial = vehicle ? formFromListing(vehicle) : EMPTY_CAR_FORM;
 
   const submit = (input: OwnedCarInput) =>
     add.mutate(input, {
       onSuccess: (car) => {
-        toast.show(`${carTitle(car)} angelegt`);
-        onDone();
+        toast.show(`${carName(car)} angelegt`);
+        onAdded(car);
       },
     });
 
   return (
-    <section className="card my-car__add" aria-labelledby="add-car-title">
-      <h2 id="add-car-title">Auto anlegen</h2>
-      {analysis.data && (
+    <section className="card my-car__add" aria-labelledby={ADD_TITLE_ID}>
+      <h2 id={ADD_TITLE_ID} tabIndex={-1}>
+        Auto anlegen
+      </h2>
+      {vehicle ? (
         <p className="muted">
           Vorausgefüllt mit den Angaben aus dem Inserat – prüf sie mit dem Fahrzeugschein.
         </p>
+      ) : (
+        analysis.isError && (
+          <p className="muted">
+            Die Prüfung konnte nicht geladen werden. Trag die Angaben bitte selbst ein.
+          </p>
+        )
       )}
       <CarForm
         key={analysis.data?.id ?? 'empty'}
         initial={initial}
         submitLabel="Auto anlegen"
         busy={add.isPending}
-        serverError={add.isError ? errorText(add.error) : null}
+        serverError={formError(add.error)}
         onSubmit={submit}
         onCancel={onCancel}
       />
@@ -116,6 +138,20 @@ export function MyCarPage() {
   const [deleting, setDeleting] = useState<OwnedCarDto | null>(null);
   const now = useMemo(() => new Date(), []);
 
+  // In-place changes remove the focused element; the focus moves to the matching heading.
+  const focusNext = useRef<string | null>(null);
+  useEffect(() => {
+    if (!focusNext.current) return;
+    const target = document.getElementById(focusNext.current);
+    if (target) {
+      target.focus();
+      focusNext.current = null;
+    }
+  });
+  const moveFocus = (id: string) => {
+    focusNext.current = id;
+  };
+
   if (me.isPending) return <PageLoading />;
   const items = cars.data?.items ?? [];
   const limit = cars.data?.limit ?? 0;
@@ -126,25 +162,37 @@ export function MyCarPage() {
     if (param !== null) setParams({}, { replace: true });
   };
 
+  const refetchIfGone = (error: unknown) => {
+    if (error instanceof ApiRequestError && error.code === 'NOT_FOUND') void cars.refetch();
+  };
+
   const save = (car: OwnedCarDto, input: OwnedCarInput) =>
     update.mutate(
       { id: car.id, input },
       {
         onSuccess: () => {
           setEditing(null);
+          moveFocus(carHeadingId(car.id));
           toast.show('Änderungen gespeichert');
         },
+        onError: refetchIfGone,
       },
     );
 
   const confirmDelete = () => {
     if (!deleting) return;
+    const index = items.findIndex((item) => item.id === deleting.id);
+    const next = items[index + 1] ?? items[index - 1];
     remove.mutate(deleting.id, {
       onSuccess: () => {
-        toast.show(`${carTitle(deleting)} gelöscht`);
+        toast.show(`${carName(deleting)} gelöscht`);
         setDeleting(null);
+        moveFocus(next ? carHeadingId(next.id) : PAGE_TITLE_ID);
       },
-      onError: (error) => toast.show(errorText(error)),
+      onError: (error) => {
+        refetchIfGone(error);
+        toast.show(formError(error)?.message ?? '');
+      },
     });
   };
 
@@ -152,7 +200,9 @@ export function MyCarPage() {
     <div className="container page my-car">
       <div className="page__header">
         <div>
-          <h1>Mein Auto</h1>
+          <h1 id={PAGE_TITLE_ID} tabIndex={-1}>
+            Mein Auto
+          </h1>
           <p className="page__lead">
             Nächste HU, bekannte Schwachstellen, Rückrufe und Kosten. Gespeichert wird nur, was du
             einträgst – keine FIN und kein Kennzeichen.
@@ -174,16 +224,20 @@ export function MyCarPage() {
         <>
           {items.map((car) =>
             editing === car.id ? (
-              <section key={car.id} className="card" aria-label={`${carTitle(car)} bearbeiten`}>
+              <section key={car.id} className="card" aria-labelledby={editTitleId(car.id)}>
+                <h2 id={editTitleId(car.id)} tabIndex={-1}>
+                  {carName(car)} bearbeiten
+                </h2>
                 <CarForm
                   initial={formFromCar(car)}
                   submitLabel="Speichern"
                   busy={update.isPending}
-                  serverError={update.isError ? errorText(update.error) : null}
+                  serverError={formError(update.error)}
                   onSubmit={(input) => save(car, input)}
                   onCancel={() => {
                     update.reset();
                     setEditing(null);
+                    moveFocus(carHeadingId(car.id));
                   }}
                 />
               </section>
@@ -195,6 +249,7 @@ export function MyCarPage() {
                 onEdit={() => {
                   update.reset();
                   setEditing(car.id);
+                  moveFocus(editTitleId(car.id));
                 }}
                 onDelete={() => setDeleting(car)}
               />
@@ -203,6 +258,8 @@ export function MyCarPage() {
 
           {full ? (
             <p className="my-car__limit">
+              {analysisId &&
+                'Du hast schon ein Auto angelegt. Bearbeite oder lösche es, um das Auto aus der Prüfung zu übernehmen. '}
               {limit <= 1 ? (
                 <>
                   Mit dem kostenlosen Konto kannst du ein Auto anlegen. Für mehrere Autos gibt es{' '}
@@ -218,17 +275,32 @@ export function MyCarPage() {
           ) : items.length === 0 || adding ? (
             <AddCar
               analysisId={analysisId}
-              onDone={closeForm}
-              onCancel={items.length > 0 ? closeForm : undefined}
+              onAdded={(car) => {
+                closeForm();
+                moveFocus(carHeadingId(car.id));
+              }}
+              onCancel={
+                items.length > 0
+                  ? () => {
+                      closeForm();
+                      moveFocus(PAGE_TITLE_ID);
+                    }
+                  : undefined
+              }
             />
           ) : (
-            <Button
-              variant="secondary"
-              icon={<Plus aria-hidden size={18} />}
-              onClick={() => setAdding(true)}
-            >
-              Weiteres Auto anlegen
-            </Button>
+            <div className="no-print">
+              <Button
+                variant="secondary"
+                icon={<Plus aria-hidden size={18} />}
+                onClick={() => {
+                  setAdding(true);
+                  moveFocus(ADD_TITLE_ID);
+                }}
+              >
+                Weiteres Auto anlegen
+              </Button>
+            </div>
           )}
         </>
       )}
@@ -249,7 +321,7 @@ export function MyCarPage() {
         }
       >
         <p>
-          {deleting ? carTitle(deleting) : ''} und alle Angaben dazu werden gelöscht. Das lässt sich
+          {deleting ? carName(deleting) : ''} und alle Angaben dazu werden gelöscht. Das lässt sich
           nicht rückgängig machen.
         </p>
       </Dialog>

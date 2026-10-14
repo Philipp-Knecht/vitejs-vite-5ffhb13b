@@ -1,12 +1,13 @@
-import { MAKES, modelsOfMake } from '@kaufcheck/catalog';
 import { FUEL_LABELS, FUEL_TYPES, type FuelType, type OwnedCarInput } from '@kaufcheck/shared';
-import { useState, type FormEvent } from 'react';
+import { generationYearsLabel, MAKES, modelsOfMake } from '@kaufcheck/catalog';
+import { useEffect, useId, useRef, useState, type FormEvent } from 'react';
 import { Button } from '../../components/ui/Button';
 import { SelectField, TextField } from '../../components/ui/Field';
 import {
   GENERATIONS,
   inputFromForm,
   OTHER_MODEL,
+  type CarFormError,
   type CarFormField,
   type CarFormValues,
 } from './car';
@@ -53,12 +54,21 @@ export function CarForm({
   initial: CarFormValues;
   submitLabel: string;
   busy: boolean;
-  serverError: string | null;
+  serverError: CarFormError | null;
   onSubmit: (input: OwnedCarInput) => void;
   onCancel?: () => void;
 }) {
   const [values, setValues] = useState(initial);
-  const [error, setError] = useState<{ field: CarFormField; message: string } | null>(null);
+  const [clientError, setClientError] = useState<CarFormError | null>(null);
+  const error = clientError ?? serverError;
+  const form = useRef<HTMLFormElement>(null);
+  const registrationHint = useId();
+  const huHint = useId();
+  // A new error moves the focus to its field, so that it is announced.
+  useEffect(() => {
+    if (!error?.field) return;
+    form.current?.querySelector<HTMLElement>('[aria-invalid="true"]')?.focus();
+  }, [error]);
   const set = (key: keyof CarFormValues) => (event: { target: { value: string } }) =>
     setValues((current) => ({ ...current, [key]: event.target.value }));
 
@@ -89,20 +99,21 @@ export function CarForm({
 
   const submit = (event: FormEvent) => {
     event.preventDefault();
-    const result = inputFromForm(values);
+    const result = inputFromForm(values, new Date());
     if ('field' in result) {
-      setError(result);
+      setClientError(result);
       return;
     }
-    setError(null);
+    setClientError(null);
     onSubmit(result.input);
   };
 
   return (
-    <form className="car-form" onSubmit={submit} noValidate>
+    <form ref={form} className="car-form" onSubmit={submit} noValidate>
       <div className="car-form__grid">
         <SelectField
           label="Marke"
+          required
           value={values.makeId}
           onChange={chooseMake}
           error={errorFor('makeId')}
@@ -117,6 +128,7 @@ export function CarForm({
         {values.makeId && (
           <SelectField
             label="Modell"
+            required
             value={values.modelId}
             onChange={chooseModel}
             error={values.modelId === OTHER_MODEL ? undefined : errorFor('modelName')}
@@ -133,6 +145,7 @@ export function CarForm({
         {values.modelId === OTHER_MODEL && (
           <TextField
             label="Modellbezeichnung"
+            required
             maxLength={60}
             value={values.modelName}
             onChange={set('modelName')}
@@ -145,11 +158,12 @@ export function CarForm({
             hint="Für die bekannten Schwachstellen; ohne Angabe passend zur Erstzulassung"
             value={values.generationId}
             onChange={set('generationId')}
+            error={errorFor('generation')}
           >
             <option value="">Passend zur Erstzulassung</option>
             {generations.map((generation) => (
               <option key={generation.id} value={generation.id}>
-                {generation.name} ({generation.years[0]}–{generation.years[1] ?? 'heute'})
+                {generation.name} ({generationYearsLabel(generation.years)})
               </option>
             ))}
           </SelectField>
@@ -164,19 +178,22 @@ export function CarForm({
         </SelectField>
       </div>
 
-      <fieldset className="car-form__pair">
+      <fieldset className="car-form__pair" aria-describedby={registrationHint}>
         <legend>Erstzulassung</legend>
-        <p className="field__hint">Fahrzeugschein, Feld B</p>
+        <p className="field__hint" id={registrationHint}>
+          Fahrzeugschein, Feld B
+        </p>
         <div className="car-form__pair-fields">
           <SelectField
             label="Monat"
             value={values.registrationMonth}
             onChange={set('registrationMonth')}
           >
-            <MonthOptions placeholder="Monat (optional)" />
+            <MonthOptions placeholder="Monat" />
           </SelectField>
           <TextField
             label="Jahr"
+            required
             inputMode="numeric"
             maxLength={4}
             value={values.registrationYear}
@@ -186,9 +203,9 @@ export function CarForm({
         </div>
       </fieldset>
 
-      <fieldset className="car-form__pair">
+      <fieldset className="car-form__pair" aria-describedby={huHint}>
         <legend>Nächste HU</legend>
-        <p className="field__hint">
+        <p className="field__hint" id={huHint}>
           Monat und Jahr auf der Prüfplakette am hinteren Kennzeichen oder im Fahrzeugschein
         </p>
         <div className="car-form__pair-fields">
@@ -215,19 +232,19 @@ export function CarForm({
           error={errorFor('mileageKm')}
         />
         <TextField
-          label="Name (optional)"
-          hint="Zum Beispiel „Familienauto“"
+          label="Name"
+          hint="Optional, zum Beispiel „Familienauto“"
+          error={errorFor('nickname')}
           maxLength={60}
           value={values.nickname}
           onChange={set('nickname')}
         />
       </div>
 
-      {serverError && (
-        <p className="field__error" role="alert">
-          {serverError}
-        </p>
-      )}
+      {/* Errors without a field (e.g. the plan limit); field errors sit at their field. */}
+      <p className="field__error" role="alert">
+        {error && !error.field ? error.message : null}
+      </p>
       <div className="button-row">
         <Button type="submit" loading={busy}>
           {submitLabel}

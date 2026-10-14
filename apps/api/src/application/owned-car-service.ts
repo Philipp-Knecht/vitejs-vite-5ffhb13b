@@ -54,6 +54,18 @@ const invalid = (field: string, message: string) =>
 /** Months since year 0, for comparing year/month pairs. */
 const monthIndex = (year: number, month: number) => year * 12 + month - 1;
 
+/** This month in German time – the server itself runs in UTC. */
+function currentMonthIndex(now: Date): number {
+  const parts = new Intl.DateTimeFormat('en-US', {
+    timeZone: 'Europe/Berlin',
+    year: 'numeric',
+    month: 'numeric',
+  }).formatToParts(now);
+  const part = (type: 'year' | 'month') =>
+    Number(parts.find((item) => item.type === type)?.value ?? NaN);
+  return monthIndex(part('year'), part('month'));
+}
+
 /**
  * Checks what the schema cannot: catalog ids that belong together and dates
  * that are possible today. Returns the columns to store.
@@ -63,14 +75,8 @@ function toColumns(input: OwnedCarInput, now: Date) {
   const model = modelById(input.modelId);
   if (input.modelId && model?.makeId !== input.makeId)
     throw invalid('modelId', 'Dieses Modell passt nicht zur Marke.');
-  if (input.generationId) {
-    const summary = MODEL_INDEX.find((entry) => entry.id === input.modelId);
-    if (!summary?.generations.some((generation) => generation.id === input.generationId))
-      throw invalid('generationId', 'Diese Generation passt nicht zum Modell.');
-  }
-
-  const current = monthIndex(now.getFullYear(), now.getMonth() + 1);
   const registration = input.firstRegistration;
+  const current = currentMonthIndex(now);
   // Without a month, the year alone must not be in the future.
   if (monthIndex(registration.year, registration.month ?? 1) > current)
     throw invalid('firstRegistration', 'Die Erstzulassung liegt in der Zukunft.');
@@ -83,11 +89,22 @@ function toColumns(input: OwnedCarInput, now: Date) {
       throw invalid('huUntil', 'Die HU liegt vor der Erstzulassung.');
   }
 
+  if (input.generationId) {
+    const summary = MODEL_INDEX.find((entry) => entry.id === input.modelId);
+    const generation = summary?.generations.find((item) => item.id === input.generationId);
+    if (!generation) throw invalid('generationId', 'Diese Generation passt nicht zum Modell.');
+    // A year of tolerance: generations overlap at model changes.
+    const [from, to] = generation.years;
+    if (registration.year < from - 1 || (to !== null && registration.year > to + 1))
+      throw invalid('generationId', 'Diese Generation passt nicht zur Erstzulassung.');
+  }
+
   return {
     nickname: input.nickname || null,
     makeId: input.makeId,
     modelId: input.modelId,
-    modelName: input.modelName,
+    // A catalog model is stored with its catalog name.
+    modelName: model?.model ?? input.modelName,
     generationId: input.generationId,
     fuel: input.fuel,
     firstRegistrationYear: registration.year,
@@ -119,16 +136,20 @@ export class OwnedCarService {
     const userId = requireUser(actor);
     const max = actor.entitlements.ownedCarsMax;
     const data = toColumns(input, this.now());
-    const used = await this.db.ownedCar.count({ where: { userId } });
-    if (used >= max)
-      throw new AppError('PLAN_LIMIT_REACHED', {
-        message:
-          max === 1
-            ? 'Mit dem kostenlosen Konto kannst du ein Auto anlegen. Mehrere Autos gehen mit KaufCheck Pro.'
-            : `Du kannst bis zu ${max} Autos anlegen. Lösche eines, um Platz zu schaffen.`,
-        details: { limit: max, used },
-      });
-    const row = await this.db.ownedCar.create({ data: { userId, ...data } });
+    const row = await this.db.$transaction(async (tx) => {
+      // Locks the user so that parallel requests cannot pass the limit together.
+      await tx.$queryRaw`SELECT "id" FROM "User" WHERE "id" = ${userId}::uuid FOR UPDATE`;
+      const used = await tx.ownedCar.count({ where: { userId } });
+      if (used >= max)
+        throw new AppError('PLAN_LIMIT_REACHED', {
+          message:
+            max <= 1
+              ? 'Mit dem kostenlosen Konto kannst du ein Auto anlegen. Mehrere Autos gehen mit KaufCheck Pro.'
+              : `Du kannst bis zu ${max} Autos anlegen. Lösche eines, um Platz zu schaffen.`,
+          details: { limit: max, used },
+        });
+      return tx.ownedCar.create({ data: { userId, ...data } });
+    });
     this.analytics.track('owned_car_added', { plan: actor.plan }, actor);
     return toDto(row);
   }
@@ -137,9 +158,9 @@ export class OwnedCarService {
     const userId = requireUser(actor);
     if (!isUuid(id)) throw this.notFound();
     const data = toColumns(input, this.now());
-    const { count } = await this.db.ownedCar.updateMany({ where: { id, userId }, data });
-    if (count === 0) throw this.notFound();
-    return toDto(await this.db.ownedCar.findUniqueOrThrow({ where: { id } }));
+    const [row] = await this.db.ownedCar.updateManyAndReturn({ where: { id, userId }, data });
+    if (!row) throw this.notFound();
+    return toDto(row);
   }
 
   async remove(actor: Actor, id: string): Promise<void> {

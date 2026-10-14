@@ -13,7 +13,7 @@ export function ownedCarRoutes(app: FastifyInstance, services: Services): void {
     return reply.status(201).send(await ownedCars.add(request.actor, body));
   });
 
-  app.patch<{ Params: { id: string } }>('/api/owned-cars/:id', async (request) => {
+  app.put<{ Params: { id: string } }>('/api/owned-cars/:id', async (request) => {
     const body = parseInput(OwnedCarInputSchema, request.body);
     return ownedCars.update(request.actor, request.params.id, body);
   });

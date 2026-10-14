@@ -49,7 +49,16 @@ function IssueHead({ issue }: { issue: Generation['issues'][number] }) {
   );
 }
 
-function GenerationDetails({ generation, compact }: { generation: Generation; compact: boolean }) {
+function GenerationDetails({
+  generation,
+  compact,
+  owner,
+}: {
+  generation: Generation;
+  compact: boolean;
+  owner: boolean;
+}) {
+  const IssuesHeading = owner ? null : 'h4';
   return (
     <div className="model-generation">
       {!compact && generation.strengths.length > 0 && (
@@ -64,7 +73,7 @@ function GenerationDetails({ generation, compact }: { generation: Generation; co
       )}
       {generation.issues.length > 0 && (
         <section aria-label="Bekannte Schwachstellen">
-          <h4>Bekannte Schwachstellen</h4>
+          {IssuesHeading && <IssuesHeading>Bekannte Schwachstellen</IssuesHeading>}
           <ul className="issue-list">
             {generation.issues.map((issue) =>
               compact ? (
@@ -88,35 +97,37 @@ function GenerationDetails({ generation, compact }: { generation: Generation; co
           </ul>
         </section>
       )}
-      {(generation.engines.recommended.length > 0 || generation.engines.caution.length > 0) && (
-        <section aria-label="Motoren" className="engine-notes">
-          {generation.engines.recommended.length > 0 && (
-            <div>
-              <h4>Empfehlenswert</h4>
-              <ul>
-                {generation.engines.recommended.map((engine) => (
-                  <li key={engine.name}>
-                    <strong>{engine.name}</strong> – {engine.why}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          )}
-          {generation.engines.caution.length > 0 && (
-            <div>
-              <h4>Mit Vorsicht</h4>
-              <ul>
-                {generation.engines.caution.map((engine) => (
-                  <li key={engine.name}>
-                    <strong>{engine.name}</strong> – {engine.why}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          )}
-        </section>
-      )}
-      {generation.tips.length > 0 && (
+      {/* Engine advice and inspection tips are for buyers, not for owners. */}
+      {!owner &&
+        (generation.engines.recommended.length > 0 || generation.engines.caution.length > 0) && (
+          <section aria-label="Motoren" className="engine-notes">
+            {generation.engines.recommended.length > 0 && (
+              <div>
+                <h4>Empfehlenswert</h4>
+                <ul>
+                  {generation.engines.recommended.map((engine) => (
+                    <li key={engine.name}>
+                      <strong>{engine.name}</strong> – {engine.why}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+            {generation.engines.caution.length > 0 && (
+              <div>
+                <h4>Mit Vorsicht</h4>
+                <ul>
+                  {generation.engines.caution.map((engine) => (
+                    <li key={engine.name}>
+                      <strong>{engine.name}</strong> – {engine.why}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+          </section>
+        )}
+      {!owner && generation.tips.length > 0 && (
         <section aria-label="Tipps für die Besichtigung">
           <h4>Tipps für die Besichtigung</h4>
           <ul className="check-list">
@@ -135,11 +146,13 @@ interface ModelKnowledgeViewProps {
   yearMin?: number | null;
   yearMax?: number | null;
   /** Heading level of the generation title (below the page or section heading). */
-  generationHeading?: 'h2' | 'h3';
+  generationHeading?: 'h2' | 'h3' | 'h4';
   /** Weaknesses as expandable rows, without strengths – inside a listing check. */
   compact?: boolean;
   /** Generation shown first, e.g. the one a user chose for their car. */
   initialGenerationId?: string | null;
+  /** For the owner of such a car („Mein Auto“): weaknesses only, no buying advice. */
+  owner?: boolean;
 }
 
 /** Generations with strengths, weaknesses (with sources), engines and inspection tips. */
@@ -150,6 +163,7 @@ export function ModelKnowledgeView({
   generationHeading: GenerationHeading = 'h3',
   compact = false,
   initialGenerationId = null,
+  owner = false,
 }: ModelKnowledgeViewProps) {
   const [selected, setSelected] = useState<string | null>(initialGenerationId);
   const generation =
@@ -188,15 +202,22 @@ export function ModelKnowledgeView({
             {generation.name}
             {generation.code ? ` (${generation.code})` : ''}, {yearsLabel(generation.years)}
           </GenerationHeading>
-          <GenerationDetails generation={generation} compact={compact} />
+          <GenerationDetails generation={generation} compact={compact} owner={owner} />
         </>
       )}
-      <p className="model-insights__disclaimer">
-        Bekannte Schwachstellen laut ADAC, TÜV-Report und Fachpresse – sie treten nicht bei jedem
-        Auto auf. Wie es um das Auto vor dir steht, zeigt erst die Besichtigung, im Zweifel mit
-        einer Werkstatt.{' '}
-        <Link to="/auto-besichtigung-checkliste">Zur Besichtigungs-Checkliste</Link>
-      </p>
+      {owner ? (
+        <p className="model-insights__disclaimer">
+          Bekannte Schwachstellen laut ADAC, TÜV-Report und Fachpresse – sie treten nicht bei jedem
+          Auto auf. Merkst du Anzeichen davon, lass dein Auto in einer Werkstatt prüfen.
+        </p>
+      ) : (
+        <p className="model-insights__disclaimer">
+          Bekannte Schwachstellen laut ADAC, TÜV-Report und Fachpresse – sie treten nicht bei jedem
+          Auto auf. Wie es um das Auto vor dir steht, zeigt erst die Besichtigung, im Zweifel mit
+          einer Werkstatt.{' '}
+          <Link to="/auto-besichtigung-checkliste">Zur Besichtigungs-Checkliste</Link>
+        </p>
+      )}
     </div>
   );
 }

@@ -168,17 +168,28 @@ export type SaveSearchRequest = z.infer<typeof SaveSearchRequestSchema>;
 // ---------------------------------------------------------------------------
 
 const CarYearSchema = z.number().int().min(1950).max(2100);
+
+/** One line of text without control characters (a NUL byte cannot be stored, a line break makes no sense). */
+const lineOfText = (max: number) =>
+  z
+    .string()
+    .trim()
+    .max(max)
+    .refine(
+      (value) => ![...value].some((char) => char.charCodeAt(0) < 32 || char.charCodeAt(0) === 127),
+      'Bitte ohne Zeilenumbrüche und Steuerzeichen.',
+    );
 const CarMonthSchema = z.number().int().min(1).max(12);
 
 /** What the user enters about a car they own; catalog ids are checked by the server. */
 export const OwnedCarInputSchema = z.object({
-  nickname: z.string().trim().max(60).nullable(),
+  nickname: lineOfText(60).nullable(),
   /** Catalog make id, e.g. `vw`. */
   makeId: z.string().min(1).max(40),
   /** Catalog model id when the model is known, e.g. `vw-golf`. */
   modelId: z.string().min(1).max(80).nullable(),
   /** The model as the user calls it, shown when there is no catalog model. */
-  modelName: z.string().trim().min(1).max(60),
+  modelName: lineOfText(60).pipe(z.string().min(1)),
   generationId: z.string().min(1).max(80).nullable(),
   fuel: z.enum(FUEL_TYPES).nullable(),
   firstRegistration: z.object({ year: CarYearSchema, month: CarMonthSchema.nullable() }),

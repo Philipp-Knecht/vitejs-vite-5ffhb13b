@@ -39,7 +39,7 @@ test('a bought car is taken over from its check and kept in view', async ({ page
   await form.getByRole('button', { name: 'Auto anlegen' }).click();
 
   const card = page.getByRole('article', { name: /Audi/ });
-  await expect(card).toContainText(`Die nächste HU ist bis 03/${huYear} fällig.`);
+  await expect(card).toContainText(`Die nächste HU ist bis Ende 03/${huYear} fällig.`);
   await expect(card).toContainText('123.000 km');
   await expect(card).toContainText(
     'Zu diesem Modell hat KaufCheck noch keine recherchierten Schwachstellen.',
@@ -49,7 +49,7 @@ test('a bought car is taken over from its check and kept in view', async ({ page
 
   // A calendar entry instead of e-mails.
   const downloading = page.waitForEvent('download');
-  await card.getByRole('button', { name: 'HU-Termin in den Kalender' }).click();
+  await card.getByRole('button', { name: 'HU-Frist in den Kalender' }).click();
   const download = await downloading;
   expect(download.suggestedFilename()).toBe(`hu-${huYear}-03.ics`);
   const ics = readFileSync(await download.path(), 'utf8');
@@ -73,12 +73,13 @@ test('a bought car is taken over from its check and kept in view', async ({ page
     .getByRole('button', { name: 'Löschen' })
     .click();
   await expect(card).toBeHidden();
+  await expect(page.getByRole('heading', { level: 1, name: 'Mein Auto' })).toBeFocused();
   const add = page.getByRole('region', { name: 'Auto anlegen' });
   await add.getByLabel('Marke').selectOption('vw');
   await add.getByLabel('Modell', { exact: true }).selectOption('vw-golf');
   await add.getByLabel('Generation').selectOption('vw-golf-7');
   await add.getByRole('group', { name: 'Erstzulassung' }).getByLabel('Jahr').fill('2016');
-  await add.getByLabel('Name (optional)').fill('Familienauto');
+  await add.getByLabel('Name', { exact: true }).fill('Familienauto');
   await add.getByRole('button', { name: 'Auto anlegen' }).click();
   const golf = page.getByRole('article', { name: 'Familienauto' });
   await expect(golf).toContainText('Volkswagen Golf');
@@ -86,8 +87,17 @@ test('a bought car is taken over from its check and kept in view', async ({ page
 
   // Edit: the mileage changes.
   await golf.getByRole('button', { name: 'Bearbeiten' }).click();
-  const edit = page.getByRole('region', { name: 'Volkswagen Golf bearbeiten' });
+  const edit = page.getByRole('region', { name: 'Familienauto bearbeiten' });
+  await expect(edit.getByRole('heading', { name: 'Familienauto bearbeiten' })).toBeFocused();
   await edit.getByLabel('Kilometerstand').fill('88000');
   await edit.getByRole('button', { name: 'Speichern' }).click();
   await expect(page.getByRole('article', { name: 'Familienauto' })).toContainText('88.000 km');
+  await expect(page.getByRole('heading', { level: 2, name: 'Familienauto' })).toBeFocused();
+
+  // A wrong year is reported at its field.
+  await page.getByRole('button', { name: 'Familienauto bearbeiten' }).click();
+  await edit.getByRole('group', { name: 'Erstzulassung' }).getByLabel('Jahr').fill('2005');
+  await edit.getByRole('button', { name: 'Speichern' }).click();
+  await expect(edit.getByLabel('Generation')).toBeFocused();
+  await expect(edit.getByText('Diese Generation passt nicht zur Erstzulassung.')).toBeVisible();
 });

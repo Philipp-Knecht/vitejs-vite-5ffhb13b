@@ -50,7 +50,7 @@ describe('Mein Auto (owned cars)', () => {
       limit: 1,
     });
 
-    const updated = await free.patch(`/api/owned-cars/${car.id}`, {
+    const updated = await free.put(`/api/owned-cars/${car.id}`, {
       ...GOLF,
       nickname: null,
       mileageKm: 101_500,
@@ -89,6 +89,10 @@ describe('Mein Auto (owned cars)', () => {
       [{ huUntil: { year: 2099, month: 1 } }, 'huUntil'],
       [{ mileageKm: -1 }, 'mileageKm'],
       [{ modelName: '' }, 'modelName'],
+      [{ nickname: 'a\u0000b' }, 'nickname'],
+      [{ modelId: null, generationId: null, modelName: 'Golf\nCountry' }, 'modelName'],
+      [{ firstRegistration: { year: 2005, month: 1 } }, 'generationId'],
+      [{ firstRegistration: { year: 2101, month: 1 } }, 'firstRegistration'],
     ];
     for (const [change, field] of cases) {
       const response = await free.post('/api/owned-cars', { ...GOLF, ...change });
@@ -107,11 +111,28 @@ describe('Mein Auto (owned cars)', () => {
     expect(other.statusCode).toBe(201);
   });
 
+  it('stores a catalog model with its catalog name', async () => {
+    const free = await client();
+    const car = (
+      await free.post('/api/owned-cars', { ...GOLF, modelName: 'Passat' })
+    ).json<OwnedCarDto>();
+    expect(car.modelName).toBe('Golf');
+  });
+
+  it('does not pass the limit with parallel requests', async () => {
+    const free = await client();
+    const statuses = await Promise.all(
+      Array.from({ length: 6 }, () => free.post('/api/owned-cars', GOLF)),
+    ).then((responses) => responses.map((response) => response.statusCode));
+    expect(statuses.filter((status) => status === 201)).toHaveLength(1);
+    expect((await free.get('/api/owned-cars')).json<OwnedCarsResponse>().items).toHaveLength(1);
+  });
+
   it('keeps cars private to their owner', async () => {
     const owner = await client();
     const car = (await owner.post('/api/owned-cars', GOLF)).json<OwnedCarDto>();
     const other = await client();
-    expect((await other.patch(`/api/owned-cars/${car.id}`, GOLF)).statusCode).toBe(404);
+    expect((await other.put(`/api/owned-cars/${car.id}`, GOLF)).statusCode).toBe(404);
     expect((await other.delete(`/api/owned-cars/${car.id}`)).statusCode).toBe(404);
     expect((await other.delete('/api/owned-cars/not-a-uuid')).statusCode).toBe(404);
     expect((await other.get('/api/owned-cars')).json<OwnedCarsResponse>().items).toEqual([]);

@@ -4,25 +4,12 @@ import { useQuery } from '@tanstack/react-query';
 import { CalendarPlus, Pencil, Trash2 } from 'lucide-react';
 import { Link } from 'react-router';
 import { Button } from '../../components/ui/Button';
+import { downloadTextFile } from '../../lib/download';
 import { formatNumber } from '../../lib/format';
 import { RecallCheck } from '../recalls/RecallCheck';
 import { ModelKnowledgeView } from '../search/ModelInsights';
 import { taxCalculatorLink } from '../tax/tax-link';
-import { carHuCalendarFile, carTitle } from './car';
-
-function downloadCalendar(car: OwnedCarDto, hu: { year: number; month: number }) {
-  const blob = new Blob([carHuCalendarFile(car, hu, new Date())], {
-    type: 'text/calendar;charset=utf-8',
-  });
-  const url = URL.createObjectURL(blob);
-  const link = document.createElement('a');
-  link.href = url;
-  link.download = `hu-${hu.year}-${String(hu.month).padStart(2, '0')}.ics`;
-  document.body.append(link);
-  link.click();
-  link.remove();
-  URL.revokeObjectURL(url);
-}
+import { carHeadingId, carHuCalendarFile, carName, carTitle } from './car';
 
 function Knowledge({ car }: { car: OwnedCarDto }) {
   const modelId = car.modelId && hasKnowledge(car.modelId) ? car.modelId : null;
@@ -39,6 +26,8 @@ function Knowledge({ car }: { car: OwnedCarDto }) {
       </p>
     );
   }
+  if (knowledge.isError)
+    return <p className="muted">Die Schwachstellen konnten nicht geladen werden.</p>;
   if (!knowledge.data) return null;
   const year = car.firstRegistration.year;
   return (
@@ -48,8 +37,9 @@ function Knowledge({ car }: { car: OwnedCarDto }) {
         yearMin={year}
         yearMax={year}
         initialGenerationId={car.generationId}
-        generationHeading="h3"
+        generationHeading="h4"
         compact
+        owner
       />
       <p>
         <Link to={`/modelle/${modelId}`}>
@@ -74,14 +64,21 @@ export function CarCard({
 }) {
   const title = carTitle(car);
   const hu = car.huUntil ? huStatus(car.huUntil, now) : null;
-  const headingId = `car-${car.id}-title`;
+  const headingId = carHeadingId(car.id);
+
+  const downloadCalendar = (until: { year: number; month: number }) =>
+    downloadTextFile(
+      `hu-${until.year}-${String(until.month).padStart(2, '0')}.ics`,
+      carHuCalendarFile(car, until, new Date()),
+      'text/calendar;charset=utf-8',
+    );
 
   return (
     <article className="car-card" aria-labelledby={headingId}>
       <header className="car-card__header">
         <div>
-          <h2 id={headingId} className="car-card__title">
-            {car.nickname ?? title}
+          <h2 id={headingId} className="car-card__title" tabIndex={-1}>
+            {carName(car)}
           </h2>
           {car.nickname && <p className="car-card__subtitle">{title}</p>}
         </div>
@@ -90,6 +87,7 @@ export function CarCard({
             variant="quiet"
             size="sm"
             icon={<Pencil aria-hidden size={16} />}
+            aria-label={`${carName(car)} bearbeiten`}
             onClick={onEdit}
           >
             Bearbeiten
@@ -98,6 +96,7 @@ export function CarCard({
             variant="quiet"
             size="sm"
             icon={<Trash2 aria-hidden size={16} />}
+            aria-label={`${carName(car)} löschen`}
             onClick={onDelete}
           >
             Löschen
@@ -124,28 +123,33 @@ export function CarCard({
         )}
       </dl>
 
-      <section className="car-card__section" aria-labelledby={`${headingId}-hu`}>
-        <h3 id={`${headingId}-hu`}>Hauptuntersuchung</h3>
+      <div className="car-card__section">
+        <h3>Hauptuntersuchung</h3>
         {car.huUntil && hu ? (
           <>
             <p className={`car-card__hu car-card__hu--${hu.tone}`}>{hu.text}</p>
-            {hu.tone === 'overdue' && (
+            {hu.tone === 'overdue' ? (
               <p className="muted">
                 Vereinbare bald einen Termin. Ist die HU mehr als zwei Monate überzogen, wird eine
                 teurere Ergänzungsuntersuchung fällig.
               </p>
+            ) : (
+              <div className="no-print">
+                <Button
+                  variant="secondary"
+                  size="sm"
+                  icon={<CalendarPlus aria-hidden size={16} />}
+                  onClick={() => downloadCalendar(car.huUntil!)}
+                >
+                  HU-Frist in den Kalender
+                </Button>
+                <p className="muted car-card__note">
+                  {hu.monthsLeft >= 2
+                    ? 'Der Termin steht am Monatsersten; übernimmt dein Kalender die Erinnerung aus der Datei, meldet er sich vier Wochen vorher.'
+                    : 'Der Termin steht am Monatsersten in deinem Kalender.'}
+                </p>
+              </div>
             )}
-            <Button
-              variant="secondary"
-              size="sm"
-              icon={<CalendarPlus aria-hidden size={16} />}
-              onClick={() => downloadCalendar(car, car.huUntil!)}
-            >
-              HU-Termin in den Kalender
-            </Button>
-            <p className="muted car-card__note">
-              Der Kalendereintrag erinnert dich vier Wochen vorher – in deinem eigenen Kalender.
-            </p>
           </>
         ) : (
           <p className="muted">
@@ -153,24 +157,24 @@ export function CarCard({
             fällig ist.
           </p>
         )}
-      </section>
+      </div>
 
-      <section className="car-card__section" aria-labelledby={`${headingId}-issues`}>
-        <h3 id={`${headingId}-issues`}>Bekannte Schwachstellen</h3>
+      <div className="car-card__section">
+        <h3>Bekannte Schwachstellen</h3>
         <Knowledge car={car} />
-      </section>
+      </div>
 
-      <section className="car-card__section" aria-labelledby={`${headingId}-recalls`}>
-        <h3 id={`${headingId}-recalls`}>Rückrufe</h3>
+      <div className="car-card__section">
+        <h3>Rückrufe</h3>
         <RecallCheck makeId={car.makeId} placement="my_car" />
-      </section>
+      </div>
 
-      <section className="car-card__section" aria-labelledby={`${headingId}-costs`}>
-        <h3 id={`${headingId}-costs`}>Kosten</h3>
+      <div className="car-card__section">
+        <h3>Kosten</h3>
         <p>
           <Link to={taxCalculatorLink(car)}>Kfz-Steuer und laufende Kosten berechnen</Link>
         </p>
-      </section>
+      </div>
     </article>
   );
 }

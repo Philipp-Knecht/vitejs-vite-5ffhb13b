@@ -32,11 +32,11 @@ Weitere Seiten: Ratgeber (`/gebrauchtwagen-kaufen`, `/gebrauchtwagen-checkliste`
 
 **Pläne** (Standardwerte, `packages/shared/src/plans.ts` bzw. Umgebungsvariablen):
 
-| Plan               | Prüfungen/Monat | Gespeicherte Angebote | Vergleich | Gespeicherte Suchen | Sonstiges                                                 |
-| ------------------ | --------------- | --------------------- | --------- | ------------------- | --------------------------------------------------------- |
-| Ohne Konto         | 3               | –                     | –         | –                   | Werbung                                                   |
-| Kostenlos          | 10              | 5                     | 3         | –                   | Werbung                                                   |
-| Pro (4,99 €/Monat) | 300             | 500                   | 6         | 50                  | Verlauf, Foto-Analyse (nur mit Link-Abruf), keine Werbung |
+| Plan               | Prüfungen/Monat | Gespeicherte Angebote | Vergleich | Gespeicherte Suchen | Mein Auto | Sonstiges                                                                               |
+| ------------------ | --------------- | --------------------- | --------- | ------------------- | --------- | --------------------------------------------------------------------------------------- |
+| Ohne Konto         | 3               | –                     | –         | –                   | –         | Werbung                                                                                 |
+| Kostenlos          | 10              | 5                     | 3         | –                   | 1 Auto    | Werbung                                                                                 |
+| Pro (4,99 €/Monat) | 300             | 500                   | 6         | 50                  | 10 Autos  | Verlauf, PDF-Mappe, Verhandlungshilfe, Foto-Analyse (nur mit Link-Abruf), keine Werbung |
 
 Grundsätze (vom Nutzer vorgegeben, im Code umgesetzt): keine erfundenen Daten, keine Kaufempfehlung,
 keine Umgehung technischer Schutzmaßnahmen, kein Scraping von Marktplätzen, UI auf Deutsch, Code und
@@ -92,13 +92,14 @@ render.yaml, Dockerfile, docker-compose.yml   Deployment
 
 **Prisma-Modelle** (`apps/api/prisma/schema.prisma`): `User`, `Session` (nur SHA-256 des Tokens),
 `PasswordResetToken`, `Listing`, `Vehicle`, `Analysis`, `SellerQuestion`, `SavedListing`, `SavedSearch`,
-`Usage`, `Subscription`, `Order`, `ContractNotice`, `BillingEvent` (Webhook-Idempotenz), `AnalyticsEvent`;
+`OwnedCar` („Mein Auto“), `Usage`, `Subscription`, `Order`, `ContractNotice`, `BillingEvent` (Webhook-Idempotenz), `AnalyticsEvent`;
 Enums `AccountPlan`, `ListingSourceType`, `ListingCategory`, `OrderStatus`, `ContractNoticeType`.
-Migrationen: `20260930103053_init`, `20261001061746_pro_orders_and_contract_notices`, `20261007140000_saved_searches`.
+Migrationen: `20260930103053_init`, `20261001061746_pro_orders_and_contract_notices`, `20261007140000_saved_searches`,
+`20261015090000_owned_cars`.
 
 **API-Routen** (alle unter `/api`): `health`, `config`, `events`, `me`, `account`, `auth/register|login|logout`,
 `auth/password-reset/request|confirm`, `listings/analyze|analyze-text|analyze-example`, `analyses`,
-`analyses/:id`, `saved-listings[/:id][/reanalyze]`, `comparisons`, `saved-searches[/:id]`,
+`analyses/:id`, `saved-listings[/:id][/reanalyze]`, `comparisons`, `saved-searches[/:id]`, `owned-cars[/:id]`,
 `billing/orders[/:number]`, `billing/portal`, `billing/webhook`, `contracts/cancellations`,
 `contracts/withdrawals`. Außerdem `/ads.txt`.
 

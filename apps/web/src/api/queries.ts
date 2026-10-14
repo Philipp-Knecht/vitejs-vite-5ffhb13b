@@ -127,7 +127,7 @@ export function useUpdateOwnedCar() {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: ({ id, input }: { id: string; input: OwnedCarInput }) =>
-      api.patch<OwnedCarDto>(`/api/owned-cars/${encodeURIComponent(id)}`, input),
+      api.put<OwnedCarDto>(`/api/owned-cars/${encodeURIComponent(id)}`, input),
     onSuccess: () => queryClient.invalidateQueries({ queryKey: queryKeys.ownedCars }),
   });
 }
