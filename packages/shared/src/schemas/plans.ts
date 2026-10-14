@@ -11,6 +11,8 @@ export const EntitlementsSchema = z.object({
   /** Saved car searches (all marketplaces); 0 = not available. */
   savedSearchesMax: z.number().int().nonnegative(),
   history: z.boolean(),
+  /** Download an analysis with checklist as a PDF file. */
+  pdfExport: z.boolean(),
   photoAnalysis: z.boolean(),
   showAds: z.boolean(),
 });
