@@ -19,7 +19,7 @@ test('homepage → analysis result with all sections', async ({ page, context })
     'Darauf solltest du achten',
     'Fragen an den Verkäufer',
     'Rückrufe prüfen',
-    'Checkliste für die Besichtigung',
+    'Checkliste von der Besichtigung bis zur Zulassung',
     'Fotos',
   ]) {
     await expect(page.getByRole('heading', { level: 2, name: section })).toBeVisible();

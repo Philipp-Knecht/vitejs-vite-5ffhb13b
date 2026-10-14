@@ -6,8 +6,9 @@ function item(id: string, label: string, hint: string | null = null): ChecklistI
 }
 
 /**
- * Inspection checklist ("Besichtigung"). Item ids are stable so that the
- * user's ticks (stored locally in the browser) survive re-analysis.
+ * Checklist from the inspection to registration and the first steps after the
+ * purchase. Item ids are stable so that the user's ticks (stored locally in
+ * the browser) survive re-analysis.
  */
 export function buildInspectionChecklist(ctx: VehicleRuleContext): ChecklistSection[] {
   const { vehicle } = ctx;
@@ -182,12 +183,71 @@ export function buildInspectionChecklist(ctx: VehicleRuleContext): ChecklistSect
         'Zum Beispiel ein Mustervertrag eines Automobilclubs.',
       ),
       item(
+        'buy.identity',
+        'Ausweis des Verkäufers ansehen',
+        'Name und Anschrift müssen zum Fahrzeugbrief und zum Vertrag passen.',
+      ),
+      item(
         'buy.promises',
         'Zusagen im Vertrag festhalten',
         'Kilometerstand, Unfallfreiheit, bekannte Mängel.',
       ),
+      item(
+        'buy.handover_time',
+        'Datum, Uhrzeit und Kilometerstand der Übergabe im Vertrag',
+        'Ab diesem Zeitpunkt bist du für das Auto verantwortlich.',
+      ),
       item('buy.keys_documents', 'Alle Schlüssel und Papiere erhalten'),
       item('buy.payment', 'Bezahlung erst bei Übergabe'),
+    ],
+  });
+
+  sections.push({
+    id: 'registration',
+    title: 'Versicherung & Zulassung',
+    items: [
+      item(
+        'reg.evb',
+        'eVB-Nummer bei deiner Versicherung anfordern',
+        'Die elektronische Versicherungsbestätigung brauchst du für die Zulassung.',
+      ),
+      item(
+        'reg.documents',
+        'Unterlagen für die Zulassung bereitlegen',
+        'Ausweis, Zulassungsbescheinigung Teil I und II, eVB-Nummer, HU-Nachweis und ein SEPA-Mandat für die Kfz-Steuer.',
+      ),
+      item(
+        'reg.register',
+        'Auto unverzüglich auf dich umschreiben lassen',
+        'Bei der Zulassungsstelle oder online mit Online-Ausweis und den freigelegten Sicherheitscodes beider Zulassungsbescheinigungen.',
+      ),
+      item(
+        'reg.drive_home',
+        'Heimfahrt klären',
+        'Ein abgemeldetes Auto darfst du nur mit Kurzzeitkennzeichen, gültiger HU und Versicherung fahren.',
+      ),
+    ],
+  });
+
+  sections.push({
+    id: 'after_purchase',
+    title: 'Nach dem Kauf',
+    items: [
+      item(
+        'after.recalls',
+        'Offene Rückrufe erledigen lassen',
+        'In einer Vertragswerkstatt mit der FIN – die Reparatur ist kostenlos.',
+      ),
+      item(
+        'after.service',
+        vehicle.serviceHistory === 'documented'
+          ? 'Nächste Inspektion laut Serviceheft vormerken'
+          : 'Inspektion und Ölwechsel machen lassen',
+        vehicle.serviceHistory === 'documented'
+          ? null
+          : 'Ohne lückenlose Nachweise weißt du nicht, wann zuletzt gewartet wurde.',
+      ),
+      item('after.hu', 'Termin der nächsten Hauptuntersuchung notieren'),
     ],
   });
 

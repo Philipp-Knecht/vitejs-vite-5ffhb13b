@@ -32,8 +32,8 @@ export const CHECK_FEATURES = [
   },
   {
     icon: ListChecks,
-    title: 'Checkliste für die Besichtigung',
-    text: 'Unterlagen, Karosserie, Innenraum und Probefahrt – zum Abhaken direkt auf dem Smartphone.',
+    title: 'Checkliste bis zur Zulassung',
+    text: 'Unterlagen, Karosserie, Probefahrt, Kaufvertrag und Ummeldung – zum Abhaken direkt auf dem Smartphone.',
   },
   {
     icon: Scale,

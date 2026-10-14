@@ -139,6 +139,8 @@ describe('example listing (Audi A7)', async () => {
       'Innenraum',
       'Probefahrt',
       'Kauf & Übergabe',
+      'Versicherung & Zulassung',
+      'Nach dem Kauf',
     ]);
   });
 

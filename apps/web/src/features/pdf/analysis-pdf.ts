@@ -330,7 +330,7 @@ export function buildAnalysisPdf(input: AnalysisPdfInput): jsPDF {
 
   // Checklist
   if (analysis.inspectionChecklist.length > 0) {
-    w.heading('Checkliste für die Besichtigung');
+    w.heading('Checkliste von der Besichtigung bis zur Zulassung');
     for (const section of analysis.inspectionChecklist) {
       w.subheading(section.title);
       for (const item of section.items) w.checkbox(item.label, item.hint, checked.has(item.id));
