@@ -1061,6 +1061,11 @@
   font-weight: 650;
 }
 
+/* Focused after a finding is removed, like other programmatically focused headings. */
+.negotiation__title[tabindex='-1']:focus {
+  outline: none;
+}
+
 .negotiation__hint {
   margin: 0 0 8px;
   font-size: 0.9rem;
