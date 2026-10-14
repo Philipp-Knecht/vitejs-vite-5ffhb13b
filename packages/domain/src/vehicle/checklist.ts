@@ -7,11 +7,12 @@ function item(id: string, label: string, hint: string | null = null): ChecklistI
 
 /**
  * Checklist from the inspection to registration and the first steps after the
- * purchase. Item ids are stable so that the user's ticks (stored locally in
- * the browser) survive re-analysis.
+ * purchase. The user's ticks are stored per analysis in the browser by item
+ * id, so ids must stay stable and unique.
  */
 export function buildInspectionChecklist(ctx: VehicleRuleContext): ChecklistSection[] {
   const { vehicle } = ctx;
+  const dealer = ctx.listing.seller.type === 'commercial';
   const old = ctx.ageMonths !== null && ctx.ageMonths >= 96;
   const highMileage = vehicle.mileageKm !== null && vehicle.mileageKm >= 150_000;
 
@@ -182,11 +183,17 @@ export function buildInspectionChecklist(ctx: VehicleRuleContext): ChecklistSect
         'Schriftlicher Kaufvertrag',
         'Zum Beispiel ein Mustervertrag eines Automobilclubs.',
       ),
-      item(
-        'buy.identity',
-        'Ausweis des Verkäufers ansehen',
-        'Name und Anschrift müssen zum Fahrzeugbrief und zum Vertrag passen.',
-      ),
+      dealer
+        ? item(
+            'buy.identity',
+            'Händler mit Firmenname und Anschrift im Vertrag',
+            'So weißt du, wer dein Vertragspartner ist – auch wenn der Kontakt über ein Portal lief.',
+          )
+        : item(
+            'buy.identity',
+            'Ausweis des Verkäufers ansehen',
+            'Der Name sollte zum Halter in den Zulassungsbescheinigungen passen, die aktuelle Anschrift steht im Fahrzeugschein. Weicht etwas ab, lass dir den Grund erklären – wer im Auftrag verkauft, braucht eine Vollmacht. Ausweisnummer im Vertrag notieren.',
+          ),
       item(
         'buy.promises',
         'Zusagen im Vertrag festhalten',
@@ -198,7 +205,11 @@ export function buildInspectionChecklist(ctx: VehicleRuleContext): ChecklistSect
         'Ab diesem Zeitpunkt bist du für das Auto verantwortlich.',
       ),
       item('buy.keys_documents', 'Alle Schlüssel und Papiere erhalten'),
-      item('buy.payment', 'Bezahlung erst bei Übergabe'),
+      item(
+        'buy.payment',
+        'Bezahlung erst bei Übergabe',
+        'Zum Beispiel per Echtzeitüberweisung vor Ort oder bar in einer Bankfiliale; den Empfang im Vertrag bestätigen lassen.',
+      ),
     ],
   });
 
@@ -209,22 +220,22 @@ export function buildInspectionChecklist(ctx: VehicleRuleContext): ChecklistSect
       item(
         'reg.evb',
         'eVB-Nummer bei deiner Versicherung anfordern',
-        'Die elektronische Versicherungsbestätigung brauchst du für die Zulassung.',
+        'Die elektronische Versicherungsbestätigung brauchst du für die Zulassung und für ein Kurzzeitkennzeichen – am besten schon vor der Abholung.',
       ),
       item(
         'reg.documents',
         'Unterlagen für die Zulassung bereitlegen',
-        'Ausweis, Zulassungsbescheinigung Teil I und II, eVB-Nummer, HU-Nachweis und ein SEPA-Mandat für die Kfz-Steuer.',
+        'Ausweis, Zulassungsbescheinigung Teil I und II, eVB-Nummer, HU-Nachweis, ein SEPA-Mandat für die Kfz-Steuer und die alten Kennzeichen, falls neue nötig sind. Lässt jemand anderes zu, braucht er eine Vollmacht.',
       ),
       item(
         'reg.register',
         'Auto unverzüglich auf dich umschreiben lassen',
-        'Bei der Zulassungsstelle oder online mit Online-Ausweis und den freigelegten Sicherheitscodes beider Zulassungsbescheinigungen.',
+        'Bei der Zulassungsstelle oder online mit Online-Ausweis, wenn beide Zulassungsbescheinigungen einen verdeckten Sicherheitscode haben. Die Codes erst im Online-Antrag freilegen – danach sind die Dokumente ungültig.',
       ),
       item(
         'reg.drive_home',
         'Heimfahrt klären',
-        'Ein abgemeldetes Auto darfst du nur mit Kurzzeitkennzeichen, gültiger HU und Versicherung fahren.',
+        'Ist das Auto noch angemeldet, sprich Kennzeichen und Versicherung mit dem Verkäufer ab. Ist es abgemeldet: vorher auf dich zulassen oder ein Kurzzeitkennzeichen holen – nur mit eVB und gültiger HU, ohne HU nur für die Fahrt zur Prüfstelle.',
       ),
     ],
   });
@@ -236,12 +247,12 @@ export function buildInspectionChecklist(ctx: VehicleRuleContext): ChecklistSect
       item(
         'after.recalls',
         'Offene Rückrufe erledigen lassen',
-        'In einer Vertragswerkstatt mit der FIN – die Reparatur ist kostenlos.',
+        'In einer Vertragswerkstatt mit der FIN – die Reparatur ist in der Regel kostenlos.',
       ),
       item(
         'after.service',
         vehicle.serviceHistory === 'documented'
-          ? 'Nächste Inspektion laut Serviceheft vormerken'
+          ? 'Nächste Inspektion laut Wartungsnachweisen vormerken'
           : 'Inspektion und Ölwechsel machen lassen',
         vehicle.serviceHistory === 'documented'
           ? null

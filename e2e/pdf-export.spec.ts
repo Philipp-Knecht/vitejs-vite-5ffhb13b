@@ -19,7 +19,7 @@ test('Pro members download an analysis as a PDF', async ({ page }) => {
   await makePro(email);
 
   await analyzeFromHomepage(page, LISTINGS.audi);
-  await page.getByRole('checkbox', { name: /Fahrzeugschein/ }).check();
+  await page.getByRole('checkbox', { name: /^Fahrzeugschein/ }).check();
   const downloading = page.waitForEvent('download');
   await page.getByRole('button', { name: /Als PDF herunterladen/ }).click();
   const download = await downloading;

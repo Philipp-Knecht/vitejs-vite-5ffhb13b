@@ -7,7 +7,7 @@ import { isStringArray, readJson, removeItem, writeJson } from '../../lib/storag
 import { ResultSection } from './Section';
 import { checklistStorageKey as storageKey } from './storage-keys';
 
-/** Checklist from inspection to registration; progress is stored only in this browser. */
+/** Checklist from the inspection to registration; progress is stored only in this browser. */
 export function ChecklistSection({
   analysisId,
   sections,
@@ -37,7 +37,7 @@ export function ChecklistSection({
   return (
     <ResultSection
       id="besichtigung"
-      title="Checkliste von der Besichtigung bis zur Zulassung"
+      title="Checkliste für Besichtigung, Kauf und Zulassung"
       lead="Hake ab, was erledigt ist – vor Ort, beim Kauf und danach. Der Fortschritt wird nur in diesem Browser gespeichert."
       actions={
         <Button

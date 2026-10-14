@@ -142,6 +142,13 @@ describe('example listing (Audi A7)', async () => {
       'Versicherung & Zulassung',
       'Nach dem Kauf',
     ]);
+    // Ticks are stored by item id, so a duplicate would share its tick.
+    const itemIds = result.inspectionChecklist.flatMap((section) => ids(section.items));
+    expect(new Set(itemIds).size).toBe(itemIds.length);
+    const purchase = result.inspectionChecklist.find((section) => section.id === 'purchase');
+    expect(purchase?.items.find((item) => item.id === 'buy.identity')?.label).toBe(
+      'Ausweis des Verkäufers ansehen',
+    );
   });
 
   it('writes a neutral summary without verdicts', () => {
