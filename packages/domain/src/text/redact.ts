@@ -10,14 +10,14 @@ const IBAN = /\b[A-Z]{2}\d{2}(?:[ ]?[A-Z0-9]{4}){3,7}(?:[ ]?[A-Z0-9]{1,3})?\b/g;
 const WHATSAPP_LINK = /(wa\.me\/)\+?\d{6,15}/gi;
 
 /**
- * Runs of digit groups joined by one separator (spaces, „-“, „–“, „/“ or „.“,
- * not a line break) – the shape of a phone number, but also of prices, dates
- * and mileages. A group may be „+49“, „+49(0)171“ or „(0171)“. Every group is
+ * Runs of digit groups joined by one separator (spaces, a hyphen or dash, „/“
+ * or „.“, not a line break) – the shape of a phone number, but also of prices,
+ * dates and mileages. A group may be „+49“, „+49(0)171“, „+49(171)“ or „(0171)“. Every group is
  * followed by a mandatory separator, so the pattern cannot split a digit run
  * in many ways (it runs in linear time even on long digit runs).
  */
-const GROUP = String.raw`\+?\d+(?:\(0\)\d*)?|\(\+?\d+\)\d*`;
-const SEPARATOR = String.raw`[^\S\n]*[-–—/.][^\S\n]*|[^\S\n]+`;
+const GROUP = String.raw`(?:\+[^\S\n]?)?\d+(?:\(\d+\)\d*)?|\(\+?\d+\)\d*`;
+const SEPARATOR = String.raw`[^\S\n]*[-‐‑‒–—−/.][^\S\n]*|[^\S\n]+`;
 const NUMBER_RUN = new RegExp(String.raw`(?:${GROUP})(?:(?:${SEPARATOR})(?:${GROUP}))*`, 'g');
 const GROUP_IN_RUN = new RegExp(GROUP, 'g');
 
@@ -27,9 +27,9 @@ export const REDACTED_IBAN = '[IBAN entfernt]';
 
 const digitCount = (text: string) => text.replace(/\D/g, '').length;
 
-/** German numbers start with 0, +49 or 0049 („000“ is no area code). */
+/** German numbers start with 0, +49 (also „+ 49“) or 0049 („000“ is no area code). */
 const startsPhoneNumber = (group: string) =>
-  /^\(?(?:\+[1-9]|00[1-9]|0)/.test(group) && (/[1-9]/.test(group) || group === '(0)');
+  /^\(?(?:\+\s?[1-9]|00[1-9]|0)/.test(group) && (/[1-9]/.test(group) || group === '(0)');
 
 /** „1.4“, „120.000“, „12/2019“: groups joined without spaces belong together. */
 const isCompactJoin = (separator: string) => /^[./]$/.test(separator);
@@ -46,13 +46,15 @@ function looksLikePhoneNumber(candidate: string): boolean {
 
 /**
  * Within a run of digit groups, each phone number starts at a group like
- * „0171“, „+49“ or „(0)“ and takes the following groups up to 15 digits. Once
- * it has 9 digits it stops before a group that starts a new number, and before
- * a token like „120.000“ or „12/2019“ that follows after a space; it never ends
- * inside such a token. Groups before and after it (a year, a mileage) stay.
- * A first group glued to a letter („A4“, a FIN) never starts a number.
+ * „0171“, „+49“ or „(0)“ and takes the following groups up to 15 digits. It
+ * ends before a group that starts a new number, and once it has 9 digits also
+ * before a token like „120.000“ or „12/2019“ that follows after a space; it
+ * never ends inside such a token. A complete number („0171 1234567“) does not
+ * take a following value („2 Vorbesitzer“, „2019“). Groups before and after it
+ * stay; a first group glued to a code with digits („A4“, a FIN) never starts a
+ * number.
  */
-function redactPhonesInRun(run: string, gluedToLetter: boolean): string {
+function redactPhonesInRun(run: string, gluedToCode: boolean): string {
   const groups = [...run.matchAll(GROUP_IN_RUN)].map((match) => ({
     start: match.index,
     end: match.index + match[0].length,
@@ -62,27 +64,52 @@ function redactPhonesInRun(run: string, gluedToLetter: boolean): string {
     index >= 0 && index + 1 < groups.length
       ? run.slice(groups[index]!.end, groups[index + 1]!.start)
       : '';
+  /** Index of the last group of the phone number starting at group `i`, or -1. */
+  const endOf = (i: number): number => {
+    const first = groups[i]!;
+    if (!startsPhoneNumber(first.text)) return -1;
+    let found = -1;
+    let digits = 0;
+    for (let j = i; j < groups.length; j++) {
+      const group = groups[j]!;
+      if (j > i) {
+        const spaced = /\s/.test(separatorAfter(j - 1));
+        const last = digitCount(groups[j - 1]!.text);
+        // „0171 1234567/0172 7654321“: the next number ends this one.
+        if (digits >= 9 && startsPhoneNumber(group.text)) {
+          if (looksLikePhoneNumber(run.slice(first.start, groups[j - 1]!.end))) found = j - 1;
+          break;
+        }
+        // A token like „120.000“ after a space is the next value, not the number.
+        if (digits >= 9 && spaced && isCompactJoin(separatorAfter(j))) break;
+        // Complete: ends with a subscriber block of 4+ digits („0171 1234567“, not „… 123 45“).
+        const complete =
+          found === j - 1 && ((digits >= 11 && last >= 4) || (digits >= 10 && last >= 5));
+        if (spaced && complete) break;
+      }
+      digits += digitCount(group.text);
+      if (digits > 15) break;
+      const endsToken = !isCompactJoin(separatorAfter(j));
+      if (endsToken && looksLikePhoneNumber(run.slice(first.start, group.end))) found = j;
+    }
+    return found;
+  };
   let out = '';
   let kept = 0;
-  let i = gluedToLetter ? 1 : 0;
+  let i = gluedToCode ? 1 : 0;
   while (i < groups.length) {
-    const first = groups[i]!;
-    let found = -1;
-    if (startsPhoneNumber(first.text)) {
-      let digits = 0;
-      for (let j = i; j < groups.length; j++) {
-        const group = groups[j]!;
-        // A token like „120.000“ after a space is the next value, not the number.
-        const newToken = /\s/.test(separatorAfter(j - 1)) && isCompactJoin(separatorAfter(j));
-        if (j > i && digits >= 9 && (startsPhoneNumber(group.text) || newToken)) break;
-        digits += digitCount(group.text);
-        if (digits > 15) break;
-        const endsToken = !isCompactJoin(separatorAfter(j));
-        if (endsToken && looksLikePhoneNumber(run.slice(first.start, group.end))) found = j;
+    let start = i;
+    let found = endOf(i);
+    // „PLZ 01067 0171 1234567“: a later start that reaches further wins (at most 15 groups).
+    for (let k = i + 1; found >= 0 && k <= found; k++) {
+      const later = endOf(k);
+      if (later > found) {
+        start = k;
+        found = later;
       }
     }
     if (found >= 0) {
-      out += run.slice(kept, first.start) + REDACTED_PHONE;
+      out += run.slice(kept, groups[start]!.start) + REDACTED_PHONE;
       kept = groups[found]!.end;
       i = found + 1;
     } else {
@@ -93,11 +120,18 @@ function redactPhonesInRun(run: string, gluedToLetter: boolean): string {
 }
 
 export function redactContactData(text: string): string {
-  return text
-    .replace(EMAIL, REDACTED_EMAIL)
-    .replace(IBAN, REDACTED_IBAN)
-    .replace(WHATSAPP_LINK, `$1${REDACTED_PHONE}`)
-    .replace(NUMBER_RUN, (run: string, offset: number, whole: string) =>
-      redactPhonesInRun(run, /\p{L}/u.test(whole.charAt(offset - 1))),
-    );
+  return (
+    text
+      .replace(EMAIL, REDACTED_EMAIL)
+      .replace(IBAN, REDACTED_IBAN)
+      .replace(WHATSAPP_LINK, `$1${REDACTED_PHONE}`)
+      // Digits glued to a code with digits (a FIN, „A4“) are not a number's start; after a
+      // plain word („Tel0171 …“) they are.
+      .replace(NUMBER_RUN, (run: string, offset: number, whole: string) =>
+        redactPhonesInRun(
+          run,
+          /\p{N}/u.test(/[\p{L}\p{N}]*$/u.exec(whole.slice(Math.max(0, offset - 20), offset))![0]),
+        ),
+      )
+  );
 }
