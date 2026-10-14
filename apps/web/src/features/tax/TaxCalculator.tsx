@@ -142,6 +142,14 @@ export function TaxCalculator({
 
   const taxAnnualEur =
     result?.kind === 'amount' ? result.annualEur : result?.kind === 'exempt' ? 0 : null;
+  const taxNote =
+    result?.kind === 'exempt'
+      ? `Kfz-Steuer: steuerfrei bis ${day(result.until)}${
+          result.afterwardsEur === null
+            ? '.'
+            : `, danach voraussichtlich ${euros(result.afterwardsEur)} im Jahr.`
+        }`
+      : null;
 
   return (
     <>
@@ -217,9 +225,9 @@ export function TaxCalculator({
           )}
         </form>
         <section className="tax-result" aria-labelledby="tax-result-title">
-          <h2 id="tax-result-title" className="tax-result__title">
+          <h3 id="tax-result-title" className="tax-result__title">
             Kfz-Steuer
-          </h2>
+          </h3>
           <div aria-live="polite">
             {result ? (
               <Result result={result} />
@@ -229,12 +237,16 @@ export function TaxCalculator({
           </div>
         </section>
       </div>
+      <p>
+        Verbindlich ist der Steuerbescheid des Hauptzollamts. Fehlt dir ein Wert, frag den Verkäufer
+        nach einem Foto des Fahrzeugscheins – darauf stehen alle Angaben.
+      </p>
       <h2 id="unterhalt">Laufende Kosten überschlagen</h2>
       <p>
         Mit deiner Fahrleistung, dem Verbrauch und deinen Preisen rechnest du grob aus, was das Auto
         im Monat kostet. Die Kfz-Steuer von oben ist schon eingerechnet.
       </p>
-      <RunningCosts taxAnnualEur={taxAnnualEur} electric={electric} />
+      <RunningCosts taxAnnualEur={taxAnnualEur} taxNote={taxNote} electric={electric} />
     </>
   );
 }

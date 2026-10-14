@@ -10,3 +10,13 @@ export function toNumber(value: string): number | null {
   if (!/^\d+(?:\.\d+)?$/.test(normalized)) return null;
   return Number(normalized);
 }
+
+/**
+ * A decimal as typed, for small values such as prices or consumption: both
+ * „1,799“ and „1.799“ mean 1.799, never 1799.
+ */
+export function toDecimal(value: string): number | null {
+  const normalized = value.replace(/\s/g, '').replace(',', '.');
+  if (!/^\d+(?:\.\d+)?$/.test(normalized)) return null;
+  return Number(normalized);
+}
