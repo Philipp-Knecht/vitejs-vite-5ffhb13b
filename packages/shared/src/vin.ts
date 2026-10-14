@@ -4,7 +4,7 @@
  */
 const VIN_PATTERN = /(^|[^\p{L}\p{N}_/=?&#])([A-HJ-NPR-Z0-9]{17})(?![\p{L}\p{N}_])/giu;
 const VIN_KEYWORD =
-  /(?:fin|vin|fahrgestell\S*|identifizierungsnummer|ident-?nr\.?|chassis\S*)\W*$/i;
+  /\b(?:(?:fin|vin)(?:-?(?:nr|nummer))?\.?|fahrgestell\S*|fahrzeug-?ident\S*|identifizierungsnummer|ident-?nr\.?|chassis\S*)\W*$/i;
 
 /**
  * A FIN as written in papers and listings: one letter case and letters as well

@@ -37,6 +37,18 @@ function hasIbanChecksum(candidate: string): boolean {
   return remainder === 1;
 }
 
+/**
+ * A candidate that is no phone number may still have swallowed one, e.g.
+ * „Baujahr 2018 0171 1234567“: then the rest after its first group is checked again.
+ */
+function redactPhones(text: string): string {
+  return text.replace(PHONE_CANDIDATE, (match: string) => {
+    if (looksLikePhoneNumber(match)) return REDACTED_PHONE;
+    const cut = match.search(/[\s\-/.]/);
+    return cut > 0 ? match.slice(0, cut) + redactPhones(match.slice(cut)) : match;
+  });
+}
+
 export function redactContactData(text: string): string {
   const redacted = text
     .replace(EMAIL, REDACTED_EMAIL)
@@ -44,11 +56,13 @@ export function redactContactData(text: string): string {
     .replace(IBAN, (match) =>
       isPlausibleVin(match) && !hasIbanChecksum(match) ? match : REDACTED_IBAN,
     );
-  // Digits inside a FIN (W0L0XCF0844012345) are not a phone number.
-  const vins = findVins(redacted).map(({ index }) => [index, index + 17] as const);
-  return redacted.replace(PHONE_CANDIDATE, (match: string, offset: number) =>
-    looksLikePhoneNumber(match) && !vins.some(([start, end]) => offset >= start && offset < end)
-      ? REDACTED_PHONE
-      : match,
-  );
+  // Phone numbers are searched between FINs only: digits of a FIN (W0L0XCF0844012345) are
+  // no phone number, and a phone number right after a FIN is still found.
+  let out = '';
+  let last = 0;
+  for (const { index } of findVins(redacted)) {
+    out += redactPhones(redacted.slice(last, index)) + redacted.slice(index, index + 17);
+    last = index + 17;
+  }
+  return out + redactPhones(redacted.slice(last));
 }

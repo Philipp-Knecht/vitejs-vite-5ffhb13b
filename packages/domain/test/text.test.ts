@@ -142,6 +142,14 @@ describe('redactContactData', () => {
     expect(redactContactData(`Konto ${iban}`)).toBe(`Konto ${REDACTED_IBAN}`);
   });
 
+  it.each([
+    ['FIN: W0L0XCF0844012345 0171 1234567', `FIN: W0L0XCF0844012345 ${REDACTED_PHONE}`],
+    ['VF33C9HZC84123456 / 0171-1234567', `VF33C9HZC84123456 / ${REDACTED_PHONE}`],
+    ['Baujahr 2018 0171 1234567', `Baujahr 2018 ${REDACTED_PHONE}`],
+  ])('redacts a phone number right after a FIN or a year: %s', (text, expected) => {
+    expect(redactContactData(text)).toBe(expected);
+  });
+
   it.each(['W0L0XCF0844012345', 'VF1BM0C0634012345', 'JTDKB20U003012345'])(
     'keeps the FIN %s whole',
     (vin) => {
