@@ -16,10 +16,13 @@ const DRIVES: readonly { value: TaxDrive; label: string }[] = [
 ];
 
 const EMISSION_CLASSES: readonly { value: TaxEmissionClass; label: string }[] = [
-  { value: 'euro3', label: 'Euro 3 oder besser (auch D3, D4)' },
-  { value: 'euro2', label: 'Euro 2' },
-  { value: 'euro1', label: 'Euro 1' },
-  { value: 'ozoneExempt', label: 'Euro 0, vom Ozon-Fahrverbot befreit' },
+  { value: 'euro3', label: 'Euro 3 oder besser – auch Euro 4/II, Euro 4/III, D3, D4, „3 L“' },
+  { value: 'euro2', label: 'Euro 2 – auch Euro 3/II oder Euro 3/III (ohne D4)' },
+  { value: 'euro1', label: 'Euro 1 – auch Euro 2/II oder Euro 2/III' },
+  {
+    value: 'ozoneExempt',
+    label: 'nicht schadstoffarm, ozonbefreit (Schlüsselnummer 17, 19, 20, 23 oder 24)',
+  },
   { value: 'older', label: 'älter oder unbekannt (höchster Satz)' },
 ];
 
@@ -62,7 +65,9 @@ function todayIso(): string {
 }
 
 function Result({ result }: { result: VehicleTaxResult }) {
-  if (result.kind === 'invalid') return <p className="tax-result__hint">{result.message}</p>;
+  if (result.kind === 'invalid') {
+    return <p className="tax-result__hint">Bitte prüfe die markierte Angabe.</p>;
+  }
   if (result.kind === 'missing') {
     return (
       <p className="tax-result__hint">
@@ -202,7 +207,7 @@ export function TaxCalculator({
             {before2009 && (
               <SelectField
                 label="Schadstoffklasse"
-                hint="Fahrzeugschein, Feld 14 und Schlüsselnummer 14.1 (alter Fahrzeugschein: Schlüsselnummer zu 1)"
+                hint="Fahrzeugschein, Feld 14 und Schlüsselnummer 14.1 (alter Fahrzeugschein: letzte zwei Ziffern im Feld „zu 1“). „/II“ und „/III“ stehen für schwere Pkw über 2,5 t – die Auswahl nennt, wie sie zählen."
                 value={values.emissionClass}
                 onChange={set('emissionClass')}
               >

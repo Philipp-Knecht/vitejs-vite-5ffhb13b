@@ -89,8 +89,9 @@ export function TaxGuidePage() {
         <li>
           <strong>Bis Juni 2009:</strong> nur nach Hubraum und Schadstoffklasse, z. B. bei Euro 3
           oder besser 6,75 € (Benziner) oder 15,44 € (Diesel) je angefangene 100 cm³, bei Euro 2
-          7,36 € oder 16,05 €, bei Euro 1 15,13 € oder 27,35 €. Für Autos mit Erstzulassung vom
-          05.11.2008 bis 30.06.2009 gilt der CO₂-Tarif, wenn er günstiger ist.
+          7,36 € oder 16,05 €, bei Euro 1 15,13 € oder 27,35 € (schwere Pkw mit „/II“ oder „/III“
+          eine Stufe höher). Für Autos mit Erstzulassung vom 05.11.2008 bis 30.06.2009 gilt der
+          CO₂-Tarif, wenn er günstiger ist.
         </li>
       </ul>
       <p>Der Jahresbetrag wird auf volle Euro abgerundet.</p>
@@ -103,7 +104,9 @@ export function TaxGuidePage() {
         <li>Feld V.7: CO₂-Ausstoß in g/km</li>
         <li>
           Feld 14 und Schlüsselnummer 14.1: Emissionsklasse (nur für Erstzulassungen vor Juli 2009
-          wichtig; im alten Fahrzeugschein die Schlüsselnummer zu 1)
+          wichtig; im alten Fahrzeugschein die letzten zwei Ziffern im Feld „zu 1“). Ein „/II“ oder
+          „/III“ hinter der Euro-Stufe kennzeichnet schwere Pkw über 2,5 t; für sie gilt der Satz
+          der nächstniedrigeren Stufe
         </li>
         <li>Feld F.2: zulässiges Gesamtgewicht (für Elektroautos)</li>
       </ul>
