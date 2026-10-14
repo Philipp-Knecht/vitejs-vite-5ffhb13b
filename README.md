@@ -20,7 +20,9 @@ analysis as a PDF folder for the viewing (built in the browser with jsPDF,
 `apps/web/src/features/pdf`). Result and
 model pages explain how to check recalls with the FIN and link the manufacturers' official recall
 pages and the KBA recall database (`packages/catalog/src/recalls.ts`); KaufCheck queries none of
-them itself.
+them itself. Pro members can also prepare the price negotiation: points from the
+listing that apply, their own findings and a factual message to the seller, without suggested
+amounts (`packages/shared/src/negotiation.ts`).
 
 For the listing check, a user pastes the listing text (or a link); KaufCheck extracts and
 normalizes the vehicle data and shows a mobile-first dashboard:
@@ -332,7 +334,7 @@ ids, IP addresses or free text. The browser sends nothing when „Do Not Track�
 Control“ is set. Events: `landing_page_view`, `listing_analysis_started`, `listing_analysis_completed`,
 `listing_analysis_failed` (recorded by the server), `seller_questions_copied`,
 `seller_message_created`, `checklist_started`, `listing_saved`, `search_saved`, `comparison_created`,
-`pro_clicked`, `car_search_started`, `platform_search_opened`, `recall_check_opened`, `analysis_pdf_downloaded`.
+`pro_clicked`, `car_search_started`, `platform_search_opened`, `recall_check_opened`, `analysis_pdf_downloaded`, `negotiation_message_copied`.
 Disable with `ANALYTICS_ENABLED=false`. Events are kept for 400 days, for example:
 
 ```sql
@@ -437,5 +439,4 @@ already reserved in the contracts and the database.
 - Richer market context as more verified comparables accumulate.
 - Alerts for saved searches and price-change notifications for saved listings (both need licensed
   listing data – KaufCheck does not query the marketplaces itself).
-- PDF export of an analysis and the checklist.
 - Integration of a privacy-friendly ad network behind the existing `AdSlot` abstraction.

@@ -80,6 +80,14 @@ function rows(
       ],
     },
     {
+      label: 'Verhandlungshilfe',
+      cells: [
+        flag(plans.anonymous.negotiationHelp),
+        flag(plans.free.negotiationHelp),
+        flag(plans.pro.negotiationHelp),
+      ],
+    },
+    {
       label: photoAnalysisAvailable ? 'Fotoanalyse' : 'Fotoanalyse (derzeit nicht verfügbar)',
       cells: [
         flag(plans.anonymous.photoAnalysis),

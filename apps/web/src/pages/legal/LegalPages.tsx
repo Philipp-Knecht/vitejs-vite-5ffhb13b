@@ -67,7 +67,7 @@ export function ImprintPage() {
   );
 }
 
-const PRIVACY_POLICY_DATE = '1. Oktober 2026';
+const PRIVACY_POLICY_DATE = '14. Oktober 2026';
 const AI_PROVIDER_NAMES = { anthropic: 'Anthropic', openai: 'OpenAI' } as const;
 
 /**
@@ -202,7 +202,8 @@ export function PrivacyPage() {
         </li>
         <li>
           Im lokalen Speicher deines Browsers merkt sich KaufCheck den Fortschritt deiner
-          Checklisten und die gewählte Anrede (Sie/du). Diese Daten verlassen deinen Browser nicht.
+          Checklisten, deine Notizen für die Preisverhandlung und die gewählte Anrede (Sie/du).
+          Diese Daten verlassen deinen Browser nicht.
         </li>
       </ul>
       <p>

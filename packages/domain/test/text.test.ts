@@ -239,6 +239,14 @@ describe('quotes', () => {
     expect(snippetAround(text, index, 7)).toBe('Kleine Kratzer an der Stoßstange, sonst gut.');
   });
 
+  it('does not end a sentence at a thousands point', () => {
+    const text = 'Zahnriemen bei 120.000 km gewechselt, Delle an der Tür. Sonst gut.';
+    const index = text.indexOf('Delle');
+    expect(snippetAround(text, index, 5)).toBe(
+      'Zahnriemen bei 120.000 km gewechselt, Delle an der Tür.',
+    );
+  });
+
   it('verifies quotes case- and whitespace-insensitively', () => {
     const source = 'Das Fahrzeug  läuft einwandfrei\nund wurde „regelmäßig“ gewartet.';
     expect(

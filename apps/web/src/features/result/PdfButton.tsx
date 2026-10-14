@@ -7,9 +7,10 @@ import { Button, ButtonLink } from '../../components/ui/Button';
 import { Dialog } from '../../components/ui/Dialog';
 import { useToast } from '../../components/ui/toast-context';
 import { track } from '../../lib/analytics';
-import { isBoolean, isStringArray, readJson } from '../../lib/storage';
+import { isStringArray, readJson } from '../../lib/storage';
 import { knownModelId } from './known-model';
-import { checklistStorageKey, FORMAL_ADDRESS_KEY } from './storage-keys';
+import { checklistStorageKey } from './storage-keys';
+import { useFormalAddress } from './use-formal-address';
 import { vehicleTitle } from './vehicle-title';
 
 /**
@@ -21,6 +22,7 @@ export function PdfButton({ dto }: { dto: AnalysisDto }) {
   const toast = useToast();
   const [busy, setBusy] = useState(false);
   const [upsell, setUpsell] = useState(false);
+  const [formal] = useFormalAddress();
 
   const isPro = me.data?.entitlements.pdfExport ?? false;
 
@@ -49,7 +51,7 @@ export function PdfButton({ dto }: { dto: AnalysisDto }) {
       const doc = buildAnalysisPdf({
         dto,
         model,
-        formal: readJson(FORMAL_ADDRESS_KEY, true, isBoolean),
+        formal,
         checked: new Set(readJson(checklistStorageKey(dto.id), [], isStringArray)),
         siteUrl: window.location.origin,
         createdAt,

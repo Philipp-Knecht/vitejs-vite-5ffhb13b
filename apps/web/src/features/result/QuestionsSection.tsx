@@ -9,9 +9,8 @@ import { useToast } from '../../components/ui/toast-context';
 import { track } from '../../lib/analytics';
 import { copyText } from '../../lib/clipboard';
 import { listingPlatformName } from '../../lib/platform';
-import { isBoolean, readJson, writeJson } from '../../lib/storage';
 import { ResultSection } from './Section';
-import { FORMAL_ADDRESS_KEY } from './storage-keys';
+import { useFormalAddress } from './use-formal-address';
 
 function questionText(question: SellerQuestion, formal: boolean): string {
   return formal ? question.text : question.textInformal;
@@ -27,16 +26,11 @@ export function QuestionsSection({
   listingUrl: string | null;
 }) {
   const toast = useToast();
-  const [formal, setFormalState] = useState(() => readJson(FORMAL_ADDRESS_KEY, true, isBoolean));
+  const [formal, setFormal] = useFormalAddress();
   const [deselected, setDeselected] = useState<ReadonlySet<string>>(() => new Set());
   const [composerOpen, setComposerOpen] = useState(false);
   const [message, setMessage] = useState('');
   const platformName = listingPlatformName(listingUrl);
-
-  const setFormal = (value: boolean) => {
-    setFormalState(value);
-    writeJson(FORMAL_ADDRESS_KEY, value);
-  };
 
   const selected = questions.filter((question) => !deselected.has(question.id));
 
