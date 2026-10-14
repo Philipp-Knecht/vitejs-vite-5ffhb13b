@@ -129,6 +129,47 @@ describe('redactContactData', () => {
     const text = '185.000 km, 12.900 €, 01067 Dresden, EZ 01.05.2012, 2012';
     expect(redactContactData(text)).toBe(text);
   });
+  const P = REDACTED_PHONE;
+  it.each([
+    ['+49 (0)171 1234567', P],
+    ['0049 (0) 171 1234567', P],
+    ['Tel.0171 1234567', `Tel.${P}`],
+    ['Tel 0171 1234567\n150000 km', `Tel ${P}\n150000 km`],
+    ['Tel 0171 1234567 185000 km', `Tel ${P} 185000 km`],
+    ['Tel 0171 1234567 06/2019 TÜV neu', `Tel ${P} 06/2019 TÜV neu`],
+    ['Tel. 0171 1234567 / 0172 7654321', `Tel. ${P} / ${P}`],
+    ['0171 1234567 - 0351 7654321', `${P} - ${P}`],
+    ['Baujahr 2018 0171 1234567', `Baujahr 2018 ${P}`],
+    ['Bj. 2018,0171 1234567', `Bj. 2018,${P}`],
+    ['Tel 01 71 12 34 56 7', `Tel ${P}`],
+    ['(0171) 123 45 67', P],
+    ['030/12345678', P],
+  ])('redacts the phone number in „%s“', (text, expected) => {
+    expect(redactContactData(text)).toBe(expected);
+  });
+
+  it.each([
+    'Zahnriemen bei 120 000 06/2019 gewechselt',
+    'Service 2016 06/2018 06/2020',
+    'EZ 2014 01/2015 - 03/2016',
+    'HU 2025 06.2025 - 06.2027',
+    'Garantie 06/2018 - 06/2020',
+    'Laufleistung 100 000 05/2026',
+    'Preis 12 000 2016 - 2018',
+    '01.05.2012 - 01.06.2012',
+    'Öffnungszeiten 10:00 - 18:00',
+    '1 234 567 €, 9.990,- €, 2x 0,5 l, 205/55 R16',
+    'FIN: W0L0XCF0844012345',
+  ])('keeps „%s“', (text) => {
+    expect(redactContactData(text)).toBe(text);
+  });
+
+  it('stays fast on long digit runs', () => {
+    const text = `${'1'.repeat(200)},`.repeat(100) + `${'x'.repeat(50_000)}`;
+    const start = performance.now();
+    redactContactData(text);
+    expect(performance.now() - start).toBeLessThan(500);
+  });
 });
 
 describe('quotes', () => {
