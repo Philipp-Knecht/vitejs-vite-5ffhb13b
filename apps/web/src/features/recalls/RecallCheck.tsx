@@ -77,11 +77,10 @@ export function RecallCheck({
         )}
         <li>
           <strong>
-            {vinCheck ? 'Oder in einer Vertragswerkstatt' : 'In einer Vertragswerkstatt'} oder bei
-            der Kundenhotline des Herstellers fragen.
+            {vinCheck ? 'Alternativ in einer Vertragswerkstatt' : 'In einer Vertragswerkstatt'} oder
+            bei der Kundenhotline des Herstellers fragen.
           </strong>{' '}
-          Dort sind offene Rückrufe zur FIN bekannt. Die Reparatur ist kostenlos (Material und
-          Arbeitszeit).
+          Dort sind offene Rückrufe zur FIN bekannt.
         </li>
         {make && infoPage && (
           <li>

@@ -13,6 +13,10 @@ describe('findVin', () => {
     ['ÄWVWZZZ1KZAW123456', null], // part of a longer word
     ['Fotos: https://photos.app.goo.gl/kCm7dWuHmKXpYhBv8', null], // URL id, mixed case
     ['Erstzulassung2018 Scheckheft', null], // words run together
+    ['ERSTZULASSUNG2018', null],
+    ['erstzulassung2018 scheckheft', null],
+    ['FIN: WVWZZZAUZFW123456', 'WVWZZZAUZFW123456'], // no digit before the serial: needs a keyword
+    ['WVWZZZAUZFW123456', null],
     ['FIN: WVWZZZ1KZAWXXXXXX (Rest auf Anfrage)', null], // masked
     ['FIN: VF33C9HZC84123456', 'VF33C9HZC84123456'],
     [null, null],

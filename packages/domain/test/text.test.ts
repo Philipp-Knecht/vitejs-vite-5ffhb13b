@@ -133,6 +133,22 @@ describe('redactContactData', () => {
     expect(redactContactData('FIN: VF33C9HZC84123456')).toBe('FIN: VF33C9HZC84123456');
   });
 
+  it.each([
+    'AT611904300234573201',
+    'CH9300762011623852957',
+    'NL91ABNA0417164300',
+    'DE89370400440532013001', // typo: no valid checksum, still redacted
+  ])('redacts the IBAN %s', (iban) => {
+    expect(redactContactData(`Konto ${iban}`)).toBe(`Konto ${REDACTED_IBAN}`);
+  });
+
+  it.each(['W0L0XCF0844012345', 'VF1BM0C0634012345', 'JTDKB20U003012345'])(
+    'keeps the FIN %s whole',
+    (vin) => {
+      expect(redactContactData(`FIN: ${vin}`)).toBe(`FIN: ${vin}`);
+    },
+  );
+
   it('keeps mileages, prices, postal codes and dates', () => {
     const text = '185.000 km, 12.900 €, 01067 Dresden, EZ 01.05.2012, 2012';
     expect(redactContactData(text)).toBe(text);
