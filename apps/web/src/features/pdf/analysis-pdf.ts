@@ -121,10 +121,17 @@ class Writer {
     this.text(text, { indent: 7 });
   }
 
+  checkboxHeight(label: string, hint: string | null) {
+    return (
+      this.height(label, { indent: 6, gap: hint ? 0.3 : 1.8 }) +
+      (hint ? this.height(hint, { indent: 6, size: 9, gap: 1.8 }) : 0)
+    );
+  }
+
   checkbox(label: string, hint: string | null, checked: boolean) {
-    const size = 10;
     const box = 3.6;
-    this.ensure(this.lineHeight(size) + (hint ? this.lineHeight(9) : 0) + 1);
+    // Box, label and the whole hint stay on one page.
+    this.ensure(this.checkboxHeight(label, hint));
     this.doc.setDrawColor(COLORS.text);
     this.doc.rect(PAGE.margin, this.y + 0.2, box, box);
     if (checked) {
@@ -330,9 +337,11 @@ export function buildAnalysisPdf(input: AnalysisPdfInput): jsPDF {
 
   // Checklist
   if (analysis.inspectionChecklist.length > 0) {
-    w.heading('Checkliste für die Besichtigung');
+    w.heading('Checkliste für Besichtigung, Kauf und Zulassung');
     for (const section of analysis.inspectionChecklist) {
-      w.subheading(section.title);
+      const first = section.items[0];
+      // The title stays with its first item.
+      w.subheading(section.title, first ? w.checkboxHeight(first.label, first.hint) : 12);
       for (const item of section.items) w.checkbox(item.label, item.hint, checked.has(item.id));
       w.space(1);
     }

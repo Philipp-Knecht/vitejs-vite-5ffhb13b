@@ -6,11 +6,13 @@ function item(id: string, label: string, hint: string | null = null): ChecklistI
 }
 
 /**
- * Inspection checklist ("Besichtigung"). Item ids are stable so that the
- * user's ticks (stored locally in the browser) survive re-analysis.
+ * Checklist from the inspection to registration and the first steps after the
+ * purchase. The user's ticks are stored per analysis in the browser by item
+ * id, so ids must stay stable and unique.
  */
 export function buildInspectionChecklist(ctx: VehicleRuleContext): ChecklistSection[] {
   const { vehicle } = ctx;
+  const dealer = ctx.listing.seller.type === 'commercial';
   const old = ctx.ageMonths !== null && ctx.ageMonths >= 96;
   const highMileage = vehicle.mileageKm !== null && vehicle.mileageKm >= 150_000;
 
@@ -23,7 +25,9 @@ export function buildInspectionChecklist(ctx: VehicleRuleContext): ChecklistSect
     item(
       'docs.title',
       'Fahrzeugbrief (Zulassungsbescheinigung Teil II)',
-      'Ist der Verkäufer eingetragen? Anzahl der Halter ansehen.',
+      dealer
+        ? 'Anzahl der Halter ansehen – der Händler selbst steht dort meist nicht.'
+        : 'Ist der Verkäufer eingetragen? Anzahl der Halter ansehen.',
     ),
     item('docs.hu_report', 'HU-Bericht', 'Mängel und Kilometerstand der letzten Prüfung ansehen.'),
     item('docs.service_records', 'Serviceunterlagen', 'Serviceheft oder digitale Servicehistorie.'),
@@ -179,15 +183,86 @@ export function buildInspectionChecklist(ctx: VehicleRuleContext): ChecklistSect
       item(
         'buy.contract',
         'Schriftlicher Kaufvertrag',
-        'Zum Beispiel ein Mustervertrag eines Automobilclubs.',
+        dealer
+          ? 'Zum Beispiel ein Mustervertrag eines Automobilclubs.'
+          : 'Zum Beispiel ein Mustervertrag eines Automobilclubs; trag die Ausweisnummer des Verkäufers ein.',
       ),
+      dealer
+        ? item(
+            'buy.identity',
+            'Händler mit Firmenname und Anschrift im Vertrag',
+            'So weißt du, wer dein Vertragspartner ist – auch wenn der Kontakt über ein Portal lief.',
+          )
+        : item(
+            'buy.identity',
+            'Ausweis des Verkäufers ansehen',
+            'Der Name sollte zum Halter in den Fahrzeugpapieren passen. Weicht etwas ab, lass dir den Grund erklären – wer im Auftrag verkauft, braucht eine Vollmacht.',
+          ),
       item(
         'buy.promises',
         'Zusagen im Vertrag festhalten',
         'Kilometerstand, Unfallfreiheit, bekannte Mängel.',
       ),
+      item(
+        'buy.handover_time',
+        'Datum, Uhrzeit und Kilometerstand der Übergabe im Vertrag',
+        'Ab diesem Zeitpunkt bist du für das Auto verantwortlich.',
+      ),
       item('buy.keys_documents', 'Alle Schlüssel und Papiere erhalten'),
-      item('buy.payment', 'Bezahlung erst bei Übergabe'),
+      item(
+        'buy.payment',
+        'Bezahlung erst bei Übergabe',
+        'Zum Beispiel per Echtzeitüberweisung vor Ort oder bar in einer Bankfiliale; den Empfang im Vertrag bestätigen lassen.',
+      ),
+    ],
+  });
+
+  sections.push({
+    id: 'registration',
+    title: 'Versicherung & Zulassung',
+    items: [
+      item(
+        'reg.evb',
+        'eVB-Nummer bei deiner Versicherung anfordern',
+        'Die elektronische Versicherungsbestätigung brauchst du für die Zulassung und für ein Kurzzeitkennzeichen – am besten schon vor der Abholung.',
+      ),
+      item(
+        'reg.documents',
+        'Unterlagen für die Zulassung bereitlegen',
+        'Ausweis, Zulassungsbescheinigung Teil I und II, eVB-Nummer, HU-Nachweis, ein SEPA-Mandat für die Kfz-Steuer und die alten Kennzeichen, falls neue nötig sind. Lässt jemand anderes zu, braucht er eine Vollmacht, eine Kopie deines Ausweises und seinen eigenen.',
+      ),
+      item(
+        'reg.register',
+        'Auto unverzüglich auf dich umschreiben lassen',
+        'Bei der Zulassungsstelle oder online mit Online-Ausweis, wenn beide Zulassungsbescheinigungen einen verdeckten Sicherheitscode haben. Die Codes erst im Online-Antrag freilegen – danach sind die Dokumente ungültig.',
+      ),
+      item(
+        'reg.drive_home',
+        'Heimfahrt klären',
+        'Ist das Auto noch angemeldet, sprich Kennzeichen und Versicherung mit dem Verkäufer ab. Ist es abgemeldet: vorher auf dich zulassen oder ein Kurzzeitkennzeichen holen – nur mit eVB und gültiger HU, ohne HU nur zu einer Prüfstelle in der Nähe und zurück.',
+      ),
+    ],
+  });
+
+  sections.push({
+    id: 'after_purchase',
+    title: 'Nach dem Kauf',
+    items: [
+      item(
+        'after.recalls',
+        'Offene Rückrufe erledigen lassen',
+        'In einer Vertragswerkstatt mit der FIN – die Reparatur ist in der Regel kostenlos.',
+      ),
+      item(
+        'after.service',
+        vehicle.serviceHistory === 'documented'
+          ? 'Nächste Inspektion laut Wartungsnachweisen vormerken'
+          : 'Inspektion und Ölwechsel machen lassen',
+        vehicle.serviceHistory === 'documented'
+          ? null
+          : 'Ohne lückenlose Nachweise weißt du nicht, wann zuletzt gewartet wurde.',
+      ),
+      item('after.hu', 'Termin der nächsten Hauptuntersuchung notieren'),
     ],
   });
 

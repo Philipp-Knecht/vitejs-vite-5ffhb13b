@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { parseListingText } from '../src/index';
-import { listingFromText } from './helpers';
+import { analyze, listingFromText } from './helpers';
 
 /*
  * Fictional listings in the layout visitors get when they copy a whole listing
@@ -298,6 +298,14 @@ describe('parseListingText – AutoScout24 page', () => {
     expect(parsed.title).toBe('BMW 320 d Touring Advantage');
     expect(parsed.priceText).toBe('€ 18.900,-');
     expect(parsed.sellerTypeText).toBe('Händler');
+  });
+
+  it('asks for the dealer in the contract instead of the ID card', async () => {
+    const result = await analyze(listingFromText(AUTOSCOUT24));
+    const purchase = result.inspectionChecklist.find((section) => section.id === 'purchase');
+    expect(purchase?.items.find((item) => item.id === 'buy.identity')?.label).toBe(
+      'Händler mit Firmenname und Anschrift im Vertrag',
+    );
   });
 
   it('does not take "Gebraucht" for the body style', () => {

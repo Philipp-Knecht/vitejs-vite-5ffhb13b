@@ -32,7 +32,7 @@ const SECTIONS = [
   { id: 'modell', label: 'Modell' },
   { id: 'fragen', label: 'Fragen' },
   { id: 'rueckrufe', label: 'Rückrufe' },
-  { id: 'besichtigung', label: 'Besichtigung' },
+  { id: 'besichtigung', label: 'Checkliste' },
   { id: 'fotos', label: 'Fotos' },
 ];
 

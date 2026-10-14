@@ -19,7 +19,7 @@ test('homepage → analysis result with all sections', async ({ page, context })
     'Darauf solltest du achten',
     'Fragen an den Verkäufer',
     'Rückrufe prüfen',
-    'Checkliste für die Besichtigung',
+    'Checkliste für Besichtigung, Kauf und Zulassung',
     'Fotos',
   ]) {
     await expect(page.getByRole('heading', { level: 2, name: section })).toBeVisible();
@@ -69,11 +69,11 @@ test('homepage → analysis result with all sections', async ({ page, context })
   await expect(composer).toBeHidden();
 
   // The checklist progress survives a reload (stored in this browser only).
-  const firstItem = page.getByRole('checkbox', { name: /Fahrzeugschein/ });
+  const firstItem = page.getByRole('checkbox', { name: /^Fahrzeugschein/ });
   await firstItem.check();
   await expect(page.getByText('1 von')).toBeVisible();
   await page.reload();
-  await expect(page.getByRole('checkbox', { name: /Fahrzeugschein/ })).toBeChecked();
+  await expect(page.getByRole('checkbox', { name: /^Fahrzeugschein/ })).toBeChecked();
 });
 
 test('the fictional example is clearly labelled', async ({ page }) => {
