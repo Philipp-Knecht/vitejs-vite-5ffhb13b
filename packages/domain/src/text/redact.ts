@@ -1,4 +1,4 @@
-import { isPlausibleVin } from '@kaufcheck/shared';
+import { findVins, isPlausibleVin } from '@kaufcheck/shared';
 
 /**
  * Removes contact and payment data from listing text before it is stored or
@@ -29,23 +29,26 @@ function looksLikePhoneNumber(candidate: string): boolean {
 /** ISO 13616 check: the rearranged number modulo 97 is 1. */
 function hasIbanChecksum(candidate: string): boolean {
   const compact = candidate.replace(/ /g, '').toUpperCase();
-  const rearranged = compact.slice(4) + compact.slice(0, 4);
   let remainder = 0;
-  for (const char of rearranged) {
+  for (const char of compact.slice(4) + compact.slice(0, 4)) {
     const value = Number.parseInt(char, 36);
-    remainder = Number((BigInt(remainder) * (value > 9 ? 100n : 10n) + BigInt(value)) % 97n);
+    remainder = (remainder * (value > 9 ? 100 : 10) + value) % 97;
   }
   return remainder === 1;
 }
 
 export function redactContactData(text: string): string {
-  return (
-    text
-      .replace(EMAIL, REDACTED_EMAIL)
-      // A FIN such as VF33C9HZC84123456 has the shape of an IBAN but no valid checksum.
-      .replace(IBAN, (match) =>
-        isPlausibleVin(match) && !hasIbanChecksum(match) ? match : REDACTED_IBAN,
-      )
-      .replace(PHONE_CANDIDATE, (match) => (looksLikePhoneNumber(match) ? REDACTED_PHONE : match))
+  const redacted = text
+    .replace(EMAIL, REDACTED_EMAIL)
+    // A FIN such as VF33C9HZC84123456 has the shape of an IBAN but no valid checksum.
+    .replace(IBAN, (match) =>
+      isPlausibleVin(match) && !hasIbanChecksum(match) ? match : REDACTED_IBAN,
+    );
+  // Digits inside a FIN (W0L0XCF0844012345) are not a phone number.
+  const vins = findVins(redacted).map(({ index }) => [index, index + 17] as const);
+  return redacted.replace(PHONE_CANDIDATE, (match: string, offset: number) =>
+    looksLikePhoneNumber(match) && !vins.some(([start, end]) => offset >= start && offset < end)
+      ? REDACTED_PHONE
+      : match,
   );
 }
