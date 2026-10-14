@@ -199,3 +199,16 @@ describe('detectCategory', () => {
     ).toBeNull();
   });
 });
+
+describe('vehicle identification number', () => {
+  it.each([
+    ['FIN: WVWZZZ1KZAW123456', true],
+    ['Fahrgestellnummer wvwzzz1kzaw123456 auf Anfrage', true],
+    ['Teilenummer 12345678901234567', false], // digits only
+    ['Ausstattungspaket ABCDEFGHJKLMNPRST', false], // letters only
+    ['Code WVWZZZ1KZAW12345O', false], // O is not allowed
+    ['Code WVWZZZ1KZAW1234567', false], // 18 characters
+  ])('%s → %s', (text, expected) => {
+    expect(signals(text).vinMention !== null).toBe(expected);
+  });
+});

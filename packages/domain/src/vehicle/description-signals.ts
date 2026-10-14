@@ -5,6 +5,7 @@ import type {
   TransmissionType,
   YearMonth,
 } from '@kaufcheck/shared';
+import { findVin } from '@kaufcheck/shared';
 import { parseYearMonth } from '../text/dates';
 import { parseMileageKm, parsePower } from '../text/numbers';
 import { snippetAround } from '../text/text';
@@ -79,6 +80,8 @@ export interface DescriptionSignals {
   deregistered: Quoted | null;
   testDriveOffered: boolean;
   batteryInfo: Quoted | null;
+  /** A vehicle identification number (FIN) in the listing. */
+  vinMention: Quoted | null;
 }
 
 interface Match {
@@ -656,6 +659,8 @@ export function extractDescriptionSignals(
     combined,
   );
 
+  const vin = findVin(combined);
+
   return {
     mileageMentions: extractMileage(text),
     registrationMentions,
@@ -686,5 +691,8 @@ export function extractDescriptionSignals(
       text,
     ),
     batteryInfo: battery ? { quote: quote(combined, battery) } : null,
+    vinMention: vin
+      ? { quote: quote(combined, { index: vin.index, text: vin.vin, groups: [] }) }
+      : null,
   };
 }

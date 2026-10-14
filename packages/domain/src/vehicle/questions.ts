@@ -300,6 +300,17 @@ export function generateSellerQuestions(
       ),
     );
   }
+  if (!signals.vinMention) {
+    questions.push(
+      question(
+        'vin',
+        'Können Sie mir die Fahrgestellnummer (FIN) schicken? Dann kann ich vorab klären, ob Rückrufe offen sind.',
+        'Kannst du mir die Fahrgestellnummer (FIN) schicken? Dann kann ich vorab klären, ob Rückrufe offen sind.',
+        'Mit der FIN lässt sich beim Hersteller prüfen, ob Rückrufe erledigt sind.',
+        2,
+      ),
+    );
+  }
   questions.push(
     question(
       'known_defects',

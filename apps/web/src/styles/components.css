@@ -797,3 +797,27 @@
   font-size: 0.85rem;
   color: var(--c-text-3);
 }
+
+/* ---------- Recall check ---------- */
+.recall-check__steps {
+  display: grid;
+  gap: 10px;
+  max-width: 70ch;
+  padding-left: 1.4em;
+}
+
+.recall-check__link {
+  font-weight: 600;
+}
+
+.recall-check__vin {
+  font-family: var(--font-mono);
+  overflow-wrap: anywhere;
+}
+
+.recall-check__note {
+  max-width: 70ch;
+  margin-top: 16px;
+  font-size: 0.925rem;
+  color: var(--c-text-2);
+}

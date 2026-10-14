@@ -11,6 +11,7 @@ import {
   parsePrice,
   parseYearMonth,
   redactContactData,
+  REDACTED_IBAN,
   REDACTED_EMAIL,
   REDACTED_PHONE,
   snippetAround,
@@ -124,6 +125,36 @@ describe('redactContactData', () => {
     );
     expect(redacted).toContain(REDACTED_EMAIL);
   });
+
+  it('removes IBANs but keeps a FIN of the same shape', () => {
+    expect(redactContactData('Anzahlung auf DE89 3704 0044 0532 0130 00')).toBe(
+      `Anzahlung auf ${REDACTED_IBAN}`,
+    );
+    expect(redactContactData('FIN: VF33C9HZC84123456')).toBe('FIN: VF33C9HZC84123456');
+  });
+
+  it.each([
+    'AT611904300234573201',
+    'CH9300762011623852957',
+    'NL91ABNA0417164300',
+    'DE89370400440532013001', // typo: no valid checksum, still redacted
+  ])('redacts the IBAN %s', (iban) => {
+    expect(redactContactData(`Konto ${iban}`)).toBe(`Konto ${REDACTED_IBAN}`);
+  });
+
+  it.each([
+    ['FIN: W0L0XCF0844012345 0171 1234567', `FIN: W0L0XCF0844012345 ${REDACTED_PHONE}`],
+    ['VF33C9HZC84123456 / 0171-1234567', `VF33C9HZC84123456 / ${REDACTED_PHONE}`],
+  ])('redacts a phone number right after a FIN: %s', (text, expected) => {
+    expect(redactContactData(text)).toBe(expected);
+  });
+
+  it.each(['W0L0XCF0844012345', 'VF1BM0C0634012345', 'JTDKB20U003012345'])(
+    'keeps the FIN %s whole',
+    (vin) => {
+      expect(redactContactData(`FIN: ${vin}`)).toBe(`FIN: ${vin}`);
+    },
+  );
 
   it('keeps mileages, prices, postal codes and dates', () => {
     const text = '185.000 km, 12.900 €, 01067 Dresden, EZ 01.05.2012, 2012';

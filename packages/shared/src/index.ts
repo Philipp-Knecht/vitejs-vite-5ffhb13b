@@ -17,3 +17,4 @@ export * from './legal';
 export * from './message';
 export * from './routes';
 export * from './comparison-ranking';
+export * from './vin';

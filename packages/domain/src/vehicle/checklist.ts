@@ -28,6 +28,11 @@ export function buildInspectionChecklist(ctx: VehicleRuleContext): ChecklistSect
     item('docs.hu_report', 'HU-Bericht', 'Mängel und Kilometerstand der letzten Prüfung ansehen.'),
     item('docs.service_records', 'Serviceunterlagen', 'Serviceheft oder digitale Servicehistorie.'),
     item('docs.invoices', 'Rechnungen', 'Größere Reparaturen und Wartungen belegen lassen.'),
+    item(
+      'docs.recalls',
+      'Rückrufe erledigt?',
+      'Mit der FIN beim Hersteller oder in einer Vertragswerkstatt prüfen lassen.',
+    ),
   ];
   if (ctx.isElectrified) {
     documents.push(

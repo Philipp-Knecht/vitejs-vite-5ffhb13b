@@ -103,6 +103,7 @@ describe('example listing (Audi A7)', async () => {
         'owners',
         'gearbox_oil',
         'damage_details',
+        'vin',
       ]),
     );
     expect(ids(questions)).not.toContain('test_drive'); // offered in the description
@@ -125,6 +126,8 @@ describe('example listing (Audi A7)', async () => {
         'private_sale',
       ]),
     );
+    const documents = result.inspectionChecklist.find((section) => section.id === 'documents');
+    expect(documents?.items.map((item) => item.id)).toContain('docs.recalls');
     const drive = result.inspectionChecklist.find((section) => section.id === 'test_drive');
     expect(drive?.items.map((item) => item.id)).toEqual(
       expect.arrayContaining(['drive.cold_start', 'drive.awd']),
@@ -204,6 +207,17 @@ describe('pasted text (VW Golf)', async () => {
     expect(listing.vehicle?.accidentHistory).toBe('previous_damage');
     expect(ids(result.observations)).toContain('listing_reserved');
     expect(ids(result.sellerQuestions)).toContain('accident_details');
+  });
+
+  it('does not ask for the FIN when the listing names it', async () => {
+    const withVin = listingFromText(
+      fixture('pasted-inline.txt').replace(
+        'Laufleistung 96.500 km.',
+        'FIN: WVWZZZ1KZAW123456. Laufleistung 96.500 km.',
+      ),
+    );
+    expect(ids((await analyze(withVin)).sellerQuestions)).not.toContain('vin');
+    expect(ids(result.sellerQuestions)).toContain('vin');
   });
 
   it('does not flag negated defects', () => {

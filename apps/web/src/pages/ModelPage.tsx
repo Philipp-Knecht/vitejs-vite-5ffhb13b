@@ -13,6 +13,8 @@ import { ClipboardCheck, Search } from 'lucide-react';
 import { Link, useParams } from 'react-router';
 import { PageLoading } from '../components/ui/Spinner';
 import { usePreloadedModel } from '../features/models/preloaded';
+import { RecallCheck } from '../features/recalls/RecallCheck';
+import { RECALL_LEAD } from '../features/recalls/texts';
 import { ModelKnowledgeView } from '../features/search/ModelInsights';
 import { modelPageMeta } from '../seo/model-meta';
 import { usePageMeta } from '../seo/use-page-meta';
@@ -95,8 +97,17 @@ function ModelContent({ model }: { model: CarModel }) {
           <ModelKnowledgeView model={model} generationHeading="h2" />
         </div>
       </section>
+      <section className="section section--muted" aria-labelledby="recalls-title">
+        <div className="container">
+          <h2 id="recalls-title" className="section__title">
+            Rückrufe prüfen: {model.make} {model.model}
+          </h2>
+          <p className="section__lead">{RECALL_LEAD}</p>
+          <RecallCheck makeId={entry?.makeId ?? null} placement="model" />
+        </div>
+      </section>
       {alternatives.length > 0 && (
-        <section className="section section--muted" aria-labelledby="alternatives-title">
+        <section className="section" aria-labelledby="alternatives-title">
           <div className="container">
             <h2 id="alternatives-title" className="section__title">
               Ähnliche Modelle

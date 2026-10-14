@@ -18,6 +18,7 @@ import { OverviewSection } from './OverviewSection';
 import { PhotosSection } from './PhotosSection';
 import { PriceSection } from './PriceSection';
 import { QuestionsSection } from './QuestionsSection';
+import { RecallSection } from './RecallSection';
 import { SummarySection } from './SummarySection';
 import { VehicleHeader } from './VehicleHeader';
 import { vehicleTitle } from './vehicle-title';
@@ -30,6 +31,7 @@ const SECTIONS = [
   { id: 'darauf-achten', label: 'Darauf achten' },
   { id: 'modell', label: 'Modell' },
   { id: 'fragen', label: 'Fragen' },
+  { id: 'rueckrufe', label: 'Rückrufe' },
   { id: 'besichtigung', label: 'Besichtigung' },
   { id: 'fotos', label: 'Fotos' },
 ];
@@ -98,6 +100,7 @@ function ResultView({ dto }: { dto: AnalysisDto }) {
             vehicleTitle={analysis.vehicleSummary?.title ?? null}
             listingUrl={listing.source.url}
           />
+          <RecallSection listing={listing} />
           <ChecklistSection analysisId={dto.id} sections={analysis.inspectionChecklist} />
           <PhotosSection
             images={listing.images}

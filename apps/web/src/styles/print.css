@@ -52,6 +52,13 @@
     text-decoration: none;
   }
 
+  /* Printed recall steps keep their addresses. */
+  .recall-check__link::after {
+    content: ' (' attr(href) ')';
+    font-weight: 400;
+    overflow-wrap: anywhere;
+  }
+
   details > summary {
     list-style: none;
   }

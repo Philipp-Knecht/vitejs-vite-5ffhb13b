@@ -7,3 +7,4 @@ export * from './platform-links';
 export * from './knowledge-index';
 export * from './advisor';
 export * from './advisor-query';
+export * from './recalls';
