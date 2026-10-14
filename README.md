@@ -20,7 +20,9 @@ analysis as a PDF folder for the viewing (built in the browser with jsPDF,
 `apps/web/src/features/pdf`). Result and
 model pages explain how to check recalls with the FIN and link the manufacturers' official recall
 pages and the KBA recall database (`packages/catalog/src/recalls.ts`); KaufCheck queries none of
-them itself.
+them itself. Pro members can also prepare the price negotiation: points from the
+listing that apply, their own findings and a factual message to the seller, without suggested
+amounts (`packages/shared/src/negotiation.ts`).
 
 For the listing check, a user pastes the listing text (or a link); KaufCheck extracts and
 normalizes the vehicle data and shows a mobile-first dashboard:
@@ -437,5 +439,4 @@ already reserved in the contracts and the database.
 - Richer market context as more verified comparables accumulate.
 - Alerts for saved searches and price-change notifications for saved listings (both need licensed
   listing data – KaufCheck does not query the marketplaces itself).
-- PDF export of an analysis and the checklist.
 - Integration of a privacy-friendly ad network behind the existing `AdSlot` abstraction.

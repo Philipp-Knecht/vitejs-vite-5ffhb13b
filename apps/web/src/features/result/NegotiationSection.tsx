@@ -87,9 +87,15 @@ export function NegotiationSection({
   const me = useMe();
   const toast = useToast();
   const [formal, setFormal] = useFormalAddress();
-  const [state, setState] = useState<NegotiationState>(() =>
-    readJson(negotiationStorageKey(analysisId), EMPTY, isState),
-  );
+  const [state, setState] = useState<NegotiationState>(() => {
+    const stored = readJson(negotiationStorageKey(analysisId), EMPTY, isState);
+    return {
+      ...stored,
+      findings: stored.findings
+        .slice(0, MAX_FINDINGS)
+        .map((finding) => finding.slice(0, MAX_FINDING_LENGTH)),
+    };
+  });
   const [draft, setDraft] = useState('');
 
   const isPro = me.data?.entitlements.negotiationHelp ?? false;
