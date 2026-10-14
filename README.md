@@ -15,7 +15,9 @@ about budget, use and space and ranks the researched models with a transparent p
 (`packages/catalog/src/advisor.ts`); it is linked once at least 40 models are researched
 (`apps/web/src/features/advisor/availability.ts`). The listing check shows the known weaknesses of
 the listed model's generation, the comparison orders saved offers by the buyer's own priorities
-(`packages/shared/src/comparison-ranking.ts`), and Pro members can save searches. Result and
+(`packages/shared/src/comparison-ranking.ts`), and Pro members can save searches and download an
+analysis as a PDF folder for the viewing (built in the browser with jsPDF,
+`apps/web/src/features/pdf`). Result and
 model pages explain how to check recalls with the FIN and link the manufacturers' official recall
 pages and the KBA recall database (`packages/catalog/src/recalls.ts`); KaufCheck queries none of
 them itself.

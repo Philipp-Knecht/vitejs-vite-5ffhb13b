@@ -79,8 +79,9 @@ class Writer {
     this.text(`${label}: ${url}`, style);
   }
 
+  /** Headings keep at least two lines of what follows on the same page. */
   heading(text: string) {
-    this.ensure(18);
+    this.ensure(28);
     this.y += 3;
     this.text(text, { size: 14, bold: true, gap: 1 });
     this.doc.setDrawColor(COLORS.rule);
@@ -89,7 +90,7 @@ class Writer {
   }
 
   subheading(text: string) {
-    this.ensure(10);
+    this.ensure(18);
     this.text(text, { size: 11, bold: true, gap: 1 });
   }
 
@@ -291,6 +292,10 @@ export function buildAnalysisPdf(input: AnalysisPdfInput): jsPDF {
     `Rückrufdatenbank des Kraftfahrt-Bundesamts (nach Hersteller, Modell und Baujahr): ${KBA_RECALL_DATABASE_URL}`,
   );
   w.bullet('Werkstattbelege zu erledigten Rückrufen zeigen lassen.');
+  w.text(
+    'Die Teilnahme an einem Rückruf ist Pflicht; die Schreiben gehen an den eingetragenen Halter – nach dem Kauf also an dich.',
+    { size: 9, muted: true },
+  );
 
   // Checklist
   w.heading('Checkliste für die Besichtigung');
