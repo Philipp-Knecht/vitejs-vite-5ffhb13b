@@ -26,7 +26,7 @@ export function buildInspectionChecklist(ctx: VehicleRuleContext): ChecklistSect
       'docs.title',
       'Fahrzeugbrief (Zulassungsbescheinigung Teil II)',
       dealer
-        ? 'Anzahl der Halter ansehen – der Händler selbst steht meist nicht drin.'
+        ? 'Anzahl der Halter ansehen – der Händler selbst steht dort meist nicht.'
         : 'Ist der Verkäufer eingetragen? Anzahl der Halter ansehen.',
     ),
     item('docs.hu_report', 'HU-Bericht', 'Mängel und Kilometerstand der letzten Prüfung ansehen.'),
@@ -185,7 +185,7 @@ export function buildInspectionChecklist(ctx: VehicleRuleContext): ChecklistSect
         'Schriftlicher Kaufvertrag',
         dealer
           ? 'Zum Beispiel ein Mustervertrag eines Automobilclubs.'
-          : 'Zum Beispiel ein Mustervertrag eines Automobilclubs, mit der Ausweisnummer des Verkäufers.',
+          : 'Zum Beispiel ein Mustervertrag eines Automobilclubs; trag die Ausweisnummer des Verkäufers ein.',
       ),
       dealer
         ? item(
