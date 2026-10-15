@@ -114,7 +114,9 @@ describe('CSV export', () => {
         invoice: false,
       },
     ];
-    const lines = carLogCsv(rows).replace(/^\ufeff/, '').split('\r\n');
+    const lines = carLogCsv(rows)
+      .replace(/^\ufeff/, '')
+      .split('\r\n');
     expect(lines[0]).toBe(
       'Datum;Art;Kilometerstand;Betrag in Euro;Menge;Einheit;Vollgetankt;Werkstatt;Notiz;Rechnung vorhanden',
     );
