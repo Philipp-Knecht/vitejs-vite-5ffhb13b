@@ -19,6 +19,8 @@ const GUIDES = [
   { to: '/gebrauchtwagen-checkliste', label: 'Checkliste Gebrauchtwagen' },
   { to: '/auto-besichtigung-checkliste', label: 'Checkliste Besichtigung' },
   { to: '/kfz-steuer-rechner', label: 'Kfz-Steuer-Rechner' },
+  { to: '/kaufvertrag', label: 'Kaufvertrag privat' },
+  { to: '/auto-verkaufen', label: 'Auto verkaufen' },
 ];
 
 function AccountLink({ onNavigate }: { onNavigate?: () => void }) {
