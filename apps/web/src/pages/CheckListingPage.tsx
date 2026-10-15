@@ -1,7 +1,7 @@
 import { DEFAULT_ENTITLEMENTS } from '@kaufcheck/shared';
 import { Search } from 'lucide-react';
 import { Link } from 'react-router';
-import { useConfig } from '../api/queries';
+import { useHydratedConfig } from '../api/queries';
 import { EvidenceLegend } from '../components/EvidenceBadge';
 import { FeatureGrid, PlatformChips } from '../features/analysis/CheckContent';
 import { ListingAnalysisForm } from '../features/analysis/ListingAnalysisForm';
@@ -12,9 +12,9 @@ import { usePageMeta } from '../seo/use-page-meta';
 export function CheckListingPage() {
   const meta = STATIC_PAGE_META['/inserat-pruefen'];
   usePageMeta(meta ?? { title: 'Inserat prüfen | KaufCheck', description: '' });
-  const config = useConfig();
-  const plans = config.data?.plans ?? DEFAULT_ENTITLEMENTS;
-  const retrieval = config.data?.features.urlRetrieval === true;
+  const config = useHydratedConfig();
+  const plans = config?.plans ?? DEFAULT_ENTITLEMENTS;
+  const retrieval = config?.features.urlRetrieval === true;
 
   return (
     <>

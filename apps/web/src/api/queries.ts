@@ -22,6 +22,7 @@ import type {
 } from '@kaufcheck/shared';
 import { QueryClient, useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { clearPrivateOfflineData } from '../lib/offline';
+import { useHydrated } from '../lib/use-hydrated';
 import { api, ApiRequestError } from './client';
 
 export const queryKeys = {
@@ -59,6 +60,17 @@ export function useConfig() {
     queryFn: ({ signal }) => api.get<PublicConfig>('/api/config', signal),
     staleTime: 5 * 60_000,
   });
+}
+
+/**
+ * The configuration as prerendered pages may show it: undefined until the page has hydrated,
+ * so that the first render matches the prerendered HTML (which shows the defaults). A
+ * configuration that loads during hydration would otherwise change texts mid-way.
+ */
+export function useHydratedConfig(): PublicConfig | undefined {
+  const hydrated = useHydrated();
+  const config = useConfig();
+  return hydrated ? config.data : undefined;
 }
 
 type MePolling = (data: MeDto | undefined, updates: number) => number | false;

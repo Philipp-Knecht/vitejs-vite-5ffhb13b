@@ -4,7 +4,7 @@ import { DEFAULT_ENTITLEMENTS } from '@kaufcheck/shared';
 import { ClipboardCheck, FileSearch, ListChecks, Scale, Search } from 'lucide-react';
 import { useEffect, useMemo, useRef, useState, type KeyboardEvent } from 'react';
 import { Link, useNavigate } from 'react-router';
-import { useConfig } from '../api/queries';
+import { useHydratedConfig } from '../api/queries';
 import { ADVISOR_AVAILABLE } from '../features/advisor/availability';
 import { PLATFORM_LIST } from '../features/analysis/check-content';
 import { FeatureGrid, PlatformChips } from '../features/analysis/CheckContent';
@@ -120,11 +120,11 @@ function useHomeTab(): [HomeTab, (tab: HomeTab) => void] {
 export function LandingPage() {
   const meta = STATIC_PAGE_META['/'];
   usePageMeta(meta ?? { title: 'KaufCheck', description: '' });
-  const config = useConfig();
+  const config = useHydratedConfig();
   const navigate = useNavigate();
-  const plans = config.data?.plans ?? DEFAULT_ENTITLEMENTS;
+  const plans = config?.plans ?? DEFAULT_ENTITLEMENTS;
   // Until the configuration has loaded, assume the default: no automatic retrieval.
-  const retrieval = config.data?.features.urlRetrieval === true;
+  const retrieval = config?.features.urlRetrieval === true;
   const faq = FAQ.filter((item) =>
     item.when === 'knowledge'
       ? KNOWLEDGE_IDS.length > 0
@@ -379,8 +379,8 @@ export function LandingPage() {
                     anonymous: plans.anonymous.monthlyAnalyses,
                     free: plans.free.monthlyAnalyses,
                     retrieval,
-                    ads: config.data?.ads != null,
-                    retentionDays: config.data?.privacy.anonymousRetentionDays ?? 90,
+                    ads: config?.ads != null,
+                    retentionDays: config?.privacy.anonymousRetentionDays ?? 90,
                   })}
                 </p>
               </details>
