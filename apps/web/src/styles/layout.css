@@ -272,3 +272,44 @@
     padding-block: 48px 24px;
   }
 }
+
+/* ---------- Offline notice (stays in the DOM so that it is announced) ---------- */
+.offline-banner {
+  margin: 0;
+}
+
+.offline-banner:not(:empty) {
+  padding: 8px 16px;
+  background: var(--c-warning-bg);
+  border-bottom: 1px solid var(--c-warning-border);
+  color: var(--c-warning);
+  font-size: 0.9rem;
+  text-align: center;
+}
+
+.offline-checks {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 4px 12px;
+  padding: 8px 16px;
+  background: var(--c-surface-2);
+  border-bottom: 1px solid var(--c-border);
+  font-size: 0.9rem;
+}
+
+.offline-checks ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 12px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+@media print {
+  .offline-banner,
+  .offline-checks {
+    display: none;
+  }
+}

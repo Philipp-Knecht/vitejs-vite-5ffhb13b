@@ -21,6 +21,8 @@ import type {
   WithdrawalRequest,
 } from '@kaufcheck/shared';
 import { QueryClient, useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { clearPrivateOfflineData } from '../lib/offline';
+import { useHydrated } from '../lib/use-hydrated';
 import { api, ApiRequestError } from './client';
 
 export const queryKeys = {
@@ -40,6 +42,8 @@ export function createQueryClient(): QueryClient {
     defaultOptions: {
       queries: {
         refetchOnWindowFocus: false,
+        // Offline, requests still go out: the service worker answers from its cache.
+        networkMode: 'offlineFirst',
         // Retry only transient server problems, never 4xx answers.
         retry: (count, error) =>
           count < 2 &&
@@ -56,6 +60,17 @@ export function useConfig() {
     queryFn: ({ signal }) => api.get<PublicConfig>('/api/config', signal),
     staleTime: 5 * 60_000,
   });
+}
+
+/**
+ * The configuration as prerendered pages may show it: undefined until the page has hydrated,
+ * so that the first render matches the prerendered HTML (which shows the defaults). A
+ * configuration that loads during hydration would otherwise change texts mid-way.
+ */
+export function useHydratedConfig(): PublicConfig | undefined {
+  const hydrated = useHydrated();
+  const config = useConfig();
+  return hydrated ? config.data : undefined;
 }
 
 type MePolling = (data: MeDto | undefined, updates: number) => number | false;
@@ -171,6 +186,10 @@ export function useComparison(ids: readonly string[]) {
 function useInvalidateSession() {
   const queryClient = useQueryClient();
   return async () => {
+    // Signing in after saving a check without an account keeps the copy: the check
+    // moves to the new account. Logging out or switching accounts deletes it.
+    const before = queryClient.getQueryData<MeDto>(queryKeys.me);
+    if (before?.user !== null) await clearPrivateOfflineData();
     queryClient.removeQueries({ queryKey: queryKeys.savedListings });
     queryClient.removeQueries({ queryKey: queryKeys.savedSearches });
     queryClient.removeQueries({ queryKey: queryKeys.ownedCars });

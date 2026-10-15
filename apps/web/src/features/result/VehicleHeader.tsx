@@ -5,6 +5,7 @@ import { Button } from '../../components/ui/Button';
 import { copyText } from '../../lib/clipboard';
 import { formatDateTime, formatIsoDay } from '../../lib/format';
 import { listingPlatformName } from '../../lib/platform';
+import { OfflineButton } from './OfflineButton';
 import { PdfButton } from './PdfButton';
 import { SaveButton } from './SaveButton';
 import { vehicleTitle } from './vehicle-title';
@@ -104,6 +105,7 @@ export function VehicleHeader({ dto }: { dto: AnalysisDto }) {
       <div className="vehicle-header__actions">
         <SaveButton dto={dto} />
         <PdfButton dto={dto} />
+        <OfflineButton analysisId={dto.id} />
         {source.url && (
           <a
             className="btn btn--secondary btn--md"

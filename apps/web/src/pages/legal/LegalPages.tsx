@@ -208,6 +208,20 @@ export function PrivacyPage() {
           Checklisten, deine Notizen für die Preisverhandlung und die gewählte Anrede (Sie/du).
           Diese Daten verlassen deinen Browser nicht.
         </li>
+        <li>
+          Nur wenn du bei einer Prüfung „Offline verfügbar machen“ wählst, speichert dein Browser
+          diese Prüfung, die Angaben, mit denen sie angezeigt wird (mit Konto auch deine
+          E-Mail-Adresse, deinen Tarif, deine Nutzung im laufenden Monat und die Eckdaten deines
+          Pro-Vertrags), und die Programmdateien von KaufCheck, damit die Prüfung auch ohne Empfang
+          funktioniert. Die Kopie verlässt dein Gerät nicht und gilt nur in diesem Browser. Sie
+          bleibt, bis du sie mit „Offline-Kopie löschen“ entfernst, dich abmeldest, mit einem
+          anderen Konto anmeldest, deine Anmeldung abläuft, dein Konto löschst oder die Websitedaten
+          in deinem Browser löschst; Safari kann sie auch von selbst löschen, wenn du Safari sieben
+          Tage lang nutzt, ohne KaufCheck aufzurufen. Ist keine Prüfung mehr gespeichert, löscht
+          KaufCheck auch die Programmdateien. Eine Einwilligung ist nach § 25 Abs. 2 Nr. 2 TDDDG
+          nicht nötig, weil du die Funktion ausdrücklich wählst; Rechtsgrundlage für die
+          Verarbeitung ist Art. 6 Abs. 1 lit. b DSGVO.
+        </li>
       </ul>
       <p>
         Beide Cookies sind für den von dir angefragten Dienst unbedingt erforderlich (§ 25 Abs. 2
