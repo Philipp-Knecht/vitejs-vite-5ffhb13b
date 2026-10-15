@@ -182,6 +182,18 @@ export function CarCard({
           sie wird jedes Jahr neu berechnet und beeinflusst deinen Beitrag.
         </p>
       </div>
+
+      <div className="car-card__section">
+        <h3>Verkaufen</h3>
+        <p>
+          <Link to={`/auto-verkaufen?auto=${car.id}#inserat`}>
+            Inseratstext schreiben<span className="visually-hidden"> für {carName(car)}</span>
+          </Link>
+          {' – '}
+          mit den Daten von hier. Dazu eine Checkliste für den Verkauf und was du danach abmelden
+          und melden musst.
+        </p>
+      </div>
     </article>
   );
 }

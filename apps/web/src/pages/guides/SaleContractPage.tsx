@@ -1,11 +1,17 @@
 import { findMake } from '@kaufcheck/catalog';
-import { EMPTY_SALE_CONTRACT, type AnalysisDto, type SaleContractValues } from '@kaufcheck/shared';
-import { useMemo } from 'react';
+import {
+  EMPTY_SALE_CONTRACT,
+  saleContractFromListing,
+  type AnalysisDto,
+  type SaleContractValues,
+} from '@kaufcheck/shared';
+import { useMemo, useState } from 'react';
 import { Link, useSearchParams } from 'react-router';
 import { useAnalysis } from '../../api/queries';
 import { Alert } from '../../components/ui/Alert';
 import { PageLoading } from '../../components/ui/Spinner';
 import { SaleContractForm } from '../../features/sale-contract/SaleContractForm';
+import { latestListingTextDraft } from '../../features/selling/draft';
 import { useHydrated } from '../../lib/use-hydrated';
 import { GuideLayout, type TocEntry } from './GuideLayout';
 
@@ -47,9 +53,17 @@ function Form() {
   const param = hydrated ? params.get('analyse') : null;
   const analysisId = param && UUID.test(param) ? param : null;
   const analysis = useAnalysis(analysisId ?? '', analysisId !== null);
+  // From the listing text written on „Auto verkaufen“, kept in memory only.
+  const [listing] = useState(() => latestListingTextDraft());
+  const fromListing = !analysisId && hydrated && params.has('inserat');
   const initial = useMemo(
-    () => (analysis.data ? fromAnalysis(analysis.data) : EMPTY_SALE_CONTRACT),
-    [analysis.data],
+    () =>
+      analysis.data
+        ? fromAnalysis(analysis.data)
+        : fromListing && listing
+          ? saleContractFromListing(listing.values)
+          : EMPTY_SALE_CONTRACT,
+    [analysis.data, fromListing, listing],
   );
 
   // Wait for the prefill: arriving later, it would replace what was typed meanwhile.
@@ -73,15 +87,27 @@ function Form() {
           unter „Weitere Vereinbarungen“, was inzwischen nicht mehr stimmt.
         </p>
       )}
+      {fromListing &&
+        (listing ? (
+          <p className="muted">
+            Fahrzeugdaten und Angaben zum Zustand aus deinem Inseratstext übernommen. Prüf sie mit
+            dem Fahrzeugschein; den Tachostand tragt ihr bei der Übergabe ein.
+          </p>
+        ) : (
+          <p className="muted">
+            Dein Inseratstext ist nicht mehr da – er bleibt nur, bis du die Seite neu lädst. Trag
+            die Angaben selbst ein.
+          </p>
+        ))}
       {analysis.isError && (
         <p className="muted">
           Die Prüfung konnte nicht geladen werden. Trag die Angaben selbst ein.
         </p>
       )}
       <SaleContractForm
-        key={analysis.data?.id ?? 'empty'}
+        key={analysis.data?.id ?? (fromListing && listing ? 'listing' : 'empty')}
         initial={initial}
-        source={analysis.data?.id ?? ''}
+        source={analysis.data?.id ?? (fromListing && listing ? 'listing' : '')}
       />
     </>
   );

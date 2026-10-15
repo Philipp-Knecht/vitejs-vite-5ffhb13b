@@ -46,6 +46,7 @@ const GUIDES = new Set([
   '/auto-besichtigung-checkliste',
   '/kfz-steuer-rechner',
   '/kaufvertrag',
+  '/auto-verkaufen',
 ]);
 
 function structuredData(pagePath, meta) {

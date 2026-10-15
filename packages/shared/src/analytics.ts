@@ -21,6 +21,7 @@ export const ANALYTICS_EVENTS = [
   'negotiation_message_copied',
   'owned_car_added',
   'sale_contract_created',
+  'listing_text_created',
 ] as const;
 
 export type AnalyticsEventName = (typeof ANALYTICS_EVENTS)[number];

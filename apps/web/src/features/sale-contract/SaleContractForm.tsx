@@ -28,7 +28,7 @@ import { keepSaleContractDraft, readSaleContractDraft, type ContractRole as Role
 
 const EV_FUELS: ReadonlySet<string> = new Set(['electric', 'plugin_hybrid']);
 
-function RadioGroup<T extends string>({
+export function RadioGroup<T extends string>({
   legend,
   name,
   value,
@@ -36,6 +36,7 @@ function RadioGroup<T extends string>({
   onChange,
   hint,
   clearable,
+  clearLabel = 'Offen lassen – auf Papier ankreuzen',
 }: {
   legend: ReactNode;
   name: string;
@@ -45,10 +46,12 @@ function RadioGroup<T extends string>({
   hint?: ReactNode;
   /** Adds „Offen lassen“: the boxes stay empty in the PDF, to be ticked on paper. */
   clearable?: boolean;
+  /** The label of the empty answer. */
+  clearLabel?: string;
 }) {
   const hintId = useId();
   const all: { value: T | ''; label: ReactNode }[] = clearable
-    ? [...options, { value: '', label: 'Offen lassen – auf Papier ankreuzen' }]
+    ? [...options, { value: '', label: clearLabel }]
     : options;
   return (
     <fieldset className="choice-group" aria-describedby={hint ? hintId : undefined}>

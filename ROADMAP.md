@@ -11,15 +11,19 @@ PRs, **L** = mehrere Wochen.
 
 ## Erledigt
 
-| #   | Feature                                                              | PR        |
-| --- | -------------------------------------------------------------------- | --------- |
-| 1.1 | Kfz-Steuer-Rechner (aus den Werten im Fahrzeugschein)                | #20       |
-| 1.2 | Laufende Kosten überschlagen (eigene Werte, Steuer eingerechnet)     | #20       |
-| 2.1 | Rückruf-Check: FIN erfragen, Herstellerseiten und KBA verlinken      | #17       |
-| 2.2 | Kauf-Assistent: Checkliste bis Zulassung und „Nach dem Kauf“         | #21       |
-| 2.4 | PDF-Mappe für die Besichtigung (Pro)                                 | #18       |
-| 2.5 | Verhandlungshilfe (Pro)                                              | #22       |
-| 3.1 | Mein Auto: Auto anlegen, HU-Termin mit Kalenderdatei, Schwachstellen | dieser PR |
+| #   | Feature                                                                      | PR        |
+| --- | ---------------------------------------------------------------------------- | --------- |
+| 1.1 | Kfz-Steuer-Rechner (aus den Werten im Fahrzeugschein)                        | #20       |
+| 1.2 | Laufende Kosten überschlagen (eigene Werte, Steuer eingerechnet)             | #20       |
+| 2.1 | Rückruf-Check: FIN erfragen, Herstellerseiten und KBA verlinken              | #17       |
+| 2.2 | Kauf-Assistent: Checkliste bis Zulassung und „Nach dem Kauf“                 | #21       |
+| 2.4 | PDF-Mappe für die Besichtigung (Pro)                                         | #18       |
+| 2.5 | Verhandlungshilfe (Pro)                                                      | #22       |
+| 3.1 | Mein Auto: Auto anlegen, HU-Termin mit Kalenderdatei, Schwachstellen         | #23       |
+| 1.3 | Typklasse: Erklärung und Link zur GDV-Abfrage                                | #24       |
+| 5.5 | PWA: installierbar, Prüfung für die Besichtigung offline                     | #25       |
+| 2.3 | Kaufvertrag für den Privatkauf als PDF (Pro)                                 | #28       |
+| 3.5 | Auto privat verkaufen: Ratgeber, Inseratstext (Pro), Übergabe an den Vertrag | dieser PR |
 
 ## Arbeitsweise je Feature
 
@@ -62,13 +66,13 @@ PRs, **L** = mehrere Wochen.
 
 ## Etappe 3 – Nach dem Kauf: „Mein Auto“
 
-| #   | Feature                                                                                     | Aufwand | Plan                          | Anmerkung                                                        |
-| --- | ------------------------------------------------------------------------------------------- | ------- | ----------------------------- | ---------------------------------------------------------------- |
-| 3.1 | Mein Auto: gekauftes Angebot übernehmen (Modell, Generation, Erstzulassung, Kilometerstand) | M       | Kostenlos (1) / Pro (mehrere) | neues Datenmodell + Migration                                    |
-| 3.2 | Erinnerungen an HU, Inspektion, Reifenwechsel, Bremsflüssigkeit (E-Mail, `.ics`)            | M       | Pro                           | Einwilligung, Abmeldelink, Datenschutzerklärung                  |
-| 3.3 | Digitales Serviceheft und Kostenbuch (optional Belege)                                      | M–L     | Pro                           | Belege brauchen Speicher; Kosten und Auftragsverarbeitung klären |
-| 3.4 | „Darauf solltest du bei deinem Auto achten“ (Schwachstellen nach Laufleistung)              | S       | Pro                           | nutzt vorhandenes Modellwissen                                   |
-| 3.5 | Wiederverkauf: Inseratstext-Generator, Verkaufs-Checkliste, Ab-/Ummeldung                   | M       | Pro                           | Regeln zuerst, KI optional                                       |
+| #       | Feature                                                                                     | Aufwand | Plan                          | Anmerkung                                                         |
+| ------- | ------------------------------------------------------------------------------------------- | ------- | ----------------------------- | ----------------------------------------------------------------- |
+| 3.1     | Mein Auto: gekauftes Angebot übernehmen (Modell, Generation, Erstzulassung, Kilometerstand) | M       | Kostenlos (1) / Pro (mehrere) | neues Datenmodell + Migration                                     |
+| 3.2     | Erinnerungen an HU, Inspektion, Reifenwechsel, Bremsflüssigkeit (E-Mail, `.ics`)            | M       | Pro                           | ohne Anwalt, nach gründlicher Recherche (Entscheidung 15.10.2026) |
+| 3.3     | Digitales Serviceheft und Kostenbuch (optional Belege)                                      | M–L     | Pro                           | Belege brauchen Speicher; Kosten und Auftragsverarbeitung klären  |
+| ~~3.4~~ | ~~„Darauf solltest du bei deinem Auto achten“ (Schwachstellen nach Laufleistung)~~          | –       | –                             | gestrichen (15.10.2026)                                           |
+| 3.5     | Wiederverkauf: Inseratstext-Generator, Verkaufs-Checkliste, Ab-/Ummeldung                   | M       | Pro                           | Regeln zuerst, KI optional                                        |
 
 ## Etappe 4 – Daten und Partner (abhängig von Dritten)
 
@@ -83,26 +87,27 @@ PRs, **L** = mehrere Wochen.
 
 ## Etappe 5 – Reichweite und Einnahmen
 
-| #   | Feature                                                                     | Aufwand | Anmerkung                                                                      |
-| --- | --------------------------------------------------------------------------- | ------- | ------------------------------------------------------------------------------ |
-| 5.1 | AdSense aktivieren                                                          | –       | Google-Prüfung, dann `ADSENSE_CLIENT`/`ADSENSE_SLOT`                           |
-| 5.2 | Datenschutzfreundliches Werbenetz hinter `AdSlot`                           | M       | Alternative zu AdSense                                                         |
-| 5.3 | Affiliate (Gebrauchtwagencheck, Versicherungs-/Kreditvergleich)             | S–M     | **rechtlich heikel**: Erlaubnispflichten nach § 34d / § 34c GewO prüfen lassen |
-| 5.4 | SEO: weitere Ratgeber (Kosten, Rückrufe, Zulassung, Verkauf), interne Links | M       | passt zu Etappe 1–3                                                            |
-| 5.5 | PWA (installierbar, Checkliste offline)                                     | S–M     | native App erst bei Bedarf                                                     |
+| #   | Feature                                                                     | Aufwand | Anmerkung                                                                  |
+| --- | --------------------------------------------------------------------------- | ------- | -------------------------------------------------------------------------- |
+| 5.1 | AdSense aktivieren                                                          | –       | Google-Prüfung, dann `ADSENSE_CLIENT`/`ADSENSE_SLOT`                       |
+| 5.2 | Datenschutzfreundliches Werbenetz hinter `AdSlot`                           | M       | Alternative zu AdSense                                                     |
+| 5.3 | Affiliate (Gebrauchtwagencheck, Versicherungs-/Kreditvergleich)             | S–M     | ohne Anwalt, nach gründlicher Recherche zu § 34d / § 34c GewO (15.10.2026) |
+| 5.4 | SEO: weitere Ratgeber (Kosten, Rückrufe, Zulassung, Verkauf), interne Links | M       | passt zu Etappe 1–3                                                        |
+| 5.5 | PWA (installierbar, Checkliste offline)                                     | S–M     | native App erst bei Bedarf                                                 |
 
-## Etappe 6 – Weitere Kategorien (offen)
+## Etappe 6 – Weitere Kategorien
 
-Verträge und Datenbank sind für weitere Kategorien vorbereitet. Zurückgestellt, bis Etappe 1–3 stehen;
-Entscheidung des Betreibers, ob KaufCheck beim Auto bleibt.
+Verträge und Datenbank sind für weitere Kategorien vorbereitet. Der Betreiber hat weitere Kategorien am
+15.10.2026 freigegeben; sie kommen nach Etappe 1–3.
 
 ## Querschnitt
 
-- Rechtstexte anwaltlich prüfen lassen, spätestens vor 3.2 und 5.3 (2.3: ohne Anwalt, nach Recherche).
+- Rechtstexte: keine anwaltliche Prüfung; 2.3, 3.2 und 5.3 nach gründlicher Recherche (Entscheidungen vom
+  15.10.2026).
 - Jedes Feature: Tests (Unit, Integration, E2E, axe), Datenschutzerklärung und FAQ anpassen.
 - Nutzung mit der vorhandenen First-Party-Analytik messen und danach priorisieren.
 
 ## Reihenfolge
 
-0 → 2.1 + 2.4 → 1.1/1.2 → 2.2 → 3.1/3.2 → Rest; 0.3 läuft im Hintergrund mit. 5.3 erst nach
-Entscheidung über eine anwaltliche Prüfung.
+0 → 2.1 + 2.4 → 1.1/1.2 → 2.2 → 3.1/3.2 → Rest; 0.3 läuft im Hintergrund mit. Neue Features gehen vor
+mehr Modellwissen.

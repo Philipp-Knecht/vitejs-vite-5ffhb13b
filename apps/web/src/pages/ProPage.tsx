@@ -108,6 +108,14 @@ function rows(
       ],
     },
     {
+      label: 'Inseratstext für den Verkauf',
+      cells: [
+        flag(plans.anonymous.listingText),
+        flag(plans.free.listingText),
+        flag(plans.pro.listingText),
+      ],
+    },
+    {
       label: photoAnalysisAvailable ? 'Fotoanalyse' : 'Fotoanalyse (derzeit nicht verfügbar)',
       cells: [
         flag(plans.anonymous.photoAnalysis),

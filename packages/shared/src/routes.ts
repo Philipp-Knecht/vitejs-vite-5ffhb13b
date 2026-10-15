@@ -20,6 +20,7 @@ export const STATIC_PAGES: readonly StaticPage[] = [
   { path: '/auto-besichtigung-checkliste', indexable: true },
   { path: '/kfz-steuer-rechner', indexable: true },
   { path: '/kaufvertrag', indexable: true },
+  { path: '/auto-verkaufen', indexable: true },
   { path: '/pro', indexable: true },
   { path: '/bot', indexable: false },
   { path: '/datenschutz', indexable: false },
