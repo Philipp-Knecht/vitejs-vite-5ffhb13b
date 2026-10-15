@@ -1566,3 +1566,94 @@
   font-family: inherit;
   white-space: pre-wrap;
 }
+
+/* Kostenbuch */
+.car-log__summary .definition-list {
+  margin-bottom: 12px;
+}
+
+.car-log__kinds {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 8px;
+}
+
+.car-log__kinds th,
+.car-log__kinds td {
+  padding: 6px 0;
+  border-bottom: 1px solid var(--c-border);
+  text-align: left;
+  font-weight: 400;
+}
+
+.car-log__kinds td {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.car-log__form {
+  display: grid;
+  gap: 16px;
+}
+
+.car-log__list-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: end;
+  justify-content: space-between;
+  gap: 12px;
+  margin-block: 24px 12px;
+}
+
+.car-log__list-header h2 {
+  margin: 0;
+}
+
+.car-log__entries {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 12px;
+}
+
+.car-log__entry {
+  padding: 12px 16px;
+  border: 1px solid var(--c-border);
+  border-radius: var(--radius);
+  background: var(--c-surface);
+}
+
+.car-log__entry p {
+  margin: 4px 0;
+}
+
+.car-log__entry-main {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.car-log__entry-title {
+  margin: 0;
+  font-size: 1rem;
+}
+
+.car-log__entry-title:focus {
+  outline: none;
+}
+
+.car-log__amount {
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.car-log__entry-note {
+  white-space: pre-line;
+}
+
+.car-log__note {
+  margin-top: 16px;
+  font-size: 0.9rem;
+}

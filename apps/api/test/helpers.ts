@@ -75,6 +75,7 @@ const TABLES = [
   'SavedListing',
   'SavedSearch',
   'OwnedCar',
+  'CarLogEntry',
   'Usage',
   'Subscription',
   'BillingEvent',

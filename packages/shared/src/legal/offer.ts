@@ -82,6 +82,9 @@ export function proFeatures(pro: Entitlements, options: { photoAnalysis: boolean
   if (pro.listingText) {
     features.push('Inseratstext für den Verkauf deines Autos aus deinen Angaben');
   }
+  if (pro.carLog) {
+    features.push('Kostenbuch und selbst geführtes Serviceheft für deine Autos unter „Mein Auto“');
+  }
   if (pro.photoAnalysis && options.photoAnalysis) {
     features.push('KI-Fotoanalyse bei Inseraten mit Fotos');
   }

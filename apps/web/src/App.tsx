@@ -40,6 +40,9 @@ const SavedListingsPage = lazy(() =>
 const MyCarPage = lazy(() =>
   import('./features/my-car/MyCarPage').then((module) => ({ default: module.MyCarPage })),
 );
+const CarLogPage = lazy(() =>
+  import('./features/car-log/CarLogPage').then((module) => ({ default: module.CarLogPage })),
+);
 const ComparePage = lazy(() =>
   import('./features/compare/ComparePage').then((module) => ({ default: module.ComparePage })),
 );
@@ -180,6 +183,7 @@ export function App({ queryClient }: { queryClient: QueryClient }) {
               <Route path="/analyse/:id" element={<ResultPage />} />
               <Route path="/meine-angebote" element={<SavedListingsPage />} />
               <Route path="/mein-auto" element={<MyCarPage />} />
+              <Route path="/mein-auto/:id/kostenbuch" element={<CarLogPage />} />
               <Route path="/vergleich" element={<ComparePage />} />
               <Route path="/verlauf" element={<HistoryPage />} />
               <Route path="/anmelden" element={<LoginPage />} />

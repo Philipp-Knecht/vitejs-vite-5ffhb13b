@@ -8,6 +8,7 @@ import {
 } from '../constants';
 import { ApiErrorSchema } from './errors';
 import { FUEL_TYPES } from '../labels';
+import { CAR_LOG_KINDS } from '../car-log';
 import { EntitlementsSchema, PlanSchema } from './plans';
 import { LISTING_PLATFORMS, MAX_URL_INPUT_LENGTH } from '../url';
 import { AnalysisResultSchema, EvidenceTypeSchema } from './analysis';
@@ -211,6 +212,70 @@ export const OwnedCarsResponseSchema = z.object({
   limit: z.number().int().nonnegative(),
 });
 export type OwnedCarsResponse = z.infer<typeof OwnedCarsResponseSchema>;
+
+/** A date as YYYY-MM-DD that exists in the calendar. */
+const DaySchema = z
+  .string()
+  .regex(/^\d{4}-\d{2}-\d{2}$/, 'Bitte gib ein gültiges Datum an.')
+  .refine((value) => {
+    const date = new Date(`${value}T00:00:00Z`);
+    return !Number.isNaN(date.getTime()) && date.toISOString().slice(0, 10) === value;
+  }, 'Bitte gib ein gültiges Datum an.');
+
+/** Free text over several lines, without other control characters. */
+const noteText = (max: number) =>
+  z
+    .string()
+    .trim()
+    .max(max, `Bitte höchstens ${max} Zeichen.`)
+    .refine(
+      (value) =>
+        ![...value].some((char) => {
+          const code = char.charCodeAt(0);
+          return (code < 32 && char !== '\n') || code === 127;
+        }),
+      'Bitte ohne Steuerzeichen.',
+    );
+
+/** One entry in the cost book and service history of a car (Pro). */
+export const CarLogEntryInputSchema = z.object({
+  date: DaySchema,
+  kind: z.enum(CAR_LOG_KINDS),
+  odometerKm: z.number().int().min(0).max(2_000_000).nullable(),
+  /** In euro cents; null for an entry without costs, e.g. work under warranty. */
+  amountCents: z.number().int().min(0).max(100_000_000).nullable(),
+  /** Litres or kWh, two decimals at most. */
+  quantity: z
+    .number()
+    .positive()
+    .max(10_000)
+    .refine(
+      (value) => Math.abs(value * 100 - Math.round(value * 100)) < 1e-6,
+      'Bitte höchstens zwei Nachkommastellen.',
+    )
+    .nullable(),
+  fullTank: z.boolean(),
+  workshop: lineOfText(100).nullable(),
+  note: noteText(500).nullable(),
+  /** The owner keeps an invoice or receipt for it. */
+  invoice: z.boolean(),
+});
+export type CarLogEntryInput = z.infer<typeof CarLogEntryInputSchema>;
+
+export const CarLogEntryDtoSchema = CarLogEntryInputSchema.extend({
+  id: z.string(),
+  carId: z.string(),
+  createdAt: z.string(),
+});
+export type CarLogEntryDto = z.infer<typeof CarLogEntryDtoSchema>;
+
+export const CarLogResponseSchema = z.object({
+  items: z.array(CarLogEntryDtoSchema),
+  limit: z.number().int().nonnegative(),
+  /** False without Pro: the entries can be read, exported and deleted, but not added. */
+  editable: z.boolean(),
+});
+export type CarLogResponse = z.infer<typeof CarLogResponseSchema>;
 
 // ---------------------------------------------------------------------------
 // Comparison

@@ -182,10 +182,14 @@ export function PrivacyPage() {
         mit KaufCheck Pro – gespeicherten Suchen (nur deine Suchangaben wie Marke, Preis und PLZ).
         Unter „Mein Auto“ speichern wir, was du zu deinem Auto einträgst (Name, Marke, Modell und
         Generation, Kraftstoff, Erstzulassung, Kilometerstand und HU-Monat – keine FIN und kein
-        Kennzeichen), damit wir dir den HU-Termin und das Wissen zu deinem Modell zeigen können.
-        Ohne E-Mail-Adresse und Passwort kann kein Konto angelegt werden. Du kannst dein Konto
-        jederzeit selbst in den Kontoeinstellungen löschen; dabei werden alle zugehörigen Daten
-        entfernt.
+        Kennzeichen), damit wir dir den HU-Termin und das Wissen zu deinem Modell zeigen können. Mit
+        KaufCheck Pro kommt das Kostenbuch dazu: Datum, Art, Kilometerstand, Betrag, Menge,
+        Werkstatt, Notiz und ob ein Beleg vorliegt – Belege selbst laden wir nicht hoch. Die
+        Einträge löschen wir, wenn du sie, das Auto oder dein Konto löschst; endet Pro, bleiben sie
+        lesbar, bis du sie löschst. Den CSV-Export und das Serviceheft als PDF erstellt dein
+        Browser. Ohne E-Mail-Adresse und Passwort kann kein Konto angelegt werden. Du kannst dein
+        Konto jederzeit selbst in den Kontoeinstellungen löschen; dabei werden alle zugehörigen
+        Daten entfernt.
         {features?.passwordReset === true &&
           ' Wenn du dein Passwort zurücksetzt, schicken wir dir eine E-Mail (siehe „E-Mails“).'}{' '}
         Rechtsgrundlage ist Art. 6 Abs. 1 lit. b DSGVO.

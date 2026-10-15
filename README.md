@@ -38,7 +38,11 @@ is stored or sent (reasons for the clauses in DECISIONS.md). To sell the car aga
 is a guide from the documents to the deregistration, and Pro members build a listing text from
 their answers (`packages/shared/src/listing-text.ts`, fixed rules, no AI). It asks the same
 questions about the car's history as the contract and hands them over to it, so that listing and
-contract say the same.
+contract say the same. Pro members keep a cost book per car (`/mein-auto/<id>/kostenbuch`,
+`apps/api/src/application/car-log-service.ts`, figures in `packages/shared/src/car-log.ts`):
+fill-ups, service, repairs and other costs, the costs per month and per km, the consumption between
+full fill-ups, a CSV export and the self-kept service history as a PDF without prices. After Pro
+ends, the entries stay readable, exportable and deletable; no receipts are uploaded.
 
 For the listing check, a user pastes the listing text (or a link); KaufCheck extracts and
 normalizes the vehicle data and shows a mobile-first dashboard:

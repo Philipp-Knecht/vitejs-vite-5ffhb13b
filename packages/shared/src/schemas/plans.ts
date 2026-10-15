@@ -21,6 +21,8 @@ export const EntitlementsSchema = z.object({
   saleContract: z.boolean(),
   /** Listing text for selling one's own car, built in the browser. */
   listingText: z.boolean(),
+  /** Cost book and service history for the cars in „Mein Auto“. */
+  carLog: z.boolean(),
   photoAnalysis: z.boolean(),
   showAds: z.boolean(),
 });

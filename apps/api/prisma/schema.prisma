@@ -220,8 +220,29 @@ model OwnedCar {
   huMonth                Int?
   createdAt              DateTime @default(now())
   updatedAt              DateTime @updatedAt
+  logEntries             CarLogEntry[]
 
   @@index([userId, createdAt])
+}
+
+/// Cost book and self-kept service history of a car (Pro): only what the owner enters.
+model CarLogEntry {
+  id                 String   @id @default(uuid()) @db.Uuid
+  carId              String   @db.Uuid
+  car                OwnedCar @relation(fields: [carId], references: [id], onDelete: Cascade)
+  date               DateTime @db.Date
+  kind               String
+  odometerKm         Int?
+  amountCents        Int?
+  /// Litres or kWh in hundredths.
+  quantityHundredths Int?
+  fullTank           Boolean  @default(false)
+  workshop           String?
+  note               String?
+  invoice            Boolean  @default(false)
+  createdAt          DateTime @default(now())
+
+  @@index([carId, date])
 }
 
 /// A car search the user saved (Pro): only KaufCheck's own search parameters, no marketplace data.
