@@ -4,6 +4,7 @@ import { useMemo } from 'react';
 import { Link, useSearchParams } from 'react-router';
 import { useAnalysis } from '../../api/queries';
 import { Alert } from '../../components/ui/Alert';
+import { PageLoading } from '../../components/ui/Spinner';
 import { SaleContractForm } from '../../features/sale-contract/SaleContractForm';
 import { useHydrated } from '../../lib/use-hydrated';
 import { GuideLayout, type TocEntry } from './GuideLayout';
@@ -51,13 +52,17 @@ function Form() {
     [analysis.data],
   );
 
+  // Wait for the prefill: arriving later, it would replace what was typed meanwhile.
+  if (analysisId && analysis.isPending) return <PageLoading label="Angaben aus der Prüfung …" />;
+
   return (
     <>
       {analysis.data && (
         <p className="muted">
           Fahrzeugdaten aus deiner Prüfung übernommen – vergleicht sie mit dem Fahrzeugschein.
-          Angaben zum Zustand aus dem Inserat stehen bewusst nicht im Vertrag: Was gilt, erklärt der
-          Verkäufer selbst.
+          Angaben zum Zustand aus dem Inserat übernimmt KaufCheck nicht. Sie können trotzdem als
+          vereinbart gelten (BGH, VIII ZR 161/23): Tragt ein, was davon gelten soll, und schreibt
+          unter „Weitere Vereinbarungen“, was inzwischen nicht mehr stimmt.
         </p>
       )}
       {analysis.isError && (
@@ -65,7 +70,11 @@ function Form() {
           Die Prüfung konnte nicht geladen werden. Trag die Angaben selbst ein.
         </p>
       )}
-      <SaleContractForm key={analysis.data?.id ?? 'empty'} initial={initial} />
+      <SaleContractForm
+        key={analysis.data?.id ?? 'empty'}
+        initial={initial}
+        source={analysis.data?.id ?? ''}
+      />
     </>
   );
 }
@@ -78,12 +87,13 @@ export function SaleContractPage() {
       title="Kaufvertrag für den privaten Autokauf"
       updated="Oktober 2026"
       toc={TOC}
+      ads={false}
       intro={
         <p>
           Mit diesem Vertrag haltet ihr beim Autokauf von privat alles Wichtige schriftlich fest:
           wer kauft und verkauft, welches Auto, was der Verkäufer über den Zustand weiß, Preis,
           Übergabe und Ummeldung. Füll aus, was du schon weißt – den Rest tragt ihr bei der Übergabe
-          von Hand ein.
+          von Hand ein. Das fertige PDF erstellst du mit KaufCheck Pro.
         </p>
       }
     >
@@ -108,8 +118,8 @@ export function SaleContractPage() {
           des Fahrzeugbriefs
         </li>
         <li>
-          Den Tachostand bei der Übergabe – und getrennt davon, was der Verkäufer über die
-          tatsächliche Laufleistung weiß
+          Den abgelesenen Tachostand – und getrennt davon die Gesamtlaufleistung: fest vereinbart
+          oder so, wie der Verkäufer sie kennt
         </li>
         <li>
           Die Angaben des Verkäufers zu Unfällen, gewerblicher Nutzung, Import, Motor und offenen
@@ -125,15 +135,16 @@ export function SaleContractPage() {
         Wer privat verkauft, darf die Haftung für Sachmängel ausschließen – das ist üblich und steht
         auch in diesem Vertrag. Der Ausschluss hat aber Grenzen, die das Gesetz vorgibt: Er gilt
         nicht, wenn der Verkäufer einen Mangel arglistig verschweigt, nicht für Schäden an Leben,
-        Körper und Gesundheit, nicht bei grober Fahrlässigkeit oder Vorsatz und nicht für eine
-        Garantie. Ein Ausschluss ohne diese Ausnahmen kann insgesamt unwirksam sein; deshalb sind
-        sie im Vertrag ausdrücklich genannt.
+        Körper und Gesundheit, nicht für Schadensersatz bei grober Fahrlässigkeit oder Vorsatz und
+        nicht für eine Garantie. Ein Ausschluss ohne diese Ausnahmen kann insgesamt unwirksam sein;
+        deshalb sind sie im Vertrag ausdrücklich genannt.
       </p>
       <p>
         Vor allem gilt der Ausschluss nicht für das, was ihr als Beschaffenheit vereinbart. Sagt der
-        Verkäufer im Vertrag „unfallfrei“ oder nennt er eine Laufleistung, muss das stimmen – auch
-        wenn die Gewährleistung sonst ausgeschlossen ist. So hat es der Bundesgerichtshof
-        entschieden, zuletzt etwa für eine Angabe im Inserat (
+        Verkäufer im Vertrag „unfallfrei“ oder vereinbart ihr eine Laufleistung fest, muss das
+        stimmen – auch wenn die Gewährleistung sonst ausgeschlossen ist. So hat es der
+        Bundesgerichtshof entschieden, zuletzt etwa für eine Angabe im Inserat (noch zum bis 2021
+        geltenden Recht;
         <a
           href="https://www.bundesgerichtshof.de/SharedDocs/Pressemitteilungen/DE/2024/2024082.html"
           target="_blank"
@@ -144,18 +155,25 @@ export function SaleContractPage() {
         </a>
         ). Deshalb fragt der Vertrag diese Punkte einzeln ab, und deshalb gibt es „Nicht bekannt“:
         Ein Verkäufer soll nur bestätigen, was er wirklich weiß. Unfälle aus der Zeit vor seiner
-        Besitzzeit gibt er nur an, soweit sie ihm bekannt sind.
+        Besitzzeit gibt er nur an, soweit sie ihm bekannt sind; nennt er die Laufleistung nur „nach
+        seiner Kenntnis“, haftet er nur, wenn er es besser wusste.
       </p>
       <p>
-        Mängel, die im Vertrag stehen, kennt der Käufer beim Kauf – wegen dieser Mängel hat er
-        später keine Rechte. Deshalb sollten sie so genau wie möglich beschrieben sein.
+        Mängel, die im Vertrag stehen, gehören zur vereinbarten Beschaffenheit – wegen dieser Mängel
+        hat der Käufer später keine Rechte. Deshalb sollten sie so genau wie möglich beschrieben
+        sein.
+      </p>
+      <p>
+        Ob der Vertrag dabei als Allgemeine Geschäftsbedingung gilt, hängt davon ab, wer ihn zur
+        Unterschrift vorschlägt. Sucht ihr das Muster gemeinsam aus, ist er keine. Die Klauseln sind
+        so geschrieben, dass sie in beiden Fällen halten.
       </p>
 
       <h2 id="uebergabe">Bei der Übergabe</h2>
       <ul>
         <li>
           Lass dir den Ausweis des Verkäufers zeigen. Steht in der Zulassungsbescheinigung Teil II
-          jemand anderes als Halter, lass dir das erklären.
+          jemand anderes, lass dir das erklären; wer für jemanden verkauft, braucht eine Vollmacht.
         </li>
         <li>Vergleiche die FIN im Vertrag und in den Papieren mit der Nummer am Auto.</li>
         <li>
@@ -165,21 +183,34 @@ export function SaleContractPage() {
           Übergeben werden Auto, Schlüssel und Fahrzeugbrief erst, wenn der Kaufpreis vollständig
           bezahlt ist – bar oder per Überweisung, die schon auf dem Konto ist.
         </li>
-        <li>Druckt den Vertrag zweimal aus; jeder unterschreibt beide Exemplare.</li>
+        <li>
+          Streicht nicht benutzte Zeilen und Kästchen durch, setzt eure Kürzel auf jede Seite und
+          unterschreibt beide Exemplare.
+        </li>
       </ul>
 
       <h2 id="nach-dem-verkauf">Nach dem Verkauf</h2>
       <p>
-        Der Verkäufer meldet den Verkauf unverzüglich seiner Kfz-Versicherung und der
-        Zulassungsbehörde, mit Namen und Anschrift des Käufers. Erst wenn diese Veräußerungsanzeige
-        bei der Zulassungsbehörde eingegangen ist oder das Auto umgemeldet wurde, endet für ihn die
-        Kfz-Steuer. Der Kaufvertrag allein reicht dafür nicht.
+        Kfz-Steuer zahlt, für wen das Auto zugelassen ist. Für den Verkäufer endet sie mit der
+        Umschreibung auf den Käufer oder der Abmeldung (
+        <a
+          href="https://www.zoll.de/DE/Privatpersonen/Kraftfahrzeugsteuer/Beginn-und-Ende-der-Steuerpflicht/beginn-und-ende-der-steuerpflicht_node.html"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Zoll: Beginn und Ende der Steuerpflicht
+          <span className="visually-hidden"> (öffnet in neuem Tab)</span>
+        </a>
+        ). Die Anzeige des Verkaufs bei der Zulassungsbehörde beendet sie nicht, sorgt aber dafür,
+        dass die Behörde die Ummeldung durchsetzt. Am sichersten meldet ihr das Auto vor der
+        Übergabe ab oder geht gemeinsam zur Zulassungsstelle. Seiner Kfz-Versicherung meldet der
+        Verkäufer den Verkauf unverzüglich.
       </p>
       <p>
-        Die Kfz-Versicherung geht mit dem Auto auf den Käufer über. Er kann sie kündigen und eine
-        eigene abschließen; für die Ummeldung braucht er ohnehin eine eVB-Nummer seiner
-        Versicherung. Was bei der Zulassung noch zu tun ist, steht im Ratgeber{' '}
-        <Link to="/gebrauchtwagen-kaufen">Gebrauchtwagen privat kaufen</Link>.
+        Die Kfz-Versicherung geht mit dem Auto auf den Käufer über. Er kann sie innerhalb eines
+        Monats nach dem Kauf kündigen und eine eigene abschließen; für die Ummeldung braucht er
+        ohnehin eine eVB-Nummer seiner Versicherung. Was bei der Zulassung noch zu tun ist, steht im
+        Ratgeber <Link to="/gebrauchtwagen-kaufen">Gebrauchtwagen privat kaufen</Link>.
       </p>
     </GuideLayout>
   );

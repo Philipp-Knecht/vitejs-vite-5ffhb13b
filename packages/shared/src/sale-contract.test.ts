@@ -1,5 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import {
+  cleanLine,
+  cleanText,
   CONTRACT_STATEMENTS,
   EMPTY_SALE_CONTRACT,
   parseWholeNumber,
@@ -59,9 +61,9 @@ describe('saleContractBlocks', () => {
       ),
     ).toBe(false);
     expect(field(blocks, 'Kaufpreis')).toBe('');
-    expect(field(blocks, 'Tachostand bei Übergabe (abgelesen)')).toBe('');
-    // No battery question for a car without an electric drive.
-    expect(text(blocks)).not.toContain('Antriebsbatterie');
+    expect(field(blocks, 'Tachostand bei Vertragsschluss (abgelesen)')).toBe('');
+    // The fuel is open, so the battery question is there for electric cars.
+    expect(text(blocks)).toContain('Nur bei Elektroautos und Plug-in-Hybriden');
   });
 
   it('excludes liability only with the carve-outs the law requires', () => {
@@ -92,8 +94,9 @@ describe('saleContractBlocks', () => {
       seller: '29.02.1980',
       buyer: '',
     });
-    expect(field(blocks, 'Tachostand bei Übergabe (abgelesen)')).toBe('154.300 km');
-    expect(text(blocks)).toContain('Eine Anzahlung von 500 Euro');
+    expect(field(blocks, 'Tachostand bei Vertragsschluss (abgelesen)')).toBe('154.300 km');
+    expect(text(blocks)).toContain('Anzahlung von 500 Euro');
+    expect(text(blocks)).toContain('Der restliche Kaufpreis beträgt 12.000 Euro.');
     expect(text(blocks)).toContain('spätestens am 27.10.2026');
   });
 
@@ -109,6 +112,35 @@ describe('saleContractBlocks', () => {
     expect(statements[1]?.detail?.value).toBe('');
     expect(statements[0]?.options[1]).toBe('Nein');
     expect(statements[1]?.options[1]).toBe('Nein, soweit dem Verkäufer bekannt');
+  });
+
+  it('prints no battery clause for a car without an electric drive', () => {
+    const blocks = saleContractBlocks({
+      ...EMPTY_SALE_CONTRACT,
+      fuel: 'petrol',
+      battery: 'rented',
+    });
+    expect(text(blocks)).not.toContain('Antriebsbatterie');
+  });
+
+  it('makes only the binding mileage option an agreed quality', () => {
+    const blocks = saleContractBlocks({
+      ...EMPTY_SALE_CONTRACT,
+      totalMileage: 'agreed',
+      totalMileageKm: '180000',
+    });
+    const choice = choices(blocks)[0];
+    expect(choice?.checked).toBe(3);
+    expect(choice?.options[3]).toBe(
+      'Sie beträgt 180.000 km; das gehört zur vereinbarten Beschaffenheit.',
+    );
+    expect(choice?.options[2]).toContain('_______________ km');
+  });
+
+  it('leaves out the duties of a registered car when it is deregistered', () => {
+    const all = text(saleContractBlocks({ ...EMPTY_SALE_CONTRACT, registration: 'deregistered' }));
+    expect(all).not.toContain('stellt der Käufer den Verkäufer frei');
+    expect(all).not.toContain('zeigt den Verkauf unverzüglich');
   });
 
   it('asks about the traction battery of an electric car', () => {
@@ -147,11 +179,36 @@ describe('validateSaleContract', () => {
     ],
     [{ odometerKm: 'viel' }, 'odometerKm'],
     [{ totalMileage: 'differs', totalMileageKm: 'x' }, 'totalMileageKm'],
-    [{ make: 'Audi\u0007' }, 'make'],
-    [{ model: 'A4\nAvant' }, 'model'],
+    [{ odometerKm: '154.3' }, 'odometerKm'],
+    [{ price: '1.2.3' }, 'price'],
+    [{ huUntil: '09/1900' }, 'huUntil'],
+    [{ knownDefects: 'x\n'.repeat(21) }, 'knownDefects'],
     [{ knownDefects: 'x'.repeat(1501) }, 'knownDefects'],
   ] as [Partial<SaleContractValues>, string][])('rejects %o', (change, key) => {
     expect(Object.keys(validateSaleContract({ ...EMPTY_SALE_CONTRACT, ...change }))).toContain(key);
+  });
+
+  it('ignores fields hidden by an answer', () => {
+    expect(
+      validateSaleContract({
+        ...EMPTY_SALE_CONTRACT,
+        answers: { ...EMPTY_SALE_CONTRACT.answers, imported: 'unknown' },
+        details: { ...EMPTY_SALE_CONTRACT.details, imported: 'x'.repeat(400) },
+        registration: 'deregistered',
+        reRegisterBy: '2020-13-45',
+      }),
+    ).toEqual({});
+  });
+
+  it('rejects a birth date in the future', () => {
+    const errors = validateSaleContract(
+      {
+        ...EMPTY_SALE_CONTRACT,
+        seller: { ...EMPTY_SALE_CONTRACT.seller, birthDate: '2027-01-01' },
+      },
+      new Date(2026, 9, 15),
+    );
+    expect(Object.keys(errors)).toEqual(['seller.birthDate']);
   });
 
   it('allows line breaks in longer texts', () => {
@@ -169,6 +226,25 @@ describe('validateSaleContract', () => {
   });
 });
 
+describe('cleanLine and cleanText', () => {
+  it('turn pasted tabs and separators into spaces or line breaks and drop invisible characters', () => {
+    expect(cleanLine(' Musterstraße\t1\u2028 ')).toBe('Musterstraße 1');
+    expect(cleanLine('Ende\u00adweich\u0007')).toBe('Endeweich');
+    expect(cleanText('Rost\u2028Delle\r\n\n\n\nKratzer\t links')).toBe(
+      'Rost\nDelle\n\nKratzer links',
+    );
+  });
+
+  it('are applied to the printed contract', () => {
+    const blocks = saleContractBlocks({
+      ...EMPTY_SALE_CONTRACT,
+      seller: { ...EMPTY_SALE_CONTRACT.seller, name: 'Łukasz\tŻółć' },
+    });
+    const parties = blocks.find((block) => block.kind === 'parties');
+    expect(parties?.kind === 'parties' && parties.rows[0]?.seller).toBe('Łukasz Żółć');
+  });
+});
+
 describe('parseWholeNumber', () => {
   it.each([
     ['12500', 12500],
@@ -177,6 +253,9 @@ describe('parseWholeNumber', () => {
     ['12.500,-', 12500],
     [' 7 ', 7],
     ['12,50', null],
+    ['12.50', null],
+    ['1.2.3', null],
+    ['1.234.567', 1234567],
     ['-5', null],
     ['', null],
   ])('%s → %s', (value, expected) => {

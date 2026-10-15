@@ -46,6 +46,7 @@ export function GuideLayout({
   updated,
   toc,
   children,
+  ads = true,
 }: {
   path: string;
   eyebrow: string;
@@ -54,6 +55,8 @@ export function GuideLayout({
   updated: string;
   toc: TocEntry[];
   children: ReactNode;
+  /** False on pages where people type personal data: no ad code next to a form. */
+  ads?: boolean;
 }) {
   const meta = STATIC_PAGE_META[path];
   usePageMeta(meta ?? { title, description: '' });
@@ -120,7 +123,7 @@ export function GuideLayout({
             Dieser Ratgeber gibt allgemeine Hinweise und ersetzt keine Rechtsberatung und keine
             technische Prüfung des Fahrzeugs.
           </p>
-          <AdSlot placement="guide_bottom" />
+          {ads && <AdSlot placement="guide_bottom" />}
         </div>
       </div>
     </article>

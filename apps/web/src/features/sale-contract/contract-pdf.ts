@@ -6,7 +6,47 @@ import { toPdfText } from '../pdf/pdf-text';
  * The purchase contract as an A4 PDF to print twice and sign. Built in the
  * browser from the form; nothing is sent anywhere. Empty fields become lines
  * and unanswered questions empty boxes, to be filled in by hand.
+ *
+ * With the embedded Liberation Sans (fonts/, SIL OFL), names such as
+ * „Łukasz Żółć“ or „Şükrü Ağaoğlu“ print correctly; the built-in Helvetica
+ * only knows Windows-1252.
  */
+
+/** The TrueType files as Base64, from ./fonts.ts. */
+export interface ContractFonts {
+  regular: string;
+  bold: string;
+}
+
+const FONT = 'LiberationSans';
+/** Latin with all extensions, general punctuation and the euro sign. */
+const SUPPORTED =
+  /[\n\u0020-\u007e\u00a0-\u024f\u0259\u1e00-\u1eff\u2010-\u2027\u2030-\u205e\u20ac\u2116\u2122]/u;
+const PICTOGRAPHIC = /^\p{Extended_Pictographic}$/u;
+
+/** Emoji, flags, skin tones, variation selectors and joiners. */
+function isEmojiPart(char: string): boolean {
+  const code = char.codePointAt(0) ?? 0;
+  return (
+    PICTOGRAPHIC.test(char) ||
+    (code >= 0x1f1e6 && code <= 0x1f1ff) ||
+    (code >= 0x1f3fb && code <= 0x1f3ff) ||
+    code === 0x200d ||
+    code === 0xfe0e ||
+    code === 0xfe0f
+  );
+}
+
+/** Text for the embedded font: unknown characters become „?“, emoji are dropped. */
+function toContractText(text: string): string {
+  let out = '';
+  for (const char of text.normalize('NFC')) {
+    if (SUPPORTED.test(char)) out += char;
+    else if (isEmojiPart(char)) continue;
+    else out += /\s/u.test(char) ? ' ' : '?';
+  }
+  return out.replace(/ {2,}/g, ' ');
+}
 
 const PAGE = { width: 210, height: 297, margin: 18, footer: 10 } as const;
 const CONTENT_WIDTH = PAGE.width - 2 * PAGE.margin;
@@ -19,6 +59,56 @@ const BOX = 3.2;
 class ContractWriter {
   readonly doc = new jsPDF({ unit: 'mm', format: 'a4', compress: true });
   private y: number = PAGE.margin;
+  /** While measuring, nothing is drawn and no page is added. */
+  private dry = false;
+  private readonly family: string;
+  private readonly convert: (text: string) => string;
+
+  constructor(fonts: ContractFonts | null) {
+    if (fonts) {
+      this.doc.addFileToVFS(`${FONT}-Regular.ttf`, fonts.regular);
+      this.doc.addFont(`${FONT}-Regular.ttf`, FONT, 'normal');
+      this.doc.addFileToVFS(`${FONT}-Bold.ttf`, fonts.bold);
+      this.doc.addFont(`${FONT}-Bold.ttf`, FONT, 'bold');
+    }
+    this.family = fonts ? FONT : 'helvetica';
+    this.convert = fonts ? toContractText : toPdfText;
+  }
+
+  /** Height a block takes, from the current position. */
+  measure(render: () => void): number {
+    const { y, dry } = this;
+    this.dry = true;
+    try {
+      render();
+      return this.y - y;
+    } finally {
+      this.y = y;
+      this.dry = dry;
+    }
+  }
+
+  /** Starts a new page unless `height` fits; for blocks that belong together. */
+  keep(height: number) {
+    // A block taller than a page breaks wherever it has to.
+    if (height <= this.bottom() - PAGE.margin) this.ensure(height);
+  }
+
+  private text(text: string, x: number, y: number, options: { align?: 'center' | 'right' } = {}) {
+    if (!this.dry) this.doc.text(this.convert(text), x, y, { baseline: 'top', ...options });
+  }
+
+  private line(x1: number, y1: number, x2: number, y2: number, color: number, width: number) {
+    if (this.dry) return;
+    this.doc.setDrawColor(color);
+    this.doc.setLineWidth(width);
+    this.doc.line(x1, y1, x2, y2);
+  }
+
+  private width(text: string, size: number): number {
+    this.font(size);
+    return this.doc.getTextWidth(this.convert(text));
+  }
 
   private lineHeight(size: number) {
     return size * LINE;
@@ -29,23 +119,24 @@ class ContractWriter {
   }
 
   private ensure(height: number) {
-    if (this.y + height > this.bottom()) this.newPage();
+    if (!this.dry && this.y + height > this.bottom()) this.newPage();
   }
 
   newPage() {
+    if (this.dry) return;
     this.doc.addPage();
     this.y = PAGE.margin;
   }
 
   private font(size: number, bold = false, muted = false) {
-    this.doc.setFont('helvetica', bold ? 'bold' : 'normal');
+    this.doc.setFont(this.family, bold ? 'bold' : 'normal');
     this.doc.setFontSize(size);
     this.doc.setTextColor(muted ? COLORS.muted : COLORS.text);
   }
 
   private split(text: string, size: number, width: number, bold = false): string[] {
     this.font(size, bold);
-    return this.doc.splitTextToSize(toPdfText(text), width) as string[];
+    return this.doc.splitTextToSize(this.convert(text), width) as string[];
   }
 
   /** Writes wrapped text at x; returns nothing, moves y below it. */
@@ -54,19 +145,19 @@ class ContractWriter {
     for (const line of lines) {
       this.ensure(height);
       this.font(size, bold, muted);
-      this.doc.text(line, x, this.y, { baseline: 'top' });
+      // Lines from split() are converted already.
+      if (!this.dry) this.doc.text(line, x, this.y, { baseline: 'top' });
       this.y += height;
     }
   }
 
   /** A line to write on, from x to the right margin. */
   private rule(x: number, y: number) {
-    this.doc.setDrawColor(COLORS.rule);
-    this.doc.setLineWidth(0.2);
-    this.doc.line(x, y, PAGE.width - PAGE.margin, y);
+    this.line(x, y, PAGE.width - PAGE.margin, y, COLORS.rule, 0.2);
   }
 
   private box(x: number, y: number, checked: boolean) {
+    if (this.dry) return;
     this.doc.setDrawColor(COLORS.text);
     this.doc.setLineWidth(0.25);
     this.doc.rect(x, y, BOX, BOX);
@@ -78,19 +169,14 @@ class ContractWriter {
 
   title(text: string, subtitle: string) {
     this.font(16, true);
-    this.doc.text(toPdfText(text), PAGE.width / 2, this.y, { baseline: 'top', align: 'center' });
+    this.text(text, PAGE.width / 2, this.y, { align: 'center' });
     this.y += this.lineHeight(16) + 1;
     this.font(11, false, true);
-    this.doc.text(toPdfText(subtitle), PAGE.width / 2, this.y, {
-      baseline: 'top',
-      align: 'center',
-    });
+    this.text(subtitle, PAGE.width / 2, this.y, { align: 'center' });
     this.y += this.lineHeight(11) + 4;
   }
 
   heading(text: string) {
-    // A heading stays with the start of its section.
-    this.ensure(22);
     this.y += 3;
     this.write(this.split(text, 11, CONTENT_WIDTH, true), PAGE.margin, 11, true);
     this.y += 1.5;
@@ -104,7 +190,7 @@ class ContractWriter {
   fields(title: string | undefined, rows: { label: string; value: string }[]) {
     if (title) {
       this.ensure(12);
-      this.write([toPdfText(title)], PAGE.margin, 10, true);
+      this.write(this.split(title, 10, CONTENT_WIDTH, true), PAGE.margin, 10, true);
       this.y += 0.8;
     }
     const valueX = PAGE.margin + LABEL_WIDTH;
@@ -138,8 +224,8 @@ class ContractWriter {
     const xs = [PAGE.margin + labelWidth, PAGE.margin + labelWidth + column + gap];
     this.ensure(12);
     this.font(10, true);
-    this.doc.text('Verkäufer', xs[0]!, this.y, { baseline: 'top' });
-    this.doc.text('Käufer', xs[1]!, this.y, { baseline: 'top' });
+    this.text('Verkäufer', xs[0]!, this.y);
+    this.text('Käufer', xs[1]!, this.y);
     this.y += this.lineHeight(10) + 1;
     for (const row of rows) {
       const labels = this.split(row.label, 8.5, labelWidth - 3);
@@ -163,9 +249,7 @@ class ContractWriter {
           this.y = lineY - lines.length * this.lineHeight(BODY) - 0.6;
           this.write(lines, x, BODY);
         }
-        this.doc.setDrawColor(COLORS.rule);
-        this.doc.setLineWidth(0.2);
-        this.doc.line(x, lineY, x + column, lineY);
+        this.line(x, lineY, x + column, lineY, COLORS.rule, 0.2);
       });
       this.y = top + height + 1;
     }
@@ -176,16 +260,13 @@ class ContractWriter {
     const text = this.split(block.text, BODY, CONTENT_WIDTH);
     const optionX = PAGE.margin + 2;
     const labelGap = BOX + 2;
-    this.font(BODY);
-    const widths = block.options.map(
-      (option) => labelGap + this.doc.getTextWidth(toPdfText(option)) + 6,
-    );
+    const widths = block.options.map((option) => labelGap + this.width(option, BODY) + 6);
     // Short answers (Ja / Nein / Nicht bekannt) go on one line.
     const inline = widths.reduce((sum, width) => sum + width, 0) <= CONTENT_WIDTH - 2;
     const options = block.options.map((option) =>
       this.split(option, BODY, CONTENT_WIDTH - 2 - labelGap),
     );
-    // The question and its first answer stay together.
+    // The question and its first answer stay together (whole choices: see keep()).
     this.ensure((text.length + (options[0]?.length ?? 1)) * this.lineHeight(BODY) + 3);
     this.write(text, PAGE.margin, BODY);
     this.y += 0.8;
@@ -194,7 +275,7 @@ class ContractWriter {
       block.options.forEach((option, index) => {
         this.box(x, this.y + 0.1, block.checked === index);
         this.font(BODY);
-        this.doc.text(toPdfText(option), x + labelGap, this.y, { baseline: 'top' });
+        this.text(option, x + labelGap, this.y);
         x += widths[index] ?? 0;
       });
       this.y += this.lineHeight(BODY) + 0.8;
@@ -214,9 +295,10 @@ class ContractWriter {
         this.write(this.split(`${label} ${detail.value}`, BODY, CONTENT_WIDTH - 2), optionX, BODY);
       } else {
         this.ensure(7);
+        const labelWidth = this.width(label, 8.5);
         this.font(8.5, false, true);
-        this.doc.text(toPdfText(label), optionX, this.y + 2.6, { baseline: 'top' });
-        this.rule(optionX + this.doc.getTextWidth(toPdfText(label)) + 2, this.y + 6);
+        this.text(label, optionX, this.y + 2.6);
+        this.rule(optionX + labelWidth + 2, this.y + 6);
         this.y += 7;
       }
     }
@@ -263,69 +345,82 @@ class ContractWriter {
     for (const label of ['Ort, Datum', 'Unterschrift']) {
       this.y += 11;
       for (const { x, role } of columns) {
-        this.doc.setDrawColor(COLORS.text);
-        this.doc.setLineWidth(0.25);
-        this.doc.line(x, this.y, x + half, this.y);
+        this.line(x, this.y, x + half, this.y, COLORS.text, 0.25);
         this.font(8, false, true);
-        const text = label === 'Unterschrift' ? `Unterschrift ${role}` : label;
-        this.doc.text(toPdfText(text), x, this.y + 1.2, { baseline: 'top' });
+        this.text(label === 'Unterschrift' ? `Unterschrift ${role}` : label, x, this.y + 1.2);
       }
       this.y += 4;
     }
     this.y += 2;
   }
 
-  footer(text: string) {
+  footer(text: string, vin: string) {
     const pages = this.doc.getNumberOfPages();
     for (let page = 1; page <= pages; page++) {
       this.doc.setPage(page);
       this.font(7.5, false, true);
-      const y = PAGE.height - PAGE.margin + 4;
-      this.doc.text(toPdfText(text), PAGE.margin, y);
-      this.doc.text(`Seite ${page} von ${pages}`, PAGE.width - PAGE.margin, y, { align: 'right' });
-      // Initials on every page, so that no page can be swapped unnoticed.
-      this.doc.text('Kürzel: ________  ________', PAGE.width / 2 + 18, y, { align: 'center' });
+      const y = PAGE.height - PAGE.margin + 2;
+      this.text(text, PAGE.margin, y);
+      this.text(`Seite ${page} von ${pages}`, PAGE.width - PAGE.margin, y, { align: 'right' });
+      // Initials (and the FIN) on every page, so that no page can be swapped unnoticed.
+      this.text(`${vin ? `FIN ${vin} · ` : ''}Kürzel: ________  ________`, PAGE.width / 2 + 14, y, {
+        align: 'center',
+      });
     }
   }
 }
 
-export function buildSaleContractPdf(values: SaleContractValues): jsPDF {
-  const w = new ContractWriter();
-  for (const block of saleContractBlocks(values)) {
-    switch (block.kind) {
-      case 'title':
-        w.title(block.text, block.subtitle);
-        break;
-      case 'heading':
-        w.heading(block.text);
-        break;
-      case 'paragraph':
-        w.paragraph(block.text);
-        break;
-      case 'fields':
-        w.fields(block.title, block.rows);
-        break;
-      case 'parties':
-        w.parties(block.rows);
-        break;
-      case 'choice':
-        w.choice(block);
-        break;
-      case 'checklist':
-        w.checklist(block.items);
-        break;
-      case 'lines':
-        w.lines(block.label, block.value, block.lines);
-        break;
-      case 'signatures':
-        w.signatures(block.text, block.left, block.right);
-        break;
-      case 'pageBreak':
-        w.newPage();
-        break;
-    }
+function render(w: ContractWriter, block: ContractBlock) {
+  switch (block.kind) {
+    case 'title':
+      return w.title(block.text, block.subtitle);
+    case 'heading':
+      return w.heading(block.text);
+    case 'paragraph':
+      return w.paragraph(block.text);
+    case 'fields':
+      return w.fields(block.title, block.rows);
+    case 'parties':
+      return w.parties(block.rows);
+    case 'choice':
+      return w.choice(block);
+    case 'checklist':
+      return w.checklist(block.items);
+    case 'lines':
+      return w.lines(block.label, block.value, block.lines);
+    case 'signatures':
+      return w.signatures(block.text, block.left, block.right);
+    case 'pageBreak':
+      return w.newPage();
   }
-  w.footer('Vertragsmuster von KaufCheck, keine Rechtsberatung');
+}
+
+/** What a block keeps on its page: a heading its section start (or all of it), others themselves. */
+function keptWith(blocks: ContractBlock[], index: number): ContractBlock[] {
+  const block = blocks[index]!;
+  if (block.kind !== 'heading') return [block];
+  const rest = blocks.slice(index + 1);
+  const end = rest.findIndex((next) => next.kind === 'heading' || next.kind === 'pageBreak');
+  const section = end === -1 ? rest : rest.slice(0, end);
+  return [block, ...(block.keepTogether ? section : section.slice(0, 1))];
+}
+
+export function buildSaleContractPdf(
+  values: SaleContractValues,
+  fonts: ContractFonts | null,
+): jsPDF {
+  const w = new ContractWriter(fonts);
+  const blocks = saleContractBlocks(values);
+  blocks.forEach((block, index) => {
+    if (block.kind !== 'pageBreak') {
+      w.keep(w.measure(() => keptWith(blocks, index).forEach((item) => render(w, item))));
+    }
+    render(w, block);
+  });
+  w.footer(
+    'Vertragsmuster von KaufCheck, keine Rechtsberatung',
+    values.vin.replace(/\s/g, '').toUpperCase(),
+  );
   return w.doc;
 }
 

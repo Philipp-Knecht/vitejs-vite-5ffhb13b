@@ -50,6 +50,8 @@ export interface ContractParty {
   phone: string;
   email: string;
   idNumber: string;
+  /** Who signs for the party, with a power of attorney. */
+  representative: string;
 }
 
 export interface SaleContractValues {
@@ -66,9 +68,14 @@ export interface SaleContractValues {
   color: string;
   huUntil: string;
   keepers: string;
+  /** The name in the registration certificate part II. */
+  registeredKeeper: string;
   odometerKm: string;
-  /** What the seller knows about the total mileage. */
-  totalMileage: '' | 'matches' | 'unknown' | 'differs';
+  /**
+   * The total mileage: what the seller knows (`matches`, `unknown`, `differs`)
+   * or a binding figure (`agreed`).
+   */
+  totalMileage: '' | 'matches' | 'unknown' | 'differs' | 'agreed';
   totalMileageKm: string;
   /** Traction battery of an electric car or plug-in hybrid. */
   battery: '' | 'included' | 'rented';
@@ -98,6 +105,7 @@ const EMPTY_PARTY: ContractParty = {
   phone: '',
   email: '',
   idNumber: '',
+  representative: '',
 };
 
 const byStatement = <T>(value: T) =>
@@ -120,6 +128,7 @@ export const EMPTY_SALE_CONTRACT: SaleContractValues = {
   color: '',
   huUntil: '',
   keepers: '',
+  registeredKeeper: '',
   odometerKm: '',
   totalMileage: '',
   totalMileageKm: '',
@@ -150,25 +159,25 @@ export const CONTRACT_STATEMENT_TEXTS: Record<
   { text: string; /** Only the seller's own time: a plain „Nein“. */ own?: boolean; detail: string }
 > = {
   damageOwn: {
-    text: 'Das Fahrzeug hatte während der Besitzzeit des Verkäufers einen Unfall oder einen anderen erheblichen Schaden.',
+    text: 'Das Fahrzeug hatte während der Besitzzeit des Verkäufers einen Unfall- oder anderen Schaden, der über Bagatellschäden (ganz geringfügige äußere Lackschäden wie Kratzer oder Steinschläge) hinausgeht.',
     own: true,
     detail: 'Welcher Schaden, wie und von wem repariert?',
   },
   damageBefore: {
-    text: 'Das Fahrzeug hatte vor der Besitzzeit des Verkäufers einen Unfall oder einen anderen erheblichen Schaden.',
+    text: 'Das Fahrzeug hatte vor der Besitzzeit des Verkäufers einen Unfall- oder anderen Schaden, der über Bagatellschäden (ganz geringfügige äußere Lackschäden wie Kratzer oder Steinschläge) hinausgeht.',
     detail: 'Welcher Schaden, wie repariert?',
   },
   commercialUse: {
-    text: 'Das Fahrzeug wurde gewerblich genutzt, etwa als Taxi, Miet- oder Fahrschulwagen.',
+    text: 'Das Fahrzeug wurde als Taxi, Mietwagen, Carsharing- oder Fahrschulwagen genutzt.',
     detail: 'Wie und wann?',
   },
   imported: {
-    text: 'Das Fahrzeug wurde aus dem Ausland eingeführt (Import oder Reimport).',
+    text: 'Das Fahrzeug war vor seiner ersten Zulassung in Deutschland im Ausland zugelassen oder wurde für einen ausländischen Markt gebaut (Import oder Reimport).',
     detail: 'Aus welchem Land?',
   },
   engineReplaced: {
     text: 'Der Motor wurde ersetzt (Austausch- oder Gebrauchtmotor).',
-    detail: 'Wann, und wie viele Kilometer hat der Motor gelaufen?',
+    detail: 'Wann eingebaut, und Laufleistung des Motors nach Kenntnis des Verkäufers',
   },
   openRecalls: {
     text: 'Für das Fahrzeug gibt es Rückrufe des Herstellers, die noch nicht erledigt sind.',
@@ -198,19 +207,42 @@ export type SaleContractField =
 
 export type SaleContractErrors = Partial<Record<SaleContractField, string>>;
 
-/** Control characters; in multi-line text, line breaks and tabs are allowed. */
-function hasControl(value: string, multiline: boolean): boolean {
-  return [...value].some((char) => {
-    const code = char.charCodeAt(0);
-    if (multiline && (char === '\n' || char === '\r' || char === '\t')) return false;
-    return code < 32 || (code >= 127 && code < 160) || code === 0x2028 || code === 0x2029;
-  });
+/** Characters that only make sense on screen: control characters and the soft hyphen. */
+// eslint-disable-next-line no-control-regex
+const INVISIBLE = /[\u0000-\u0008\u000e-\u001f\u007f-\u0084\u0086-\u009f\u00ad\u200b\ufeff]/g;
+
+/** One line of text as printed: pasted tabs and line breaks become spaces. */
+export function cleanLine(value: string): string {
+  return value
+    .normalize('NFC')
+    .replace(INVISIBLE, '')
+    .replace(/[\s\u0085\u2028\u2029]+/g, ' ')
+    .trim();
 }
 
-/** Whole euros or kilometres, also typed as „12.500“ or „12 500“. */
+/** Text with paragraphs as printed: any line separator becomes a line break. */
+export function cleanText(value: string): string {
+  return (
+    value
+      .normalize('NFC')
+      .replace(INVISIBLE, '')
+      // eslint-disable-next-line no-control-regex
+      .replace(/\r\n?|[\u000b\u000c\u0085\u2028\u2029]/g, '\n')
+      .replace(/[^\S\n]+/g, ' ')
+      .replace(/ *\n */g, '\n')
+      .replace(/\n{3,}/g, '\n\n')
+      .trim()
+  );
+}
+
+/**
+ * Whole euros or kilometres: „12500“, „12.500“ or „12 500“ (groups of three),
+ * optionally „12.500,-“. „12.50“ is rejected instead of read as 1250.
+ */
 export function parseWholeNumber(value: string): number | null {
-  const compact = value.trim().replace(/[\s.]/g, '').replace(/,-*$/, '');
-  return /^\d{1,10}$/.test(compact) ? Number(compact) : null;
+  const compact = value.trim().replace(/,-*$/, '');
+  if (!/^\d{1,10}$/.test(compact) && !/^\d{1,3}([. ]\d{3})+$/.test(compact)) return null;
+  return Number(compact.replace(/[. ]/g, ''));
 }
 
 /** A date from an `<input type="date">` (YYYY-MM-DD) that exists. */
@@ -221,14 +253,25 @@ function isDate(value: string): boolean {
   return date.toISOString().slice(0, 10) === value;
 }
 
-const MAX_PRICE = 9_999_999;
+const isoDay = (date: Date) =>
+  `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
 
-export function validateSaleContract(values: SaleContractValues): SaleContractErrors {
+const MAX_PRICE = 9_999_999;
+const MAX_LINES = { details: 5, text: 20 } as const;
+
+/** Checks what is shown; fields hidden by an answer are ignored, as they are not printed. */
+export function validateSaleContract(
+  values: SaleContractValues,
+  now: Date = new Date(),
+): SaleContractErrors {
   const errors: SaleContractErrors = {};
-  const check = (field: SaleContractField, value: string, max: number, multiline = false) => {
-    if (value.length > max) errors[field] = `Bitte höchstens ${max} Zeichen.`;
-    else if (hasControl(value, multiline)) errors[field] = 'Bitte nur normalen Text eingeben.';
+  const check = (field: SaleContractField, value: string, max: number, maxLines?: number) => {
+    const text = maxLines ? cleanText(value) : cleanLine(value);
+    if (text.length > max) errors[field] = `Bitte höchstens ${max} Zeichen.`;
+    else if (maxLines && text.split('\n').length > maxLines)
+      errors[field] = `Bitte höchstens ${maxLines} Zeilen.`;
   };
+  const today = isoDay(now);
 
   for (const role of ['seller', 'buyer'] as const) {
     const party = values[role];
@@ -238,18 +281,28 @@ export function validateSaleContract(values: SaleContractValues): SaleContractEr
     check(`${role}.phone`, party.phone, CONTRACT_LIMITS.short);
     check(`${role}.email`, party.email, CONTRACT_LIMITS.line);
     check(`${role}.idNumber`, party.idNumber, CONTRACT_LIMITS.short);
-    if (party.birthDate && !isDate(party.birthDate))
-      errors[`${role}.birthDate`] = 'Bitte gib ein gültiges Datum an.';
+    check(`${role}.representative`, party.representative, CONTRACT_LIMITS.line);
+    if (
+      party.birthDate &&
+      (!isDate(party.birthDate) || party.birthDate < '1900-01-01' || party.birthDate >= today)
+    )
+      errors[`${role}.birthDate`] = 'Bitte gib ein gültiges Geburtsdatum an.';
   }
 
-  for (const field of ['make', 'model', 'color', 'handoverPlace'] as const)
+  for (const field of ['make', 'model', 'color', 'handoverPlace', 'registeredKeeper'] as const)
     check(field, values[field], CONTRACT_LIMITS.line);
   for (const field of ['plate', 'firstRegistration', 'registrationPart2Number'] as const)
     check(field, values[field], CONTRACT_LIMITS.short);
   for (const field of ['knownDefects', 'accessories', 'notIncluded', 'otherAgreements'] as const)
-    check(field, values[field], CONTRACT_LIMITS.text, true);
+    check(field, values[field], CONTRACT_LIMITS.text, MAX_LINES.text);
   for (const statement of CONTRACT_STATEMENTS)
-    check(`details.${statement}`, values.details[statement], CONTRACT_LIMITS.details, true);
+    if (values.answers[statement] === 'yes')
+      check(
+        `details.${statement}`,
+        values.details[statement],
+        CONTRACT_LIMITS.details,
+        MAX_LINES.details,
+      );
 
   const vin = values.vin.replace(/\s/g, '');
   if (vin) {
@@ -259,7 +312,11 @@ export function validateSaleContract(values: SaleContractValues): SaleContractEr
       errors.vin = 'I, O und Q kommen in einer FIN nicht vor – meist ist 1 oder 0 gemeint.';
   }
 
-  if (values.huUntil && !/^(0?[1-9]|1[0-2])\/\d{4}$/.test(values.huUntil.trim()))
+  const hu = /^(0?[1-9]|1[0-2])\/(\d{4})$/.exec(values.huUntil.trim());
+  if (
+    values.huUntil.trim() &&
+    (!hu || Number(hu[2]) < 1950 || Number(hu[2]) > now.getFullYear() + 3)
+  )
     errors.huUntil = 'Bitte als Monat/Jahr angeben, zum Beispiel 09/2027.';
 
   const number = (field: SaleContractField, value: string, max: number, message: string) => {
@@ -277,7 +334,7 @@ export function validateSaleContract(values: SaleContractValues): SaleContractEr
     2_000_000,
     'Bitte gib den Tachostand in ganzen Kilometern an.',
   );
-  if (values.totalMileage === 'differs')
+  if (values.totalMileage === 'differs' || values.totalMileage === 'agreed')
     number(
       'totalMileageKm',
       values.totalMileageKm,
@@ -297,17 +354,17 @@ export function validateSaleContract(values: SaleContractValues): SaleContractEr
   if (deposit !== null && price !== null && deposit >= price && !errors.deposit)
     errors.deposit = 'Die Anzahlung muss kleiner als der Kaufpreis sein.';
 
-  for (const field of ['handoverDate', 'reRegisterBy'] as const)
-    if (values[field] && !isDate(values[field])) errors[field] = 'Bitte gib ein gültiges Datum an.';
-  if (
-    values.registration === 'registered' &&
-    values.reRegisterBy &&
-    values.handoverDate &&
-    !errors.reRegisterBy &&
-    !errors.handoverDate &&
-    values.reRegisterBy < values.handoverDate
-  )
-    errors.reRegisterBy = 'Die Ummeldung kann nicht vor der Übergabe liegen.';
+  if (values.handoverDate && !isDate(values.handoverDate))
+    errors.handoverDate = 'Bitte gib ein gültiges Datum an.';
+  if (values.registration === 'registered' && values.reRegisterBy) {
+    if (!isDate(values.reRegisterBy)) errors.reRegisterBy = 'Bitte gib ein gültiges Datum an.';
+    else if (
+      values.handoverDate &&
+      !errors.handoverDate &&
+      values.reRegisterBy < values.handoverDate
+    )
+      errors.reRegisterBy = 'Die Ummeldung kann nicht vor der Übergabe liegen.';
+  }
   if (values.handoverTime && !/^([01]\d|2[0-3]):[0-5]\d$/.test(values.handoverTime))
     errors.handoverTime = 'Bitte gib eine Uhrzeit an, zum Beispiel 14:30.';
 
@@ -319,7 +376,8 @@ export function validateSaleContract(values: SaleContractValues): SaleContractEr
 
 export type ContractBlock =
   | { kind: 'title'; text: string; subtitle: string }
-  | { kind: 'heading'; text: string }
+  /** `keepTogether`: the whole section up to the next heading stays on one page. */
+  | { kind: 'heading'; text: string; keepTogether?: boolean }
   | { kind: 'paragraph'; text: string }
   /** Label and value; an empty value is printed as a line to fill in. */
   | { kind: 'fields'; title?: string; rows: { label: string; value: string }[] }
@@ -368,21 +426,32 @@ function partyRows(seller: ContractParty, buyer: ContractParty) {
     buyer: value(buyer),
   });
   return [
-    row('Name, Vorname', (party) => party.name.trim()),
-    row('Straße, Hausnummer', (party) => party.street.trim()),
-    row('PLZ, Ort', (party) => party.city.trim()),
+    row('Name, Vorname', (party) => cleanLine(party.name)),
+    row('Straße, Hausnummer', (party) => cleanLine(party.street)),
+    row('PLZ, Ort', (party) => cleanLine(party.city)),
     row('Geburtsdatum', (party) => formatDate(party.birthDate)),
-    row('Telefon', (party) => party.phone.trim()),
-    row('E-Mail', (party) => party.email.trim()),
-    row('Ausweis- oder Passnummer', (party) => party.idNumber.trim()),
+    row('Telefon', (party) => cleanLine(party.phone)),
+    row('E-Mail', (party) => cleanLine(party.email)),
+    row('Ausweis- oder Passnummer', (party) => cleanLine(party.idNumber)),
+    row('Vertreten durch (Vollmacht anbei)', (party) => cleanLine(party.representative)),
   ];
 }
 
 const EV_FUELS: ReadonlySet<FuelType | ''> = new Set(['electric', 'plugin_hybrid']);
 
+/** Keeps „Teil II“ on one line. */
+const NBSP = '\u00a0';
+
+/** The ticked option for a value, or null while nothing is chosen. */
+function optionIndex<T extends string>(value: T | '', options: readonly T[]): number | null {
+  const index = value === '' ? -1 : options.indexOf(value);
+  return index === -1 ? null : index;
+}
+
 export function saleContractBlocks(values: SaleContractValues): ContractBlock[] {
   const blocks: ContractBlock[] = [];
   const add = (...items: ContractBlock[]) => blocks.push(...items);
+  const blank = '_______________';
 
   add({
     kind: 'title',
@@ -396,81 +465,83 @@ export function saleContractBlocks(values: SaleContractValues): ContractBlock[] 
     { kind: 'parties', rows: partyRows(values.seller, values.buyer) },
     {
       kind: 'paragraph',
-      text: 'Verkäufer und Käufer schließen diesen Vertrag als Privatpersonen. Der Verkäufer verkauft das Fahrzeug nicht im Rahmen einer gewerblichen oder selbständigen beruflichen Tätigkeit.',
+      text: 'Verkäufer und Käufer schließen diesen Vertrag als Privatpersonen. Der Verkäufer erklärt, dass das Fahrzeug zu seinem Privatvermögen gehört und er es nicht im Rahmen einer gewerblichen oder selbständigen beruflichen Tätigkeit verkauft.',
     },
   );
 
   // § 2 Vehicle
   const keepers = parseWholeNumber(values.keepers);
+  const mileage = amount(values.totalMileageKm);
+  const mileageFor = (option: SaleContractValues['totalMileage']) =>
+    values.totalMileage === option && mileage ? `${mileage} km` : `${blank} km`;
   add(
     { kind: 'heading', text: '§ 2 Fahrzeug' },
     {
       kind: 'fields',
       rows: [
-        { label: 'Hersteller', value: values.make.trim() },
-        { label: 'Modell', value: values.model.trim() },
+        { label: 'Hersteller', value: cleanLine(values.make) },
+        { label: 'Modell', value: cleanLine(values.model) },
         {
           label: 'Fahrzeug-Identifizierungsnummer (FIN)',
           value: values.vin.replace(/\s/g, '').toUpperCase(),
         },
-        { label: 'Amtliches Kennzeichen', value: values.plate.trim().toUpperCase() },
-        { label: 'Erstzulassung', value: values.firstRegistration.trim() },
+        { label: 'Amtliches Kennzeichen', value: cleanLine(values.plate).toUpperCase() },
+        { label: 'Erstzulassung', value: cleanLine(values.firstRegistration) },
         {
-          label: 'Nummer der Zulassungsbescheinigung Teil II',
-          value: values.registrationPart2Number.trim().toUpperCase(),
+          label: `Nummer der Zulassungsbescheinigung Teil${NBSP}II`,
+          value: cleanLine(values.registrationPart2Number).toUpperCase(),
+        },
+        {
+          label: `Eingetragen in der Zulassungsbescheinigung Teil${NBSP}II`,
+          value: cleanLine(values.registeredKeeper),
+        },
+        {
+          label: `Zahl der Halter laut Zulassungsbescheinigung Teil${NBSP}II`,
+          value: keepers === null ? '' : String(keepers),
         },
         { label: 'Leistung', value: amount(values.powerKw) && `${amount(values.powerKw)} kW` },
         {
           label: 'Kraftstoff oder Energiequelle',
           value: values.fuel ? FUEL_LABELS[values.fuel] : '',
         },
-        { label: 'Farbe', value: values.color.trim() },
-        { label: 'Hauptuntersuchung gültig bis', value: values.huUntil.trim() },
+        { label: 'Farbe', value: cleanLine(values.color) },
         {
-          label: 'Zahl der Halter laut Zulassungsbescheinigung Teil II',
-          value: keepers === null ? '' : String(keepers),
+          label: 'Nächste Hauptuntersuchung fällig (laut Prüfplakette)',
+          value: cleanLine(values.huUntil),
         },
         {
-          label: 'Tachostand bei Übergabe (abgelesen)',
+          label: 'Tachostand bei Vertragsschluss (abgelesen)',
           value: amount(values.odometerKm) && `${amount(values.odometerKm)} km`,
         },
       ],
     },
     {
       kind: 'choice',
-      text: 'Der Tachostand gibt nur wieder, was der Kilometerzähler anzeigt. Zur Gesamtlaufleistung des Fahrzeugs erklärt der Verkäufer:',
+      text: 'Der Tachostand gibt nur wieder, was der Kilometerzähler anzeigt. Zur Gesamtlaufleistung des Fahrzeugs gilt:',
       options: [
-        'Sie entspricht nach seiner Kenntnis dem Tachostand.',
-        'Sie ist ihm nicht bekannt.',
-        'Sie weicht vom Tachostand ab und beträgt nach seiner Kenntnis etwa:',
+        'Sie entspricht nach Kenntnis des Verkäufers dem Tachostand.',
+        'Sie ist dem Verkäufer nicht bekannt.',
+        `Sie weicht vom Tachostand ab und beträgt nach Kenntnis des Verkäufers etwa ${mileageFor('differs')}.`,
+        `Sie beträgt ${mileageFor('agreed')}; das gehört zur vereinbarten Beschaffenheit.`,
       ],
-      checked:
-        values.totalMileage === 'matches'
-          ? 0
-          : values.totalMileage === 'unknown'
-            ? 1
-            : values.totalMileage === 'differs'
-              ? 2
-              : null,
-      detail: {
-        option: 2,
-        label: 'Gesamtlaufleistung',
-        value:
-          values.totalMileage === 'differs' && amount(values.totalMileageKm)
-            ? `${amount(values.totalMileageKm)} km`
-            : '',
-      },
+      checked: optionIndex(values.totalMileage, ['matches', 'unknown', 'differs', 'agreed']),
     },
   );
-  if (EV_FUELS.has(values.fuel) || values.battery) {
+  // An electric drive, or an unknown fuel on a blank contract: a battery answer left over from
+  // another fuel is not printed.
+  const battery = EV_FUELS.has(values.fuel) || values.fuel === '';
+  if (battery) {
     add({
       kind: 'choice',
-      text: 'Die Antriebsbatterie',
+      text:
+        values.fuel === ''
+          ? 'Nur bei Elektroautos und Plug-in-Hybriden: Die Antriebsbatterie'
+          : 'Die Antriebsbatterie',
       options: [
         'gehört zum Fahrzeug und wird mitverkauft.',
-        'ist gemietet oder geleast; der Käufer klärt die Übernahme des Vertrags selbst mit dem Vermieter.',
+        'ist gemietet oder geleast. Der Käufer klärt die Übernahme des Vertrags mit dem Vermieter; bis zur Übernahme erstattet er dem Verkäufer die ab der Übergabe fällige Miete.',
       ],
-      checked: values.battery === 'included' ? 0 : values.battery === 'rented' ? 1 : null,
+      checked: values.fuel === '' ? null : optionIndex(values.battery, ['included', 'rented']),
     });
   }
 
@@ -479,7 +550,7 @@ export function saleContractBlocks(values: SaleContractValues): ContractBlock[] 
     { kind: 'heading', text: '§ 3 Angaben des Verkäufers' },
     {
       kind: 'paragraph',
-      text: 'Der Verkäufer macht die folgenden Angaben zum Fahrzeug. Sie gehören zur vereinbarten Beschaffenheit. „Nicht bekannt“ bedeutet: Der Verkäufer weiß es nicht und macht dazu keine Angabe.',
+      text: 'Der Verkäufer macht die folgenden Angaben zum Fahrzeug. Angaben mit „Ja“ oder „Nein“ und die Beschreibungen unter „Falls ja“ gehören zur vereinbarten Beschaffenheit. Angaben „Nein, soweit dem Verkäufer bekannt“ und Angaben „nach Kenntnis des Verkäufers“ in § 2 geben nur wieder, was der Verkäufer weiß; sie sind keine Beschaffenheitsvereinbarung, müssen aber wahr sein. „Nicht bekannt“ bedeutet: Der Verkäufer weiß es nicht und macht dazu keine Angabe.',
     },
   );
   for (const statement of CONTRACT_STATEMENTS) {
@@ -489,11 +560,11 @@ export function saleContractBlocks(values: SaleContractValues): ContractBlock[] 
       kind: 'choice',
       text: CONTRACT_STATEMENT_TEXTS[statement].text,
       options: [labels.yes, labels.no, labels.unknown],
-      checked: answer === 'yes' ? 0 : answer === 'no' ? 1 : answer === 'unknown' ? 2 : null,
+      checked: optionIndex(answer, ['yes', 'no', 'unknown']),
       detail: {
         option: 0,
         label: 'Falls ja',
-        value: answer === 'yes' ? values.details[statement].trim() : '',
+        value: answer === 'yes' ? cleanText(values.details[statement]) : '',
       },
     });
   }
@@ -501,21 +572,22 @@ export function saleContractBlocks(values: SaleContractValues): ContractBlock[] 
     {
       kind: 'lines',
       label: 'Weitere dem Verkäufer bekannte Mängel und Schäden',
-      value: values.knownDefects.trim(),
+      value: cleanText(values.knownDefects),
       lines: 3,
     },
     {
       kind: 'paragraph',
-      text: 'Die in diesem Paragrafen angegebenen Unfälle, Schäden und Mängel kennt der Käufer. Wegen dieser Punkte hat er keine Rechte gegen den Verkäufer, soweit sie zutreffend beschrieben sind.',
+      text: 'Die in diesem Paragrafen als vorhanden angegebenen Unfälle, Schäden und Mängel gehören zur vereinbarten Beschaffenheit; wegen ihnen hat der Käufer keine Rechte. Ist ein angegebener Schaden oder Mangel größer als beschrieben, gilt das nur im beschriebenen Umfang.',
     },
     {
       kind: 'paragraph',
-      text: 'Der Verkäufer erklärt, dass er dem Käufer das Eigentum am Fahrzeug frei von Rechten Dritter verschaffen kann. Das Fahrzeug ist insbesondere nicht finanziert, nicht zur Sicherheit übereignet und nicht gepfändet.',
+      text: `Der Verkäufer kann dem Käufer das Eigentum am Fahrzeug frei von Rechten Dritter verschaffen. Das Fahrzeug ist insbesondere nicht zur Sicherheit übereignet (etwa an eine Bank), steht nicht unter dem Eigentumsvorbehalt eines Dritten und ist weder verpfändet noch gepfändet.${battery ? ' Ausgenommen ist eine in § 2 als gemietet oder geleast angegebene Antriebsbatterie.' : ''}`,
     },
   );
 
   // § 4 Price and payment
   const price = priceText(values.price);
+  const total = parseWholeNumber(values.price);
   const deposit = parseWholeNumber(values.deposit);
   add(
     { kind: 'heading', text: '§ 4 Kaufpreis und Zahlung' },
@@ -526,25 +598,36 @@ export function saleContractBlocks(values: SaleContractValues): ContractBlock[] 
         { label: 'in Worten', value: price.words },
       ],
     },
+  );
+  if (deposit && total) {
+    add(
+      {
+        kind: 'paragraph',
+        text: `Vereinbart ist eine Anzahlung von ${formatNumber(deposit)} Euro, die auf den Kaufpreis angerechnet wird. Der restliche Kaufpreis beträgt ${formatNumber(total - deposit)} Euro.`,
+      },
+      {
+        kind: 'fields',
+        rows: [{ label: 'Anzahlung erhalten (Datum, Unterschrift Verkäufer)', value: '' }],
+      },
+    );
+  }
+  add(
     {
       kind: 'choice',
-      text: 'Der Käufer zahlt den Kaufpreis',
+      text: deposit
+        ? 'Der Käufer zahlt den restlichen Kaufpreis'
+        : 'Der Käufer zahlt den Kaufpreis',
       options: [
         'bar bei der Übergabe.',
-        'per Überweisung. Das Geld muss vor der Übergabe auf dem Konto des Verkäufers eingegangen sein.',
+        'durch Überweisung. Das Geld muss vor der Übergabe auf dem Konto des Verkäufers eingegangen sein.',
       ],
-      checked: values.payment === 'cash' ? 0 : values.payment === 'transfer' ? 1 : null,
+      checked: optionIndex(values.payment, ['cash', 'transfer']),
+    },
+    {
+      kind: 'paragraph',
+      text: `Das Fahrzeug bleibt bis zur vollständigen Zahlung des Kaufpreises Eigentum des Verkäufers; mit der vollständigen Zahlung geht das Eigentum auf den Käufer über. Fahrzeug, Schlüssel und die Zulassungsbescheinigungen Teil${NBSP}I und Teil${NBSP}II übergibt der Verkäufer bei der Übergabe nach § 6, nicht jedoch vor vollständiger Zahlung.`,
     },
   );
-  if (deposit)
-    add({
-      kind: 'paragraph',
-      text: `Eine Anzahlung von ${formatNumber(deposit)} Euro hat der Verkäufer bereits erhalten; er bestätigt das mit seiner Unterschrift unter diesem Vertrag. Sie wird auf den Kaufpreis angerechnet.`,
-    });
-  add({
-    kind: 'paragraph',
-    text: 'Das Fahrzeug bleibt bis zur vollständigen Zahlung des Kaufpreises Eigentum des Verkäufers. Fahrzeug, Schlüssel und Zulassungsbescheinigung Teil II übergibt der Verkäufer, sobald der Kaufpreis vollständig bezahlt ist.',
-  });
 
   // § 5 Liability for defects
   add(
@@ -553,10 +636,7 @@ export function saleContractBlocks(values: SaleContractValues): ContractBlock[] 
       kind: 'paragraph',
       text: '(1) Das Fahrzeug wird gebraucht verkauft. Rechte und Ansprüche des Käufers wegen Sachmängeln sind ausgeschlossen, soweit sich aus Absatz 2 nichts anderes ergibt.',
     },
-    {
-      kind: 'paragraph',
-      text: '(2) Der Ausschluss gilt nicht',
-    },
+    { kind: 'paragraph', text: '(2) Der Ausschluss gilt nicht' },
     {
       kind: 'paragraph',
       text: 'a) für Ansprüche auf Schadensersatz wegen einer Verletzung des Lebens, des Körpers oder der Gesundheit, die auf einer fahrlässigen oder vorsätzlichen Pflichtverletzung des Verkäufers, seines gesetzlichen Vertreters oder seines Erfüllungsgehilfen beruht;',
@@ -565,18 +645,22 @@ export function saleContractBlocks(values: SaleContractValues): ContractBlock[] 
       kind: 'paragraph',
       text: 'b) für Ansprüche auf Schadensersatz wegen sonstiger Schäden, die auf einer grob fahrlässigen oder vorsätzlichen Pflichtverletzung des Verkäufers, seines gesetzlichen Vertreters oder seines Erfüllungsgehilfen beruhen;',
     },
-    { kind: 'paragraph', text: 'c) wenn der Verkäufer einen Mangel arglistig verschwiegen hat;' },
+    { kind: 'paragraph', text: 'c) soweit der Verkäufer einen Mangel arglistig verschwiegen hat;' },
     {
       kind: 'paragraph',
       text: 'd) soweit der Verkäufer eine Garantie für die Beschaffenheit des Fahrzeugs übernommen hat;',
     },
     {
       kind: 'paragraph',
-      text: 'e) soweit das Fahrzeug bei der Übergabe nicht die in diesem Vertrag vereinbarte Beschaffenheit hat, insbesondere nach § 2 und § 3.',
+      text: 'e) soweit das Fahrzeug bei Gefahrübergang nicht die vereinbarte Beschaffenheit hat (insbesondere nach § 2 und § 3; zu Angaben nach Kenntnis des Verkäufers siehe § 3) oder nicht mit dem vereinbarten Zubehör und den vereinbarten Unterlagen (§ 6) übergeben wird;',
     },
     {
       kind: 'paragraph',
-      text: '(3) Rechte des Käufers wegen Rechtsmängeln bleiben unberührt. Ansprüche gegen Dritte wegen Mängeln des Fahrzeugs, etwa aus einer Herstellergarantie, tritt der Verkäufer an den Käufer ab, soweit sie abtretbar sind.',
+      text: 'f) für Mängel, die nach Abschluss dieses Vertrags und vor der Übergabe entstehen.',
+    },
+    {
+      kind: 'paragraph',
+      text: '(3) Rechte des Käufers wegen Rechtsmängeln bleiben unberührt. Mit vollständiger Zahlung des Kaufpreises tritt der Verkäufer seine Ansprüche gegen Dritte auf Beseitigung von Mängeln des Fahrzeugs (etwa aus einer Hersteller- oder Händlergarantie oder Gewährleistung) an den Käufer ab, soweit sie abtretbar sind; eigene Zahlungsansprüche des Verkäufers bleiben bei ihm.',
     },
   );
 
@@ -593,13 +677,17 @@ export function saleContractBlocks(values: SaleContractValues): ContractBlock[] 
       kind: 'fields',
       rows: [
         { label: 'Übergabe am (Datum, Uhrzeit)', value: handoverAt },
-        { label: 'Übergabe in (Ort)', value: values.handoverPlace.trim() },
+        { label: 'Übergabe in (Ort)', value: cleanLine(values.handoverPlace) },
         { label: 'Zahl der Fahrzeugschlüssel', value: amount(values.keys) },
       ],
     },
     {
       kind: 'paragraph',
-      text: 'Mit der Übergabe gehen die Gefahr des zufälligen Untergangs und der zufälligen Verschlechterung des Fahrzeugs, die Nutzungen und die Lasten auf den Käufer über. Der Verkäufer löst das Fahrzeug vor der Übergabe aus seinen Hersteller-Apps und Online-Diensten, soweit es dort verknüpft ist.',
+      text: 'Mit der Übergabe gehen die Gefahr des zufälligen Untergangs und der zufälligen Verschlechterung des Fahrzeugs, die Nutzungen und die Lasten auf den Käufer über. Der Verkäufer löst das Fahrzeug vor der Übergabe aus seinen Hersteller-Apps und Online-Diensten, soweit es dort verknüpft ist, und löscht seine persönlichen Daten im Fahrzeug.',
+    },
+    {
+      kind: 'paragraph',
+      text: 'Mit dem Fahrzeug übergibt der Verkäufer die angekreuzten Unterlagen:',
     },
     {
       kind: 'checklist',
@@ -611,13 +699,13 @@ export function saleContractBlocks(values: SaleContractValues): ContractBlock[] 
     {
       kind: 'lines',
       label: 'Mitverkauftes Zubehör (zum Beispiel zweiter Radsatz)',
-      value: values.accessories.trim(),
+      value: cleanText(values.accessories),
       lines: 2,
     },
     {
       kind: 'lines',
       label: 'Nicht mitverkauft',
-      value: values.notIncluded.trim(),
+      value: cleanText(values.notIncluded),
       lines: 1,
     },
   );
@@ -631,32 +719,32 @@ export function saleContractBlocks(values: SaleContractValues): ContractBlock[] 
       text: 'Bei der Übergabe ist das Fahrzeug',
       options: [
         'abgemeldet (außer Betrieb gesetzt).',
-        `noch auf den Verkäufer zugelassen. Der Käufer meldet es spätestens am ${reRegisterBy || '_______________'} auf sich um; bis dahin bleiben die Kennzeichen am Fahrzeug.`,
+        `noch auf den Verkäufer zugelassen. Der Käufer meldet es unverzüglich, spätestens am ${reRegisterBy || blank}, auf sich um oder setzt es außer Betrieb und schickt dem Verkäufer sofort eine Kopie der neuen Zulassungsbescheinigung Teil${NBSP}I oder der Abmeldebestätigung. Bis dahin bleiben die Kennzeichen am Fahrzeug.`,
       ],
-      checked:
-        values.registration === 'deregistered'
-          ? 0
-          : values.registration === 'registered'
-            ? 1
-            : null,
-    },
-    {
-      kind: 'paragraph',
-      text: 'Bleibt das Fahrzeug nach der Übergabe auf den Verkäufer zugelassen, erstattet der Käufer ihm die Kfz-Steuer und den Versicherungsbeitrag, die auf die Zeit ab der Übergabe entfallen. Von Bußgeldern, Gebühren und Ansprüchen Dritter, die ab der Übergabe durch den Gebrauch des Fahrzeugs entstehen, stellt der Käufer den Verkäufer frei.',
-    },
-    {
-      kind: 'paragraph',
-      text: 'Der Verkäufer zeigt den Verkauf unverzüglich seiner Kfz-Versicherung und der Zulassungsbehörde an und gibt dabei Namen und Anschrift des Käufers an.',
+      checked: optionIndex(values.registration, ['deregistered', 'registered']),
     },
   );
+  if (values.registration !== 'deregistered') {
+    add(
+      {
+        kind: 'paragraph',
+        text: 'Bleibt das Fahrzeug nach der Übergabe auf den Verkäufer zugelassen, erstattet der Käufer ihm die Kfz-Steuer und den Versicherungsbeitrag, die der Verkäufer für die Zeit von der Übergabe bis zur Umschreibung oder Außerbetriebsetzung zahlen muss. Von Bußgeldern, Gebühren und Ansprüchen Dritter, die ab der Übergabe durch den Gebrauch des Fahrzeugs entstehen, stellt der Käufer den Verkäufer frei, soweit sie nicht auf einer Pflichtverletzung des Verkäufers beruhen.',
+      },
+      {
+        kind: 'paragraph',
+        text: 'Der Verkäufer zeigt den Verkauf unverzüglich seiner Kfz-Versicherung und der Zulassungsbehörde an und gibt dabei Namen und Anschrift des Käufers an.',
+      },
+    );
+  }
 
   // § 8 Other agreements, signatures
   add(
-    { kind: 'heading', text: '§ 8 Weitere Vereinbarungen' },
+    // The last section stays on the page with the signatures.
+    { kind: 'heading', text: '§ 8 Weitere Vereinbarungen', keepTogether: true },
+    { kind: 'lines', value: cleanText(values.otherAgreements), lines: 3 },
     {
-      kind: 'lines',
-      value: values.otherAgreements.trim(),
-      lines: 3,
+      kind: 'paragraph',
+      text: 'Weicht eine Angabe in einer Anzeige zum Fahrzeug von diesem Vertrag ab, gilt dieser Vertrag. Nicht benutzte Zeilen und Kästchen werden vor der Unterschrift durchgestrichen.',
     },
     {
       kind: 'signatures',
@@ -672,7 +760,7 @@ export function saleContractBlocks(values: SaleContractValues): ContractBlock[] 
     { kind: 'heading', text: 'Übergabeprotokoll und Quittung' },
     {
       kind: 'paragraph',
-      text: 'Der Käufer bestätigt, das Fahrzeug, die Schlüssel und die in § 6 angekreuzten Unterlagen erhalten zu haben.',
+      text: `Der Käufer bestätigt, das Fahrzeug, die Schlüssel und die in § 6 angekreuzten Unterlagen erhalten zu haben, darunter die Zulassungsbescheinigungen Teil${NBSP}I und Teil${NBSP}II.`,
     },
     {
       kind: 'fields',
@@ -680,11 +768,12 @@ export function saleContractBlocks(values: SaleContractValues): ContractBlock[] 
         { label: 'Datum und Uhrzeit der Übergabe', value: '' },
         { label: 'Tachostand bei Übergabe', value: '' },
         { label: 'Zahl der übergebenen Schlüssel', value: '' },
+        { label: 'Bemerkungen (zum Beispiel Schäden seit Vertragsschluss)', value: '' },
       ],
     },
     {
       kind: 'signatures',
-      text: `Der Verkäufer bestätigt, den Kaufpreis von ${price.figures || '_______________ Euro'} vollständig erhalten zu haben.`,
+      text: `Der Verkäufer bestätigt, den Kaufpreis von ${price.figures || `${blank} Euro`} vollständig erhalten zu haben.`,
       left: 'Verkäufer',
       right: 'Käufer',
     },

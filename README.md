@@ -25,7 +25,8 @@ listing that apply, their own findings and a factual message to the seller, with
 amounts (`packages/shared/src/negotiation.ts`). For a private purchase, Pro members can fill in
 a purchase contract on `/kaufvertrag` and download it as a PDF with a handover record and receipt;
 the text and its checks live in `packages/shared/src/sale-contract.ts`, the PDF is built in the
-browser and nothing is stored or sent (reasons for the clauses in DECISIONS.md).
+browser with the embedded Liberation Sans font (SIL Open Font License, `fonts/OFL.txt`) and nothing
+is stored or sent (reasons for the clauses in DECISIONS.md).
 
 For the listing check, a user pastes the listing text (or a link); KaufCheck extracts and
 normalizes the vehicle data and shows a mobile-first dashboard:

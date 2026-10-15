@@ -29,6 +29,7 @@ describe('numberInWords', () => {
     [1_250_000, 'eine Million zweihundertfünfzigtausend'],
     [2_000_000, 'zwei Millionen'],
     [21_000_017, 'einundzwanzig Millionen siebzehn'],
+    [101_000_000, 'einhunderteine Millionen'],
   ])('%i → %s', (n, words) => {
     expect(numberInWords(n)).toBe(words);
   });

@@ -65,6 +65,10 @@ export function numberInWords(n: number): string {
     (thousands ? `${belowThousand(thousands, false)}tausend` : '') +
     (rest ? belowThousand(rest, true) : '');
   if (!millions) return below;
-  const million = millions === 1 ? 'eine Million' : `${belowThousand(millions, false)} Millionen`;
+  // „Million“ is feminine: 101 million is „einhunderteine Millionen“.
+  const million =
+    millions === 1
+      ? 'eine Million'
+      : `${belowThousand(millions, false).replace(/ein$/, 'eine')} Millionen`;
   return below ? `${million} ${below}` : million;
 }

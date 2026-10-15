@@ -33,12 +33,12 @@ test('the contract page is prerendered and only for private sales', async ({ pag
 
   await choosePrivate(page);
   await expect(page.getByRole('button', { name: /Vertrag als PDF erstellen/ })).toBeVisible();
-  // Nothing about the condition is preselected.
-  await expect(
-    page.getByRole('group', { name: /während der Besitzzeit des Verkäufers/ }).getByRole('radio', {
-      checked: true,
-    }),
-  ).toHaveCount(0);
+  // Nothing about the condition is preselected: the question stays open for the paper.
+  const checked = page
+    .getByRole('group', { name: /während der Besitzzeit des Verkäufers/ })
+    .getByRole('radio', { checked: true });
+  await expect(checked).toHaveCount(1);
+  await expect(checked).toHaveAccessibleName(/Offen lassen/);
 });
 
 test('the filled form meets WCAG 2.1 AA checks', async ({ page }) => {
@@ -94,7 +94,7 @@ test('a check prefills only the vehicle data, and Pro members download the contr
   await expect(page.getByLabel('Hersteller')).toHaveValue('Audi');
   await expect(page.getByLabel('Modell', { exact: true })).toHaveValue(/A7/);
   // The listing's mileage is no agreement: the odometer is read at the handover.
-  await expect(page.getByLabel('Tachostand bei Übergabe in km')).toHaveValue('');
+  await expect(page.getByLabel('Tachostand in km')).toHaveValue('');
 
   await page.getByLabel('Name, Vorname').first().fill('Muster, Erika');
   await page.getByLabel('Kaufpreis in Euro').fill('12.500');
@@ -111,4 +111,38 @@ test('a check prefills only the vehicle data, and Pro members download the contr
   const file = readFileSync(await download.path());
   expect(file.subarray(0, 5).toString()).toBe('%PDF-');
   expect(file.length).toBeGreaterThan(5_000);
+});
+
+test('a late prefill does not replace what was typed', async ({ page }) => {
+  await analyzeFromHomepage(page, LISTINGS.audi);
+  const url = page.url().replace(/.*\/analyse\//, '/kaufvertrag?analyse=');
+  let release: () => void = () => undefined;
+  const held = new Promise<void>((resolve) => {
+    release = resolve;
+  });
+  await page.route('**/api/analyses/*', async (route) => {
+    await held;
+    await route.continue();
+  });
+  await page.goto(url);
+  // While the check loads, there is no form to type into.
+  await expect(page.getByText('Angaben aus der Prüfung …')).toBeVisible();
+  await expect(page.getByRole('group', { name: 'Wer verkauft?' })).toHaveCount(0);
+  release();
+  await choosePrivate(page);
+  await expect(page.getByLabel('Hersteller')).toHaveValue('Audi');
+});
+
+test('what was typed survives a link within the app, but nothing is stored', async ({ page }) => {
+  await page.goto('/kaufvertrag');
+  await choosePrivate(page);
+  await page.getByLabel('Name, Vorname').first().fill('Musterfrau, Erika');
+  await page.getByRole('link', { name: 'Gebrauchtwagen privat kaufen' }).first().click();
+  await expect(page).toHaveURL(/\/gebrauchtwagen-kaufen$/);
+  await page.goBack();
+  await expect(page.getByLabel('Name, Vorname').first()).toHaveValue('Musterfrau, Erika');
+  const stored = await page.evaluate(() =>
+    JSON.stringify({ local: { ...localStorage }, session: { ...sessionStorage } }),
+  );
+  expect(stored).not.toContain('Musterfrau');
 });

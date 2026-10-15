@@ -16,7 +16,7 @@ import {
   type SaleContractValues,
 } from '@kaufcheck/shared';
 import { FileSignature } from 'lucide-react';
-import { useEffect, useRef, useState, type FormEvent, type ReactNode } from 'react';
+import { useEffect, useId, useMemo, useRef, useState, type FormEvent, type ReactNode } from 'react';
 import { useMe } from '../../api/queries';
 import { Alert } from '../../components/ui/Alert';
 import { Button, ButtonLink } from '../../components/ui/Button';
@@ -24,8 +24,9 @@ import { Dialog } from '../../components/ui/Dialog';
 import { SelectField, TextAreaField, TextField } from '../../components/ui/Field';
 import { useToast } from '../../components/ui/toast-context';
 import { track } from '../../lib/analytics';
+import { keepSaleContractDraft, readSaleContractDraft, type ContractRole as Role } from './draft';
 
-type Role = '' | 'private' | 'business';
+const EV_FUELS: ReadonlySet<string> = new Set(['electric', 'plugin_hybrid']);
 
 function RadioGroup<T extends string>({
   legend,
@@ -34,24 +35,35 @@ function RadioGroup<T extends string>({
   options,
   onChange,
   hint,
+  clearable,
 }: {
   legend: ReactNode;
   name: string;
   value: T | '';
   options: { value: T; label: ReactNode }[];
-  onChange: (value: T) => void;
+  onChange: (value: T | '') => void;
   hint?: ReactNode;
+  /** Adds „Offen lassen“: the boxes stay empty in the PDF, to be ticked on paper. */
+  clearable?: boolean;
 }) {
+  const hintId = useId();
+  const all: { value: T | ''; label: ReactNode }[] = clearable
+    ? [...options, { value: '', label: 'Offen lassen – auf Papier ankreuzen' }]
+    : options;
   return (
-    <fieldset className="choice-group">
+    <fieldset className="choice-group" aria-describedby={hint ? hintId : undefined}>
       <legend>{legend}</legend>
-      {hint && <p className="field__hint">{hint}</p>}
-      {options.map((option) => (
-        <label className="choice" key={option.value}>
+      {hint && (
+        <p className="field__hint" id={hintId}>
+          {hint}
+        </p>
+      )}
+      {all.map((option) => (
+        <label className="choice" key={option.value || 'open'}>
           <input
             type="radio"
             name={name}
-            checked={value === option.value}
+            checked={value === option.value && (option.value !== '' || clearable === true)}
             onChange={() => onChange(option.value)}
           />
           <span>{option.label}</span>
@@ -84,45 +96,37 @@ function PartyFields({
     <fieldset className="sale-contract__group">
       <legend>{title}</legend>
       <div className="sale-contract__grid">
-        <TextField
-          label="Name, Vorname"
-          autoComplete="off"
-          maxLength={CONTRACT_LIMITS.line}
-          {...field('name')}
-        />
-        <TextField label="Geburtsdatum" type="date" autoComplete="off" {...field('birthDate')} />
+        <TextField label="Name, Vorname" maxLength={CONTRACT_LIMITS.line} {...field('name')} />
+        <TextField label="Geburtsdatum" type="date" {...field('birthDate')} />
         <TextField
           label="Straße, Hausnummer"
-          autoComplete="off"
           maxLength={CONTRACT_LIMITS.line}
           {...field('street')}
         />
-        <TextField
-          label="PLZ, Ort"
-          autoComplete="off"
-          maxLength={CONTRACT_LIMITS.line}
-          {...field('city')}
-        />
+        <TextField label="PLZ, Ort" maxLength={CONTRACT_LIMITS.line} {...field('city')} />
         <TextField
           label="Telefon"
           type="tel"
-          autoComplete="off"
           maxLength={CONTRACT_LIMITS.short}
           {...field('phone')}
         />
         <TextField
           label="E-Mail"
           type="email"
-          autoComplete="off"
           maxLength={CONTRACT_LIMITS.line}
           {...field('email')}
         />
         <TextField
           label="Ausweis- oder Passnummer"
           hint="Mit dem Ausweis vergleichen; kein Foto oder Scan nötig"
-          autoComplete="off"
           maxLength={CONTRACT_LIMITS.short}
           {...field('idNumber')}
+        />
+        <TextField
+          label="Vertreten durch"
+          hint="Nur wenn jemand anderes unterschreibt – mit schriftlicher Vollmacht"
+          maxLength={CONTRACT_LIMITS.line}
+          {...field('representative')}
         />
       </div>
     </fieldset>
@@ -135,23 +139,45 @@ const ANSWER_ORDER: Exclude<ContractAnswer, ''>[] = ['yes', 'no', 'unknown'];
  * The form for the purchase contract. What is typed stays in this browser
  * tab: nothing is saved or sent, and the PDF is built locally (Pro).
  */
-export function SaleContractForm({ initial }: { initial: SaleContractValues }) {
+export function SaleContractForm({
+  initial,
+  source,
+}: {
+  initial: SaleContractValues;
+  /** The check the form was prefilled from, or empty. */
+  source: string;
+}) {
   const me = useMe();
   const toast = useToast();
-  const [seller, setSeller] = useState<Role>('');
-  const [buyer, setBuyer] = useState<Role>('');
-  const [values, setValues] = useState(initial);
-  const [errors, setErrors] = useState<SaleContractErrors>({});
+  // What was typed before a click on another page of the app comes back (memory only).
+  const [restored] = useState(() => readSaleContractDraft(source));
+  const [seller, setSeller] = useState<Role>(restored?.seller ?? '');
+  const [buyer, setBuyer] = useState<Role>(restored?.buyer ?? '');
+  const [values, setValues] = useState(restored?.values ?? initial);
+  const [submitted, setSubmitted] = useState(false);
   const [busy, setBusy] = useState(false);
   const [upsell, setUpsell] = useState(false);
-  const [dirty, setDirty] = useState(false);
+  const [dirty, setDirty] = useState(restored !== null);
   const form = useRef<HTMLFormElement>(null);
   const isPro = me.data?.entitlements.saleContract ?? false;
+  // After the first attempt, the messages follow the input.
+  const errors: SaleContractErrors = useMemo(
+    () => (submitted ? validateSaleContract(values) : {}),
+    [submitted, values],
+  );
 
-  // Nothing is saved: leaving the page asks first once something was typed.
+  useEffect(() => {
+    if (dirty) keepSaleContractDraft({ source, seller, buyer, values });
+  }, [dirty, source, seller, buyer, values]);
+
+  // Nothing is saved: closing or reloading the tab asks first once something was typed.
   useEffect(() => {
     if (!dirty) return;
-    const warn = (event: BeforeUnloadEvent) => event.preventDefault();
+    const warn = (event: BeforeUnloadEvent) => {
+      event.preventDefault();
+      // Older browsers and web views ask only with a return value.
+      event.returnValue = '';
+    };
     window.addEventListener('beforeunload', warn);
     return () => window.removeEventListener('beforeunload', warn);
   }, [dirty]);
@@ -160,6 +186,10 @@ export function SaleContractForm({ initial }: { initial: SaleContractValues }) {
     setDirty(true);
     setValues((current) => ({ ...current, ...change }));
   };
+  const chooseRole = (set: (role: Role) => void) => (role: Role) => {
+    setDirty(true);
+    set(role);
+  };
   const errorFor = (field: SaleContractField) => errors[field];
   const text = (key: keyof SaleContractValues & SaleContractField) => ({
     value: values[key] as string,
@@ -167,15 +197,13 @@ export function SaleContractForm({ initial }: { initial: SaleContractValues }) {
     error: errorFor(key),
   });
 
-  const business = seller === 'business' || buyer === 'business';
   const ready = seller === 'private' && buyer === 'private';
-  const electric =
-    values.fuel === 'electric' || values.fuel === 'plugin_hybrid' || values.battery !== '';
+  const electric = EV_FUELS.has(values.fuel);
 
   const submit = async (event: FormEvent) => {
     event.preventDefault();
+    setSubmitted(true);
     const found = validateSaleContract(values);
-    setErrors(found);
     if (Object.keys(found).length > 0) {
       // After React has marked the fields, the first one gets the focus.
       requestAnimationFrame(() =>
@@ -193,13 +221,23 @@ export function SaleContractForm({ initial }: { initial: SaleContractValues }) {
     }
     setBusy(true);
     try {
-      // Pro may have been ordered in another tab in the meantime.
-      if (!isPro && !(await me.refetch()).data?.entitlements.saleContract) {
-        setUpsell(true);
-        return;
+      if (!isPro) {
+        // Pro may have been ordered in another tab in the meantime.
+        const fresh = await me.refetch();
+        if (fresh.isError) {
+          toast.show('Dein Konto konnte nicht geladen werden. Bitte versuch es noch einmal.');
+          return;
+        }
+        if (!fresh.data?.entitlements.saleContract) {
+          setUpsell(true);
+          return;
+        }
       }
-      const { buildSaleContractPdf, saleContractFileName } = await import('./contract-pdf');
-      buildSaleContractPdf(values).save(saleContractFileName(values, new Date()));
+      const [{ buildSaleContractPdf, saleContractFileName }, fonts] = await Promise.all([
+        import('./contract-pdf'),
+        import('./fonts').then((module) => module.loadContractFonts()),
+      ]);
+      buildSaleContractPdf(values, fonts).save(saleContractFileName(values, new Date()));
       track('sale_contract_created');
       toast.show('Vertrag erstellt – druck ihn zweimal aus.');
     } catch (error) {
@@ -217,19 +255,24 @@ export function SaleContractForm({ initial }: { initial: SaleContractValues }) {
       <div className="sale-contract__roles">
         <RadioGroup
           legend="Wer verkauft?"
+          hint="Wer regelmäßig Autos verkauft, handelt meist gewerblich."
           name="seller-role"
           value={seller}
-          onChange={setSeller}
+          onChange={chooseRole(setSeller)}
           options={[
-            { value: 'private', label: 'Eine Privatperson' },
-            { value: 'business', label: 'Ein Händler oder jemand, der gewerblich verkauft' },
+            { value: 'private', label: 'Eine Privatperson – das Auto gehört zum Privatvermögen' },
+            {
+              value: 'business',
+              label:
+                'Ein Händler, ein Unternehmen oder eine selbständig tätige Person, die das Auto aus ihrem Betrieb verkauft (zum Beispiel einen Firmenwagen)',
+            },
           ]}
         />
         <RadioGroup
           legend="Wer kauft?"
           name="buyer-role"
           value={buyer}
-          onChange={setBuyer}
+          onChange={chooseRole(setBuyer)}
           options={[
             { value: 'private', label: 'Eine Privatperson' },
             { value: 'business', label: 'Ein Unternehmen oder Händler' },
@@ -237,14 +280,24 @@ export function SaleContractForm({ initial }: { initial: SaleContractValues }) {
         />
       </div>
 
-      {business && (
+      {seller === 'business' && (
         <Alert tone="warning" title="Dieser Vertrag passt nur, wenn beide privat handeln">
           <p>
-            Verkauft ein Händler an eine Privatperson, darf er die Gewährleistung nicht
-            ausschließen; bei Gebrauchtwagen kann er sie nur auf ein Jahr verkürzen, und das muss
-            ausdrücklich und gesondert vereinbart werden. Händler und Unternehmen verwenden dafür
-            eigene Verträge. Lies den Vertrag des Händlers genau und lass dir Zusagen schriftlich
-            geben.
+            Verkauft ein Händler oder Unternehmen an eine Privatperson, darf es die Gewährleistung
+            nicht ausschließen. Bei Gebrauchtwagen kann es nur die Verjährungsfrist für
+            Mängelansprüche auf ein Jahr verkürzen; dazu muss es den Käufer vor Vertragsschluss
+            eigens darauf hinweisen und die Verkürzung ausdrücklich und gesondert vereinbaren (§ 476
+            Abs. 2 BGB). Händler verwenden dafür eigene Verträge. Lies sie genau und lass dir
+            Zusagen schriftlich geben.
+          </p>
+        </Alert>
+      )}
+      {seller !== 'business' && buyer === 'business' && (
+        <Alert tone="warning" title="Dieser Vertrag passt nur, wenn beide privat handeln">
+          <p>
+            Kauft ein Händler oder ein Unternehmen dein Auto, verwendet es in der Regel einen
+            eigenen Ankaufvertrag. Lies ihn genau, bevor du unterschreibst – vor allem, was über den
+            Zustand des Autos und die Haftung darin steht.
           </p>
         </Alert>
       )}
@@ -254,6 +307,7 @@ export function SaleContractForm({ initial }: { initial: SaleContractValues }) {
           ref={form}
           className="sale-contract__form"
           onSubmit={(event) => void submit(event)}
+          autoComplete="off"
           noValidate
         >
           <p className="field__hint">
@@ -316,7 +370,11 @@ export function SaleContractForm({ initial }: { initial: SaleContractValues }) {
               <SelectField
                 label="Kraftstoff oder Energiequelle"
                 value={values.fuel}
-                onChange={(event) => update({ fuel: event.target.value as FuelType | '' })}
+                onChange={(event) => {
+                  const fuel = event.target.value as FuelType | '';
+                  // A battery answer belongs to an electric drive only.
+                  update({ fuel, battery: EV_FUELS.has(fuel) ? values.battery : '' });
+                }}
               >
                 <option value="">Keine Angabe</option>
                 {FUEL_TYPES.map((fuel) => (
@@ -327,10 +385,16 @@ export function SaleContractForm({ initial }: { initial: SaleContractValues }) {
               </SelectField>
               <TextField label="Farbe" maxLength={CONTRACT_LIMITS.line} {...text('color')} />
               <TextField
-                label="Hauptuntersuchung gültig bis"
-                hint="Monat/Jahr, zum Beispiel 09/2027"
+                label="Nächste HU fällig"
+                hint="Monat/Jahr von der Prüfplakette, zum Beispiel 09/2027"
                 maxLength={7}
                 {...text('huUntil')}
+              />
+              <TextField
+                label="Eingetragen im Fahrzeugbrief"
+                hint="Name in der Zulassungsbescheinigung Teil II – passt er zum Verkäufer?"
+                maxLength={CONTRACT_LIMITS.line}
+                {...text('registeredKeeper')}
               />
               <TextField
                 label="Zahl der Halter"
@@ -340,28 +404,37 @@ export function SaleContractForm({ initial }: { initial: SaleContractValues }) {
                 {...text('keepers')}
               />
               <TextField
-                label="Tachostand bei Übergabe in km"
-                hint="Bei der Übergabe vom Tacho ablesen"
+                label="Tachostand in km"
+                hint="Beim Unterschreiben vom Tacho ablesen"
                 inputMode="numeric"
                 maxLength={9}
                 {...text('odometerKm')}
               />
             </div>
             <RadioGroup
-              legend="Gesamtlaufleistung: Was weiß der Verkäufer?"
+              legend="Gesamtlaufleistung"
               name="total-mileage"
+              clearable
               value={values.totalMileage}
               onChange={(totalMileage) => update({ totalMileage })}
-              hint="Der Tacho kann getauscht oder verstellt worden sein. Hier steht, was der Verkäufer über die tatsächliche Laufleistung weiß."
+              hint="Der Tacho kann getauscht oder verstellt worden sein. „Nach Kenntnis“ heißt: Der Verkäufer haftet nur, wenn er es besser wusste. Eine fest vereinbarte Laufleistung muss stimmen."
               options={[
-                { value: 'matches', label: 'Sie entspricht nach seiner Kenntnis dem Tachostand' },
-                { value: 'unknown', label: 'Sie ist ihm nicht bekannt' },
-                { value: 'differs', label: 'Sie weicht ab' },
+                {
+                  value: 'matches',
+                  label: 'Entspricht nach Kenntnis des Verkäufers dem Tachostand',
+                },
+                { value: 'unknown', label: 'Ist dem Verkäufer nicht bekannt' },
+                { value: 'differs', label: 'Weicht nach Kenntnis des Verkäufers ab' },
+                { value: 'agreed', label: 'Fest vereinbart: Sie beträgt …' },
               ]}
             />
-            {values.totalMileage === 'differs' && (
+            {(values.totalMileage === 'differs' || values.totalMileage === 'agreed') && (
               <TextField
-                label="Gesamtlaufleistung nach Kenntnis des Verkäufers, in km"
+                label={
+                  values.totalMileage === 'agreed'
+                    ? 'Vereinbarte Gesamtlaufleistung in km'
+                    : 'Gesamtlaufleistung nach Kenntnis des Verkäufers, in km'
+                }
                 inputMode="numeric"
                 maxLength={9}
                 {...text('totalMileageKm')}
@@ -371,6 +444,7 @@ export function SaleContractForm({ initial }: { initial: SaleContractValues }) {
               <RadioGroup
                 legend="Antriebsbatterie"
                 name="battery"
+                clearable
                 value={values.battery}
                 onChange={(battery) => update({ battery })}
                 options={[
@@ -396,6 +470,7 @@ export function SaleContractForm({ initial }: { initial: SaleContractValues }) {
                   <RadioGroup
                     legend={CONTRACT_STATEMENT_TEXTS[statement].text}
                     name={`answer-${statement}`}
+                    clearable
                     value={answer}
                     onChange={(next) =>
                       update({ answers: { ...values.answers, [statement]: next } })
@@ -460,6 +535,7 @@ export function SaleContractForm({ initial }: { initial: SaleContractValues }) {
             <RadioGroup
               legend="Bezahlung"
               name="payment"
+              clearable
               value={values.payment}
               onChange={(payment) => update({ payment })}
               options={[
@@ -473,6 +549,7 @@ export function SaleContractForm({ initial }: { initial: SaleContractValues }) {
             <RadioGroup
               legend="Bei der Übergabe ist das Auto"
               name="registration"
+              clearable
               value={values.registration}
               onChange={(registration) => update({ registration })}
               options={[
@@ -530,7 +607,7 @@ export function SaleContractForm({ initial }: { initial: SaleContractValues }) {
             <legend>Weitere Vereinbarungen</legend>
             <TextAreaField
               label="Was ihr sonst vereinbart"
-              hint="Zum Beispiel eine Reparatur, die der Verkäufer noch erledigt. KaufCheck prüft diesen Text nicht."
+              hint="Zum Beispiel eine Reparatur, die der Verkäufer noch erledigt, oder was aus dem Inserat nicht mehr stimmt. Wörter wie „garantiert“ oder „zugesichert“ machen eine Angabe zur Garantie, für die der Verkäufer trotz Ausschluss haftet. KaufCheck prüft diesen Text nicht."
               rows={3}
               maxLength={CONTRACT_LIMITS.text}
               {...text('otherAgreements')}
