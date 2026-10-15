@@ -65,10 +65,17 @@ export function CarForm({
   const registrationHint = useId();
   const huHint = useId();
   // A new error moves the focus to its field, so that it is announced.
-  useEffect(() => {
-    if (!error?.field) return;
+  // Separate effects: clearing one error must not refocus the other, older one.
+  const focusInvalidField = () =>
     form.current?.querySelector<HTMLElement>('[aria-invalid="true"]')?.focus();
-  }, [error]);
+  useEffect(() => {
+    if (clientError?.field) focusInvalidField();
+  }, [clientError]);
+  useEffect(() => {
+    if (serverError?.field && !clientError) focusInvalidField();
+    // Only a new server error moves the focus, not a cleared client error.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [serverError]);
   const set = (key: keyof CarFormValues) => (event: { target: { value: string } }) =>
     setValues((current) => ({ ...current, [key]: event.target.value }));
 

@@ -27,13 +27,18 @@ test('a bought car is taken over from its check and kept in view', async ({ page
 
   // The HU is taken from the badge, not calculated.
   const hu = form.getByRole('group', { name: 'Nächste HU' });
-  await hu.getByLabel('Monat').selectOption('3');
-  await hu.getByLabel('Jahr').fill('2099');
+  // 37 months ahead: within the year the form checks itself, so the server answers at the field.
+  const tooLate = new Date();
+  tooLate.setMonth(tooLate.getMonth() + 37, 1);
+  await hu.getByLabel('Monat').selectOption(String(tooLate.getMonth() + 1));
+  await hu.getByLabel('Jahr').fill(String(tooLate.getFullYear()));
   await form.getByRole('button', { name: 'Auto anlegen' }).click();
   await expect(
     form.getByText('Die HU kann höchstens drei Jahre im Voraus gültig sein.'),
   ).toBeVisible();
+  await expect(hu.getByLabel('Jahr')).toBeFocused();
   const huYear = new Date().getFullYear() + 1;
+  await hu.getByLabel('Monat').selectOption('3');
   await hu.getByLabel('Jahr').fill(String(huYear));
   await form.getByLabel('Kilometerstand').fill('123.000');
   await form.getByRole('button', { name: 'Auto anlegen' }).click();
