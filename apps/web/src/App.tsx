@@ -1,6 +1,6 @@
 import { QueryClientProvider, type QueryClient } from '@tanstack/react-query';
 import { lazy, Suspense, useEffect, useRef } from 'react';
-import { Route, Routes, useLocation } from 'react-router';
+import { NavigationType, Route, Routes, useLocation, useNavigationType } from 'react-router';
 import { useConfig } from './api/queries';
 import { Layout } from './components/layout/Layout';
 import { PageLoading } from './components/ui/Spinner';
@@ -62,44 +62,76 @@ const OrderDonePage = lazy(() =>
   import('./features/contracts/OrderPages').then((module) => ({ default: module.OrderDonePage })),
 );
 
+function focusContent() {
+  window.scrollTo(0, 0);
+  document.getElementById('inhalt')?.focus({ preventScroll: true });
+}
+
+/** Scrolls to an element and moves the focus there, so that screen readers follow. */
+function showSection(target: HTMLElement) {
+  if (target.tabIndex < 0 && !target.hasAttribute('tabindex')) target.tabIndex = -1;
+  target.scrollIntoView();
+  target.focus({ preventScroll: true });
+}
+
+/** The element id in a URL fragment; a malformed escape such as „#100%“ is taken as it is. */
+function fragmentId(hash: string): string {
+  const raw = hash.slice(1);
+  try {
+    return decodeURIComponent(raw);
+  } catch {
+    return raw;
+  }
+}
+
 /**
- * Scrolls to the section of a link like /kfz-steuer-rechner#typklasse. The
- * browser does this only on a full page load; after client-side navigation
- * the (lazily loaded) page may not have rendered the section yet.
+ * Scrolls to the section of a link like /kfz-steuer-rechner#typklasse – the
+ * browser does this only on a full page load. If the section is not rendered
+ * yet (a page loaded later), the page starts at the top and jumps to the
+ * section once it appears.
  */
-function scrollToAnchor(id: string): () => void {
-  const scroll = () => {
-    const target = document.getElementById(id);
-    target?.scrollIntoView();
-    return target !== null;
-  };
-  if (scroll()) return () => undefined;
+function scrollToSection(id: string): () => void {
+  const find = () => document.getElementById(id);
+  const target = find();
+  if (target) {
+    showSection(target);
+    return () => undefined;
+  }
+  focusContent();
+  let timeout = 0;
   const observer = new MutationObserver(() => {
-    if (scroll()) stop();
+    const found = find();
+    if (!found) return;
+    stop();
+    showSection(found);
   });
-  const timeout = window.setTimeout(() => stop(), 5000);
   const stop = () => {
     observer.disconnect();
     window.clearTimeout(timeout);
   };
+  timeout = window.setTimeout(stop, 3000);
   observer.observe(document.body, { childList: true, subtree: true });
   return stop;
 }
 
-/** Scrolls to the top and moves focus to the content after client-side navigation. */
+/** Scrolls to the top (or the linked section) and moves focus after client-side navigation. */
 function NavigationEffects() {
   const { pathname, hash } = useLocation();
+  const navigationType = useNavigationType();
   const first = useRef(true);
   useEffect(() => {
     if (first.current) {
       first.current = false;
       return;
     }
-    if (hash) return scrollToAnchor(decodeURIComponent(hash.slice(1)));
-    window.scrollTo(0, 0);
-    document.getElementById('inhalt')?.focus({ preventScroll: true });
+    if (hash) {
+      // Back/forward and in-page anchors: the browser restores or sets the position itself.
+      if (navigationType === NavigationType.Pop) return;
+      return scrollToSection(fragmentId(hash));
+    }
+    focusContent();
     return undefined;
-  }, [pathname, hash]);
+  }, [pathname, hash, navigationType]);
   return null;
 }
 

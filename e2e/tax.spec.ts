@@ -81,7 +81,7 @@ test('a link from a check prefills first registration and drive', async ({ page 
   await expect(page.getByLabel('Antrieb')).toHaveValue('diesel');
 });
 
-test('the insurance class is explained and looked up at the GDV, not shown by KaufCheck', async ({
+test('the insurance class is explained and looked up at the GDV, without class values', async ({
   page,
 }) => {
   await page.goto('/kfz-steuer-rechner');
@@ -93,11 +93,28 @@ test('the insurance class is explained and looked up at the GDV, not shown by Ka
     'href',
     'https://www.dieversicherer.de/versicherer/auto/typklassenabfrage',
   );
+  // KaufCheck shows no class values itself (GDV terms, § 87b UrhG).
+  await expect(page.getByText(/Typklasse\s*\d{2}/)).toHaveCount(0);
 });
 
 test('the buying guide links to the insurance class section', async ({ page }) => {
   await page.goto('/gebrauchtwagen-kaufen');
   await page.getByRole('link', { name: 'So findest du die Typklasse heraus.' }).click();
   await expect(page).toHaveURL(/\/kfz-steuer-rechner#typklasse$/);
-  await expect(page.getByRole('heading', { name: 'Versicherung und Typklasse' })).toBeInViewport();
+  const heading = page.getByRole('heading', { name: 'Versicherung und Typklasse' });
+  await expect(heading).toBeInViewport();
+  await expect(heading).toBeFocused();
+});
+
+test('a malformed link fragment does not break the page', async ({ page }) => {
+  await page.goto('/kfz-steuer-rechner');
+  const errors: Error[] = [];
+  page.on('pageerror', (error) => errors.push(error));
+  await page.evaluate(() => {
+    window.location.hash = '100%';
+  });
+  await expect(page).toHaveURL(/#100%$/);
+  await page.getByRole('link', { name: 'Gebrauchtwagen privat kaufen' }).first().click();
+  await expect(page.getByRole('heading', { level: 1 })).toBeVisible();
+  expect(errors).toEqual([]);
 });
