@@ -55,17 +55,27 @@ export function FindCarPage() {
   );
   const scrollToResults = useRef(false);
 
+  const showResults = () => {
+    results.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    results.current?.focus({ preventScroll: true });
+  };
+
   useEffect(() => {
     if (!scrollToResults.current || !searched) return;
     scrollToResults.current = false;
-    results.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    results.current?.focus({ preventScroll: true });
+    showResults();
   }, [searched, query]);
 
   const search = (next: SearchQuery) => {
     track('car_search_started', { placement: 'search_page' });
+    const nextParams = toSearchParams(next);
+    // The same search again: the results are already there.
+    if (searched && nextParams.toString() === params.toString()) {
+      showResults();
+      return;
+    }
     scrollToResults.current = true;
-    setParams(toSearchParams(next));
+    setParams(nextParams);
   };
 
   return (

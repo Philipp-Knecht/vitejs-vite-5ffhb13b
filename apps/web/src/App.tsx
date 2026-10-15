@@ -107,13 +107,17 @@ function scrollToSection(id: string): () => void {
 
 /** Scrolls to the top (or the linked section) and moves focus after client-side navigation. */
 function NavigationEffects() {
-  // Every navigation has a new key, also a link to the current page.
-  const { key, hash } = useLocation();
+  const { key, pathname, search, hash } = useLocation();
   const navigationType = useNavigationType();
-  const first = useRef(true);
+  const previous = useRef<{ pathname: string; search: string; hash: string } | null>(null);
   useEffect(() => {
-    if (first.current) {
-      first.current = false;
+    const before = previous.current;
+    previous.current = { pathname, search, hash };
+    if (!before) return;
+    const samePage = before.pathname === pathname && before.hash === hash;
+    // A changed query (e.g. a new search) is handled by the page itself. The same URL again
+    // counts only for a link to the current page (replace), not for a resubmitted form (push).
+    if (samePage && (before.search !== search || navigationType !== NavigationType.Replace)) {
       return;
     }
     if (hash) {
@@ -123,7 +127,7 @@ function NavigationEffects() {
     }
     focusContent();
     return undefined;
-  }, [key, hash, navigationType]);
+  }, [key, pathname, search, hash, navigationType]);
   return null;
 }
 
