@@ -1152,3 +1152,8 @@
 .negotiation__tips li + li {
   margin-top: 6px;
 }
+
+.checklist__next {
+  margin-top: 16px;
+  color: var(--c-text-2);
+}

@@ -68,8 +68,8 @@ function DeleteAccountDialog({
       }
     >
       <p>
-        Dein Konto, alle gespeicherten Angebote und deine Prüfungen werden sofort gelöscht. Das
-        lässt sich nicht rückgängig machen.
+        Dein Konto, alle gespeicherten Angebote, Suchen und Autos sowie deine Prüfungen werden
+        sofort gelöscht. Das lässt sich nicht rückgängig machen.
       </p>
       <p>
         Ein laufendes Pro-Abo endet mit der Löschung; für den bezahlten Monat erstatten wir nichts.
@@ -187,6 +187,15 @@ export function AccountPage() {
             <dd>
               bis zu {entitlements.savedListingsMax} ·{' '}
               <Link to="/meine-angebote">Meine Angebote</Link>
+            </dd>
+          </div>
+          <div>
+            <dt>Mein Auto</dt>
+            <dd>
+              {entitlements.ownedCarsMax === 1
+                ? 'ein Auto'
+                : `bis zu ${entitlements.ownedCarsMax} Autos`}{' '}
+              · <Link to="/mein-auto">Mein Auto</Link>
             </dd>
           </div>
           {entitlements.history && (

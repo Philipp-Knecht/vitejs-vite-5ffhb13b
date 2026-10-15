@@ -74,6 +74,7 @@ const TABLES = [
   'SellerQuestion',
   'SavedListing',
   'SavedSearch',
+  'OwnedCar',
   'Usage',
   'Subscription',
   'BillingEvent',
@@ -90,7 +91,7 @@ export async function resetDatabase(db: Db): Promise<void> {
 
 export const uniqueEmail = () => `nutzer-${randomBytes(4).toString('hex')}@example.com`;
 
-type Method = 'GET' | 'POST' | 'PATCH' | 'DELETE';
+type Method = 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE';
 
 function randomClientIp(): string {
   const [a = 1, b = 1, c = 1] = randomBytes(3);
@@ -166,6 +167,10 @@ export class TestClient {
 
   patch(url: string, json: unknown) {
     return this.request('PATCH', url, { json });
+  }
+
+  put(url: string, json: unknown) {
+    return this.request('PUT', url, { json });
   }
 
   delete(url: string, json?: unknown) {

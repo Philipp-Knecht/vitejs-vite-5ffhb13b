@@ -16,6 +16,7 @@ export * from './schemas/contracts';
 export * from './legal';
 export * from './message';
 export * from './negotiation';
+export * from './hu';
 export * from './routes';
 export * from './comparison-ranking';
 export * from './vin';

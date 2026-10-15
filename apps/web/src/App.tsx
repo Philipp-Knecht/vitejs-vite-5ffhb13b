@@ -34,6 +34,9 @@ const SavedListingsPage = lazy(() =>
     default: module.SavedListingsPage,
   })),
 );
+const MyCarPage = lazy(() =>
+  import('./features/my-car/MyCarPage').then((module) => ({ default: module.MyCarPage })),
+);
 const ComparePage = lazy(() =>
   import('./features/compare/ComparePage').then((module) => ({ default: module.ComparePage })),
 );
@@ -119,6 +122,7 @@ export function App({ queryClient }: { queryClient: QueryClient }) {
               <Route path="/inseratstext" element={<TextInputPage />} />
               <Route path="/analyse/:id" element={<ResultPage />} />
               <Route path="/meine-angebote" element={<SavedListingsPage />} />
+              <Route path="/mein-auto" element={<MyCarPage />} />
               <Route path="/vergleich" element={<ComparePage />} />
               <Route path="/verlauf" element={<HistoryPage />} />
               <Route path="/anmelden" element={<LoginPage />} />

@@ -63,6 +63,7 @@
 
 .header__link {
   padding: 8px 12px;
+  white-space: nowrap;
   border-radius: var(--radius);
   color: var(--c-text-2);
   font-weight: 550;
@@ -137,7 +138,8 @@
   color: var(--c-text-3);
 }
 
-@media (min-width: 960px) {
+/* Six links and the account button need about 950 px at 16 px; em scales with the font size. */
+@media (min-width: 67.5em) {
   .header__nav {
     display: flex;
   }

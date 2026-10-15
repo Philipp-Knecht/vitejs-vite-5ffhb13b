@@ -47,6 +47,7 @@ model User {
   analyses            Analysis[]
   savedListings       SavedListing[]
   savedSearches       SavedSearch[]
+  ownedCars           OwnedCar[]
   subscription        Subscription?
   passwordResetTokens PasswordResetToken[]
   orders              Order[]
@@ -198,6 +199,28 @@ model SavedListing {
   updatedAt   DateTime @updatedAt
 
   @@unique([userId, fingerprint])
+  @@index([userId, createdAt])
+}
+
+/// A car the user owns („Mein Auto“): only what the user entered, no FIN or plate.
+model OwnedCar {
+  id                     String   @id @default(uuid()) @db.Uuid
+  userId                 String   @db.Uuid
+  user                   User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  nickname               String?
+  makeId                 String
+  modelId                String?
+  modelName              String
+  generationId           String?
+  fuel                   String?
+  firstRegistrationYear  Int
+  firstRegistrationMonth Int?
+  mileageKm              Int?
+  huYear                 Int?
+  huMonth                Int?
+  createdAt              DateTime @default(now())
+  updatedAt              DateTime @updatedAt
+
   @@index([userId, createdAt])
 }
 
