@@ -114,6 +114,12 @@ describe('saleContractBlocks', () => {
     expect(statements[1]?.options[1]).toBe('Nein, soweit dem Verkäufer bekannt');
   });
 
+  it('keeps a deposit without a price, with the rest left open', () => {
+    const all = text(saleContractBlocks({ ...EMPTY_SALE_CONTRACT, deposit: '500' }));
+    expect(all).toContain('Anzahlung von 500 Euro');
+    expect(all).toContain('Der restliche Kaufpreis beträgt _______________ Euro.');
+  });
+
   it('prints no battery clause for a car without an electric drive', () => {
     const blocks = saleContractBlocks({
       ...EMPTY_SALE_CONTRACT,
@@ -132,7 +138,7 @@ describe('saleContractBlocks', () => {
     const choice = choices(blocks)[0];
     expect(choice?.checked).toBe(3);
     expect(choice?.options[3]).toBe(
-      'Sie beträgt 180.000 km; das gehört zur vereinbarten Beschaffenheit.',
+      'Sie betrug bei Vertragsschluss höchstens 180.000 km; das gehört zur vereinbarten Beschaffenheit.',
     );
     expect(choice?.options[2]).toContain('_______________ km');
   });
@@ -140,7 +146,8 @@ describe('saleContractBlocks', () => {
   it('leaves out the duties of a registered car when it is deregistered', () => {
     const all = text(saleContractBlocks({ ...EMPTY_SALE_CONTRACT, registration: 'deregistered' }));
     expect(all).not.toContain('stellt der Käufer den Verkäufer frei');
-    expect(all).not.toContain('zeigt den Verkauf unverzüglich');
+    expect(all).toContain('zeigt den Verkauf unverzüglich seiner Kfz-Versicherung an.');
+    expect(all).not.toContain('Zulassungsbehörde an');
   });
 
   it('asks about the traction battery of an electric car', () => {
@@ -256,6 +263,7 @@ describe('parseWholeNumber', () => {
     ['12.50', null],
     ['1.2.3', null],
     ['1.234.567', 1234567],
+    ['12\u00a0500', 12500],
     ['-5', null],
     ['', null],
   ])('%s → %s', (value, expected) => {

@@ -241,8 +241,10 @@ export function cleanText(value: string): string {
  */
 export function parseWholeNumber(value: string): number | null {
   const compact = value.trim().replace(/,-*$/, '');
-  if (!/^\d{1,10}$/.test(compact) && !/^\d{1,3}([. ]\d{3})+$/.test(compact)) return null;
-  return Number(compact.replace(/[. ]/g, ''));
+  // Groups by dot or space, also the no-break spaces of pasted text.
+  if (!/^\d{1,10}$/.test(compact) && !/^\d{1,3}([. \u00a0\u202f]\d{3})+$/.test(compact))
+    return null;
+  return Number(compact.replace(/[. \u00a0\u202f]/g, ''));
 }
 
 /** A date from an `<input type="date">` (YYYY-MM-DD) that exists. */
@@ -492,7 +494,7 @@ export function saleContractBlocks(values: SaleContractValues): ContractBlock[] 
           value: cleanLine(values.registrationPart2Number).toUpperCase(),
         },
         {
-          label: `Eingetragen in der Zulassungsbescheinigung Teil${NBSP}II`,
+          label: `Als Halter eingetragen in der Zulassungsbescheinigung Teil${NBSP}II`,
           value: cleanLine(values.registeredKeeper),
         },
         {
@@ -522,7 +524,7 @@ export function saleContractBlocks(values: SaleContractValues): ContractBlock[] 
         'Sie entspricht nach Kenntnis des Verkäufers dem Tachostand.',
         'Sie ist dem Verkäufer nicht bekannt.',
         `Sie weicht vom Tachostand ab und beträgt nach Kenntnis des Verkäufers etwa ${mileageFor('differs')}.`,
-        `Sie beträgt ${mileageFor('agreed')}; das gehört zur vereinbarten Beschaffenheit.`,
+        `Sie betrug bei Vertragsschluss höchstens ${mileageFor('agreed')}; das gehört zur vereinbarten Beschaffenheit.`,
       ],
       checked: optionIndex(values.totalMileage, ['matches', 'unknown', 'differs', 'agreed']),
     },
@@ -550,7 +552,7 @@ export function saleContractBlocks(values: SaleContractValues): ContractBlock[] 
     { kind: 'heading', text: '§ 3 Angaben des Verkäufers' },
     {
       kind: 'paragraph',
-      text: 'Der Verkäufer macht die folgenden Angaben zum Fahrzeug. Angaben mit „Ja“ oder „Nein“ und die Beschreibungen unter „Falls ja“ gehören zur vereinbarten Beschaffenheit. Angaben „Nein, soweit dem Verkäufer bekannt“ und Angaben „nach Kenntnis des Verkäufers“ in § 2 geben nur wieder, was der Verkäufer weiß; sie sind keine Beschaffenheitsvereinbarung, müssen aber wahr sein. „Nicht bekannt“ bedeutet: Der Verkäufer weiß es nicht und macht dazu keine Angabe.',
+      text: 'Der Verkäufer macht die folgenden Angaben zum Fahrzeug. Angaben mit „Ja“ oder „Nein“ und die Beschreibungen unter „Falls ja“ gehören zur vereinbarten Beschaffenheit. Angaben „Nein, soweit dem Verkäufer bekannt“ und Angaben „nach Kenntnis des Verkäufers“ in § 2 geben nur wieder, was der Verkäufer weiß; sie sind keine Beschaffenheitsvereinbarung; der Verkäufer muss sie aber nach seinem tatsächlichen Wissen machen. „Nicht bekannt“ bedeutet: Der Verkäufer weiß es nicht und macht dazu keine Angabe.',
     },
   );
   for (const statement of CONTRACT_STATEMENTS) {
@@ -599,11 +601,12 @@ export function saleContractBlocks(values: SaleContractValues): ContractBlock[] 
       ],
     },
   );
-  if (deposit && total) {
+  if (deposit) {
+    const rest = total ? `${formatNumber(total - deposit)} Euro` : `${blank} Euro`;
     add(
       {
         kind: 'paragraph',
-        text: `Vereinbart ist eine Anzahlung von ${formatNumber(deposit)} Euro, die auf den Kaufpreis angerechnet wird. Der restliche Kaufpreis beträgt ${formatNumber(total - deposit)} Euro.`,
+        text: `Vereinbart ist eine Anzahlung von ${formatNumber(deposit)} Euro, die auf den Kaufpreis angerechnet wird. Der restliche Kaufpreis beträgt ${rest}.`,
       },
       {
         kind: 'fields',
@@ -625,7 +628,7 @@ export function saleContractBlocks(values: SaleContractValues): ContractBlock[] 
     },
     {
       kind: 'paragraph',
-      text: `Das Fahrzeug bleibt bis zur vollständigen Zahlung des Kaufpreises Eigentum des Verkäufers; mit der vollständigen Zahlung geht das Eigentum auf den Käufer über. Fahrzeug, Schlüssel und die Zulassungsbescheinigungen Teil${NBSP}I und Teil${NBSP}II übergibt der Verkäufer bei der Übergabe nach § 6, nicht jedoch vor vollständiger Zahlung.`,
+      text: `Das Fahrzeug bleibt bis zur vollständigen Zahlung des Kaufpreises Eigentum des Verkäufers. Das Eigentum geht mit der Übergabe auf den Käufer über, jedoch nicht vor vollständiger Zahlung des Kaufpreises. Fahrzeug, Schlüssel und die Zulassungsbescheinigungen Teil${NBSP}I und Teil${NBSP}II übergibt der Verkäufer bei der Übergabe nach § 6, nicht jedoch vor vollständiger Zahlung.`,
     },
   );
 
@@ -725,17 +728,20 @@ export function saleContractBlocks(values: SaleContractValues): ContractBlock[] 
     },
   );
   if (values.registration !== 'deregistered') {
-    add(
-      {
-        kind: 'paragraph',
-        text: 'Bleibt das Fahrzeug nach der Übergabe auf den Verkäufer zugelassen, erstattet der Käufer ihm die Kfz-Steuer und den Versicherungsbeitrag, die der Verkäufer für die Zeit von der Übergabe bis zur Umschreibung oder Außerbetriebsetzung zahlen muss. Von Bußgeldern, Gebühren und Ansprüchen Dritter, die ab der Übergabe durch den Gebrauch des Fahrzeugs entstehen, stellt der Käufer den Verkäufer frei, soweit sie nicht auf einer Pflichtverletzung des Verkäufers beruhen.',
-      },
-      {
-        kind: 'paragraph',
-        text: 'Der Verkäufer zeigt den Verkauf unverzüglich seiner Kfz-Versicherung und der Zulassungsbehörde an und gibt dabei Namen und Anschrift des Käufers an.',
-      },
-    );
+    add({
+      kind: 'paragraph',
+      text: 'Bleibt das Fahrzeug nach der Übergabe auf den Verkäufer zugelassen, erstattet der Käufer ihm die Kfz-Steuer und den Versicherungsbeitrag, die der Verkäufer für die Zeit von der Übergabe bis zur Umschreibung oder Außerbetriebsetzung zahlen muss. Von Bußgeldern, Gebühren und Ansprüchen Dritter, die ab der Übergabe durch den Gebrauch des Fahrzeugs entstehen, stellt der Käufer den Verkäufer frei, soweit sie nicht auf einer Pflichtverletzung des Verkäufers beruhen.',
+    });
   }
+  add({
+    kind: 'paragraph',
+    // The insurance passes to the buyer also for a deregistered car (§§ 95, 97 VVG); the
+    // registration authority needs no notice then (§ 15 Abs. 6 FZV).
+    text:
+      values.registration === 'deregistered'
+        ? 'Der Verkäufer zeigt den Verkauf unverzüglich seiner Kfz-Versicherung an.'
+        : 'Der Verkäufer zeigt den Verkauf unverzüglich seiner Kfz-Versicherung und der Zulassungsbehörde an und gibt dabei das Kennzeichen sowie Namen und Anschrift des Käufers an.',
+  });
 
   // § 8 Other agreements, signatures
   add(
@@ -760,7 +766,13 @@ export function saleContractBlocks(values: SaleContractValues): ContractBlock[] 
     { kind: 'heading', text: 'Übergabeprotokoll und Quittung' },
     {
       kind: 'paragraph',
-      text: `Der Käufer bestätigt, das Fahrzeug, die Schlüssel und die in § 6 angekreuzten Unterlagen erhalten zu haben, darunter die Zulassungsbescheinigungen Teil${NBSP}I und Teil${NBSP}II.`,
+      // Names the registration certificates (§ 15 Abs. 5 FZV) unless they were left unticked.
+      text:
+        values.documents.length === 0 ||
+        (values.documents.includes('registrationPart1') &&
+          values.documents.includes('registrationPart2'))
+          ? `Der Käufer bestätigt, das Fahrzeug, die Schlüssel und die in § 6 angekreuzten Unterlagen erhalten zu haben, darunter die Zulassungsbescheinigungen Teil${NBSP}I und Teil${NBSP}II.`
+          : 'Der Käufer bestätigt, das Fahrzeug, die Schlüssel und die in § 6 angekreuzten Unterlagen erhalten zu haben.',
     },
     {
       kind: 'fields',

@@ -158,6 +158,8 @@ export function SaleContractForm({
   const [busy, setBusy] = useState(false);
   const [upsell, setUpsell] = useState(false);
   const [dirty, setDirty] = useState(restored !== null);
+  // Asks before leaving only once something was typed, not for the two role questions.
+  const [typed, setTyped] = useState(restored !== null);
   const form = useRef<HTMLFormElement>(null);
   const isPro = me.data?.entitlements.saleContract ?? false;
   // After the first attempt, the messages follow the input.
@@ -172,7 +174,7 @@ export function SaleContractForm({
 
   // Nothing is saved: closing or reloading the tab asks first once something was typed.
   useEffect(() => {
-    if (!dirty) return;
+    if (!typed) return;
     const warn = (event: BeforeUnloadEvent) => {
       event.preventDefault();
       // Older browsers and web views ask only with a return value.
@@ -180,10 +182,11 @@ export function SaleContractForm({
     };
     window.addEventListener('beforeunload', warn);
     return () => window.removeEventListener('beforeunload', warn);
-  }, [dirty]);
+  }, [typed]);
 
   const update = (change: Partial<SaleContractValues>) => {
     setDirty(true);
+    setTyped(true);
     setValues((current) => ({ ...current, ...change }));
   };
   const chooseRole = (set: (role: Role) => void) => (role: Role) => {
@@ -198,6 +201,14 @@ export function SaleContractForm({
   });
 
   const ready = seller === 'private' && buyer === 'private';
+
+  // Loaded ahead while the form is filled in, so that weak reception at the handover does not
+  // stop the PDF (the files stay in the browser's cache).
+  useEffect(() => {
+    if (!ready) return;
+    void import('./contract-pdf').catch(() => {});
+    void import('./fonts').then((module) => module.loadContractFonts()).catch(() => {});
+  }, [ready]);
   const electric = EV_FUELS.has(values.fuel);
 
   const submit = async (event: FormEvent) => {
@@ -242,8 +253,9 @@ export function SaleContractForm({
       toast.show('Vertrag erstellt – druck ihn zweimal aus.');
     } catch (error) {
       console.error('Contract PDF failed', error);
+      // No reload: the form lives only in this tab, and a reload would empty it.
       toast.show(
-        'Das PDF konnte nicht erstellt werden. Bitte lade die Seite neu und versuch es noch einmal.',
+        'Das PDF konnte nicht erstellt werden. Prüf deine Verbindung und versuch es noch einmal.',
       );
     } finally {
       setBusy(false);
@@ -425,14 +437,14 @@ export function SaleContractForm({
                 },
                 { value: 'unknown', label: 'Ist dem Verkäufer nicht bekannt' },
                 { value: 'differs', label: 'Weicht nach Kenntnis des Verkäufers ab' },
-                { value: 'agreed', label: 'Fest vereinbart: Sie beträgt …' },
+                { value: 'agreed', label: 'Fest vereinbart: höchstens … km' },
               ]}
             />
             {(values.totalMileage === 'differs' || values.totalMileage === 'agreed') && (
               <TextField
                 label={
                   values.totalMileage === 'agreed'
-                    ? 'Vereinbarte Gesamtlaufleistung in km'
+                    ? 'Höchstens so viele km (vereinbart)'
                     : 'Gesamtlaufleistung nach Kenntnis des Verkäufers, in km'
                 }
                 inputMode="numeric"
@@ -512,8 +524,8 @@ export function SaleContractForm({
                 {...text('price')}
               />
               <TextField
-                label="Bereits erhaltene Anzahlung in Euro"
-                hint="Nur falls schon gezahlt"
+                label="Vereinbarte Anzahlung in Euro"
+                hint="Wird auf den Kaufpreis angerechnet; der Verkäufer quittiert sie im Vertrag"
                 inputMode="numeric"
                 maxLength={12}
                 {...text('deposit')}

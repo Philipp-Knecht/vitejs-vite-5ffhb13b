@@ -110,6 +110,8 @@ test('a check prefills only the vehicle data, and Pro members download the contr
   );
   const file = readFileSync(await download.path());
   expect(file.subarray(0, 5).toString()).toBe('%PDF-');
+  // The embedded font, so that names beyond Windows-1252 print.
+  expect(file.toString('latin1')).toContain('LiberationSans');
   expect(file.length).toBeGreaterThan(5_000);
 });
 

@@ -53,7 +53,15 @@ function Form() {
   );
 
   // Wait for the prefill: arriving later, it would replace what was typed meanwhile.
-  if (analysisId && analysis.isPending) return <PageLoading label="Angaben aus der Prüfung …" />;
+  if (analysisId && analysis.isPending)
+    return (
+      <>
+        <PageLoading label="Angaben aus der Prüfung …" />
+        <p className="muted">
+          Dauert es zu lange? <Link to="/kaufvertrag">Ohne Angaben aus der Prüfung ausfüllen</Link>
+        </p>
+      </>
+    );
 
   return (
     <>
@@ -165,8 +173,9 @@ export function SaleContractPage() {
       </p>
       <p>
         Ob der Vertrag dabei als Allgemeine Geschäftsbedingung gilt, hängt davon ab, wer ihn zur
-        Unterschrift vorschlägt. Sucht ihr das Muster gemeinsam aus, ist er keine. Die Klauseln sind
-        so geschrieben, dass sie in beiden Fällen halten.
+        Unterschrift vorschlägt. Sucht ihr das Muster gemeinsam aus und hätte jeder auch einen
+        anderen Vertrag vorschlagen können, ist er in der Regel keine. Die Klauseln sind für beide
+        Fälle formuliert; eine Prüfung eures Einzelfalls ersetzt das nicht.
       </p>
 
       <h2 id="uebergabe">Bei der Übergabe</h2>
@@ -201,16 +210,17 @@ export function SaleContractPage() {
           Zoll: Beginn und Ende der Steuerpflicht
           <span className="visually-hidden"> (öffnet in neuem Tab)</span>
         </a>
-        ). Die Anzeige des Verkaufs bei der Zulassungsbehörde beendet sie nicht, sorgt aber dafür,
-        dass die Behörde die Ummeldung durchsetzt. Am sichersten meldet ihr das Auto vor der
+        ). Die Anzeige des Verkaufs bei der Zulassungsbehörde beendet sie nicht, ermöglicht der
+        Behörde aber, die Ummeldung durchzusetzen. Am sichersten meldet ihr das Auto vor der
         Übergabe ab oder geht gemeinsam zur Zulassungsstelle. Seiner Kfz-Versicherung meldet der
         Verkäufer den Verkauf unverzüglich.
       </p>
       <p>
         Die Kfz-Versicherung geht mit dem Auto auf den Käufer über. Er kann sie innerhalb eines
-        Monats nach dem Kauf kündigen und eine eigene abschließen; für die Ummeldung braucht er
-        ohnehin eine eVB-Nummer seiner Versicherung. Was bei der Zulassung noch zu tun ist, steht im
-        Ratgeber <Link to="/gebrauchtwagen-kaufen">Gebrauchtwagen privat kaufen</Link>.
+        Monats nach dem Erwerb, also der Übergabe, kündigen und eine eigene abschließen; für die
+        Ummeldung braucht er ohnehin eine eVB-Nummer seiner Versicherung. Was bei der Zulassung noch
+        zu tun ist, steht im Ratgeber{' '}
+        <Link to="/gebrauchtwagen-kaufen">Gebrauchtwagen privat kaufen</Link>.
       </p>
     </GuideLayout>
   );

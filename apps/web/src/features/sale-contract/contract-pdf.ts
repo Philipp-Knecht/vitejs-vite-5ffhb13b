@@ -21,7 +21,9 @@ export interface ContractFonts {
 const FONT = 'LiberationSans';
 /** Latin with all extensions, general punctuation and the euro sign. */
 const SUPPORTED =
-  /[\n\u0020-\u007e\u00a0-\u024f\u0259\u1e00-\u1eff\u2010-\u2027\u2030-\u205e\u20ac\u2116\u2122]/u;
+  /[\n\u0020-\u007e\u00a0-\u024f\u0259\u1e00-\u1eff\u2010\u2012-\u2027\u2030-\u205e\u20ac\u2116\u2122\u2190-\u2193\u2212\u2248\u2260\u2264\u2265]/u;
+/** Characters the font has no glyph for, with a printable equivalent. */
+const REPLACEMENTS: Readonly<Record<string, string>> = { '\u2011': '-' };
 const PICTOGRAPHIC = /^\p{Extended_Pictographic}$/u;
 
 /** Emoji, flags, skin tones, variation selectors and joiners. */
@@ -41,7 +43,8 @@ function isEmojiPart(char: string): boolean {
 function toContractText(text: string): string {
   let out = '';
   for (const char of text.normalize('NFC')) {
-    if (SUPPORTED.test(char)) out += char;
+    if (char in REPLACEMENTS) out += REPLACEMENTS[char];
+    else if (SUPPORTED.test(char)) out += char;
     else if (isEmojiPart(char)) continue;
     else out += /\s/u.test(char) ? ' ' : '?';
   }
@@ -398,6 +401,14 @@ function render(w: ContractWriter, block: ContractBlock) {
 /** What a block keeps on its page: a heading its section start (or all of it), others themselves. */
 function keptWith(blocks: ContractBlock[], index: number): ContractBlock[] {
   const block = blocks[index]!;
+  const next = blocks[index + 1];
+  // A lead-in („… die angekreuzten Unterlagen:“) or a sentence with its receipt line.
+  if (
+    block.kind === 'paragraph' &&
+    next &&
+    (block.text.endsWith(':') || next.kind === 'fields' || next.kind === 'checklist')
+  )
+    return [block, next];
   if (block.kind !== 'heading') return [block];
   const rest = blocks.slice(index + 1);
   const end = rest.findIndex((next) => next.kind === 'heading' || next.kind === 'pageBreak');

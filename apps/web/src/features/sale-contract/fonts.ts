@@ -14,8 +14,17 @@ async function base64(url: string): Promise<string> {
   return btoa(binary);
 }
 
-/** Liberation Sans for the contract PDF, loaded only when a contract is created. */
-export async function loadContractFonts(): Promise<ContractFonts> {
-  const [regular, bold] = await Promise.all([base64(regularUrl), base64(boldUrl)]);
-  return { regular, bold };
+let loading: Promise<ContractFonts> | null = null;
+
+/** Liberation Sans for the contract PDF, loaded once the contract form is shown. */
+export function loadContractFonts(): Promise<ContractFonts> {
+  loading ??= Promise.all([base64(regularUrl), base64(boldUrl)]).then(([regular, bold]) => ({
+    regular,
+    bold,
+  }));
+  // A failed load (weak reception) is tried again next time.
+  loading.catch(() => {
+    loading = null;
+  });
+  return loading;
 }

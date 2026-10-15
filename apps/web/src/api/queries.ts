@@ -18,6 +18,7 @@ import type {
   WithdrawalRequest,
 } from '@kaufcheck/shared';
 import { QueryClient, useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { clearSaleContractDraft } from '../features/sale-contract/draft';
 import { api, ApiRequestError } from './client';
 
 export const queryKeys = {
@@ -134,6 +135,9 @@ export function useComparison(ids: readonly string[]) {
 function useInvalidateSession() {
   const queryClient = useQueryClient();
   return async () => {
+    // After a logout or an account switch another person may use the device; signing in
+    // after typing keeps the draft.
+    if (queryClient.getQueryData<MeDto>(queryKeys.me)?.user !== null) clearSaleContractDraft();
     queryClient.removeQueries({ queryKey: queryKeys.savedListings });
     queryClient.removeQueries({ queryKey: queryKeys.savedSearches });
     queryClient.removeQueries({ queryKey: queryKeys.history });
