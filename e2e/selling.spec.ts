@@ -102,7 +102,7 @@ test('from „Mein Auto“ to the listing text and on to the contract', async ({
   await expect(description).toHaveValue(/Farbe: Blau/);
 
   await page.getByRole('link', { name: /Kaufvertrag mit diesen Angaben vorbereiten/ }).click();
-  await expect(page).toHaveURL(/\/kaufvertrag\?inserat=1$/);
+  await expect(page).toHaveURL(/\/kaufvertrag\?inserat=1#vertrag$/);
   await page
     .getByRole('group', { name: 'Wer verkauft?' })
     .getByRole('radio', { name: 'Eine Privatperson' })
@@ -119,6 +119,18 @@ test('from „Mein Auto“ to the listing text and on to the contract', async ({
   );
   const before = page.getByRole('group', { name: /vor der Besitzzeit des Verkäufers/ });
   await expect(before.getByRole('radio', { name: 'Nicht bekannt' })).toBeChecked();
+  await page.getByLabel('Name, Vorname').nth(1).fill('Käufer, Karl');
+
+  // A change to the listing reaches the contract; what was typed there stays.
+  await page.getByRole('link', { name: 'Zurück zum Inseratstext' }).click();
+  await expect(page).toHaveURL(/\/auto-verkaufen\?auto=.+#inserat$/);
+  await expect(page.getByLabel('Beschreibung')).toHaveValue(/Farbe: Blau/);
+  await page.getByLabel('Welche Mängel?').fill('Delle in der Fahrertür');
+  await page.getByRole('link', { name: /Kaufvertrag mit diesen Angaben vorbereiten/ }).click();
+  await expect(page.getByLabel('Weitere bekannte Mängel und Schäden')).toHaveValue(
+    'Delle in der Fahrertür',
+  );
+  await expect(page.getByLabel('Name, Vorname').nth(1)).toHaveValue('Käufer, Karl');
 
   await page.goBack();
   await expect(page.getByLabel('Farbe')).toHaveValue('Blau');
@@ -126,4 +138,85 @@ test('from „Mein Auto“ to the listing text and on to the contract', async ({
     JSON.stringify({ local: { ...localStorage }, session: { ...sessionStorage } }),
   );
   expect(stored).not.toContain('Stoßstange');
+});
+
+test('a text created from „Mein Auto“ without typing reaches the contract', async ({ page }) => {
+  const email = await register(page);
+  await makePro(email);
+  await page.goto('/mein-auto');
+  const add = page.getByRole('region', { name: 'Auto anlegen' });
+  await add.getByLabel('Marke').selectOption('skoda');
+  await add.getByLabel('Modell', { exact: true }).selectOption('other');
+  await add.getByLabel('Modellbezeichnung').fill('Fabia');
+  await add.getByRole('group', { name: 'Erstzulassung' }).getByLabel('Jahr').fill('2018');
+  await add.getByRole('button', { name: 'Auto anlegen' }).click();
+
+  await page.getByRole('link', { name: 'Inseratstext schreiben für Škoda Fabia' }).click();
+  // „Mein Auto“ knows the year alone.
+  await expect(page.getByLabel('Erstzulassung')).toHaveValue('2018');
+  await expect(
+    page.getByText('Marke, Modell und Erstzulassung aus „Mein Auto“ übernommen.'),
+  ).toBeVisible();
+  await page.getByRole('button', { name: 'Inseratstext erstellen' }).click();
+  await expect(page.getByLabel('Titel')).toHaveValue('Škoda Fabia, EZ 2018');
+  await page.getByRole('link', { name: /Kaufvertrag mit diesen Angaben vorbereiten/ }).click();
+  await page
+    .getByRole('group', { name: 'Wer verkauft?' })
+    .getByRole('radio', { name: 'Eine Privatperson' })
+    .check();
+  await page
+    .getByRole('group', { name: 'Wer kauft?' })
+    .getByRole('radio', { name: 'Eine Privatperson' })
+    .check();
+  await expect(page.getByLabel('Hersteller')).toHaveValue('Škoda');
+  await expect(page.getByLabel('Erstzulassung')).toHaveValue('2018');
+});
+
+test('another car starts its own contract', async ({ page }) => {
+  const email = await register(page);
+  await makePro(email);
+  await page.goto('/mein-auto');
+  for (const [index, model] of ['Fabia', 'Octavia'].entries()) {
+    if (index > 0) await page.getByRole('button', { name: 'Weiteres Auto anlegen' }).click();
+    const add = page.getByRole('region', { name: 'Auto anlegen' });
+    await add.getByLabel('Marke').selectOption('skoda');
+    await add.getByLabel('Modell', { exact: true }).selectOption('other');
+    await add.getByLabel('Modellbezeichnung').fill(model);
+    await add.getByRole('group', { name: 'Erstzulassung' }).getByLabel('Jahr').fill('2018');
+    await add.getByRole('button', { name: 'Auto anlegen' }).click();
+    await expect(page.getByRole('heading', { name: `Škoda ${model}` })).toBeVisible();
+  }
+
+  const contractFor = async (model: string) => {
+    await page.goto('/mein-auto');
+    await page.getByRole('link', { name: `Inseratstext schreiben für Škoda ${model}` }).click();
+    await page.getByRole('button', { name: 'Inseratstext erstellen' }).click();
+    await page.getByRole('link', { name: /Kaufvertrag mit diesen Angaben vorbereiten/ }).click();
+    await page
+      .getByRole('group', { name: 'Wer verkauft?' })
+      .getByRole('radio', { name: 'Eine Privatperson' })
+      .check();
+    await page
+      .getByRole('group', { name: 'Wer kauft?' })
+      .getByRole('radio', { name: 'Eine Privatperson' })
+      .check();
+  };
+  await contractFor('Fabia');
+  await page.getByLabel('Fahrzeug-Identifizierungsnummer (FIN)').fill('TMBZZZ5JZJ0000001');
+  // In-app navigation keeps the drafts; a reload would clear them.
+  await page.getByRole('link', { name: 'Zurück zum Inseratstext' }).click();
+  await page.getByRole('link', { name: 'Mein Auto' }).first().click();
+  await page.getByRole('link', { name: 'Inseratstext schreiben für Škoda Octavia' }).click();
+  await page.getByRole('button', { name: 'Inseratstext erstellen' }).click();
+  await page.getByRole('link', { name: /Kaufvertrag mit diesen Angaben vorbereiten/ }).click();
+  await page
+    .getByRole('group', { name: 'Wer verkauft?' })
+    .getByRole('radio', { name: 'Eine Privatperson' })
+    .check();
+  await page
+    .getByRole('group', { name: 'Wer kauft?' })
+    .getByRole('radio', { name: 'Eine Privatperson' })
+    .check();
+  await expect(page.getByLabel('Modell', { exact: true })).toHaveValue('Octavia');
+  await expect(page.getByLabel('Fahrzeug-Identifizierungsnummer (FIN)')).toHaveValue('');
 });

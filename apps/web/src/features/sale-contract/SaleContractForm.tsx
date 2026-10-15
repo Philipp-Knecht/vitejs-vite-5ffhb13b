@@ -145,10 +145,13 @@ const ANSWER_ORDER: Exclude<ContractAnswer, ''>[] = ['yes', 'no', 'unknown'];
 export function SaleContractForm({
   initial,
   source,
+  applyToRestored,
 }: {
   initial: SaleContractValues;
   /** The check the form was prefilled from, or empty. */
   source: string;
+  /** Applied to what was typed before, e.g. a listing that changed since. */
+  applyToRestored?: (values: SaleContractValues) => SaleContractValues;
 }) {
   const me = useMe();
   const toast = useToast();
@@ -156,7 +159,9 @@ export function SaleContractForm({
   const [restored] = useState(() => readSaleContractDraft(source));
   const [seller, setSeller] = useState<Role>(restored?.seller ?? '');
   const [buyer, setBuyer] = useState<Role>(restored?.buyer ?? '');
-  const [values, setValues] = useState(restored?.values ?? initial);
+  const [values, setValues] = useState(() =>
+    restored ? (applyToRestored?.(restored.values) ?? restored.values) : initial,
+  );
   const [submitted, setSubmitted] = useState(false);
   const [busy, setBusy] = useState(false);
   const [upsell, setUpsell] = useState(false);

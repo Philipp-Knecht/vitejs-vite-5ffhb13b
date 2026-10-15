@@ -234,7 +234,7 @@ export function PrivacyPage() {
         <li>
           Ebenso bleibt, was du für einen Inseratstext zum Verkauf deines Autos einträgst, im
           geöffneten Browser-Tab; der Text entsteht auf deinem Gerät. Kommst du von „Mein Auto“,
-          lädt die Seite dafür nur die Daten deines Autos, die dort schon gespeichert sind.
+          lädt die Seite dafür deine Autos, die dort schon gespeichert sind.
         </li>
       </ul>
       <p>

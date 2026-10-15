@@ -8,6 +8,7 @@ import {
   listingDescription,
   listingTitle,
   SERVICE_HISTORY_TEXTS,
+  SMOKING_TEXTS,
   TRANSMISSION_LABELS,
   TRANSMISSION_TYPES,
   validateListingText,
@@ -54,8 +55,9 @@ export function ListingTextForm({
   const toast = useToast();
   const [restored] = useState(() => readListingTextDraft(source));
   const [values, setValues] = useState(restored?.values ?? initial);
-  const [submitted, setSubmitted] = useState(false);
-  const [created, setCreated] = useState(false);
+  // A text shown again after a link within the app shows its errors, too.
+  const [submitted, setSubmitted] = useState(restored?.created ?? false);
+  const [created, setCreated] = useState(restored?.created ?? false);
   const [busy, setBusy] = useState(false);
   const [upsell, setUpsell] = useState(false);
   const [typed, setTyped] = useState(restored !== null);
@@ -69,8 +71,9 @@ export function ListingTextForm({
   const hasErrors = Object.keys(errors).length > 0;
 
   useEffect(() => {
-    if (typed) keepListingTextDraft({ source, values });
-  }, [typed, source, values]);
+    // Also a text created from the prefill alone, without typing: the contract takes it over.
+    if (typed || created) keepListingTextDraft({ source, values, created });
+  }, [typed, created, source, values]);
 
   useEffect(() => {
     if (!typed) return;
@@ -151,8 +154,10 @@ export function ListingTextForm({
         noValidate
       >
         <p className="field__hint">
-          Nur Marke und Modell sind Pflicht. Was du leer lässt, steht nicht im Text. Schreib nur,
-          was du sicher weißt: Alles im Inserat kann später als vereinbart gelten.
+          Nur für Privatverkäufe – verkaufst du ein Auto aus deinem Betrieb, passt dieser Text
+          nicht. Nur Marke und Modell sind Pflicht; was du leer lässt, steht nicht im Text. Schreib
+          nur, was du sicher weißt: Was im Inserat steht, kann später als vereinbart gelten. Den
+          fertigen Text erstellst du mit KaufCheck Pro.
         </p>
 
         <fieldset className="sale-contract__group">
@@ -168,8 +173,8 @@ export function ListingTextForm({
             />
             <TextField
               label="Erstzulassung"
-              hint="Monat/Jahr, Feld B im Fahrzeugschein, zum Beispiel 09/2016"
-              maxLength={7}
+              hint="Feld B im Fahrzeugschein, zum Beispiel 09.2016"
+              maxLength={10}
               {...text('firstRegistration')}
             />
             <TextField
@@ -214,8 +219,8 @@ export function ListingTextForm({
             <TextField label="Farbe" maxLength={LISTING_LIMITS.line} {...text('color')} />
             <TextField
               label="HU bis"
-              hint="Monat/Jahr von der Prüfplakette, zum Beispiel 09/2027"
-              maxLength={7}
+              hint="Monat und Jahr von der Prüfplakette, zum Beispiel 09.2027"
+              maxLength={9}
               {...text('huUntil')}
             />
             <TextField
@@ -225,7 +230,26 @@ export function ListingTextForm({
               maxLength={2}
               {...text('keepers')}
             />
+            <TextField
+              label="Zahl der Schlüssel"
+              inputMode="numeric"
+              maxLength={2}
+              {...text('keys')}
+            />
           </div>
+          <RadioGroup
+            clearable
+            clearLabel={NO_STATEMENT}
+            legend="Zulassung"
+            name="listing-registration"
+            value={values.registration}
+            onChange={(registration) => update({ registration })}
+            hint="Ein abgemeldetes Auto darf nicht auf öffentlichen Straßen fahren; für eine Probefahrt braucht es ein Kurzzeitkennzeichen. Der Text bietet dann keine Probefahrt an."
+            options={[
+              { value: 'registered', label: 'Das Auto ist zugelassen' },
+              { value: 'deregistered', label: 'Das Auto ist abgemeldet' },
+            ]}
+          />
           <RadioGroup
             clearable
             clearLabel={NO_STATEMENT}
@@ -254,8 +278,7 @@ export function ListingTextForm({
           <legend>Vorgeschichte</legend>
           <p className="field__hint">
             Dieselben Fragen stehen im Kaufvertrag. Antwortest du im Inserat und im Vertrag gleich,
-            gibt es später keinen Streit darüber, was vereinbart war. Unbeantwortete Fragen
-            erscheinen nicht im Text.
+            vermeidet ihr Widersprüche. Unbeantwortete Fragen erscheinen nicht im Text.
           </p>
           {LISTING_STATEMENTS.map((statement) => {
             const texts = LISTING_STATEMENT_TEXTS[statement];
@@ -297,6 +320,7 @@ export function ListingTextForm({
             name="listing-service-history"
             value={values.serviceHistory}
             onChange={(serviceHistory) => update({ serviceHistory })}
+            hint="„Alle Wartungen“ nur, wenn jede vom Hersteller vorgesehene Wartung belegt ist."
             options={[
               { value: 'complete', label: SERVICE_HISTORY_TEXTS.complete },
               { value: 'partial', label: SERVICE_HISTORY_TEXTS.partial },
@@ -311,7 +335,7 @@ export function ListingTextForm({
           />
           <TextAreaField
             label="Zuletzt gemacht"
-            hint="Eine Zeile je Arbeit, zum Beispiel „Zahnriemen gewechselt 2024 bei 80.000 km“ – am besten mit Rechnung"
+            hint="Eine Zeile je Arbeit, zum Beispiel „Zahnriemen gewechselt 2024 bei 80.000 km“ oder neue Reifen und Bremsen – am besten mit Rechnung"
             rows={3}
             maxLength={LISTING_LIMITS.text}
             {...text('recentWork')}
@@ -338,7 +362,7 @@ export function ListingTextForm({
             name="listing-defects"
             value={values.defects}
             onChange={(defects) => update({ defects })}
-            hint="Was du kennst, gehört ins Inserat. Wer einen Mangel verschweigt, haftet trotz Ausschluss."
+            hint="Was du kennst, gehört ins Inserat – auch Verschleiß, Warnleuchten und Geräusche. Wer einen bekannten Mangel verschweigt, haftet trotz Ausschluss."
             options={[
               { value: 'listed', label: 'Ja, diese:' },
               { value: 'none', label: 'Mir sind keine Mängel bekannt' },
@@ -361,8 +385,8 @@ export function ListingTextForm({
             value={values.smoking}
             onChange={(smoking) => update({ smoking })}
             options={[
-              { value: 'nonSmoker', label: 'Nichtraucherfahrzeug' },
-              { value: 'smoker', label: 'Im Auto wurde geraucht' },
+              { value: 'nonSmoker', label: SMOKING_TEXTS.nonSmoker },
+              { value: 'smoker', label: SMOKING_TEXTS.smoker },
             ]}
           />
         </fieldset>
@@ -414,7 +438,8 @@ export function ListingTextForm({
         </p>
       </form>
 
-      {created && (
+      {/* Shown again after a link within the app only while Pro is still active. */}
+      {created && isPro && (
         <section className="listing-text" aria-labelledby={RESULT_TITLE_ID}>
           <h3 id={RESULT_TITLE_ID} ref={result} tabIndex={-1}>
             Dein Inseratstext
@@ -428,6 +453,11 @@ export function ListingTextForm({
               <p className="muted">
                 Der Text folgt deinen Eingaben. Lies ihn vor dem Einstellen genau durch und ändere,
                 was nicht stimmt – auch nach dem Einfügen auf der Plattform.
+              </p>
+              <p className="muted">
+                Auch die Felder der Plattform sind Angaben zum Auto, etwa „unfallfrei“ oder
+                „scheckheftgepflegt“: Stell sie passend zu deinem Text ein und kreuz nichts an, was
+                du nicht weißt. Speichere das veröffentlichte Inserat als Screenshot oder PDF.
               </p>
               <TextField
                 label="Titel"
@@ -464,7 +494,9 @@ export function ListingTextForm({
               </div>
               <p>
                 Interessent gefunden?{' '}
-                <Link to="/kaufvertrag?inserat=1">Kaufvertrag mit diesen Angaben vorbereiten</Link>{' '}
+                <Link to="/kaufvertrag?inserat=1#vertrag">
+                  Kaufvertrag mit diesen Angaben vorbereiten
+                </Link>{' '}
                 – dort stehen dieselben Fragen zum Zustand.
               </p>
             </>
@@ -499,7 +531,8 @@ export function ListingTextForm({
         </p>
         <p>
           Pro öffnet sich in einem neuen Tab; deine Eingaben hier bleiben erhalten, solange du diese
-          Seite nicht schließt. Danach tippst du einfach noch einmal auf „Inseratstext erstellen“.
+          Seite nicht schließt oder neu lädst. Danach tippst du einfach noch einmal auf
+          „Inseratstext erstellen“.
         </p>
       </Dialog>
     </div>

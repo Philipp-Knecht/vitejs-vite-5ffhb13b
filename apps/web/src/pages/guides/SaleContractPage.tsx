@@ -1,17 +1,24 @@
 import { findMake } from '@kaufcheck/catalog';
 import {
+  mergeListingIntoContract,
   EMPTY_SALE_CONTRACT,
   saleContractFromListing,
   type AnalysisDto,
   type SaleContractValues,
 } from '@kaufcheck/shared';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Link, useSearchParams } from 'react-router';
 import { useAnalysis } from '../../api/queries';
 import { Alert } from '../../components/ui/Alert';
 import { PageLoading } from '../../components/ui/Spinner';
+import { readSaleContractDraft } from '../../features/sale-contract/draft';
 import { SaleContractForm } from '../../features/sale-contract/SaleContractForm';
-import { latestListingTextDraft } from '../../features/selling/draft';
+import {
+  latestListingTextDraft,
+  listingChangedSinceContract,
+  listingInContract,
+  markListingInContract,
+} from '../../features/selling/draft';
 import { useHydrated } from '../../lib/use-hydrated';
 import { GuideLayout, type TocEntry } from './GuideLayout';
 
@@ -56,14 +63,25 @@ function Form() {
   // From the listing text written on „Auto verkaufen“, kept in memory only.
   const [listing] = useState(() => latestListingTextDraft());
   const fromListing = !analysisId && hydrated && params.has('inserat');
+  const takeOver = fromListing && listing !== null;
+  // A listing changed since the last handover updates what was typed into the contract.
+  const [listingChanged] = useState(() => listing !== null && listingChangedSinceContract(listing));
+  // One contract per car: another car's listing starts a new contract.
+  const contractSource = `listing:${listing?.source ?? ''}`;
+  const [previous] = useState(() => (listing ? listingInContract(listing) : null));
+  const [hadContract] = useState(() => readSaleContractDraft(contractSource) !== null);
+  const merged = takeOver && listingChanged && hadContract;
+  useEffect(() => {
+    if (takeOver) markListingInContract(listing);
+  }, [takeOver, listing]);
   const initial = useMemo(
     () =>
       analysis.data
         ? fromAnalysis(analysis.data)
-        : fromListing && listing
+        : takeOver
           ? saleContractFromListing(listing.values)
           : EMPTY_SALE_CONTRACT,
-    [analysis.data, fromListing, listing],
+    [analysis.data, takeOver, listing],
   );
 
   // Wait for the prefill: arriving later, it would replace what was typed meanwhile.
@@ -90,13 +108,20 @@ function Form() {
       {fromListing &&
         (listing ? (
           <p className="muted">
-            Fahrzeugdaten und Angaben zum Zustand aus deinem Inseratstext übernommen. Prüf sie mit
-            dem Fahrzeugschein; den Tachostand tragt ihr bei der Übergabe ein.
+            {merged
+              ? 'Dein Inseratstext hat sich geändert: Was du hier nicht selbst geändert hast, ist neu übernommen. Prüf vor allem die Angaben zum Zustand und „Weitere bekannte Mängel“.'
+              : 'Fahrzeugdaten und Angaben zum Zustand aus deinem Inseratstext übernommen. Prüf sie mit dem Fahrzeugschein; den Tachostand tragt ihr bei der Übergabe ein.'}{' '}
+            Was nur im Inserat steht – etwa Wartung, Umbauten, Ausstattung und Rauchen –, kann
+            trotzdem als vereinbart gelten; was davon nicht mehr stimmt, schreibt unter „Weitere
+            Vereinbarungen“.{' '}
+            <Link to={`/auto-verkaufen${listing.source ? `?auto=${listing.source}` : ''}#inserat`}>
+              Zurück zum Inseratstext
+            </Link>
           </p>
         ) : (
           <p className="muted">
-            Dein Inseratstext ist nicht mehr da – er bleibt nur, bis du die Seite neu lädst. Trag
-            die Angaben selbst ein.
+            Hier ist kein Inseratstext von dir: Er bleibt nur in diesem Tab, bis du die Seite neu
+            lädst. Trag die Angaben selbst ein.
           </p>
         ))}
       {analysis.isError && (
@@ -105,9 +130,14 @@ function Form() {
         </p>
       )}
       <SaleContractForm
-        key={analysis.data?.id ?? (fromListing && listing ? 'listing' : 'empty')}
+        key={analysis.data?.id ?? (takeOver ? contractSource : 'empty')}
         initial={initial}
-        source={analysis.data?.id ?? (fromListing && listing ? 'listing' : '')}
+        source={analysis.data?.id ?? (takeOver ? contractSource : '')}
+        applyToRestored={
+          takeOver && listingChanged
+            ? (values) => mergeListingIntoContract(values, previous, listing.values)
+            : undefined
+        }
       />
     </>
   );

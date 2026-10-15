@@ -1,4 +1,4 @@
-import { EMPTY_LISTING_TEXT } from '@kaufcheck/shared';
+import { EMPTY_LISTING_TEXT, type ListingTextValues } from '@kaufcheck/shared';
 import { useMemo, type ReactNode } from 'react';
 import { Link, useSearchParams } from 'react-router';
 import { useMe, useOwnedCars } from '../../api/queries';
@@ -25,6 +25,18 @@ function Source({ href, children }: { href: string; children: ReactNode }) {
       <span className="visually-hidden"> (öffnet in neuem Tab)</span>
     </a>
   );
+}
+
+/** „Marke, Modell und Erstzulassung“: what the prefill actually filled. */
+function prefilledFields(values: ListingTextValues): string {
+  const names = [
+    'Marke',
+    'Modell',
+    values.firstRegistration && 'Erstzulassung',
+    values.fuel && 'Kraftstoff',
+    values.huUntil && 'HU',
+  ].filter(Boolean);
+  return `${names.slice(0, -1).join(', ')} und ${names.at(-1)}`;
 }
 
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
@@ -56,8 +68,8 @@ function Form() {
     <>
       {car && (
         <p className="muted">
-          Marke, Modell, Erstzulassung, Kraftstoff und HU aus „Mein Auto“ übernommen. Den
-          Kilometerstand liest du am besten frisch vom Tacho ab.
+          {prefilledFields(initial)} aus „Mein Auto“ übernommen. Den Kilometerstand liest du am
+          besten frisch vom Tacho ab.
         </p>
       )}
       {carId && !car && (
@@ -111,19 +123,25 @@ export function SellingGuidePage() {
         Für die Fotos: Tageslicht, ruhiger Hintergrund, das Auto von allen Seiten, dazu Innenraum,
         Kofferraum, Motorraum und Tachostand. Fotografiere auch Mängel – das erspart Diskussionen
         bei der Besichtigung. Mach das Kennzeichen unkenntlich, und veröffentliche weder die
-        Fahrzeug-Identifizierungsnummer (FIN) noch Fotos deiner Papiere: Betrüger nutzen solche
-        Daten, etwa für Fälschungen (
+        Fahrzeug-Identifizierungsnummer (FIN) noch Fotos deiner Papiere: Betrüger können damit in
+        deinem Namen auftreten oder dich mit angeblichen FIN-Berichten abzocken (Polizeiliche
+        Kriminalprävention:{' '}
         <Source href="https://www.polizei-beratung.de/themen-und-tipps/sicherer-autokauf/betrug-beim-autoverkauf/fin-abfrage/">
-          Polizeiliche Kriminalprävention: FIN-Abfrage
+          FIN-Abfrage
+        </Source>
+        ,{' '}
+        <Source href="https://www.polizei-beratung.de/themen-und-tipps/sicherer-autokauf/betrug-beim-autoverkauf/versand-vertraulicher-dokumente/">
+          Versand vertraulicher Dokumente
         </Source>
         ).
       </p>
 
       <h2 id="inserat">Inseratstext schreiben</h2>
       <p>
-        Was im Inserat steht, gilt als vereinbart – auch wenn ihr die Haftung für Mängel im Vertrag
-        ausschließt. So hat es der Bundesgerichtshof für die Angabe „Klimaanlage funktioniert
-        einwandfrei“ in einem privaten Inserat entschieden (
+        Was im Inserat steht, kann als vereinbart gelten – auch wenn ihr die Haftung für Mängel im
+        Vertrag ausschließt. So hat es der Bundesgerichtshof für die Angabe „Klimaanlage
+        funktioniert einwandfrei“ in einem privaten Inserat gesehen, noch zum bis 2021 geltenden
+        Recht (
         <Source href="https://www.bundesgerichtshof.de/SharedDocs/Pressemitteilungen/DE/2024/2024082.html">
           Urteil vom 10. April 2024, VIII ZR 161/23
         </Source>
@@ -132,10 +150,11 @@ export function SellingGuidePage() {
         etwa ob das Auto vor deiner Zeit einen Unfall hatte, schreib genau das – nicht „unfallfrei“.
       </p>
       <p>
-        Der Generator unten fragt alles ab, was Käufer im Inserat suchen, und formuliert es
+        Der Generator unten fragt das Wichtigste ab, was Käufer im Inserat suchen, und formuliert es
         vorsichtig. Die Fragen zur Vorgeschichte sind dieselben wie im{' '}
-        <Link to="/kaufvertrag">Kaufvertrag</Link>. Druck dein Inserat aus und bring es zur
-        Besichtigung mit; dann ist klar, was darin stand.
+        <Link to="/kaufvertrag">Kaufvertrag</Link>. Auch die Felder der Plattform, etwa
+        „unfallfrei“, sind Angaben zum Auto: Stell sie passend zu deinem Text ein. Speichere das
+        veröffentlichte Inserat als Screenshot oder PDF; dann ist klar, was darin stand.
       </p>
       <Form />
 
@@ -162,7 +181,12 @@ export function SellingGuidePage() {
           ).
         </li>
         <li>
-          Zeig Unterlagen vor Ort, aber schick keine Scans deiner Papiere per E-Mail oder Messenger.
+          Zeig Unterlagen vor Ort, aber schick keine Kopien oder Scans deiner Papiere per E-Mail
+          oder Messenger (
+          <Source href="https://www.polizei-beratung.de/themen-und-tipps/sicherer-autokauf/betrug-beim-autoverkauf/versand-vertraulicher-dokumente/">
+            Polizeiliche Kriminalprävention
+          </Source>
+          ).
         </li>
       </ul>
 
@@ -173,7 +197,8 @@ export function SellingGuidePage() {
           besten mit Begleitung.
         </li>
         <li>
-          Eine Echtzeitüberweisung kommt in Sekunden an und ist grundsätzlich nicht widerruflich (
+          Eine Echtzeitüberweisung kommt in Sekunden an und ist wie jede Überweisung grundsätzlich
+          nicht widerruflich (
           <Source href="https://www.bundesbank.de/dynamic/action/de/aufgaben/unbarer-zahlungsverkehr/veroeffentlichungen/fragen-und-antworten-zu-echtzeitueberweisungen-und-empfaengerueberpruefung/963980/fragen-und-antworten-zu-echtzeitueberweisungen-und-empfaengerueberpruefung-">
             Deutsche Bundesbank
           </Source>
@@ -181,13 +206,18 @@ export function SellingGuidePage() {
           ist. Ein Screenshot oder eine E-Mail mit „Zahlungsbestätigung“ beweist nichts.
         </li>
         <li>
-          Vorsicht bei Käufern, die das Auto ungesehen kaufen, eine Spedition schicken, einen Scheck
-          über mehr als den Kaufpreis anbieten und den Rest zurückhaben wollen oder einen
-          Treuhanddienst vorschlagen – typische Maschen (
+          Vorsicht bei Käufern, die eine Spedition schicken, eine Zahlungsbestätigung per E-Mail
+          vorlegen, einen Scheck über mehr als den Kaufpreis anbieten und den Rest zurückhaben
+          wollen oder einen Treuhanddienst vorschlagen – typische Maschen (Polizeiliche
+          Kriminalprävention:{' '}
           <Source href="https://www.polizei-beratung.de/themen-und-tipps/sicherer-autokauf/betrug-beim-autoverkauf/fahrzeuguebergabe-an-dritte/">
-            Polizeiliche Kriminalprävention
+            Übergabe an Dritte
           </Source>
           ,{' '}
+          <Source href="https://www.polizei-beratung.de/themen-und-tipps/sicherer-autokauf/betrug-beim-autoverkauf/scheckbetrug/">
+            Scheckbetrug
+          </Source>
+          ;{' '}
           <Source href="https://www.adac.de/rund-ums-fahrzeug/auto-kaufen-verkaufen/kauftipps/auto-sicher-bezahlen/">
             ADAC: Auto sicher bezahlen
           </Source>
@@ -203,21 +233,25 @@ export function SellingGuidePage() {
       <p>
         Schließt den Vertrag schriftlich, in zwei Exemplaren – etwa mit dem{' '}
         <Link to="/kaufvertrag">Kaufvertrag für den privaten Autokauf</Link>. Hast du oben einen
-        Inseratstext erstellt, übernimmt der Vertrag deine Angaben. Darin steht auch, was
-        ausgeschlossen ist und was nicht, und es gibt ein Übergabeprotokoll mit Tachostand und
-        Quittung.
+        Inseratstext erstellt, nimm den Link „Kaufvertrag mit diesen Angaben vorbereiten“ unter dem
+        Text: Dann übernimmt der Vertrag deine Angaben. Darin steht auch, was ausgeschlossen ist und
+        was nicht, und es gibt ein Übergabeprotokoll mit Tachostand und Quittung.
       </p>
       <p>
-        Am einfachsten ist es, wenn du das Auto vor der Übergabe abmeldest: Dann endet deine Haftung
-        als Halter mit Sicherheit, und der Käufer meldet es neu an. Bleibt es zugelassen, vereinbart
-        ihr im Vertrag, bis wann der Käufer es ummeldet, oder ihr geht gemeinsam zur
-        Zulassungsstelle.
+        Am einfachsten ist es, wenn du das Auto vor der Übergabe abmeldest: Dann endet deine
+        Kfz-Steuer, und der Käufer meldet es neu an; zum Wegfahren braucht er ein
+        Kurzzeitkennzeichen (
+        <Source href="https://www.gesetze-im-internet.de/fzv_2023/__42.html">§ 42 FZV</Source>).
+        Frag deine Versicherung, was nach der Abmeldung mit deinem Vertrag passiert. Bleibt es
+        zugelassen, vereinbart ihr im Vertrag, bis wann der Käufer es ummeldet, oder ihr geht
+        gemeinsam zur Zulassungsstelle.
       </p>
       <p>
         Verkaufst du ein Auto aus deinem Betrieb, etwa als Selbständiger einen Firmenwagen, bist du
         kein Privatverkäufer: Gegenüber Privatleuten kannst du die Gewährleistung dann nicht
-        ausschließen (
-        <Source href="https://www.gesetze-im-internet.de/bgb/__476.html">§ 476 BGB</Source>).
+        ausschließen, bei Gebrauchtwagen nur unter Bedingungen auf ein Jahr verkürzen (
+        <Source href="https://www.gesetze-im-internet.de/bgb/__476.html">§ 476 BGB</Source>). Der
+        Inseratstext und der Kaufvertrag hier passen dann nicht.
       </p>
 
       <h2 id="nach-dem-verkauf">Nach dem Verkauf</h2>
@@ -233,15 +267,19 @@ export function SellingGuidePage() {
         </li>
         <li>
           <strong>Versicherung:</strong> Die Kfz-Versicherung geht mit dem Verkauf auf den Käufer
-          über; er kann sie innerhalb eines Monats kündigen. Melde den Verkauf deiner Versicherung
-          unverzüglich, sonst kann sie später leistungsfrei werden (
-          <Source href="https://www.gesetze-im-internet.de/vvg_2008/__97.html">§ 97 VVG</Source>).
-          Für den laufenden Zeitraum haftet ihr beide für den Beitrag.
+          über; er kann sie innerhalb eines Monats kündigen. Melde den Verkauf unverzüglich deiner
+          Versicherung (das darf auch der Käufer). Für den Beitrag der laufenden
+          Versicherungsperiode haftet ihr beide; kündigt der Käufer, zahlst nur du ( §§{' '}
+          <Source href="https://www.gesetze-im-internet.de/vvg_2008/__95.html">95</Source>,{' '}
+          <Source href="https://www.gesetze-im-internet.de/vvg_2008/__96.html">96</Source>,{' '}
+          <Source href="https://www.gesetze-im-internet.de/vvg_2008/__97.html">97</Source> und{' '}
+          <Source href="https://www.gesetze-im-internet.de/vvg_2008/__122.html">122</Source> VVG).
         </li>
         <li>
           <strong>Kfz-Steuer:</strong> Sie endet mit der Umschreibung auf den Käufer oder mit der
-          Abmeldung, nicht schon mit der Verkaufsanzeige. Zu viel Gezahltes erstattet der Zoll von
-          selbst (
+          Abmeldung, nicht schon mit der Verkaufsanzeige. Zu viel Gezahltes zahlt der Zoll zurück –
+          automatisch, wenn du per Lastschrift zahlst; sonst teilst du dem Hauptzollamt deine
+          Bankverbindung mit (
           <Source href="https://www.zoll.de/DE/Privatpersonen/Kraftfahrzeugsteuer/Beginn-und-Ende-der-Steuerpflicht/beginn-und-ende-der-steuerpflicht_node.html">
             Zoll: Beginn und Ende der Steuerpflicht
           </Source>
@@ -263,12 +301,14 @@ export function SellingGuidePage() {
         </li>
         <li>
           <strong>Kennzeichen:</strong> Bei der Abmeldung kannst du es bis zu zwölf Monate
-          reservieren lassen (
-          <Source href="https://www.gesetze-im-internet.de/fzv_2023/__16.html">§ 16 FZV</Source>).
+          reservieren lassen – nach{' '}
+          <Source href="https://www.gesetze-im-internet.de/fzv_2023/__16.html">§ 16 FZV</Source>{' '}
+          aber nur, um dasselbe Auto wieder zuzulassen. Willst du es für ein anderes Auto behalten,
+          frag deine Zulassungsbehörde.
         </li>
         <li>
           Lösch deine Daten im Auto – gekoppelte Handys, Ziele im Navi, Konten in der App des
-          Herstellers – und das Auto unter <Link to="/mein-auto">„Mein Auto“</Link>.
+          Herstellers – und entferne das Auto aus <Link to="/mein-auto">„Mein Auto“</Link>.
         </li>
       </ul>
     </GuideLayout>
