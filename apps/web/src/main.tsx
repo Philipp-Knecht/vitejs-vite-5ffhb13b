@@ -6,7 +6,7 @@ import { BrowserRouter } from 'react-router';
 import { createQueryClient } from './api/queries';
 import { App } from './App';
 import { PreloadedModelContext, readPageData } from './features/models/preloaded';
-import { registerServiceWorker } from './lib/offline';
+import { updateServiceWorker } from './lib/offline';
 
 const container = document.getElementById('root');
 if (!container) throw new Error('Root element missing');
@@ -25,4 +25,4 @@ const app = (
 if (container.dataset.prerendered === 'true') hydrateRoot(container, app);
 else createRoot(container).render(app);
 
-registerServiceWorker();
+updateServiceWorker();

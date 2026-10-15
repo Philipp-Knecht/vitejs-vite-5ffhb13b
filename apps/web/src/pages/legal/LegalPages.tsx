@@ -206,10 +206,13 @@ export function PrivacyPage() {
           Diese Daten verlassen deinen Browser nicht.
         </li>
         <li>
-          Damit KaufCheck auch ohne Empfang funktioniert, etwa bei einer Besichtigung, speichert
-          dein Browser zuletzt geöffnete Seiten und Prüfungen in seinem Zwischenspeicher (Service
-          Worker). Bei der Anmeldung, Abmeldung und Kontolöschung leeren wir den Teil mit
-          Kontodaten.
+          Nur wenn du bei einer Prüfung „Offline verfügbar machen“ wählst, speichert dein Browser
+          diese Prüfung, die Angaben, mit denen sie angezeigt wird (mit Konto auch deine
+          E-Mail-Adresse und deinen Tarif), und die Programmdateien von KaufCheck, damit die Prüfung
+          auch ohne Empfang funktioniert. Die Kopie verlässt dein Gerät nicht. Sie bleibt, bis du
+          sie mit „Offline-Kopie löschen“ entfernst, dich an- oder abmeldest, dein Konto löschst
+          oder die Websitedaten in deinem Browser löschst. Rechtsgrundlage ist § 25 Abs. 2 Nr. 2
+          TDDDG (eine von dir ausdrücklich gewünschte Funktion) und Art. 6 Abs. 1 lit. b DSGVO.
         </li>
       </ul>
       <p>

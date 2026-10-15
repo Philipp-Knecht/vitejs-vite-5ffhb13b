@@ -1,23 +1,25 @@
 /**
- * KaufCheck service worker: makes the app installable and keeps the last
- * opened pages and checks available without reception – e.g. in a garage
- * during an inspection.
+ * KaufCheck service worker: shows a saved check without reception, e.g. in a
+ * garage during an inspection.
  *
- * - Pages are always loaded from the network first; the cache is only used
- *   offline, so nobody sees an outdated version while online.
- * - Built files (/assets/…) carry a hash in their name and never change.
- * - Of the API, only what is needed to show an opened check again is kept.
- *   It may be personal; the app deletes this cache on login, logout and
- *   account deletion (see apps/web/src/lib/offline.ts).
+ * This worker stores nothing by itself. Only when the user taps „Offline
+ * verfügbar machen“ does the page put the check, the app shell
+ * and the files it needs into the caches below (apps/web/src/lib/offline.ts;
+ * TDDDG § 25 Abs. 2 Nr. 2: only for the function the user asked for). The
+ * worker serves them when the network fails and refreshes stored entries
+ * when they are loaded online again – it never adds new ones.
+ *
+ * The server sends check data with `no-store` so that no HTTP cache keeps it
+ * unasked; this copy is the user's explicit choice and is deleted on login,
+ * logout, account deletion and with „Offline-Kopie löschen“.
  */
-const PAGES = 'kc-pages-v1';
-const ASSETS = 'kc-assets-v1';
-const API = 'kc-api-v1';
-const MAX_ENTRIES = { [PAGES]: 40, [ASSETS]: 150, [API]: 40 };
-/** The empty app shell, for app pages that were never opened before. */
+const APP = 'kc-app-v1'; // shell and built files – no personal data
+const SAVED = 'kc-saved-v1'; // saved checks, account and settings – personal
 const SHELL_KEY = '/__kaufcheck-shell';
+/** Weak reception: after this, a stored copy is used instead of waiting longer. */
+const NETWORK_TIMEOUT_MS = 4000;
 
-const OFFLINE_API = [/^\/api\/analyses\/[0-9a-f-]{36}$/i, /^\/api\/me$/, /^\/api\/config$/];
+const API_PATHS = [/^\/api\/analyses\/[0-9a-f-]{36}$/i, /^\/api\/me$/, /^\/api\/config$/];
 
 self.addEventListener('install', () => {
   self.skipWaiting();
@@ -26,9 +28,8 @@ self.addEventListener('install', () => {
 self.addEventListener('activate', (event) => {
   event.waitUntil(
     (async () => {
-      const current = new Set(Object.keys(MAX_ENTRIES));
       for (const name of await caches.keys()) {
-        if (name.startsWith('kc-') && !current.has(name)) await caches.delete(name);
+        if (name.startsWith('kc-') && name !== APP && name !== SAVED) await caches.delete(name);
       }
       await self.clients.claim();
     })(),
@@ -42,64 +43,65 @@ self.addEventListener('fetch', (event) => {
   if (url.origin !== self.location.origin) return;
 
   if (request.mode === 'navigate') {
-    event.respondWith(page(request));
+    // Every app page is the same shell; prerendered pages are not stored.
+    event.respondWith(fromNetworkOr(event, request, APP, SHELL_KEY));
   } else if (url.pathname.startsWith('/assets/')) {
-    event.respondWith(asset(request));
-  } else if (OFFLINE_API.some((pattern) => pattern.test(url.pathname))) {
-    event.respondWith(networkFirst(request, API));
+    event.respondWith(asset(request, url.pathname));
+  } else if (API_PATHS.some((pattern) => pattern.test(url.pathname))) {
+    event.respondWith(fromNetworkOr(event, request, SAVED, url.pathname));
   }
 });
 
-async function trim(cache, max) {
-  const keys = await cache.keys();
-  for (const key of keys.slice(0, Math.max(0, keys.length - max))) await cache.delete(key);
-}
-
-async function store(cacheName, key, response) {
+/**
+ * Network first. Without an answer – offline, or nothing after a few seconds
+ * of weak reception – the stored copy is used if there is one. A stored copy
+ * is refreshed with a newer answer.
+ */
+async function fromNetworkOr(event, request, cacheName, key) {
   const cache = await caches.open(cacheName);
-  await cache.put(key, response);
-  await trim(cache, MAX_ENTRIES[cacheName]);
-}
-
-/** Network first; a successful same-origin answer is kept for offline use. */
-async function networkFirst(request, cacheName) {
-  try {
-    const response = await fetch(request);
-    if (response.ok && response.type === 'basic') {
-      await store(cacheName, request, response.clone());
+  const stored = await cache.match(key);
+  const network = fetch(request).then((response) => {
+    if (stored && response.ok && response.type === 'basic' && !response.redirected) {
+      event.waitUntil(refresh(cache, key, response.clone()));
     }
     return response;
-  } catch (error) {
-    const cached = await caches.match(request, { cacheName, ignoreVary: true });
-    if (cached) return cached;
-    throw error;
+  });
+  if (!stored) return network;
+  // A late network error must not go unhandled once the stored copy was used.
+  network.catch(() => {});
+  const timeout = new Promise((resolve) => {
+    setTimeout(() => resolve(null), NETWORK_TIMEOUT_MS);
+  });
+  try {
+    return (await Promise.race([network, timeout])) ?? stored;
+  } catch {
+    return stored;
   }
 }
 
-async function page(request) {
+async function refresh(cache, key, response) {
   try {
-    const response = await fetch(request);
-    if (response.ok && response.type === 'basic') {
-      await store(PAGES, request, response.clone());
-      if (response.headers.get('x-kaufcheck-shell') === '1') {
-        await store(PAGES, SHELL_KEY, response.clone());
+    // Only the shell replaces the shell, never a prerendered page.
+    if (key === SHELL_KEY && response.headers.get('x-kaufcheck-shell') !== '1') return;
+    // Signed out elsewhere (e.g. the session expired) or another account: the copies go, too.
+    if (key === '/api/me') {
+      const before = await (await cache.match(key))?.json();
+      const now = await response.clone().json();
+      if (before?.user && before.user.id !== now?.user?.id) {
+        await caches.delete(SAVED);
+        return;
       }
     }
-    return response;
-  } catch (error) {
-    const cached =
-      (await caches.match(request, { cacheName: PAGES, ignoreSearch: true })) ??
-      (await caches.match(SHELL_KEY, { cacheName: PAGES }));
-    if (cached) return cached;
-    throw error;
+    // Deleted in the meantime (logout, „Offline-Kopie löschen“): do not bring it back.
+    if (!(await cache.match(key))) return;
+    await cache.put(key, response);
+  } catch {
+    // A failed refresh keeps the older copy.
   }
 }
 
-/** Hashed files never change: from the cache when there, else from the network. */
-async function asset(request) {
-  const cached = await caches.match(request, { cacheName: ASSETS });
-  if (cached) return cached;
-  const response = await fetch(request);
-  if (response.ok && response.type === 'basic') await store(ASSETS, request, response.clone());
-  return response;
+/** Built files carry a hash in their name and never change. */
+async function asset(request, key) {
+  const stored = await caches.match(key, { cacheName: APP });
+  return stored ?? fetch(request);
 }

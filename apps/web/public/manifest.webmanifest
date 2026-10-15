@@ -2,6 +2,7 @@
   "name": "KaufCheck – Gebrauchtwagen prüfen",
   "short_name": "KaufCheck",
   "description": "Gebrauchtwagen finden, Inserate prüfen und bei der Besichtigung die Checkliste dabeihaben – auch ohne Empfang.",
+  "id": "/",
   "lang": "de",
   "start_url": "/",
   "scope": "/",
