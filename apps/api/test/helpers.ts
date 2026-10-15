@@ -105,7 +105,11 @@ export class TestClient {
   private readonly cookies = new Map<string, string>();
   readonly remoteAddress = randomClientIp();
 
-  constructor(private readonly app: FastifyInstance) {}
+  /** `now`: the app's clock, for tests that run the app on a fixed one. */
+  constructor(
+    private readonly app: FastifyInstance,
+    private readonly now: () => Date = () => new Date(),
+  ) {}
 
   cookie(name: string): string | undefined {
     return this.cookies.get(name);
@@ -145,7 +149,7 @@ export class TestClient {
       const expired =
         cookie.value === '' ||
         cookie.maxAge === 0 ||
-        (cookie.expires && cookie.expires.getTime() <= Date.now());
+        (cookie.expires && cookie.expires.getTime() <= this.now().getTime());
       if (expired) this.cookies.delete(cookie.name);
       else this.cookies.set(cookie.name, cookie.value);
     }
