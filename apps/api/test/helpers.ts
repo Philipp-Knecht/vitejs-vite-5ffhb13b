@@ -105,7 +105,11 @@ export class TestClient {
   private readonly cookies = new Map<string, string>();
   readonly remoteAddress = randomClientIp();
 
-  constructor(private readonly app: FastifyInstance) {}
+  /** `now`: the app's clock, for tests that run the app on a fixed one. */
+  constructor(
+    private readonly app: FastifyInstance,
+    private readonly now: () => Date = () => new Date(),
+  ) {}
 
   cookie(name: string): string | undefined {
     return this.cookies.get(name);
@@ -142,12 +146,10 @@ export class TestClient {
       expires?: Date;
       maxAge?: number;
     }[]) {
-      // A cleared cookie expires in 1970. Other dates cannot be judged by the real clock:
-      // tests may run the app on a fixed clock, so its sessions can lie in the real past.
       const expired =
         cookie.value === '' ||
         cookie.maxAge === 0 ||
-        (cookie.expires && cookie.expires.getTime() < Date.UTC(2000, 0, 1));
+        (cookie.expires && cookie.expires.getTime() <= this.now().getTime());
       if (expired) this.cookies.delete(cookie.name);
       else this.cookies.set(cookie.name, cookie.value);
     }

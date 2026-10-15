@@ -21,7 +21,7 @@ describe('usage limits', () => {
   afterAll(() => built.app.close());
 
   it('limits anonymous visitors to three analyses per month', async () => {
-    const client = new TestClient(built.app);
+    const client = new TestClient(built.app, () => now);
     for (let index = 0; index < 3; index += 1) await client.analyzeUrl(URLS.audi);
     const blocked = await client.post('/api/listings/analyze', { url: URLS.audi });
     expect(blocked.statusCode).toBe(429);
@@ -48,7 +48,7 @@ describe('usage limits', () => {
   });
 
   it('never exceeds the limit under concurrent requests', async () => {
-    const client = new TestClient(built.app);
+    const client = new TestClient(built.app, () => now);
     // Establish the anonymous id first so all parallel requests share it.
     await client.post('/api/listings/analyze-example', {});
     const responses = await Promise.all(
@@ -63,7 +63,7 @@ describe('usage limits', () => {
   });
 
   it('does not count failed analyses', async () => {
-    const client = new TestClient(built.app);
+    const client = new TestClient(built.app, () => now);
     for (let index = 0; index < 5; index += 1) {
       const response = await client.post('/api/listings/analyze', { url: URLS.blocked });
       expect(errorOf(response).code).toBe('FETCH_BLOCKED');
@@ -73,7 +73,7 @@ describe('usage limits', () => {
   });
 
   it('gives accounts a higher limit and Pro the highest', async () => {
-    const client = new TestClient(built.app);
+    const client = new TestClient(built.app, () => now);
     const account = await client.register();
     expect((await client.get('/api/me')).json<Me>().usage.limit).toBe(10);
     for (let index = 0; index < 10; index += 1) await client.analyzeUrl(URLS.mercedes);
@@ -91,10 +91,10 @@ describe('usage limits', () => {
   });
 
   it('counts per account, not per browser', async () => {
-    const first = new TestClient(built.app);
+    const first = new TestClient(built.app, () => now);
     const account = await first.register();
     await first.analyzeUrl(URLS.audi);
-    const second = new TestClient(built.app);
+    const second = new TestClient(built.app, () => now);
     await second.post('/api/auth/login', { email: account.email, password: account.password });
     await second.analyzeUrl(URLS.audi);
     expect((await first.get('/api/me')).json<Me>().usage.used).toBe(2);
