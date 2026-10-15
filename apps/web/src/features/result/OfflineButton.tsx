@@ -5,6 +5,8 @@ import { useToast } from '../../components/ui/toast-context';
 import {
   isSavedForOffline,
   offlineSupported,
+  OutdatedPageError,
+  refreshOfflineApp,
   removeOfflineCopy,
   saveForOffline,
 } from '../../lib/offline';
@@ -21,7 +23,10 @@ export function OfflineButton({ analysisId }: { analysisId: string }) {
   useEffect(() => {
     let active = true;
     void isSavedForOffline(analysisId).then((value) => {
-      if (active) setSaved(value);
+      if (!active) return;
+      setSaved(value);
+      // After an update of KaufCheck the stored app files are brought up to date.
+      if (value) void refreshOfflineApp(analysisId);
     });
     return () => {
       active = false;
@@ -35,10 +40,16 @@ export function OfflineButton({ analysisId }: { analysisId: string }) {
     try {
       await saveForOffline(analysisId);
       setSaved(true);
-      toast.show('Gespeichert – diese Prüfung öffnet sich jetzt auch ohne Empfang.');
+      toast.show(
+        'Gespeichert – diese Prüfung öffnet sich in diesem Browser jetzt auch ohne Empfang.',
+      );
     } catch (error) {
       console.warn('Offline copy not saved', error);
-      toast.show('Offline speichern hat nicht geklappt. Bitte versuch es noch einmal.');
+      toast.show(
+        error instanceof OutdatedPageError
+          ? 'KaufCheck wurde gerade aktualisiert. Lade die Seite bitte neu und speichere dann noch einmal.'
+          : 'Offline speichern hat nicht geklappt. Bitte versuch es noch einmal.',
+      );
     } finally {
       setBusy(false);
     }
@@ -50,6 +61,9 @@ export function OfflineButton({ analysisId }: { analysisId: string }) {
       await removeOfflineCopy(analysisId);
       setSaved(false);
       toast.show('Offline-Kopie gelöscht');
+    } catch (error) {
+      console.warn('Offline copy not removed', error);
+      toast.show('Löschen hat nicht geklappt. Bitte versuch es noch einmal.');
     } finally {
       setBusy(false);
     }
