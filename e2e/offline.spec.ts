@@ -78,7 +78,7 @@ test('a saved check opens without reception', async ({ page, context }) => {
   // The installed app starts on the homepage; the saved check is linked from there.
   await page.goto('/');
   await page
-    .getByRole('status')
+    .getByRole('navigation', { name: 'Offline gespeicherte Prüfungen' })
     .getByRole('link', { name: /Audi A7/ })
     .click();
   await expect(page.getByRole('heading', { level: 1 })).toContainText('Audi A7');
@@ -110,4 +110,25 @@ test('logging out deletes the offline copy', async ({ page }) => {
   await page.getByRole('button', { name: 'Abmelden' }).click();
   await expect(page.getByRole('link', { name: 'Anmelden' }).first()).toBeVisible();
   await expect.poll(() => page.evaluate(() => caches.keys())).toEqual([]);
+});
+
+test('signing up after saving keeps the copy, which then lists on the homepage', async ({
+  page,
+}) => {
+  await analyzeFromHomepage(page, LISTINGS.audi);
+  await saveOffline(page);
+
+  await page.goto('/registrieren');
+  await page.getByLabel('E-Mail-Adresse').fill(uniqueEmail());
+  await page.getByLabel('Passwort').fill('ein-sicheres-passwort');
+  await page.getByRole('button', { name: 'Konto erstellen' }).click();
+  await expect(page).not.toHaveURL(/\/registrieren$/);
+  expect(await page.evaluate(() => caches.keys())).toContain('kc-saved-v1');
+
+  await page.goto('/');
+  await expect(
+    page
+      .getByRole('navigation', { name: 'Offline gespeicherte Prüfungen' })
+      .getByRole('link', { name: /Audi A7/ }),
+  ).toBeVisible();
 });

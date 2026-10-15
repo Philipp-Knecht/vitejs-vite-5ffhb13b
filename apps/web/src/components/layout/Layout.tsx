@@ -6,13 +6,16 @@ import { Footer } from './Footer';
 import { Header } from './Header';
 
 /**
- * The checks saved in this browser, while offline. The installed app starts on
- * the homepage, from where they could otherwise not be reached.
+ * The checks saved in this browser, offline and on the homepage – where the
+ * installed app starts, also with weak reception that still counts as online.
+ * Outside the status message, so that going offline is announced briefly.
  */
-function OfflineChecks() {
+function OfflineChecks({ online }: { online: boolean }) {
   const { pathname } = useLocation();
   const [checks, setChecks] = useState<OfflineCheck[]>([]);
+  const shown = !online || pathname === '/';
   useEffect(() => {
+    if (!shown) return;
     let active = true;
     savedOfflineChecks()
       .then((items) => {
@@ -22,20 +25,20 @@ function OfflineChecks() {
     return () => {
       active = false;
     };
-  }, []);
+  }, [shown]);
   const others = checks.filter((check) => pathname !== `/analyse/${check.id}`);
-  if (others.length === 0) return null;
+  if (!shown || others.length === 0) return null;
   return (
-    <>
-      {' '}
-      Offline gespeichert:{' '}
-      {others.map((check, index) => (
-        <span key={check.id}>
-          {index > 0 && ', '}
-          <Link to={`/analyse/${check.id}`}>{check.title}</Link>
-        </span>
-      ))}
-    </>
+    <nav className="offline-checks" aria-label="Offline gespeicherte Prüfungen">
+      <span>Offline gespeichert:</span>
+      <ul>
+        {others.map((check) => (
+          <li key={check.id}>
+            <Link to={`/analyse/${check.id}`}>{check.title}</Link>
+          </li>
+        ))}
+      </ul>
+    </nav>
   );
 }
 
@@ -52,10 +55,10 @@ export function Layout({ children }: { children: ReactNode }) {
           <>
             Du bist offline. Du siehst den zuletzt geladenen Stand; neue Prüfungen und Änderungen
             gehen erst wieder mit Verbindung.
-            <OfflineChecks />
           </>
         )}
       </p>
+      <OfflineChecks online={online} />
       <main id="inhalt" className="main" tabIndex={-1}>
         <ErrorBoundary>{children}</ErrorBoundary>
       </main>

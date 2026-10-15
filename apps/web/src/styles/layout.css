@@ -285,8 +285,29 @@
   text-align: center;
 }
 
+.offline-checks {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 4px 12px;
+  padding: 8px 16px;
+  background: var(--c-surface-2);
+  border-bottom: 1px solid var(--c-border);
+  font-size: 0.9rem;
+}
+
+.offline-checks ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 12px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
 @media print {
-  .offline-banner {
+  .offline-banner,
+  .offline-checks {
     display: none;
   }
 }

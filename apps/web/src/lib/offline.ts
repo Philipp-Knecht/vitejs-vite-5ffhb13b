@@ -53,8 +53,13 @@ function loadedAssets(): string[] {
     .map((url) => url.pathname);
 }
 
+/** A save gives up instead of spinning for minutes with weak reception. */
+const LOAD_TIMEOUT_MS = 30_000;
+
 async function load(url: string, init?: RequestInit): Promise<Response> {
-  const response = await fetch(url, { credentials: 'same-origin', ...init });
+  const signal =
+    typeof AbortSignal.timeout === 'function' ? AbortSignal.timeout(LOAD_TIMEOUT_MS) : undefined;
+  const response = await fetch(url, { credentials: 'same-origin', signal, ...init });
   if (!response.ok) throw new Error(`${url}: ${response.status}`);
   return response;
 }
@@ -71,6 +76,8 @@ async function storeApp(analysisId: string): Promise<void> {
   const current = entryScript(document);
   // Every app page is the same shell; this check's page is one of them.
   const shell = await load(`/analyse/${analysisId}`, { cache: 'no-store' });
+  // Set by the server on the app shell only, never on a prerendered page (apps/api web.ts).
+  if (shell.headers.get('x-kaufcheck-shell') !== '1') throw new Error('No app shell');
   // Stored as received, with its headers (including the Content-Security-Policy).
   const copy = shell.clone();
   const html = await shell.text();
@@ -98,20 +105,32 @@ async function storeApp(analysisId: string): Promise<void> {
  * and the built files, and registers the service worker that serves them.
  */
 export async function saveForOffline(analysisId: string): Promise<void> {
-  await navigator.serviceWorker.register('/sw.js', { scope: '/' });
-  await navigator.serviceWorker.ready;
-  await storeApp(analysisId);
-  // Everything is loaded before anything is written, so that a failed save leaves nothing half done.
-  const [analysis, me, config] = await Promise.all(
-    [analysisKey(analysisId), '/api/me', '/api/config'].map((url) =>
-      load(url, { cache: 'no-store' }),
-    ),
-  );
+  try {
+    await navigator.serviceWorker.register('/sw.js', { scope: '/' });
+    await navigator.serviceWorker.ready;
+    await storeApp(analysisId);
+    // Everything is loaded before anything is written, so that a failed save leaves nothing half done.
+    const [analysis, me, config] = await Promise.all(
+      [analysisKey(analysisId), '/api/me', '/api/config'].map((url) =>
+        load(url, { cache: 'no-store' }),
+      ),
+    );
+    const saved = await caches.open(SAVED_CACHE);
+    await saved.put('/api/me', me!);
+    await saved.put('/api/config', config!);
+    // The check last: it marks the copy as complete.
+    await saved.put(analysisKey(analysisId), analysis!);
+  } catch (error) {
+    // A first save that failed leaves no files and no service worker behind.
+    if (!(await hasSavedChecks())) await removeAll().catch(() => {});
+    throw error;
+  }
+}
+
+async function hasSavedChecks(): Promise<boolean> {
+  if (!(await caches.has(SAVED_CACHE))) return false;
   const saved = await caches.open(SAVED_CACHE);
-  await saved.put('/api/me', me!);
-  await saved.put('/api/config', config!);
-  // The check last: it marks the copy as complete.
-  await saved.put(analysisKey(analysisId), analysis!);
+  return (await saved.keys()).some((request) => ANALYSIS_PATH.test(new URL(request.url).pathname));
 }
 
 /**
@@ -176,12 +195,8 @@ async function removeAll(): Promise<void> {
 
 /** Removes one check; without any saved check, everything else goes, too. */
 export async function removeOfflineCopy(analysisId: string): Promise<void> {
-  const saved = await caches.open(SAVED_CACHE);
-  await saved.delete(analysisKey(analysisId));
-  const left = (await saved.keys()).some((request) =>
-    ANALYSIS_PATH.test(new URL(request.url).pathname),
-  );
-  if (!left) await removeAll();
+  await (await caches.open(SAVED_CACHE)).delete(analysisKey(analysisId));
+  if (!(await hasSavedChecks())) await removeAll();
 }
 
 /** Deletes all offline data, e.g. on logout on a shared device. */

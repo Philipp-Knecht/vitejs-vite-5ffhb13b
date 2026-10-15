@@ -46,7 +46,7 @@ export function accountRoutes(app: FastifyInstance, services: Services): void {
 
   app.post(
     '/api/auth/register',
-    { config: { rateLimit: { max: 5, timeWindow: '1 hour' } } },
+    { config: { rateLimit: { max: config.limits.registerRatePerHour, timeWindow: '1 hour' } } },
     async (request, reply) => {
       const body = parseInput(RegisterRequestSchema, request.body);
       const session = await auth.register(body.email, body.password, request.actor.anonymousId);

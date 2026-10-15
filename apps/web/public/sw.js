@@ -111,7 +111,7 @@ async function refresh(key, response) {
       const was = await before.json();
       const now = await response.clone().json();
       if (was?.user && was.user.id !== now?.user?.id) {
-        await caches.delete(SAVED);
+        await removeEverything();
         return;
       }
     }
@@ -119,6 +119,14 @@ async function refresh(key, response) {
   } catch {
     // A failed refresh keeps the older copy.
   }
+}
+
+/** Without saved checks, the app files and this worker have no purpose (offline.ts: removeAll). */
+async function removeEverything() {
+  for (const name of await caches.keys()) {
+    if (name === SAVED || name.startsWith(APP_PREFIX)) await caches.delete(name);
+  }
+  await self.registration.unregister();
 }
 
 /** Built files carry a hash in their name and never change. */

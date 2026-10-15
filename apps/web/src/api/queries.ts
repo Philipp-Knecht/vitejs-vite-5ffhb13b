@@ -136,7 +136,10 @@ export function useComparison(ids: readonly string[]) {
 function useInvalidateSession() {
   const queryClient = useQueryClient();
   return async () => {
-    await clearPrivateOfflineData();
+    // Signing in after saving a check without an account keeps the copy: the check
+    // moves to the new account. Logging out or switching accounts deletes it.
+    const before = queryClient.getQueryData<MeDto>(queryKeys.me);
+    if (before?.user !== null) await clearPrivateOfflineData();
     queryClient.removeQueries({ queryKey: queryKeys.savedListings });
     queryClient.removeQueries({ queryKey: queryKeys.savedSearches });
     queryClient.removeQueries({ queryKey: queryKeys.history });
