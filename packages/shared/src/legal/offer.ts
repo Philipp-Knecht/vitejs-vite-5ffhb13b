@@ -75,6 +75,9 @@ export function proFeatures(pro: Entitlements, options: { photoAnalysis: boolean
       'Verhandlungshilfe: eigene Mängel festhalten und daraus eine Nachricht an den Verkäufer erstellen',
     );
   }
+  if (pro.saleContract) {
+    features.push('Kaufvertrag für den privaten Autokauf als PDF, mit deinen Angaben ausgefüllt');
+  }
   if (pro.photoAnalysis && options.photoAnalysis) {
     features.push('KI-Fotoanalyse bei Inseraten mit Fotos');
   }

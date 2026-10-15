@@ -1,6 +1,7 @@
 import type { ChecklistSection as Section } from '@kaufcheck/shared';
 import { Printer, RotateCcw } from 'lucide-react';
 import { useState } from 'react';
+import { Link } from 'react-router';
 import { Button } from '../../components/ui/Button';
 import { track } from '../../lib/analytics';
 import { isStringArray, readJson, removeItem, writeJson } from '../../lib/storage';
@@ -112,6 +113,12 @@ export function ChecklistSection({
                   );
                 })}
               </ul>
+              {section.id === 'purchase' && (
+                <p className="checklist__link no-print">
+                  Kaufst du von privat?{' '}
+                  <Link to={`/kaufvertrag?analyse=${analysisId}`}>Kaufvertrag vorbereiten</Link>
+                </p>
+              )}
             </fieldset>
           );
         })}

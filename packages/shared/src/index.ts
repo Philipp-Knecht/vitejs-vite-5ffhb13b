@@ -20,3 +20,5 @@ export * from './routes';
 export * from './comparison-ranking';
 export * from './vin';
 export * from './vehicle-tax';
+export * from './number-words';
+export * from './sale-contract';

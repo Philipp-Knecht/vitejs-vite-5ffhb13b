@@ -31,6 +31,11 @@ const GUIDES = [
     title: 'Kfz-Steuer-Rechner',
     text: 'Steuer aus den Werten im Fahrzeugschein.',
   },
+  {
+    to: '/kaufvertrag',
+    title: 'Kaufvertrag privat',
+    text: 'Muster zum Ausfüllen, mit Übergabeprotokoll.',
+  },
 ];
 
 export function GuideLayout({

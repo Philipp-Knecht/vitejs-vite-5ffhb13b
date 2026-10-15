@@ -22,7 +22,10 @@ model pages explain how to check recalls with the FIN and link the manufacturers
 pages and the KBA recall database (`packages/catalog/src/recalls.ts`); KaufCheck queries none of
 them itself. Pro members can also prepare the price negotiation: points from the
 listing that apply, their own findings and a factual message to the seller, without suggested
-amounts (`packages/shared/src/negotiation.ts`).
+amounts (`packages/shared/src/negotiation.ts`). For a private purchase, Pro members can fill in
+a purchase contract on `/kaufvertrag` and download it as a PDF with a handover record and receipt;
+the text and its checks live in `packages/shared/src/sale-contract.ts`, the PDF is built in the
+browser and nothing is stored or sent (reasons for the clauses in DECISIONS.md).
 
 For the listing check, a user pastes the listing text (or a link); KaufCheck extracts and
 normalizes the vehicle data and shows a mobile-first dashboard:
@@ -334,7 +337,7 @@ ids, IP addresses or free text. The browser sends nothing when „Do Not Track�
 Control“ is set. Events: `landing_page_view`, `listing_analysis_started`, `listing_analysis_completed`,
 `listing_analysis_failed` (recorded by the server), `seller_questions_copied`,
 `seller_message_created`, `checklist_started`, `listing_saved`, `search_saved`, `comparison_created`,
-`pro_clicked`, `car_search_started`, `platform_search_opened`, `recall_check_opened`, `analysis_pdf_downloaded`, `negotiation_message_copied`.
+`pro_clicked`, `car_search_started`, `platform_search_opened`, `recall_check_opened`, `analysis_pdf_downloaded`, `negotiation_message_copied`, `sale_contract_created`.
 Disable with `ANALYTICS_ENABLED=false`. Events are kept for 400 days, for example:
 
 ```sql

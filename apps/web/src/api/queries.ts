@@ -68,12 +68,13 @@ export function useMe(options: { poll?: MePolling } = {}) {
   });
 }
 
-export function useAnalysis(id: string) {
+export function useAnalysis(id: string, enabled = true) {
   return useQuery({
     queryKey: queryKeys.analysis(id),
     queryFn: ({ signal }) =>
       api.get<AnalysisDto>(`/api/analyses/${encodeURIComponent(id)}`, signal),
     staleTime: Infinity,
+    enabled,
   });
 }
 

@@ -40,13 +40,13 @@ PRs, **L** = mehrere Wochen.
 
 ## Etappe 2 – Kauf und Übergabe
 
-| #   | Feature                                                                                                      | Aufwand | Plan      | Anmerkung                                                                         |
-| --- | ------------------------------------------------------------------------------------------------------------ | ------- | --------- | --------------------------------------------------------------------------------- |
-| 2.1 | Rückruf-Check: Fahrgestellnummer erfragen, Frage an den Verkäufer, Links zu Hersteller-Rückrufseiten und KBA | S       | Kostenlos | kein automatischer Abruf ohne geprüfte Nutzungsbedingungen                        |
-| 2.2 | Kauf-Assistent: Schritt-für-Schritt-Checkliste von Besichtigung bis Zulassung                                | M       | Kostenlos | baut auf Ratgeber und Checkliste auf, Fortschritt je gespeichertem Angebot        |
-| 2.3 | Kaufvertrag-Generator (aus dem Inserat vorbefüllt, PDF)                                                      | M       | Pro       | **rechtlich heikel**: eigene, anwaltlich geprüfte Vorlage; erst nach Entscheidung |
-| 2.4 | PDF-Export von Analyse und Checkliste                                                                        | S–M     | Pro       | zum Mitnehmen zur Besichtigung                                                    |
-| 2.5 | Verhandlungshilfe: Mängel aus der Besichtigung als Argumente                                                 | S       | Pro       | ohne Preisangaben, solange keine Marktdaten vorliegen                             |
+| #   | Feature                                                                                                      | Aufwand | Plan      | Anmerkung                                                                     |
+| --- | ------------------------------------------------------------------------------------------------------------ | ------- | --------- | ----------------------------------------------------------------------------- |
+| 2.1 | Rückruf-Check: Fahrgestellnummer erfragen, Frage an den Verkäufer, Links zu Hersteller-Rückrufseiten und KBA | S       | Kostenlos | kein automatischer Abruf ohne geprüfte Nutzungsbedingungen                    |
+| 2.2 | Kauf-Assistent: Schritt-für-Schritt-Checkliste von Besichtigung bis Zulassung                                | M       | Kostenlos | baut auf Ratgeber und Checkliste auf, Fortschritt je gespeichertem Angebot    |
+| 2.3 | Kaufvertrag-Generator (aus dem Inserat vorbefüllt, PDF)                                                      | M       | Pro       | ohne Anwalt, nach Recherche (Entscheidung vom 15.10.2026, siehe DECISIONS.md) |
+| 2.4 | PDF-Export von Analyse und Checkliste                                                                        | S–M     | Pro       | zum Mitnehmen zur Besichtigung                                                |
+| 2.5 | Verhandlungshilfe: Mängel aus der Besichtigung als Argumente                                                 | S       | Pro       | ohne Preisangaben, solange keine Marktdaten vorliegen                         |
 
 ## Etappe 3 – Nach dem Kauf: „Mein Auto“
 
@@ -86,11 +86,11 @@ Entscheidung des Betreibers, ob KaufCheck beim Auto bleibt.
 
 ## Querschnitt
 
-- Rechtstexte anwaltlich prüfen lassen, spätestens vor 2.3, 3.2 und 5.3.
+- Rechtstexte anwaltlich prüfen lassen, spätestens vor 3.2 und 5.3 (2.3: ohne Anwalt, nach Recherche).
 - Jedes Feature: Tests (Unit, Integration, E2E, axe), Datenschutzerklärung und FAQ anpassen.
 - Nutzung mit der vorhandenen First-Party-Analytik messen und danach priorisieren.
 
 ## Reihenfolge
 
-0 → 2.1 + 2.4 → 1.1/1.2 → 2.2 → 3.1/3.2 → Rest; 0.3 läuft im Hintergrund mit. 2.3 und 5.3 erst nach
+0 → 2.1 + 2.4 → 1.1/1.2 → 2.2 → 3.1/3.2 → Rest; 0.3 läuft im Hintergrund mit. 5.3 erst nach
 Entscheidung über eine anwaltliche Prüfung.
