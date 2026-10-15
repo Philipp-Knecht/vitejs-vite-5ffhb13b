@@ -222,6 +222,11 @@ export function PrivacyPage() {
           nicht nötig, weil du die Funktion ausdrücklich wählst; Rechtsgrundlage für die
           Verarbeitung ist Art. 6 Abs. 1 lit. b DSGVO.
         </li>
+        <li>
+          Was du in den Kaufvertrag einträgst, bleibt im geöffneten Browser-Tab: KaufCheck speichert
+          es weder in deinem Browser noch auf unseren Servern und sendet es nirgendwohin; auch das
+          PDF entsteht auf deinem Gerät. Schließt du den Tab, ist alles weg.
+        </li>
       </ul>
       <p>
         Beide Cookies sind für den von dir angefragten Dienst unbedingt erforderlich (§ 25 Abs. 2

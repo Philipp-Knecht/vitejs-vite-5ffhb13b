@@ -100,6 +100,14 @@ function rows(
       ],
     },
     {
+      label: 'Kaufvertrag für den Privatkauf',
+      cells: [
+        flag(plans.anonymous.saleContract),
+        flag(plans.free.saleContract),
+        flag(plans.pro.saleContract),
+      ],
+    },
+    {
       label: photoAnalysisAvailable ? 'Fotoanalyse' : 'Fotoanalyse (derzeit nicht verfügbar)',
       cells: [
         flag(plans.anonymous.photoAnalysis),

@@ -21,6 +21,7 @@ import type {
   WithdrawalRequest,
 } from '@kaufcheck/shared';
 import { QueryClient, useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { clearSaleContractDraft } from '../features/sale-contract/draft';
 import { clearPrivateOfflineData } from '../lib/offline';
 import { useHydrated } from '../lib/use-hydrated';
 import { api, ApiRequestError } from './client';
@@ -189,7 +190,11 @@ function useInvalidateSession() {
     // Signing in after saving a check without an account keeps the copy: the check
     // moves to the new account. Logging out or switching accounts deletes it.
     const before = queryClient.getQueryData<MeDto>(queryKeys.me);
-    if (before?.user !== null) await clearPrivateOfflineData();
+    if (before?.user !== null) {
+      await clearPrivateOfflineData();
+      // Another person may use the device next; signing in after typing keeps the draft.
+      clearSaleContractDraft();
+    }
     queryClient.removeQueries({ queryKey: queryKeys.savedListings });
     queryClient.removeQueries({ queryKey: queryKeys.savedSearches });
     queryClient.removeQueries({ queryKey: queryKeys.ownedCars });

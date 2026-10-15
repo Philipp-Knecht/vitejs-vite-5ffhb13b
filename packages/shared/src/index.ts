@@ -22,3 +22,5 @@ export * from './comparison-ranking';
 export * from './vin';
 export * from './vehicle-tax';
 export * from './fragment';
+export * from './number-words';
+export * from './sale-contract';

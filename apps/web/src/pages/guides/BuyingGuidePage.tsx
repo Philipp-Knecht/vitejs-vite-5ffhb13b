@@ -188,8 +188,9 @@ export function BuyingGuidePage() {
 
       <h2 id="vertrag">8. Der Kaufvertrag</h2>
       <p>
-        Schließ den Kauf immer schriftlich ab. Musterverträge für den privaten Autokauf bieten zum
-        Beispiel die Automobilclubs an. In den Vertrag gehören:
+        Schließ den Kauf immer schriftlich ab, zum Beispiel mit unserem{' '}
+        <Link to="/kaufvertrag">Kaufvertrag für den privaten Autokauf</Link> oder einem
+        Mustervertrag eines Automobilclubs. In den Vertrag gehören:
       </p>
       <ul>
         <li>Namen, Anschriften und Ausweisdaten von Käufer und Verkäufer</li>

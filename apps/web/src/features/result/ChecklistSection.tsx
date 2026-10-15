@@ -113,6 +113,12 @@ export function ChecklistSection({
                   );
                 })}
               </ul>
+              {section.id === 'purchase' && (
+                <p className="checklist__link no-print">
+                  Kaufst du von privat?{' '}
+                  <Link to={`/kaufvertrag?analyse=${analysisId}`}>Kaufvertrag vorbereiten</Link>
+                </p>
+              )}
             </fieldset>
           );
         })}

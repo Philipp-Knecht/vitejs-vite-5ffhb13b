@@ -30,7 +30,11 @@ user enters is stored – no FIN, no plate. The web app is installable, and a ch
 the inspection on request („Offline verfügbar machen“): the page stores the check, the app shell
 and its built files, and the service worker (`apps/web/public/sw.js`) serves them when there is no
 reception. Nothing is stored without that request; the copy is deleted on logout, an account switch
-and account deletion.
+and account deletion. For a private purchase, Pro members can fill in
+a purchase contract on `/kaufvertrag` and download it as a PDF with a handover record and receipt;
+the text and its checks live in `packages/shared/src/sale-contract.ts`, the PDF is built in the
+browser with the embedded Liberation Sans font (SIL Open Font License, `fonts/OFL.txt`) and nothing
+is stored or sent (reasons for the clauses in DECISIONS.md).
 
 For the listing check, a user pastes the listing text (or a link); KaufCheck extracts and
 normalizes the vehicle data and shows a mobile-first dashboard:
@@ -342,7 +346,7 @@ ids, IP addresses or free text. The browser sends nothing when „Do Not Track�
 Control“ is set. Events: `landing_page_view`, `listing_analysis_started`, `listing_analysis_completed`,
 `listing_analysis_failed` (recorded by the server), `seller_questions_copied`,
 `seller_message_created`, `checklist_started`, `listing_saved`, `search_saved`, `comparison_created`,
-`pro_clicked`, `car_search_started`, `platform_search_opened`, `recall_check_opened`, `analysis_pdf_downloaded`, `negotiation_message_copied`, `owned_car_added`.
+`pro_clicked`, `car_search_started`, `platform_search_opened`, `recall_check_opened`, `analysis_pdf_downloaded`, `negotiation_message_copied`, `owned_car_added`, `sale_contract_created`.
 Disable with `ANALYTICS_ENABLED=false`. Events are kept for 400 days, for example:
 
 ```sql

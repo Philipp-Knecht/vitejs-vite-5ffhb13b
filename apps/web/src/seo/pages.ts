@@ -54,6 +54,11 @@ export const STATIC_PAGE_META: Readonly<Record<string, PageMeta>> = {
     description:
       'Kfz-Steuer berechnen mit den Werten aus dem Fahrzeugschein – nach dem Kraftfahrzeugsteuergesetz, auch für ältere Autos und Elektroautos – und die laufenden Kosten im Monat überschlagen.',
   },
+  '/kaufvertrag': {
+    title: 'Kaufvertrag Auto privat: Muster zum Ausfüllen | KaufCheck',
+    description:
+      'Kaufvertrag für den privaten Autokauf: mit Angaben des Verkäufers zu Unfällen und Laufleistung, Gewährleistungsausschluss mit den gesetzlichen Ausnahmen, Übergabeprotokoll und Quittung.',
+  },
   '/pro': {
     title: 'KaufCheck Pro – mehr Prüfungen, Verlauf und keine Werbung',
     description:

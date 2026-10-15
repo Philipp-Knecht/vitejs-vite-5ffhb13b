@@ -17,6 +17,8 @@ export const EntitlementsSchema = z.object({
   pdfExport: z.boolean(),
   /** Negotiation help: own findings and a message to the seller. */
   negotiationHelp: z.boolean(),
+  /** Purchase contract for a private sale as a PDF, built in the browser. */
+  saleContract: z.boolean(),
   photoAnalysis: z.boolean(),
   showAds: z.boolean(),
 });
