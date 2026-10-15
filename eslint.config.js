@@ -60,6 +60,11 @@ export default defineConfig([
     languageOptions: { globals: globals.node },
   },
   {
+    // The service worker runs in the browser's worker scope.
+    files: ['apps/web/public/sw.js'],
+    languageOptions: { globals: globals.serviceworker },
+  },
+  {
     // CLI scripts and tests may print to stdout.
     files: ['**/scripts/**', '**/*.test.ts', 'e2e/**'],
     rules: { 'no-console': 'off' },

@@ -18,6 +18,7 @@ import type {
   WithdrawalRequest,
 } from '@kaufcheck/shared';
 import { QueryClient, useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { clearPrivateOfflineData } from '../lib/offline';
 import { api, ApiRequestError } from './client';
 
 export const queryKeys = {
@@ -36,6 +37,8 @@ export function createQueryClient(): QueryClient {
     defaultOptions: {
       queries: {
         refetchOnWindowFocus: false,
+        // Offline, requests still go out: the service worker answers from its cache.
+        networkMode: 'offlineFirst',
         // Retry only transient server problems, never 4xx answers.
         retry: (count, error) =>
           count < 2 &&
@@ -133,6 +136,7 @@ export function useComparison(ids: readonly string[]) {
 function useInvalidateSession() {
   const queryClient = useQueryClient();
   return async () => {
+    await clearPrivateOfflineData();
     queryClient.removeQueries({ queryKey: queryKeys.savedListings });
     queryClient.removeQueries({ queryKey: queryKeys.savedSearches });
     queryClient.removeQueries({ queryKey: queryKeys.history });

@@ -25,6 +25,8 @@ export function adsContentSecurityPolicy(nonce: string, https: boolean): string 
     "font-src 'self' data: https:",
     "connect-src 'self' https:",
     'frame-src https:',
+    // 'strict-dynamic' ignores 'self' in script-src, which workers would fall back to.
+    "worker-src 'self'",
     "frame-ancestors 'none'",
     "base-uri 'none'",
     "form-action 'self'",

@@ -270,3 +270,23 @@
     padding-block: 48px 24px;
   }
 }
+
+/* ---------- Offline notice (stays in the DOM so that it is announced) ---------- */
+.offline-banner {
+  margin: 0;
+}
+
+.offline-banner:not(:empty) {
+  padding: 8px 16px;
+  background: var(--c-warning-bg);
+  border-bottom: 1px solid var(--c-warning-border);
+  color: var(--c-warning);
+  font-size: 0.9rem;
+  text-align: center;
+}
+
+@media print {
+  .offline-banner {
+    display: none;
+  }
+}

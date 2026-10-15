@@ -22,7 +22,9 @@ model pages explain how to check recalls with the FIN and link the manufacturers
 pages and the KBA recall database (`packages/catalog/src/recalls.ts`); KaufCheck queries none of
 them itself. Pro members can also prepare the price negotiation: points from the
 listing that apply, their own findings and a factual message to the seller, without suggested
-amounts (`packages/shared/src/negotiation.ts`).
+amounts (`packages/shared/src/negotiation.ts`). The web app is installable and works without reception for pages
+and checks opened before (`apps/web/public/sw.js`: pages network first, hashed assets cached, the
+check data kept per browser and cleared on login, logout and account deletion).
 
 For the listing check, a user pastes the listing text (or a link); KaufCheck extracts and
 normalizes the vehicle data and shows a mobile-first dashboard:
