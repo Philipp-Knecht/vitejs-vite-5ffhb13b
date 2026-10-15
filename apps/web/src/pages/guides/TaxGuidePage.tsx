@@ -143,15 +143,15 @@ export function TaxGuidePage() {
         Gesamtverband der Deutschen Versicherungswirtschaft (GDV) ermittelt sie jedes Jahr aus den
         Schäden, die mit den einzelnen Fahrzeugtypen entstanden sind – getrennt für Haftpflicht
         (Klassen 10 bis 25), Teilkasko (10 bis 33) und Vollkasko (10 bis 34). Eine höhere Klasse
-        bedeutet meist einen höheren Beitrag. Die neuen Typklassen erscheinen in der Regel Ende
-        September und gelten meist ab dem folgenden Jahr; für die Versicherer sind sie
-        unverbindlich.
+        bedeutet meist einen höheren Beitrag. Die neuen Typklassen erscheinen meist im September.
+        Versicherer können sie gleich für neue Verträge verwenden, bei bestehenden meist ab dem 1.
+        Januar; verbindlich sind sie für die Versicherer nicht.
       </p>
       <p>
         Die Typklasse gilt nicht für ein Modell insgesamt, sondern für jede Variante – zwei Motoren
         desselben Modells können weit auseinanderliegen. Du brauchst dafür zwei Nummern aus dem
         Fahrzeugschein: die Herstellerschlüsselnummer (HSN, Feld 2.1, vier Ziffern) und die
-        Typschlüsselnummer (TSN, Feld 2.2, drei Zeichen). In Fahrzeugscheinen von vor November 2005
+        Typschlüsselnummer (TSN, die ersten drei Zeichen in Feld 2.2). Im alten Fahrzeugschein
         stehen sie in den Feldern „zu 2“ und „zu 3“. Frag den Verkäufer danach, bevor du kaufst.
       </p>
       <p>

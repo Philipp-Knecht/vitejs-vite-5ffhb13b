@@ -42,7 +42,8 @@ export function BuyingGuidePage() {
         <li>
           <strong>Versicherung:</strong> Der Beitrag hängt stark von Modell (Typklasse), Wohnort
           (Regionalklasse) und deinem Schadenfreiheitsrabatt ab. Hol dir vor dem Kauf ein Angebot
-          für genau das Modell ein.
+          für genau das Modell ein.{' '}
+          <Link to="/kfz-steuer-rechner#typklasse">So findest du die Typklasse heraus.</Link>
         </li>
         <li>
           <strong>Kfz-Steuer:</strong> Sie richtet sich nach Hubraum, CO₂-Ausstoß und Erstzulassung.

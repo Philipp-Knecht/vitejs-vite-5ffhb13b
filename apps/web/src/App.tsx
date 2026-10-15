@@ -62,6 +62,30 @@ const OrderDonePage = lazy(() =>
   import('./features/contracts/OrderPages').then((module) => ({ default: module.OrderDonePage })),
 );
 
+/**
+ * Scrolls to the section of a link like /kfz-steuer-rechner#typklasse. The
+ * browser does this only on a full page load; after client-side navigation
+ * the (lazily loaded) page may not have rendered the section yet.
+ */
+function scrollToAnchor(id: string): () => void {
+  const scroll = () => {
+    const target = document.getElementById(id);
+    target?.scrollIntoView();
+    return target !== null;
+  };
+  if (scroll()) return () => undefined;
+  const observer = new MutationObserver(() => {
+    if (scroll()) stop();
+  });
+  const timeout = window.setTimeout(() => stop(), 5000);
+  const stop = () => {
+    observer.disconnect();
+    window.clearTimeout(timeout);
+  };
+  observer.observe(document.body, { childList: true, subtree: true });
+  return stop;
+}
+
 /** Scrolls to the top and moves focus to the content after client-side navigation. */
 function NavigationEffects() {
   const { pathname, hash } = useLocation();
@@ -71,9 +95,10 @@ function NavigationEffects() {
       first.current = false;
       return;
     }
-    if (hash) return;
+    if (hash) return scrollToAnchor(decodeURIComponent(hash.slice(1)));
     window.scrollTo(0, 0);
     document.getElementById('inhalt')?.focus({ preventScroll: true });
+    return undefined;
   }, [pathname, hash]);
   return null;
 }

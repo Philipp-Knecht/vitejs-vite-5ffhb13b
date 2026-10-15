@@ -94,3 +94,10 @@ test('the insurance class is explained and looked up at the GDV, not shown by Ka
     'https://www.dieversicherer.de/versicherer/auto/typklassenabfrage',
   );
 });
+
+test('the buying guide links to the insurance class section', async ({ page }) => {
+  await page.goto('/gebrauchtwagen-kaufen');
+  await page.getByRole('link', { name: 'So findest du die Typklasse heraus.' }).click();
+  await expect(page).toHaveURL(/\/kfz-steuer-rechner#typklasse$/);
+  await expect(page.getByRole('heading', { name: 'Versicherung und Typklasse' })).toBeInViewport();
+});
