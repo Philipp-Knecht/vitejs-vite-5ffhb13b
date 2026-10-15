@@ -1054,6 +1054,11 @@
   outline: none;
 }
 
+/* A section reached by a link gets the focus for screen readers, not a focus ring. */
+.guide h2[tabindex='-1']:focus {
+  outline: none;
+}
+
 .notice-receipt__fields {
   margin-block: 20px;
   padding: 18px 20px;
