@@ -545,7 +545,9 @@ export function mergeListingIntoContract(
   next: ListingTextValues,
 ): SaleContractValues {
   if (!previous) return applyListingToContract(contract, next);
-  const before = applyListingToContract(contract, previous);
+  // From an empty contract, so that a value typed into the contract (e.g. the keys)
+  // does not count as one from the listing.
+  const before = applyListingToContract(EMPTY_SALE_CONTRACT, previous);
   const after = applyListingToContract(contract, next);
   const merged: SaleContractValues = {
     ...contract,

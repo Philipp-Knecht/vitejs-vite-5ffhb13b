@@ -16,8 +16,8 @@ export interface ListingTextDraft {
  */
 let draft: ListingTextDraft | null = null;
 let revision = 0;
-/** The listing last taken over into the purchase contract. */
-let applied: { source: string; revision: number; values: ListingTextValues } | null = null;
+/** The listing last taken over into the purchase contract, per car. */
+const applied = new Map<string, { revision: number; values: ListingTextValues }>();
 
 export const readListingTextDraft = (source: string) => (draft?.source === source ? draft : null);
 
@@ -35,18 +35,18 @@ export function keepListingTextDraft(next: Omit<ListingTextDraft, 'revision'>): 
 
 /** True when the listing changed since it was last taken over into the contract. */
 export const listingChangedSinceContract = (current: ListingTextDraft) =>
-  current.revision !== applied?.revision;
+  current.revision !== applied.get(current.source)?.revision;
 
 /** What the contract of the same car last took over from the listing, or null. */
 export const listingInContract = (current: ListingTextDraft) =>
-  applied?.source === current.source ? applied.values : null;
+  applied.get(current.source)?.values ?? null;
 
 export function markListingInContract(current: ListingTextDraft): void {
-  applied = { source: current.source, revision: current.revision, values: current.values };
+  applied.set(current.source, { revision: current.revision, values: current.values });
 }
 
 /** On logout or an account switch, e.g. on a shared device. */
 export function clearListingTextDraft(): void {
   draft = null;
-  applied = null;
+  applied.clear();
 }

@@ -283,3 +283,10 @@ describe('round 2', () => {
     expect(title).toBe('VW Golf GTI Clubsport, Performance-Paket, Dach, AHK');
   });
 });
+
+describe('round 3', () => {
+  it('keeps keys typed into the contract when the listing gets some later', () => {
+    const contract = { ...saleContractFromListing(golf), keys: '3' };
+    expect(mergeListingIntoContract(contract, golf, { ...golf, keys: '2' }).keys).toBe('3');
+  });
+});

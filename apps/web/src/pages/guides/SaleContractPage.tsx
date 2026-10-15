@@ -111,7 +111,9 @@ function Form() {
             {merged
               ? 'Dein Inseratstext hat sich geändert: Was du hier nicht selbst geändert hast, ist neu übernommen. Prüf vor allem die Angaben zum Zustand und „Weitere bekannte Mängel“.'
               : 'Fahrzeugdaten und Angaben zum Zustand aus deinem Inseratstext übernommen. Prüf sie mit dem Fahrzeugschein; den Tachostand tragt ihr bei der Übergabe ein.'}{' '}
-            Wartung und Rauchen stehen nur im Inserat – sie können trotzdem als vereinbart gelten.{' '}
+            Was nur im Inserat steht – etwa Wartung, Umbauten, Ausstattung und Rauchen –, kann
+            trotzdem als vereinbart gelten; was davon nicht mehr stimmt, schreibt unter „Weitere
+            Vereinbarungen“.{' '}
             <Link to={`/auto-verkaufen${listing.source ? `?auto=${listing.source}` : ''}#inserat`}>
               Zurück zum Inseratstext
             </Link>
