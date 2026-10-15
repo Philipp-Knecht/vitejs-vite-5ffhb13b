@@ -12,7 +12,11 @@ const TOC: TocEntry[] = [
   { id: 'werte', title: 'Wo stehen die Werte?' },
   { id: 'elektro', title: 'Elektroautos' },
   { id: 'zahlung', title: 'Zahlung und Halterwechsel' },
+  { id: 'typklasse', title: 'Versicherung und Typklasse' },
 ];
+
+/** The GDV's own, free Typklassen lookup (KaufCheck shows no values itself). */
+const GDV_TYPKLASSEN_URL = 'https://www.dieversicherer.de/versicherer/auto/typklassenabfrage';
 
 const DRIVE_PARAMS: Record<string, TaxFormValues['drive']> = {
   benzin: 'petrol',
@@ -131,6 +135,32 @@ export function TaxGuidePage() {
         Meldet der Verkäufer das Auto ab oder um, endet seine Steuerpflicht, und deine beginnt mit
         deiner Zulassung. Mehr zum Ablauf steht im Ratgeber{' '}
         <Link to="/gebrauchtwagen-kaufen">Gebrauchtwagen privat kaufen</Link>.
+      </p>
+
+      <h2 id="typklasse">Versicherung und Typklasse</h2>
+      <p>
+        Wie viel die Kfz-Versicherung kostet, hängt unter anderem von der Typklasse ab. Der
+        Gesamtverband der Deutschen Versicherungswirtschaft (GDV) ermittelt sie jedes Jahr aus den
+        Schäden, die mit den einzelnen Fahrzeugtypen entstanden sind – getrennt für Haftpflicht
+        (Klassen 10 bis 25), Teilkasko (10 bis 33) und Vollkasko (10 bis 34). Eine höhere Klasse
+        bedeutet meist einen höheren Beitrag. Die neuen Typklassen erscheinen meist im September.
+        Versicherer können sie gleich für neue Verträge verwenden, bei bestehenden meist ab dem 1.
+        Januar; verbindlich sind sie für die Versicherer nicht.
+      </p>
+      <p>
+        Die Typklasse gilt nicht für ein Modell insgesamt, sondern für jede Variante – zwei Motoren
+        desselben Modells können weit auseinanderliegen. Du brauchst dafür zwei Nummern aus dem
+        Fahrzeugschein: die Herstellerschlüsselnummer (HSN, Feld 2.1, vier Ziffern) und die
+        Typschlüsselnummer (TSN, die ersten drei Zeichen in Feld 2.2). Im alten Fahrzeugschein
+        stehen sie in den Feldern „zu 2“ und „zu 3“. Frag den Verkäufer danach, bevor du kaufst.
+      </p>
+      <p>
+        <a href={GDV_TYPKLASSEN_URL} target="_blank" rel="noopener noreferrer">
+          Typklasse beim GDV abfragen
+          <span className="visually-hidden"> (öffnet in neuem Tab)</span>
+        </a>{' '}
+        – kostenlos, mit HSN und TSN oder nach Marke und Modell. Was du am Ende zahlst, zeigt erst
+        das Angebot einer Versicherung; dabei zählen auch Regionalklasse und Schadenfreiheitsklasse.
       </p>
     </GuideLayout>
   );

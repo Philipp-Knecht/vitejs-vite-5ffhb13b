@@ -42,6 +42,22 @@ test('a model typed without make is recognized', async ({ page }) => {
   await expect(page.getByText('Škoda Octavia', { exact: true })).toBeVisible();
 });
 
+test('searching the same again shows the results again', async ({ page }) => {
+  await page.goto('/auto-finden');
+  const search = page.getByRole('search', { name: 'Gebrauchtwagen suchen' });
+  await search.getByLabel('Modell').fill('Golf');
+  await search.getByRole('button', { name: 'Angebote finden' }).click();
+  const heading = page.getByRole('heading', { level: 2, name: /Deine Suche auf/ });
+  await expect(heading).toBeInViewport();
+
+  // From the top of the page, so that showing the results means scrolling to them.
+  await page.evaluate(() => window.scrollTo(0, 0));
+  await search.getByRole('button', { name: 'Angebote finden' }).click();
+  await expect(page.getByRole('region', { name: /Deine Suche auf/ })).toBeFocused();
+  await expect.poll(() => page.evaluate(() => window.scrollY)).toBeGreaterThan(0);
+  await expect(heading).toBeInViewport();
+});
+
 test('the check tab is remembered and reachable with the keyboard', async ({ page }) => {
   await page.goto('/');
   const findTab = page.getByRole('tab', { name: 'Auto finden' });

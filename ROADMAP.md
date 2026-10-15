@@ -1,6 +1,6 @@
 # KaufCheck – Fahrplan
 
-Stand: 14.10.2026. Ziel: KaufCheck deckt den ganzen Weg eines Gebrauchtwagenkaufs ab – von der Planung über
+Stand: 15.10.2026. Ziel: KaufCheck deckt den ganzen Weg eines Gebrauchtwagenkaufs ab – von der Planung über
 Suche, Prüfung, Besichtigung, Kauf und Zulassung bis zu Wartung und Wiederverkauf. Grundlage sind die offenen
 Punkte aus [TODO.md](TODO.md), die Roadmap im [README](README.md#roadmap) und ein Abgleich des Kaufablaufs mit
 dem Code.
@@ -8,6 +8,18 @@ dem Code.
 Reihenfolge: Zuerst kommt, was nur Code braucht und Pro wertvoller macht. Was von Dritten abhängt (Zustimmung
 der Börsen, lizenzierte Daten), läuft parallel und blockiert nichts. Aufwand: **S** = 1–2 PRs, **M** = 3–5
 PRs, **L** = mehrere Wochen.
+
+## Erledigt
+
+| #   | Feature                                                              | PR        |
+| --- | -------------------------------------------------------------------- | --------- |
+| 1.1 | Kfz-Steuer-Rechner (aus den Werten im Fahrzeugschein)                | #20       |
+| 1.2 | Laufende Kosten überschlagen (eigene Werte, Steuer eingerechnet)     | #20       |
+| 2.1 | Rückruf-Check: FIN erfragen, Herstellerseiten und KBA verlinken      | #17       |
+| 2.2 | Kauf-Assistent: Checkliste bis Zulassung und „Nach dem Kauf“         | #21       |
+| 2.4 | PDF-Mappe für die Besichtigung (Pro)                                 | #18       |
+| 2.5 | Verhandlungshilfe (Pro)                                              | #22       |
+| 3.1 | Mein Auto: Auto anlegen, HU-Termin mit Kalenderdatei, Schwachstellen | dieser PR |
 
 ## Arbeitsweise je Feature
 

@@ -197,6 +197,18 @@ describe('accounts and sessions', () => {
     expect((await client.post('/api/saved-listings', { analysisId: analysis.id })).statusCode).toBe(
       201,
     );
+    const car = await client.post('/api/owned-cars', {
+      nickname: null,
+      makeId: 'vw',
+      modelId: 'vw-golf',
+      modelName: 'Golf',
+      generationId: null,
+      fuel: null,
+      firstRegistration: { year: 2018, month: null },
+      mileageKm: null,
+      huUntil: null,
+    });
+    expect(car.statusCode).toBe(201);
 
     const wrong = await client.delete('/api/account', { password: 'falsches-passwort' });
     expect(wrong.statusCode).toBe(401);
@@ -207,6 +219,7 @@ describe('accounts and sessions', () => {
     expect(await db.user.count()).toBe(0);
     expect(await db.session.count()).toBe(0);
     expect(await db.savedListing.count()).toBe(0);
+    expect(await db.ownedCar.count()).toBe(0);
     expect(await db.analysis.count({ where: { id: analysis.id } })).toBe(0);
     expect((await client.get('/api/me')).json<Me>().user).toBeNull();
   });

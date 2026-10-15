@@ -1,6 +1,7 @@
+import { fragmentId } from '@kaufcheck/shared';
 import { QueryClientProvider, type QueryClient } from '@tanstack/react-query';
 import { lazy, Suspense, useEffect, useRef } from 'react';
-import { Route, Routes, useLocation } from 'react-router';
+import { NavigationType, Route, Routes, useLocation, useNavigationType } from 'react-router';
 import { useConfig } from './api/queries';
 import { Layout } from './components/layout/Layout';
 import { PageLoading } from './components/ui/Spinner';
@@ -35,6 +36,9 @@ const SavedListingsPage = lazy(() =>
     default: module.SavedListingsPage,
   })),
 );
+const MyCarPage = lazy(() =>
+  import('./features/my-car/MyCarPage').then((module) => ({ default: module.MyCarPage })),
+);
 const ComparePage = lazy(() =>
   import('./features/compare/ComparePage').then((module) => ({ default: module.ComparePage })),
 );
@@ -63,19 +67,71 @@ const OrderDonePage = lazy(() =>
   import('./features/contracts/OrderPages').then((module) => ({ default: module.OrderDonePage })),
 );
 
-/** Scrolls to the top and moves focus to the content after client-side navigation. */
+function focusContent() {
+  window.scrollTo(0, 0);
+  document.getElementById('inhalt')?.focus({ preventScroll: true });
+}
+
+/** Scrolls to an element and moves the focus there, so that screen readers follow. */
+function showSection(target: HTMLElement) {
+  if (target.tabIndex < 0 && !target.hasAttribute('tabindex')) target.tabIndex = -1;
+  target.scrollIntoView();
+  target.focus({ preventScroll: true });
+}
+
+/**
+ * Scrolls to the section of a link like /kfz-steuer-rechner#typklasse – the
+ * browser does this only on a full page load. If the section is not rendered
+ * yet (a page loaded later), the page starts at the top and jumps to the
+ * section once it appears.
+ */
+function scrollToSection(id: string): () => void {
+  const find = () => document.getElementById(id);
+  const target = find();
+  if (target) {
+    showSection(target);
+    return () => undefined;
+  }
+  focusContent();
+  let timeout = 0;
+  const observer = new MutationObserver(() => {
+    const found = find();
+    if (!found) return;
+    stop();
+    showSection(found);
+  });
+  const stop = () => {
+    observer.disconnect();
+    window.clearTimeout(timeout);
+  };
+  timeout = window.setTimeout(stop, 3000);
+  observer.observe(document.body, { childList: true, subtree: true });
+  return stop;
+}
+
+/** Scrolls to the top (or the linked section) and moves focus after client-side navigation. */
 function NavigationEffects() {
-  const { pathname, hash } = useLocation();
-  const first = useRef(true);
+  const { key, pathname, search, hash } = useLocation();
+  const navigationType = useNavigationType();
+  const previous = useRef<{ pathname: string; search: string; hash: string } | null>(null);
   useEffect(() => {
-    if (first.current) {
-      first.current = false;
+    const before = previous.current;
+    previous.current = { pathname, search, hash };
+    if (!before) return;
+    const samePage = before.pathname === pathname && before.hash === hash;
+    // A changed query (e.g. a new search) is handled by the page itself. The same URL again
+    // counts only for a link to the current page (replace), not for a resubmitted form (push).
+    if (samePage && (before.search !== search || navigationType !== NavigationType.Replace)) {
       return;
     }
-    if (hash) return;
-    window.scrollTo(0, 0);
-    document.getElementById('inhalt')?.focus({ preventScroll: true });
-  }, [pathname, hash]);
+    if (hash) {
+      // Back/forward and in-page anchors: the browser restores or sets the position itself.
+      if (navigationType === NavigationType.Pop) return;
+      return scrollToSection(fragmentId(hash));
+    }
+    focusContent();
+    return undefined;
+  }, [key, pathname, search, hash, navigationType]);
   return null;
 }
 
@@ -121,6 +177,7 @@ export function App({ queryClient }: { queryClient: QueryClient }) {
               <Route path="/inseratstext" element={<TextInputPage />} />
               <Route path="/analyse/:id" element={<ResultPage />} />
               <Route path="/meine-angebote" element={<SavedListingsPage />} />
+              <Route path="/mein-auto" element={<MyCarPage />} />
               <Route path="/vergleich" element={<ComparePage />} />
               <Route path="/verlauf" element={<HistoryPage />} />
               <Route path="/anmelden" element={<LoginPage />} />

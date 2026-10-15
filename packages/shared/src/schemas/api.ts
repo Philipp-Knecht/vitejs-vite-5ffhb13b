@@ -7,6 +7,7 @@ import {
   PASSWORD_MIN_LENGTH,
 } from '../constants';
 import { ApiErrorSchema } from './errors';
+import { FUEL_TYPES } from '../labels';
 import { EntitlementsSchema, PlanSchema } from './plans';
 import { LISTING_PLATFORMS, MAX_URL_INPUT_LENGTH } from '../url';
 import { AnalysisResultSchema, EvidenceTypeSchema } from './analysis';
@@ -161,6 +162,55 @@ export const SaveSearchRequestSchema = z.object({
   query: z.string().max(600),
 });
 export type SaveSearchRequest = z.infer<typeof SaveSearchRequestSchema>;
+
+// ---------------------------------------------------------------------------
+// Mein Auto: the cars a user owns
+// ---------------------------------------------------------------------------
+
+const CarYearSchema = z.number().int().min(1950).max(2100);
+
+/** One line of text without control characters (a NUL byte cannot be stored, a line break makes no sense). */
+const lineOfText = (max: number) =>
+  z
+    .string()
+    .trim()
+    .max(max, `Bitte höchstens ${max} Zeichen.`)
+    .refine(
+      (value) => ![...value].some((char) => char.charCodeAt(0) < 32 || char.charCodeAt(0) === 127),
+      'Bitte ohne Zeilenumbrüche und Steuerzeichen.',
+    );
+const CarMonthSchema = z.number().int().min(1).max(12);
+
+/** What the user enters about a car they own; catalog ids are checked by the server. */
+export const OwnedCarInputSchema = z.object({
+  nickname: lineOfText(60).nullable(),
+  /** Catalog make id, e.g. `vw`. */
+  makeId: z.string().min(1).max(40),
+  /** Catalog model id when the model is known, e.g. `vw-golf`. */
+  modelId: z.string().min(1).max(80).nullable(),
+  /** The model as the user calls it, shown when there is no catalog model. */
+  modelName: lineOfText(60).pipe(z.string().min(1, 'Bitte nenne das Modell.')),
+  generationId: z.string().min(1).max(80).nullable(),
+  fuel: z.enum(FUEL_TYPES).nullable(),
+  firstRegistration: z.object({ year: CarYearSchema, month: CarMonthSchema.nullable() }),
+  mileageKm: z.number().int().min(0).max(2_000_000).nullable(),
+  /** Month and year on the HU badge (Prüfplakette). */
+  huUntil: z.object({ year: CarYearSchema, month: CarMonthSchema }).nullable(),
+});
+export type OwnedCarInput = z.infer<typeof OwnedCarInputSchema>;
+
+export const OwnedCarDtoSchema = OwnedCarInputSchema.extend({
+  id: z.string(),
+  createdAt: z.string(),
+  updatedAt: z.string(),
+});
+export type OwnedCarDto = z.infer<typeof OwnedCarDtoSchema>;
+
+export const OwnedCarsResponseSchema = z.object({
+  items: z.array(OwnedCarDtoSchema),
+  limit: z.number().int().nonnegative(),
+});
+export type OwnedCarsResponse = z.infer<typeof OwnedCarsResponseSchema>;
 
 // ---------------------------------------------------------------------------
 // Comparison

@@ -123,6 +123,11 @@ export function ChecklistSection({
           );
         })}
       </div>
+      <p className="checklist__next no-print">
+        Gekauft?{' '}
+        <Link to={`/mein-auto?analyse=${analysisId}`}>Leg das Auto unter „Mein Auto“ an</Link> – mit
+        HU-Termin, bekannten Schwachstellen und Rückruf-Check.
+      </p>
     </ResultSection>
   );
 }
