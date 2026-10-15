@@ -386,8 +386,9 @@ already reserved in the contracts and the database.
 - **Data**: phone numbers, e-mail addresses and IBANs are removed from listings before storage and
   before AI calls; logs contain operation, duration, status and error category – never cookies,
   tokens, keys, IP addresses or listing texts. Secrets come only from the environment.
-- `npm audit` reports no known vulnerabilities (vulnerable transitive Prisma CLI dependencies are
-  overridden in `package.json`).
+- `npm audit` reports no known vulnerabilities (checked 15 October 2026). Vulnerable transitive
+  Prisma CLI dependencies are overridden in `package.json`; others are updated in the lockfile with
+  `npm audit fix` – check again before each release.
 
 ## Legal
 
