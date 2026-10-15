@@ -196,10 +196,17 @@ function parseMonthYear(value: string): { month: number; year: number } | null {
   return match ? { month: Number(match[1]), year: Number(match[2]) } : null;
 }
 
-/** A first registration: month and year, or the year alone as in „Mein Auto“. */
+/**
+ * A first registration: month and year, the full date from field B
+ * („15.09.2016“, only month and year are used) or the year alone as in „Mein Auto“.
+ */
 function parseRegistration(value: string): { month: number | null; year: number } | null {
-  const year = /^\d{4}$/.exec(value.trim());
-  return year ? { month: null, year: Number(year[0]) } : parseMonthYear(value);
+  const text = value.trim();
+  const year = /^\d{4}$/.exec(text);
+  if (year) return { month: null, year: Number(year[0]) };
+  const date = /^(0?[1-9]|[12]\d|3[01])\.(0?[1-9]|1[0-2])\.(\d{4})$/.exec(text);
+  if (date) return { month: Number(date[2]), year: Number(date[3]) };
+  return parseMonthYear(text);
 }
 
 const EV_FUELS: ReadonlySet<FuelType | ''> = new Set(['electric', 'plugin_hybrid']);
@@ -258,10 +265,13 @@ export function validateListingText(
       registration.year < 1900 ||
       registration.year * 12 + (registration.month ?? 1) > thisYear * 12 + now.getMonth() + 1)
   )
-    errors.firstRegistration = 'Bitte als Monat/Jahr angeben, zum Beispiel 09/2016.';
+    errors.firstRegistration =
+      registration && registration.year >= 1900
+        ? 'Die Erstzulassung liegt in der Zukunft.'
+        : 'Bitte gib Monat und Jahr an, zum Beispiel 09.2016, oder nur das Jahr.';
   const hu = parseMonthYear(values.huUntil);
   if (values.huUntil.trim() && (!hu || hu.year < 1950 || hu.year > thisYear + 3))
-    errors.huUntil = 'Bitte als Monat/Jahr angeben, zum Beispiel 09/2027.';
+    errors.huUntil = 'Bitte gib Monat und Jahr an, zum Beispiel 09.2027.';
 
   const number = (field: ListingTextField, value: string, max: number, message: string) => {
     if (!value.trim()) return;
@@ -331,7 +341,9 @@ function cutAtWord(text: string, max: number): string {
   if (text.length <= max) return text;
   const cut = text.slice(0, max + 1);
   const space = cut.lastIndexOf(' ');
-  return (space > 0 ? cut.slice(0, space) : cut.slice(0, max)).replace(/[\s,;:–-]+$/, '');
+  return (space > 0 ? cut.slice(0, space) : cut.slice(0, max))
+    .replace(/[\s,;:–-]+$/, '')
+    .replace(/[\s,;:–-]+(und|oder|mit|&)$/i, '');
 }
 
 /** Lines of a free text as list items; empty lines are dropped. */
@@ -502,3 +514,52 @@ export function applyListingToContract(
 /** A new purchase contract prefilled from the listing. */
 export const saleContractFromListing = (values: ListingTextValues): SaleContractValues =>
   applyListingToContract(EMPTY_SALE_CONTRACT, values);
+
+/** Contract fields that come from the listing. */
+const LISTING_CONTRACT_FIELDS = [
+  'make',
+  'model',
+  'firstRegistration',
+  'fuel',
+  'battery',
+  'powerKw',
+  'color',
+  'huUntil',
+  'keepers',
+  'keys',
+  'totalMileage',
+  'totalMileageKm',
+  'knownDefects',
+  'accessories',
+] as const satisfies readonly (keyof SaleContractValues)[];
+
+/**
+ * A changed listing taken over into a contract that was already filled in:
+ * a field takes the new value only where the contract still holds what the
+ * previous listing put there, so that what was typed into the contract stays.
+ * Without a previous listing (`previous` null), the listing replaces its fields.
+ */
+export function mergeListingIntoContract(
+  contract: SaleContractValues,
+  previous: ListingTextValues | null,
+  next: ListingTextValues,
+): SaleContractValues {
+  if (!previous) return applyListingToContract(contract, next);
+  const before = applyListingToContract(contract, previous);
+  const after = applyListingToContract(contract, next);
+  const merged: SaleContractValues = {
+    ...contract,
+    answers: { ...contract.answers },
+    details: { ...contract.details },
+  };
+  const target = merged as unknown as Record<string, unknown>;
+  for (const field of LISTING_CONTRACT_FIELDS)
+    if (contract[field] === before[field]) target[field] = after[field];
+  for (const statement of LISTING_STATEMENTS) {
+    if (contract.answers[statement] === before.answers[statement])
+      merged.answers[statement] = after.answers[statement];
+    if (contract.details[statement] === before.details[statement])
+      merged.details[statement] = after.details[statement];
+  }
+  return merged;
+}

@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import {
   EMPTY_LISTING_TEXT,
   kwToPs,
+  mergeListingIntoContract,
   saleContractFromListing,
   LISTING_TITLE_MAX,
   listingDescription,
@@ -237,5 +238,48 @@ describe('review fixes', () => {
     });
     expect(title).not.toMatch(/[,\s]$/);
     expect(title.length).toBeLessThanOrEqual(LISTING_TITLE_MAX);
+  });
+});
+
+describe('a changed listing in a filled-in contract', () => {
+  it('keeps what was changed in the contract and takes over the rest', () => {
+    const first = saleContractFromListing(golf);
+    const typed = {
+      ...first,
+      vin: 'WVWZZZAUZKW000001',
+      knownDefects: 'Steinschlag in der Frontscheibe; Delle hinten rechts',
+      answers: { ...first.answers, imported: 'no' as const },
+    };
+    const next = {
+      ...golf,
+      color: 'Silber',
+      defectsText: 'Steinschlag; Bremsen vorne bald fällig',
+    };
+    const merged = mergeListingIntoContract(typed, golf, next);
+    expect(merged.color).toBe('Silber');
+    expect(merged.vin).toBe('WVWZZZAUZKW000001');
+    // Typed into the contract: stays, although the listing changed.
+    expect(merged.knownDefects).toBe('Steinschlag in der Frontscheibe; Delle hinten rechts');
+    expect(merged.answers.imported).toBe('no');
+    // Without a previous listing, the listing replaces its fields.
+    expect(mergeListingIntoContract(typed, null, next).knownDefects).toBe(
+      'Steinschlag; Bremsen vorne bald fällig',
+    );
+  });
+});
+
+describe('round 2', () => {
+  it('reads the full date from field B and ends a cut title without a dangling word', () => {
+    expect(validateListingText({ ...golf, firstRegistration: '15.09.2016' }, NOW)).toEqual({});
+    expect(listingDescription({ ...golf, firstRegistration: '15.09.2016' })).toContain(
+      '- Erstzulassung: 09/2016',
+    );
+    const title = listingTitle({
+      ...EMPTY_LISTING_TEXT,
+      make: 'VW',
+      model: 'Golf',
+      variant: 'GTI Clubsport, Performance-Paket, Dach, AHK und Winterräder auf Alufelgen',
+    });
+    expect(title).toBe('VW Golf GTI Clubsport, Performance-Paket, Dach, AHK');
   });
 });

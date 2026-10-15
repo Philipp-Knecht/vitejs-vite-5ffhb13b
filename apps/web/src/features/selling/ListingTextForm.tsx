@@ -55,7 +55,8 @@ export function ListingTextForm({
   const toast = useToast();
   const [restored] = useState(() => readListingTextDraft(source));
   const [values, setValues] = useState(restored?.values ?? initial);
-  const [submitted, setSubmitted] = useState(false);
+  // A text shown again after a link within the app shows its errors, too.
+  const [submitted, setSubmitted] = useState(restored?.created ?? false);
   const [created, setCreated] = useState(restored?.created ?? false);
   const [busy, setBusy] = useState(false);
   const [upsell, setUpsell] = useState(false);
@@ -172,8 +173,8 @@ export function ListingTextForm({
             />
             <TextField
               label="Erstzulassung"
-              hint="Monat und Jahr, Feld B im Fahrzeugschein, zum Beispiel 09.2016"
-              maxLength={9}
+              hint="Feld B im Fahrzeugschein, zum Beispiel 09.2016"
+              maxLength={10}
               {...text('firstRegistration')}
             />
             <TextField
@@ -243,7 +244,7 @@ export function ListingTextForm({
             name="listing-registration"
             value={values.registration}
             onChange={(registration) => update({ registration })}
-            hint="Ein abgemeldetes Auto darf ohne Kurzzeitkennzeichen nicht auf die Straße – der Text bietet dann keine Probefahrt an."
+            hint="Ein abgemeldetes Auto darf nicht auf öffentlichen Straßen fahren; für eine Probefahrt braucht es ein Kurzzeitkennzeichen. Der Text bietet dann keine Probefahrt an."
             options={[
               { value: 'registered', label: 'Das Auto ist zugelassen' },
               { value: 'deregistered', label: 'Das Auto ist abgemeldet' },
@@ -334,7 +335,7 @@ export function ListingTextForm({
           />
           <TextAreaField
             label="Zuletzt gemacht"
-            hint="Eine Zeile je Arbeit, zum Beispiel „Zahnriemen gewechselt 2024 bei 80.000 km“ – am besten mit Rechnung"
+            hint="Eine Zeile je Arbeit, zum Beispiel „Zahnriemen gewechselt 2024 bei 80.000 km“ oder neue Reifen und Bremsen – am besten mit Rechnung"
             rows={3}
             maxLength={LISTING_LIMITS.text}
             {...text('recentWork')}
@@ -437,7 +438,8 @@ export function ListingTextForm({
         </p>
       </form>
 
-      {created && (
+      {/* Shown again after a link within the app only while Pro is still active. */}
+      {created && isPro && (
         <section className="listing-text" aria-labelledby={RESULT_TITLE_ID}>
           <h3 id={RESULT_TITLE_ID} ref={result} tabIndex={-1}>
             Dein Inseratstext

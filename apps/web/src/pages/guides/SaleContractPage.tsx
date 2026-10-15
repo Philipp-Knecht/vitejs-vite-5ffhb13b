@@ -1,6 +1,6 @@
 import { findMake } from '@kaufcheck/catalog';
 import {
-  applyListingToContract,
+  mergeListingIntoContract,
   EMPTY_SALE_CONTRACT,
   saleContractFromListing,
   type AnalysisDto,
@@ -11,10 +11,12 @@ import { Link, useSearchParams } from 'react-router';
 import { useAnalysis } from '../../api/queries';
 import { Alert } from '../../components/ui/Alert';
 import { PageLoading } from '../../components/ui/Spinner';
+import { readSaleContractDraft } from '../../features/sale-contract/draft';
 import { SaleContractForm } from '../../features/sale-contract/SaleContractForm';
 import {
   latestListingTextDraft,
   listingChangedSinceContract,
+  listingInContract,
   markListingInContract,
 } from '../../features/selling/draft';
 import { useHydrated } from '../../lib/use-hydrated';
@@ -64,6 +66,11 @@ function Form() {
   const takeOver = fromListing && listing !== null;
   // A listing changed since the last handover updates what was typed into the contract.
   const [listingChanged] = useState(() => listing !== null && listingChangedSinceContract(listing));
+  // One contract per car: another car's listing starts a new contract.
+  const contractSource = `listing:${listing?.source ?? ''}`;
+  const [previous] = useState(() => (listing ? listingInContract(listing) : null));
+  const [hadContract] = useState(() => readSaleContractDraft(contractSource) !== null);
+  const merged = takeOver && listingChanged && hadContract;
   useEffect(() => {
     if (takeOver) markListingInContract(listing);
   }, [takeOver, listing]);
@@ -101,8 +108,10 @@ function Form() {
       {fromListing &&
         (listing ? (
           <p className="muted">
-            Fahrzeugdaten und Angaben zum Zustand aus deinem Inseratstext übernommen. Prüf sie mit
-            dem Fahrzeugschein; den Tachostand tragt ihr bei der Übergabe ein.{' '}
+            {merged
+              ? 'Dein Inseratstext hat sich geändert: Was du hier nicht selbst geändert hast, ist neu übernommen. Prüf vor allem die Angaben zum Zustand und „Weitere bekannte Mängel“.'
+              : 'Fahrzeugdaten und Angaben zum Zustand aus deinem Inseratstext übernommen. Prüf sie mit dem Fahrzeugschein; den Tachostand tragt ihr bei der Übergabe ein.'}{' '}
+            Wartung und Rauchen stehen nur im Inserat – sie können trotzdem als vereinbart gelten.{' '}
             <Link to={`/auto-verkaufen${listing.source ? `?auto=${listing.source}` : ''}#inserat`}>
               Zurück zum Inseratstext
             </Link>
@@ -119,12 +128,12 @@ function Form() {
         </p>
       )}
       <SaleContractForm
-        key={analysis.data?.id ?? (takeOver ? 'listing' : 'empty')}
+        key={analysis.data?.id ?? (takeOver ? contractSource : 'empty')}
         initial={initial}
-        source={analysis.data?.id ?? (takeOver ? 'listing' : '')}
+        source={analysis.data?.id ?? (takeOver ? contractSource : '')}
         applyToRestored={
           takeOver && listingChanged
-            ? (values) => applyListingToContract(values, listing.values)
+            ? (values) => mergeListingIntoContract(values, previous, listing.values)
             : undefined
         }
       />

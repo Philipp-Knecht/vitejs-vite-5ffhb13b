@@ -171,3 +171,52 @@ test('a text created from „Mein Auto“ without typing reaches the contract', 
   await expect(page.getByLabel('Hersteller')).toHaveValue('Škoda');
   await expect(page.getByLabel('Erstzulassung')).toHaveValue('2018');
 });
+
+test('another car starts its own contract', async ({ page }) => {
+  const email = await register(page);
+  await makePro(email);
+  await page.goto('/mein-auto');
+  for (const [index, model] of ['Fabia', 'Octavia'].entries()) {
+    if (index > 0) await page.getByRole('button', { name: 'Weiteres Auto anlegen' }).click();
+    const add = page.getByRole('region', { name: 'Auto anlegen' });
+    await add.getByLabel('Marke').selectOption('skoda');
+    await add.getByLabel('Modell', { exact: true }).selectOption('other');
+    await add.getByLabel('Modellbezeichnung').fill(model);
+    await add.getByRole('group', { name: 'Erstzulassung' }).getByLabel('Jahr').fill('2018');
+    await add.getByRole('button', { name: 'Auto anlegen' }).click();
+    await expect(page.getByRole('heading', { name: `Škoda ${model}` })).toBeVisible();
+  }
+
+  const contractFor = async (model: string) => {
+    await page.goto('/mein-auto');
+    await page.getByRole('link', { name: `Inseratstext schreiben für Škoda ${model}` }).click();
+    await page.getByRole('button', { name: 'Inseratstext erstellen' }).click();
+    await page.getByRole('link', { name: /Kaufvertrag mit diesen Angaben vorbereiten/ }).click();
+    await page
+      .getByRole('group', { name: 'Wer verkauft?' })
+      .getByRole('radio', { name: 'Eine Privatperson' })
+      .check();
+    await page
+      .getByRole('group', { name: 'Wer kauft?' })
+      .getByRole('radio', { name: 'Eine Privatperson' })
+      .check();
+  };
+  await contractFor('Fabia');
+  await page.getByLabel('Fahrzeug-Identifizierungsnummer (FIN)').fill('TMBZZZ5JZJ0000001');
+  // In-app navigation keeps the drafts; a reload would clear them.
+  await page.getByRole('link', { name: 'Zurück zum Inseratstext' }).click();
+  await page.getByRole('link', { name: 'Mein Auto' }).first().click();
+  await page.getByRole('link', { name: 'Inseratstext schreiben für Škoda Octavia' }).click();
+  await page.getByRole('button', { name: 'Inseratstext erstellen' }).click();
+  await page.getByRole('link', { name: /Kaufvertrag mit diesen Angaben vorbereiten/ }).click();
+  await page
+    .getByRole('group', { name: 'Wer verkauft?' })
+    .getByRole('radio', { name: 'Eine Privatperson' })
+    .check();
+  await page
+    .getByRole('group', { name: 'Wer kauft?' })
+    .getByRole('radio', { name: 'Eine Privatperson' })
+    .check();
+  await expect(page.getByLabel('Modell', { exact: true })).toHaveValue('Octavia');
+  await expect(page.getByLabel('Fahrzeug-Identifizierungsnummer (FIN)')).toHaveValue('');
+});

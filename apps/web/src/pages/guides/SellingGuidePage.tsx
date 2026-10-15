@@ -66,7 +66,6 @@ function Form() {
 
   return (
     <>
-      {' '}
       {car && (
         <p className="muted">
           {prefilledFields(initial)} aus „Mein Auto“ übernommen. Den Kilometerstand liest du am
@@ -239,8 +238,11 @@ export function SellingGuidePage() {
         was nicht, und es gibt ein Übergabeprotokoll mit Tachostand und Quittung.
       </p>
       <p>
-        Am einfachsten ist es, wenn du das Auto vor der Übergabe abmeldest: Dann laufen Steuer und
-        Versicherung nicht auf deinen Namen weiter, und der Käufer meldet es neu an. Bleibt es
+        Am einfachsten ist es, wenn du das Auto vor der Übergabe abmeldest: Dann endet deine
+        Kfz-Steuer, und der Käufer meldet es neu an; zum Wegfahren braucht er ein
+        Kurzzeitkennzeichen (
+        <Source href="https://www.gesetze-im-internet.de/fzv_2023/__42.html">§ 42 FZV</Source>).
+        Frag deine Versicherung, was nach der Abmeldung mit deinem Vertrag passiert. Bleibt es
         zugelassen, vereinbart ihr im Vertrag, bis wann der Käufer es ummeldet, oder ihr geht
         gemeinsam zur Zulassungsstelle.
       </p>
@@ -267,9 +269,11 @@ export function SellingGuidePage() {
           <strong>Versicherung:</strong> Die Kfz-Versicherung geht mit dem Verkauf auf den Käufer
           über; er kann sie innerhalb eines Monats kündigen. Melde den Verkauf unverzüglich deiner
           Versicherung (das darf auch der Käufer). Für den Beitrag der laufenden
-          Versicherungsperiode haftet ihr beide; kündigt der Käufer, zahlst nur du (
-          <Source href="https://www.gesetze-im-internet.de/vvg_2008/__95.html">§§ 95–97</Source>,{' '}
-          <Source href="https://www.gesetze-im-internet.de/vvg_2008/__122.html">122 VVG</Source>).
+          Versicherungsperiode haftet ihr beide; kündigt der Käufer, zahlst nur du ( §§{' '}
+          <Source href="https://www.gesetze-im-internet.de/vvg_2008/__95.html">95</Source>,{' '}
+          <Source href="https://www.gesetze-im-internet.de/vvg_2008/__96.html">96</Source>,{' '}
+          <Source href="https://www.gesetze-im-internet.de/vvg_2008/__97.html">97</Source> und{' '}
+          <Source href="https://www.gesetze-im-internet.de/vvg_2008/__122.html">122</Source> VVG).
         </li>
         <li>
           <strong>Kfz-Steuer:</strong> Sie endet mit der Umschreibung auf den Käufer oder mit der
