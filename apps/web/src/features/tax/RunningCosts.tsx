@@ -147,7 +147,12 @@ export function RunningCosts({
         />
         <TextField
           label="Versicherung in € pro Jahr"
-          hint="Angebot deines Versicherers – abhängig von Typklasse, Region und Schadenfreiheitsklasse"
+          hint={
+            <>
+              Angebot deines Versicherers – abhängig unter anderem von der{' '}
+              <a href="#typklasse">Typklasse</a>, der Region und deiner Schadenfreiheitsklasse
+            </>
+          }
           inputMode="decimal"
           error={insurance.error}
           value={values.insurance}

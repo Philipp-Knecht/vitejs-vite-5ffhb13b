@@ -80,3 +80,17 @@ test('a link from a check prefills first registration and drive', async ({ page 
   await expect(page.getByText('Laut Inserat 09/2016')).toBeVisible();
   await expect(page.getByLabel('Antrieb')).toHaveValue('diesel');
 });
+
+test('the insurance class is explained and looked up at the GDV, not shown by KaufCheck', async ({
+  page,
+}) => {
+  await page.goto('/kfz-steuer-rechner');
+  await page.getByRole('link', { name: 'Typklasse', exact: true }).click();
+  await expect(page).toHaveURL(/#typklasse$/);
+  await expect(page.getByRole('heading', { name: 'Versicherung und Typklasse' })).toBeVisible();
+  await expect(page.getByText('Feld 2.1, vier Ziffern', { exact: false })).toBeVisible();
+  await expect(page.getByRole('link', { name: /Typklasse beim GDV abfragen/ })).toHaveAttribute(
+    'href',
+    'https://www.dieversicherer.de/versicherer/auto/typklassenabfrage',
+  );
+});
