@@ -204,11 +204,12 @@ export function SaleContractForm({
 
   // Loaded ahead while the form is filled in, so that weak reception at the handover does not
   // stop the PDF (the files stay in the browser's cache).
+  // Only for Pro: others see the offer instead of a PDF.
   useEffect(() => {
-    if (!ready) return;
+    if (!ready || !isPro) return;
     void import('./contract-pdf').catch(() => {});
     void import('./fonts').then((module) => module.loadContractFonts()).catch(() => {});
-  }, [ready]);
+  }, [ready, isPro]);
   const electric = EV_FUELS.has(values.fuel);
 
   const submit = async (event: FormEvent) => {
@@ -244,19 +245,27 @@ export function SaleContractForm({
           return;
         }
       }
-      const [{ buildSaleContractPdf, saleContractFileName }, fonts] = await Promise.all([
-        import('./contract-pdf'),
-        import('./fonts').then((module) => module.loadContractFonts()),
-      ]);
+      let loaded;
+      try {
+        loaded = await Promise.all([
+          import('./contract-pdf'),
+          import('./fonts').then((module) => module.loadContractFonts()),
+        ]);
+      } catch (error) {
+        console.error('Contract PDF files not loaded', error);
+        // A failed module load can stick until the page is reloaded, which empties the form.
+        toast.show(
+          'Die Dateien für das PDF konnten nicht geladen werden. Prüf deine Verbindung und versuch es noch einmal. Klappt es weiter nicht, hilft nur Neuladen – deine Eingaben sind dann weg.',
+        );
+        return;
+      }
+      const [{ buildSaleContractPdf, saleContractFileName }, fonts] = loaded;
       buildSaleContractPdf(values, fonts).save(saleContractFileName(values, new Date()));
       track('sale_contract_created');
       toast.show('Vertrag erstellt – druck ihn zweimal aus.');
     } catch (error) {
       console.error('Contract PDF failed', error);
-      // No reload: the form lives only in this tab, and a reload would empty it.
-      toast.show(
-        'Das PDF konnte nicht erstellt werden. Prüf deine Verbindung und versuch es noch einmal.',
-      );
+      toast.show('Das PDF konnte nicht erstellt werden. Bitte versuch es noch einmal.');
     } finally {
       setBusy(false);
     }

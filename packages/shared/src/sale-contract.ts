@@ -552,7 +552,7 @@ export function saleContractBlocks(values: SaleContractValues): ContractBlock[] 
     { kind: 'heading', text: '§ 3 Angaben des Verkäufers' },
     {
       kind: 'paragraph',
-      text: 'Der Verkäufer macht die folgenden Angaben zum Fahrzeug. Angaben mit „Ja“ oder „Nein“ und die Beschreibungen unter „Falls ja“ gehören zur vereinbarten Beschaffenheit. Angaben „Nein, soweit dem Verkäufer bekannt“ und Angaben „nach Kenntnis des Verkäufers“ in § 2 geben nur wieder, was der Verkäufer weiß; sie sind keine Beschaffenheitsvereinbarung; der Verkäufer muss sie aber nach seinem tatsächlichen Wissen machen. „Nicht bekannt“ bedeutet: Der Verkäufer weiß es nicht und macht dazu keine Angabe.',
+      text: 'Der Verkäufer macht die folgenden Angaben zum Fahrzeug. Angaben mit „Ja“ oder „Nein“ und die Beschreibungen unter „Falls ja“ gehören zur vereinbarten Beschaffenheit. Angaben „Nein, soweit dem Verkäufer bekannt“ und Angaben „nach Kenntnis des Verkäufers“ in § 2 geben nur wieder, was der Verkäufer weiß. Sie sind keine Beschaffenheitsvereinbarung; der Verkäufer muss sie aber nach seinem tatsächlichen Wissen machen. „Nicht bekannt“ bedeutet: Der Verkäufer weiß es nicht und macht dazu keine Angabe.',
     },
   );
   for (const statement of CONTRACT_STATEMENTS) {
@@ -628,7 +628,7 @@ export function saleContractBlocks(values: SaleContractValues): ContractBlock[] 
     },
     {
       kind: 'paragraph',
-      text: `Das Fahrzeug bleibt bis zur vollständigen Zahlung des Kaufpreises Eigentum des Verkäufers. Das Eigentum geht mit der Übergabe auf den Käufer über, jedoch nicht vor vollständiger Zahlung des Kaufpreises. Fahrzeug, Schlüssel und die Zulassungsbescheinigungen Teil${NBSP}I und Teil${NBSP}II übergibt der Verkäufer bei der Übergabe nach § 6, nicht jedoch vor vollständiger Zahlung.`,
+      text: `Das Eigentum geht mit der Übergabe auf den Käufer über, jedoch nicht vor vollständiger Zahlung des Kaufpreises; bis dahin bleibt das Fahrzeug Eigentum des Verkäufers. Fahrzeug, Schlüssel und die Zulassungsbescheinigungen Teil${NBSP}I und Teil${NBSP}II übergibt der Verkäufer bei der Übergabe nach § 6, nicht jedoch vor vollständiger Zahlung.`,
     },
   );
 
