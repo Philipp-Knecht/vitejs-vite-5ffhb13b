@@ -106,7 +106,7 @@ test('the buying guide links to the insurance class section', async ({ page }) =
   await expect(heading).toBeFocused();
 });
 
-test('a malformed link fragment does not break the page', async ({ page }) => {
+test('typing a malformed fragment does not break the page', async ({ page }) => {
   await page.goto('/kfz-steuer-rechner');
   const errors: Error[] = [];
   page.on('pageerror', (error) => errors.push(error));

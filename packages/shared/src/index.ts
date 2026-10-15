@@ -20,3 +20,4 @@ export * from './routes';
 export * from './comparison-ranking';
 export * from './vin';
 export * from './vehicle-tax';
+export * from './fragment';

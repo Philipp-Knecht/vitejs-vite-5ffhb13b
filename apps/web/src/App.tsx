@@ -1,3 +1,4 @@
+import { fragmentId } from '@kaufcheck/shared';
 import { QueryClientProvider, type QueryClient } from '@tanstack/react-query';
 import { lazy, Suspense, useEffect, useRef } from 'react';
 import { NavigationType, Route, Routes, useLocation, useNavigationType } from 'react-router';
@@ -74,16 +75,6 @@ function showSection(target: HTMLElement) {
   target.focus({ preventScroll: true });
 }
 
-/** The element id in a URL fragment; a malformed escape such as „#100%“ is taken as it is. */
-function fragmentId(hash: string): string {
-  const raw = hash.slice(1);
-  try {
-    return decodeURIComponent(raw);
-  } catch {
-    return raw;
-  }
-}
-
 /**
  * Scrolls to the section of a link like /kfz-steuer-rechner#typklasse – the
  * browser does this only on a full page load. If the section is not rendered
@@ -116,7 +107,8 @@ function scrollToSection(id: string): () => void {
 
 /** Scrolls to the top (or the linked section) and moves focus after client-side navigation. */
 function NavigationEffects() {
-  const { pathname, hash } = useLocation();
+  // Every navigation has a new key, also a link to the current page.
+  const { key, hash } = useLocation();
   const navigationType = useNavigationType();
   const first = useRef(true);
   useEffect(() => {
@@ -131,7 +123,7 @@ function NavigationEffects() {
     }
     focusContent();
     return undefined;
-  }, [pathname, hash, navigationType]);
+  }, [key, hash, navigationType]);
   return null;
 }
 
