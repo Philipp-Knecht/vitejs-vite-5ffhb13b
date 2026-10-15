@@ -50,6 +50,9 @@ test('a bought car is taken over from its check and kept in view', async ({ page
     'Zu diesem Modell hat KaufCheck noch keine recherchierten Schwachstellen.',
   );
   await expect(card.getByRole('link', { name: /FIN-Abfrage von Audi/ })).toBeVisible();
+  await expect(
+    card.getByRole('link', { name: 'Typklasse für die Versicherung nachschlagen' }),
+  ).toHaveAttribute('href', '/kfz-steuer-rechner#typklasse');
   await expect(page).toHaveURL(/\/mein-auto$/);
 
   // A calendar entry instead of e-mails.

@@ -174,6 +174,13 @@ export function CarCard({
         <p>
           <Link to={taxCalculatorLink(car)}>Kfz-Steuer und laufende Kosten berechnen</Link>
         </p>
+        <p>
+          <Link to="/kfz-steuer-rechner#typklasse">
+            Typklasse für die Versicherung nachschlagen
+          </Link>
+          {' – '}
+          sie wird jedes Jahr neu berechnet und beeinflusst deinen Beitrag.
+        </p>
       </div>
     </article>
   );
