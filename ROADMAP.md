@@ -23,7 +23,8 @@ PRs, **L** = mehrere Wochen.
 | 1.3 | Typklasse: Erklärung und Link zur GDV-Abfrage                                | #24       |
 | 5.5 | PWA: installierbar, Prüfung für die Besichtigung offline                     | #25       |
 | 2.3 | Kaufvertrag für den Privatkauf als PDF (Pro)                                 | #28       |
-| 3.5 | Auto privat verkaufen: Ratgeber, Inseratstext (Pro), Übergabe an den Vertrag | dieser PR |
+| 3.5 | Auto privat verkaufen: Ratgeber, Inseratstext (Pro), Übergabe an den Vertrag | #30       |
+| 3.3 | Kostenbuch und Serviceheft (Pro): Kosten, Verbrauch, CSV, Serviceheft-PDF    | dieser PR |
 
 ## Arbeitsweise je Feature
 
@@ -70,7 +71,7 @@ PRs, **L** = mehrere Wochen.
 | ------- | ------------------------------------------------------------------------------------------- | ------- | ----------------------------- | ----------------------------------------------------------------- |
 | 3.1     | Mein Auto: gekauftes Angebot übernehmen (Modell, Generation, Erstzulassung, Kilometerstand) | M       | Kostenlos (1) / Pro (mehrere) | neues Datenmodell + Migration                                     |
 | 3.2     | Erinnerungen an HU, Inspektion, Reifenwechsel, Bremsflüssigkeit (E-Mail, `.ics`)            | M       | Pro                           | ohne Anwalt, nach gründlicher Recherche (Entscheidung 15.10.2026) |
-| 3.3     | Digitales Serviceheft und Kostenbuch (optional Belege)                                      | M–L     | Pro                           | Belege brauchen Speicher; Kosten und Auftragsverarbeitung klären  |
+| 3.3     | Digitales Serviceheft und Kostenbuch (optional Belege)                                      | M–L     | Pro                           | ohne Belege gebaut; Belege brauchen Speicher, Kosten und AVV      |
 | ~~3.4~~ | ~~„Darauf solltest du bei deinem Auto achten“ (Schwachstellen nach Laufleistung)~~          | –       | –                             | gestrichen (15.10.2026)                                           |
 | 3.5     | Wiederverkauf: Inseratstext-Generator, Verkaufs-Checkliste, Ab-/Ummeldung                   | M       | Pro                           | Regeln zuerst, KI optional                                        |
 
