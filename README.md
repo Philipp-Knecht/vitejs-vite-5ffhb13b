@@ -22,11 +22,15 @@ model pages explain how to check recalls with the FIN and link the manufacturers
 pages and the KBA recall database (`packages/catalog/src/recalls.ts`); KaufCheck queries none of
 them itself. Pro members can also prepare the price negotiation: points from the
 listing that apply, their own findings and a factual message to the seller, without suggested
-amounts (`packages/shared/src/negotiation.ts`). The web app is installable, and a check can be saved for the
-inspection on request („Offline verfügbar machen“): the page stores the check, the
-app shell and its built files, and the service worker (`apps/web/public/sw.js`) serves them when
-there is no reception. Nothing is stored without that request; the copy is deleted on login,
-logout and account deletion.
+amounts (`packages/shared/src/negotiation.ts`). After the purchase, „Mein Auto“ (`/mein-auto`, one car free, up to
+ten with Pro) keeps the car in view: next HU from the badge with a calendar file instead of e-mails,
+the generation's known weaknesses, the recall check and the cost calculator
+(`apps/api/src/application/owned-car-service.ts`, `apps/web/src/features/my-car`). Only what the
+user enters is stored – no FIN, no plate. The web app is installable, and a check can be saved for
+the inspection on request („Offline verfügbar machen“): the page stores the check, the app shell
+and its built files, and the service worker (`apps/web/public/sw.js`) serves them when there is no
+reception. Nothing is stored without that request; the copy is deleted on logout, an account switch
+and account deletion.
 
 For the listing check, a user pastes the listing text (or a link); KaufCheck extracts and
 normalizes the vehicle data and shows a mobile-first dashboard:
@@ -338,7 +342,7 @@ ids, IP addresses or free text. The browser sends nothing when „Do Not Track�
 Control“ is set. Events: `landing_page_view`, `listing_analysis_started`, `listing_analysis_completed`,
 `listing_analysis_failed` (recorded by the server), `seller_questions_copied`,
 `seller_message_created`, `checklist_started`, `listing_saved`, `search_saved`, `comparison_created`,
-`pro_clicked`, `car_search_started`, `platform_search_opened`, `recall_check_opened`, `analysis_pdf_downloaded`, `negotiation_message_copied`.
+`pro_clicked`, `car_search_started`, `platform_search_opened`, `recall_check_opened`, `analysis_pdf_downloaded`, `negotiation_message_copied`, `owned_car_added`.
 Disable with `ANALYTICS_ENABLED=false`. Events are kept for 400 days, for example:
 
 ```sql
@@ -390,8 +394,9 @@ already reserved in the contracts and the database.
 - **Data**: phone numbers, e-mail addresses and IBANs are removed from listings before storage and
   before AI calls; logs contain operation, duration, status and error category – never cookies,
   tokens, keys, IP addresses or listing texts. Secrets come only from the environment.
-- `npm audit` reports no known vulnerabilities (vulnerable transitive Prisma CLI dependencies are
-  overridden in `package.json`).
+- `npm audit` reports no known vulnerabilities (checked 15 October 2026). Vulnerable transitive
+  Prisma CLI dependencies are overridden in `package.json`; others are updated in the lockfile with
+  `npm audit fix` – check again before each release.
 
 ## Legal
 

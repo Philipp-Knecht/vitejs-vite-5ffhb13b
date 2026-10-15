@@ -1,6 +1,7 @@
 import type { ChecklistSection as Section } from '@kaufcheck/shared';
 import { Printer, RotateCcw } from 'lucide-react';
 import { useState } from 'react';
+import { Link } from 'react-router';
 import { Button } from '../../components/ui/Button';
 import { track } from '../../lib/analytics';
 import { isStringArray, readJson, removeItem, writeJson } from '../../lib/storage';
@@ -116,6 +117,11 @@ export function ChecklistSection({
           );
         })}
       </div>
+      <p className="checklist__next no-print">
+        Gekauft?{' '}
+        <Link to={`/mein-auto?analyse=${analysisId}`}>Leg das Auto unter „Mein Auto“ an</Link> – mit
+        HU-Termin, bekannten Schwachstellen und Rückruf-Check.
+      </p>
     </ResultSection>
   );
 }

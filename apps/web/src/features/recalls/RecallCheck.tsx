@@ -2,7 +2,7 @@ import { KBA_RECALL_DATABASE_URL, makeById, recallCheckFor } from '@kaufcheck/ca
 import type { ReactNode } from 'react';
 import { track } from '../../lib/analytics';
 
-type Placement = 'result' | 'model';
+type Placement = 'result' | 'model' | 'my_car';
 
 function OutLink({
   href,
@@ -54,9 +54,10 @@ export function RecallCheck({
     <div className="recall-check">
       <ol className="recall-check__steps">
         <li>
-          <strong>FIN erfragen.</strong> Die Fahrzeug-Identifizierungsnummer (FIN, auch
-          Fahrgestellnummer) steht im Fahrzeugschein (Zulassungsbescheinigung Teil I, Feld E) und
-          oft unten an der Windschutzscheibe oder auf dem Typschild.
+          <strong>{placement === 'my_car' ? 'FIN bereitlegen.' : 'FIN erfragen.'}</strong> Die
+          Fahrzeug-Identifizierungsnummer (FIN, auch Fahrgestellnummer) steht im Fahrzeugschein
+          (Zulassungsbescheinigung Teil I, Feld E) und oft unten an der Windschutzscheibe oder auf
+          dem Typschild.
           {listingVin && (
             <>
               {' '}
@@ -100,9 +101,12 @@ export function RecallCheck({
           zeigt Rückrufe nach Hersteller, Modell und Baujahr – nicht für ein einzelnes Auto und
           nicht jede Maßnahme der Hersteller.
         </li>
-        <li>
-          <strong>Belege zeigen lassen.</strong> Frag nach Werkstattbelegen zu erledigten Rückrufen.
-        </li>
+        {placement !== 'my_car' && (
+          <li>
+            <strong>Belege zeigen lassen.</strong> Frag nach Werkstattbelegen zu erledigten
+            Rückrufen.
+          </li>
+        )}
       </ol>
       <p className="recall-check__note">
         Anders als bei freiwilligen Serviceaktionen ist die Teilnahme an einem Rückruf Pflicht. Die

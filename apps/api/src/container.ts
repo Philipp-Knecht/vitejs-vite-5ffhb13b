@@ -8,6 +8,7 @@ import { AnalyticsService } from './application/analytics-service';
 import { AuthService } from './application/auth-service';
 import { ContractService } from './application/contract-service';
 import { SavedListingService } from './application/saved-listing-service';
+import { OwnedCarService } from './application/owned-car-service';
 import { SavedSearchService } from './application/saved-search-service';
 import { UsageService } from './application/usage-service';
 import type { AppConfig } from './config/env';
@@ -45,6 +46,7 @@ export interface Services {
   auth: AuthService;
   savedListings: SavedListingService;
   savedSearches: SavedSearchService;
+  ownedCars: OwnedCarService;
   billing: BillingService;
   account: AccountService;
   email: EmailService;
@@ -151,6 +153,7 @@ export function createServices(
   );
   const savedListings = new SavedListingService(db, analyses, analytics, now);
   const savedSearches = new SavedSearchService(db, analytics, now);
+  const ownedCars = new OwnedCarService(db, analytics, now);
   const account = new AccountService(db, auth, billing);
 
   return {
@@ -165,6 +168,7 @@ export function createServices(
     auth,
     savedListings,
     savedSearches,
+    ownedCars,
     billing,
     account,
     email,

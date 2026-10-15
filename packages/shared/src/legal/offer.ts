@@ -68,6 +68,7 @@ export function proFeatures(pro: Entitlements, options: { photoAnalysis: boolean
   if (pro.savedSearchesMax > 0) {
     features.push(`bis zu ${pro.savedSearchesMax} gespeicherte Gebrauchtwagen-Suchen`);
   }
+  if (pro.ownedCarsMax > 1) features.push(`bis zu ${pro.ownedCarsMax} Autos unter „Mein Auto“`);
   if (pro.history) features.push('Verlauf aller deiner Prüfungen');
   if (pro.pdfExport) features.push('jede Prüfung als PDF-Mappe für die Besichtigung');
   if (pro.negotiationHelp) {
