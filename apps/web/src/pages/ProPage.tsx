@@ -12,7 +12,7 @@ import {
 import { Check, Minus } from 'lucide-react';
 import type { ReactNode } from 'react';
 import { Link } from 'react-router';
-import { useConfig, useMe } from '../api/queries';
+import { useHydratedConfig, useMe } from '../api/queries';
 import { CONTRACT_DETAILS_COMPLETE } from './legal/site-info';
 import { Button, ButtonLink } from '../components/ui/Button';
 import { track } from '../lib/analytics';
@@ -125,15 +125,15 @@ function rows(
 export function ProPage() {
   const meta = STATIC_PAGE_META['/pro'];
   usePageMeta(meta ?? { title: 'KaufCheck Pro', description: '' });
-  const config = useConfig();
+  const config = useHydratedConfig();
   const me = useMe();
-  const plans = config.data?.plans ?? DEFAULT_ENTITLEMENTS;
+  const plans = config?.plans ?? DEFAULT_ENTITLEMENTS;
   // Orders also need the operator's full details in the order page and the terms.
-  const offer = CONTRACT_DETAILS_COMPLETE ? (config.data?.pro.offer ?? null) : null;
-  const photoAnalysis = config.data?.features.photoAnalysis ?? false;
+  const offer = CONTRACT_DETAILS_COMPLETE ? (config?.pro.offer ?? null) : null;
+  const photoAnalysis = config?.features.photoAnalysis ?? false;
 
   const cta = () => {
-    if (!config.data || !me.data) return null;
+    if (!config || !me.data) return null;
     if (me.data.plan === 'pro') return <p className="plan-note">Du nutzt bereits KaufCheck Pro.</p>;
     if (!offer) {
       return (

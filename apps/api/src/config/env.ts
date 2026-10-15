@@ -80,6 +80,8 @@ const EnvSchema = z
     FREE_MONTHLY_ANALYSES: z.coerce.number().int().min(0).optional(),
     PRO_MONTHLY_ANALYSES: z.coerce.number().int().min(0).optional(),
     ANALYZE_RATE_PER_MINUTE: z.coerce.number().int().min(1).max(1000).default(10),
+    /** Registrations per IP address and hour. */
+    REGISTER_RATE_PER_HOUR: z.coerce.number().int().min(1).max(1000).default(5),
 
     STRIPE_SECRET_KEY: optionalString,
     STRIPE_WEBHOOK_SECRET: optionalString,
@@ -231,6 +233,7 @@ export interface AppConfig {
     freeMonthlyAnalyses?: number;
     proMonthlyAnalyses?: number;
     analyzeRatePerMinute: number;
+    registerRatePerHour: number;
   };
   stripe: {
     secretKey: string;
@@ -368,6 +371,7 @@ export function loadConfig(source: NodeJS.ProcessEnv = process.env): AppConfig {
       freeMonthlyAnalyses: env.FREE_MONTHLY_ANALYSES,
       proMonthlyAnalyses: env.PRO_MONTHLY_ANALYSES,
       analyzeRatePerMinute: env.ANALYZE_RATE_PER_MINUTE,
+      registerRatePerHour: env.REGISTER_RATE_PER_HOUR,
     },
     stripe:
       env.STRIPE_SECRET_KEY && env.STRIPE_WEBHOOK_SECRET && env.STRIPE_PRICE_ID_PRO && env.VAT_MODE

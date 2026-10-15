@@ -2,6 +2,10 @@ import { defineConfig, devices } from '@playwright/test';
 
 const PORT = Number(process.env.E2E_PORT ?? 3100);
 
+// Without it, Playwright neither routes nor blocks a service worker's own requests, and an
+// offline test would still reach the server (e2e/offline.spec.ts).
+process.env.PW_EXPERIMENTAL_SERVICE_WORKER_NETWORK_EVENTS = '1';
+
 /**
  * End-to-end tests against the production build (`npm run test:e2e` builds
  * first). Listing retrieval uses the synthetic fixtures in

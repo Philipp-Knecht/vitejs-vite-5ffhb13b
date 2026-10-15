@@ -31,11 +31,15 @@ export async function registerWeb(app: FastifyInstance, config: AppConfig): Prom
     allowedPath: (pathName) =>
       !pathName.startsWith(`/${PRERENDERED_DIR}/`) && pathName !== '/index.html',
     setHeaders(response, filePath) {
+      const name = path.basename(filePath);
       response.header(
         'cache-control',
         filePath.includes(`${path.sep}assets${path.sep}`)
           ? 'public, max-age=31536000, immutable'
-          : 'public, max-age=3600',
+          : // The service worker and the manifest must update with every release.
+            name === 'sw.js' || name === 'manifest.webmanifest'
+            ? 'no-cache'
+            : 'public, max-age=3600',
       );
     },
   });
@@ -72,6 +76,8 @@ export async function registerWeb(app: FastifyInstance, config: AppConfig): Prom
     const insideRoot = prerendered.startsWith(`${pagesRoot}${path.sep}`);
     const file = insideRoot && existsSync(prerendered) ? prerendered : shell;
     reply.type('text/html; charset=utf-8');
+    // The service worker keeps the empty app shell for app pages opened offline for the first time.
+    if (file === shell) reply.header('x-kaufcheck-shell', '1');
     // Prerendered pages exist (model pages are generated from data); other paths must be app routes.
     reply.status(file !== shell || isAppRoute(decoded) ? 200 : 404);
     const { adsense } = config;

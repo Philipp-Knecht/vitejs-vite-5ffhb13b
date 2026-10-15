@@ -24,6 +24,8 @@ export async function registerSecurity(app: FastifyInstance, config: AppConfig):
       directives: {
         defaultSrc: ["'self'"],
         scriptSrc: ["'self'"],
+        workerSrc: ["'self'"],
+        manifestSrc: ["'self'"],
         // React sets inline styles for dynamic values (e.g. progress widths).
         styleSrc: ["'self'", "'unsafe-inline'"],
         imgSrc: ["'self'", 'data:', ...imageSources],

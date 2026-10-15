@@ -26,7 +26,11 @@ amounts (`packages/shared/src/negotiation.ts`). After the purchase, „Mein Auto
 ten with Pro) keeps the car in view: next HU from the badge with a calendar file instead of e-mails,
 the generation's known weaknesses, the recall check and the cost calculator
 (`apps/api/src/application/owned-car-service.ts`, `apps/web/src/features/my-car`). Only what the
-user enters is stored – no FIN, no plate. For a private purchase, Pro members can fill in
+user enters is stored – no FIN, no plate. The web app is installable, and a check can be saved for
+the inspection on request („Offline verfügbar machen“): the page stores the check, the app shell
+and its built files, and the service worker (`apps/web/public/sw.js`) serves them when there is no
+reception. Nothing is stored without that request; the copy is deleted on logout, an account switch
+and account deletion. For a private purchase, Pro members can fill in
 a purchase contract on `/kaufvertrag` and download it as a PDF with a handover record and receipt;
 the text and its checks live in `packages/shared/src/sale-contract.ts`, the PDF is built in the
 browser with the embedded Liberation Sans font (SIL Open Font License, `fonts/OFL.txt`) and nothing
@@ -98,7 +102,7 @@ or a short cookie secret). Only `VITE_*` variables are compiled into the browser
 | Database, secrets | `DATABASE_URL`, `COOKIE_SECRET`                                                                                                                           | `COOKIE_SECRET`: at least 32 random characters in production.                                  |
 | Listing retrieval | `LISTING_FETCH_MODE` (`off`/`live`/`fixtures`), `FETCH_USER_AGENT`, `FETCH_TIMEOUT_MS`, `FETCH_MAX_BYTES`, `FETCH_RATE_PER_MINUTE`, `SHOW_LISTING_PHOTOS` | Production default is `off`. `fixtures` is development/test only.                              |
 | AI                | `AI_PROVIDER`, `ANTHROPIC_*`, `OPENAI_*`, `AI_TIMEOUT_MS`, `AI_MAX_CONCURRENCY`, `AI_PHOTO_ANALYSIS`, `AI_MAX_PHOTOS`                                     | See [AI provider configuration](#ai-provider-configuration).                                   |
-| Plans             | `ANON_MONTHLY_ANALYSES`, `FREE_MONTHLY_ANALYSES`, `PRO_MONTHLY_ANALYSES`, `ANALYZE_RATE_PER_MINUTE`                                                       | Defaults: 3 without account, 10 free, 300 Pro per calendar month (UTC).                        |
+| Plans             | `ANON_MONTHLY_ANALYSES`, `FREE_MONTHLY_ANALYSES`, `PRO_MONTHLY_ANALYSES`, `ANALYZE_RATE_PER_MINUTE`, `REGISTER_RATE_PER_HOUR`                             | Defaults: 3 without account, 10 free, 300 Pro per calendar month (UTC).                        |
 | Payments          | `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET`, `STRIPE_PRICE_ID_PRO`, `VAT_MODE`, `STRIPE_PAYMENT_METHODS`                                                 | All three Stripe values or none; payments also need SMTP e-mail and the full operator details. |
 | Ads               | `ADSENSE_CLIENT`, `ADSENSE_SLOT`                                                                                                                          | See [Google AdSense](#google-adsense).                                                         |
 | E-mail            | `EMAIL_TRANSPORT` (`none`/`smtp`/`console`), `SMTP_URL`, `EMAIL_FROM`                                                                                     | Needed for password reset; without e-mail the feature is shown as unavailable.                 |

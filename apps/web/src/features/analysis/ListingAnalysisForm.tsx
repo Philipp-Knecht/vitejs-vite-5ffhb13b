@@ -10,7 +10,7 @@ import {
 import { ArrowRight } from 'lucide-react';
 import { useState, type FormEvent, type KeyboardEvent } from 'react';
 import { useNavigate } from 'react-router';
-import { useConfig } from '../../api/queries';
+import { useHydratedConfig } from '../../api/queries';
 import { Button } from '../../components/ui/Button';
 import { TextAreaField } from '../../components/ui/Field';
 import { AnalysisErrorPanel } from './AnalysisErrorPanel';
@@ -52,14 +52,15 @@ function isSingleLink(value: string): boolean {
  */
 export function ListingAnalysisForm() {
   const runner = useAnalysisRunner();
-  const config = useConfig();
   const navigate = useNavigate();
   const [input, setInput] = useState('');
   const [error, setError] = useState<string | null>(null);
   const [showHelp, setShowHelp] = useState(false);
   const { state } = runner;
-  const retrieval = config.data?.features.urlRetrieval;
-  const retrievable = config.data?.features.retrievablePlatforms;
+  // Prerendered on the homepage: the loaded configuration only after hydration.
+  const loaded = useHydratedConfig();
+  const retrieval = loaded?.features.urlRetrieval;
+  const retrievable = loaded?.features.retrievablePlatforms;
 
   const submit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
