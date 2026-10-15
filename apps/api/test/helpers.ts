@@ -142,10 +142,12 @@ export class TestClient {
       expires?: Date;
       maxAge?: number;
     }[]) {
+      // A cleared cookie expires in 1970. Other dates cannot be judged by the real clock:
+      // tests may run the app on a fixed clock, so its sessions can lie in the real past.
       const expired =
         cookie.value === '' ||
         cookie.maxAge === 0 ||
-        (cookie.expires && cookie.expires.getTime() <= Date.now());
+        (cookie.expires && cookie.expires.getTime() < Date.UTC(2000, 0, 1));
       if (expired) this.cookies.delete(cookie.name);
       else this.cookies.set(cookie.name, cookie.value);
     }
