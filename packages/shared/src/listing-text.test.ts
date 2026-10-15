@@ -2,12 +2,14 @@ import { describe, expect, it } from 'vitest';
 import {
   EMPTY_LISTING_TEXT,
   kwToPs,
+  saleContractFromListing,
   LISTING_TITLE_MAX,
   listingDescription,
   listingTitle,
   validateListingText,
   type ListingTextValues,
 } from './listing-text';
+import { validateSaleContract } from './sale-contract';
 
 const NOW = new Date(2026, 9, 15);
 
@@ -80,7 +82,7 @@ describe('listing text', () => {
     expect(text).toContain('- Gesamtlaufleistung: entspricht nach meiner Kenntnis dem Tachostand');
     expect(text).toContain('- Leistung: 96 kW (131 PS)');
     expect(text).toContain(
-      '- In meiner Besitzzeit gab es einen Schaden: Parkschaden an der Heckklappe, 2023 in einer Fachwerkstatt lackiert',
+      '- Schäden in meiner Besitzzeit: Parkschaden an der Heckklappe, 2023 in einer Fachwerkstatt lackiert',
     );
     expect(text).toContain('- Ob es vor meiner Besitzzeit Schäden gab, weiß ich nicht');
     expect(text).not.toContain('wird nicht gedruckt');
@@ -167,10 +169,73 @@ describe('listing text validation', () => {
 
   it('limits the length of free texts', () => {
     const errors = validateListingText(
-      { ...golf, equipment: 'x'.repeat(1501), reason: 'a\n'.repeat(31) },
+      { ...golf, equipment: 'x'.repeat(1501), reason: 'a\n'.repeat(21) },
       NOW,
     );
     expect(errors.equipment).toBe('Bitte höchstens 1500 Zeichen.');
-    expect(errors.reason).toBe('Bitte höchstens 30 Zeilen.');
+    expect(errors.reason).toBe('Bitte höchstens 20 Zeilen.');
+  });
+});
+
+describe('review fixes', () => {
+  it('accepts the usual German ways to write month and year, and the year alone', () => {
+    for (const value of ['09.2016', '9/2016', '09-2016', '09 2016', '2016'])
+      expect(validateListingText({ ...golf, firstRegistration: value }, NOW)).toEqual({});
+    expect(listingTitle({ ...golf, variant: '', firstRegistration: '2016' })).toContain('EZ 2016');
+    expect(validateListingText({ ...golf, huUntil: '2027' }, NOW)).toHaveProperty('huUntil');
+    expect(listingDescription({ ...golf, huUntil: '4.2027' })).toContain('- HU bis: 04/2027');
+  });
+
+  it('asks for at least one keeper and key, and prints the keys', () => {
+    expect(Object.keys(validateListingText({ ...golf, keepers: '0', keys: '00' }, NOW))).toEqual([
+      'keepers',
+      'keys',
+    ]);
+    expect(listingDescription({ ...golf, keys: '2' })).toContain('- Schlüssel: 2');
+  });
+
+  it('offers no test drive for a deregistered car', () => {
+    const text = listingDescription({ ...golf, registration: 'deregistered' });
+    expect(text).toContain(
+      'Das Auto ist abgemeldet.\nBesichtigung nach Absprache in Köln-Ehrenfeld.',
+    );
+    expect(text).not.toContain('Probefahrt');
+    expect(listingDescription({ ...golf, registration: 'registered' })).toContain(
+      'Das Auto ist zugelassen.\nBesichtigung und Probefahrt',
+    );
+  });
+
+  it('says what the seller knows about smoking, and joins paragraphs with one space', () => {
+    const text = listingDescription({ ...golf, reason: 'Erster Satz.\n\nZweiter Satz.' });
+    expect(text).toContain('- In meiner Besitzzeit wurde im Auto nicht geraucht');
+    expect(text).toContain('Grund für den Verkauf: Erster Satz. Zweiter Satz.');
+  });
+
+  it('hands over what the contract accepts', () => {
+    const contract = saleContractFromListing({
+      ...golf,
+      keys: '2',
+      firstRegistration: '2019',
+      variant: 'x '.repeat(60),
+    });
+    expect(contract).toMatchObject({ keys: '2', keepers: '2', firstRegistration: '2019' });
+    expect(contract.model.length).toBeLessThanOrEqual(100);
+    expect(contract.model.endsWith(' ')).toBe(false);
+    expect(validateSaleContract(contract, NOW)).toEqual({});
+    expect(saleContractFromListing({ ...golf, keepers: '0' }).keepers).toBe('');
+  });
+
+  it('ends a cut title without a dangling comma', () => {
+    const title = listingTitle({
+      ...golf,
+      make: 'Volkswagen',
+      model: 'Golf',
+      variant: 'Variant 2.0 TDI DSG Highline, AHK, Panoramadach, Standheizung',
+      odometerKm: '',
+      firstRegistration: '',
+      huUntil: '',
+    });
+    expect(title).not.toMatch(/[,\s]$/);
+    expect(title.length).toBeLessThanOrEqual(LISTING_TITLE_MAX);
   });
 });

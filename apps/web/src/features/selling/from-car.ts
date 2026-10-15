@@ -13,7 +13,8 @@ export function listingTextFromCar(car: OwnedCarDto): ListingTextValues {
     ...EMPTY_LISTING_TEXT,
     make: makeById(car.makeId)?.name ?? car.makeId,
     model: car.modelName,
-    firstRegistration: monthYear(car.firstRegistration),
+    // „Mein Auto“ may know the year alone.
+    firstRegistration: monthYear(car.firstRegistration) || String(car.firstRegistration.year),
     fuel: car.fuel ?? '',
     huUntil: monthYear(car.huUntil),
   };

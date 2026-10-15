@@ -207,9 +207,13 @@ export type SaleContractField =
 
 export type SaleContractErrors = Partial<Record<SaleContractField, string>>;
 
-/** Characters that only make sense on screen: control characters and the soft hyphen. */
-// eslint-disable-next-line no-control-regex
-const INVISIBLE = /[\u0000-\u0008\u000e-\u001f\u007f-\u0084\u0086-\u009f\u00ad\u200b\ufeff]/g;
+/**
+ * Characters that only make sense on screen: control characters, the soft
+ * hyphen and the marks that change the writing direction.
+ */
+const INVISIBLE =
+  // eslint-disable-next-line no-control-regex
+  /[\u0000-\u0008\u000e-\u001f\u007f-\u0084\u0086-\u009f\u00ad\u200b\u200e\u200f\u202a-\u202e\u2066-\u2069\ufeff]/g;
 
 /** One line of text as printed: pasted tabs and line breaks become spaces. */
 export function cleanLine(value: string): string {
