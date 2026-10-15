@@ -50,16 +50,17 @@ export function Layout({ children }: { children: ReactNode }) {
         Zum Inhalt springen
       </a>
       <Header />
-      <p className="offline-banner" role="status">
-        {online ? null : (
-          <>
-            Du bist offline. Du siehst den zuletzt geladenen Stand; neue Prüfungen und Änderungen
-            gehen erst wieder mit Verbindung.
-          </>
-        )}
-      </p>
-      <OfflineChecks online={online} />
       <main id="inhalt" className="main" tabIndex={-1}>
+        {/* Inside main, so that the message is not content outside every landmark. */}
+        <p className="offline-banner" role="status">
+          {online ? null : (
+            <>
+              Du bist offline. Du siehst den zuletzt geladenen Stand; neue Prüfungen und Änderungen
+              gehen erst wieder mit Verbindung.
+            </>
+          )}
+        </p>
+        <OfflineChecks online={online} />
         <ErrorBoundary>{children}</ErrorBoundary>
       </main>
       <Footer />

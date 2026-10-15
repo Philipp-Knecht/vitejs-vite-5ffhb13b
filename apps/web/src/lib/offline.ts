@@ -122,7 +122,9 @@ export async function saveForOffline(analysisId: string): Promise<void> {
     await saved.put(analysisKey(analysisId), analysis!);
   } catch (error) {
     // A first save that failed leaves no files and no service worker behind.
-    if (!(await hasSavedChecks())) await removeAll().catch(() => {});
+    // The original error is reported; a failed cleanup must not replace it.
+    const left = await hasSavedChecks().catch(() => true);
+    if (!left) await removeAll().catch(() => {});
     throw error;
   }
 }

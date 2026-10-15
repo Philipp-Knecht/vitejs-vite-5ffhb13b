@@ -212,12 +212,12 @@ export function PrivacyPage() {
           Pro-Vertrags), und die Programmdateien von KaufCheck, damit die Prüfung auch ohne Empfang
           funktioniert. Die Kopie verlässt dein Gerät nicht und gilt nur in diesem Browser. Sie
           bleibt, bis du sie mit „Offline-Kopie löschen“ entfernst, dich abmeldest, mit einem
-          anderen Konto anmeldest, dein Konto löschst oder die Websitedaten in deinem Browser
-          löschst; Safari kann sie auch von selbst löschen, wenn du Safari sieben Tage lang nutzt,
-          ohne KaufCheck aufzurufen. Ist keine Prüfung mehr gespeichert, löscht KaufCheck auch die
-          Programmdateien. Eine Einwilligung ist nach § 25 Abs. 2 Nr. 2 TDDDG nicht nötig, weil du
-          die Funktion ausdrücklich wählst; Rechtsgrundlage für die Verarbeitung ist Art. 6 Abs. 1
-          lit. b DSGVO.
+          anderen Konto anmeldest, deine Anmeldung abläuft, dein Konto löschst oder die Websitedaten
+          in deinem Browser löschst; Safari kann sie auch von selbst löschen, wenn du Safari sieben
+          Tage lang nutzt, ohne KaufCheck aufzurufen. Ist keine Prüfung mehr gespeichert, löscht
+          KaufCheck auch die Programmdateien. Eine Einwilligung ist nach § 25 Abs. 2 Nr. 2 TDDDG
+          nicht nötig, weil du die Funktion ausdrücklich wählst; Rechtsgrundlage für die
+          Verarbeitung ist Art. 6 Abs. 1 lit. b DSGVO.
         </li>
       </ul>
       <p>
