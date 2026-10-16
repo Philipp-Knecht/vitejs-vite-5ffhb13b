@@ -170,7 +170,8 @@ export function CarCard({
             Erinnerungen einstellen<span className="visually-hidden"> für {carName(car)}</span>
           </Link>
           {' – '}
-          HU, Inspektion, Bremsflüssigkeit und Reifenwechsel – per E-Mail oder im Kalender.
+          Erinnerungen per E-Mail und Kalenderdateien für HU, Inspektion, Bremsflüssigkeit und
+          Reifenwechsel; die E-Mails gehören zu Pro.
           {!reminders && <span className="tag tag--pro">Pro</span>}
         </p>
       </div>

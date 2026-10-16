@@ -203,7 +203,7 @@ export class ReminderService {
           : invalid(
               'month',
               reminderKind === 'brakeFluid'
-                ? 'Laut deiner Angabe ist der Wechsel überfällig. Lass die Bremsflüssigkeit wechseln und trag danach den Monat ein, dann erinnern wir dich zum nächsten Termin.'
+                ? 'Laut deiner Angabe liegt der letzte Wechsel mehr als zwei Jahre zurück – länger, als der ADAC empfiehlt. Lass die Bremsflüssigkeit wechseln und trag danach den Monat ein, dann erinnern wir dich zum nächsten Termin.'
                 : 'Der Termin ist schon vorbei. Trag den neuen Termin ein, dann erinnern wir dich.',
             );
     }

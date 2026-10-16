@@ -359,7 +359,7 @@ describe('Reminders', () => {
     // Brake fluid changed more than two years ago: the due month has passed.
     const late = await client.put(path(car.id, 'brakeFluid'), on({ year: 2024, month: 6 }));
     expect(late.statusCode).toBe(400);
-    expect(errorOf(late).message).toContain('überfällig');
+    expect(errorOf(late).message).toContain('mehr als zwei Jahre zurück');
     // An HU that has expired already.
     const expired = await owner('PRO', { ...CAR, huUntil: { year: 2026, month: 8 } });
     const hu = await expired.client.put(path(expired.car.id, 'hu'), on());

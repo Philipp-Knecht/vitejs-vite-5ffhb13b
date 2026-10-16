@@ -94,7 +94,7 @@ const PAST_HINTS: Record<ReminderKind, string> = {
   hu: 'Trag nach der HU in „Mein Auto“ den Monat von der neuen Plakette ein.',
   service: 'Trag den nächsten Termin ein.',
   brakeFluid:
-    'Laut deiner Angabe ist der Wechsel überfällig. Lass die Bremsflüssigkeit wechseln und trag danach den Monat ein, dann erinnern wir dich zum nächsten Termin.',
+    'Laut deiner Angabe liegt der letzte Wechsel mehr als zwei Jahre zurück – länger, als der ADAC empfiehlt. Lass die Bremsflüssigkeit wechseln und trag danach den Monat ein, dann erinnern wir dich zum nächsten Termin.',
   tyres: '',
 };
 
@@ -471,17 +471,17 @@ function EmailStatus({
 }) {
   const resend = useRequestReminderConfirmation();
   const toast = useToast();
+  if (!editable)
+    return (
+      <p className="muted">
+        Erinnerungen gehen an <strong>{address}</strong>, sobald du wieder Pro hast
+        {confirmed ? '' : ' und die Adresse bestätigt ist'}.
+      </p>
+    );
   if (confirmed)
     return (
       <p>
         Erinnerungen gehen an <strong>{address}</strong>.
-      </p>
-    );
-  if (!editable)
-    return (
-      <p className="muted">
-        Erinnerungen gehen an <strong>{address}</strong> – sobald du Pro hast und die Adresse
-        bestätigt ist.
       </p>
     );
   if (!anyEmail)
