@@ -344,8 +344,14 @@ export function buildComparison(items: readonly ComparisonInput[], now: Date): C
             make: item.listing.vehicle.make,
             model: item.listing.vehicle.model,
             firstRegistrationYear: item.listing.vehicle.firstRegistration?.year ?? null,
+            firstRegistrationMonth: item.listing.vehicle.firstRegistration?.month ?? null,
+            fuel: item.listing.vehicle.fuel,
           }
         : null,
+      askingPriceEur:
+        item.listing.price && item.listing.price.kind !== 'give_away'
+          ? item.listing.price.amountEur
+          : null,
     })),
     rows,
     equipment,
