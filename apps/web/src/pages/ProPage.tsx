@@ -116,6 +116,14 @@ function rows(
       ],
     },
     {
+      label: 'Kosten pro Monat im Vergleich',
+      cells: [
+        flag(plans.anonymous.monthlyCosts),
+        flag(plans.free.monthlyCosts),
+        flag(plans.pro.monthlyCosts),
+      ],
+    },
+    {
       label: 'Kostenbuch und Serviceheft',
       cells: [flag(plans.anonymous.carLog), flag(plans.free.carLog), flag(plans.pro.carLog)],
     },

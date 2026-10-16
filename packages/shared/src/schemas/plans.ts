@@ -23,6 +23,8 @@ export const EntitlementsSchema = z.object({
   listingText: z.boolean(),
   /** Cost book and service history for the cars in „Mein Auto“. */
   carLog: z.boolean(),
+  /** Monthly costs of the offers in a comparison, from the buyer's own figures. */
+  monthlyCosts: z.boolean(),
   photoAnalysis: z.boolean(),
   showAds: z.boolean(),
 });

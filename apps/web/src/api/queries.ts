@@ -26,6 +26,8 @@ import type {
 import { QueryClient, useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { clearSaleContractDraft } from '../features/sale-contract/draft';
 import { clearListingTextDraft } from '../features/selling/draft';
+import { MONTHLY_COSTS_STORAGE_KEY } from '../features/compare/monthly-costs-storage';
+import { removeItem } from '../lib/storage';
 import { clearPrivateOfflineData } from '../lib/offline';
 import { useHydrated } from '../lib/use-hydrated';
 import { api, ApiRequestError } from './client';
@@ -235,6 +237,8 @@ function useInvalidateSession() {
       // Another person may use the device next; signing in after typing keeps the draft.
       clearSaleContractDraft();
       clearListingTextDraft();
+      // Own assumptions for saved offers of this account.
+      removeItem(MONTHLY_COSTS_STORAGE_KEY);
     }
     queryClient.removeQueries({ queryKey: queryKeys.savedListings });
     queryClient.removeQueries({ queryKey: queryKeys.savedSearches });

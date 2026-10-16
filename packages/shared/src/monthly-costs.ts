@@ -114,7 +114,7 @@ const perMonth = (perYear: number | null) => (perYear === null ? null : perYear 
 
 /** Monthly costs of one car; rounded per part so that the parts add up to the total. */
 export function monthlyCosts(figures: CarCostFigures, shared: SharedCostAssumptions): MonthlyCosts {
-  const price = figures.energy ? shared.prices[figures.energy] ?? null : null;
+  const price = figures.energy ? (shared.prices[figures.energy] ?? null) : null;
   const energy =
     shared.kmPerYear !== null && figures.consumption !== null && price !== null
       ? (shared.kmPerYear / 100) * figures.consumption * price
