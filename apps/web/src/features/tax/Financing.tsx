@@ -76,6 +76,8 @@ export function Financing() {
               <span className="visually-hidden">Monatsrate: </span>
               {euros(result.monthlyRate, 2)} <span>im Monat</span>
             </>
+          ) : Object.keys(parsed.fields).length > 0 ? (
+            'Bitte prüfe die markierten Angaben.'
           ) : parsed.incomplete ? (
             'Für die Rate fehlen noch Kreditbetrag, Zins oder Laufzeit.'
           ) : (
