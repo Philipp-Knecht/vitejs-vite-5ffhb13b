@@ -62,9 +62,7 @@ test('reminders are switched on, confirmed by link and unsubscribed', async ({ p
   await service.getByLabel('Jahr').fill(nextYear);
   await service.getByRole('checkbox', { name: 'Per E-Mail erinnern' }).check();
   await service.getByRole('button', { name: /^Speichern\s*: Inspektion$/ }).click();
-  await expect(
-    page.getByText(/Eingeschaltet – bitte bestätige noch deine E-Mail-Adresse/),
-  ).toBeVisible();
+  await expect(page.getByText(/Eingeschaltet – wir haben dir einen Link an/)).toBeVisible();
   await expect(page.getByText('Bitte bestätige deine E-Mail-Adresse')).toBeVisible();
   await expect(
     page.getByText(

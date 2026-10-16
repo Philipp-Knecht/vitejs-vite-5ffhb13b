@@ -92,6 +92,13 @@ export class ReminderService {
       : null;
   }
 
+  private stopping = false;
+
+  /** On shutdown: no new due dates are claimed; the e-mail in progress is finished. */
+  stop(): void {
+    this.stopping = true;
+  }
+
   /** E-mails need a mail server and the operator's details for the footer. */
   get available(): boolean {
     return this.email.enabled && this.context !== null;
@@ -195,11 +202,16 @@ export class ReminderService {
             })
           : invalid(
               'month',
-              'Der Termin ist schon vorbei. Trag den neuen Termin ein, dann erinnern wir dich.',
+              reminderKind === 'brakeFluid'
+                ? 'Laut deiner Angabe ist der Wechsel überfällig. Lass die Bremsflüssigkeit wechseln und trag danach den Monat ein, dann erinnern wir dich zum nächsten Termin.'
+                : 'Der Termin ist schon vorbei. Trag den neuen Termin ein, dann erinnern wir dich.',
             );
     }
     // The link goes out before saving: if it cannot be sent, nothing is switched on.
-    if (input.email && user.remindersConfirmedAt === null) await this.sendConfirmation(user, false);
+    const confirmationSent =
+      input.email && user.remindersConfirmedAt === null
+        ? await this.sendConfirmation(user, false)
+        : false;
     const now = this.options.now();
     const data = {
       email: input.email,
@@ -212,7 +224,7 @@ export class ReminderService {
       create: { carId, kind, ...data },
       update: data,
     });
-    return this.list(actor, carId);
+    return { ...(await this.list(actor, carId)), confirmationSent };
   }
 
   /** Sends a new confirmation link; `explicit` = the owner asked for it again. */
@@ -230,12 +242,13 @@ export class ReminderService {
     await this.sendConfirmation(user, true);
   }
 
+  /** True when a link was sent; a link sent shortly before or the daily limit skip it. */
   private async sendConfirmation(
     user: { id: string; email: string },
     explicit: boolean,
-  ): Promise<void> {
+  ): Promise<boolean> {
     const context = this.context;
-    if (!context || !this.email.enabled) return;
+    if (!context || !this.email.enabled) return false;
     const now = this.options.now();
     const recent = await this.db.reminderConfirmToken.findFirst({
       where: { userId: user.id, createdAt: { gt: new Date(now.getTime() - CONFIRM_RESEND_MS) } },
@@ -245,7 +258,7 @@ export class ReminderService {
     });
     // At most a few links a day: the address is not verified yet.
     if (today >= CONFIRM_PER_DAY) {
-      if (!explicit) return;
+      if (!explicit) return false;
       throw new AppError('RATE_LIMITED', {
         message:
           'Wir haben dir heute schon mehrere Links geschickt. Bitte schau in deinem Postfach und im Spam-Ordner nach oder versuch es morgen wieder.',
@@ -256,7 +269,7 @@ export class ReminderService {
         throw new AppError('RATE_LIMITED', {
           message: 'Wir haben dir gerade erst einen Link geschickt. Bitte warte ein paar Minuten.',
         });
-      return;
+      return false;
     }
     const token = randomToken(32);
     await this.db.reminderConfirmToken.create({
@@ -277,6 +290,7 @@ export class ReminderService {
         message: 'Die Bestätigungs-E-Mail konnte nicht verschickt werden. Bitte versuch es später.',
       });
     }
+    return true;
   }
 
   /** The link from the confirmation e-mail; no login needed. */
@@ -370,6 +384,7 @@ export class ReminderService {
           today,
         );
         if (!occurrence || occurrence.key === row.lastSentKey) continue;
+        if (this.stopping) return report;
         // Claims the due date first, so that a parallel run cannot send it twice.
         const claimed = await this.db.carReminder.updateMany({
           where: { id: row.id, email: true, lastSentKey: row.lastSentKey },

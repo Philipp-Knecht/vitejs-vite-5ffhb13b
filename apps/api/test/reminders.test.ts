@@ -7,6 +7,7 @@ import type {
 } from '@kaufcheck/shared';
 import { afterAll, beforeAll, beforeEach, describe, expect, it } from 'vitest';
 import type { BuiltApp } from '../src/app';
+import { ReminderService } from '../src/application/reminder-service';
 import type { EmailMessage } from '../src/infrastructure/email/email-service';
 import {
   CapturingEmailService,
@@ -20,6 +21,13 @@ const OPERATOR = {
   VITE_IMPRINT_NAME: 'Erika Musterfrau',
   VITE_IMPRINT_ADDRESS: 'Musterstraße 1|12345 Musterstadt',
   VITE_CONTACT_EMAIL: 'kontakt@kaufcheck.example',
+};
+
+const OPERATOR_INFO = {
+  name: 'Erika Musterfrau',
+  addressLines: ['Musterstraße 1', '12345 Musterstadt'],
+  email: 'kontakt@kaufcheck.example',
+  phone: '+49 30 1234567',
 };
 
 const CAR: OwnedCarInput = {
@@ -111,6 +119,7 @@ describe('Reminders', () => {
     expect(saved.json<CarRemindersResponse>()).toMatchObject({
       emailConfirmed: false,
       confirmationPending: true,
+      confirmationSent: true,
     });
     expect(email.sent).toHaveLength(1);
     const mail = email.sent[0]!;
@@ -251,6 +260,25 @@ describe('Reminders', () => {
     );
   });
 
+  it('claims no further due dates once the server stops', async () => {
+    const { client, car } = await owner();
+    await confirmed(client, car.id);
+    const service = new ReminderService(
+      built.services.db,
+      email,
+      {
+        siteUrl: 'http://localhost:5173',
+        operator: OPERATOR_INFO,
+        secret: 'x'.repeat(32),
+        now: () => now,
+      },
+      built.app.log,
+    );
+    service.stop();
+    expect(await service.sendDue()).toEqual({ remindersSent: 0, remindersFailed: 0 });
+    expect((await built.services.reminders.sendDue()).remindersSent).toBe(1);
+  });
+
   it('checks the months it needs', async () => {
     const { client, car } = await owner();
     const cases: [string, ReminderInput, string][] = [
@@ -331,7 +359,7 @@ describe('Reminders', () => {
     // Brake fluid changed more than two years ago: the due month has passed.
     const late = await client.put(path(car.id, 'brakeFluid'), on({ year: 2024, month: 6 }));
     expect(late.statusCode).toBe(400);
-    expect(errorOf(late).message).toContain('schon vorbei');
+    expect(errorOf(late).message).toContain('überfällig');
     // An HU that has expired already.
     const expired = await owner('PRO', { ...CAR, huUntil: { year: 2026, month: 8 } });
     const hu = await expired.client.put(path(expired.car.id, 'hu'), on());
@@ -363,7 +391,9 @@ describe('Reminders', () => {
     const fourth = await client.post('/api/reminders/confirmation');
     expect(fourth.statusCode).toBe(429);
     // Switching on still works; it just sends no further link today.
-    expect((await client.put(path(car.id, 'hu'), on())).statusCode).toBe(200);
+    const capped = await client.put(path(car.id, 'hu'), on());
+    expect(capped.statusCode).toBe(200);
+    expect(capped.json<CarRemindersResponse>().confirmationSent).toBe(false);
     expect(email.sent).toHaveLength(3);
   });
 

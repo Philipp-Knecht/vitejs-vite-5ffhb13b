@@ -41,7 +41,7 @@ export function reminderConfirmEmail(
       '',
       link,
       '',
-      'Ohne Bestätigung schicken wir keine Erinnerungen an diese Adresse. Hast du kein KaufCheck-Konto angelegt, ignoriere diese E-Mail oder antworte darauf – dann löschen wir das Konto.',
+      'Ohne Bestätigung schicken wir keine Erinnerungen an diese Adresse. Hast du kein KaufCheck-Konto angelegt, kannst du diese E-Mail ignorieren. Antwortest du uns, löschen wir das Konto.',
       ...footer(context, [
         'Du bekommst diese E-Mail, weil in deinem KaufCheck-Konto eine Erinnerung eingeschaltet wurde.',
       ]),
