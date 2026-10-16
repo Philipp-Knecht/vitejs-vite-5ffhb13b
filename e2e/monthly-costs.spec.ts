@@ -81,6 +81,20 @@ test('monthly costs of the compared offers are part of Pro and come from own fig
   expect(stored).toHaveLength(1);
   expect(stored[0]).toContain('"consumption":"5"');
 
+  // Financing: only the interest counts, spread over the term.
+  const loanCar = cars.nth(1);
+  await loanCar.getByText('Finanzierung (optional)').click();
+  await loanCar.getByLabel('Kreditbetrag in Euro').fill('10.000');
+  await loanCar.getByLabel('Effektiver Jahreszins in %').fill('5');
+  await loanCar.getByLabel('Laufzeit in Monaten').fill('24');
+  // 438.22 € a month (rounded to cents), so 517.28 € interest over 24 months.
+  await expect(
+    loanCar.getByText(/Monatsrate 438,22\s€, davon im Schnitt 21,55\s€ Zinsen/),
+  ).toBeVisible();
+  const interestRow = table.getByRole('row', { name: /Zinsen der Finanzierung/ });
+  await expect(interestRow).toContainText('Keine Finanzierung');
+  await expect(interestRow).toContainText('22 €');
+
   // Blocked storage: the form still keeps what is typed.
   await page.addInitScript(() => {
     const blocked = (key: string) => key.startsWith('kaufcheck:monatskosten');
