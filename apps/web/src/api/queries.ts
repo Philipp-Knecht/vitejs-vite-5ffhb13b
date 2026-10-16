@@ -226,6 +226,8 @@ export function useSaveReminder(carId: string) {
         input,
       ),
     onSuccess: (data) => queryClient.setQueryData(queryKeys.reminders(carId), data),
+    // E.g. the confirmation e-mail could not be sent: show what the server holds.
+    onError: () => queryClient.invalidateQueries({ queryKey: queryKeys.reminders(carId) }),
   });
 }
 
@@ -242,6 +244,19 @@ export function useConfirmReminders() {
   return useMutation({
     mutationFn: (token: string) => api.post('/api/reminders/confirm', { token }),
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ['reminders'] }),
+  });
+}
+
+export function useUnsubscribeInfo(reminder: string, token: string) {
+  return useQuery({
+    queryKey: ['reminder-unsubscribe', reminder, token],
+    queryFn: ({ signal }) =>
+      api.get<{ kind: ReminderKind; carName: string; email: boolean }>(
+        `/api/reminders/unsubscribe?r=${encodeURIComponent(reminder)}&t=${encodeURIComponent(token)}`,
+        signal,
+      ),
+    enabled: Boolean(reminder && token),
+    retry: false,
   });
 }
 

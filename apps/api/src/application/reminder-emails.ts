@@ -41,7 +41,7 @@ export function reminderConfirmEmail(
       '',
       link,
       '',
-      'Wenn du das nicht warst, ignoriere diese E-Mail: Ohne Bestätigung schicken wir keine Erinnerungen an diese Adresse.',
+      'Ohne Bestätigung schicken wir keine Erinnerungen an diese Adresse. Hast du kein KaufCheck-Konto angelegt, ignoriere diese E-Mail oder antworte darauf – dann löschen wir das Konto.',
       ...footer(context, [
         'Du bekommst diese E-Mail, weil in deinem KaufCheck-Konto eine Erinnerung eingeschaltet wurde.',
       ]),
@@ -82,10 +82,11 @@ export function reminderEmail(
       'Hallo,',
       '',
       mail.body,
+      '',
+      `Termine ändern: ${context.siteUrl}/mein-auto/${input.carId}/erinnerungen`,
       ...footer(context, [
         `Du bekommst diese E-Mail, weil du in „Mein Auto“ die Erinnerung „${REMINDER_LABELS[input.kind]}“ für ${input.carName} eingeschaltet hast.`,
         `Diese Erinnerung abbestellen: ${unsubscribePageUrl(context.siteUrl, input.reminderId, input.unsubscribeToken)}`,
-        `Alle Erinnerungen für dieses Auto: ${context.siteUrl}/mein-auto/${input.carId}/erinnerungen`,
       ]),
     ].join('\n'),
     replyTo: context.operator.email,

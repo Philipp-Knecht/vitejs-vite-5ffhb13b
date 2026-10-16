@@ -299,6 +299,8 @@ export const ReminderDtoSchema = z.object({
   email: z.boolean(),
   /** Inspection: the month it is due; brake fluid: the month of the last change. */
   month: ReminderMonthSchema.nullable(),
+  /** The due date the last e-mail was about (see `dueOccurrence`). */
+  lastSentKey: z.string().nullable(),
 });
 export type ReminderDto = z.infer<typeof ReminderDtoSchema>;
 

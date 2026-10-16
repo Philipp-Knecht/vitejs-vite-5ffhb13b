@@ -1,12 +1,13 @@
 import {
   BRAKE_FLUID_MONTHS,
   huStatus,
-  monthText,
+  monthName,
   monthsUntil,
   REMINDER_LABELS,
   reminderCalendarFile,
   reminderDueMonth,
   reminderMonthProblem,
+  reminderPlan,
   type OwnedCarDto,
   type ReminderDto,
   type ReminderKind,
@@ -52,101 +53,231 @@ const MONTHS = [
   'Dezember',
 ];
 
-const thisMonth = (now: Date): ReminderMonth => ({
-  year: now.getFullYear(),
-  month: now.getMonth() + 1,
-});
+/** Today in Germany, as the server counts due months and tyre seasons. */
+function germanToday(now: Date) {
+  const [year, month, day] = new Intl.DateTimeFormat('en-CA', { timeZone: 'Europe/Berlin' })
+    .format(now)
+    .split('-')
+    .map(Number) as [number, number, number];
+  return { year, month, day };
+}
 
-const errorMessage = (error: unknown) =>
+const errorOf = (error: unknown): { month: boolean; message: string } =>
   error instanceof ApiRequestError
-    ? (error.details?.fieldErrors?.month?.[0] ?? error.message)
-    : 'Das hat nicht geklappt. Bitte versuch es noch einmal.';
+    ? error.details?.fieldErrors?.month?.[0]
+      ? { month: true, message: error.details.fieldErrors.month[0] }
+      : { month: false, message: error.message }
+    : { month: false, message: 'Das hat nicht geklappt. Bitte versuch es noch einmal.' };
 
 const DESCRIPTIONS: Record<ReminderKind, string> = {
-  hu: 'Eine E-Mail im Monat vor dem Monat auf der Prüfplakette. Ist die HU mehr als zwei Monate überzogen, wird eine teurere Ergänzungsuntersuchung fällig.',
+  hu: 'Eine E-Mail einen Monat, bevor die HU abläuft – steht auf der Plakette Oktober, also Anfang September. Die Frist für die nächste HU beginnt mit dem Monat, in dem die HU gemacht wird. Ist sie mehr als zwei Monate überzogen, wird eine teurere Ergänzungsuntersuchung fällig.',
   service:
-    'Eine E-Mail im Monat vor der Inspektion. Wann sie fällig ist, steht im Serviceheft, auf dem letzten Werkstattzettel oder in der Anzeige im Auto.',
+    'Eine E-Mail einen Monat vor der Inspektion. Wann sie fällig ist, steht im Serviceheft, auf dem letzten Werkstattzettel oder in der Anzeige im Auto.',
   brakeFluid:
-    'Der ADAC empfiehlt, die Bremsflüssigkeit spätestens alle zwei Jahre zu wechseln; maßgeblich ist der Wartungsplan des Herstellers. Eine E-Mail im Monat vor dem Termin.',
+    'Der ADAC empfiehlt, die Bremsflüssigkeit spätestens alle zwei Jahre zu wechseln; maßgeblich ist der Wartungsplan des Herstellers. Eine E-Mail einen Monat vor dem Termin.',
   tyres:
-    'Eine E-Mail Anfang Oktober und Anfang April. Feste Termine gibt es nicht: Bei Glätte, Schnee oder Schneematsch sind Winter- oder Ganzjahresreifen Pflicht; als Faustregel gilt „von O bis O“.',
+    'Eine E-Mail Anfang Oktober und Anfang April. Feste Termine gibt es nicht: Bei Glatteis, Schneeglätte, Schneematsch, Eis- oder Reifglätte sind Winter- oder Ganzjahresreifen mit Alpine-Symbol (Bergpiktogramm mit Schneeflocke) Pflicht; als Faustregel gilt „von O bis O“.',
 };
+
+/** When the calendar app reminds, if it takes the alarm from the file. */
+const CALENDAR_NOTES: Record<ReminderKind, string> = {
+  hu: 'Der Termin steht am Monatsersten; übernimmt dein Kalender die Erinnerung aus der Datei, meldet er sich vier Wochen vorher.',
+  service:
+    'Der Termin steht am Monatsersten; übernimmt dein Kalender die Erinnerung aus der Datei, meldet er sich zwei Wochen vorher.',
+  brakeFluid:
+    'Der Termin steht am Monatsersten; übernimmt dein Kalender die Erinnerung aus der Datei, meldet er sich zwei Wochen vorher.',
+  tyres:
+    'Zwei Termine, jedes Jahr am 1. Oktober und am 1. April; manche Kalender übernehmen die Erinnerung aus der Datei nicht.',
+};
+
+const AFTER_DUE: Partial<Record<ReminderKind, string>> = {
+  hu: 'Nach der HU trägst du in „Mein Auto“ den neuen Monat von der Plakette ein, dann erinnern wir dich wieder.',
+  service: 'Nach der Inspektion trägst du hier den nächsten Termin ein.',
+  brakeFluid: 'Nach dem Wechsel trägst du hier den neuen Monat ein.',
+};
+
+function PlanLine({
+  kind,
+  car,
+  reminder,
+  confirmed,
+}: {
+  kind: ReminderKind;
+  car: OwnedCarDto;
+  reminder: ReminderDto;
+  confirmed: boolean;
+}) {
+  const plan = reminderPlan(
+    kind,
+    { huUntil: car.huUntil, month: reminder.month },
+    germanToday(new Date()),
+    reminder.lastSentKey,
+  );
+  const unconfirmed = confirmed ? '' : ' – sobald du deine E-Mail-Adresse bestätigt hast';
+  switch (plan.state) {
+    case 'scheduled':
+      return (
+        <p className="reminder__plan">
+          Nächste E-Mail: Anfang {monthName(plan.month)}
+          {unconfirmed}.
+        </p>
+      );
+    case 'due':
+      return (
+        <p className="reminder__plan">
+          Der Termin steht an: Die E-Mail kommt in den nächsten Stunden{unconfirmed}.
+        </p>
+      );
+    case 'sent':
+      return (
+        <p className="reminder__plan">
+          Die E-Mail zu diesem Termin haben wir verschickt. {AFTER_DUE[kind]}
+        </p>
+      );
+    case 'past':
+      return (
+        <Alert tone="warning">
+          <p>
+            Keine E-Mail geplant: Der Termin ist vorbei.{' '}
+            {kind === 'hu'
+              ? 'Trag in „Mein Auto“ den Monat von der neuen Plakette ein.'
+              : 'Trag den neuen Monat ein.'}
+          </p>
+        </Alert>
+      );
+    default:
+      return null;
+  }
+}
 
 function ReminderForm({
   car,
   reminder,
   editable,
   emailAvailable,
+  confirmed,
+  address,
 }: {
   car: OwnedCarDto;
   reminder: ReminderDto;
   editable: boolean;
   emailAvailable: boolean;
+  confirmed: boolean;
+  address: string;
 }) {
   const toast = useToast();
   const save = useSaveReminder(car.id);
   const kind = reminder.kind;
   const needsMonth = kind === 'service' || kind === 'brakeFluid';
+  const savedMonthText = reminder.month ? String(reminder.month.month) : '';
+  const savedYearText = reminder.month ? String(reminder.month.year) : '';
   const [email, setEmail] = useState(reminder.email);
-  const [month, setMonth] = useState(reminder.month ? String(reminder.month.month) : '');
-  const [year, setYear] = useState(reminder.month ? String(reminder.month.year) : '');
-  const [localError, setLocalError] = useState<string | null>(null);
+  const [month, setMonth] = useState(savedMonthText);
+  const [year, setYear] = useState(savedYearText);
+  const [localError, setLocalError] = useState<{ month: boolean; message: string } | null>(null);
+  // A new state from the server (saved here, or unsubscribed elsewhere) replaces the form.
+  const [server, setServer] = useState(reminder);
+  if (server !== reminder) {
+    setServer(reminder);
+    setEmail(reminder.email);
+    setMonth(savedMonthText);
+    setYear(savedYearText);
+  }
+
   const titleId = `reminder-${kind}-title`;
+  const reasonId = `reminder-${kind}-reason`;
   const now = new Date();
-  const today = thisMonth(now);
+  const today = germanToday(now);
 
   const typed = (): { value: ReminderMonth | null } | { error: string } => {
     if (!needsMonth || (!month && !year.trim())) return { value: null };
-    const yearNumber = Number(year.trim());
     if (!month || !/^\d{4}$/.test(year.trim()))
       return { error: 'Bitte gib Monat und Jahr an, zum Beispiel März und 2027.' };
-    return { value: { year: yearNumber, month: Number(month) } };
+    return { value: { year: Number(year.trim()), month: Number(month) } };
   };
   const current = typed();
-  const savedMonth = reminder.month;
-  const due = reminderDueMonth(kind, {
-    huUntil: car.huUntil,
-    month: 'value' in current ? current.value : savedMonth,
-  });
+  const dirty = email !== reminder.email || month !== savedMonthText || year !== savedYearText;
   const huMissing = kind === 'hu' && !car.huUntil;
 
   const submit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if ('error' in current) {
-      setLocalError(current.error);
+      setLocalError({ month: true, message: current.error });
       return;
     }
-    const problem = reminderMonthProblem(kind, current.value, today);
+    const monthChanged = month !== savedMonthText || year !== savedYearText;
+    const problem = monthChanged ? reminderMonthProblem(kind, current.value, today) : null;
     if (problem) {
-      setLocalError(problem);
+      setLocalError({ month: true, message: problem });
       return;
     }
     if (email && needsMonth && current.value === null) {
-      setLocalError(
-        kind === 'service'
-          ? 'Bitte gib an, wann die nächste Inspektion fällig ist.'
-          : 'Bitte gib an, wann die Bremsflüssigkeit zuletzt gewechselt wurde.',
-      );
+      setLocalError({
+        month: true,
+        message:
+          kind === 'service'
+            ? 'Bitte gib an, wann die nächste Inspektion fällig ist.'
+            : 'Bitte gib an, wann die Bremsflüssigkeit zuletzt gewechselt wurde.',
+      });
       return;
     }
+    if (email && (!reminder.email || monthChanged)) {
+      const plan = reminderPlan(
+        kind,
+        { huUntil: car.huUntil, month: current.value },
+        today,
+        reminder.lastSentKey,
+      );
+      if (plan.state === 'past') {
+        setLocalError(
+          kind === 'hu'
+            ? {
+                month: false,
+                message:
+                  'Die HU ist laut „Mein Auto“ schon abgelaufen. Trag nach der HU den Monat von der neuen Plakette ein, dann erinnern wir dich.',
+              }
+            : {
+                month: true,
+                message:
+                  'Der Termin ist schon vorbei. Trag den neuen Termin ein, dann erinnern wir dich.',
+              },
+        );
+        return;
+      }
+    }
     setLocalError(null);
+    const label = REMINDER_LABELS[kind];
     save.mutate(
       { kind, input: { email, month: current.value } },
       {
         onSuccess: () => {
-          toast.show(
-            email
-              ? `Erinnerung „${REMINDER_LABELS[kind]}“ ist eingeschaltet`
-              : `Erinnerung „${REMINDER_LABELS[kind]}“ gespeichert`,
-          );
-          if (email && !reminder.email) track('reminder_enabled', { placement: kind });
+          if (email && !reminder.email) {
+            track('reminder_enabled', { placement: kind });
+            toast.show(
+              confirmed
+                ? `Erinnerung „${label}“ ist eingeschaltet`
+                : `Eingeschaltet – bitte bestätige noch deine E-Mail-Adresse. Wir haben dir einen Link an ${address} geschickt.`,
+            );
+          } else if (!email && reminder.email) {
+            toast.show(`Erinnerung „${label}“ ist ausgeschaltet`);
+          } else {
+            toast.show(`Erinnerung „${label}“ gespeichert`);
+          }
         },
       },
     );
   };
 
+  const title = car.nickname ? `${car.nickname} (${carTitle(car)})` : carTitle(car);
+  const calendarMonth = 'value' in current ? current.value : null;
+  const due = reminderDueMonth(kind, { huUntil: car.huUntil, month: calendarMonth });
+  // The HU file is free, as on the car card; the others belong to Pro.
+  const calendarAllowed = kind === 'hu' || editable;
+  const calendarPossible = kind === 'tyres' || due !== null;
+  // A calendar entry this month or in the past helps nobody.
+  const calendarTooLate = due !== null && monthsUntil(due, today) < 1;
+
   const downloadCalendar = () => {
-    const title = car.nickname ? `${car.nickname} (${carTitle(car)})` : carTitle(car);
     if (kind === 'hu') {
       if (!car.huUntil) return;
       downloadTextFile(
@@ -160,115 +291,137 @@ function ReminderForm({
       kind,
       carId: car.id,
       title,
-      month: 'value' in current ? current.value : null,
+      month: calendarMonth,
       today,
       now,
     });
     if (!file) return;
-    downloadTextFile(
-      kind === 'tyres'
-        ? 'reifenwechsel.ics'
-        : `${kind === 'service' ? 'inspektion' : 'bremsfluessigkeit'}-${due ? `${due.year}-${String(due.month).padStart(2, '0')}` : ''}.ics`,
-      file,
-      'text/calendar;charset=utf-8',
-    );
+    const suffix = due ? `-${due.year}-${String(due.month).padStart(2, '0')}` : '';
+    const name = { service: 'inspektion', brakeFluid: 'bremsfluessigkeit', tyres: 'reifenwechsel' }[
+      kind
+    ];
+    downloadTextFile(`${name}${suffix}.ics`, file, 'text/calendar;charset=utf-8');
   };
 
-  const error = localError ?? (save.error ? errorMessage(save.error) : null);
-  const calendarPossible =
-    kind === 'tyres' ||
-    (kind === 'hu' ? car.huUntil !== null : 'value' in current && current.value !== null);
-  // A calendar entry in the past helps nobody.
-  const calendarInPast = due !== null && monthsUntil(due, today) < 1;
+  const serverError = save.error ? errorOf(save.error) : null;
+  const error = localError ?? serverError;
   const dueText =
     kind === 'hu' && car.huUntil
       ? huStatus(car.huUntil, now).text
       : kind === 'brakeFluid' && due
         ? monthsUntil(due, today) < 0
-          ? `Nach der Empfehlung war der Wechsel im ${monthText(due)} fällig – also schon überfällig.`
-          : `Nächster Wechsel nach der Empfehlung: ${monthText(due)} (${BRAKE_FLUID_MONTHS / 12} Jahre nach dem letzten).`
+          ? `Nach der Empfehlung war der Wechsel im ${monthName(due)} fällig – also schon überfällig.`
+          : `Nächster Wechsel nach der Empfehlung: ${monthName(due)} (${BRAKE_FLUID_MONTHS / 12} Jahre nach dem letzten).`
         : null;
+  const reason = !editable
+    ? 'Erinnerungen per E-Mail gehören zu KaufCheck Pro.'
+    : !emailAvailable
+      ? 'E-Mail-Erinnerungen sind derzeit nicht verfügbar.'
+      : null;
+  const checkboxDisabled = (!editable || !emailAvailable) && !email;
 
   return (
     <section className="card reminder" aria-labelledby={titleId}>
       <h2 id={titleId}>{REMINDER_LABELS[kind]}</h2>
       <p className="muted">{DESCRIPTIONS[kind]}</p>
       {dueText && <p>{dueText}</p>}
-      {huMissing && (
+      {huMissing ? (
         <p>
-          Trag in <Link to="/mein-auto">„Mein Auto“</Link> Monat und Jahr von der Prüfplakette ein,
-          dann kann KaufCheck dich erinnern.
+          Trag in <Link to="/mein-auto">„Mein Auto“</Link> über „Bearbeiten“ Monat und Jahr von der
+          Prüfplakette ein, dann kann KaufCheck dich erinnern.
         </p>
-      )}
-      <form className="stack" onSubmit={submit} noValidate aria-labelledby={titleId}>
-        {needsMonth && (
-          <fieldset className="car-form__pair">
-            <legend>
-              {kind === 'service' ? 'Nächste Inspektion fällig im' : 'Zuletzt gewechselt im'}
-            </legend>
-            <div className="car-form__pair-fields">
-              <SelectField
-                label="Monat"
-                value={month}
-                disabled={!editable}
-                onChange={(event) => setMonth(event.target.value)}
-              >
-                <option value="">Monat</option>
-                {MONTHS.map((name, index) => (
-                  <option key={name} value={index + 1}>
-                    {name}
-                  </option>
-                ))}
-              </SelectField>
-              <TextField
-                label="Jahr"
-                inputMode="numeric"
-                maxLength={4}
-                value={year}
-                disabled={!editable}
-                onChange={(event) => setYear(event.target.value)}
-              />
-            </div>
-          </fieldset>
-        )}
-        <label className="consent">
-          <input
-            type="checkbox"
-            className="checkbox"
-            checked={email}
-            // Without Pro or e-mail a reminder can still be switched off.
-            disabled={(!editable || !emailAvailable || huMissing) && !email}
-            onChange={(event) => setEmail(event.target.checked)}
-          />
-          <span>Per E-Mail erinnern</span>
-        </label>
-        {error && (
-          <Alert tone="error">
-            <p>{error}</p>
-          </Alert>
-        )}
-        <div className="button-row">
-          <Button
-            type="submit"
-            variant="primary"
-            size="sm"
-            loading={save.isPending}
-            disabled={!editable && (email || !reminder.email)}
-          >
-            Speichern<span className="visually-hidden">: {REMINDER_LABELS[kind]}</span>
-          </Button>
-          {editable && calendarPossible && !calendarInPast && (
-            <Button
-              variant="secondary"
-              size="sm"
-              icon={<CalendarPlus aria-hidden size={16} />}
-              onClick={downloadCalendar}
-            >
-              In den Kalender<span className="visually-hidden">: {REMINDER_LABELS[kind]}</span>
-            </Button>
+      ) : (
+        <form className="stack" onSubmit={submit} noValidate aria-labelledby={titleId}>
+          {needsMonth && (
+            <fieldset className="car-form__pair">
+              <legend>
+                {kind === 'service' ? 'Nächste Inspektion fällig im' : 'Zuletzt gewechselt im'}
+              </legend>
+              <div className="car-form__pair-fields">
+                <SelectField
+                  label="Monat"
+                  value={month}
+                  disabled={!editable}
+                  aria-invalid={error?.month ? true : undefined}
+                  onChange={(event) => setMonth(event.target.value)}
+                >
+                  <option value="">Monat</option>
+                  {MONTHS.map((name, index) => (
+                    <option key={name} value={index + 1}>
+                      {name}
+                    </option>
+                  ))}
+                </SelectField>
+                <TextField
+                  label="Jahr"
+                  inputMode="numeric"
+                  maxLength={4}
+                  value={year}
+                  disabled={!editable}
+                  onChange={(event) => setYear(event.target.value)}
+                  error={error?.month ? error.message : undefined}
+                />
+              </div>
+            </fieldset>
           )}
-        </div>
-      </form>
+          <div>
+            <label className="consent">
+              <input
+                type="checkbox"
+                className="checkbox"
+                checked={email}
+                // Switching off always works, also without Pro.
+                disabled={checkboxDisabled}
+                aria-describedby={checkboxDisabled && reason ? reasonId : undefined}
+                onChange={(event) => setEmail(event.target.checked)}
+              />
+              <span>Per E-Mail erinnern</span>
+            </label>
+            {checkboxDisabled && reason && (
+              <p className="field__hint" id={reasonId}>
+                {reason}
+              </p>
+            )}
+          </div>
+          {reminder.email && editable && emailAvailable && !dirty && (
+            <PlanLine kind={kind} car={car} reminder={reminder} confirmed={confirmed} />
+          )}
+          {error && !error.month && (
+            <Alert tone="error">
+              <p>{error.message}</p>
+            </Alert>
+          )}
+          <div className="button-row">
+            <Button
+              type="submit"
+              variant="primary"
+              size="sm"
+              loading={save.isPending}
+              disabled={!dirty || (!editable && email)}
+            >
+              Speichern<span className="visually-hidden">: {REMINDER_LABELS[kind]}</span>
+            </Button>
+            {calendarAllowed && calendarPossible && !calendarTooLate && (
+              <Button
+                variant="secondary"
+                size="sm"
+                icon={<CalendarPlus aria-hidden size={16} />}
+                onClick={downloadCalendar}
+              >
+                In den Kalender<span className="visually-hidden">: {REMINDER_LABELS[kind]}</span>
+              </Button>
+            )}
+            {dirty && <span className="reminder__dirty">Noch nicht gespeichert</span>}
+          </div>
+          {calendarAllowed && calendarPossible && (
+            <p className="muted car-card__note">
+              {calendarTooLate
+                ? 'Der Termin ist diesen Monat oder schon vorbei – ein Kalendereintrag lohnt sich nicht mehr.'
+                : CALENDAR_NOTES[kind]}
+            </p>
+          )}
+        </form>
+      )}
     </section>
   );
 }
@@ -278,11 +431,13 @@ function EmailStatus({
   confirmed,
   pending,
   anyEmail,
+  editable,
 }: {
   address: string;
   confirmed: boolean;
   pending: boolean;
   anyEmail: boolean;
+  editable: boolean;
 }) {
   const resend = useRequestReminderConfirmation();
   const toast = useToast();
@@ -292,7 +447,7 @@ function EmailStatus({
         Erinnerungen gehen an <strong>{address}</strong>.
       </p>
     );
-  if (!anyEmail)
+  if (!anyEmail || !editable)
     return (
       <p className="muted">
         Erinnerungen gehen an <strong>{address}</strong>. Beim ersten Einschalten schicken wir dir
@@ -310,20 +465,19 @@ function EmailStatus({
           loading={resend.isPending}
           onClick={() =>
             resend.mutate(undefined, {
-              onSuccess: () => toast.show('Wir haben dir einen neuen Link geschickt'),
-              onError: (error) => toast.show(errorMessage(error)),
+              onSuccess: () => toast.show(`Wir haben dir einen Link an ${address} geschickt`),
+              onError: (error) => toast.show(errorOf(error).message),
             })
           }
         >
-          Link erneut senden
+          {pending ? 'Link erneut senden' : 'Bestätigungslink senden'}
         </Button>
       }
     >
       <p>
         {pending
-          ? `Wir haben dir einen Link an ${address} geschickt.`
-          : `Der Link an ${address} ist abgelaufen.`}{' '}
-        Erst nach der Bestätigung bekommst du Erinnerungen. Schau auch im Spam-Ordner nach.
+          ? `Wir haben dir einen Link an ${address} geschickt. Erst nach der Bestätigung bekommst du Erinnerungen. Schau auch im Spam-Ordner nach.`
+          : `Bestätige deine Adresse ${address}, damit wir dir Erinnerungen schicken können.`}
       </p>
     </Alert>
   );
@@ -368,6 +522,7 @@ export function RemindersPage() {
 
   const data = reminders.data;
   const emailAvailable = config.data?.features.reminders ?? false;
+  const anyEmail = data?.items.some((item) => item.email) ?? false;
 
   return (
     <div className="container page reminders">
@@ -387,7 +542,9 @@ export function RemindersPage() {
           <p className="page__lead">
             KaufCheck erinnert dich per E-Mail an HU, Inspektion, Bremsflüssigkeit und Reifenwechsel
             – oder du übernimmst die Termine in deinen Kalender. Die E-Mails enthalten nur die
-            Erinnerung, keine Werbung; jede kannst du mit einem Klick abbestellen.
+            Erinnerung, keine Werbung; abbestellen kannst du sie jederzeit. Jede Erinnerung
+            speicherst du einzeln. Die Erinnerungen sind ein Service; für die Fristen bleibst du
+            selbst verantwortlich.
           </p>
         </div>
       </div>
@@ -405,8 +562,9 @@ export function RemindersPage() {
           {!data.editable && (
             <Alert tone="info" title="Erinnerungen gehören zu KaufCheck Pro">
               <p>
-                Mit Pro erinnert dich KaufCheck per E-Mail an Fristen deiner Autos und du übernimmst
-                sie in deinen Kalender. Eingeschaltete Erinnerungen kannst du jederzeit ausschalten.
+                {anyEmail
+                  ? 'Ohne Pro verschicken wir keine Erinnerungen. Deine Einstellungen bleiben gespeichert und gelten wieder, sobald du Pro hast; ausschalten kannst du sie jederzeit.'
+                  : 'Mit Pro erinnert dich KaufCheck per E-Mail an Fristen deiner Autos, und du übernimmst Inspektion, Bremsflüssigkeit und Reifenwechsel in deinen Kalender. Die HU-Frist kannst du auch ohne Pro in den Kalender übernehmen.'}
               </p>
               <p>
                 <Link to="/pro" onClick={() => track('pro_clicked', { placement: 'reminders' })}>
@@ -420,22 +578,24 @@ export function RemindersPage() {
               <p>Die Termine kannst du trotzdem in deinen Kalender übernehmen.</p>
             </Alert>
           )}
-          {emailAvailable && (data.editable || data.items.some((item) => item.email)) && (
+          {emailAvailable && (data.editable || anyEmail) && (
             <EmailStatus
               address={data.emailAddress}
               confirmed={data.emailConfirmed}
               pending={data.confirmationPending}
-              anyEmail={data.items.some((item) => item.email)}
+              anyEmail={anyEmail}
+              editable={data.editable}
             />
           )}
           {data.items.map((reminder) => (
             <ReminderForm
-              // A new server state (e.g. after unsubscribing) resets the form.
-              key={`${reminder.kind}-${reminder.email}-${reminder.month?.year}-${reminder.month?.month}`}
+              key={reminder.kind}
               car={car}
               reminder={reminder}
               editable={data.editable}
               emailAvailable={emailAvailable}
+              confirmed={data.emailConfirmed}
+              address={data.emailAddress}
             />
           ))}
         </div>

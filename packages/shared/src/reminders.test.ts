@@ -5,6 +5,7 @@ import {
   reminderDueMonth,
   reminderMail,
   reminderMonthProblem,
+  reminderPlan,
 } from './reminders';
 
 const none = { huUntil: null, month: null };
@@ -45,6 +46,34 @@ describe('reminders', () => {
     expect(dueOccurrence('tyres', none, { year: 2026, month: 11, day: 1 })).toBeNull();
   });
 
+  it('says when the next e-mail goes out', () => {
+    const today = { year: 2026, month: 10, day: 20 };
+    const hu = (year: number, month: number) => ({ huUntil: { year, month }, month: null });
+    expect(reminderPlan('hu', hu(2027, 3), today, null)).toEqual({
+      state: 'scheduled',
+      month: { year: 2027, month: 2 },
+    });
+    expect(reminderPlan('hu', hu(2026, 11), today, null)).toEqual({ state: 'due' });
+    expect(reminderPlan('hu', hu(2026, 11), today, 'hu-2026-11')).toEqual({ state: 'sent' });
+    expect(reminderPlan('hu', hu(2026, 9), today, null)).toEqual({ state: 'past' });
+    expect(reminderPlan('service', none, today, null)).toEqual({ state: 'noDate' });
+    // Tyres: after the first half of October, the next is April.
+    expect(reminderPlan('tyres', none, today, null)).toEqual({
+      state: 'scheduled',
+      month: { year: 2027, month: 4 },
+    });
+    const early = { year: 2026, month: 10, day: 3 };
+    expect(reminderPlan('tyres', none, early, null)).toEqual({ state: 'due' });
+    expect(reminderPlan('tyres', none, early, 'tyres-2026-10')).toEqual({
+      state: 'scheduled',
+      month: { year: 2027, month: 4 },
+    });
+    expect(reminderPlan('tyres', none, { year: 2026, month: 9, day: 30 }, null)).toEqual({
+      state: 'scheduled',
+      month: { year: 2026, month: 10 },
+    });
+  });
+
   it('checks the months', () => {
     const today = { year: 2026, month: 10 };
     expect(reminderMonthProblem('service', { year: 2026, month: 10 }, today)).toBeNull();
@@ -66,7 +95,7 @@ describe('reminders', () => {
       { key: 'hu-2026-11', due: { year: 2026, month: 11 } },
       'Mein Golf',
     );
-    expect(mail.subject).toBe('Erinnerung: HU für Mein Golf bis Ende 11/2026');
+    expect(mail.subject).toBe('Erinnerung: HU für Mein Golf bis Ende November 2026');
     expect(mail.body).toContain('Ergänzungsuntersuchung');
     const summer = reminderMail(
       'tyres',

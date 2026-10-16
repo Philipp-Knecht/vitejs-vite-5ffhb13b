@@ -1,6 +1,7 @@
 import { useSearchParams } from 'react-router';
 import { ApiRequestError } from '../../api/client';
-import { useConfirmReminders, useUnsubscribeReminder } from '../../api/queries';
+import { REMINDER_LABELS } from '@kaufcheck/shared';
+import { useConfirmReminders, useUnsubscribeInfo, useUnsubscribeReminder } from '../../api/queries';
 import { Alert } from '../../components/ui/Alert';
 import { Button, ButtonLink } from '../../components/ui/Button';
 import { appPageMeta } from '../../seo/pages';
@@ -56,8 +57,8 @@ export function ConfirmRemindersPage() {
       ) : (
         <div className="stack">
           <p>
-            Bestätige, dass KaufCheck dir die Erinnerungen schicken darf, die du in „Mein Auto“
-            einschaltest. Du kannst sie jederzeit wieder ausschalten.
+            Bestätige, dass diese E-Mail-Adresse dir gehört. Danach schicken wir dir die
+            Erinnerungen, die du in „Mein Auto“ einschaltest; ausschalten kannst du sie jederzeit.
           </p>
           {confirm.isError && (
             <Alert tone="error">
@@ -86,24 +87,40 @@ export function UnsubscribeReminderPage() {
   const reminder = params.get('r') ?? '';
   const token = params.get('t') ?? '';
   const unsubscribe = useUnsubscribeReminder();
+  const info = useUnsubscribeInfo(reminder, token);
   if (!reminder || !token) return <Incomplete title="Erinnerung abbestellen" />;
+  const what = info.data ? `„${REMINDER_LABELS[info.data.kind]}“ für ${info.data.carName}` : null;
   return (
     <div className="container page page--auth">
       <h1>Erinnerung abbestellen</h1>
-      {unsubscribe.isSuccess ? (
+      {info.isError ? (
+        <Alert
+          tone="warning"
+          title="Der Link funktioniert nicht"
+          actions={<ButtonLink to="/mein-auto">Zu „Mein Auto“</ButtonLink>}
+        >
+          <p>
+            {message(info.error)} Angemeldet kannst du jede Erinnerung auf der Seite „Erinnerungen“
+            deines Autos ausschalten.
+          </p>
+        </Alert>
+      ) : unsubscribe.isSuccess || info.data?.email === false ? (
         <Alert
           tone="success"
           title="Abbestellt"
           actions={<ButtonLink to="/mein-auto">Zu „Mein Auto“</ButtonLink>}
         >
           <p>
-            Diese Erinnerung schicken wir dir nicht mehr. Andere Erinnerungen und deine Angaben in
-            „Mein Auto“ bleiben, wie sie sind.
+            {what ? `Die Erinnerung ${what}` : 'Diese Erinnerung'} schicken wir dir nicht mehr per
+            E-Mail. Andere Erinnerungen und deine Angaben in „Mein Auto“ bleiben, wie sie sind.
           </p>
         </Alert>
       ) : (
         <div className="stack">
-          <p>Möchtest du diese Erinnerung nicht mehr per E-Mail bekommen?</p>
+          <p>
+            Möchtest du {what ? `die Erinnerung ${what}` : 'diese Erinnerung'} nicht mehr per E-Mail
+            bekommen?
+          </p>
           {unsubscribe.isError && (
             <Alert tone="error">
               <p>{message(unsubscribe.error)}</p>
@@ -113,6 +130,7 @@ export function UnsubscribeReminderPage() {
             <Button
               variant="primary"
               loading={unsubscribe.isPending}
+              disabled={info.isPending}
               onClick={() => unsubscribe.mutate({ reminder, token })}
             >
               Erinnerung abbestellen

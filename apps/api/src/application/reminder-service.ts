@@ -4,6 +4,7 @@ import {
   REMINDER_KINDS,
   REMINDER_NEEDS_MONTH,
   reminderMonthProblem,
+  reminderPlan,
   type CarRemindersResponse,
   type LegalContext,
   type OperatorInfo,
@@ -25,6 +26,9 @@ const HOUR_MS = 60 * 60 * 1000;
 /** A new confirmation link at most every ten minutes. */
 const CONFIRM_RESEND_MS = 10 * 60 * 1000;
 const SEND_BATCH = 200;
+const DAY_MS = 24 * HOUR_MS;
+/** Confirmation links per account and day. */
+const CONFIRM_PER_DAY = 3;
 
 export interface ReminderServiceOptions {
   siteUrl: string;
@@ -53,12 +57,14 @@ interface ReminderRow {
   email: boolean;
   year: number | null;
   month: number | null;
+  lastSentKey: string | null;
 }
 
 function toDto(kind: ReminderKind, row: ReminderRow | undefined): ReminderDto {
   return {
     kind,
     email: row?.email ?? false,
+    lastSentKey: row?.lastSentKey ?? null,
     month:
       row && row.year !== null && row.month !== null ? { year: row.year, month: row.month } : null,
   };
@@ -133,7 +139,7 @@ export class ReminderService {
     if (!(REMINDER_KINDS as readonly string[]).includes(kind))
       throw new AppError('NOT_FOUND', { message: 'Diese Erinnerung gibt es nicht.' });
     const reminderKind = kind as ReminderKind;
-    await this.requireCar(user.id, carId);
+    const car = await this.requireCar(user.id, carId);
     const existing = await this.db.carReminder.findUnique({
       where: { carId_kind: { carId, kind } },
     });
@@ -146,13 +152,16 @@ export class ReminderService {
       throw new AppError('SERVICE_UNAVAILABLE', {
         message: 'E-Mail-Erinnerungen sind derzeit nicht verfügbar.',
       });
-    if (pro) {
+    // A month that was valid when saved may lie in the past by now: only a changed one is checked.
+    if (pro && !sameMonth(existing, input.month)) {
       const problem = reminderMonthProblem(
         reminderKind,
         input.month,
         germanToday(this.options.now()),
       );
       if (problem) throw invalid('month', problem);
+    }
+    if (pro) {
       if (input.email && REMINDER_NEEDS_MONTH.has(reminderKind) && input.month === null)
         throw invalid(
           'month',
@@ -162,6 +171,35 @@ export class ReminderService {
         );
     }
     const month = pro ? input.month : existingMonth(existing);
+    // A reminder that could never send is not switched on.
+    if (input.email && (!existing?.email || !sameMonth(existing, input.month))) {
+      const huUntil =
+        car.huYear !== null && car.huMonth !== null
+          ? { year: car.huYear, month: car.huMonth }
+          : null;
+      if (reminderKind === 'hu' && !huUntil)
+        throw new AppError('VALIDATION_ERROR', {
+          message: 'Trag zuerst in „Mein Auto“ Monat und Jahr von der Prüfplakette ein.',
+        });
+      const plan = reminderPlan(
+        reminderKind,
+        { huUntil, month },
+        germanToday(this.options.now()),
+        existing?.lastSentKey ?? null,
+      );
+      if (plan.state === 'past')
+        throw reminderKind === 'hu'
+          ? new AppError('VALIDATION_ERROR', {
+              message:
+                'Die HU ist laut „Mein Auto“ schon abgelaufen. Trag nach der HU den Monat von der neuen Plakette ein, dann erinnern wir dich.',
+            })
+          : invalid(
+              'month',
+              'Der Termin ist schon vorbei. Trag den neuen Termin ein, dann erinnern wir dich.',
+            );
+    }
+    // The link goes out before saving: if it cannot be sent, nothing is switched on.
+    if (input.email && user.remindersConfirmedAt === null) await this.sendConfirmation(user, false);
     const now = this.options.now();
     const data = {
       email: input.email,
@@ -174,7 +212,6 @@ export class ReminderService {
       create: { carId, kind, ...data },
       update: data,
     });
-    if (input.email && user.remindersConfirmedAt === null) await this.sendConfirmation(user, false);
     return this.list(actor, carId);
   }
 
@@ -203,6 +240,17 @@ export class ReminderService {
     const recent = await this.db.reminderConfirmToken.findFirst({
       where: { userId: user.id, createdAt: { gt: new Date(now.getTime() - CONFIRM_RESEND_MS) } },
     });
+    const today = await this.db.reminderConfirmToken.count({
+      where: { userId: user.id, createdAt: { gt: new Date(now.getTime() - DAY_MS) } },
+    });
+    // At most a few links a day: the address is not verified yet.
+    if (today >= CONFIRM_PER_DAY) {
+      if (!explicit) return;
+      throw new AppError('RATE_LIMITED', {
+        message:
+          'Wir haben dir heute schon mehrere Links geschickt. Bitte schau in deinem Postfach und im Spam-Ordner nach oder versuch es morgen wieder.',
+      });
+    }
     if (recent) {
       if (explicit)
         throw new AppError('RATE_LIMITED', {
@@ -240,7 +288,7 @@ export class ReminderService {
     if (!record || record.expiresAt <= now)
       throw new AppError('VALIDATION_ERROR', {
         message:
-          'Der Link ist abgelaufen oder wurde schon benutzt. Unter „Mein Auto“ kannst du einen neuen anfordern.',
+          'Der Link ist abgelaufen oder wurde schon benutzt. Hast du schon bestätigt, ist alles erledigt; sonst forderst du auf der Seite „Erinnerungen“ deines Autos einen neuen Link an.',
       });
     await this.db.$transaction([
       this.db.user.update({
@@ -251,8 +299,7 @@ export class ReminderService {
     ]);
   }
 
-  /** Switches one reminder off with the signed link from an e-mail; repeating it does no harm. */
-  async unsubscribe(reminderId: string, token: string): Promise<void> {
+  private checkUnsubscribe(reminderId: string, token: string): void {
     const expected = Buffer.from(this.unsubscribeToken(reminderId));
     const given = Buffer.from(token);
     if (
@@ -260,11 +307,32 @@ export class ReminderService {
       given.length !== expected.length ||
       !timingSafeEqual(given, expected)
     )
-      throw new AppError('VALIDATION_ERROR', { message: 'Dieser Abmeldelink ist ungültig.' });
+      throw new AppError('VALIDATION_ERROR', {
+        message: 'Dieser Link zum Abbestellen ist ungültig.',
+      });
+  }
+
+  /** Which reminder a link from an e-mail is about, for the page that asks before unsubscribing. */
+  async describeUnsubscribe(
+    reminderId: string,
+    token: string,
+  ): Promise<{ kind: ReminderKind; carName: string; email: boolean } | null> {
+    this.checkUnsubscribe(reminderId, token);
+    const row = await this.db.carReminder.findUnique({
+      where: { id: reminderId },
+      include: { car: { select: { nickname: true, makeId: true, modelName: true } } },
+    });
+    if (!row || !(REMINDER_KINDS as readonly string[]).includes(row.kind)) return null;
+    return { kind: row.kind as ReminderKind, carName: carName(row.car), email: row.email };
+  }
+
+  /** Switches one reminder off with the signed link from an e-mail; repeating it does no harm. */
+  async unsubscribe(reminderId: string, token: string): Promise<void> {
+    this.checkUnsubscribe(reminderId, token);
     await this.db.carReminder.updateMany({ where: { id: reminderId }, data: { email: false } });
   }
 
-  /** Called by the maintenance loop: sends what is due today, each due date once. */
+  /** Called hourly by the server: sends what is due today, each due date once. */
   async sendDue(): Promise<ReminderSendReport> {
     const report: ReminderSendReport = { remindersSent: 0, remindersFailed: 0 };
     const context = this.context;
@@ -277,11 +345,12 @@ export class ReminderService {
         where: {
           email: true,
           car: { user: { plan: 'PRO', remindersConfirmedAt: { not: null } } },
+          // Not a Prisma cursor: the last row may change or go while e-mails are sent.
+          ...(cursor ? { id: { gt: cursor } } : {}),
         },
         include: { car: { include: { user: { select: { email: true } } } } },
         orderBy: { id: 'asc' },
         take: SEND_BATCH,
-        ...(cursor ? { cursor: { id: cursor }, skip: 1 } : {}),
       });
       if (rows.length === 0) break;
       cursor = rows.at(-1)!.id;
@@ -307,15 +376,13 @@ export class ReminderService {
           data: { lastSentKey: occurrence.key, lastSentAt: now },
         });
         if (claimed.count !== 1) continue;
-        const carName =
-          car.nickname ?? `${makeById(car.makeId)?.name ?? car.makeId} ${car.modelName}`;
         try {
           await this.email.send(
             reminderEmail(context, {
               to: car.user.email,
               kind,
               occurrence,
-              carName,
+              carName: carName(car),
               carId: car.id,
               reminderId: row.id,
               unsubscribeToken: this.unsubscribeToken(row.id),
@@ -346,12 +413,20 @@ export class ReminderService {
     return user;
   }
 
-  private async requireCar(userId: string, carId: string): Promise<void> {
+  private async requireCar(userId: string, carId: string) {
     const car = isUuid(carId)
-      ? await this.db.ownedCar.findFirst({ where: { id: carId, userId }, select: { id: true } })
+      ? await this.db.ownedCar.findFirst({
+          where: { id: carId, userId },
+          select: { id: true, huYear: true, huMonth: true },
+        })
       : null;
     if (!car) throw new AppError('NOT_FOUND', { message: 'Dieses Auto gibt es nicht (mehr).' });
+    return car;
   }
+}
+
+function carName(car: { nickname: string | null; makeId: string; modelName: string }): string {
+  return car.nickname ?? `${makeById(car.makeId)?.name ?? car.makeId} ${car.modelName}`;
 }
 
 function existingMonth(row: { year: number | null; month: number | null } | null) {

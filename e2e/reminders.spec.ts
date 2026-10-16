@@ -55,16 +55,22 @@ test('reminders are switched on, confirmed by link and unsubscribed', async ({ p
   // The HU needs the month from the badge first.
   const hu = page.getByRole('region', { name: 'Hauptuntersuchung (HU)' });
   await expect(hu.getByText(/Monat und Jahr von der Prüfplakette/)).toBeVisible();
-  await expect(hu.getByRole('checkbox', { name: 'Per E-Mail erinnern' })).toBeDisabled();
+  await expect(hu.getByRole('checkbox')).toHaveCount(0);
 
   const service = page.getByRole('region', { name: 'Inspektion' });
   await service.getByLabel('Monat').selectOption({ label: 'März' });
   await service.getByLabel('Jahr').fill(nextYear);
   await service.getByRole('checkbox', { name: 'Per E-Mail erinnern' }).check();
   await service.getByRole('button', { name: /^Speichern\s*: Inspektion$/ }).click();
-  await expect(page.getByText('Erinnerung „Inspektion“ ist eingeschaltet')).toBeVisible();
+  await expect(
+    page.getByText(/Eingeschaltet – bitte bestätige noch deine E-Mail-Adresse/),
+  ).toBeVisible();
   await expect(page.getByText('Bitte bestätige deine E-Mail-Adresse')).toBeVisible();
-  await expect(page.getByText(`Wir haben dir einen Link an ${email} geschickt.`)).toBeVisible();
+  await expect(
+    page.getByText(
+      `Wir haben dir einen Link an ${email} geschickt. Erst nach der Bestätigung bekommst du Erinnerungen.`,
+    ),
+  ).toBeVisible();
 
   const download = page.waitForEvent('download');
   await service.getByRole('button', { name: /^In den Kalender\s*: Inspektion$/ }).click();
@@ -98,6 +104,9 @@ test('reminders are switched on, confirmed by link and unsubscribed', async ({ p
   await expect(page.getByText('Bestätigt', { exact: true })).toBeVisible();
   await page.goto(remindersUrl);
   await expect(page.getByText(`Erinnerungen gehen an ${email}.`)).toBeVisible();
+  await expect(
+    page.getByRole('region', { name: 'Inspektion' }).getByText(/Nächste E-Mail: Anfang Februar/),
+  ).toBeVisible();
 
   // The unsubscribe link in a reminder.
   const [reminder] = await query<{ id: string }>(
@@ -109,6 +118,9 @@ test('reminders are switched on, confirmed by link and unsubscribed', async ({ p
     .update(`reminder-unsubscribe:${reminder!.id}`)
     .digest('base64url');
   await page.goto(`/erinnerung-abbestellen?r=${reminder!.id}&t=${signature}`);
+  await expect(
+    page.getByText(/die Erinnerung „Inspektion“ für Škoda Fabia nicht mehr/),
+  ).toBeVisible();
   await page.getByRole('button', { name: 'Erinnerung abbestellen' }).click();
   await expect(page.getByText('Abbestellt', { exact: true })).toBeVisible();
   await page.goto(remindersUrl);

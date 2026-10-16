@@ -128,7 +128,7 @@ function rows(
       cells: [flag(plans.anonymous.carLog), flag(plans.free.carLog), flag(plans.pro.carLog)],
     },
     {
-      label: 'Erinnerungen an HU, Inspektion und Reifen',
+      label: 'Erinnerungen an HU, Inspektion, Bremsflüssigkeit und Reifen',
       cells: [
         flag(plans.anonymous.reminders),
         flag(plans.free.reminders),

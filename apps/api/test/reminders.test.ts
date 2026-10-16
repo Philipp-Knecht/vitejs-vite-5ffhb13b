@@ -90,10 +90,10 @@ describe('Reminders', () => {
     expect(response.statusCode).toBe(200);
     expect(response.json<CarRemindersResponse>()).toEqual({
       items: [
-        { kind: 'hu', email: false, month: null },
-        { kind: 'service', email: false, month: null },
-        { kind: 'brakeFluid', email: false, month: null },
-        { kind: 'tyres', email: false, month: null },
+        { kind: 'hu', email: false, month: null, lastSentKey: null },
+        { kind: 'service', email: false, month: null, lastSentKey: null },
+        { kind: 'brakeFluid', email: false, month: null, lastSentKey: null },
+        { kind: 'tyres', email: false, month: null, lastSentKey: null },
       ],
       emailAddress: account.email,
       emailConfirmed: false,
@@ -161,9 +161,9 @@ describe('Reminders', () => {
     expect(report).toEqual({ remindersSent: 4, remindersFailed: 0 });
     const subjects = email.sent.map((mail) => mail.subject).sort();
     expect(subjects).toEqual([
-      'Erinnerung: Bremsflüssigkeit für Volkswagen Golf im 11/2026',
-      'Erinnerung: HU für Volkswagen Golf bis Ende 11/2026',
-      'Erinnerung: Inspektion für Volkswagen Golf im 10/2026',
+      'Erinnerung: Bremsflüssigkeit für Volkswagen Golf im November 2026',
+      'Erinnerung: HU für Volkswagen Golf bis Ende November 2026',
+      'Erinnerung: Inspektion für Volkswagen Golf im Oktober 2026',
       'Erinnerung: Winterreifen für Volkswagen Golf',
     ]);
     for (const mail of email.sent) {
@@ -185,6 +185,13 @@ describe('Reminders', () => {
     // The mail provider's one-click POST: form-encoded, no cookies, no Origin.
     const hu = email.sent.find((mail) => mail.subject.includes('HU'))!;
     const url = new URL(/^<(.+)>$/.exec(hu.headers!['List-Unsubscribe']!)![1]!);
+    // The page behind the link names the reminder before asking.
+    const info = await built.app.inject({ method: 'GET', url: `${url.pathname}${url.search}` });
+    expect(info.json()).toEqual({
+      kind: 'hu',
+      carName: 'Volkswagen Golf',
+      email: true,
+    });
     const oneClick = await built.app.inject({
       method: 'POST',
       url: `${url.pathname}${url.search}`,
@@ -195,6 +202,18 @@ describe('Reminders', () => {
     const list = (await client.get(path(car.id))).json<CarRemindersResponse>();
     expect(list.items.find((item) => item.kind === 'hu')!.email).toBe(false);
     expect(list.items.find((item) => item.kind === 'tyres')!.email).toBe(true);
+
+    // RFC 8058 prefers multipart/form-data.
+    const tyres = email.sent.find((mail) => mail.subject.includes('Winterreifen'))!;
+    const tyresUrl = new URL(/^<(.+)>$/.exec(tyres.headers!['List-Unsubscribe']!)![1]!);
+    const boundary = 'kaufcheck-boundary';
+    const multipart = await built.app.inject({
+      method: 'POST',
+      url: `${tyresUrl.pathname}${tyresUrl.search}`,
+      headers: { 'content-type': `multipart/form-data; boundary=${boundary}` },
+      payload: `--${boundary}\r\nContent-Disposition: form-data; name="List-Unsubscribe"\r\n\r\nOne-Click\r\n--${boundary}--\r\n`,
+    });
+    expect(multipart.statusCode).toBe(204);
 
     // The page behind the link in the text posts JSON; repeating it does no harm.
     const reminder = url.searchParams.get('r')!;
@@ -227,7 +246,9 @@ describe('Reminders', () => {
     expect((await built.services.reminders.sendDue()).remindersSent).toBe(0);
     now = new Date('2028-10-02T08:00:00Z');
     expect((await built.services.reminders.sendDue()).remindersSent).toBe(1);
-    expect(email.sent[0]!.subject).toBe('Erinnerung: HU für Volkswagen Golf bis Ende 11/2028');
+    expect(email.sent[0]!.subject).toBe(
+      'Erinnerung: HU für Volkswagen Golf bis Ende November 2028',
+    );
   });
 
   it('checks the months it needs', async () => {
@@ -291,7 +312,59 @@ describe('Reminders', () => {
       kind: 'service',
       email: false,
       month: { year: 2026, month: 10 },
+      lastSentKey: null,
     });
+  });
+
+  it('switches off whatever the month, but does not switch on what could never send', async () => {
+    const { client, car } = await owner();
+    await confirmed(client, car.id);
+    await client.put(path(car.id, 'service'), on({ year: 2026, month: 10 }));
+    // Months later the saved month lies in the past; switching off still works.
+    await built.services.db.carReminder.updateMany({ data: { year: 2026, month: 7 } });
+    const off = await client.put(path(car.id, 'service'), {
+      email: false,
+      month: { year: 2026, month: 7 },
+    });
+    expect(off.statusCode).toBe(200);
+
+    // Brake fluid changed more than two years ago: the due month has passed.
+    const late = await client.put(path(car.id, 'brakeFluid'), on({ year: 2024, month: 6 }));
+    expect(late.statusCode).toBe(400);
+    expect(errorOf(late).message).toContain('schon vorbei');
+    // An HU that has expired already.
+    const expired = await owner('PRO', { ...CAR, huUntil: { year: 2026, month: 8 } });
+    const hu = await expired.client.put(path(expired.car.id, 'hu'), on());
+    expect(hu.statusCode).toBe(400);
+    expect(errorOf(hu).message).toContain('abgelaufen');
+
+    const noHu = await owner('PRO', { ...CAR, huUntil: null });
+    const missing = await noHu.client.put(path(noHu.car.id, 'hu'), on());
+    expect(missing.statusCode).toBe(400);
+    expect(errorOf(missing).message).toContain('Prüfplakette');
+  });
+
+  it('switches nothing on when the confirmation link cannot be sent, and limits links', async () => {
+    const { client, car } = await owner();
+    email.failing = true;
+    const failed = await client.put(path(car.id, 'hu'), on());
+    expect(failed.statusCode).toBe(503);
+    const list = (await client.get(path(car.id))).json<CarRemindersResponse>();
+    expect(list.items.every((item) => !item.email)).toBe(true);
+    expect(list.confirmationPending).toBe(false);
+    email.failing = false;
+
+    // Three links a day at most, also on request.
+    for (let round = 0; round < 3; round++) {
+      expect((await client.post('/api/reminders/confirmation')).statusCode).toBe(204);
+      now = new Date(now.getTime() + 11 * 60 * 1000);
+    }
+    expect(email.sent).toHaveLength(3);
+    const fourth = await client.post('/api/reminders/confirmation');
+    expect(fourth.statusCode).toBe(429);
+    // Switching on still works; it just sends no further link today.
+    expect((await client.put(path(car.id, 'hu'), on())).statusCode).toBe(200);
+    expect(email.sent).toHaveLength(3);
   });
 
   it('is unavailable without e-mail or operator details', async () => {
@@ -316,5 +389,14 @@ describe('Reminders', () => {
     expect(await built.services.db.carReminder.count()).toBe(1);
     await client.delete(`/api/owned-cars/${car.id}`);
     expect(await built.services.db.carReminder.count()).toBe(0);
+
+    const other = await owner();
+    await other.client.put(path(other.car.id, 'hu'), on());
+    expect(await built.services.db.carReminder.count()).toBe(1);
+    expect(await built.services.db.reminderConfirmToken.count()).toBe(1);
+    const deleted = await other.client.delete('/api/account', { password: other.account.password });
+    expect(deleted.statusCode).toBe(204);
+    expect(await built.services.db.carReminder.count()).toBe(0);
+    expect(await built.services.db.reminderConfirmToken.count()).toBe(0);
   });
 });

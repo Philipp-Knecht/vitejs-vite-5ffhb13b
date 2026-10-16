@@ -5,6 +5,7 @@ import {
 } from '@kaufcheck/shared';
 import type { FastifyInstance } from 'fastify';
 import type { Services } from '../../container';
+import { AppError } from '../../lib/errors';
 import { parseInput } from '../errors';
 
 export function reminderRoutes(app: FastifyInstance, services: Services): void {
@@ -33,15 +34,30 @@ export function reminderRoutes(app: FastifyInstance, services: Services): void {
     return reply.status(204).send();
   });
 
+  app.get<{ Querystring: { r?: string; t?: string } }>(
+    '/api/reminders/unsubscribe',
+    async (request) => {
+      const { reminder, token } = parseInput(ReminderUnsubscribeRequestSchema, {
+        reminder: request.query.r ?? '',
+        token: request.query.t ?? '',
+      });
+      const found = await reminders.describeUnsubscribe(reminder, token);
+      if (!found)
+        throw new AppError('NOT_FOUND', { message: 'Diese Erinnerung gibt es nicht mehr.' });
+      return found;
+    },
+  );
+
   /**
    * Unsubscribing: from the page behind the e-mail link (JSON) and as the
    * one-click POST of RFC 8058, which mail providers send form-encoded with
    * the id and token in the URL, without cookies.
    */
   app.register((scope, _options, done) => {
+    // RFC 8058 § 3.1: multipart/form-data (SHOULD) or form-encoded (MAY); the body only says „One-Click“.
     scope.addContentTypeParser(
-      'application/x-www-form-urlencoded',
-      { parseAs: 'string', bodyLimit: 1024 },
+      ['application/x-www-form-urlencoded', 'multipart/form-data'],
+      { parseAs: 'string', bodyLimit: 4096 },
       (_request, _body, parsed) => {
         parsed(null, {});
       },

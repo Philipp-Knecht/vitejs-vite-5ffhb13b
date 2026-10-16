@@ -105,6 +105,67 @@ export function dueOccurrence(
   return { key: `${kind}-${due.year}-${pad(due.month)}`, due };
 }
 
+const MONTH_NAMES = [
+  'Januar',
+  'Februar',
+  'März',
+  'April',
+  'Mai',
+  'Juni',
+  'Juli',
+  'August',
+  'September',
+  'Oktober',
+  'November',
+  'Dezember',
+];
+
+/** E.g. „November 2026“. */
+export const monthName = (value: YearMonth) => `${MONTH_NAMES[value.month - 1]} ${value.year}`;
+
+/** What happens next with an e-mail reminder, for the settings page. */
+export type ReminderPlan =
+  /** The next e-mail goes out at the start of this month. */
+  | { state: 'scheduled'; month: YearMonth }
+  /** Due now: the e-mail goes out with the next run. */
+  | { state: 'due' }
+  /** The e-mail for the current date was sent. */
+  | { state: 'sent' }
+  /** The date has passed: no e-mail until a new date is entered. */
+  | { state: 'past' }
+  /** No date yet (no HU month, no inspection month). */
+  | { state: 'noDate' };
+
+/** The next tyre season: October or April, from the first half of the month on. */
+function nextTyreSeason(today: { year: number; month: number; day: number }): YearMonth {
+  const current = index(today) + (today.day > 15 ? 1 : 0);
+  for (let offset = 0; offset < 12; offset++) {
+    const candidate = fromIndex(current + offset);
+    if (candidate.month === 10 || candidate.month === 4) return candidate;
+  }
+  return fromIndex(current);
+}
+
+export function reminderPlan(
+  kind: ReminderKind,
+  input: { huUntil: YearMonth | null; month: YearMonth | null },
+  today: { year: number; month: number; day: number },
+  lastSentKey: string | null,
+): ReminderPlan {
+  const occurrence = dueOccurrence(kind, input, today);
+  if (kind === 'tyres') {
+    if (occurrence && occurrence.key !== lastSentKey) return { state: 'due' };
+    const season = nextTyreSeason(occurrence ? { ...today, day: 16 } : today);
+    return { state: 'scheduled', month: season };
+  }
+  const due = reminderDueMonth(kind, input);
+  if (!due) return { state: 'noDate' };
+  if (occurrence) return occurrence.key === lastSentKey ? { state: 'sent' } : { state: 'due' };
+  return index(today) < index(due) - 1
+    ? { state: 'scheduled', month: fromIndex(index(due) - 1) }
+    : { state: 'past' };
+}
+
 export interface ReminderMail {
   subject: string;
   /** The factual part; the footer with sender and unsubscribe links is added by the server. */
@@ -117,15 +178,16 @@ export function reminderMail(
   occurrence: ReminderOccurrence,
   carName: string,
 ): ReminderMail {
-  const month = monthText(occurrence.due);
+  const month = monthName(occurrence.due);
   switch (kind) {
     case 'hu':
       return {
         subject: `Erinnerung: HU für ${carName} bis Ende ${month}`,
         body: [
-          `Die Hauptuntersuchung für ${carName} ist laut deiner Angabe in „Mein Auto“ bis Ende ${month} fällig.`,
-          'Einen Termin vereinbarst du zum Beispiel bei TÜV, DEKRA, GTÜ oder KÜS. Maßgeblich ist der Monat auf der Prüfplakette am hinteren Kennzeichen.',
-          'Ist die HU mehr als zwei Monate überzogen, wird eine Ergänzungsuntersuchung fällig, die mehr kostet.',
+          `Die Hauptuntersuchung für ${carName} ist laut deiner Angabe in „Mein Auto“ bis Ende ${month} fällig. Maßgeblich sind Monat und Jahr auf der Prüfplakette am hinteren Kennzeichen.`,
+          'Einen Termin vereinbarst du zum Beispiel bei TÜV, DEKRA, GTÜ oder KÜS. Die Frist für die nächste HU beginnt mit dem Monat, in dem die HU gemacht wird – gehst du schon vor dem Monat auf der Plakette, ist auch die nächste HU entsprechend früher fällig.',
+          'Ist die HU mehr als zwei Monate überzogen, wird eine Ergänzungsuntersuchung fällig, die mehr kostet; außerdem droht dann ein Verwarnungsgeld ab 15 €.',
+          'Nach der HU trägst du in „Mein Auto“ den neuen Monat von der Plakette ein, dann erinnern wir dich wieder.',
         ].join('\n\n'),
       };
     case 'service':
@@ -134,6 +196,7 @@ export function reminderMail(
         body: [
           `Für ${carName} hast du in „Mein Auto“ die nächste Inspektion für ${month} eingetragen.`,
           'Maßgeblich sind der Wartungsplan des Herstellers und die Anzeige im Auto.',
+          'Nach der Inspektion trägst du den nächsten Termin ein, dann erinnern wir dich wieder.',
         ].join('\n\n'),
       };
     case 'brakeFluid':
@@ -142,6 +205,7 @@ export function reminderMail(
         body: [
           `Für ${carName} hast du in „Mein Auto“ den letzten Wechsel der Bremsflüssigkeit eingetragen. Der ADAC empfiehlt, sie spätestens alle zwei Jahre zu wechseln – das wäre im ${month}.`,
           'Maßgeblich ist der Wartungsplan des Herstellers; eine gesetzliche Frist gibt es nicht.',
+          'Nach dem Wechsel trägst du den neuen Monat ein, dann erinnern wir dich wieder.',
         ].join('\n\n'),
       };
     case 'tyres':
@@ -149,19 +213,23 @@ export function reminderMail(
         ? {
             subject: `Erinnerung: Winterreifen für ${carName}`,
             body: [
-              'Bei Glatteis, Schnee, Schneematsch oder Reifglätte darfst du nur mit Winter- oder Ganzjahresreifen mit Alpine-Symbol (Bergpiktogramm mit Schneeflocke) fahren. Eine feste Frist gibt es nicht; als Faustregel gilt „von O bis O“, von Oktober bis Ostern.',
-              'Prüf auch die Profiltiefe: Gesetzlich sind 1,6 mm vorgeschrieben.',
+              `${WINTER_RULE} Eine feste Frist gibt es nicht; als Faustregel gilt „von O bis O“, von Oktober bis Ostern.`,
+              'Prüf auch die Profiltiefe: Gesetzlich sind mindestens 1,6 mm vorgeschrieben.',
             ].join('\n\n'),
           }
         : {
             subject: `Erinnerung: Sommerreifen für ${carName}`,
             body: [
-              'Die Faustregel „von O bis O“ endet mit Ostern: Wenn kein Schnee und keine Glätte mehr zu erwarten sind, kannst du auf Sommerreifen wechseln.',
+              'Die Faustregel „von O bis O“ endet mit Ostern: Wenn keine Glätte durch Eis oder Schnee mehr zu erwarten ist, kannst du auf Sommerreifen wechseln.',
               'Prüf dabei Profiltiefe (gesetzlich mindestens 1,6 mm), Alter und Schäden der Reifen.',
             ].join('\n\n'),
           };
   }
 }
+
+/** § 2 Abs. 3a StVO and § 36 Abs. 4 StVZO, in plain words. */
+export const WINTER_RULE =
+  'Bei Glatteis, Schneeglätte, Schneematsch, Eisglätte oder Reifglätte darfst du nur fahren, wenn alle Räder Winter- oder Ganzjahresreifen mit Alpine-Symbol (Bergpiktogramm mit Schneeflocke) haben; Reifen nur mit M+S-Kennzeichnung reichen nicht mehr.';
 
 const dateValue = (value: YearMonth, day = 1) => `${value.year}${pad(value.month)}${pad(day)}`;
 
@@ -241,18 +309,17 @@ export function reminderCalendarFile({
         {
           uid: `tyres-winter-${carId}@kaufcheck`,
           start: october,
-          summary: `Winterreifen: ${title}`,
-          description:
-            'Faustregel „von O bis O“: Winter- oder Ganzjahresreifen mit Alpine-Symbol von Oktober bis Ostern. Pflicht sind sie bei Glatteis, Schnee, Schneematsch und Reifglätte.',
+          summary: `Winterreifen aufziehen: ${title}`,
+          description: `Faustregel „von O bis O“: von Oktober bis Ostern. ${WINTER_RULE}`,
           alarm: 'PT9H',
           yearly: true,
         },
         {
           uid: `tyres-summer-${carId}@kaufcheck`,
           start: april,
-          summary: `Sommerreifen: ${title}`,
+          summary: `Sommerreifen aufziehen: ${title}`,
           description:
-            'Faustregel „von O bis O“: Wenn kein Schnee und keine Glätte mehr zu erwarten sind, kannst du auf Sommerreifen wechseln. Prüf Profiltiefe (mindestens 1,6 mm), Alter und Schäden.',
+            'Faustregel „von O bis O“: Wenn keine Glätte durch Eis oder Schnee mehr zu erwarten ist, kannst du auf Sommerreifen wechseln. Prüf Profiltiefe (mindestens 1,6 mm), Alter und Schäden.',
           alarm: 'PT9H',
           yearly: true,
         },
@@ -268,14 +335,14 @@ export function reminderCalendarFile({
           uid: `service-${carId}-${due.year}-${due.month}@kaufcheck`,
           start: due,
           summary: `Inspektion fällig: ${title}`,
-          description: `Laut deiner Angabe ist die nächste Inspektion im ${monthText(due)} fällig. Maßgeblich sind der Wartungsplan des Herstellers und die Anzeige im Auto.`,
+          description: `Laut deiner Angabe ist die nächste Inspektion im ${monthName(due)} fällig. Maßgeblich sind der Wartungsplan des Herstellers und die Anzeige im Auto.`,
           alarm: '-P14D',
         }
       : {
           uid: `brake-fluid-${carId}-${due.year}-${due.month}@kaufcheck`,
           start: due,
           summary: `Bremsflüssigkeit wechseln: ${title}`,
-          description: `Der ADAC empfiehlt, die Bremsflüssigkeit spätestens alle zwei Jahre zu wechseln; zuletzt gewechselt im ${monthText(month!)}. Maßgeblich ist der Wartungsplan des Herstellers.`,
+          description: `Der ADAC empfiehlt, die Bremsflüssigkeit spätestens alle zwei Jahre zu wechseln; zuletzt gewechselt im ${monthName(month!)}. Maßgeblich ist der Wartungsplan des Herstellers.`,
           alarm: '-P14D',
         };
   return calendar([event], now);

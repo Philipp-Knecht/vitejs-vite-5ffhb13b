@@ -3,6 +3,8 @@ import { runMaintenance } from './application/maintenance';
 import { ConfigError, describeConfig, loadConfig } from './config/env';
 
 const MAINTENANCE_INTERVAL_MS = 6 * 60 * 60 * 1000;
+const REMINDER_INTERVAL_MS = 60 * 60 * 1000;
+const REMINDER_START_DELAY_MS = 2 * 60 * 1000;
 
 async function main(): Promise<void> {
   let config;
@@ -32,11 +34,7 @@ async function main(): Promise<void> {
         anonRetentionDays: config.anonRetentionDays,
       });
       const contracts = await services.contracts.runMaintenance();
-      const reminders = await services.reminders.sendDue();
-      app.log.info(
-        { op: 'maintenance', ...report, ...contracts, ...reminders },
-        'maintenance finished',
-      );
+      app.log.info({ op: 'maintenance', ...report, ...contracts }, 'maintenance finished');
     } catch (error) {
       app.log.error({ op: 'maintenance', err: error }, 'maintenance failed');
     }
@@ -44,9 +42,31 @@ async function main(): Promise<void> {
   const timer = setInterval(() => void maintenance(), MAINTENANCE_INTERVAL_MS);
   timer.unref();
 
+  // Reminders on their own schedule: every hour and shortly after a deploy, each due date once.
+  let sending = false;
+  const sendReminders = async () => {
+    if (sending) return;
+    sending = true;
+    try {
+      const report = await services.reminders.sendDue();
+      if (report.remindersSent > 0 || report.remindersFailed > 0)
+        app.log.info({ op: 'reminders', ...report }, 'reminders sent');
+    } catch (error) {
+      app.log.error({ op: 'reminders', err: error }, 'reminders failed');
+    } finally {
+      sending = false;
+    }
+  };
+  const reminderStart = setTimeout(() => void sendReminders(), REMINDER_START_DELAY_MS);
+  reminderStart.unref();
+  const reminderTimer = setInterval(() => void sendReminders(), REMINDER_INTERVAL_MS);
+  reminderTimer.unref();
+
   const shutdown = (signal: string) => {
     app.log.info({ op: 'shutdown', signal }, 'shutting down');
     clearInterval(timer);
+    clearTimeout(reminderStart);
+    clearInterval(reminderTimer);
     app
       .close()
       .then(() => process.exit(0))
