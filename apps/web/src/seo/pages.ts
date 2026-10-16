@@ -65,19 +65,19 @@ export const STATIC_PAGE_META: Readonly<Record<string, PageMeta>> = {
       'Auto privat verkaufen: Unterlagen, ehrliches Inserat, sichere Probefahrt und Bezahlung, Kaufvertrag und was du nach dem Verkauf bei Zulassungsstelle und Versicherung melden musst.',
   },
   '/auto-ummelden': {
-    title: 'Auto ummelden nach dem Kauf: Unterlagen, Kosten, online | KaufCheck',
+    title: 'Auto ummelden: Unterlagen, Kosten, online | KaufCheck',
     description:
-      'Gebrauchtwagen ummelden: welche Unterlagen du brauchst, wie es online mit i-Kfz geht, was es kostet, ob du das Kennzeichen behältst und wie du das Auto nach Hause bringst.',
+      'Gebrauchtwagen ummelden: Unterlagen, online mit i-Kfz, Kosten, Kennzeichen behalten, Überführung – und was nach Umzug oder Namensänderung zu tun ist.',
   },
   '/auto-rueckruf-pruefen': {
     title: 'Rückrufe beim Auto prüfen: KBA-Datenbank und FIN | KaufCheck',
     description:
-      'So prüfst du, ob dein Auto von einem Rückruf betroffen ist: Rückrufdatenbank des KBA, Abfrage mit der FIN beim Hersteller, Kosten und was passiert, wenn du nicht reagierst.',
+      'Ist dein Auto von einem Rückruf betroffen? Rückrufdatenbank des KBA, FIN-Abfrage beim Hersteller, Kosten und was passiert, wenn du nicht reagierst.',
   },
   '/autokosten-im-monat': {
     title: 'Was kostet ein Auto im Monat? Kosten und Beispiele | KaufCheck',
     description:
-      'Wertverlust, Fixkosten, Betriebskosten und Werkstatt: woraus sich die Autokosten zusammensetzen, Beispiele des ADAC, was die Versicherung bestimmt und wie du sparst.',
+      'Wertverlust, Fixkosten, Betrieb und Werkstatt: woraus sich Autokosten zusammensetzen, Beispiele des ADAC, was die Versicherung bestimmt und wie du sparst.',
   },
   '/pro': {
     title: 'KaufCheck Pro – mehr Prüfungen, Verlauf und keine Werbung',

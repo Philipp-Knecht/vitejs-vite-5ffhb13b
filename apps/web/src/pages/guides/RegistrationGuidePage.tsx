@@ -9,10 +9,11 @@ const TOC: TocEntry[] = [
   { id: 'kosten', title: 'Kosten' },
   { id: 'ueberfuehrung', title: 'Das Auto nach Hause bringen' },
   { id: 'verkaeufer', title: 'Was der Verkäufer melden muss' },
+  { id: 'umzug', title: 'Nach Umzug oder Namensänderung' },
   { id: 'faq', title: 'Häufige Fragen' },
 ];
 
-const external = { target: '_blank', rel: 'noopener' } as const;
+const external = { target: '_blank', rel: 'noopener noreferrer' } as const;
 
 export function RegistrationGuidePage() {
   return (
@@ -54,8 +55,8 @@ export function RegistrationGuidePage() {
           kostenlos beim Versicherer
         </li>
         <li>
-          ein SEPA-Lastschriftmandat für die Kfz-Steuer – ohne Mandat gibt es keine Zulassung (§ 13
-          Kraftfahrzeugsteuergesetz)
+          ein SEPA-Lastschriftmandat für die Kfz-Steuer – ohne Mandat gibt es keine Zulassung, außer
+          das Auto ist steuerbefreit, etwa ein Elektroauto (§ 13 Kraftfahrzeugsteuergesetz)
         </li>
         <li>
           den Nachweis über eine gültige Hauptuntersuchung, wenn sie nicht im Fahrzeugschein steht
@@ -63,8 +64,8 @@ export function RegistrationGuidePage() {
         <li>die bisherigen Kennzeichen, wenn du neue bekommst</li>
       </ul>
       <p>
-        In manchen Städten, etwa Hamburg, wird die Zulassung verweigert, solange du noch Kfz-Steuer
-        schuldest.
+        Hast du noch Kfz-Steuerschulden von 5 € oder mehr, darf die Zulassungsbehörde das Auto nicht
+        auf dich zulassen (§ 13 Abs. 2 Kraftfahrzeugsteuergesetz).
       </p>
 
       <h2 id="online">Online ummelden mit i-Kfz</h2>
@@ -90,7 +91,8 @@ export function RegistrationGuidePage() {
         Leg einen Sicherheitscode erst frei, wenn du ihn eingibst: Freigelegte Codes machen das
         Dokument ungültig. Nach dem Antrag lädst du den Bescheid und einen vorläufigen Nachweis
         herunter, druckst sie aus und legst den Nachweis gut sichtbar ins Auto; damit darfst du
-        schon fahren. Wie lange er gilt, steht im Bescheid. Papiere und Plaketten kommen per Post.
+        schon fahren. Er gilt nach § 31 Fahrzeug-Zulassungsverordnung höchstens 14 Tage, manche
+        Behörden nennen 10 – maßgeblich ist der Bescheid. Papiere und Plaketten kommen per Post.
         Mehr dazu beim{' '}
         <a
           href="https://www.bmv.de/SharedDocs/DE/Artikel/StV/Strassenverkehr/internetbasierte-fahrzeugzulassung.html"
@@ -116,19 +118,24 @@ export function RegistrationGuidePage() {
         unterscheiden sich je Behörde und Vorgang. Beispiele (Stand Oktober 2026):
       </p>
       <ul>
-        <li>München: online ab 17,80 € mit altem Kennzeichen, ab 20,50 € mit neuem</li>
-        <li>München vor Ort: ab 24,20 € mit altem Kennzeichen, ab 27,10 € mit neuem</li>
-        <li>Berlin: 19,60 € Grundgebühr, dazu je nach Fall weitere Gebühren</li>
+        <li>
+          München (Auto schon in München zugelassen): online ab 17,80 € mit altem Kennzeichen, ab
+          20,50 € mit neuem; vor Ort ab 24,20 € und ab 27,10 €
+        </li>
+        <li>
+          Berlin (Auto mit Berliner Kennzeichen): 19,60 € Grundgebühr, dazu je nach Fall weitere
+          Gebühren
+        </li>
         <li>Hamburg: 23,60 € bis 60,00 €</li>
       </ul>
       <p>Dazu kommen gegebenenfalls neue Schilder und ein Wunschkennzeichen.</p>
 
       <h2 id="ueberfuehrung">Das Auto nach Hause bringen</h2>
       <p>
-        <strong>Ist das Auto noch zugelassen,</strong> kannst du es online auf dich ummelden und mit
-        dem vorläufigen Nachweis aus i-Kfz nach Hause fahren. Bis zur Ummeldung läuft die
-        Versicherung des Verkäufers weiter; ein Unfall in dieser Zeit kann ihn seinen
-        Schadenfreiheitsrabatt kosten. Sprich das vorher mit ihm ab.
+        <strong>Ist das Auto noch zugelassen,</strong> kannst du es – wenn die Papiere onlinefähig
+        sind (siehe oben) – online auf dich ummelden und mit dem vorläufigen Nachweis aus i-Kfz nach
+        Hause fahren. Sonst fährst du es bis zur Ummeldung mit seiner bisherigen Zulassung; sprich
+        das vorher mit dem Verkäufer ab (zur Versicherung siehe unten).
       </p>
       <p>
         <strong>Ist das Auto abgemeldet,</strong> brauchst du für die Fahrt ein Kurzzeitkennzeichen
@@ -145,14 +152,26 @@ export function RegistrationGuidePage() {
         Der Verkäufer meldet den Verkauf unverzüglich seiner Zulassungsbehörde, wenn du das Auto
         nicht schon umgemeldet hast – mit Kennzeichen, deinem Namen und deiner Anschrift und deiner
         Bestätigung, dass du die Zulassungsbescheinigung bekommen hast. Meldest du nicht um, kann
-        die Behörde die Zulassung nach einer Frist von vier Wochen beenden oder den Betrieb des
-        Autos untersagen. Für den Verkäufer endet die Kfz-Steuer erst, wenn seine Anzeige bei der
-        Behörde eingeht oder du das Auto umgemeldet hast. Mehr dazu im Ratgeber{' '}
+        die Behörde den Betrieb des Autos untersagen oder die Zulassungsbescheinigung im
+        Verkehrsblatt aufbieten; legt sie niemand binnen vier Wochen vor, endet die Zulassung. Für
+        den Verkäufer endet die Kfz-Steuer mit dem Tag, an dem das Auto auf dich umgeschrieben wird
+        – nicht schon mit seiner Verkaufsanzeige. Mehr dazu im Ratgeber{' '}
         <Link to="/auto-verkaufen#nach-dem-verkauf">Auto privat verkaufen</Link>.
       </p>
       <p>
-        Die Kfz-Versicherung des Verkäufers geht ohne Abmeldung zunächst auf dich über. Sobald du
-        mit der eVB-Nummer deiner eigenen Versicherung ummeldest, endet sie.
+        Die Kfz-Versicherung des Verkäufers geht mit dem Kauf auf dich über, solange das Auto nicht
+        abgemeldet ist. Sobald du mit der eVB-Nummer deiner eigenen Versicherung ummeldest, endet
+        sie. Ein Unfall in der Zeit dazwischen kann den Verkäufer trotzdem seinen
+        Schadenfreiheitsrabatt kosten – melde deshalb zügig um.
+      </p>
+
+      <h2 id="umzug">Nach Umzug oder Namensänderung</h2>
+      <p>
+        Auch wenn du selbst umziehst oder deinen Namen änderst, meldest du das unverzüglich der
+        Zulassungsbehörde (§ 15 Fahrzeug-Zulassungsverordnung); geändert wird die
+        Zulassungsbescheinigung Teil I. Den Fahrzeugbrief (Teil II) brauchst du dafür nicht, und das
+        Kennzeichen darfst du behalten – ein neues ist freiwillig. Bei einem Umzug in einen anderen
+        Bezirk ist die Behörde deines neuen Wohnorts zuständig.
       </p>
 
       <h2 id="faq">Häufige Fragen</h2>
@@ -166,6 +185,8 @@ export function RegistrationGuidePage() {
       <p>Ja, das Kennzeichen kann am Auto bleiben, auch wenn du in einem anderen Bezirk wohnst.</p>
       <h3>Brauche ich für ein Kurzzeitkennzeichen eine eVB-Nummer?</h3>
       <p>Ja, auch dafür brauchst du eine Versicherungsbestätigung.</p>
+      <h3>Muss ich nach einem Umzug ein neues Kennzeichen nehmen?</h3>
+      <p>Nein, du meldest nur die neue Anschrift; das Kennzeichen kann bleiben.</p>
       <h3>Kann ich sofort nach der Online-Zulassung losfahren?</h3>
       <p>
         Ja, mit dem ausgedruckten vorläufigen Nachweis gut sichtbar im Auto, bis Papiere und
