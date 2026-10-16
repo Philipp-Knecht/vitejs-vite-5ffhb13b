@@ -132,6 +132,8 @@ export function buildServiceHistoryPdf(
         doc.addPage();
         y = PAGE.margin;
         header();
+        // A row continued on a new page names its date again.
+        if (row > 0) doc.text(cells[0]![0] ?? '', PAGE.margin, y, { baseline: 'top' });
       }
       let x = PAGE.margin;
       cells.forEach((lines, index) => {
