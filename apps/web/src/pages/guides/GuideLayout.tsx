@@ -41,6 +41,21 @@ const GUIDES = [
     title: 'Auto privat verkaufen',
     text: 'Inseratstext, Checkliste und Abmeldung.',
   },
+  {
+    to: '/auto-ummelden',
+    title: 'Auto ummelden',
+    text: 'Unterlagen, i-Kfz, Kosten und Überführung.',
+  },
+  {
+    to: '/auto-rueckruf-pruefen',
+    title: 'Rückrufe prüfen',
+    text: 'KBA-Datenbank, FIN-Abfrage und Pflichten.',
+  },
+  {
+    to: '/autokosten-im-monat',
+    title: 'Was kostet ein Auto im Monat?',
+    text: 'Kostenblöcke, Beispiele und Spartipps.',
+  },
 ];
 
 export function GuideLayout({

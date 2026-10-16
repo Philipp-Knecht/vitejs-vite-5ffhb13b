@@ -47,6 +47,9 @@ const GUIDES = new Set([
   '/kfz-steuer-rechner',
   '/kaufvertrag',
   '/auto-verkaufen',
+  '/auto-ummelden',
+  '/auto-rueckruf-pruefen',
+  '/autokosten-im-monat',
 ]);
 
 function structuredData(pagePath, meta) {

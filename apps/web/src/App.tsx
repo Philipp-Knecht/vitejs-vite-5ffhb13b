@@ -12,6 +12,9 @@ import { ChecklistGuidePage } from './pages/guides/ChecklistGuidePage';
 import { InspectionGuidePage } from './pages/guides/InspectionGuidePage';
 import { SaleContractPage } from './pages/guides/SaleContractPage';
 import { SellingGuidePage } from './pages/guides/SellingGuidePage';
+import { RegistrationGuidePage } from './pages/guides/RegistrationGuidePage';
+import { RecallGuidePage } from './pages/guides/RecallGuidePage';
+import { CostsGuidePage } from './pages/guides/CostsGuidePage';
 import { TaxGuidePage } from './pages/guides/TaxGuidePage';
 import { AdvisorPage } from './pages/AdvisorPage';
 import { CheckListingPage } from './pages/CheckListingPage';
@@ -184,6 +187,9 @@ export function App({ queryClient }: { queryClient: QueryClient }) {
               <Route path="/kfz-steuer-rechner" element={<TaxGuidePage />} />
               <Route path="/kaufvertrag" element={<SaleContractPage />} />
               <Route path="/auto-verkaufen" element={<SellingGuidePage />} />
+              <Route path="/auto-ummelden" element={<RegistrationGuidePage />} />
+              <Route path="/auto-rueckruf-pruefen" element={<RecallGuidePage />} />
+              <Route path="/autokosten-im-monat" element={<CostsGuidePage />} />
               <Route path="/pro" element={<ProPage />} />
               <Route path="/bot" element={<BotPage />} />
               <Route path="/datenschutz" element={<PrivacyPage />} />

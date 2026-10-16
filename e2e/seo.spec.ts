@@ -27,6 +27,9 @@ test('guides are readable without JavaScript', async ({ browser }) => {
     ['/kfz-steuer-rechner', 'Kfz-Steuer'],
     ['/kaufvertrag', 'Kaufvertrag'],
     ['/auto-verkaufen', 'Auto privat verkaufen'],
+    ['/auto-ummelden', 'Auto ummelden'],
+    ['/auto-rueckruf-pruefen', 'Rückrufe'],
+    ['/autokosten-im-monat', 'Was kostet ein Auto im Monat?'],
   ] as const) {
     await page.goto(path);
     await expect(page.getByRole('heading', { level: 1 })).toContainText(heading);
@@ -44,6 +47,9 @@ test('sitemap, robots.txt, noindex and real 404 status codes', async ({ request 
     '/kfz-steuer-rechner',
     '/kaufvertrag',
     '/auto-verkaufen',
+    '/auto-ummelden',
+    '/auto-rueckruf-pruefen',
+    '/autokosten-im-monat',
     '/pro',
   ]) {
     expect(sitemap).toContain(`${path}</loc>`);
