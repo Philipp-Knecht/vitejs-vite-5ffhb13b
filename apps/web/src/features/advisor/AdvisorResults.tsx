@@ -159,6 +159,12 @@ export function AdvisorResults({ answers, onEdit }: AdvisorResultsProps) {
         zeigen die Börsen. Das ist keine Kaufempfehlung: Wie gut ein Auto ist, zeigt erst die
         Besichtigung.
       </p>
+      <p className="advisor-results__note">
+        Was ein Modell dich im Monat kostet, hängt vom Motor, deiner Fahrleistung und deiner
+        Versicherung ab – Daten dazu hat KaufCheck nicht. Rechne es für ein Auto mit dem{' '}
+        <Link to="/kfz-steuer-rechner#unterhalt">Kostenrechner</Link> durch; mit KaufCheck Pro
+        stellst du im Vergleich deiner gespeicherten Angebote die Kosten pro Monat nebeneinander.
+      </p>
     </div>
   );
 }

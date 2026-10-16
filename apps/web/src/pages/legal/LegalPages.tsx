@@ -212,8 +212,9 @@ export function PrivacyPage() {
         </li>
         <li>
           Im lokalen Speicher deines Browsers merkt sich KaufCheck den Fortschritt deiner
-          Checklisten, deine Notizen für die Preisverhandlung und die gewählte Anrede (Sie/du).
-          Diese Daten verlassen deinen Browser nicht.
+          Checklisten, deine Notizen für die Preisverhandlung, deine Annahmen für die Kosten pro
+          Monat im Vergleich (Pro) und die gewählte Anrede (Sie/du). Diese Daten verlassen deinen
+          Browser nicht; die Annahmen für die Kosten löschen wir beim Abmelden.
         </li>
         <li>
           Nur wenn du bei einer Prüfung „Offline verfügbar machen“ wählst, speichert dein Browser

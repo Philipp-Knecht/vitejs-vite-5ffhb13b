@@ -42,7 +42,10 @@ contract say the same. Pro members keep a cost book per car (`/mein-auto/<id>/ko
 `apps/api/src/application/car-log-service.ts`, figures in `packages/shared/src/car-log.ts`):
 fill-ups, service, repairs and other costs, the costs per month and per km, the consumption between
 full fill-ups, a CSV export and the self-kept service history as a PDF without prices. After Pro
-ends, the entries stay readable, exportable and deletable; no receipts are uploaded.
+ends, the entries stay readable, exportable and deletable; no receipts are uploaded. In the
+comparison, Pro members put the monthly costs of their saved offers side by side
+(`packages/shared/src/monthly-costs.ts`): depreciation, fuel or electricity, tax, insurance and
+workshop from their own figures – KaufCheck has no price or consumption data and assumes none.
 
 For the listing check, a user pastes the listing text (or a link); KaufCheck extracts and
 normalizes the vehicle data and shows a mobile-first dashboard:
