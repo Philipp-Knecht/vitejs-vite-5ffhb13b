@@ -84,6 +84,14 @@ describe('monthly costs', () => {
     ).toBe(82);
   });
 
+  it('adds the interest of a financing, not the repayment', () => {
+    const costs = monthlyCosts({ ...golf, loanInterestPerMonth: 38.6 }, shared);
+    expect(costs.interest).toBe(39);
+    expect(costs.totalEur).toBe(353 + 39);
+    expect(costs.missing).toEqual(['other']);
+    expect(monthlyCosts(golf, shared).interest).toBeNull();
+  });
+
   it('groups fuels by what they cost', () => {
     // (Plug-in) hybrids can have a petrol or a diesel engine: the buyer chooses.
     expect(energyGroup('hybrid')).toBeNull();
