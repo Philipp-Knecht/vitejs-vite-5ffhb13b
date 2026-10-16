@@ -223,7 +223,10 @@ export function EntryForm({
                 <li key={text}>{text}</li>
               ))}
             </ul>
-            <p>Stimmt es so, etwa nach einem Tachotausch, speichere noch einmal.</p>
+            <p>
+              Stimmt es so, etwa nach einem Tachotausch, speichere noch einmal. Einen Tachotausch
+              hältst du am besten als eigenen Eintrag mit altem und neuem Stand fest.
+            </p>
           </Alert>
         </div>
       )}

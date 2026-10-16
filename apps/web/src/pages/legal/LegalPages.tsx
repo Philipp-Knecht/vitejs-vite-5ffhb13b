@@ -186,12 +186,13 @@ export function PrivacyPage() {
         Generation, Kraftstoff, Erstzulassung, Kilometerstand und HU-Monat – keine FIN und kein
         Kennzeichen), damit wir dir den HU-Termin und das Wissen zu deinem Modell zeigen können. Mit
         KaufCheck Pro kommt das Kostenbuch dazu, damit du Kosten und Wartung festhalten, auswerten
-        und exportieren kannst: Datum, Art, Kilometerstand, Betrag, Menge, Werkstatt, Notiz und ob
-        eine Rechnung vorliegt – Belege selbst laden wir nicht hoch. Die Einträge löschen wir, wenn
-        du einen Eintrag, das Auto oder dein Konto löschst; endet Pro, bleiben sie lesbar, bis du
-        sie löschst. Den CSV-Export und das Serviceheft als PDF erstellt dein Browser. Ohne
-        E-Mail-Adresse und Passwort kann kein Konto angelegt werden. Du kannst dein Konto jederzeit
-        selbst in den Kontoeinstellungen löschen; dabei werden alle zugehörigen Daten entfernt.
+        und exportieren kannst: Datum, Art, Kilometerstand, Betrag, Menge, bei Tankungen, ob
+        vollgetankt wurde und ob eine Tankung fehlt, Werkstatt, Notiz und ob eine Rechnung vorliegt
+        – Belege selbst laden wir nicht hoch. Die Einträge löschen wir, wenn du einen Eintrag, das
+        Auto oder dein Konto löschst; endet Pro, bleiben sie lesbar, bis du sie löschst. Den
+        CSV-Export und das Serviceheft als PDF erstellt dein Browser. Ohne E-Mail-Adresse und
+        Passwort kann kein Konto angelegt werden. Du kannst dein Konto jederzeit selbst in den
+        Kontoeinstellungen löschen; dabei werden alle zugehörigen Daten entfernt.
         {features?.passwordReset === true &&
           ' Wenn du dein Passwort zurücksetzt, schicken wir dir eine E-Mail (siehe „E-Mails“).'}{' '}
         Rechtsgrundlage ist Art. 6 Abs. 1 lit. b DSGVO.

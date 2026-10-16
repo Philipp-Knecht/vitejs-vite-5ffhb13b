@@ -158,14 +158,20 @@ export function plausibilityWarnings(
   const registration = `${firstRegistration.year}-${String(firstRegistration.month ?? 1).padStart(2, '0')}`;
   if (input.date.slice(0, 7) < registration)
     warnings.push('Das Datum liegt vor der Erstzulassung des Autos.');
+  if (input.quantity !== null && input.quantity > 150)
+    warnings.push(
+      `${input.quantity.toLocaleString('de-DE')} ${input.kind === 'charging' ? 'kWh' : 'Liter'} sind mehr, als in einen Tank oder eine Batterie passt.`,
+    );
   if (input.odometerKm !== null) {
     const km = input.odometerKm;
-    const higherBefore = others.find(
-      (entry) => entry.odometerKm !== null && entry.date < input.date && entry.odometerKm > km,
-    );
-    const lowerAfter = others.find(
-      (entry) => entry.odometerKm !== null && entry.date > input.date && entry.odometerKm < km,
-    );
+    // Only the neighbouring readings: a confirmed tacho swap further back does not warn again.
+    const readings = others
+      .filter((entry) => entry.odometerKm !== null)
+      .sort((a, b) => a.date.localeCompare(b.date) || a.createdAt.localeCompare(b.createdAt));
+    const before = readings.filter((entry) => entry.date <= input.date).at(-1);
+    const after = readings.find((entry) => entry.date > input.date);
+    const higherBefore = before && before.odometerKm! > km ? before : undefined;
+    const lowerAfter = after && after.odometerKm! < km ? after : undefined;
     if (higherBefore)
       warnings.push(
         `Am ${germanDate(higherBefore.date)} hast du schon ${higherBefore.odometerKm!.toLocaleString('de-DE')} km eingetragen – mehr als jetzt.`,

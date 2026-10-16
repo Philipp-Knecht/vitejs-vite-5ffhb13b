@@ -1657,3 +1657,12 @@
   margin-top: 16px;
   font-size: 0.9rem;
 }
+
+.car-log__summary-period {
+  margin: 12px 0 8px;
+  font-size: 1rem;
+}
+
+.car-log__warning:focus {
+  outline: none;
+}

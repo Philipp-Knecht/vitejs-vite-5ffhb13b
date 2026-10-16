@@ -23,8 +23,8 @@ const COLUMNS = [
 ] as const;
 
 const germanDate = (date: string) => date.split('-').reverse().join('.');
-/** A row taller than this many lines is cut, so that it always fits on a page. */
-const MAX_ROW_LINES = 40;
+/** A row up to this many lines stays on one page; a longer one continues on the next. */
+const KEEP_TOGETHER_LINES = 12;
 const FOOTER = 'Selbst geführt – nicht von Werkstätten oder KaufCheck bestätigt';
 
 export interface ServiceHistoryCar extends Pick<OwnedCarDto, 'firstRegistration'> {
@@ -116,26 +116,31 @@ export function buildServiceHistoryPdf(
       entry.note ?? '',
       entry.workshop ?? '',
       entry.invoice ? 'ja' : '',
-    ]
-      .map(
-        (value, index) =>
-          doc.splitTextToSize(toContractText(value), COLUMNS[index]!.width - 2) as string[],
-      )
-      .map((lines) =>
-        lines.length > MAX_ROW_LINES ? [...lines.slice(0, MAX_ROW_LINES - 1), '…'] : lines,
-      );
-    const height = Math.max(1, ...cells.map((lines) => lines.length)) * LINE + 2;
-    if (y + height > bottom) {
+    ].map(
+      (value, index) =>
+        doc.splitTextToSize(toContractText(value), COLUMNS[index]!.width - 2) as string[],
+    );
+    const rowLines = Math.max(1, ...cells.map((lines) => lines.length));
+    // A short row moves to the next page as a whole; a long one is split across pages.
+    if (y + Math.min(rowLines, KEEP_TOGETHER_LINES) * LINE + 2 > bottom) {
       doc.addPage();
       y = PAGE.margin;
       header();
     }
-    let x = PAGE.margin;
-    cells.forEach((lines, index) => {
-      lines.forEach((line, row) => doc.text(line, x, y + row * LINE, { baseline: 'top' }));
-      x += COLUMNS[index]!.width;
-    });
-    y += height;
+    for (let row = 0; row < rowLines; row++) {
+      if (y + LINE > bottom) {
+        doc.addPage();
+        y = PAGE.margin;
+        header();
+      }
+      let x = PAGE.margin;
+      cells.forEach((lines, index) => {
+        if (lines[row] !== undefined) doc.text(lines[row]!, x, y, { baseline: 'top' });
+        x += COLUMNS[index]!.width;
+      });
+      y += LINE;
+    }
+    y += 2;
   }
 
   const pages = doc.getNumberOfPages();
