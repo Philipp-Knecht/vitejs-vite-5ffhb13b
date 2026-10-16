@@ -169,12 +169,12 @@ export function RegistrationGuidePage() {
       <p>
         Auch wenn du selbst umziehst oder deinen Namen änderst, meldest du das unverzüglich der
         Zulassungsbehörde (§ 15 Fahrzeug-Zulassungsverordnung); geändert wird die
-        Zulassungsbescheinigung Teil I. Bei einer reinen Adressänderung brauchst du den
-        Fahrzeugbrief (Teil II) nicht; bei einer Namensänderung oder wenn du ein neues Kennzeichen
-        nimmst, bring ihn mit. Das Kennzeichen darfst du behalten – ein neues ist freiwillig. Manche
-        Meldebehörden geben die neue Anschrift bei der Ummeldung direkt weiter (§ 15 Abs. 2
-        Fahrzeug-Zulassungsverordnung). Bei einem Umzug in einen anderen Bezirk ist die Behörde
-        deines neuen Wohnorts zuständig.
+        Zulassungsbescheinigung Teil I, bei einer Namensänderung oder einem neuen Kennzeichen auch
+        Teil II. Bei einer reinen Adressänderung brauchst du den Fahrzeugbrief (Teil II) nicht; bei
+        einer Namensänderung oder wenn du ein neues Kennzeichen nimmst, bring ihn mit. Das
+        Kennzeichen darfst du behalten – ein neues ist freiwillig. Manche Meldebehörden geben die
+        neue Anschrift bei der Ummeldung direkt weiter (§ 15 Abs. 2 Fahrzeug-Zulassungsverordnung).
+        Bei einem Umzug in einen anderen Bezirk ist die Behörde deines neuen Wohnorts zuständig.
       </p>
 
       <h2 id="faq">Häufige Fragen</h2>
