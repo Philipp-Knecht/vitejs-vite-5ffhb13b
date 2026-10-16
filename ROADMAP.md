@@ -101,16 +101,16 @@ PRs, **L** = mehrere Wochen.
 
 ## Etappe 5 – Reichweite und Einnahmen
 
-| #   | Feature                                                                                                  | Aufwand       | Anmerkung                                                                  |
-| --- | -------------------------------------------------------------------------------------------------------- | ------------- | -------------------------------------------------------------------------- |
-| 5.1 | AdSense aktivieren                                                                                       | –             | Google-Prüfung, dann `ADSENSE_CLIENT`/`ADSENSE_SLOT`                       |
-| 5.2 | Datenschutzfreundliches Werbenetz hinter `AdSlot`                                                        | M             | Alternative zu AdSense                                                     |
-| 5.3 | Affiliate (Gebrauchtwagencheck, Versicherungs-/Kreditvergleich)                                          | S–M           | ohne Anwalt, nach gründlicher Recherche zu § 34d / § 34c GewO (15.10.2026) |
-| 5.4 | SEO: weitere Ratgeber (Kosten, Rückrufe, Zulassung, Verkauf), interne Links                              | M             | passt zu Etappe 1–3                                                        |
-| 5.5 | PWA (installierbar, Checkliste offline)                                                                  | S–M           | native App erst bei Bedarf                                                 |
-| 5.6 | Übersichtsseiten aus dem Modellwissen („Gute Gebrauchte bis 10.000 €“, Familienauto, Stadtauto, Elektro) | S–M           | Wettbewerb W10; ohne Inserate, mit Berater und Deeplinks                   |
-| 5.7 | Weitere Ratgeber: Gewährleistung beim Händler, Unfallwagen, Import, Versicherung                         | S je Ratgeber | Wettbewerb W11; Teil von 5.4                                               |
-| 5.8 | Partner für „Was ist mein Auto wert?“, Verkauf an Händler, Leasing                                       | S             | Wettbewerb W12; als Affiliate-Link nach 5.3                                |
+| #   | Feature                                                                                                   | Aufwand       | Anmerkung                                                                  |
+| --- | --------------------------------------------------------------------------------------------------------- | ------------- | -------------------------------------------------------------------------- |
+| 5.1 | AdSense aktivieren                                                                                        | –             | Google-Prüfung, dann `ADSENSE_CLIENT`/`ADSENSE_SLOT`                       |
+| 5.2 | Datenschutzfreundliches Werbenetz hinter `AdSlot`                                                         | M             | Alternative zu AdSense                                                     |
+| 5.3 | Affiliate (Gebrauchtwagencheck, Versicherungs-/Kreditvergleich)                                           | S–M           | ohne Anwalt, nach gründlicher Recherche zu § 34d / § 34c GewO (15.10.2026) |
+| 5.4 | SEO: weitere Ratgeber und interne Links (Teil 1 erledigt: Ummelden, Rückrufe, Autokosten; Verkauf in #30) | M             | passt zu Etappe 1–3                                                        |
+| 5.5 | PWA (installierbar, Checkliste offline)                                                                   | S–M           | native App erst bei Bedarf                                                 |
+| 5.6 | Übersichtsseiten aus dem Modellwissen („Gute Gebrauchte bis 10.000 €“, Familienauto, Stadtauto, Elektro)  | S–M           | Wettbewerb W10; ohne Inserate, mit Berater und Deeplinks                   |
+| 5.7 | Weitere Ratgeber: Gewährleistung beim Händler, Unfallwagen, Import, Versicherung                          | S je Ratgeber | Wettbewerb W11; Teil von 5.4                                               |
+| 5.8 | Partner für „Was ist mein Auto wert?“, Verkauf an Händler, Leasing                                        | S             | Wettbewerb W12; als Affiliate-Link nach 5.3                                |
 
 ## Etappe 6 – Weitere Kategorien
 
@@ -120,9 +120,8 @@ Transporter (Wettbewerb W13).
 
 ## Wettbewerbsabgleich (16.10.2026)
 
-Abgleich mit AutoUncle.de, 12Gebrauchtwagen.de, Automarkt.de und Das Parking – nur öffentliche Info-Seiten,
-App-Store-Texte und Presseberichte, keine Such- oder Inseratsseiten. AutoUncle.de blockt direkte Abrufe; dort
-nur Suchergebnis-Ausschnitte und Dritte. Die Kernfunktionen der Wettbewerber (Marktpreis-Bewertung,
+Abgleich mit AutoUncle (deutscher App-Store-Text und autouncle.ch/llms.txt), 12Gebrauchtwagen.de, Automarkt.de und Das Parking – nur öffentliche Info-Seiten,
+App-Store-Texte und Presseberichte, keine Such- oder Inseratsseiten. autouncle.de blockt direkte Abrufe. Die Kernfunktionen der Wettbewerber (Marktpreis-Bewertung,
 Preisverlauf, Suchaufträge für neue Inserate) brauchen Marktplatz- oder lizenzierte Daten und bleiben in
 Etappe 4 (4.3, 4.4, 4.7).
 

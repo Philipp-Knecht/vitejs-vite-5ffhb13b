@@ -53,7 +53,7 @@ const GUIDES = [
   },
   {
     to: '/autokosten-im-monat',
-    title: 'Was kostet ein Auto im Monat?',
+    title: 'Autokosten im Monat',
     text: 'Kostenblöcke, Beispiele und Spartipps.',
   },
 ];

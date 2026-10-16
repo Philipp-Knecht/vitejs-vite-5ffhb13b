@@ -1,4 +1,5 @@
 import { Link } from 'react-router';
+import { KBA_RECALL_DATABASE_URL, recallCheckFor } from '@kaufcheck/catalog';
 import { MODEL_PAGES_AVAILABLE } from '../../features/advisor/availability';
 import { GuideLayout, type TocEntry } from './GuideLayout';
 
@@ -13,7 +14,11 @@ const TOC: TocEntry[] = [
   { id: 'faq', title: 'Häufige Fragen' },
 ];
 
-const external = { target: '_blank', rel: 'noopener' } as const;
+const external = { target: '_blank', rel: 'noopener noreferrer' } as const;
+
+// The same, hand-checked pages as in the recall check of the app.
+const SKODA_URL = recallCheckFor('skoda')?.url;
+const TOYOTA_URL = recallCheckFor('toyota')?.url;
 const NEW_TAB = <span className="visually-hidden"> (öffnet in neuem Tab)</span>;
 
 export function RecallGuidePage() {
@@ -49,7 +54,7 @@ export function RecallGuidePage() {
       <h2 id="datenbank">Die Rückrufdatenbank des KBA</h2>
       <p>
         In der{' '}
-        <a href="https://www.kba-online.de/rrdb/buerger/" {...external}>
+        <a href={KBA_RECALL_DATABASE_URL} {...external}>
           Rückrufdatenbank des KBA{NEW_TAB}
         </a>{' '}
         suchst du nach Marke und Modell. Sie zeigt, welche Modelle und Bauzeiträume betroffen sind,
@@ -71,14 +76,11 @@ export function RecallGuidePage() {
         Ob genau dein Auto betroffen ist, erfährst du über die 17-stellige
         Fahrzeug-Identifizierungsnummer (FIN). Sie steht in der Zulassungsbescheinigung Teil I im
         Feld „E“. Viele Hersteller bieten dafür eine Abfrage auf ihrer Website an, zum Beispiel{' '}
-        <a href="https://www.skoda-auto.de/service/rueckrufaktion" {...external}>
+        <a href={SKODA_URL} {...external}>
           Škoda{NEW_TAB}
         </a>{' '}
         und{' '}
-        <a
-          href="https://www.toyota.de/zubehoer-service/fahrzeuginformationen/rueckrufaktionen"
-          {...external}
-        >
+        <a href={TOYOTA_URL} {...external}>
           Toyota{NEW_TAB}
         </a>
         . Sonst hilft eine Vertragswerkstatt der Marke: Sie sieht offene Rückrufe in der Datenbank
@@ -96,9 +98,18 @@ export function RecallGuidePage() {
 
       <h2 id="kosten">Kosten</h2>
       <p>
-        Für dich als Halter ist der Rückruf kostenlos, und der Hersteller muss eine kostenlose
-        Kontaktmöglichkeit anbieten. Ein Ersatzauto für die Zeit in der Werkstatt steht dir nicht
-        zu.
+        Nach dem{' '}
+        <a
+          href="https://www.kba.de/DE/Themen/Marktueberwachung/Rueckrufe/Kodex/kodex_pdf.pdf?__blob=publicationFile&v=2"
+          {...external}
+        >
+          Rückruf-Kodex des KBA{NEW_TAB}
+        </a>{' '}
+        ist der Rückruf für dich als Halter kostenlos, und der Hersteller muss eine kostenlose
+        Kontaktmöglichkeit anbieten. Ein gesetzlicher Anspruch darauf besteht laut ADAC nur über
+        Gewährleistung oder Garantie; in der Praxis zahlen die Hersteller. Ein Ersatzauto für die
+        Zeit in der Werkstatt steht dir nicht zu – manche Hersteller bieten aber freiwillig eines
+        an.
       </p>
 
       <h2 id="ignorieren">Was passiert ohne Reaktion?</h2>
@@ -109,7 +120,7 @@ export function RecallGuidePage() {
       </p>
 
       <h2 id="kauf">Vor dem Gebrauchtwagenkauf</h2>
-      <ul className="checklist">
+      <ul>
         <li>Marke und Modell in der Rückrufdatenbank des KBA nachschlagen</li>
         <li>die FIN beim Hersteller oder in einer Vertragswerkstatt prüfen lassen</li>
         <li>
@@ -129,7 +140,8 @@ export function RecallGuidePage() {
         )}
         {!MODEL_PAGES_AVAILABLE && 'Unter '}
         <Link to="/mein-auto">„Mein Auto“</Link> verlinkt KaufCheck die Rückrufabfrage des
-        Herstellers, soweit es eine gibt, und die Datenbank des KBA – abfragen musst du selbst.
+        Herstellers, soweit es eine gibt, und die Datenbank des KBA, ebenso bei jeder{' '}
+        <Link to="/inserat-pruefen">Inseratsprüfung</Link> – abfragen musst du selbst.
       </p>
 
       <h2 id="faq">Häufige Fragen</h2>
@@ -143,7 +155,10 @@ export function RecallGuidePage() {
         werden kann.
       </p>
       <h3>Muss ich die Reparatur bezahlen?</h3>
-      <p>Nein, ein Rückruf ist für den Halter kostenlos.</p>
+      <p>
+        In der Regel nein: Nach dem Kodex des KBA ist der Rückruf für den Halter kostenlos, und die
+        Hersteller übernehmen die Kosten üblicherweise.
+      </p>
     </GuideLayout>
   );
 }

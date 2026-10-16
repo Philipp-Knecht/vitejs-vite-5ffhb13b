@@ -11,22 +11,24 @@ const TOC: TocEntry[] = [
   { id: 'faq', title: 'Häufige Fragen' },
 ];
 
-const external = { target: '_blank', rel: 'noopener' } as const;
+const external = { target: '_blank', rel: 'noopener noreferrer' } as const;
 const NEW_TAB = <span className="visually-hidden"> (öffnet in neuem Tab)</span>;
 
 export function CostsGuidePage() {
   return (
     <GuideLayout
       path="/autokosten-im-monat"
-      eyebrow="Autokosten"
+      eyebrow="Autokosten im Monat"
       title="Was kostet ein Auto im Monat?"
       updated="Oktober 2026"
       toc={TOC}
       intro={
         <p>
           Ein Auto kostet mehr als Sprit und Versicherung: Der größte Posten ist meist der
-          Wertverlust. Hier steht, woraus sich die Kosten zusammensetzen, was der ADAC für einige
-          Modelle errechnet hat und wie du für dein Wunschauto selbst rechnest.
+          Wertverlust. Ein neuer VW Golf kostet laut ADAC rund 674 € im Monat, das günstigste Modell
+          seiner Übersicht 433 €; drei Jahre alte Gebrauchte ohne Wertverlust 318 bis 346 €. Hier
+          steht, woraus sich die Kosten zusammensetzen, was der ADAC für einige Modelle errechnet
+          hat und wie du für dein Wunschauto selbst rechnest.
         </p>
       }
     >
@@ -50,15 +52,15 @@ export function CostsGuidePage() {
         </li>
         <li>
           <strong>Werkstatt und Reifen:</strong> Inspektionen nach Herstellervorgabe,
-          Verschleißteile wie Bremsen und Batterie, Ersatzreifen und bei längerer Haltedauer eine
+          Verschleißteile wie Bremsen und Batterie, neue Reifen und bei längerer Haltedauer eine
           Rücklage für Reparaturen.
         </li>
       </ul>
 
       <h2 id="beispiele">Beispiele des ADAC</h2>
       <p>
-        Für Neuwagen hat der ADAC im Frühjahr und Sommer 2026 bei fünf Jahren und 15.000 km im Jahr
-        zum Beispiel diese Monatskosten errechnet (
+        In seiner Autokostenübersicht Frühjahr/Sommer 2026 (Stand April 2026) hat der ADAC für
+        Neuwagen bei fünf Jahren und 15.000 km im Jahr zum Beispiel diese Monatskosten errechnet (
         <a
           href="https://assets.adac.de/Autodatenbank/Autokosten/autokostenuebersicht.pdf"
           {...external}
@@ -133,10 +135,16 @@ export function CostsGuidePage() {
       <h2 id="sparen">So sparst du</h2>
       <ul>
         <li>
-          <strong>Versicherung vergleichen:</strong> Laut Verbraucherzentrale lassen sich oft
-          mehrere hundert Euro im Jahr sparen. Die Kündigungsfrist beträgt meist einen Monat – bei
-          einem Versicherungsjahr ab 1. Januar muss die Kündigung bis 30. November ankommen. Eine
-          Beitragserhöhung gibt dir ein Sonderkündigungsrecht.
+          <strong>Versicherung vergleichen:</strong> Laut{' '}
+          <a
+            href="https://www.verbraucherzentrale.de/wissen/geld-versicherungen/weitere-versicherungen/kfzversicherung-ueberpruefen-und-mehrere-hundert-euro-sparen-11490"
+            {...external}
+          >
+            Verbraucherzentrale{NEW_TAB}
+          </a>{' '}
+          lassen sich oft mehrere hundert Euro im Jahr sparen. Die Kündigungsfrist beträgt meist
+          einen Monat – bei einem Versicherungsjahr ab 1. Januar muss die Kündigung bis 30. November
+          ankommen. Eine Beitragserhöhung gibt dir ein Sonderkündigungsrecht.
         </li>
         <li>
           <strong>Typklasse vor dem Kauf prüfen:</strong> Zwei ähnliche Modelle können sehr
