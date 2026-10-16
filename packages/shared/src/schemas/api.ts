@@ -314,6 +314,8 @@ export const CarRemindersResponseSchema = z.object({
   confirmationPending: z.boolean(),
   /** False without Pro: reminders can be switched off, not on. */
   editable: z.boolean(),
+  /** Only after saving: a confirmation link was sent just now. */
+  confirmationSent: z.boolean().optional(),
 });
 export type CarRemindersResponse = z.infer<typeof CarRemindersResponseSchema>;
 

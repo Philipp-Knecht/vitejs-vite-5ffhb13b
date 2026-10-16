@@ -43,18 +43,20 @@ async function main(): Promise<void> {
   timer.unref();
 
   // Reminders on their own schedule: every hour and shortly after a deploy, each due date once.
-  let sending = false;
-  const sendReminders = async () => {
-    if (sending) return;
-    sending = true;
+  let sending: Promise<void> | null = null;
+  const sendReminders = () => {
+    sending ??= runReminders().finally(() => {
+      sending = null;
+    });
+    return sending;
+  };
+  const runReminders = async () => {
     try {
       const report = await services.reminders.sendDue();
       if (report.remindersSent > 0 || report.remindersFailed > 0)
         app.log.info({ op: 'reminders', ...report }, 'reminders sent');
     } catch (error) {
       app.log.error({ op: 'reminders', err: error }, 'reminders failed');
-    } finally {
-      sending = false;
     }
   };
   const reminderStart = setTimeout(() => void sendReminders(), REMINDER_START_DELAY_MS);
@@ -67,8 +69,10 @@ async function main(): Promise<void> {
     clearInterval(timer);
     clearTimeout(reminderStart);
     clearInterval(reminderTimer);
-    app
-      .close()
+    // A due date claimed for sending is sent (or released) before the database closes.
+    services.reminders.stop();
+    Promise.resolve(sending)
+      .then(() => app.close())
       .then(() => process.exit(0))
       .catch(() => process.exit(1));
   };

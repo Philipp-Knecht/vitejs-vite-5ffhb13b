@@ -38,8 +38,11 @@ test('the selling guide is prerendered, and the listing text is part of Pro', as
 
 test('the filled form meets WCAG 2.1 AA checks', async ({ page }) => {
   await page.goto('/auto-verkaufen');
-  await page.getByLabel('Kraftstoff oder Energiequelle').selectOption('electric');
-  await expect(page.getByLabel('Antriebsbatterie')).toBeVisible();
+  // The page is prerendered: a choice made before hydration is lost.
+  await expect(async () => {
+    await page.getByLabel('Kraftstoff oder Energiequelle').selectOption('electric');
+    await expect(page.getByLabel('Antriebsbatterie')).toBeVisible({ timeout: 1_000 });
+  }).toPass();
   await page
     .getByRole('group', { name: /seit es dir gehört/ })
     .getByRole('radio', { name: 'Ja' })

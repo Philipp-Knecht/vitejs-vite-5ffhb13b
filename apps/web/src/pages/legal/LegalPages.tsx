@@ -311,7 +311,7 @@ export function PrivacyPage() {
         keine Zählpixel und keine nachverfolgten Links. Abbestellen kannst du jede Erinnerung über
         den Link in der E-Mail oder unter „Mein Auto“. Die Angaben löschen wir mit dem Auto oder
         deinem Konto. Endet Pro, schicken wir keine Erinnerungen mehr; deine Einstellungen bleiben
-        gespeichert, bis du sie ausschaltest oder das Auto löschst. Buchst du Pro wieder, kommen die
+        gespeichert, bis du das Auto oder dein Konto löschst. Buchst du Pro wieder, kommen die
         eingeschalteten Erinnerungen wieder. Ist der E-Mail-Versand nicht verfügbar, speichern wir
         nur die Monate, die du einträgst. Bestätigungslinks schicken wir höchstens dreimal am Tag.
         Rechtsgrundlage ist Art. 6 Abs. 1 lit. b DSGVO.
