@@ -15,6 +15,7 @@ export interface EntryFormValues {
   amount: string;
   quantity: string;
   fullTank: boolean;
+  missedBefore: boolean;
   workshop: string;
   note: string;
   invoice: boolean;
@@ -35,6 +36,7 @@ export const emptyEntry = (today: string, kind: CarLogKind = 'fuel'): EntryFormV
   amount: '',
   quantity: '',
   fullTank: true,
+  missedBefore: false,
   workshop: '',
   note: '',
   invoice: false,
@@ -51,6 +53,7 @@ export function formFromEntry(entry: CarLogEntryDto): EntryFormValues {
     amount: entry.amountCents === null ? '' : decimal(entry.amountCents / 100),
     quantity: entry.quantity === null ? '' : decimal(entry.quantity),
     fullTank: entry.kind === 'fuel' ? entry.fullTank : true,
+    missedBefore: entry.missedBefore,
     workshop: entry.workshop ?? '',
     note: entry.note ?? '',
     invoice: entry.invoice,
@@ -65,12 +68,15 @@ export const WORKSHOP_KINDS: ReadonlySet<CarLogKind> = new Set([
   'inspection',
 ]);
 
-/** Control characters from pasted text become spaces; the server rejects them. */
+/** Control characters and direction marks from pasted text go; the server rejects them. */
 const withoutControl = (value: string, keepNewline: boolean) =>
   [...value]
     .map((char) => {
       const code = char.charCodeAt(0);
-      return (code < 32 && !(keepNewline && char === '\n')) || code === 127 ? ' ' : char;
+      if ((code >= 0x202a && code <= 0x202e) || (code >= 0x2066 && code <= 0x2069)) return '';
+      return (code < 32 && !(keepNewline && char === '\n')) || (code >= 127 && code <= 159)
+        ? ' '
+        : char;
     })
     .join('');
 
@@ -127,9 +133,61 @@ export function inputFromForm(
       amountCents,
       quantity,
       fullTank: values.kind === 'fuel' && values.fullTank,
-      workshop: workshop || null,
+      missedBefore: values.kind === 'fuel' && values.missedBefore,
+      // A workshop typed for another kind is not saved when the kind changes.
+      workshop: WORKSHOP_KINDS.has(values.kind) ? workshop || null : null,
       note: note || null,
       invoice: values.invoice,
     },
   };
+}
+
+const germanDate = (date: string) => date.split('-').reverse().join('.');
+
+/**
+ * Readings and dates that do not fit the other entries or the car: shown as a
+ * warning before saving, as a typo would look like tampering in the service
+ * history. A swapped odometer can explain them, so they do not block.
+ */
+export function plausibilityWarnings(
+  input: CarLogEntryInput,
+  others: readonly CarLogEntryDto[],
+  firstRegistration: { year: number; month: number | null },
+): string[] {
+  const warnings: string[] = [];
+  const registration = `${firstRegistration.year}-${String(firstRegistration.month ?? 1).padStart(2, '0')}`;
+  if (input.date.slice(0, 7) < registration)
+    warnings.push('Das Datum liegt vor der Erstzulassung des Autos.');
+  if (input.odometerKm !== null) {
+    const km = input.odometerKm;
+    const higherBefore = others.find(
+      (entry) => entry.odometerKm !== null && entry.date < input.date && entry.odometerKm > km,
+    );
+    const lowerAfter = others.find(
+      (entry) => entry.odometerKm !== null && entry.date > input.date && entry.odometerKm < km,
+    );
+    if (higherBefore)
+      warnings.push(
+        `Am ${germanDate(higherBefore.date)} hast du schon ${higherBefore.odometerKm!.toLocaleString('de-DE')} km eingetragen – mehr als jetzt.`,
+      );
+    else if (lowerAfter)
+      warnings.push(
+        `Am ${germanDate(lowerAfter.date)} hast du später nur ${lowerAfter.odometerKm!.toLocaleString('de-DE')} km eingetragen.`,
+      );
+  }
+  return warnings;
+}
+
+/** The latest reading in the book, as a hint for the next one. */
+export function lastReading(entries: readonly CarLogEntryDto[]): CarLogEntryDto | null {
+  return entries.reduce<CarLogEntryDto | null>(
+    (latest, entry) =>
+      entry.odometerKm !== null &&
+      (latest === null ||
+        entry.date > latest.date ||
+        (entry.date === latest.date && entry.odometerKm > latest.odometerKm!))
+        ? entry
+        : latest,
+    null,
+  );
 }

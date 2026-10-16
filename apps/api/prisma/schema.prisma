@@ -237,6 +237,7 @@ model CarLogEntry {
   /// Litres or kWh in hundredths.
   quantityHundredths Int?
   fullTank           Boolean  @default(false)
+  missedBefore       Boolean  @default(false)
   workshop           String?
   note               String?
   invoice            Boolean  @default(false)

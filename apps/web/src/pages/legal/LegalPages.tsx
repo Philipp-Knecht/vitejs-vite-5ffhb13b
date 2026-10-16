@@ -67,7 +67,7 @@ export function ImprintPage() {
   );
 }
 
-const PRIVACY_POLICY_DATE = '15. Oktober 2026';
+const PRIVACY_POLICY_DATE = '16. Oktober 2026';
 const AI_PROVIDER_NAMES = { anthropic: 'Anthropic', openai: 'OpenAI' } as const;
 
 /**
@@ -111,9 +111,11 @@ export function PrivacyPage() {
         <>
           <p>
             KaufCheck wird bei Render Services, Inc. (San Francisco, USA) betrieben. Server und
-            Datenbank stehen in einem Rechenzentrum in Frankfurt am Main. Render setzt dafür weitere
-            Dienstleister ein, darunter Amazon Web Services, Google Cloud und Cloudflare; über das
-            Netzwerk von Cloudflare wird die Seite ausgeliefert und vor Angriffen geschützt.
+            Datenbank stehen in einem Rechenzentrum in Frankfurt am Main; in der Datenbank speichert
+            Render in unserem Auftrag auch deine Kontodaten, etwa gespeicherte Angebote, „Mein Auto“
+            und das Kostenbuch. Render setzt dafür weitere Dienstleister ein, darunter Amazon Web
+            Services, Google Cloud und Cloudflare; über das Netzwerk von Cloudflare wird die Seite
+            ausgeliefert und vor Angriffen geschützt.
           </p>
           <p>
             Beim Aufruf der Seite verarbeiten Render und diese Dienstleister technisch notwendige
@@ -183,13 +185,13 @@ export function PrivacyPage() {
         Unter „Mein Auto“ speichern wir, was du zu deinem Auto einträgst (Name, Marke, Modell und
         Generation, Kraftstoff, Erstzulassung, Kilometerstand und HU-Monat – keine FIN und kein
         Kennzeichen), damit wir dir den HU-Termin und das Wissen zu deinem Modell zeigen können. Mit
-        KaufCheck Pro kommt das Kostenbuch dazu: Datum, Art, Kilometerstand, Betrag, Menge,
-        Werkstatt, Notiz und ob ein Beleg vorliegt – Belege selbst laden wir nicht hoch. Die
-        Einträge löschen wir, wenn du sie, das Auto oder dein Konto löschst; endet Pro, bleiben sie
-        lesbar, bis du sie löschst. Den CSV-Export und das Serviceheft als PDF erstellt dein
-        Browser. Ohne E-Mail-Adresse und Passwort kann kein Konto angelegt werden. Du kannst dein
-        Konto jederzeit selbst in den Kontoeinstellungen löschen; dabei werden alle zugehörigen
-        Daten entfernt.
+        KaufCheck Pro kommt das Kostenbuch dazu, damit du Kosten und Wartung festhalten, auswerten
+        und exportieren kannst: Datum, Art, Kilometerstand, Betrag, Menge, Werkstatt, Notiz und ob
+        eine Rechnung vorliegt – Belege selbst laden wir nicht hoch. Die Einträge löschen wir, wenn
+        du einen Eintrag, das Auto oder dein Konto löschst; endet Pro, bleiben sie lesbar, bis du
+        sie löschst. Den CSV-Export und das Serviceheft als PDF erstellt dein Browser. Ohne
+        E-Mail-Adresse und Passwort kann kein Konto angelegt werden. Du kannst dein Konto jederzeit
+        selbst in den Kontoeinstellungen löschen; dabei werden alle zugehörigen Daten entfernt.
         {features?.passwordReset === true &&
           ' Wenn du dein Passwort zurücksetzt, schicken wir dir eine E-Mail (siehe „E-Mails“).'}{' '}
         Rechtsgrundlage ist Art. 6 Abs. 1 lit. b DSGVO.

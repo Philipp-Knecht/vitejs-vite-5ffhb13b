@@ -16,6 +16,7 @@ const entry = (overrides: Partial<CarLogEntryLike>): CarLogEntryLike => ({
   amountCents: null,
   quantity: null,
   fullTank: false,
+  missedBefore: false,
   ...overrides,
 });
 
@@ -61,6 +62,27 @@ describe('summary', () => {
     expect(summary.yearCents).toBe(49_000);
     expect(summary.months).toBe(12);
     expect(summary.yearKm).toBe(6_000);
+    // The readings span half a year: 490 € over 6,000 km.
+    expect(summary.centsPerKm).toBe(8);
+  });
+
+  it('counts the months from the first cost and needs half a year of readings for costs per km', () => {
+    const summary = carLogSummary(
+      [
+        // An old service entered later does not stretch the period.
+        entry({ date: '2019-04-01', kind: 'service', amountCents: 30_000, odometerKm: 20_000 }),
+        entry({ date: '2026-09-20', kind: 'insurance', amountCents: 60_000 }),
+        entry({ date: '2026-09-25', kind: 'fuel', amountCents: 7_000, odometerKm: 90_000 }),
+        entry({ date: '2026-10-10', kind: 'fuel', amountCents: 6_000, odometerKm: 90_600 }),
+      ],
+      '2026-10-15',
+    );
+    expect(summary.months).toBe(1);
+    expect(summary.yearKm).toBe(600);
+    expect(summary.centsPerKm).toBeNull();
+    expect(
+      carLogSummary([entry({ date: '2026-10-01', kind: 'service' })], '2026-10-15').months,
+    ).toBe(0);
   });
 
   it('counts fewer months for a young book and needs two readings for the distance', () => {
@@ -92,6 +114,64 @@ describe('summary', () => {
     expect(carLogSummary(fills.slice(0, 1), '2026-10-15').fuelPer100Km).toBeNull();
   });
 
+  it('breaks the interval at a fill-up without litres or after a missed one', () => {
+    const base = { kind: 'fuel' as const, fullTank: true };
+    const withoutLitres = carLogSummary(
+      [
+        entry({ ...base, date: '2026-01-01', quantity: 40, odometerKm: 1_000 }),
+        entry({ ...base, date: '2026-01-10', quantity: null, odometerKm: 1_500 }),
+        entry({ ...base, date: '2026-01-20', quantity: 30, odometerKm: 2_000 }),
+      ],
+      '2026-10-15',
+    );
+    // Only 1,500 → 2,000 km counts: 30 l over 500 km.
+    expect(withoutLitres.fuelPer100Km).toBe(6);
+    expect(withoutLitres.fuelIntervals).toBe(1);
+    const missed = carLogSummary(
+      [
+        entry({ ...base, date: '2026-01-01', quantity: 40, odometerKm: 1_000, amountCents: 7_000 }),
+        entry({
+          ...base,
+          date: '2026-01-20',
+          quantity: 60,
+          odometerKm: 2_000,
+          missedBefore: true,
+          amountCents: 10_000,
+        }),
+        entry({ ...base, date: '2026-01-30', quantity: 30, odometerKm: 2_500, amountCents: 5_000 }),
+      ],
+      '2026-10-15',
+    );
+    expect(missed.fuelPer100Km).toBe(6);
+    // 50 € over 500 km.
+    expect(missed.fuelCentsPer100Km).toBe(1_000);
+  });
+
+  it('ignores an odometer typo and orders a day by entry', () => {
+    const base = { kind: 'fuel' as const, fullTank: true };
+    const typo = carLogSummary(
+      [
+        entry({ ...base, date: '2026-01-01', quantity: 40, odometerKm: 1_000 }),
+        entry({ ...base, date: '2026-01-10', quantity: 40, odometerKm: 150_000 }),
+        entry({ ...base, date: '2026-01-20', quantity: 40, odometerKm: 2_000 }),
+      ],
+      '2026-10-15',
+    );
+    expect(typo.fuelPer100Km).toBeNull();
+    // A partial fill-up without a reading, entered first on the same day, belongs before the full one.
+    const sameDay = carLogSummary(
+      [
+        entry({ ...base, date: '2026-01-01', quantity: 40, odometerKm: 1_000, createdAt: 'a' }),
+        entry({ ...base, date: '2026-01-10', quantity: 10, fullTank: false, createdAt: 'b' }),
+        entry({ ...base, date: '2026-01-10', quantity: 30, odometerKm: 1_500, createdAt: 'c' }),
+        entry({ ...base, date: '2026-01-20', quantity: 35, odometerKm: 2_000, createdAt: 'd' }),
+      ],
+      '2026-10-15',
+    );
+    // (10 + 30 + 35) l over 1,000 km.
+    expect(sameDay.fuelPer100Km).toBe(7.5);
+  });
+
   it('starts the window a year back, also from 29 February', () => {
     expect(yearBefore('2026-10-15')).toBe('2025-10-15');
     expect(yearBefore('2028-02-29')).toBe('2027-03-01');
@@ -118,11 +198,11 @@ describe('CSV export', () => {
       .replace(/^\ufeff/, '')
       .split('\r\n');
     expect(lines[0]).toBe(
-      'Datum;Art;Kilometerstand;Betrag in Euro;Menge;Einheit;Vollgetankt;Werkstatt;Notiz;Rechnung vorhanden',
+      'Datum;Art;Kilometerstand;Betrag in Euro;Menge;Einheit;Vollgetankt;Vorige Tankung fehlt;Werkstatt;Notiz;Rechnung vorhanden',
     );
-    expect(lines[1]).toBe('2026-01-02;Tanken;;;41,4;l;ja;;;nein');
+    expect(lines[1]).toBe('2026-01-02;Tanken;;;41,4;l;ja;;;;nein');
     expect(lines[2]).toContain('"Autohaus Muster; Köln"');
     expect(lines[2]).toContain(`"'=HYPERLINK(""x"")`);
-    expect(lines[2]).toContain('349,5');
+    expect(lines[2]).toContain('349,50');
   });
 });

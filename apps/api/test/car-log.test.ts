@@ -28,6 +28,7 @@ const FILL: CarLogEntryInput = {
   amountCents: 7_245,
   quantity: 41.4,
   fullTank: true,
+  missedBefore: false,
   workshop: null,
   note: null,
   invoice: false,
@@ -40,6 +41,7 @@ const SERVICE: CarLogEntryInput = {
   amountCents: 34_900,
   quantity: 12,
   fullTank: true,
+  missedBefore: false,
   workshop: 'Autohaus Muster, Köln',
   note: 'Inspektion mit Ölwechsel\nBremsflüssigkeit gewechselt',
   invoice: true,
@@ -65,7 +67,7 @@ describe('Kostenbuch (car log)', () => {
     return { client, car, account };
   }
 
-  it('adds, lists, updates and deletes entries, and keeps the mileage current', async () => {
+  it('adds, lists, updates and deletes entries', async () => {
     const { client, car } = await owner();
     const added = await client.post(`/api/owned-cars/${car.id}/log`, FILL);
     expect(added.statusCode).toBe(201);
@@ -77,14 +79,20 @@ describe('Kostenbuch (car log)', () => {
     ).json<CarLogEntryDto>();
     // A quantity and a full tank belong to fuel only.
     expect(service).toMatchObject({ quantity: null, fullTank: false, note: SERVICE.note });
+    // A workshop belongs to service entries only.
+    const fuelWithWorkshop = (
+      await client.post(`/api/owned-cars/${car.id}/log`, { ...FILL, workshop: 'Tankstelle' })
+    ).json<CarLogEntryDto>();
+    expect(fuelWithWorkshop.workshop).toBeNull();
+    await client.delete(`/api/owned-cars/${car.id}/log/${fuelWithWorkshop.id}`);
 
     const list = (await client.get(`/api/owned-cars/${car.id}/log`)).json<CarLogResponse>();
     expect(list.editable).toBe(true);
     expect(list.items.map((item) => item.date)).toEqual(['2026-09-01', '2026-05-12']);
 
-    // The newest reading becomes the car's mileage; an older one does not lower it.
+    // The log does not change the mileage in „Mein Auto“.
     const cars = (await client.get('/api/owned-cars')).json<{ items: OwnedCarDto[] }>();
-    expect(cars.items[0]?.mileageKm).toBe(98_500);
+    expect(cars.items[0]?.mileageKm).toBe(98_000);
 
     const updated = await client.put(`/api/owned-cars/${car.id}/log/${fill.id}`, {
       ...FILL,

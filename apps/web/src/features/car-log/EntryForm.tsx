@@ -2,6 +2,7 @@ import {
   CAR_LOG_KIND_LABELS,
   CAR_LOG_KINDS,
   QUANTITY_UNITS,
+  type CarLogEntryDto,
   type CarLogEntryInput,
   type CarLogKind,
 } from '@kaufcheck/shared';
@@ -11,6 +12,8 @@ import { Button } from '../../components/ui/Button';
 import { SelectField, TextAreaField, TextField } from '../../components/ui/Field';
 import {
   inputFromForm,
+  lastReading,
+  plausibilityWarnings,
   WORKSHOP_KINDS,
   type EntryFormField,
   type EntryFormValues,
@@ -25,22 +28,37 @@ export interface EntryFormError {
 export function EntryForm({
   initial,
   today,
+  entries,
+  firstRegistration,
+  editingId,
   submitLabel,
   busy,
   serverError,
+  onChange,
   onSubmit,
   onCancel,
 }: {
   initial: EntryFormValues;
   today: string;
+  /** The book, for the plausibility check and the last reading. */
+  entries: readonly CarLogEntryDto[];
+  firstRegistration: { year: number; month: number | null };
+  /** The entry being changed, which is not compared with itself. */
+  editingId: string | null;
   submitLabel: string;
   busy: boolean;
   serverError: EntryFormError | null;
+  /** Called on every change, e.g. to clear an error from the server. */
+  onChange: () => void;
   onSubmit: (input: CarLogEntryInput) => void;
   onCancel: () => void;
 }) {
   const [values, setValues] = useState(initial);
   const [error, setError] = useState<EntryFormError | null>(null);
+  // Warnings for the values they were shown for; saving again confirms them.
+  const [warnings, setWarnings] = useState<{ for: string; texts: string[] } | null>(null);
+  const others = entries.filter((entry) => entry.id !== editingId);
+  const last = lastReading(others);
   const form = useRef<HTMLFormElement>(null);
   const shown = error ?? serverError;
   const unit = QUANTITY_UNITS[values.kind];
@@ -58,6 +76,8 @@ export function EntryForm({
     <K extends keyof EntryFormValues>(key: K) =>
     (value: EntryFormValues[K]) => {
       setError(null);
+      setWarnings(null);
+      onChange();
       setValues((current) => ({ ...current, [key]: value }));
     };
   const errorFor = (field: EntryFormField) => (shown?.field === field ? shown.message : undefined);
@@ -68,6 +88,17 @@ export function EntryForm({
     if ('field' in result) {
       setError({ field: result.field, message: result.message });
       return;
+    }
+    const key = JSON.stringify(result.input);
+    if (warnings?.for !== key) {
+      const texts = plausibilityWarnings(result.input, others, firstRegistration);
+      if (texts.length > 0) {
+        setWarnings({ for: key, texts });
+        requestAnimationFrame(() =>
+          form.current?.querySelector<HTMLElement>('.car-log__warning')?.focus(),
+        );
+        return;
+      }
     }
     onSubmit(result.input);
   };
@@ -96,7 +127,11 @@ export function EntryForm({
         />
         <TextField
           label="Kilometerstand"
-          hint="Laut Tacho, freiwillig"
+          hint={
+            last
+              ? `Laut Tacho, freiwillig – zuletzt ${last.odometerKm!.toLocaleString('de-DE')} km am ${last.date.split('-').reverse().join('.')}`
+              : 'Laut Tacho, freiwillig'
+          }
           inputMode="numeric"
           maxLength={9}
           value={values.odometerKm}
@@ -141,9 +176,20 @@ export function EntryForm({
             onChange={(event) => set('fullTank')(event.target.checked)}
           />
           <span>
-            Vollgetankt – nur dann kann KaufCheck den Verbrauch bis zur nächsten vollen Tankung
-            berechnen
+            Vollgetankt – für den Verbrauch braucht KaufCheck Liter und Kilometerstand von zwei
+            vollen Tankungen
           </span>
+        </label>
+      )}
+      {values.kind === 'fuel' && (
+        <label className="consent">
+          <input
+            type="checkbox"
+            className="checkbox"
+            checked={values.missedBefore}
+            onChange={(event) => set('missedBefore')(event.target.checked)}
+          />
+          <span>Die Tankung davor habe ich nicht eingetragen</span>
         </label>
       )}
       <TextAreaField
@@ -166,9 +212,21 @@ export function EntryForm({
           checked={values.invoice}
           onChange={(event) => set('invoice')(event.target.checked)}
         />
-        <span>Rechnung oder Beleg liegt vor</span>
+        <span>Rechnung oder Beleg vorhanden</span>
       </label>
       {shown && shown.field === null && <Alert tone="error" title={shown.message} />}
+      {warnings && (
+        <div className="car-log__warning" tabIndex={-1}>
+          <Alert tone="warning" title="Bitte prüf das noch einmal">
+            <ul>
+              {warnings.texts.map((text) => (
+                <li key={text}>{text}</li>
+              ))}
+            </ul>
+            <p>Stimmt es so, etwa nach einem Tachotausch, speichere noch einmal.</p>
+          </Alert>
+        </div>
+      )}
       <div className="button-row">
         <Button type="submit" loading={busy}>
           {submitLabel}

@@ -173,7 +173,7 @@ export function useCarLog(carId: string, enabled: boolean) {
   });
 }
 
-/** Adds an entry, or changes it when `id` is given. A new reading can change the car's mileage. */
+/** Adds an entry, or changes it when `id` is given. */
 export function useSaveCarLogEntry(carId: string) {
   const queryClient = useQueryClient();
   return useMutation({
@@ -183,11 +183,7 @@ export function useSaveCarLogEntry(carId: string) {
         ? api.put<CarLogEntryDto>(`${base}/${encodeURIComponent(id)}`, input)
         : api.post<CarLogEntryDto>(base, input);
     },
-    onSuccess: () =>
-      Promise.all([
-        queryClient.invalidateQueries({ queryKey: queryKeys.carLog(carId) }),
-        queryClient.invalidateQueries({ queryKey: queryKeys.ownedCars }),
-      ]),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: queryKeys.carLog(carId) }),
   });
 }
 

@@ -8,6 +8,7 @@ CREATE TABLE "CarLogEntry" (
     "amountCents" INTEGER,
     "quantityHundredths" INTEGER,
     "fullTank" BOOLEAN NOT NULL DEFAULT false,
+    "missedBefore" BOOLEAN NOT NULL DEFAULT false,
     "workshop" TEXT,
     "note" TEXT,
     "invoice" BOOLEAN NOT NULL DEFAULT false,

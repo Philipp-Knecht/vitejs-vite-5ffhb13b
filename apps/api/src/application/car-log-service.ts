@@ -1,6 +1,7 @@
 import {
   CAR_LOG_MAX_ENTRIES,
   QUANTITY_UNITS,
+  SERVICE_LOG_KINDS,
   type CarLogEntryDto,
   type CarLogEntryInput,
   type CarLogKind,
@@ -20,6 +21,7 @@ interface CarLogRow {
   amountCents: number | null;
   quantityHundredths: number | null;
   fullTank: boolean;
+  missedBefore: boolean;
   workshop: string | null;
   note: string | null;
   invoice: boolean;
@@ -36,6 +38,7 @@ function toDto(row: CarLogRow): CarLogEntryDto {
     amountCents: row.amountCents,
     quantity: row.quantityHundredths === null ? null : row.quantityHundredths / 100,
     fullTank: row.fullTank,
+    missedBefore: row.missedBefore,
     workshop: row.workshop,
     note: row.note,
     invoice: row.invoice,
@@ -46,9 +49,12 @@ function toDto(row: CarLogRow): CarLogEntryDto {
 const invalid = (field: string, message: string) =>
   new AppError('VALIDATION_ERROR', { message, details: { fieldErrors: { [field]: [message] } } });
 
-/** Today in German time – the server itself runs in UTC. */
+/**
+ * The latest date anywhere (UTC+14): a device east of Germany or travelling may
+ * already be on the next day. Later than that is in the future for everyone.
+ */
 function today(now: Date): string {
-  return new Intl.DateTimeFormat('en-CA', { timeZone: 'Europe/Berlin' }).format(now);
+  return new Intl.DateTimeFormat('en-CA', { timeZone: 'Pacific/Kiritimati' }).format(now);
 }
 
 /** Checks what the schema cannot and returns the columns to store. */
@@ -64,7 +70,9 @@ function toColumns(input: CarLogEntryInput, now: Date) {
     // A quantity belongs to fuel and charging only, a full tank to fuel only.
     quantityHundredths: unit && input.quantity !== null ? Math.round(input.quantity * 100) : null,
     fullTank: input.kind === 'fuel' && input.fullTank,
-    workshop: input.workshop || null,
+    missedBefore: input.kind === 'fuel' && input.missedBefore,
+    // A workshop belongs to service, repairs, tyres and HU only.
+    workshop: SERVICE_LOG_KINDS.has(input.kind) ? input.workshop || null : null,
     note: input.note || null,
     invoice: input.invoice,
   };
@@ -102,8 +110,8 @@ export class CarLogService {
     const data = toColumns(input, this.now());
     const row = await this.db.$transaction(async (tx) => {
       // Locks the car so that parallel requests cannot pass the limit together.
-      const locked = await tx.$queryRaw<{ id: string; mileageKm: number | null }[]>`
-        SELECT "id", "mileageKm" FROM "OwnedCar"
+      const locked = await tx.$queryRaw<{ id: string }[]>`
+        SELECT "id" FROM "OwnedCar"
         WHERE "id" = ${carId}::uuid
           AND "userId" = ${userId}::uuid
         FOR UPDATE`;
@@ -115,9 +123,6 @@ export class CarLogService {
           message: `Ein Kostenbuch hat Platz für ${CAR_LOG_MAX_ENTRIES} Einträge. Lösche ältere, um Platz zu schaffen.`,
           details: { limit: CAR_LOG_MAX_ENTRIES, used },
         });
-      // A newer reading keeps the mileage in „Mein Auto“ up to date.
-      if (data.odometerKm !== null && data.odometerKm > (car.mileageKm ?? -1))
-        await tx.ownedCar.update({ where: { id: carId }, data: { mileageKm: data.odometerKm } });
       return tx.carLogEntry.create({ data: { carId, ...data } });
     });
     return toDto(row);

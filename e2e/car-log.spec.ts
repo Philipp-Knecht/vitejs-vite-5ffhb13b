@@ -17,7 +17,7 @@ async function ownerWithCar(page: Page, pro: boolean): Promise<void> {
   await add.getByLabel('Modell', { exact: true }).selectOption('other');
   await add.getByLabel('Modellbezeichnung').fill('Fabia');
   await add.getByRole('group', { name: 'Erstzulassung' }).getByLabel('Jahr').fill('2018');
-  await add.getByLabel('Kilometerstand').fill('80.000');
+  await add.getByLabel('Kilometerstand', { exact: true }).fill('80.000');
   await add.getByRole('button', { name: 'Auto anlegen' }).click();
   await page.getByRole('link', { name: 'Kostenbuch öffnen für Škoda Fabia' }).click();
   await expect(page).toHaveURL(/\/mein-auto\/[0-9a-f-]{36}\/kostenbuch$/);
@@ -44,7 +44,7 @@ async function addEntry(
   const form = page.getByRole('region', { name: 'Eintrag hinzufügen' });
   await form.getByLabel('Art').selectOption({ label: entry.kind });
   await form.getByLabel('Datum').fill(entry.date);
-  if (entry.km) await form.getByLabel('Kilometerstand').fill(entry.km);
+  if (entry.km) await form.getByLabel('Kilometerstand', { exact: true }).fill(entry.km);
   if (entry.amount) await form.getByLabel('Betrag in Euro').fill(entry.amount);
   if (entry.quantity) await form.getByLabel('Menge in Litern').fill(entry.quantity);
   if (entry.note) await form.getByLabel('Was wurde gemacht?').fill(entry.note);
@@ -82,19 +82,35 @@ test('entries, figures, exports and the service history', async ({ page }) => {
     note: 'Inspektion mit Ölwechsel',
   });
 
-  const summary = page.getByRole('region', { name: /Seit dem ersten Eintrag/ });
+  const summary = page.getByRole('region', { name: 'Auswertung' });
+  await expect(summary).toContainText('Seit deiner ersten Ausgabe');
   await expect(summary).toContainText('474,30 €');
+  // 55,20 € over 600 km between the two full fill-ups.
+  await expect(summary).toContainText('9,20 € je 100 km');
+  // A month of readings is too short for costs per km.
+  await expect(summary).not.toContainText(/€ je km/);
   // 36.6 l over 600 km.
   await expect(summary).toContainText('6,1 l/100 km');
   await expect(summary).toContainText('800 km');
 
-  // The newest reading becomes the car's mileage.
-  await page.getByRole('link', { name: 'Mein Auto' }).first().click();
-  await expect(page.getByRole('article', { name: /Fabia/ })).toContainText('81.300 km');
-  await page.goBack();
+  // A reading lower than an earlier one asks first.
+  await page.getByRole('button', { name: 'Eintrag hinzufügen' }).click();
+  const check = page.getByRole('region', { name: 'Eintrag hinzufügen' });
+  await expect(check.getByText('zuletzt 81.300 km')).toBeVisible();
+  await check.getByLabel('Art').selectOption({ label: 'Pflege und Wäsche' });
+  await check.getByLabel('Kilometerstand', { exact: true }).fill('18.130');
+  await check.getByRole('button', { name: 'Hinzufügen' }).click();
+  await expect(check.getByText(/mehr als jetzt/)).toBeVisible();
+  await check.getByRole('button', { name: 'Hinzufügen' }).click();
+  await expect(check).toHaveCount(0);
+  await page.getByRole('button', { name: /Löschen.*Pflege/ }).click();
+  await page.getByRole('dialog').getByRole('button', { name: 'Löschen' }).click();
+  await expect(page.getByRole('button', { name: /Löschen.*Pflege/ })).toHaveCount(0);
 
   await page.getByLabel('Anzeigen').selectOption('service');
-  await expect(page.getByRole('heading', { level: 3 })).toHaveCount(1);
+  await expect(
+    page.getByRole('region', { name: 'Einträge' }).getByRole('heading', { level: 3 }),
+  ).toHaveCount(1);
   await page.getByLabel('Anzeigen').selectOption('all');
 
   // A future date is refused at the field.
@@ -115,7 +131,7 @@ test('entries, figures, exports and the service history', async ({ page }) => {
   const pdf = page.waitForEvent('download');
   await page.getByRole('button', { name: 'Serviceheft als PDF' }).click();
   const file = await pdf;
-  expect(file.suggestedFilename()).toMatch(/^serviceheft-\d{4}-\d{2}-\d{2}\.pdf$/);
+  expect(file.suggestedFilename()).toMatch(/^serviceheft-skoda-fabia-\d{4}-\d{2}-\d{2}\.pdf$/);
   expect(
     readFileSync(await file.path())
       .subarray(0, 5)

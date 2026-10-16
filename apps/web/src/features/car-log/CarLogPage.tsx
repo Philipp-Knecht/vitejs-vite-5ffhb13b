@@ -81,65 +81,89 @@ const decimal = (value: number) => value.toLocaleString('de-DE', { maximumFracti
 
 function Summary({ entries, today }: { entries: CarLogEntryDto[]; today: string }) {
   const summary = useMemo(() => carLogSummary(entries, today), [entries, today]);
-  if (entries.length === 0) return null;
-  const perMonth = summary.months > 0 ? Math.round(summary.yearCents / summary.months) : 0;
+  const costs = summary.months > 0;
+  const fuel = summary.fuelPer100Km !== null;
+  if (!costs && !fuel && summary.yearKm === null) return null;
   return (
     <section className="card car-log__summary" aria-labelledby="car-log-summary-title">
-      <h2 id="car-log-summary-title">
-        {summary.months >= 12
-          ? 'Die letzten 12 Monate'
-          : `Seit dem ersten Eintrag (${summary.months === 1 ? '1 Monat' : `${summary.months} Monate`})`}
-      </h2>
-      <dl className="definition-list">
-        <div>
-          <dt>Kosten</dt>
-          <dd>{formatCents(summary.yearCents)}</dd>
-        </div>
-        <div>
-          <dt>Im Monat</dt>
-          <dd>{formatCents(perMonth)}</dd>
-        </div>
-        {summary.yearKm !== null && (
-          <div>
-            <dt>Gefahren laut deinen Einträgen</dt>
-            <dd>
-              {formatNumber(summary.yearKm)} km, also{' '}
-              {formatCents(Math.round(summary.yearCents / summary.yearKm))} je km
-            </dd>
-          </div>
-        )}
-        {summary.fuelPer100Km !== null && (
-          <div>
-            <dt>Verbrauch</dt>
-            <dd>
-              {decimal(summary.fuelPer100Km)} l/100 km{' '}
-              <span className="muted">
-                (aus{' '}
-                {summary.fuelIntervals === 1
-                  ? 'einer Strecke'
-                  : `${summary.fuelIntervals} Strecken`}{' '}
-                zwischen vollen Tankungen)
-              </span>
-            </dd>
-          </div>
-        )}
-      </dl>
-      {summary.byKind.length > 0 && (
-        <table className="car-log__kinds">
-          <caption className="visually-hidden">Kosten nach Art</caption>
-          <tbody>
-            {summary.byKind.map((item) => (
-              <tr key={item.kind}>
-                <th scope="row">{CAR_LOG_KIND_LABELS[item.kind]}</th>
-                <td>{formatCents(item.cents)}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+      <h2 id="car-log-summary-title">Auswertung</h2>
+      {(costs || summary.yearKm !== null) && (
+        <>
+          <h3 className="car-log__summary-period">
+            {summary.months >= 12 || !costs
+              ? 'Die letzten 12 Monate'
+              : `Seit deiner ersten Ausgabe (${summary.months === 1 ? '1 Monat' : `${summary.months} Monate`})`}
+          </h3>
+          <dl className="definition-list">
+            {costs && (
+              <>
+                <div>
+                  <dt>Kosten</dt>
+                  <dd>{formatCents(summary.yearCents)}</dd>
+                </div>
+                <div>
+                  <dt>Im Monat</dt>
+                  <dd>{formatCents(Math.round(summary.yearCents / summary.months))}</dd>
+                </div>
+              </>
+            )}
+            {summary.yearKm !== null && (
+              <div>
+                <dt>Gefahren laut deinen Einträgen</dt>
+                <dd>
+                  {formatNumber(summary.yearKm)} km
+                  {summary.centsPerKm !== null && (
+                    <>, also {formatCents(summary.centsPerKm)} je km</>
+                  )}
+                </dd>
+              </div>
+            )}
+          </dl>
+          {summary.byKind.length > 0 && (
+            <table className="car-log__kinds">
+              <caption className="visually-hidden">Kosten nach Art</caption>
+              <tbody>
+                {summary.byKind.map((item) => (
+                  <tr key={item.kind}>
+                    <th scope="row">{CAR_LOG_KIND_LABELS[item.kind]}</th>
+                    <td>{formatCents(item.cents)}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          )}
+        </>
+      )}
+      {fuel && (
+        <>
+          <h3 className="car-log__summary-period">Verbrauch aus allen Einträgen</h3>
+          <dl className="definition-list">
+            <div>
+              <dt>Kraftstoff</dt>
+              <dd>
+                {decimal(summary.fuelPer100Km!)} l/100 km{' '}
+                <span className="muted">
+                  (aus{' '}
+                  {summary.fuelIntervals === 1
+                    ? 'einer Strecke'
+                    : `${summary.fuelIntervals} Strecken`}{' '}
+                  zwischen vollen Tankungen)
+                </span>
+              </dd>
+            </div>
+            {summary.fuelCentsPer100Km !== null && (
+              <div>
+                <dt>Kraftstoffkosten</dt>
+                <dd>{formatCents(summary.fuelCentsPer100Km)} je 100 km</dd>
+              </div>
+            )}
+          </dl>
+        </>
       )}
       <p className="muted car-log__note">
         Gezählt wird, was du eingetragen hast. Kosten je km: Kosten geteilt durch die Strecke
-        zwischen dem niedrigsten und dem höchsten Kilometerstand dieser Zeit.
+        zwischen dem niedrigsten und dem höchsten Kilometerstand – erst, wenn deine Einträge
+        mindestens ein halbes Jahr abdecken.
       </p>
     </section>
   );
@@ -161,11 +185,15 @@ function EntryItem({
   const details = [
     entry.odometerKm !== null ? `${formatNumber(entry.odometerKm)} km` : null,
     unit && entry.quantity !== null ? `${decimal(entry.quantity)} ${unit}` : null,
+    entry.kind === 'fuel' && entry.quantity && entry.amountCents
+      ? `${formatCents(Math.round(entry.amountCents / entry.quantity))}/l`
+      : null,
     entry.kind === 'fuel' && entry.quantity !== null && !entry.fullTank
       ? 'nicht vollgetankt'
       : null,
+    entry.kind === 'fuel' && entry.missedBefore ? 'Tankung davor nicht eingetragen' : null,
     entry.workshop,
-    entry.invoice ? 'Beleg vorhanden' : null,
+    entry.invoice ? 'Rechnung oder Beleg vorhanden' : null,
   ].filter(Boolean);
   return (
     <li className="car-log__entry">
@@ -219,7 +247,8 @@ export function CarLogPage() {
   const [deleting, setDeleting] = useState<CarLogEntryDto | null>(null);
   const [filter, setFilter] = useState<Filter>('all');
   const [pdfBusy, setPdfBusy] = useState(false);
-  const today = useMemo(() => localDay(new Date()), []);
+  // Taken again when the form opens: the page may stay open past midnight.
+  const [today, setToday] = useState(() => localDay(new Date()));
   const saveError = useMemo(() => formError(save.error), [save.error]);
 
   const focusNext = useRef<string | null>(null);
@@ -256,6 +285,15 @@ export function CarLogPage() {
     );
 
   const entries = log.data?.items ?? [];
+  // For the file names: which car, with ten cars in Pro.
+  const slug =
+    carTitle(car)
+      .normalize('NFKD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/^-|-$/g, '')
+      .slice(0, 40) || 'auto';
   const editable = log.data?.editable ?? false;
   const shown = entries.filter((entry) => matches(entry, filter));
   const full = entries.length >= (log.data?.limit ?? Infinity);
@@ -268,6 +306,8 @@ export function CarLogPage() {
         onSuccess: (saved) => {
           toast.show(editing ? 'Eintrag gespeichert' : 'Eintrag hinzugefügt');
           setForm(null);
+          // So that the saved entry is shown, whatever the filter.
+          setFilter('all');
           focusNext.current = entryId(saved.id);
         },
         onError: (error) => {
@@ -294,7 +334,11 @@ export function CarLogPage() {
   };
 
   const exportCsv = () =>
-    downloadTextFile(`kostenbuch-${today}.csv`, carLogCsv(entries), 'text/csv;charset=utf-8');
+    downloadTextFile(
+      `kostenbuch-${slug}-${today}.csv`,
+      carLogCsv(entries),
+      'text/csv;charset=utf-8',
+    );
 
   const exportPdf = async () => {
     setPdfBusy(true);
@@ -308,7 +352,7 @@ export function CarLogPage() {
         entries,
         fonts,
         new Date(),
-      ).save(`serviceheft-${today}.pdf`);
+      ).save(`serviceheft-${slug}-${today}.pdf`);
       track('service_history_pdf_downloaded');
     } catch (error) {
       console.error('Service history PDF failed', error);
@@ -322,6 +366,7 @@ export function CarLogPage() {
 
   const openForm = (entry: CarLogEntryDto | null) => {
     save.reset();
+    setToday(localDay(new Date()));
     setForm({ entry });
     focusNext.current = FORM_TITLE_ID;
   };
@@ -344,9 +389,9 @@ export function CarLogPage() {
             Kostenbuch: {carName(car)}
           </h1>
           <p className="page__lead">
-            Halte Tankungen, Wartung, Reparaturen und andere Kosten fest. Was Wartung, Reparaturen,
-            Reifen und HU betrifft, wird dein selbst geführtes Serviceheft – praktisch, wenn du das
-            Auto einmal verkaufst.
+            Halte Tankungen, Wartung, Reparaturen und andere Kosten fest. Einträge zu Wartung,
+            Reparaturen, Reifen und HU/AU ergeben dein selbst geführtes Serviceheft. Es ersetzt
+            weder Rechnungen noch das Serviceheft des Herstellers.
           </p>
         </div>
       </div>
@@ -387,9 +432,15 @@ export function CarLogPage() {
                 key={form.entry?.id ?? 'new'}
                 initial={form.entry ? formFromEntry(form.entry) : emptyEntry(today)}
                 today={today}
+                entries={entries}
+                firstRegistration={car.firstRegistration}
+                editingId={form.entry?.id ?? null}
                 submitLabel={form.entry ? 'Speichern' : 'Hinzufügen'}
                 busy={save.isPending}
                 serverError={saveError}
+                onChange={() => {
+                  if (save.error) save.reset();
+                }}
                 onSubmit={submit}
                 onCancel={() => {
                   const back = form.entry ? entryId(form.entry.id) : PAGE_TITLE_ID;
@@ -425,6 +476,14 @@ export function CarLogPage() {
                 </>
               )}
             </div>
+          )}
+          {entries.length > 0 && !form && (
+            <p className="muted car-log__note">
+              Das Serviceheft als PDF ist kein Wartungsnachweis. Gib es nur weiter, wenn alle
+              Einträge stimmen – Käufer dürfen sich darauf verlassen, auch wenn du die
+              Gewährleistung ausschließt. „Scheckheftgepflegt“ oder „Serviceheft vorhanden“
+              schreibst du nur, wenn du das Serviceheft des Herstellers oder Rechnungen hast.
+            </p>
           )}
           {full && editable && (
             <p className="muted">
@@ -499,7 +558,8 @@ export function CarLogPage() {
       </Dialog>
       <p className="muted car-log__note">
         Gespeichert wird nur, was du einträgst. Löschst du das Auto unter{' '}
-        <Link to="/mein-auto">„Mein Auto“</Link>, löscht KaufCheck auch sein Kostenbuch.
+        <Link to="/mein-auto">„Mein Auto“</Link> oder dein Konto, löscht KaufCheck auch das
+        Kostenbuch.
       </p>
     </div>
   );

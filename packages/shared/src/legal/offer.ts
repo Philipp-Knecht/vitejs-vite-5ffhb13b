@@ -83,7 +83,9 @@ export function proFeatures(pro: Entitlements, options: { photoAnalysis: boolean
     features.push('Inseratstext für den Verkauf deines Autos aus deinen Angaben');
   }
   if (pro.carLog) {
-    features.push('Kostenbuch und selbst geführtes Serviceheft für deine Autos unter „Mein Auto“');
+    features.push(
+      'Kostenbuch für deine Autos unter „Mein Auto“: Tankungen, Wartung, Reparaturen und andere Kosten festhalten (bis zu 2.000 Einträge je Auto), mit Kosten pro Monat, Verbrauch, CSV-Export und einem selbst geführten Serviceheft als PDF; Belege lassen sich nicht hochladen',
+    );
   }
   if (pro.photoAnalysis && options.photoAnalysis) {
     features.push('KI-Fotoanalyse bei Inseraten mit Fotos');

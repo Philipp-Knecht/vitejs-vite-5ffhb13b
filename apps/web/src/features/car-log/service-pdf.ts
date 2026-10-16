@@ -6,6 +6,7 @@ import {
 } from '@kaufcheck/shared';
 import { jsPDF } from 'jspdf';
 import { toContractText, type ContractFonts } from '../sale-contract/contract-pdf';
+import { localDay } from './entry-form';
 
 const FONT = 'LiberationSans';
 const PAGE = { width: 210, height: 297, margin: 16, footer: 10 } as const;
@@ -13,15 +14,18 @@ const SIZE = 9;
 const LINE = SIZE * 0.42;
 /** Date, km, kind, work, workshop, invoice – widths in mm. */
 const COLUMNS = [
-  { title: 'Datum', width: 20 },
-  { title: 'km', width: 18 },
-  { title: 'Art', width: 26 },
-  { title: 'Arbeiten', width: 66 },
-  { title: 'Werkstatt', width: 38 },
-  { title: 'Beleg', width: 10 },
+  { title: 'Datum', width: 19 },
+  { title: 'km', width: 16 },
+  { title: 'Art', width: 25 },
+  { title: 'Arbeiten', width: 62 },
+  { title: 'Werkstatt', width: 37 },
+  { title: 'Rechnung lt. Besitzer', width: 19 },
 ] as const;
 
 const germanDate = (date: string) => date.split('-').reverse().join('.');
+/** A row taller than this many lines is cut, so that it always fits on a page. */
+const MAX_ROW_LINES = 40;
+const FOOTER = 'Selbst geführt – nicht von Werkstätten oder KaufCheck bestätigt';
 
 export interface ServiceHistoryCar extends Pick<OwnedCarDto, 'firstRegistration'> {
   title: string;
@@ -52,19 +56,25 @@ export function buildServiceHistoryPdf(
   let y = PAGE.margin;
 
   font(16, true);
-  text('Serviceheft', PAGE.margin, y);
+  text('Selbst geführtes Serviceheft', PAGE.margin, y);
   y += 9;
   font(SIZE + 1);
   const registration = car.firstRegistration.month
     ? `${String(car.firstRegistration.month).padStart(2, '0')}/${car.firstRegistration.year}`
     : String(car.firstRegistration.year);
-  text(`${car.title}, Erstzulassung ${registration}`, PAGE.margin, y);
-  y += 6;
+  for (const line of doc.splitTextToSize(
+    toContractText(`${car.title}, Erstzulassung ${registration}`),
+    PAGE.width - 2 * PAGE.margin,
+  ) as string[]) {
+    doc.text(line, PAGE.margin, y, { baseline: 'top' });
+    y += (SIZE + 1) * 0.42;
+  }
+  y += 2;
   font(SIZE);
   doc.setTextColor(90);
   for (const line of doc.splitTextToSize(
     toContractText(
-      `Vom Halter selbst geführt und am ${germanDate(createdAt.toISOString().slice(0, 10))} mit KaufCheck erstellt. KaufCheck und die Werkstätten haben die Einträge nicht bestätigt; maßgeblich sind Rechnungen und das Serviceheft des Herstellers.`,
+      `Diese Übersicht hat der Besitzer selbst geführt und am ${germanDate(localDay(createdAt))} mit KaufCheck erstellt. Weder KaufCheck noch die genannten Werkstätten haben die Einträge geprüft oder bestätigt. Als Nachweis dienen nur Rechnungen, Werkstattbelege und Einträge im Serviceheft des Herstellers.`,
     ),
     PAGE.width - 2 * PAGE.margin,
   ) as string[]) {
@@ -77,11 +87,14 @@ export function buildServiceHistoryPdf(
   const header = () => {
     font(SIZE, true);
     let x = PAGE.margin;
+    let lines = 1;
     for (const column of COLUMNS) {
-      text(column.title, x, y);
+      const title = doc.splitTextToSize(toContractText(column.title), column.width - 2) as string[];
+      title.forEach((line, row) => doc.text(line, x, y + row * LINE, { baseline: 'top' }));
+      lines = Math.max(lines, title.length);
       x += column.width;
     }
-    y += LINE + 1;
+    y += lines * LINE + 1;
     doc.setDrawColor(150);
     doc.setLineWidth(0.2);
     doc.line(PAGE.margin, y, PAGE.width - PAGE.margin, y);
@@ -103,10 +116,14 @@ export function buildServiceHistoryPdf(
       entry.note ?? '',
       entry.workshop ?? '',
       entry.invoice ? 'ja' : '',
-    ].map(
-      (value, index) =>
-        doc.splitTextToSize(toContractText(value), COLUMNS[index]!.width - 2) as string[],
-    );
+    ]
+      .map(
+        (value, index) =>
+          doc.splitTextToSize(toContractText(value), COLUMNS[index]!.width - 2) as string[],
+      )
+      .map((lines) =>
+        lines.length > MAX_ROW_LINES ? [...lines.slice(0, MAX_ROW_LINES - 1), '…'] : lines,
+      );
     const height = Math.max(1, ...cells.map((lines) => lines.length)) * LINE + 2;
     if (y + height > bottom) {
       doc.addPage();
@@ -126,6 +143,7 @@ export function buildServiceHistoryPdf(
     doc.setPage(page);
     font(8);
     doc.setTextColor(90);
+    doc.text(toContractText(FOOTER), PAGE.margin, PAGE.height - PAGE.margin);
     doc.text(`Seite ${page} von ${pages}`, PAGE.width - PAGE.margin, PAGE.height - PAGE.margin, {
       align: 'right',
     });

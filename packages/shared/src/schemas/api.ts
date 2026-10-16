@@ -232,7 +232,12 @@ const noteText = (max: number) =>
       (value) =>
         ![...value].some((char) => {
           const code = char.charCodeAt(0);
-          return (code < 32 && char !== '\n') || code === 127;
+          return (
+            (code < 32 && char !== '\n') ||
+            (code >= 127 && code <= 159) ||
+            (code >= 0x202a && code <= 0x202e) ||
+            (code >= 0x2066 && code <= 0x2069)
+          );
         }),
       'Bitte ohne Steuerzeichen.',
     );
@@ -255,6 +260,8 @@ export const CarLogEntryInputSchema = z.object({
     )
     .nullable(),
   fullTank: z.boolean(),
+  /** A fill-up before this one was not entered; optional for clients from before it existed. */
+  missedBefore: z.boolean().default(false),
   workshop: lineOfText(100).nullable(),
   note: noteText(500).nullable(),
   /** The owner keeps an invoice or receipt for it. */
