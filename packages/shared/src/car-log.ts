@@ -207,10 +207,15 @@ export function carLogSummary(entries: readonly CarLogEntryLike[], today: string
   const span = dates.length >= 2 ? Math.max(...dates) - Math.min(...dates) : 0;
   // Costs and kilometres per day: costs since the first cost, kilometres between the readings.
   const costDays = firstCost === null ? 0 : dayIndex(today) - dayIndex(firstCost) + 1;
-  const centsPerKm =
-    yearKm !== null && span >= MIN_DAYS_FOR_COST_PER_KM && yearCents > 0 && costDays > 0
+  const perKm =
+    yearKm !== null &&
+    span >= MIN_DAYS_FOR_COST_PER_KM &&
+    costDays >= MIN_DAYS_FOR_COST_PER_KM &&
+    yearCents > 0
       ? Math.round(yearCents / costDays / (yearKm / span))
       : null;
+  // Rounded to nothing, e.g. after a tacho swap, it says nothing.
+  const centsPerKm = perKm === 0 ? null : perKm;
 
   const fuel = fuelConsumption(entries);
   return {
