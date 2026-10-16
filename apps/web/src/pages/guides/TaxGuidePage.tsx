@@ -78,8 +78,8 @@ export function TaxGuidePage() {
       <h2 id="finanzierung">Finanzierung durchrechnen</h2>
       <p>
         Finanzierst du das Auto, rechnest du hier mit den Zahlen aus dem Angebot die Monatsrate und
-        die Zinsen aus. Die Zinsen sind Kosten, die zu den laufenden Kosten dazukommen; die Tilgung
-        ist der Kaufpreis, nur in Raten.
+        die Kreditkosten aus. Zinsen und Gebühren sind Kosten, die zu den laufenden Kosten
+        dazukommen; die Tilgung ist der Kaufpreis, nur in Raten.
       </p>
       <Financing />
 

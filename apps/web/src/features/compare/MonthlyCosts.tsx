@@ -7,8 +7,6 @@ import {
   ENERGY_UNITS,
   energyGroup,
   isPluginHybrid,
-  loan,
-  loanProblem,
   monthlyCosts,
   PRICES_NEEDED,
   type ComparisonDto,
@@ -22,6 +20,7 @@ import { queryKeys, useMe } from '../../api/queries';
 import { SelectField, TextField } from '../../components/ui/Field';
 import { track } from '../../lib/analytics';
 import { taxCalculatorLink } from '../tax/tax-link';
+import { parseLoanForm } from '../tax/loan-form';
 import { toDecimal, toNumber } from '../tax/numbers';
 import { monthlyCostsStorageKey } from './monthly-costs-storage';
 
@@ -139,42 +138,15 @@ const euros = (value: number, fractions = 0) =>
 
 const LOAN_FIELDS = ['loanAmount', 'loanRate', 'loanMonths', 'loanBalloon'] as const;
 const hasLoan = (car: CarInput) => LOAN_FIELDS.some((field) => car[field].trim() !== '');
-const blank = (raw: string) => /^\s*[.,]?\s*$/.test(raw);
 
-/** The financing of one offer: field errors, a problem with the figures, or the result. */
-function parseLoan(car: CarInput) {
-  const read = (raw: string, parse: (value: string) => number | null) =>
-    blank(raw)
-      ? { value: null, error: undefined }
-      : parse(raw) === null
-        ? { value: null, error: 'Bitte gib nur eine Zahl ein.' }
-        : { value: parse(raw), error: undefined };
-  const amount = read(car.loanAmount, toNumber);
-  const rate = read(car.loanRate, toDecimal);
-  const months = read(car.loanMonths, toNumber);
-  const balloon = read(car.loanBalloon, toNumber);
-  const fields = {
-    amount: amount.error,
-    rate: rate.error,
-    months: months.error,
-    balloon: balloon.error,
-  };
-  const none = { fields, problem: null, result: null, balloon: 0 };
-  if (amount.value === null || rate.value === null || months.value === null) {
-    // Started but incomplete: say what is missing once something was typed.
-    return hasLoan(car) && !Object.values(fields).some(Boolean)
-      ? { ...none, problem: 'Für die Rate fehlen noch Kreditbetrag, Zins oder Laufzeit.' }
-      : none;
-  }
-  const input = {
-    amount: amount.value,
-    effectiveRatePercent: rate.value,
-    months: months.value,
-    balloon: balloon.value ?? 0,
-  };
-  const problem = loanProblem(input);
-  return { fields, problem, result: problem ? null : loan(input), balloon: input.balloon };
-}
+/** The financing of one offer, from the four loan fields. */
+const parseLoan = (car: CarInput) =>
+  parseLoanForm({
+    amount: car.loanAmount,
+    rate: car.loanRate,
+    months: car.loanMonths,
+    balloon: car.loanBalloon,
+  });
 
 /** A typed value checked against an upper limit; empty means „not given“. */
 function parse(
@@ -263,6 +235,8 @@ export function MonthlyCosts({ comparison }: { comparison: ComparisonDto }) {
   const queryClient = useQueryClient();
   const key = monthlyCostsStorageKey(me.data?.user?.id ?? '');
   const [stored, setStored] = useState<Stored>(() => readStored(key));
+  // Which financing sections are open; at first those with figures. Typing never closes one.
+  const [openLoans, setOpenLoans] = useState<Record<string, boolean>>({});
   // Another account signed in while the page is open: read its figures.
   const [storedKey, setStoredKey] = useState(key);
   if (storedKey !== key) {
@@ -391,7 +365,11 @@ export function MonthlyCosts({ comparison }: { comparison: ComparisonDto }) {
       },
     );
   });
-  const lowest = cheapestCar(costs);
+  // A financing that cannot be computed yet would count as none.
+  const loanPending = parsedCars.some(
+    (parsed) => parsed.loan.incomplete || Object.keys(parsed.loan.fields).length > 0,
+  );
+  const lowest = loanPending ? null : cheapestCar(costs);
   // Column and group names that tell offers with the same title apart.
   const titles = items.map((item, index) => {
     const same = items.filter((other) => other.title === item.title).length > 1;
@@ -401,7 +379,8 @@ export function MonthlyCosts({ comparison }: { comparison: ComparisonDto }) {
     (cost) => cost.missing.length < COST_PARTS.length || cost.interest !== null,
   );
   const anyInterest = costs.some((cost) => cost.interest !== null);
-  const sameParts = costs.every((cost) => cost.missing.join() === costs[0]!.missing.join());
+  const sameParts =
+    !loanPending && costs.every((cost) => cost.missing.join() === costs[0]!.missing.join());
 
   return (
     <section className="page__section monthly-costs" aria-labelledby="monthly-costs-title">
@@ -606,15 +585,29 @@ export function MonthlyCosts({ comparison }: { comparison: ComparisonDto }) {
                     error={parsed.other.error}
                   />
                 </div>
-                <details className="monthly-costs__loan" open={hasLoan(car) || undefined}>
+                <details
+                  className="monthly-costs__loan"
+                  open={openLoans[item.savedListingId] ?? hasLoan(car)}
+                  onToggle={(event) => {
+                    const open = event.currentTarget.open;
+                    setOpenLoans((current) =>
+                      current[item.savedListingId] === open
+                        ? current
+                        : { ...current, [item.savedListingId]: open },
+                    );
+                  }}
+                >
                   <summary>Finanzierung (optional)</summary>
                   <p className="field__hint">
-                    Mit den Zahlen aus dem Angebot. Nur die Zinsen zählen zu den Kosten; die Tilgung
-                    ist der Kaufpreis in Raten.
+                    Mit den Zahlen aus dem Angebot. Nur die Kreditkosten (Zinsen und Gebühren)
+                    zählen zu den Kosten; die Tilgung ist der Kaufpreis in Raten. Gerechnet ist der
+                    Schnitt über die ganze Laufzeit; verkaufst du das Auto vorher, zahlst du bis
+                    dahin mehr Zinsen pro Monat und musst den Rest ablösen.
                   </p>
                   <div className="sale-contract__grid">
                     <TextField
                       label="Kreditbetrag in Euro"
+                      hint="Nettodarlehensbetrag laut Angebot – meist Kaufpreis minus Anzahlung"
                       inputMode="numeric"
                       value={car.loanAmount}
                       onChange={(event) => setCar(index, { loanAmount: event.target.value })}
@@ -622,6 +615,7 @@ export function MonthlyCosts({ comparison }: { comparison: ComparisonDto }) {
                     />
                     <TextField
                       label="Effektiver Jahreszins in %"
+                      hint="Nicht der Sollzins: Nur der effektive Jahreszins enthält alle Pflichtkosten"
                       inputMode="decimal"
                       value={car.loanRate}
                       onChange={(event) => setCar(index, { loanRate: event.target.value })}
@@ -643,15 +637,15 @@ export function MonthlyCosts({ comparison }: { comparison: ComparisonDto }) {
                       error={parsed.loan.fields.balloon}
                     />
                   </div>
-                  {parsed.loan.problem && (
-                    <p className="field__error" role="alert">
-                      {parsed.loan.problem}
+                  {parsed.loan.incomplete && (
+                    <p className="field__hint">
+                      Für die Rate fehlen noch Kreditbetrag, Zins oder Laufzeit.
                     </p>
                   )}
                   {parsed.loan.result && (
                     <p className="monthly-costs__loan-result">
                       Monatsrate {euros(parsed.loan.result.monthlyRate, 2)}, davon im Schnitt{' '}
-                      {euros(parsed.loan.result.interestPerMonth, 2)} Zinsen
+                      {euros(parsed.loan.result.interestPerMonth, 2)} Zinsen und Gebühren
                       {parsed.loan.balloon > 0 &&
                         `; am Ende ${euros(parsed.loan.balloon)} Schlussrate`}
                     </p>
@@ -705,7 +699,7 @@ export function MonthlyCosts({ comparison }: { comparison: ComparisonDto }) {
                   ))}
                   {anyInterest && (
                     <tr>
-                      <th scope="row">Zinsen der Finanzierung</th>
+                      <th scope="row">Kosten der Finanzierung</th>
                       {costs.map((cost, index) => (
                         <td key={index}>
                           {cost.interest === null ? (
@@ -743,8 +737,9 @@ export function MonthlyCosts({ comparison }: { comparison: ComparisonDto }) {
           )}
           {started && !sameParts && (
             <p className="muted">
-              Die Summen sind erst vergleichbar, wenn für alle Angebote dieselben Posten ausgefüllt
-              sind. Fällt ein Posten weg, etwa die Steuer, trag 0 ein.
+              {loanPending
+                ? 'Die Summen sind erst vergleichbar, wenn jede eingetragene Finanzierung vollständig ist.'
+                : 'Die Summen sind erst vergleichbar, wenn für alle Angebote dieselben Posten ausgefüllt sind. Fällt ein Posten weg, etwa die Steuer, trag 0 ein.'}
             </p>
           )}
         </>

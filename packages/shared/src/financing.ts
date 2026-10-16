@@ -32,23 +32,31 @@ export const LOAN_LIMITS = {
 
 const cents = (value: number) => Math.round(value * 100) / 100;
 
-/** Why the figures cannot be used, or null. */
-export function loanProblem(input: LoanInput): string | null {
+export type LoanField = 'amount' | 'rate' | 'months' | 'balloon';
+
+/** Why the figures cannot be used, with the field to fix, or null. */
+export function loanProblem(input: LoanInput): { field: LoanField; message: string } | null {
   if (input.amount < LOAN_LIMITS.amount.min || input.amount > LOAN_LIMITS.amount.max)
-    return 'Bitte prüfe den Kreditbetrag.';
+    return { field: 'amount', message: 'Bitte prüfe den Kreditbetrag.' };
   if (
     input.effectiveRatePercent < LOAN_LIMITS.ratePercent.min ||
     input.effectiveRatePercent > LOAN_LIMITS.ratePercent.max
   )
-    return 'Bitte gib den effektiven Jahreszins in Prozent an, zum Beispiel 5,9.';
+    return {
+      field: 'rate',
+      message: 'Bitte gib den effektiven Jahreszins in Prozent an, zum Beispiel 5,9.',
+    };
   if (
     !Number.isInteger(input.months) ||
     input.months < LOAN_LIMITS.months.min ||
     input.months > LOAN_LIMITS.months.max
   )
-    return 'Bitte gib die Laufzeit in Monaten an, zwischen 6 und 120.';
+    return {
+      field: 'months',
+      message: 'Bitte gib die Laufzeit in Monaten an, zwischen 6 und 120.',
+    };
   if (input.balloon < 0 || input.balloon >= input.amount)
-    return 'Die Schlussrate muss kleiner als der Kreditbetrag sein.';
+    return { field: 'balloon', message: 'Die Schlussrate muss kleiner als der Kreditbetrag sein.' };
   return null;
 }
 

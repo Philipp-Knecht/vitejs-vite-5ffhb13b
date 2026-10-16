@@ -28,17 +28,14 @@ describe('car loan', () => {
       totalInterest: 0,
       interestPerMonth: 0,
     });
-    expect(loanProblem({ amount: 50, effectiveRatePercent: 5, months: 24, balloon: 0 })).toMatch(
-      /Kreditbetrag/,
-    );
-    expect(
-      loanProblem({ amount: 10_000, effectiveRatePercent: 31, months: 24, balloon: 0 }),
-    ).toMatch(/Jahreszins/);
-    expect(
-      loanProblem({ amount: 10_000, effectiveRatePercent: 5, months: 130, balloon: 0 }),
-    ).toMatch(/Laufzeit/);
-    expect(
-      loanProblem({ amount: 10_000, effectiveRatePercent: 5, months: 24, balloon: 10_000 }),
-    ).toMatch(/Schlussrate/);
+    const problem = (input: Partial<Parameters<typeof loanProblem>[0]>) =>
+      loanProblem({ amount: 10_000, effectiveRatePercent: 5, months: 24, balloon: 0, ...input })
+        ?.field;
+    expect(problem({ amount: 50 })).toBe('amount');
+    expect(problem({ effectiveRatePercent: 31 })).toBe('rate');
+    expect(problem({ months: 130 })).toBe('months');
+    expect(problem({ months: 36.5 })).toBe('months');
+    expect(problem({ balloon: 10_000 })).toBe('balloon');
+    expect(problem({})).toBeUndefined();
   });
 });

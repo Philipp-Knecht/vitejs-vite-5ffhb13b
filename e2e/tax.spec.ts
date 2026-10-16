@@ -133,12 +133,18 @@ test('the financing calculator works with the figures of an offer', async ({ pag
   await section.getByLabel('Laufzeit in Monaten').fill('48');
   // (1 + 5.9 %)^(1/12) − 1 per month: about 350.60 € a month.
   await expect(section.getByText(/350,\d\d\s€\s*im Monat/)).toBeVisible();
-  await expect(section.getByText('Zinsen insgesamt')).toBeVisible();
+  await expect(section.getByText(/Kreditkosten insgesamt/)).toBeVisible();
 
   await section.getByLabel('Schlussrate in €').fill('20.000');
   await expect(
     section.getByText('Die Schlussrate muss kleiner als der Kreditbetrag sein.'),
   ).toBeVisible();
+  // A field that is not a number means no result, not a result without it.
+  await section.getByLabel('Schlussrate in €').fill('5.000 €');
+  await expect(section.getByText('Bitte gib nur eine Zahl ein.')).toBeVisible();
+  await expect(section.getByText(/im Monat/)).toHaveCount(0);
   await section.getByLabel('Schlussrate in €').fill('5.000');
-  await expect(section.getByText(/Dazu kommt am Ende die Schlussrate von 5\.000\s€/)).toBeVisible();
+  await expect(
+    section.getByText(/Darin ist die Schlussrate von 5\.000\s€ enthalten/),
+  ).toBeVisible();
 });

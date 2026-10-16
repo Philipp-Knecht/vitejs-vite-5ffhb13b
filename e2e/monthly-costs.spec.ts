@@ -89,9 +89,9 @@ test('monthly costs of the compared offers are part of Pro and come from own fig
   await loanCar.getByLabel('Laufzeit in Monaten').fill('24');
   // 438.22 € a month (rounded to cents), so 517.28 € interest over 24 months.
   await expect(
-    loanCar.getByText(/Monatsrate 438,22\s€, davon im Schnitt 21,55\s€ Zinsen/),
+    loanCar.getByText(/Monatsrate 438,22\s€, davon im Schnitt 21,55\s€ Zinsen und Gebühren/),
   ).toBeVisible();
-  const interestRow = table.getByRole('row', { name: /Zinsen der Finanzierung/ });
+  const interestRow = table.getByRole('row', { name: /Kosten der Finanzierung/ });
   await expect(interestRow).toContainText('Keine Finanzierung');
   await expect(interestRow).toContainText('22 €');
 

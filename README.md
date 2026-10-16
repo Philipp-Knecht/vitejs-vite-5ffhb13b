@@ -48,7 +48,7 @@ comparison, Pro members put the monthly costs of their saved offers side by side
 workshop from their own figures – KaufCheck has no price or consumption data and assumes none.
 A financing calculator (`packages/shared/src/financing.ts`) computes the monthly rate and the
 interest from the effective annual rate of an offer; it is free in the cost calculator, and in the
-comparison the interest (not the repayment) is added to the monthly costs.
+comparison the credit costs (interest and fees, not the repayment) are added to the monthly costs.
 Pro members can also switch on e-mail reminders per car (`/mein-auto/<id>/erinnerungen`,
 `apps/api/src/application/reminder-service.ts`, rules in `packages/shared/src/reminders.ts`): HU,
 inspection, brake fluid and tyres, or a calendar file for each. The account address is confirmed

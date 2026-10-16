@@ -1,7 +1,6 @@
-import { loan, loanProblem } from '@kaufcheck/shared';
 import { useState } from 'react';
 import { TextField } from '../../components/ui/Field';
-import { toDecimal, toNumber } from './numbers';
+import { parseLoanForm } from './loan-form';
 
 interface LoanValues {
   amount: string;
@@ -20,9 +19,6 @@ const euros = (value: number, fractions = 0) =>
     maximumFractionDigits: fractions,
   });
 
-/** Empty, or only the first keystroke of „,9“. */
-const blank = (raw: string) => /^\s*[.,]?\s*$/.test(raw);
-
 /**
  * Monthly rate of a car loan from the figures of an offer. KaufCheck has no
  * rates of its own and compares no offers; everything stays in the browser.
@@ -32,45 +28,32 @@ export function Financing() {
   const set = (key: keyof LoanValues) => (event: { target: { value: string } }) =>
     setValues((current) => ({ ...current, [key]: event.target.value }));
 
-  const read = (raw: string, parse: (value: string) => number | null) =>
-    blank(raw) ? null : parse(raw);
-  const amount = read(values.amount, toNumber);
-  const rate = read(values.rate, toDecimal);
-  const months = read(values.months, toNumber);
-  const balloon = read(values.balloon, toNumber);
-  const invalid = (raw: string, value: number | null) =>
-    !blank(raw) && value === null ? 'Bitte gib nur eine Zahl ein.' : undefined;
-
-  const complete = amount !== null && rate !== null && months !== null;
-  const input = complete
-    ? { amount, effectiveRatePercent: rate, months, balloon: balloon ?? 0 }
-    : null;
-  const problem = input ? loanProblem(input) : null;
-  const result = input && !problem ? loan(input) : null;
+  const parsed = parseLoanForm(values);
+  const result = parsed.result;
 
   return (
     <div className="tax-calculator">
       <form className="tax-form" onSubmit={(event) => event.preventDefault()} noValidate>
         <TextField
           label="Kreditbetrag in €"
-          hint="Kaufpreis minus Anzahlung"
+          hint="Nettodarlehensbetrag laut Angebot – meist Kaufpreis minus Anzahlung"
           inputMode="numeric"
-          error={invalid(values.amount, amount)}
+          error={parsed.fields.amount}
           value={values.amount}
           onChange={set('amount')}
         />
         <TextField
           label="Effektiver Jahreszins in %"
-          hint="Aus dem Angebot von Bank oder Händler; er muss dort angegeben sein"
+          hint="Aus dem Angebot von Bank oder Händler, nicht der Sollzins: Nur der effektive Jahreszins enthält alle Pflichtkosten"
           inputMode="decimal"
-          error={invalid(values.rate, rate)}
+          error={parsed.fields.rate}
           value={values.rate}
           onChange={set('rate')}
         />
         <TextField
           label="Laufzeit in Monaten"
           inputMode="numeric"
-          error={invalid(values.months, months)}
+          error={parsed.fields.months}
           value={values.months}
           onChange={set('months')}
         />
@@ -78,7 +61,7 @@ export function Financing() {
           label="Schlussrate in €"
           hint="Optional, bei einer Ballonfinanzierung: am Ende auf einmal fällig"
           inputMode="numeric"
-          error={invalid(values.balloon, balloon)}
+          error={parsed.fields.balloon}
           value={values.balloon}
           onChange={set('balloon')}
         />
@@ -93,19 +76,21 @@ export function Financing() {
               <span className="visually-hidden">Monatsrate: </span>
               {euros(result.monthlyRate, 2)} <span>im Monat</span>
             </>
+          ) : parsed.incomplete ? (
+            'Für die Rate fehlen noch Kreditbetrag, Zins oder Laufzeit.'
           ) : (
-            (problem ?? 'Trag Kreditbetrag, Zins und Laufzeit ein.')
+            'Trag Kreditbetrag, Zins und Laufzeit ein.'
           )}
         </p>
-        {result && input && (
+        {result && (
           <>
             <ul className="tax-result__parts">
               <li>
-                <span>Zinsen insgesamt</span>
+                <span>Kreditkosten insgesamt (Zinsen und Gebühren)</span>
                 <span className="tax-result__value">{euros(result.totalInterest, 2)}</span>
               </li>
               <li>
-                <span>Zinsen im Schnitt pro Monat</span>
+                <span>Kreditkosten im Schnitt pro Monat</span>
                 <span className="tax-result__value">{euros(result.interestPerMonth, 2)}</span>
               </li>
               <li>
@@ -113,10 +98,10 @@ export function Financing() {
                 <span className="tax-result__value">{euros(result.totalPaid, 2)}</span>
               </li>
             </ul>
-            {input.balloon > 0 && (
+            {parsed.balloon > 0 && (
               <p className="tax-result__hint">
-                Dazu kommt am Ende die Schlussrate von {euros(input.balloon)} – auf einmal, oder du
-                finanzierst sie neu.
+                Darin ist die Schlussrate von {euros(parsed.balloon)} enthalten. Sie ist am Ende auf
+                einmal fällig; finanzierst du sie neu, kommen weitere Zinsen dazu.
               </p>
             )}
             <p className="tax-result__rule">
