@@ -30,11 +30,11 @@ test('monthly costs of the compared offers are part of Pro and come from own fig
   await page.reload();
   await section.getByLabel('Fahrleistung in km pro Jahr').fill('12.000');
   const groups = section.getByRole('group');
-  const cars = groups.filter({ hasText: 'Antrieb' });
+  const cars = groups.filter({ has: page.getByLabel('Kraftstoff oder Strom') });
   await expect(cars).toHaveCount(2);
   for (const index of [0, 1]) {
     const car = cars.nth(index);
-    await car.getByLabel('Antrieb').selectOption('diesel');
+    await car.getByLabel('Kraftstoff oder Strom').selectOption('diesel');
     await car.getByLabel('Verbrauch in l je 100 km').fill(index === 0 ? '6' : '5');
     await car.getByLabel('Kfz-Steuer in Euro pro Jahr').fill('240');
     await car.getByLabel('Versicherung in Euro pro Jahr').fill('600');
@@ -43,25 +43,50 @@ test('monthly costs of the compared offers are part of Pro and come from own fig
 
   const table = section.getByRole('region', { name: 'Kosten pro Monat im Vergleich' });
   // 12,000 km × 6 l × 1.70 € / 12 = 102 €, plus 20 € tax and 50 € insurance.
-  await expect(table).toContainText('172 €');
+  await expect(table).toContainText('rund 172 €');
   // 5 l: 85 € fuel.
-  await expect(table).toContainText('155 €');
-  await expect(table.getByText('günstigstes Angebot')).toHaveCount(1);
+  await expect(table).toContainText('rund 155 €');
+  await expect(table.getByText('niedrigste Summe')).toHaveCount(1);
+  await expect(table).toContainText('ohne Wertverlust, Werkstatt und Reifen, Sonstiges');
 
   // Different parts filled in: no cheapest offer.
   await cars.nth(0).getByLabel('Werkstatt und Reifen in Euro pro Jahr').fill('480');
-  await expect(table.getByText('günstigstes Angebot')).toHaveCount(0);
+  await expect(table.getByText('niedrigste Summe')).toHaveCount(0);
   await expect(section.getByText(/erst vergleichbar/)).toBeVisible();
 
   const results = await new AxeBuilder({ page })
-    .include('#monthly-costs-title')
+    .include('section.monthly-costs')
     .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa'])
     .analyze();
   expect(results.violations.map((violation) => violation.id)).toEqual([]);
 
-  // The assumptions stay in this browser, and go with the logout.
+  // Depreciation: price minus resale value over the holding period.
+  await section.getByLabel('Haltedauer in Jahren').fill('4');
+  await cars.nth(1).getByLabel('Kaufpreis in Euro').fill('20.000');
+  await cars.nth(1).getByLabel('Erwarteter Wert beim Verkauf in Euro').fill('12.800');
+  // 7,200 € over 48 months.
+  await expect(table).toContainText('150 €');
+  await cars.nth(1).getByLabel('Erwarteter Wert beim Verkauf in Euro').fill('25.000');
+  await expect(cars.nth(1).getByText(/Höher als der Kaufpreis/)).toBeVisible();
+
+  // The assumptions stay in this browser.
   await page.reload();
   await expect(cars.nth(1).getByLabel('Verbrauch in l je 100 km')).toHaveValue('5');
-  const stored = await page.evaluate(() => localStorage.getItem('kaufcheck:monatskosten'));
-  expect(stored).toContain('"consumption":"5"');
+  const stored = await page.evaluate(() =>
+    Object.keys(localStorage)
+      .filter((key) => key.startsWith('kaufcheck:monatskosten:'))
+      .map((key) => localStorage.getItem(key)),
+  );
+  // One entry for this account only.
+  expect(stored).toHaveLength(1);
+  expect(stored[0]).toContain('"consumption":"5"');
+
+  // Logging out removes them from this browser.
+  await page.goto('/konto');
+  await page.getByRole('button', { name: 'Abmelden' }).click();
+  await expect(page).toHaveURL('/');
+  const left = await page.evaluate(() =>
+    Object.keys(localStorage).filter((key) => key.startsWith('kaufcheck:monatskosten')),
+  );
+  expect(left).toEqual([]);
 });

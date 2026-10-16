@@ -16,6 +16,7 @@ const shared: SharedCostAssumptions = {
 const golf: CarCostFigures = {
   energy: 'petrol',
   consumption: 6,
+  electricConsumption: null,
   taxPerYear: 120,
   insurancePerYear: 600,
   workshopPerYear: 720,
@@ -60,8 +61,23 @@ describe('monthly costs', () => {
     expect(cheapestCar([a])).toBeNull();
   });
 
+  it('adds petrol and electricity for a plug-in hybrid', () => {
+    const phev = monthlyCosts(
+      { ...golf, energy: 'pluginHybrid', consumption: 2, electricConsumption: 12 },
+      shared,
+    );
+    // 120 × (2 × 1.80 + 12 × 0.40) = 1,008 € a year.
+    expect(phev.parts.energy).toBe(84);
+    expect(
+      monthlyCosts({ ...golf, energy: 'pluginHybrid', consumption: 2 }, shared).parts.energy,
+    ).toBeNull();
+  });
+
   it('groups fuels by what they cost', () => {
-    expect(energyGroup('plugin_hybrid')).toBe('petrol');
+    // Hybrids can have a petrol or a diesel engine: the buyer chooses.
+    expect(energyGroup('hybrid')).toBeNull();
+    expect(energyGroup('plugin_hybrid')).toBe('pluginHybrid');
+    expect(energyGroup('petrol')).toBe('petrol');
     expect(energyGroup('electric')).toBe('electric');
     expect(energyGroup('other')).toBeNull();
     expect(energyGroup(null)).toBeNull();

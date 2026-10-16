@@ -160,10 +160,12 @@ export function AdvisorResults({ answers, onEdit }: AdvisorResultsProps) {
         Besichtigung.
       </p>
       <p className="advisor-results__note">
-        Was ein Modell dich im Monat kostet, hängt vom Motor, deiner Fahrleistung und deiner
-        Versicherung ab – Daten dazu hat KaufCheck nicht. Rechne es für ein Auto mit dem{' '}
-        <Link to="/kfz-steuer-rechner#unterhalt">Kostenrechner</Link> durch; mit KaufCheck Pro
-        stellst du im Vergleich deiner gespeicherten Angebote die Kosten pro Monat nebeneinander.
+        Was ein Auto dich im Monat kostet, hängt unter anderem von Kaufpreis, Wertverlust,
+        Verbrauch, deiner Fahrleistung und deiner Versicherung ab – das rechnen wir für ein Modell
+        nicht aus, unsere Einschätzung oben ist nur grob. Für ein bestimmtes Auto überschlägst du
+        die laufenden Kosten mit dem <Link to="/kfz-steuer-rechner#unterhalt">Kostenrechner</Link>;
+        mit KaufCheck Pro stellst du im Vergleich deiner gespeicherten Angebote die geschätzten
+        Kosten pro Monat nebeneinander.
       </p>
     </div>
   );

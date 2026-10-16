@@ -84,7 +84,7 @@ export function proFeatures(pro: Entitlements, options: { photoAnalysis: boolean
   }
   if (pro.monthlyCosts) {
     features.push(
-      'Kosten pro Monat im Vergleich: Wertverlust, Kraftstoff oder Strom, Steuer, Versicherung und Werkstatt aus deinen eigenen Annahmen',
+      'geschätzte Kosten pro Monat im Vergleich deiner Angebote: Wertverlust, Kraftstoff oder Strom, Steuer, Versicherung und Werkstatt aus deinen eigenen Annahmen; die Angaben bleiben nur in deinem Browser gespeichert',
     );
   }
   if (pro.carLog) {
