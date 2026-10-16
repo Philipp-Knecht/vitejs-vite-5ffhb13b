@@ -25,10 +25,11 @@ export function CostsGuidePage() {
       intro={
         <p>
           Ein Auto kostet mehr als Sprit und Versicherung: Der größte Posten ist meist der
-          Wertverlust. Ein neuer VW Golf kostet laut ADAC rund 674 € im Monat, das günstigste Modell
-          seiner Übersicht 433 €; drei Jahre alte Gebrauchte ohne Wertverlust 318 bis 346 €. Hier
-          steht, woraus sich die Kosten zusammensetzen, was der ADAC für einige Modelle errechnet
-          hat und wie du für dein Wunschauto selbst rechnest.
+          Wertverlust. Ein neuer VW Golf 1.5 TSI kostet laut ADAC rund 674 € im Monat, das
+          günstigste Modell seiner Übersicht 433 €; die günstigsten drei Jahre alten Gebrauchten
+          kosten ohne Wertverlust ab rund 318 €. Hier steht, woraus sich die Kosten zusammensetzen,
+          was der ADAC für einige Modelle errechnet hat und wie du für dein Wunschauto selbst
+          rechnest.
         </p>
       }
     >
