@@ -34,6 +34,7 @@ export function systemRoutes(app: FastifyInstance, services: Services): void {
         photoAnalysis: services.photoAnalysisAvailable,
         billing: offer !== null,
         passwordReset: auth.passwordResetEnabled,
+        reminders: services.reminders.available,
         analytics: analytics.isEnabled,
       },
       plans,

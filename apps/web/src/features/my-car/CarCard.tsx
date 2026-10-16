@@ -65,6 +65,7 @@ export function CarCard({
 }) {
   const me = useMe();
   const carLog = me.data?.entitlements.carLog ?? false;
+  const reminders = me.data?.entitlements.reminders ?? false;
   const title = carTitle(car);
   const hu = car.huUntil ? huStatus(car.huUntil, now) : null;
   const headingId = carHeadingId(car.id);
@@ -160,6 +161,18 @@ export function CarCard({
             fällig ist.
           </p>
         )}
+      </div>
+
+      <div className="car-card__section">
+        <h3>Erinnerungen</h3>
+        <p>
+          <Link to={`/mein-auto/${car.id}/erinnerungen`}>
+            Erinnerungen einstellen<span className="visually-hidden"> für {carName(car)}</span>
+          </Link>
+          {' – '}
+          per E-Mail oder im Kalender: HU, Inspektion, Bremsflüssigkeit und Reifenwechsel.
+          {!reminders && <span className="tag tag--pro">Pro</span>}
+        </p>
       </div>
 
       <div className="car-card__section">

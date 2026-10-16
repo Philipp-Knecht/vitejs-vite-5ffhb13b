@@ -32,7 +32,11 @@ async function main(): Promise<void> {
         anonRetentionDays: config.anonRetentionDays,
       });
       const contracts = await services.contracts.runMaintenance();
-      app.log.info({ op: 'maintenance', ...report, ...contracts }, 'maintenance finished');
+      const reminders = await services.reminders.sendDue();
+      app.log.info(
+        { op: 'maintenance', ...report, ...contracts, ...reminders },
+        'maintenance finished',
+      );
     } catch (error) {
       app.log.error({ op: 'maintenance', err: error }, 'maintenance failed');
     }

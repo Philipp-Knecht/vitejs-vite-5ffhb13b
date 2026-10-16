@@ -14,6 +14,7 @@ import { listingRoutes } from './http/routes/listing-routes';
 import { savedListingRoutes } from './http/routes/saved-listing-routes';
 import { ownedCarRoutes } from './http/routes/owned-car-routes';
 import { carLogRoutes } from './http/routes/car-log-routes';
+import { reminderRoutes } from './http/routes/reminder-routes';
 import { savedSearchRoutes } from './http/routes/saved-search-routes';
 import { contractRoutes } from './http/routes/contract-routes';
 import { systemRoutes } from './http/routes/system-routes';
@@ -90,6 +91,7 @@ export async function buildApp(
   savedSearchRoutes(app, services);
   ownedCarRoutes(app, services);
   carLogRoutes(app, services);
+  reminderRoutes(app, services);
   contractRoutes(app, services);
 
   const servingWeb = await registerWeb(app, config);

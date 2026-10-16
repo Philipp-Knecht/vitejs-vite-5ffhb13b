@@ -92,6 +92,12 @@ export function proFeatures(pro: Entitlements, options: { photoAnalysis: boolean
       'Kostenbuch für deine Autos unter „Mein Auto“: Tankungen, Wartung, Reparaturen und andere Kosten festhalten (bis zu 2.000 Einträge je Auto), mit Kosten pro Monat, Kraftstoffverbrauch, CSV-Export und einem selbst geführten Serviceheft als PDF; Belege lassen sich nicht hochladen',
     );
   }
+  // Orders need e-mail and the operator's details, so reminders are always possible with them.
+  if (pro.reminders) {
+    features.push(
+      'Erinnerungen an HU, Inspektion, Bremsflüssigkeit und Reifenwechsel für deine Autos unter „Mein Auto“, per E-Mail (nach Bestätigung deiner Adresse) oder als Kalenderdatei',
+    );
+  }
   if (pro.photoAnalysis && options.photoAnalysis) {
     features.push('KI-Fotoanalyse bei Inseraten mit Fotos');
   }

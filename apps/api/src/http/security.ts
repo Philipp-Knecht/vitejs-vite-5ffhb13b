@@ -5,8 +5,8 @@ import type { AppConfig } from '../config/env';
 import { AppError } from '../lib/errors';
 
 const STATE_CHANGING = new Set(['POST', 'PUT', 'PATCH', 'DELETE']);
-/** Endpoints called by third parties (signature-verified instead). */
-const CSRF_EXEMPT = new Set(['/api/billing/webhook']);
+/** Endpoints called by third parties (signature- or token-verified instead, no cookies needed). */
+const CSRF_EXEMPT = new Set(['/api/billing/webhook', '/api/reminders/unsubscribe']);
 
 /** HSTS and request upgrades only make sense when the site is served over HTTPS. */
 export function servedOverHttps(config: AppConfig): boolean {

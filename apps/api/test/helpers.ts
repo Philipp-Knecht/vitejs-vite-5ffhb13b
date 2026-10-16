@@ -76,6 +76,8 @@ const TABLES = [
   'SavedSearch',
   'OwnedCar',
   'CarLogEntry',
+  'CarReminder',
+  'ReminderConfirmToken',
   'Usage',
   'Subscription',
   'BillingEvent',

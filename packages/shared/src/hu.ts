@@ -33,14 +33,15 @@ export function huStatus(hu: HuMonth, now: Date): HuStatus {
   return { tone: 'ok', monthsLeft, text: `Die nächste HU ist bis ${until} fällig.` };
 }
 
-const icsText = (value: string) =>
+/** Escapes a TEXT value of a calendar file. */
+export const icsText = (value: string) =>
   [...value.replace(/[\\;,]/g, (char) => `\\${char}`).replace(/\r\n|\r|\n/g, '\\n')]
     // TEXT allows no other control characters (RFC 5545, 3.3.11).
     .filter((char) => char === '\t' || (char.charCodeAt(0) >= 32 && char.charCodeAt(0) !== 127))
     .join('');
 
 /** Folds a content line at 75 octets (RFC 5545, 3.1) without splitting a character. */
-function fold(line: string): string {
+export function fold(line: string): string {
   const encoder = new TextEncoder();
   const parts: string[] = [];
   let current = '';
