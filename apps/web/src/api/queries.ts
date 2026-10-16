@@ -252,6 +252,8 @@ function useInvalidateSession() {
     queryClient.removeQueries({ queryKey: ['analysis'] });
     await queryClient.invalidateQueries({ queryKey: queryKeys.me });
     // A session may have ended without logging out here: only the account now signed in keeps its figures.
+    // Only after a successful check: a failed one still holds the old answer.
+    if (queryClient.getQueryState(queryKeys.me)?.status !== 'success') return;
     const after = queryClient.getQueryData<MeDto>(queryKeys.me);
     removeByPrefix(
       MONTHLY_COSTS_STORAGE_PREFIX,

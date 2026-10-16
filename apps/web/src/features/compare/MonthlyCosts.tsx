@@ -13,13 +13,12 @@ import {
   type EnergyGroup,
   type PriceGroup,
 } from '@kaufcheck/shared';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router';
 import { useQueryClient } from '@tanstack/react-query';
 import { queryKeys, useMe } from '../../api/queries';
 import { SelectField, TextField } from '../../components/ui/Field';
 import { track } from '../../lib/analytics';
-import { readJson, writeJson } from '../../lib/storage';
 import { taxCalculatorLink } from '../tax/tax-link';
 import { toDecimal, toNumber } from '../tax/numbers';
 import { monthlyCostsStorageKey } from './monthly-costs-storage';
@@ -66,13 +65,19 @@ const CAR_FIELDS = [
 const isRecord = (value: unknown): value is Record<string, unknown> =>
   typeof value === 'object' && value !== null && !Array.isArray(value);
 
-/**
- * What the browser holds, checked field by field; anything else is dropped.
- * Null when nothing can be read: nothing stored yet, or storage blocked.
- */
-function readStoredIfAny(key: string): Stored | null {
-  const raw = readJson<unknown>(key, null, (_value): _value is unknown => true);
-  if (raw === null) return null;
+/** What the browser holds; `ok` is false when storage is blocked. */
+function readRaw(key: string): { ok: boolean; value: unknown } {
+  try {
+    const raw = window.localStorage.getItem(key);
+    return { ok: true, value: raw === null ? null : (JSON.parse(raw) as unknown) };
+  } catch (error) {
+    // Unreadable JSON is a value to drop, blocked storage is not.
+    return { ok: error instanceof SyntaxError, value: null };
+  }
+}
+
+/** Checked field by field; anything else is dropped. */
+function parseStored(raw: unknown): Stored {
   if (!isRecord(raw) || !isRecord(raw.shared) || !isRecord(raw.cars)) return EMPTY;
   const text = (value: unknown) => (typeof value === 'string' ? value.slice(0, 20) : '');
   const prices = isRecord(raw.shared.prices) ? raw.shared.prices : {};
@@ -103,7 +108,7 @@ function readStoredIfAny(key: string): Stored | null {
   };
 }
 
-const readStored = (key: string): Stored => readStoredIfAny(key) ?? EMPTY;
+const readStored = (key: string): Stored => parseStored(readRaw(key).value);
 
 /** The unit of the consumption field; for a plug-in hybrid the litres of fuel. */
 function unitOf(energy: EnergyGroup | ''): 'l' | 'kWh' | 'kg' | null {
@@ -212,7 +217,10 @@ export function MonthlyCosts({ comparison }: { comparison: ComparisonDto }) {
   }
   // Logged out in another tab: no writes until the session is checked again.
   const [clearedAt, setClearedAt] = useState<number | null>(null);
-  const writable = clearedAt === null || me.dataUpdatedAt > clearedAt;
+  const writable =
+    clearedAt === null || me.dataUpdatedAt > clearedAt || me.errorUpdatedAt > clearedAt;
+  // Storage refused a write: from then on the screen is the only copy.
+  const writeFailed = useRef(false);
   const shared = stored.shared;
   const cars = items.map((item) => stored.cars[item.savedListingId] ?? initialCar(item));
 
@@ -233,9 +241,14 @@ export function MonthlyCosts({ comparison }: { comparison: ComparisonDto }) {
   /** Changes what this browser holds now, so that another tab's changes are kept. */
   const change = (apply: (current: Stored) => Stored) => {
     if (!me.data?.user || !writable) return;
-    // Storage blocked or empty: build on what is on screen.
-    const next = apply(readStoredIfAny(key) ?? stored);
-    writeJson(key, next);
+    const read = readRaw(key);
+    // Storage blocked: build on what is on screen.
+    const next = apply(read.ok && !writeFailed.current ? parseStored(read.value) : stored);
+    try {
+      window.localStorage.setItem(key, JSON.stringify(next));
+    } catch {
+      writeFailed.current = true;
+    }
     setStored(next);
   };
   const setShared = (update: Partial<SharedInput>) =>
@@ -417,7 +430,7 @@ export function MonthlyCosts({ comparison }: { comparison: ComparisonDto }) {
                 <div className="sale-contract__grid">
                   <TextField
                     label="Kaufpreis in Euro"
-                    hint="Aus dem Inserat übernommen, falls genannt – trag den Preis ein, den du erwartest; Zulassung und Überführung kannst du dazurechnen"
+                    hint="Aus dem Inserat übernommen, falls genannt – trag den Preis ein, den du nach der Verhandlung erwartest; Zulassung und Überführung kannst du dazurechnen"
                     inputMode="numeric"
                     value={car.purchasePrice}
                     onChange={(event) => setCar(index, { purchasePrice: event.target.value })}
@@ -444,7 +457,7 @@ export function MonthlyCosts({ comparison }: { comparison: ComparisonDto }) {
                       hybrid
                         ? 'Hybrid: Wähl den Kraftstoff des Verbrennungsmotors.'
                         : pluginHybrid
-                          ? 'Plug-in-Hybrid: Wähl, ob der Motor Benzin oder Diesel tankt.'
+                          ? 'Plug-in-Hybrid: Wähl, ob er Benzin oder Diesel tankt.'
                           : undefined
                     }
                     value={car.energy}
@@ -473,7 +486,7 @@ export function MonthlyCosts({ comparison }: { comparison: ComparisonDto }) {
                     }
                     hint={
                       phev
-                        ? 'Dein Durchschnitt über alle Fahrten, nicht der WLTP-Wert aus dem Inserat – der ist bei Plug-in-Hybriden meist viel zu niedrig. Lädst du selten, brauchst du fast so viel Kraftstoff wie ohne Elektromotor'
+                        ? 'Was du im Schnitt über alle Fahrten erwartest, nicht der WLTP-Wert aus dem Inserat – der ist bei Plug-in-Hybriden meist viel zu niedrig. Lädst du selten, brauchst du fast so viel Kraftstoff wie ein Auto ohne Elektromotor'
                         : unit
                           ? 'Laut Inserat oder Hersteller (WLTP); im Alltag meist etwas mehr'
                           : 'Erst Kraftstoff oder Strom wählen'
@@ -511,7 +524,7 @@ export function MonthlyCosts({ comparison }: { comparison: ComparisonDto }) {
                   />
                   <TextField
                     label="Versicherung in Euro pro Jahr"
-                    hint="Beitrag laut Angebot deines Versicherers – für alle Autos mit demselben Umfang (Haftpflicht, Teil- oder Vollkasko). Er hängt unter anderem von Typklasse, Regionalklasse und Schadenfreiheitsklasse ab"
+                    hint="Beitrag laut Angebot deines Versicherers; wähl für alle Autos denselben Umfang (Haftpflicht, Teil- oder Vollkasko). Er hängt unter anderem von Typklasse, Regionalklasse und Schadenfreiheitsklasse ab"
                     inputMode="decimal"
                     value={car.insurance}
                     onChange={(event) => setCar(index, { insurance: event.target.value })}

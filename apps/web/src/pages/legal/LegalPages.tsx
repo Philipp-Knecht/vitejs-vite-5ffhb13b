@@ -217,8 +217,9 @@ export function PrivacyPage() {
           Browser nicht. Die Annahmen für die Kosten speichert er je Konto; sie bleiben, bis du dich
           in diesem Browser bei KaufCheck abmeldest, dich mit einem anderen Konto anmeldest, hier
           dein Konto löschst oder die Websitedaten deines Browsers löschst – auch wenn deine
-          Anmeldung vorher abläuft. Eine Einwilligung ist dafür nach § 25 Abs. 2 Nr. 2 TDDDG nicht
-          nötig.
+          Anmeldung vorher abläuft. Für diese Speicherung in deinem Browser ist nach § 25 Abs. 2 Nr.
+          2 TDDDG keine Einwilligung nötig, weil sie für die Funktionen, die du nutzt, unbedingt
+          erforderlich ist.
         </li>
         <li>
           Nur wenn du bei einer Prüfung „Offline verfügbar machen“ wählst, speichert dein Browser
