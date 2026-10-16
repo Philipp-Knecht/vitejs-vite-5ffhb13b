@@ -134,6 +134,15 @@ function Summary({ entries, today }: { entries: CarLogEntryDto[]; today: string 
           )}
         </>
       )}
+      {summary.fuelSkipped > 0 && (
+        <p className="muted">
+          {summary.fuelSkipped === 1
+            ? 'Eine Strecke zwischen vollen Tankungen'
+            : `${summary.fuelSkipped} Strecken zwischen vollen Tankungen`}{' '}
+          ergäbe einen unrealistischen Verbrauch und zählt nicht mit. Prüf dort Liter und
+          Kilometerstände.
+        </p>
+      )}
       {fuel && (
         <>
           <h3 className="car-log__summary-period">Verbrauch aus allen Einträgen</h3>
@@ -162,8 +171,8 @@ function Summary({ entries, today }: { entries: CarLogEntryDto[]; today: string 
       )}
       <p className="muted car-log__note">
         Gezählt wird, was du eingetragen hast. Kosten je km: Kosten geteilt durch die Strecke
-        zwischen dem niedrigsten und dem höchsten Kilometerstand – erst, wenn deine Einträge
-        mindestens ein halbes Jahr abdecken.
+        zwischen dem niedrigsten und dem höchsten Kilometerstand, je Tag gerechnet – erst, wenn
+        deine Kilometerstände mindestens ein halbes Jahr auseinanderliegen.
       </p>
     </section>
   );
@@ -480,9 +489,10 @@ export function CarLogPage() {
           {entries.length > 0 && !form && (
             <p className="muted car-log__note">
               Das Serviceheft als PDF ist kein Wartungsnachweis. Gib es nur weiter, wenn alle
-              Einträge stimmen – Käufer dürfen sich darauf verlassen, auch wenn du die
-              Gewährleistung ausschließt. „Scheckheftgepflegt“ oder „Serviceheft vorhanden“
-              schreibst du nur, wenn du das Serviceheft des Herstellers oder Rechnungen hast.
+              Einträge stimmen: Was darin steht, kann als vereinbart gelten – auch wenn du die
+              Gewährleistung ausschließt. „Scheckheftgepflegt“ schreibst du nur, wenn alle Wartungen
+              nach Herstellervorgabe im Serviceheft des Herstellers oder digital eingetragen sind,
+              „Serviceheft vorhanden“ nur, wenn du dieses Heft hast.
             </p>
           )}
           {full && editable && (

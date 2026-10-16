@@ -82,6 +82,8 @@ export interface CarLogSummary {
   fuelCentsPer100Km: number | null;
   /** Intervals between full fill-ups the consumption is based on. */
   fuelIntervals: number;
+  /** Intervals left out because their consumption is unrealistic: a typo in litres or readings. */
+  fuelSkipped: number;
 }
 
 const dayIndex = (date: string) => {
@@ -117,12 +119,15 @@ function fuelConsumption(entries: readonly CarLogEntryLike[]) {
     .sort(
       (a, b) =>
         a.date.localeCompare(b.date) ||
+        // On one day: by reading where both have one, else in the order they were entered.
+        (a.odometerKm !== null && b.odometerKm !== null ? a.odometerKm - b.odometerKm : 0) ||
         (a.createdAt && b.createdAt ? a.createdAt.localeCompare(b.createdAt) : 0) ||
         (a.odometerKm ?? Number.MAX_SAFE_INTEGER) - (b.odometerKm ?? Number.MAX_SAFE_INTEGER),
     );
   let litres = 0;
   let distance = 0;
   let intervals = 0;
+  let skipped = 0;
   let costCents = 0;
   let costDistance = 0;
   let lastFullKm: number | null = null;
@@ -144,28 +149,29 @@ function fuelConsumption(entries: readonly CarLogEntryLike[]) {
       fill.odometerKm - lastFullKm <= MAX_INTERVAL_KM
     ) {
       const km = fill.odometerKm - lastFullKm;
-      litres += pendingLitres;
-      distance += km;
-      intervals += 1;
-      if (pendingCents !== null) {
-        costCents += pendingCents;
-        costDistance += km;
+      const consumption = (pendingLitres / km) * 100;
+      // One interval with a typo in the litres or a reading is left out, not the whole figure.
+      if (consumption < PLAUSIBLE_CONSUMPTION[0] || consumption > PLAUSIBLE_CONSUMPTION[1])
+        skipped += 1;
+      else {
+        litres += pendingLitres;
+        distance += km;
+        intervals += 1;
+        if (pendingCents !== null) {
+          costCents += pendingCents;
+          costDistance += km;
+        }
       }
     }
     lastFullKm = fill.fullTank ? fill.odometerKm : null;
     pendingLitres = 0;
     pendingCents = 0;
   }
-  const per100Km = distance > 0 ? Math.round((litres / distance) * 1000) / 10 : null;
-  const plausible =
-    per100Km !== null &&
-    per100Km >= PLAUSIBLE_CONSUMPTION[0] &&
-    per100Km <= PLAUSIBLE_CONSUMPTION[1];
   return {
-    per100Km: plausible ? per100Km : null,
-    centsPer100Km:
-      plausible && costDistance > 0 ? Math.round((costCents / costDistance) * 100) : null,
-    intervals: plausible ? intervals : 0,
+    skipped,
+    per100Km: distance > 0 ? Math.round((litres / distance) * 1000) / 10 : null,
+    centsPer100Km: costDistance > 0 ? Math.round((costCents / costDistance) * 100) : null,
+    intervals,
   };
 }
 
@@ -199,9 +205,11 @@ export function carLogSummary(entries: readonly CarLogEntryLike[], today: string
   const yearKm = kms.length >= 2 ? Math.max(...kms) - Math.min(...kms) || null : null;
   const dates = readings.map((entry) => dayIndex(entry.date));
   const span = dates.length >= 2 ? Math.max(...dates) - Math.min(...dates) : 0;
+  // Costs and kilometres per day: costs since the first cost, kilometres between the readings.
+  const costDays = firstCost === null ? 0 : dayIndex(today) - dayIndex(firstCost) + 1;
   const centsPerKm =
-    yearKm !== null && span >= MIN_DAYS_FOR_COST_PER_KM && yearCents > 0
-      ? Math.round(yearCents / yearKm)
+    yearKm !== null && span >= MIN_DAYS_FOR_COST_PER_KM && yearCents > 0 && costDays > 0
+      ? Math.round(yearCents / costDays / (yearKm / span))
       : null;
 
   const fuel = fuelConsumption(entries);
@@ -214,6 +222,7 @@ export function carLogSummary(entries: readonly CarLogEntryLike[], today: string
     fuelPer100Km: fuel.per100Km,
     fuelCentsPer100Km: fuel.centsPer100Km,
     fuelIntervals: fuel.intervals,
+    fuelSkipped: fuel.skipped,
   };
 }
 
@@ -245,7 +254,7 @@ export function carLogCsv(entries: readonly CarLogCsvEntry[]): string {
       'Vorige Tankung fehlt',
       'Werkstatt',
       'Notiz',
-      'Rechnung vorhanden',
+      'Rechnung oder Beleg vorhanden',
     ],
     ...[...entries]
       .sort((a, b) => a.date.localeCompare(b.date))

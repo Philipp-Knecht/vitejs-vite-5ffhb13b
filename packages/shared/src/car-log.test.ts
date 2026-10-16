@@ -62,8 +62,8 @@ describe('summary', () => {
     expect(summary.yearCents).toBe(49_000);
     expect(summary.months).toBe(12);
     expect(summary.yearKm).toBe(6_000);
-    // The readings span half a year: 490 € over 6,000 km.
-    expect(summary.centsPerKm).toBe(8);
+    // Per day: 490 € over 365 days, 6,000 km over the 184 days between the readings.
+    expect(summary.centsPerKm).toBe(4);
   });
 
   it('counts the months from the first cost and needs half a year of readings for costs per km', () => {
@@ -158,6 +158,17 @@ describe('summary', () => {
       '2026-10-15',
     );
     expect(typo.fuelPer100Km).toBeNull();
+    // One litre typo among normal fill-ups leaves out only its interval.
+    const litreTypo = carLogSummary(
+      [
+        entry({ ...base, date: '2026-02-01', quantity: 40, odometerKm: 3_000 }),
+        entry({ ...base, date: '2026-02-10', quantity: 4_140, odometerKm: 3_600 }),
+        entry({ ...base, date: '2026-02-20', quantity: 42, odometerKm: 4_200 }),
+      ],
+      '2026-10-15',
+    );
+    expect(litreTypo.fuelPer100Km).toBe(7);
+    expect(litreTypo.fuelSkipped).toBe(1);
     // A partial fill-up without a reading, entered first on the same day, belongs before the full one.
     const sameDay = carLogSummary(
       [
@@ -198,7 +209,7 @@ describe('CSV export', () => {
       .replace(/^\ufeff/, '')
       .split('\r\n');
     expect(lines[0]).toBe(
-      'Datum;Art;Kilometerstand;Betrag in Euro;Menge;Einheit;Vollgetankt;Vorige Tankung fehlt;Werkstatt;Notiz;Rechnung vorhanden',
+      'Datum;Art;Kilometerstand;Betrag in Euro;Menge;Einheit;Vollgetankt;Vorige Tankung fehlt;Werkstatt;Notiz;Rechnung oder Beleg vorhanden',
     );
     expect(lines[1]).toBe('2026-01-02;Tanken;;;41,4;l;ja;;;;nein');
     expect(lines[2]).toContain('"Autohaus Muster; Köln"');
