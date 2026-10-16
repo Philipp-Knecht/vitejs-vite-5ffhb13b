@@ -30,13 +30,13 @@ export function removeItem(key: string): void {
   }
 }
 
-/** Removes every key that starts with `prefix`, e.g. per-account conveniences on logout. */
-export function removeByPrefix(prefix: string): void {
+/** Removes every key that starts with `prefix` but `keep`, e.g. per-account conveniences on logout. */
+export function removeByPrefix(prefix: string, keep?: string): void {
   try {
     const keys: string[] = [];
     for (let index = 0; index < window.localStorage.length; index++) {
       const key = window.localStorage.key(index);
-      if (key?.startsWith(prefix)) keys.push(key);
+      if (key?.startsWith(prefix) && key !== keep) keys.push(key);
     }
     for (const key of keys) window.localStorage.removeItem(key);
   } catch {

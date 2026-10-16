@@ -26,7 +26,10 @@ import type {
 import { QueryClient, useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { clearSaleContractDraft } from '../features/sale-contract/draft';
 import { clearListingTextDraft } from '../features/selling/draft';
-import { MONTHLY_COSTS_STORAGE_PREFIX } from '../features/compare/monthly-costs-storage';
+import {
+  MONTHLY_COSTS_STORAGE_PREFIX,
+  monthlyCostsStorageKey,
+} from '../features/compare/monthly-costs-storage';
 import { removeByPrefix } from '../lib/storage';
 import { clearPrivateOfflineData } from '../lib/offline';
 import { useHydrated } from '../lib/use-hydrated';
@@ -248,6 +251,12 @@ function useInvalidateSession() {
     queryClient.removeQueries({ queryKey: ['comparison'] });
     queryClient.removeQueries({ queryKey: ['analysis'] });
     await queryClient.invalidateQueries({ queryKey: queryKeys.me });
+    // A session may have ended without logging out here: only the account now signed in keeps its figures.
+    const after = queryClient.getQueryData<MeDto>(queryKeys.me);
+    removeByPrefix(
+      MONTHLY_COSTS_STORAGE_PREFIX,
+      after?.user ? monthlyCostsStorageKey(after.user.id) : undefined,
+    );
   };
 }
 

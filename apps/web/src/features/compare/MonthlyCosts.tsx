@@ -6,6 +6,7 @@ import {
   ENERGY_GROUPS,
   ENERGY_UNITS,
   energyGroup,
+  isPluginHybrid,
   monthlyCosts,
   PRICES_NEEDED,
   type ComparisonDto,
@@ -14,7 +15,8 @@ import {
 } from '@kaufcheck/shared';
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router';
-import { useMe } from '../../api/queries';
+import { useQueryClient } from '@tanstack/react-query';
+import { queryKeys, useMe } from '../../api/queries';
 import { SelectField, TextField } from '../../components/ui/Field';
 import { track } from '../../lib/analytics';
 import { readJson, writeJson } from '../../lib/storage';
@@ -64,9 +66,13 @@ const CAR_FIELDS = [
 const isRecord = (value: unknown): value is Record<string, unknown> =>
   typeof value === 'object' && value !== null && !Array.isArray(value);
 
-/** What the browser holds, checked field by field; anything else is dropped. */
-function readStored(key: string): Stored {
+/**
+ * What the browser holds, checked field by field; anything else is dropped.
+ * Null when nothing can be read: nothing stored yet, or storage blocked.
+ */
+function readStoredIfAny(key: string): Stored | null {
   const raw = readJson<unknown>(key, null, (_value): _value is unknown => true);
+  if (raw === null) return null;
   if (!isRecord(raw) || !isRecord(raw.shared) || !isRecord(raw.cars)) return EMPTY;
   const text = (value: unknown) => (typeof value === 'string' ? value.slice(0, 20) : '');
   const prices = isRecord(raw.shared.prices) ? raw.shared.prices : {};
@@ -97,12 +103,16 @@ function readStored(key: string): Stored {
   };
 }
 
-/** The unit of the consumption field; for a plug-in hybrid the litres of petrol. */
+const readStored = (key: string): Stored => readStoredIfAny(key) ?? EMPTY;
+
+/** The unit of the consumption field; for a plug-in hybrid the litres of fuel. */
 function unitOf(energy: EnergyGroup | ''): 'l' | 'kWh' | 'kg' | null {
   if (energy === '') return null;
-  if (energy === 'pluginHybrid') return 'l';
+  if (isPluginHybrid(energy)) return 'l';
   return ENERGY_UNITS[energy];
 }
+
+const UNIT_WORDS: Record<'l' | 'kWh' | 'kg', string> = { l: 'Liter', kWh: 'kWh', kg: 'kg' };
 
 const euros = (value: number) =>
   value.toLocaleString('de-DE', {
@@ -127,7 +137,7 @@ function parse(
 }
 
 /** Plausible upper limits per unit: hydrogen costs well over 10 € per kg. */
-const PRICE_GROUPS = ENERGY_GROUPS.filter((group): group is PriceGroup => group !== 'pluginHybrid');
+const PRICE_GROUPS = ENERGY_GROUPS.filter((group): group is PriceGroup => !isPluginHybrid(group));
 
 const PRICE_LIMITS: Record<PriceGroup, number> = {
   petrol: 5,
@@ -191,24 +201,40 @@ export function MonthlyCosts({ comparison }: { comparison: ComparisonDto }) {
   const pro = me.data?.entitlements.monthlyCosts ?? false;
   const items = comparison.items;
   // Per account: another person on this browser does not see the figures.
+  const queryClient = useQueryClient();
   const key = monthlyCostsStorageKey(me.data?.user?.id ?? '');
   const [stored, setStored] = useState<Stored>(() => readStored(key));
+  // Another account signed in while the page is open: read its figures.
+  const [storedKey, setStoredKey] = useState(key);
+  if (storedKey !== key) {
+    setStoredKey(key);
+    setStored(readStored(key));
+  }
+  // Logged out in another tab: no writes until the session is checked again.
+  const [clearedAt, setClearedAt] = useState<number | null>(null);
+  const writable = clearedAt === null || me.dataUpdatedAt > clearedAt;
   const shared = stored.shared;
   const cars = items.map((item) => stored.cars[item.savedListingId] ?? initialCar(item));
 
   // Another tab changed or deleted the figures (e.g. on logout): take that over.
   useEffect(() => {
     const listen = (event: StorageEvent) => {
-      if (event.key === key || event.key === null) setStored(readStored(key));
+      if (event.key !== key && event.key !== null) return;
+      setStored(readStored(key));
+      if (event.key === null || event.newValue === null) {
+        setClearedAt(Date.now());
+        void queryClient.invalidateQueries({ queryKey: queryKeys.me });
+      }
     };
     window.addEventListener('storage', listen);
     return () => window.removeEventListener('storage', listen);
-  }, [key]);
+  }, [key, queryClient]);
 
   /** Changes what this browser holds now, so that another tab's changes are kept. */
   const change = (apply: (current: Stored) => Stored) => {
-    if (!me.data?.user) return;
-    const next = apply(readStored(key));
+    if (!me.data?.user || !writable) return;
+    // Storage blocked or empty: build on what is on screen.
+    const next = apply(readStoredIfAny(key) ?? stored);
     writeJson(key, next);
     setStored(next);
   };
@@ -317,7 +343,7 @@ export function MonthlyCosts({ comparison }: { comparison: ComparisonDto }) {
             Eine Schätzung nach deinen Annahmen: KaufCheck hat keine Preis- oder Verbrauchsdaten.
             Trag zum Beispiel den Verbrauch aus dem Inserat, Angebote deiner Versicherung und die
             Steuer aus dem Rechner ein. Was du einträgst, bleibt nur in diesem Browser – auf anderen
-            Geräten siehst du es nicht, und beim Abmelden löschen wir es.
+            Geräten siehst du es nicht. Meldest du dich in diesem Browser ab, löschen wir es.
           </p>
 
           <fieldset className="sale-contract__group">
@@ -341,12 +367,19 @@ export function MonthlyCosts({ comparison }: { comparison: ComparisonDto }) {
               {groups.map((group) => (
                 <TextField
                   key={group}
-                  label={`Preis ${ENERGY_GROUP_LABELS[group]} in Euro je ${ENERGY_UNITS[group]}`}
+                  label={`Preis ${ENERGY_GROUP_LABELS[group]} in Euro je ${UNIT_WORDS[ENERGY_UNITS[group]]}`}
                   inputMode="decimal"
                   value={shared.prices[group] ?? ''}
-                  onChange={(event) =>
-                    setShared({ prices: { ...shared.prices, [group]: event.target.value } })
-                  }
+                  onChange={(event) => {
+                    const value = event.target.value;
+                    change((current) => ({
+                      ...current,
+                      shared: {
+                        ...current.shared,
+                        prices: { ...current.shared.prices, [group]: value },
+                      },
+                    }));
+                  }}
                   error={prices[group].error}
                 />
               ))}
@@ -362,10 +395,11 @@ export function MonthlyCosts({ comparison }: { comparison: ComparisonDto }) {
           {items.map((item, index) => {
             const car = cars[index]!;
             const parsed = parsedCars[index]!;
-            const phev = car.energy === 'pluginHybrid';
+            const phev = isPluginHybrid(car.energy);
             const unit = unitOf(car.energy);
             const vehicle = item.vehicle;
             const hybrid = vehicle?.fuel === 'hybrid' && !car.energy;
+            const pluginHybrid = vehicle?.fuel === 'plugin_hybrid' && !car.energy;
             const taxLink = taxCalculatorLink({
               firstRegistration:
                 vehicle?.firstRegistrationYear != null
@@ -383,7 +417,7 @@ export function MonthlyCosts({ comparison }: { comparison: ComparisonDto }) {
                 <div className="sale-contract__grid">
                   <TextField
                     label="Kaufpreis in Euro"
-                    hint="Aus dem Inserat übernommen, falls genannt"
+                    hint="Aus dem Inserat übernommen, falls genannt – trag den Preis ein, den du erwartest; Zulassung und Überführung kannst du dazurechnen"
                     inputMode="numeric"
                     value={car.purchasePrice}
                     onChange={(event) => setCar(index, { purchasePrice: event.target.value })}
@@ -400,14 +434,18 @@ export function MonthlyCosts({ comparison }: { comparison: ComparisonDto }) {
                       (parsed.resaleValue.value !== null &&
                       parsed.purchasePrice.value !== null &&
                       parsed.resaleValue.value > parsed.purchasePrice.value
-                        ? 'Höher als der Kaufpreis – so gibt es keinen Wertverlust.'
+                        ? 'Höher als der Kaufpreis – einen Wertzuwachs rechnen wir nicht ein. Trag höchstens den Kaufpreis ein.'
                         : undefined)
                     }
                   />
                   <SelectField
                     label="Kraftstoff oder Strom"
                     hint={
-                      hybrid ? 'Hybrid: Wähl den Kraftstoff des Verbrennungsmotors.' : undefined
+                      hybrid
+                        ? 'Hybrid: Wähl den Kraftstoff des Verbrennungsmotors.'
+                        : pluginHybrid
+                          ? 'Plug-in-Hybrid: Wähl, ob der Motor Benzin oder Diesel tankt.'
+                          : undefined
                     }
                     value={car.energy}
                     onChange={(event) =>
@@ -428,14 +466,14 @@ export function MonthlyCosts({ comparison }: { comparison: ComparisonDto }) {
                   <TextField
                     label={
                       phev
-                        ? 'Benzin in l je 100 km'
+                        ? `${car.energy === 'pluginHybridDiesel' ? 'Diesel' : 'Benzin'} in Litern je 100 km`
                         : unit
-                          ? `Verbrauch in ${unit} je 100 km`
+                          ? `Verbrauch in ${unit === 'l' ? 'Litern' : unit} je 100 km`
                           : 'Verbrauch je 100 km'
                     }
                     hint={
                       phev
-                        ? 'Durchschnitt über alle deine Fahrten: Fährst du viel elektrisch, ist es wenig Benzin und mehr Strom'
+                        ? 'Dein Durchschnitt über alle Fahrten, nicht der WLTP-Wert aus dem Inserat – der ist bei Plug-in-Hybriden meist viel zu niedrig. Lädst du selten, brauchst du fast so viel Kraftstoff wie ohne Elektromotor'
                         : unit
                           ? 'Laut Inserat oder Hersteller (WLTP); im Alltag meist etwas mehr'
                           : 'Erst Kraftstoff oder Strom wählen'
@@ -449,7 +487,7 @@ export function MonthlyCosts({ comparison }: { comparison: ComparisonDto }) {
                   {phev && (
                     <TextField
                       label="Strom in kWh je 100 km"
-                      hint="Ebenfalls im Durchschnitt über alle Fahrten"
+                      hint="Ebenfalls im Durchschnitt über alle Fahrten; lädst du selten, ist es wenig"
                       inputMode="decimal"
                       value={car.electricConsumption}
                       onChange={(event) =>
@@ -473,7 +511,7 @@ export function MonthlyCosts({ comparison }: { comparison: ComparisonDto }) {
                   />
                   <TextField
                     label="Versicherung in Euro pro Jahr"
-                    hint="Angebot deines Versicherers, für alle Angebote mit gleichem Umfang (Haftpflicht, Teil- oder Vollkasko); abhängig unter anderem von Typklasse, Region und Schadenfreiheitsklasse"
+                    hint="Beitrag laut Angebot deines Versicherers – für alle Autos mit demselben Umfang (Haftpflicht, Teil- oder Vollkasko). Er hängt unter anderem von Typklasse, Regionalklasse und Schadenfreiheitsklasse ab"
                     inputMode="decimal"
                     value={car.insurance}
                     onChange={(event) => setCar(index, { insurance: event.target.value })}
@@ -569,7 +607,7 @@ export function MonthlyCosts({ comparison }: { comparison: ComparisonDto }) {
           {started && !sameParts && (
             <p className="muted">
               Die Summen sind erst vergleichbar, wenn für alle Angebote dieselben Posten ausgefüllt
-              sind.
+              sind. Fällt ein Posten weg, etwa die Steuer, trag 0 ein.
             </p>
           )}
         </>

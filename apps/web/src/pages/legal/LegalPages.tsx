@@ -214,8 +214,11 @@ export function PrivacyPage() {
           Im lokalen Speicher deines Browsers merkt sich KaufCheck den Fortschritt deiner
           Checklisten, deine Notizen für die Preisverhandlung, deine Annahmen für die Kosten pro
           Monat im Vergleich (Pro) und die gewählte Anrede (Sie/du). Diese Daten verlassen deinen
-          Browser nicht; die Annahmen für die Kosten speichert er je Konto und löscht sie, wenn du
-          dich bei KaufCheck abmeldest.
+          Browser nicht. Die Annahmen für die Kosten speichert er je Konto; sie bleiben, bis du dich
+          in diesem Browser bei KaufCheck abmeldest, dich mit einem anderen Konto anmeldest, hier
+          dein Konto löschst oder die Websitedaten deines Browsers löschst – auch wenn deine
+          Anmeldung vorher abläuft. Eine Einwilligung ist dafür nach § 25 Abs. 2 Nr. 2 TDDDG nicht
+          nötig.
         </li>
         <li>
           Nur wenn du bei einer Prüfung „Offline verfügbar machen“ wählst, speichert dein Browser

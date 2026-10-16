@@ -71,12 +71,23 @@ describe('monthly costs', () => {
     expect(
       monthlyCosts({ ...golf, energy: 'pluginHybrid', consumption: 2 }, shared).parts.energy,
     ).toBeNull();
+    // A diesel plug-in hybrid needs the diesel price.
+    const diesel = {
+      ...golf,
+      energy: 'pluginHybridDiesel' as const,
+      consumption: 2,
+      electricConsumption: 12,
+    };
+    expect(monthlyCosts(diesel, shared).parts.energy).toBeNull();
+    expect(
+      monthlyCosts(diesel, { ...shared, prices: { ...shared.prices, diesel: 1.7 } }).parts.energy,
+    ).toBe(82);
   });
 
   it('groups fuels by what they cost', () => {
-    // Hybrids can have a petrol or a diesel engine: the buyer chooses.
+    // (Plug-in) hybrids can have a petrol or a diesel engine: the buyer chooses.
     expect(energyGroup('hybrid')).toBeNull();
-    expect(energyGroup('plugin_hybrid')).toBe('pluginHybrid');
+    expect(energyGroup('plugin_hybrid')).toBeNull();
     expect(energyGroup('petrol')).toBe('petrol');
     expect(energyGroup('electric')).toBe('electric');
     expect(energyGroup('other')).toBeNull();

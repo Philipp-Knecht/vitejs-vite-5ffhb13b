@@ -17,10 +17,16 @@ export const ENERGY_GROUPS = [
   'hydrogen',
   'ethanol',
   'pluginHybrid',
+  'pluginHybridDiesel',
 ] as const;
 export type EnergyGroup = (typeof ENERGY_GROUPS)[number];
-/** What has a price per unit; a plug-in hybrid uses petrol and electricity. */
-export type PriceGroup = Exclude<EnergyGroup, 'pluginHybrid'>;
+/** Plug-in hybrids use fuel and electricity. */
+export const PLUGIN_HYBRIDS = { pluginHybrid: 'petrol', pluginHybridDiesel: 'diesel' } as const;
+type PluginHybrid = keyof typeof PLUGIN_HYBRIDS;
+export const isPluginHybrid = (group: EnergyGroup | null | ''): group is PluginHybrid =>
+  group === 'pluginHybrid' || group === 'pluginHybridDiesel';
+/** What has a price per unit. */
+export type PriceGroup = Exclude<EnergyGroup, PluginHybrid>;
 
 export const ENERGY_GROUP_LABELS: Record<EnergyGroup, string> = {
   petrol: 'Benzin',
@@ -31,6 +37,7 @@ export const ENERGY_GROUP_LABELS: Record<EnergyGroup, string> = {
   hydrogen: 'Wasserstoff',
   ethanol: 'Ethanol (E85)',
   pluginHybrid: 'Plug-in-Hybrid (Benzin und Strom)',
+  pluginHybridDiesel: 'Plug-in-Hybrid (Diesel und Strom)',
 };
 
 /** The prices a car needs. */
@@ -43,6 +50,7 @@ export const PRICES_NEEDED: Record<EnergyGroup, readonly PriceGroup[]> = {
   hydrogen: ['hydrogen'],
   ethanol: ['ethanol'],
   pluginHybrid: ['petrol', 'electric'],
+  pluginHybridDiesel: ['diesel', 'electric'],
 };
 
 /** The unit a price and a consumption per 100 km refer to. */
@@ -58,7 +66,7 @@ export const ENERGY_UNITS: Record<PriceGroup, 'l' | 'kWh' | 'kg'> = {
 
 /**
  * The group of a fuel from a listing; null where it is not clear: „Andere“,
- * and hybrids, which can have a petrol or a diesel engine.
+ * and (plug-in) hybrids, which can have a petrol or a diesel engine.
  */
 export function energyGroup(fuel: FuelType | null | undefined): EnergyGroup | null {
   switch (fuel) {
@@ -71,8 +79,6 @@ export function energyGroup(fuel: FuelType | null | undefined): EnergyGroup | nu
     case 'hydrogen':
     case 'ethanol':
       return fuel;
-    case 'plugin_hybrid':
-      return 'pluginHybrid';
     default:
       return null;
   }
@@ -88,7 +94,7 @@ export interface SharedCostAssumptions {
 
 export interface CarCostFigures {
   energy: EnergyGroup | null;
-  /** Units per 100 km; for a plug-in hybrid the litres of petrol. */
+  /** Units per 100 km; for a plug-in hybrid the litres of fuel. */
   consumption: number | null;
   /** Only a plug-in hybrid: kWh per 100 km, both averaged over all trips. */
   electricConsumption: number | null;
@@ -137,18 +143,21 @@ const perMonth = (perYear: number | null) => (perYear === null ? null : perYear 
 export function monthlyCosts(figures: CarCostFigures, shared: SharedCostAssumptions): MonthlyCosts {
   let energy: number | null = null;
   if (figures.energy && shared.kmPerYear !== null) {
-    const per100 =
-      figures.energy === 'pluginHybrid'
-        ? figures.consumption !== null &&
-          figures.electricConsumption !== null &&
-          shared.prices.petrol !== undefined &&
-          shared.prices.electric !== undefined
-          ? figures.consumption * shared.prices.petrol +
-            figures.electricConsumption * shared.prices.electric
-          : null
-        : figures.consumption !== null && shared.prices[figures.energy] !== undefined
-          ? figures.consumption * shared.prices[figures.energy]!
-          : null;
+    let per100: number | null = null;
+    if (isPluginHybrid(figures.energy)) {
+      const fuelPrice = shared.prices[PLUGIN_HYBRIDS[figures.energy]];
+      if (
+        figures.consumption !== null &&
+        figures.electricConsumption !== null &&
+        fuelPrice !== undefined &&
+        shared.prices.electric !== undefined
+      )
+        per100 =
+          figures.consumption * fuelPrice + figures.electricConsumption * shared.prices.electric;
+    } else {
+      const price = shared.prices[figures.energy];
+      if (figures.consumption !== null && price !== undefined) per100 = figures.consumption * price;
+    }
     if (per100 !== null) energy = (shared.kmPerYear / 100) * per100;
   }
   const depreciation =

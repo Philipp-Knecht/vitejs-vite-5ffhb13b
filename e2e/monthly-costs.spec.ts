@@ -35,11 +35,11 @@ test('monthly costs of the compared offers are part of Pro and come from own fig
   for (const index of [0, 1]) {
     const car = cars.nth(index);
     await car.getByLabel('Kraftstoff oder Strom').selectOption('diesel');
-    await car.getByLabel('Verbrauch in l je 100 km').fill(index === 0 ? '6' : '5');
+    await car.getByLabel('Verbrauch in Litern je 100 km').fill(index === 0 ? '6' : '5');
     await car.getByLabel('Kfz-Steuer in Euro pro Jahr').fill('240');
     await car.getByLabel('Versicherung in Euro pro Jahr').fill('600');
   }
-  await section.getByLabel('Preis Diesel in Euro je l').fill('1,70');
+  await section.getByLabel('Preis Diesel in Euro je Liter').fill('1,70');
 
   const table = section.getByRole('region', { name: 'Kosten pro Monat im Vergleich' });
   // 12,000 km × 6 l × 1.70 € / 12 = 102 €, plus 20 € tax and 50 € insurance.
@@ -71,7 +71,7 @@ test('monthly costs of the compared offers are part of Pro and come from own fig
 
   // The assumptions stay in this browser.
   await page.reload();
-  await expect(cars.nth(1).getByLabel('Verbrauch in l je 100 km')).toHaveValue('5');
+  await expect(cars.nth(1).getByLabel('Verbrauch in Litern je 100 km')).toHaveValue('5');
   const stored = await page.evaluate(() =>
     Object.keys(localStorage)
       .filter((key) => key.startsWith('kaufcheck:monatskosten:'))
@@ -80,6 +80,26 @@ test('monthly costs of the compared offers are part of Pro and come from own fig
   // One entry for this account only.
   expect(stored).toHaveLength(1);
   expect(stored[0]).toContain('"consumption":"5"');
+
+  // Blocked storage: the form still keeps what is typed.
+  await page.addInitScript(() => {
+    const blocked = (key: string) => key.startsWith('kaufcheck:monatskosten');
+    const proto = Storage.prototype;
+    const getItem = proto.getItem.bind(window.localStorage);
+    const setItem = proto.setItem.bind(window.localStorage);
+    proto.getItem = function (key: string) {
+      if (blocked(key)) throw new DOMException('blocked', 'SecurityError');
+      return getItem(key);
+    };
+    proto.setItem = function (key: string, value: string) {
+      if (blocked(key)) throw new DOMException('blocked', 'SecurityError');
+      setItem(key, value);
+    };
+  });
+  await page.reload();
+  await section.getByLabel('Fahrleistung in km pro Jahr').fill('15.000');
+  await section.getByLabel('Preis Diesel in Euro je Liter').fill('1,80');
+  await expect(section.getByLabel('Fahrleistung in km pro Jahr')).toHaveValue('15.000');
 
   // Logging out removes them from this browser.
   await page.goto('/konto');
