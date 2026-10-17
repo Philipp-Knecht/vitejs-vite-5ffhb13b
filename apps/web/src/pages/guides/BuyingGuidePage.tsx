@@ -1,4 +1,5 @@
 import { Link } from 'react-router';
+import { InsuranceComparisonLink } from '../../components/InsuranceComparisonLink';
 import { GuideLayout, type TocEntry } from './GuideLayout';
 
 const TOC: TocEntry[] = [
@@ -62,6 +63,7 @@ export function BuyingGuidePage() {
           kommen einmalig dazu.
         </li>
       </ul>
+      <InsuranceComparisonLink placement="guide_buying" />
 
       <h2 id="modell">2. Das passende Modell finden</h2>
       <p>

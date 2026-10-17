@@ -42,6 +42,7 @@ export function systemRoutes(app: FastifyInstance, services: Services): void {
       ads: config.adsense?.slot
         ? { client: config.adsense.client, slot: config.adsense.slot }
         : null,
+      affiliates: { carInsurance: config.affiliateCarInsurance },
       privacy: {
         hosting: config.hostingProvider,
         anonymousRetentionDays: config.anonRetentionDays,

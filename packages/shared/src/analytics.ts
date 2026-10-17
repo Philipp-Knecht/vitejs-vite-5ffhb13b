@@ -24,6 +24,7 @@ export const ANALYTICS_EVENTS = [
   'listing_text_created',
   'service_history_pdf_downloaded',
   'reminder_enabled',
+  'affiliate_clicked',
 ] as const;
 
 export type AnalyticsEventName = (typeof ANALYTICS_EVENTS)[number];

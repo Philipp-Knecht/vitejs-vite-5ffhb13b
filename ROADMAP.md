@@ -29,7 +29,8 @@ PRs, **L** = mehrere Wochen.
 | 3.2 | Erinnerungen per E-Mail und Kalenderdatei: HU, Inspektion, Bremsflüssigkeit, Reifen (Pro) | #33       |
 | 5.4 | Ratgeber (Teil 1): Auto ummelden, Rückrufe prüfen, Autokosten im Monat                    | #34       |
 | 1.5 | Finanzierungsrechner (kostenlos) und Kreditkosten im Vergleich der Kosten pro Monat (Pro) | #35       |
-| 3.2 | Erinnerung an die HU per E-Mail auch ohne Pro                                             | dieser PR |
+| 3.2 | Erinnerung an die HU per E-Mail auch ohne Pro                                             | #36       |
+| 5.3 | Affiliate-Link zum Vergleich von Kfz-Versicherungen in drei Ratgebern (ohne Pro)          | dieser PR |
 
 ## Arbeitsweise je Feature
 

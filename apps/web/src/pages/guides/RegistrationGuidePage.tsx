@@ -1,4 +1,5 @@
 import { Link } from 'react-router';
+import { InsuranceComparisonLink } from '../../components/InsuranceComparisonLink';
 import { GuideLayout, type TocEntry } from './GuideLayout';
 
 const TOC: TocEntry[] = [
@@ -129,6 +130,7 @@ export function RegistrationGuidePage() {
         <li>Hamburg: 23,60 € bis 60,00 €</li>
       </ul>
       <p>Dazu kommen gegebenenfalls neue Schilder und ein Wunschkennzeichen.</p>
+      <InsuranceComparisonLink placement="guide_registration" />
 
       <h2 id="ueberfuehrung">Das Auto nach Hause bringen</h2>
       <p>

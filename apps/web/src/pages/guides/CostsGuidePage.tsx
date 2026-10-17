@@ -1,4 +1,5 @@
 import { Link } from 'react-router';
+import { InsuranceComparisonLink } from '../../components/InsuranceComparisonLink';
 import { GuideLayout, type TocEntry } from './GuideLayout';
 
 const TOC: TocEntry[] = [
@@ -161,6 +162,7 @@ export function CostsGuidePage() {
           prüft, spart beim Verbrauch.
         </li>
       </ul>
+      <InsuranceComparisonLink placement="guide_costs" />
 
       <h2 id="rechnen">Selbst rechnen</h2>
       <p>

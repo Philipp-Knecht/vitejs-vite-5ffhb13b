@@ -27,6 +27,60 @@ const STRIPE = {
 };
 
 describe('loadConfig', () => {
+  it('takes an affiliate link only as a plain https link with a name', () => {
+    expect(loadConfig(BASE).affiliateCarInsurance).toBeNull();
+    const config = loadConfig({
+      ...BASE,
+      AFFILIATE_CAR_INSURANCE_URL: ' https://partner.example/kfz?pid=123 ',
+      AFFILIATE_CAR_INSURANCE_NAME: 'Vergleichsportal (Beispiel GmbH)',
+    });
+    expect(config.affiliateCarInsurance).toEqual({
+      url: 'https://partner.example/kfz?pid=123',
+      name: 'Vergleichsportal (Beispiel GmbH)',
+    });
+    expect(describeConfig(config).affiliateCarInsurance).toBe(true);
+    for (const url of [
+      'http://partner.example/kfz',
+      'javascript:alert(1)',
+      'https://user:pass@partner.example/',
+      'partner.example/kfz',
+      'https://partner.example/k fz',
+      'https://partner.example/\u202Ekfz',
+    ])
+      expect(() =>
+        loadConfig({
+          ...BASE,
+          AFFILIATE_CAR_INSURANCE_URL: url,
+          AFFILIATE_CAR_INSURANCE_NAME: 'X',
+        }),
+      ).toThrow(ConfigError);
+    expect(() =>
+      loadConfig({ ...BASE, AFFILIATE_CAR_INSURANCE_URL: 'https://partner.example/' }),
+    ).toThrow(ConfigError);
+    expect(() =>
+      loadConfig({
+        ...BASE,
+        AFFILIATE_CAR_INSURANCE_URL: 'https://partner.example/',
+        AFFILIATE_CAR_INSURANCE_NAME: 'x'.repeat(101),
+      }),
+    ).toThrow(ConfigError);
+    expect(() =>
+      loadConfig({
+        ...BASE,
+        AFFILIATE_CAR_INSURANCE_URL: 'https://partner.example/',
+        AFFILIATE_CAR_INSURANCE_NAME: 'Portal\u202E',
+      }),
+    ).toThrow(ConfigError);
+    // Kept exactly as given: partner programs forbid changing their links.
+    expect(
+      loadConfig({
+        ...BASE,
+        AFFILIATE_CAR_INSURANCE_URL: 'https://partner.example?pid={id}',
+        AFFILIATE_CAR_INSURANCE_NAME: 'Portal',
+      }).affiliateCarInsurance?.url,
+    ).toBe('https://partner.example?pid={id}');
+  });
+
   it('uses safe development defaults', () => {
     const config = loadConfig({ ...BASE, NODE_ENV: 'development' });
     expect(config.fetch.mode).toBe('live');

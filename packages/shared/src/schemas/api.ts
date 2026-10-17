@@ -468,6 +468,10 @@ export const PublicConfigSchema = z.object({
   pro: z.object({ offer: ProOfferSchema.nullable() }),
   /** Google AdSense ad unit; null = no ads. */
   ads: z.object({ client: z.string(), slot: z.string() }).nullable(),
+  /** Affiliate links (plain links with the partner ID); null = not configured. */
+  affiliates: z.object({
+    carInsurance: z.object({ url: z.string(), name: z.string() }).nullable(),
+  }),
   /** Operator facts the privacy policy depends on. */
   privacy: z.object({
     hosting: z.enum(['render']).nullable(),

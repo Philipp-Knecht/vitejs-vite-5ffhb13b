@@ -126,6 +126,7 @@ or a short cookie secret). Only `VITE_*` variables are compiled into the browser
 | Plans             | `ANON_MONTHLY_ANALYSES`, `FREE_MONTHLY_ANALYSES`, `PRO_MONTHLY_ANALYSES`, `ANALYZE_RATE_PER_MINUTE`, `REGISTER_RATE_PER_HOUR`                             | Defaults: 3 without account, 10 free, 300 Pro per calendar month (UTC).                        |
 | Payments          | `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET`, `STRIPE_PRICE_ID_PRO`, `VAT_MODE`, `STRIPE_PAYMENT_METHODS`                                                 | All three Stripe values or none; payments also need SMTP e-mail and the full operator details. |
 | Ads               | `ADSENSE_CLIENT`, `ADSENSE_SLOT`                                                                                                                          | See [Google AdSense](#google-adsense).                                                         |
+| Affiliate         | `AFFILIATE_CAR_INSURANCE_URL`, `AFFILIATE_CAR_INSURANCE_NAME`                                                                                             | See [Affiliate link](#affiliate-link).                                                         |
 | E-mail            | `EMAIL_TRANSPORT` (`none`/`smtp`/`console`), `SMTP_URL`, `EMAIL_FROM`                                                                                     | Needed for password reset; without e-mail the feature is shown as unavailable.                 |
 | Operations        | `ANALYTICS_ENABLED`, `SERVE_WEB`, `WEB_DIST_DIR`, `ANON_RETENTION_DAYS`, `HOSTING_PROVIDER`                                                               | `HOSTING_PROVIDER=render` names Render in the privacy policy (detected automatically there).   |
 | Web (build time)  | `VITE_IMPRINT_NAME`, `VITE_IMPRINT_ADDRESS` (lines separated by `\|`), `VITE_CONTACT_EMAIL`, `VITE_CONTACT_PHONE`, `VITE_ADS_PROVIDER`                    | The imprint is legally required in Germany; the server reads the same values for contracts.    |
@@ -358,6 +359,25 @@ local testing: `stripe listen --forward-to localhost:3000/api/billing/webhook`.
 - While ads are on, HTML pages carry a nonce per response and the strict, nonce-based
   Content-Security-Policy Google supports (`'strict-dynamic'`); API responses keep the strict
   default policy.
+
+## Affiliate link
+
+- With `AFFILIATE_CAR_INSURANCE_URL` (an `https://` partner link, at most 1,000 characters, used
+  exactly as given) and `AFFILIATE_CAR_INSURANCE_NAME` (the partner whose site the link opens, at
+  most 100 characters, e.g. „Tarifcheck.de“), three guides show a link „Kfz-Versicherungen bei …
+  vergleichen*“ to visitors without Pro: at the end of the budget section (buying guide), after
+  the fees (registration) and after the saving tips (monthly costs). It is labelled „Werbung“ and
+  explained as an affiliate link; the privacy policy gets a section „Affiliate-Links“.
+- It is a plain link (`rel="sponsored noopener"`): no partner script, pixel or banner is loaded,
+  and nothing is handed over. KaufCheck only points to the general comparison and names no
+  insurers, prices or recommendations, so it stays a „Tippgeber“ without a licence under § 34d
+  GewO. Do not change the text into advice, rankings or a pre-filled form, and do not place it
+  next to warnings, legal duties or step-by-step instructions.
+- Partner terms (https://www.tarifcheck-partnerprogramm.de/agb/, read on 17.10.2026): the
+  Tarifcheck partner program (TARIFCHECK24 GmbH) allows only its own
+  advertising material, unchanged, and names a contract penalty of 1,500 € per violation. Use the
+  Kfz-Direktlink from the partner account unchanged, and get the link text and the name approved
+  in writing by the partner support before setting the variables.
 
 ## Analytics configuration
 
