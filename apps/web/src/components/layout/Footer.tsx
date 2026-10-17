@@ -55,6 +55,9 @@ export function Footer() {
           <Link to="/kfz-steuer-rechner">Kfz-Steuer-Rechner</Link>
           <Link to="/kaufvertrag">Kaufvertrag privat</Link>
           <Link to="/auto-verkaufen">Auto privat verkaufen</Link>
+          <Link to="/auto-ummelden">Auto ummelden</Link>
+          <Link to="/auto-rueckruf-pruefen">Rückrufe prüfen</Link>
+          <Link to="/autokosten-im-monat">Autokosten im Monat</Link>
           {MODEL_PAGES_AVAILABLE && <Link to="/modelle">Modelle von A bis Z</Link>}
         </nav>
         <nav className="footer__column" aria-label="Rechtliches">

@@ -20,7 +20,7 @@ try {
   // No .env file – use the process environment.
 }
 const siteUrl = (process.env.PUBLIC_SITE_URL ?? 'http://localhost:5173').replace(/\/+$/, '');
-const MODIFIED = '2026-10-15';
+const MODIFIED = '2026-10-16';
 
 const { render, STATIC_PAGES, MODEL_PAGES } = await import(
   pathToFileURL(path.join(ssrDir, 'entry-server.js')).href
@@ -47,6 +47,9 @@ const GUIDES = new Set([
   '/kfz-steuer-rechner',
   '/kaufvertrag',
   '/auto-verkaufen',
+  '/auto-ummelden',
+  '/auto-rueckruf-pruefen',
+  '/autokosten-im-monat',
 ]);
 
 function structuredData(pagePath, meta) {

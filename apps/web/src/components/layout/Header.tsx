@@ -21,6 +21,7 @@ const GUIDES = [
   { to: '/kfz-steuer-rechner', label: 'Kfz-Steuer-Rechner' },
   { to: '/kaufvertrag', label: 'Kaufvertrag privat' },
   { to: '/auto-verkaufen', label: 'Auto verkaufen' },
+  { to: '/auto-ummelden', label: 'Auto ummelden' },
 ];
 
 function AccountLink({ onNavigate }: { onNavigate?: () => void }) {
