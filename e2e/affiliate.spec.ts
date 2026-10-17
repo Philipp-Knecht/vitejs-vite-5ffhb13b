@@ -54,3 +54,18 @@ test('the insurance comparison link is labelled, plain and gone with Pro', async
   await page.evaluate(() => new Promise((resolve) => requestAnimationFrame(resolve)));
   await expect(page.getByRole('complementary', { name: 'Werbung: Affiliate-Link' })).toHaveCount(0);
 });
+
+test('a configuration cached before affiliate links existed still renders', async ({ page }) => {
+  // The browser or the offline copy may still hold /api/config from before the field.
+  await page.route('**/api/config', async (route) => {
+    const response = await route.fetch();
+    const body = (await response.json()) as Record<string, unknown>;
+    delete body.affiliates;
+    await route.fulfill({ response, json: body });
+  });
+  await page.goto('/datenschutz');
+  await expect(page.getByRole('heading', { name: 'Grundsatz' })).toBeVisible();
+  await page.goto('/autokosten-im-monat');
+  await expect(page.getByRole('heading', { name: 'So sparst du' })).toBeVisible();
+  await expect(page.getByRole('complementary', { name: 'Werbung: Affiliate-Link' })).toHaveCount(0);
+});

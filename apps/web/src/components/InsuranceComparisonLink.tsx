@@ -19,7 +19,8 @@ export function InsuranceComparisonLink({ placement }: { placement: AffiliatePla
   const hydrated = useHydrated();
   const me = useMe();
   const config = useConfig();
-  const partner = config.data?.affiliates.carInsurance ?? null;
+  // A configuration cached before this field existed (HTTP cache, offline copy) lacks it.
+  const partner = config.data?.affiliates?.carInsurance ?? null;
   if (!hydrated || !partner || me.data?.entitlements.showAds !== true) return null;
   return (
     <aside className="affiliate" aria-label="Werbung: Affiliate-Link" data-placement={placement}>
