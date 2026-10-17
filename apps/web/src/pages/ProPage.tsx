@@ -116,6 +116,10 @@ function rows(
       ],
     },
     {
+      label: 'Kostenbuch und Serviceheft',
+      cells: [flag(plans.anonymous.carLog), flag(plans.free.carLog), flag(plans.pro.carLog)],
+    },
+    {
       label: photoAnalysisAvailable ? 'Fotoanalyse' : 'Fotoanalyse (derzeit nicht verfügbar)',
       cells: [
         flag(plans.anonymous.photoAnalysis),

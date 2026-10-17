@@ -40,7 +40,7 @@ function isEmojiPart(char: string): boolean {
 }
 
 /** Text for the embedded font: unknown characters become „?“, emoji are dropped. */
-function toContractText(text: string): string {
+export function toContractText(text: string): string {
   let out = '';
   for (const char of text.normalize('NFC')) {
     if (char in REPLACEMENTS) out += REPLACEMENTS[char];

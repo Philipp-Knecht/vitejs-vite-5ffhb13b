@@ -321,8 +321,9 @@ export function MyCarPage() {
         }
       >
         <p>
-          {deleting ? carName(deleting) : ''} und alle Angaben dazu werden gelöscht. Das lässt sich
-          nicht rückgängig machen.
+          {deleting ? carName(deleting) : ''} und alle Angaben dazu werden gelöscht, auch das
+          Kostenbuch – exportiere es vorher, wenn du es behalten willst. Das lässt sich nicht
+          rückgängig machen.
         </p>
       </Dialog>
     </div>

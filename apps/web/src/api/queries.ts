@@ -10,6 +10,9 @@ import type {
   OrderRequest,
   OwnedCarDto,
   OwnedCarInput,
+  CarLogEntryDto,
+  CarLogEntryInput,
+  CarLogResponse,
   OwnedCarsResponse,
   PublicConfig,
   RedirectResponse,
@@ -34,6 +37,7 @@ export const queryKeys = {
   savedListings: ['saved-listings'] as const,
   savedSearches: ['saved-searches'] as const,
   ownedCars: ['owned-cars'] as const,
+  carLog: (carId: string) => ['car-log', carId] as const,
   history: ['history'] as const,
   comparison: (ids: readonly string[]) => ['comparison', ...ids] as const,
   order: (number: string) => ['order', number] as const,
@@ -153,7 +157,42 @@ export function useDeleteOwnedCar() {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: (id: string) => api.delete(`/api/owned-cars/${encodeURIComponent(id)}`),
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: queryKeys.ownedCars }),
+    onSuccess: (_result, id) => {
+      queryClient.removeQueries({ queryKey: queryKeys.carLog(id) });
+      return queryClient.invalidateQueries({ queryKey: queryKeys.ownedCars });
+    },
+  });
+}
+
+export function useCarLog(carId: string, enabled: boolean) {
+  return useQuery({
+    queryKey: queryKeys.carLog(carId),
+    queryFn: ({ signal }) =>
+      api.get<CarLogResponse>(`/api/owned-cars/${encodeURIComponent(carId)}/log`, signal),
+    enabled,
+  });
+}
+
+/** Adds an entry, or changes it when `id` is given. */
+export function useSaveCarLogEntry(carId: string) {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: ({ id, input }: { id: string | null; input: CarLogEntryInput }) => {
+      const base = `/api/owned-cars/${encodeURIComponent(carId)}/log`;
+      return id
+        ? api.put<CarLogEntryDto>(`${base}/${encodeURIComponent(id)}`, input)
+        : api.post<CarLogEntryDto>(base, input);
+    },
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: queryKeys.carLog(carId) }),
+  });
+}
+
+export function useDeleteCarLogEntry(carId: string) {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (id: string) =>
+      api.delete(`/api/owned-cars/${encodeURIComponent(carId)}/log/${encodeURIComponent(id)}`),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: queryKeys.carLog(carId) }),
   });
 }
 
@@ -200,6 +239,7 @@ function useInvalidateSession() {
     queryClient.removeQueries({ queryKey: queryKeys.savedListings });
     queryClient.removeQueries({ queryKey: queryKeys.savedSearches });
     queryClient.removeQueries({ queryKey: queryKeys.ownedCars });
+    queryClient.removeQueries({ queryKey: ['car-log'] });
     queryClient.removeQueries({ queryKey: queryKeys.history });
     queryClient.removeQueries({ queryKey: ['comparison'] });
     queryClient.removeQueries({ queryKey: ['analysis'] });

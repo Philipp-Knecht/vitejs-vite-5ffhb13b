@@ -25,3 +25,4 @@ export * from './fragment';
 export * from './number-words';
 export * from './sale-contract';
 export * from './listing-text';
+export * from './car-log';

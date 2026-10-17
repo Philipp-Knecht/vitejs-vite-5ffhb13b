@@ -37,6 +37,7 @@ const DYNAMIC_ROUTE_PATTERNS: readonly RegExp[] = [
   /^\/inseratstext$/,
   /^\/meine-angebote$/,
   /^\/mein-auto$/,
+  /^\/mein-auto\/[0-9a-f-]{36}\/kostenbuch$/i,
   /^\/vergleich$/,
   /^\/verlauf$/,
   /^\/anmelden$/,

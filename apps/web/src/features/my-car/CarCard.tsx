@@ -3,6 +3,7 @@ import { FUEL_LABELS, huStatus, monthYear, type OwnedCarDto } from '@kaufcheck/s
 import { useQuery } from '@tanstack/react-query';
 import { CalendarPlus, Pencil, Trash2 } from 'lucide-react';
 import { Link } from 'react-router';
+import { useMe } from '../../api/queries';
 import { Button } from '../../components/ui/Button';
 import { downloadTextFile } from '../../lib/download';
 import { formatNumber } from '../../lib/format';
@@ -62,6 +63,8 @@ export function CarCard({
   onEdit: () => void;
   onDelete: () => void;
 }) {
+  const me = useMe();
+  const carLog = me.data?.entitlements.carLog ?? false;
   const title = carTitle(car);
   const hu = car.huUntil ? huStatus(car.huUntil, now) : null;
   const headingId = carHeadingId(car.id);
@@ -180,6 +183,18 @@ export function CarCard({
           </Link>
           {' – '}
           sie wird jedes Jahr neu berechnet und beeinflusst deinen Beitrag.
+        </p>
+      </div>
+
+      <div className="car-card__section">
+        <h3>Kostenbuch und Serviceheft</h3>
+        <p>
+          <Link to={`/mein-auto/${car.id}/kostenbuch`}>
+            Kostenbuch öffnen<span className="visually-hidden"> für {carName(car)}</span>
+          </Link>
+          {' – '}
+          Tankungen, Wartung und Reparaturen festhalten und sehen, was das Auto im Monat kostet.
+          {!carLog && <span className="tag tag--pro">Pro</span>}
         </p>
       </div>
 
