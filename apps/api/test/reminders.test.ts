@@ -350,6 +350,14 @@ describe('Reminders', () => {
       remindersFailed: 0,
     });
     expect(email.sent.map((mail) => mail.subject)).toEqual([huSubject]);
+    // Booked again: the kept setting applies again.
+    email.sent.length = 0;
+    await built.services.db.user.update({ where: { id: account.id }, data: { plan: 'PRO' } });
+    expect((await built.services.reminders.sendDue()).remindersSent).toBe(1);
+    expect(email.sent.map((mail) => mail.subject)).toEqual([
+      'Erinnerung: Inspektion für Volkswagen Golf im Oktober 2026',
+    ]);
+    await built.services.db.user.update({ where: { id: account.id }, data: { plan: 'FREE' } });
     // Changing the month needs Pro, switching off does not.
     const changed = await client.put(path(car.id, 'service'), {
       email: false,
@@ -366,20 +374,9 @@ describe('Reminders', () => {
       kind: 'service',
       email: false,
       month: { year: 2026, month: 10 },
-      lastSentKey: null,
+      lastSentKey: 'service-2026-10',
       editable: false,
     });
-
-    // Booked again: the kept settings apply again.
-    await built.services.db.user.update({ where: { id: account.id }, data: { plan: 'PRO' } });
-    expect(
-      (await client.put(path(car.id, 'service'), on({ year: 2026, month: 11 }))).statusCode,
-    ).toBe(200);
-    email.sent.length = 0;
-    expect((await built.services.reminders.sendDue()).remindersSent).toBe(1);
-    expect(email.sent.map((mail) => mail.subject)).toEqual([
-      'Erinnerung: Inspektion für Volkswagen Golf im November 2026',
-    ]);
   });
 
   it('switches off whatever the month, but does not switch on what could never send', async () => {

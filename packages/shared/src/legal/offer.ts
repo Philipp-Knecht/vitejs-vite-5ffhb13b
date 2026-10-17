@@ -95,7 +95,7 @@ export function proFeatures(pro: Entitlements, options: { photoAnalysis: boolean
   // Orders need e-mail and the operator's details, so reminders are always possible with them.
   if (pro.reminders) {
     features.push(
-      'Erinnerungen an Inspektion, Bremsflüssigkeit und Reifenwechsel für deine Autos unter „Mein Auto“ per E-Mail (nach Bestätigung deiner Adresse; je Termin eine E-Mail im Monat davor, für Reifen Anfang Oktober und April) und als Kalenderdatei; die Erinnerung an die HU gibt es auch ohne Pro',
+      'Erinnerungen an HU, Inspektion, Bremsflüssigkeit und Reifenwechsel für deine Autos unter „Mein Auto“ per E-Mail (nach Bestätigung deiner Adresse; je Termin eine E-Mail im Monat davor, für Reifen Anfang Oktober und April) und als Kalenderdatei; die Erinnerung an die HU per E-Mail und die HU-Frist als Kalenderdatei gibt es auch ohne Pro',
     );
   }
   if (pro.photoAnalysis && options.photoAnalysis) {

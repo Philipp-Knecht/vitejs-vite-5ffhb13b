@@ -416,8 +416,9 @@ function ReminderForm({
             )}
             {paused && (
               <p className="field__hint" id={pausedId}>
-                Pausiert: Diese Erinnerung schicken wir nur mit KaufCheck Pro. Deine Einstellung
-                bleibt gespeichert; ausschalten kannst du sie jederzeit.
+                {emailAvailable
+                  ? 'Pausiert: Diese Erinnerung schicken wir nur mit KaufCheck Pro. Deine Einstellung bleibt gespeichert; ausschalten kannst du sie jederzeit.'
+                  : 'Pausiert: Diese Erinnerung gehört zu KaufCheck Pro. Deine Einstellung bleibt gespeichert; ausschalten kannst du sie jederzeit.'}
               </p>
             )}
           </div>
@@ -614,7 +615,7 @@ export function RemindersPage() {
             >
               <p>
                 {anyProEmail
-                  ? 'Inspektion, Bremsflüssigkeit und Reifen schicken wir nur mit KaufCheck Pro. Deine Einstellungen dazu bleiben gespeichert und gelten wieder, sobald du Pro hast; ausschalten kannst du sie jederzeit.'
+                  ? 'Die Erinnerungen an Inspektion, Bremsflüssigkeit und Reifen schicken wir nur mit KaufCheck Pro. Deine Einstellungen dazu bleiben gespeichert und gelten wieder, sobald du Pro hast; ausschalten kannst du sie jederzeit.'
                   : emailAvailable
                     ? 'Mit KaufCheck Pro erinnern wir dich auch an Inspektion, Bremsflüssigkeit und Reifenwechsel – per E-Mail und als Kalenderdatei.'
                     : 'Mit KaufCheck Pro übernimmst du auch diese Termine in deinen Kalender.'}

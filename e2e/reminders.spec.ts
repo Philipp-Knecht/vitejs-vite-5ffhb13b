@@ -70,7 +70,9 @@ test('without Pro the HU reminder works, the others explain themselves', async (
   );
   await page.reload();
   await expect(
-    page.getByText(/^Inspektion, Bremsflüssigkeit und Reifen schicken wir nur mit KaufCheck Pro/),
+    page.getByText(
+      /^Die Erinnerungen an Inspektion, Bremsflüssigkeit und Reifen schicken wir nur mit KaufCheck Pro/,
+    ),
   ).toBeVisible();
   const paused = service.getByRole('checkbox', { name: 'Per E-Mail erinnern' });
   await expect(paused).toBeChecked();
