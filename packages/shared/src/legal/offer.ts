@@ -84,7 +84,7 @@ export function proFeatures(pro: Entitlements, options: { photoAnalysis: boolean
   }
   if (pro.monthlyCosts) {
     features.push(
-      'geschätzte Kosten pro Monat im Vergleich deiner gespeicherten Angebote: Wertverlust, Kraftstoff oder Strom, Steuer, Versicherung und Werkstatt aus deinen eigenen Annahmen; die Angaben bleiben nur in diesem Browser gespeichert und werden beim Abmelden gelöscht',
+      'geschätzte Kosten pro Monat im Vergleich deiner gespeicherten Angebote: Wertverlust, Kraftstoff oder Strom, Steuer, Versicherung, Werkstatt und Kosten einer Finanzierung aus deinen eigenen Annahmen; die Angaben bleiben nur in diesem Browser gespeichert und werden beim Abmelden gelöscht',
     );
   }
   if (pro.carLog) {

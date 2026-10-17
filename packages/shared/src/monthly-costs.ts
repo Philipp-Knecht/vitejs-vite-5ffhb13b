@@ -107,6 +107,8 @@ export interface CarCostFigures {
   purchasePrice: number | null;
   /** What the buyer expects to get for the car at the end. */
   resaleValue: number | null;
+  /** Interest of a loan spread over its term (see `loan`); null without financing. */
+  loanInterestPerMonth?: number | null;
 }
 
 export const COST_PARTS = [
@@ -135,6 +137,8 @@ export interface MonthlyCosts {
   totalEur: number;
   /** Parts without figures. */
   missing: CostPart[];
+  /** Interest of a financing per month; null without. The repayment is no cost: it is the price. */
+  interest: number | null;
 }
 
 const perMonth = (perYear: number | null) => (perYear === null ? null : perYear / 12);
@@ -179,10 +183,15 @@ export function monthlyCosts(figures: CarCostFigures, shared: SharedCostAssumpti
   const parts = Object.fromEntries(
     COST_PARTS.map((part) => [part, raw[part] === null ? null : Math.round(raw[part])]),
   ) as Record<CostPart, number | null>;
+  const interest =
+    figures.loanInterestPerMonth === undefined || figures.loanInterestPerMonth === null
+      ? null
+      : Math.round(figures.loanInterestPerMonth);
   return {
     parts,
-    totalEur: COST_PARTS.reduce((sum, part) => sum + (parts[part] ?? 0), 0),
+    totalEur: COST_PARTS.reduce((sum, part) => sum + (parts[part] ?? 0), 0) + (interest ?? 0),
     missing: COST_PARTS.filter((part) => parts[part] === null),
+    interest,
   };
 }
 

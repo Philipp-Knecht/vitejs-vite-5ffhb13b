@@ -1711,3 +1711,20 @@
   color: var(--c-text-2);
   font-size: 0.875rem;
 }
+
+.monthly-costs__loan {
+  margin-top: 12px;
+}
+
+.monthly-costs__loan > summary {
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.monthly-costs__loan[open] > summary {
+  margin-bottom: 8px;
+}
+
+.monthly-costs__loan-result {
+  margin-top: 8px;
+}

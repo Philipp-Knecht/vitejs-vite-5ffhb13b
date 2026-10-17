@@ -1,6 +1,7 @@
 import { useMemo } from 'react';
 import { Link, useSearchParams } from 'react-router';
 import { EMPTY_TAX_FORM, type TaxFormValues } from '../../features/tax/form';
+import { Financing } from '../../features/tax/Financing';
 import { TaxCalculator } from '../../features/tax/TaxCalculator';
 import { useHydrated } from '../../lib/use-hydrated';
 import { GuideLayout, type TocEntry } from './GuideLayout';
@@ -8,6 +9,7 @@ import { GuideLayout, type TocEntry } from './GuideLayout';
 const TOC: TocEntry[] = [
   { id: 'rechner', title: 'Rechner' },
   { id: 'unterhalt', title: 'Laufende Kosten' },
+  { id: 'finanzierung', title: 'Finanzierung' },
   { id: 'so-wird-gerechnet', title: 'So wird gerechnet' },
   { id: 'werte', title: 'Wo stehen die Werte?' },
   { id: 'elektro', title: 'Elektroautos' },
@@ -72,6 +74,14 @@ export function TaxGuidePage() {
         initial={prefill.initial}
         listingRegistration={prefill.hint}
       />
+
+      <h2 id="finanzierung">Finanzierung durchrechnen</h2>
+      <p>
+        Finanzierst du das Auto, rechnest du hier mit den Zahlen aus dem Angebot die Monatsrate und
+        die Kreditkosten aus. Zinsen und Gebühren sind Kosten, die zu den laufenden Kosten
+        dazukommen; die Tilgung ist der Kaufpreis, nur in Raten.
+      </p>
+      <Financing />
 
       <h2 id="so-wird-gerechnet">So wird gerechnet</h2>
       <p>Maßgeblich ist das Datum der Erstzulassung (§ 9 Kraftfahrzeugsteuergesetz):</p>

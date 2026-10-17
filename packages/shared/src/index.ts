@@ -28,3 +28,4 @@ export * from './listing-text';
 export * from './car-log';
 export * from './monthly-costs';
 export * from './reminders';
+export * from './financing';

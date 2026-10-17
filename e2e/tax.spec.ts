@@ -118,3 +118,33 @@ test('typing a malformed fragment does not break the page', async ({ page }) => 
   await expect(page.getByRole('heading', { level: 1 })).toBeVisible();
   expect(errors).toEqual([]);
 });
+
+test('the financing calculator works with the figures of an offer', async ({ page }) => {
+  await page.goto('/kfz-steuer-rechner#finanzierung');
+  const section = page
+    .locator('.tax-calculator')
+    .filter({ has: page.getByLabel('Kreditbetrag in €') });
+  // The page is prerendered: a value typed before hydration is lost.
+  await expect(async () => {
+    await section.getByLabel('Kreditbetrag in €').fill('15.000');
+    await expect(section.getByLabel('Kreditbetrag in €')).toHaveValue('15.000', { timeout: 1_000 });
+  }).toPass();
+  await section.getByLabel('Effektiver Jahreszins in %').fill('5,9');
+  await section.getByLabel('Laufzeit in Monaten').fill('48');
+  // (1 + 5.9 %)^(1/12) − 1 per month: about 350.60 € a month.
+  await expect(section.getByText(/350,\d\d\s€\s*im Monat/)).toBeVisible();
+  await expect(section.getByText(/Kreditkosten insgesamt/)).toBeVisible();
+
+  await section.getByLabel('Schlussrate in €').fill('20.000');
+  await expect(
+    section.getByText('Die Schlussrate muss kleiner als der Kreditbetrag sein.'),
+  ).toBeVisible();
+  // A field that is not a number means no result, not a result without it.
+  await section.getByLabel('Schlussrate in €').fill('5.000 €');
+  await expect(section.getByText('Bitte gib nur eine Zahl ein.')).toBeVisible();
+  await expect(section.getByText(/im Monat/)).toHaveCount(0);
+  await section.getByLabel('Schlussrate in €').fill('5.000');
+  await expect(
+    section.getByText(/Darin ist die Schlussrate von 5\.000\s€ enthalten/),
+  ).toBeVisible();
+});
