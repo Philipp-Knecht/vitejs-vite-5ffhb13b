@@ -29,6 +29,7 @@ PRs, **L** = mehrere Wochen.
 | 3.2 | Erinnerungen per E-Mail und Kalenderdatei: HU, Inspektion, Bremsflüssigkeit, Reifen (Pro) | #33       |
 | 5.4 | Ratgeber (Teil 1): Auto ummelden, Rückrufe prüfen, Autokosten im Monat                    | #34       |
 | 1.5 | Finanzierungsrechner (kostenlos) und Kreditkosten im Vergleich der Kosten pro Monat (Pro) | #35       |
+| 3.2 | Erinnerung an die HU per E-Mail auch ohne Pro                                             | #36       |
 | 5.3 | Affiliate-Link zum Vergleich von Kfz-Versicherungen in drei Ratgebern (ohne Pro)          | dieser PR |
 
 ## Arbeitsweise je Feature
@@ -81,7 +82,7 @@ PRs, **L** = mehrere Wochen.
 | #       | Feature                                                                                                                                                                      | Aufwand | Plan                          | Anmerkung                                                         |
 | ------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- | ----------------------------- | ----------------------------------------------------------------- |
 | 3.1     | Mein Auto: gekauftes Angebot übernehmen (Modell, Generation, Erstzulassung, Kilometerstand)                                                                                  | M       | Kostenlos (1) / Pro (mehrere) | neues Datenmodell + Migration                                     |
-| 3.2     | Erinnerungen an HU, Inspektion, Reifenwechsel, Bremsflüssigkeit (E-Mail, `.ics`)                                                                                             | M       | Pro                           | ohne Anwalt, nach gründlicher Recherche (Entscheidung 15.10.2026) |
+| 3.2     | Erinnerungen an HU, Inspektion, Reifenwechsel, Bremsflüssigkeit (E-Mail, `.ics`)                                                                                             | M       | Pro (HU kostenlos)            | ohne Anwalt, nach gründlicher Recherche (Entscheidung 15.10.2026) |
 | 3.3     | Digitales Serviceheft und Kostenbuch (optional Belege)                                                                                                                       | M–L     | Pro                           | ohne Belege gebaut; Belege brauchen Speicher, Kosten und AVV      |
 | ~~3.4~~ | ~~„Darauf solltest du bei deinem Auto achten“ (Schwachstellen nach Laufleistung)~~                                                                                           | –       | –                             | gestrichen (15.10.2026)                                           |
 | 3.5     | Wiederverkauf: Inseratstext-Generator, Verkaufs-Checkliste, Ab-/Ummeldung                                                                                                    | M       | Pro                           | Regeln zuerst, KI optional                                        |
