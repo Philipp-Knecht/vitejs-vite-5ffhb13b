@@ -33,6 +33,18 @@ const optionalString = z
   .optional()
   .transform((value) => (value ? value : undefined));
 
+/** A partner link as given, when it is a plain https:// URL; it ends up in an href. */
+function affiliateUrl(value: string): string | null {
+  if (value.length > 1000) return null;
+  try {
+    const url = new URL(value);
+    if (url.protocol !== 'https:' || url.username || url.password) return null;
+    return url.href;
+  } catch {
+    return null;
+  }
+}
+
 const EnvSchema = z
   .object({
     NODE_ENV: z.enum(['development', 'test', 'production']).default('development'),
@@ -123,6 +135,14 @@ const EnvSchema = z
       .regex(/^\d{6,20}$/, 'must be the numeric ad unit ID')
       .optional(),
 
+    /**
+     * Partner link to a car insurance comparison (affiliate program), shown in
+     * the guides to visitors without Pro. A plain link: no script, no pixel.
+     */
+    AFFILIATE_CAR_INSURANCE_URL: optionalString,
+    /** Who runs that comparison, named next to the link, e.g. „Tarifcheck (TARIFCHECK24 GmbH)“. */
+    AFFILIATE_CAR_INSURANCE_NAME: optionalString,
+
     ANALYTICS_ENABLED: booleanString.default(true),
     SERVE_WEB: booleanString.optional(),
     WEB_DIST_DIR: optionalString,
@@ -154,6 +174,17 @@ const EnvSchema = z
         'OPENAI_API_KEY',
         'OPENAI_API_KEY and OPENAI_MODEL are required for AI_PROVIDER=openai',
       );
+    }
+    if (env.AFFILIATE_CAR_INSURANCE_URL || env.AFFILIATE_CAR_INSURANCE_NAME) {
+      if (!env.AFFILIATE_CAR_INSURANCE_URL || !env.AFFILIATE_CAR_INSURANCE_NAME)
+        issue(
+          'AFFILIATE_CAR_INSURANCE_URL',
+          'AFFILIATE_CAR_INSURANCE_URL and AFFILIATE_CAR_INSURANCE_NAME must be set together',
+        );
+      else if (!affiliateUrl(env.AFFILIATE_CAR_INSURANCE_URL))
+        issue('AFFILIATE_CAR_INSURANCE_URL', 'must be an https:// link without user name');
+      if ((env.AFFILIATE_CAR_INSURANCE_NAME?.length ?? 0) > 100)
+        issue('AFFILIATE_CAR_INSURANCE_NAME', 'must be at most 100 characters');
     }
     if (env.EMAIL_TRANSPORT === 'smtp' && (!env.SMTP_URL || !env.EMAIL_FROM)) {
       issue('SMTP_URL', 'SMTP_URL and EMAIL_FROM are required for EMAIL_TRANSPORT=smtp');
@@ -253,6 +284,8 @@ export interface AppConfig {
   };
   /** Google AdSense; `slot` null = only verification (ads.txt, meta tag), no ads yet. */
   adsense: { client: string; slot: string | null } | null;
+  /** Affiliate link to a car insurance comparison; null = none. */
+  affiliateCarInsurance: { url: string; name: string } | null;
   analyticsEnabled: boolean;
   serveWeb: boolean;
   webDistDir: string;
@@ -393,6 +426,13 @@ export function loadConfig(source: NodeJS.ProcessEnv = process.env): AppConfig {
     adsense: env.ADSENSE_CLIENT
       ? { client: env.ADSENSE_CLIENT, slot: env.ADSENSE_SLOT ?? null }
       : null,
+    affiliateCarInsurance:
+      env.AFFILIATE_CAR_INSURANCE_URL && env.AFFILIATE_CAR_INSURANCE_NAME
+        ? {
+            url: affiliateUrl(env.AFFILIATE_CAR_INSURANCE_URL)!,
+            name: env.AFFILIATE_CAR_INSURANCE_NAME,
+          }
+        : null,
     analyticsEnabled: env.ANALYTICS_ENABLED,
     serveWeb: env.SERVE_WEB ?? production,
     webDistDir: env.WEB_DIST_DIR ?? path.resolve(apiRoot, '../web/dist'),
@@ -416,6 +456,7 @@ export function describeConfig(config: AppConfig): Record<string, unknown> {
     billing: config.stripe ? 'stripe' : 'not_configured',
     ads: config.adsense ? (config.adsense.slot ? 'adsense' : 'adsense_verification_only') : 'none',
     email: config.email.transport,
+    affiliateCarInsurance: config.affiliateCarInsurance !== null,
     analytics: config.analyticsEnabled,
     serveWeb: config.serveWeb,
   };

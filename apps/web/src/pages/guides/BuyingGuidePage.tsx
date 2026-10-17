@@ -1,4 +1,5 @@
 import { Link } from 'react-router';
+import { InsuranceComparisonLink } from '../../components/InsuranceComparisonLink';
 import { GuideLayout, type TocEntry } from './GuideLayout';
 
 const TOC: TocEntry[] = [
@@ -244,6 +245,7 @@ export function BuyingGuidePage() {
         Fahr nicht mit den Kennzeichen und der Versicherung des Verkäufers weg, ohne das genau
         abzusprechen. Sauberer ist ein Kurzzeitkennzeichen oder die Ummeldung vor der Abholung.
       </p>
+      <InsuranceComparisonLink placement="guide_buying" />
 
       <h2 id="betrug">11. Betrugsmaschen erkennen</h2>
       <ul>

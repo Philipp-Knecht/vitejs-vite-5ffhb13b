@@ -78,6 +78,9 @@ const server = spawn(process.execPath, [path.join(root, 'apps/api/dist/server.js
     VITE_IMPRINT_ADDRESS: 'Musterstraße 1|12345 Musterstadt',
     VITE_CONTACT_EMAIL: 'kontakt@kaufcheck.example',
     VITE_CONTACT_PHONE: '+49 30 1234567',
+    // A synthetic partner link; nothing is fetched from it.
+    AFFILIATE_CAR_INSURANCE_URL: 'https://partner.example/kfz-vergleich?pid=e2e',
+    AFFILIATE_CAR_INSURANCE_NAME: 'Beispielportal (Beispiel GmbH)',
   },
 });
 

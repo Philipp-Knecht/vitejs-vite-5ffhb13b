@@ -1,4 +1,5 @@
 import { Link } from 'react-router';
+import { InsuranceComparisonLink } from '../../components/InsuranceComparisonLink';
 import { GuideLayout, type TocEntry } from './GuideLayout';
 
 const TOC: TocEntry[] = [
@@ -67,6 +68,7 @@ export function RegistrationGuidePage() {
         Hast du noch Kfz-Steuerschulden von 5 € oder mehr, darf die Zulassungsbehörde das Auto nicht
         auf dich zulassen (§ 13 Abs. 2 Kraftfahrzeugsteuergesetz).
       </p>
+      <InsuranceComparisonLink placement="guide_registration" />
 
       <h2 id="online">Online ummelden mit i-Kfz</h2>
       <p>

@@ -67,7 +67,7 @@ export function ImprintPage() {
   );
 }
 
-const PRIVACY_POLICY_DATE = '16. Oktober 2026';
+const PRIVACY_POLICY_DATE = '17. Oktober 2026';
 const AI_PROVIDER_NAMES = { anthropic: 'Anthropic', openai: 'OpenAI' } as const;
 
 /**
@@ -87,6 +87,7 @@ export function PrivacyPage() {
   const aiProvider = features?.aiProvider ? AI_PROVIDER_NAMES[features.aiProvider] : null;
   const emailProvider = config?.privacy.emailProvider ?? null;
   const ads = config?.ads ?? null;
+  const insurancePartner = config?.affiliates.carInsurance ?? null;
 
   return (
     <div className="container page page--narrow prose">
@@ -427,6 +428,23 @@ export function PrivacyPage() {
             </a>
             ; Informationen zu den Werbediensten von Google stehen unter{' '}
             <a href="https://business.safety.google/privacy/">business.safety.google/privacy</a>.
+          </p>
+        </>
+      )}
+
+      {insurancePartner && (
+        <>
+          <h2>Affiliate-Links</h2>
+          <p>
+            In einigen Ratgebern steht für Besucher ohne KaufCheck Pro ein Link zum Vergleich von
+            Kfz-Versicherungen bei {insurancePartner.name}, gekennzeichnet als Anzeige. Es ist ein
+            einfacher Link mit unserer Partnerkennung: Beim Aufruf unserer Seiten lädt dein Browser
+            nichts vom Partner, und wir geben keine Daten über dich weiter. Erst wenn du den Link
+            anklickst, öffnet sich die Seite des Partners; sie erfährt dabei, dass du von KaufCheck
+            kommst, und kann mit Cookies erfassen, ob über den Link ein Vertrag zustande kommt.
+            Dafür ist der Partner verantwortlich; es gilt seine Datenschutzerklärung.
+            {features?.analytics !== false &&
+              ' Klicks auf den Link zählen wir ohne Angaben zur Person in der Nutzungsstatistik.'}
           </p>
         </>
       )}
