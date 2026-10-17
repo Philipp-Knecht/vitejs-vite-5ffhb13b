@@ -87,8 +87,8 @@ export function PrivacyPage() {
   const aiProvider = features?.aiProvider ? AI_PROVIDER_NAMES[features.aiProvider] : null;
   const emailProvider = config?.privacy.emailProvider ?? null;
   const ads = config?.ads ?? null;
-  const insurancePartner = config?.affiliates.carInsurance ?? null;
-  // A configuration cached before ads sold directly existed has no `sponsors`.
+  // A configuration cached before these fields existed (HTTP cache, offline copy) lacks them.
+  const insurancePartner = config?.affiliates?.carInsurance ?? null;
   const sponsorAds = config?.sponsors?.configured ?? false;
 
   return (
