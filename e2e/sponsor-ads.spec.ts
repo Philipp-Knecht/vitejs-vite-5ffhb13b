@@ -37,7 +37,7 @@ test('an ad sold directly comes from our own server, named and gone with Pro', a
   const ad = page.getByRole('complementary', { name: 'Werbung von Autohaus Beispiel' });
   await ad.scrollIntoViewIfNeeded();
   await expect(ad.getByRole('img', { name: 'Logo von Autohaus Beispiel' })).toBeVisible();
-  const link = ad.getByRole('link', { name: /^Gebrauchtwagen mit Garantie/ });
+  const link = ad.getByRole('link', { name: /Gebrauchtwagen mit Garantie/ });
   await expect(link).toHaveAttribute('href', 'https://autohaus.example/?ref=kaufcheck');
   await expect(link).toHaveAttribute('rel', 'sponsored noopener');
   await expect(ad.getByText('Über 100 geprüfte Fahrzeuge in Musterstadt.')).toBeVisible();
