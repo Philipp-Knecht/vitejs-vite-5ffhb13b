@@ -87,7 +87,8 @@ export function PrivacyPage() {
   const aiProvider = features?.aiProvider ? AI_PROVIDER_NAMES[features.aiProvider] : null;
   const emailProvider = config?.privacy.emailProvider ?? null;
   const ads = config?.ads ?? null;
-  const insurancePartner = config?.affiliates.carInsurance ?? null;
+  // A configuration cached before this field existed (HTTP cache, offline copy) lacks it.
+  const insurancePartner = config?.affiliates?.carInsurance ?? null;
 
   return (
     <div className="container page page--narrow prose">
