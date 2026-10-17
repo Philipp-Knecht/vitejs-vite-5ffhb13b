@@ -3,6 +3,7 @@ import {
   dueOccurrence,
   REMINDER_KINDS,
   REMINDER_NEEDS_MONTH,
+  reminderAllowed,
   reminderMonthProblem,
   reminderPlan,
   type CarRemindersResponse,
@@ -60,9 +61,10 @@ interface ReminderRow {
   lastSentKey: string | null;
 }
 
-function toDto(kind: ReminderKind, row: ReminderRow | undefined): ReminderDto {
+function toDto(kind: ReminderKind, row: ReminderRow | undefined, editable: boolean): ReminderDto {
   return {
     kind,
+    editable,
     email: row?.email ?? false,
     lastSentKey: row?.lastSentKey ?? null,
     month:
@@ -74,7 +76,8 @@ const invalid = (field: string, message: string) =>
   new AppError('VALIDATION_ERROR', { message, details: { fieldErrors: { [field]: [message] } } });
 
 /**
- * E-mail reminders for the cars in „Mein Auto“ (Pro). An e-mail goes out only
+ * E-mail reminders for the cars in „Mein Auto“ (the HU with any account, the
+ * others with Pro). An e-mail goes out only
  * after the owner switched it on and confirmed the account address, once per
  * due date, with a one-click unsubscribe link (RFC 8058) and no advertising.
  */
@@ -123,6 +126,7 @@ export class ReminderService {
         toDto(
           kind,
           rows.find((row) => row.kind === kind),
+          reminderAllowed(kind, actor.entitlements),
         ),
       ),
       emailAddress: user.email,
@@ -133,7 +137,7 @@ export class ReminderService {
   }
 
   /**
-   * Saves one reminder. Without Pro it can only be switched off. Switching on
+   * Saves one reminder. One that needs Pro can only be switched off without it. Switching on
    * an e-mail reminder before the address is confirmed sends the confirmation link.
    */
   async update(
@@ -150,17 +154,17 @@ export class ReminderService {
     const existing = await this.db.carReminder.findUnique({
       where: { carId_kind: { carId, kind } },
     });
-    const pro = actor.entitlements.reminders;
-    if (!pro && (input.email || !sameMonth(existing, input.month)))
+    const allowed = reminderAllowed(reminderKind, actor.entitlements);
+    if (!allowed && (input.email || !sameMonth(existing, input.month)))
       throw new AppError('PLAN_LIMIT_REACHED', {
-        message: 'Erinnerungen gehören zu KaufCheck Pro. Ausschalten kannst du sie jederzeit.',
+        message: 'Diese Erinnerung gehört zu KaufCheck Pro. Ausschalten kannst du sie jederzeit.',
       });
     if (input.email && !this.available)
       throw new AppError('SERVICE_UNAVAILABLE', {
         message: 'E-Mail-Erinnerungen sind derzeit nicht verfügbar.',
       });
     // A month that was valid when saved may lie in the past by now: only a changed one is checked.
-    if (pro && !sameMonth(existing, input.month)) {
+    if (allowed && !sameMonth(existing, input.month)) {
       const problem = reminderMonthProblem(
         reminderKind,
         input.month,
@@ -168,7 +172,7 @@ export class ReminderService {
       );
       if (problem) throw invalid('month', problem);
     }
-    if (pro) {
+    if (allowed) {
       if (input.email && REMINDER_NEEDS_MONTH.has(reminderKind) && input.month === null)
         throw invalid(
           'month',
@@ -177,7 +181,7 @@ export class ReminderService {
             : 'Bitte gib an, wann die Bremsflüssigkeit zuletzt gewechselt wurde.',
         );
     }
-    const month = pro ? input.month : existingMonth(existing);
+    const month = allowed ? input.month : existingMonth(existing);
     // A reminder that could never send is not switched on.
     if (input.email && (!existing?.email || !sameMonth(existing, input.month))) {
       const huUntil =
@@ -230,9 +234,9 @@ export class ReminderService {
   /** Sends a new confirmation link; `explicit` = the owner asked for it again. */
   async requestConfirmation(actor: Actor): Promise<void> {
     const user = await this.requireUser(actor);
-    if (!actor.entitlements.reminders)
+    if (!actor.entitlements.reminders && !actor.entitlements.huReminder)
       throw new AppError('PLAN_LIMIT_REACHED', {
-        message: 'Erinnerungen gehören zu KaufCheck Pro.',
+        message: 'E-Mail-Erinnerungen sind mit deinem Konto nicht verfügbar.',
       });
     if (user.remindersConfirmedAt !== null) return;
     if (!this.available)
@@ -358,7 +362,10 @@ export class ReminderService {
       const rows = await this.db.carReminder.findMany({
         where: {
           email: true,
-          car: { user: { plan: 'PRO', remindersConfirmedAt: { not: null } } },
+          car: { user: { remindersConfirmedAt: { not: null } } },
+          // As `reminderAllowed` with the plans in plans.ts: the HU with any account, the rest with Pro.
+          // Change both together.
+          OR: [{ kind: 'hu' }, { car: { user: { plan: 'PRO' } } }],
           // Not a Prisma cursor: the last row may change or go while e-mails are sent.
           ...(cursor ? { id: { gt: cursor } } : {}),
         },

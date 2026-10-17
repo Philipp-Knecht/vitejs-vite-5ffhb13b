@@ -41,11 +41,53 @@ async function ownerWithCar(page: Page, pro: boolean): Promise<string> {
   return email;
 }
 
-test('without Pro reminders explain themselves', async ({ page }) => {
-  await ownerWithCar(page, false);
-  await expect(page.getByText('Erinnerungen gehören zu KaufCheck Pro')).toBeVisible();
+test('without Pro the HU reminder works, the others explain themselves', async ({ page }) => {
+  const email = await ownerWithCar(page, false);
+  await expect(page.getByText('An die HU erinnern wir dich kostenlos')).toBeVisible();
   const service = page.getByRole('region', { name: 'Inspektion' });
   await expect(service.getByRole('checkbox', { name: 'Per E-Mail erinnern' })).toBeDisabled();
+  await expect(service.getByText('Diese Erinnerung gehört zu KaufCheck Pro.')).toBeVisible();
+
+  // The month from the badge, as entered in „Mein Auto“.
+  await query(
+    `UPDATE "OwnedCar" SET "huYear" = $1, "huMonth" = 3
+     WHERE "userId" = (SELECT "id" FROM "User" WHERE "email" = $2)`,
+    [new Date().getFullYear() + 1, email],
+  );
+  await page.reload();
+  const hu = page.getByRole('region', { name: 'Hauptuntersuchung (HU)' });
+  await hu.getByRole('checkbox', { name: 'Per E-Mail erinnern' }).check();
+  await hu.getByRole('button', { name: /^Speichern\s*: Hauptuntersuchung/ }).click();
+  await expect(page.getByText(/Eingeschaltet – wir haben dir einen Link an/)).toBeVisible();
+  await expect(page.getByText('Bitte bestätige deine E-Mail-Adresse')).toBeVisible();
+
+  // An inspection reminder kept from an earlier Pro membership is paused, not hidden.
+  await query(
+    `INSERT INTO "CarReminder" ("id", "carId", "kind", "email", "year", "month", "updatedAt")
+     SELECT gen_random_uuid(), c."id", 'service', true, $1, 6, now()
+     FROM "OwnedCar" c JOIN "User" u ON u."id" = c."userId" WHERE u."email" = $2`,
+    [new Date().getFullYear() + 1, email],
+  );
+  await page.reload();
+  await expect(
+    page.getByText(
+      /^Die Erinnerungen an Inspektion, Bremsflüssigkeit und Reifen schicken wir nur mit KaufCheck Pro/,
+    ),
+  ).toBeVisible();
+  const paused = service.getByRole('checkbox', { name: 'Per E-Mail erinnern' });
+  await expect(paused).toBeChecked();
+  await expect(paused).toBeEnabled();
+  await expect(paused).toHaveAccessibleDescription(/^Pausiert: Diese Erinnerung schicken wir nur/);
+  const results = await new AxeBuilder({ page })
+    .include('.reminders')
+    .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa'])
+    .analyze();
+  expect(results.violations.map((violation) => violation.id)).toEqual([]);
+  // Switching it off works without Pro.
+  await paused.uncheck();
+  await service.getByRole('button', { name: /^Speichern\s*: Inspektion$/ }).click();
+  await expect(page.getByText('Erinnerung „Inspektion“ ist ausgeschaltet')).toBeVisible();
+  await expect(paused).toBeDisabled();
 });
 
 test('reminders are switched on, confirmed by link and unsubscribed', async ({ page }) => {

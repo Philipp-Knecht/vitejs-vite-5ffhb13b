@@ -22,8 +22,8 @@ export function InsuranceComparisonLink({ placement }: { placement: AffiliatePla
   const partner = config.data?.affiliates.carInsurance ?? null;
   if (!hydrated || !partner || me.data?.entitlements.showAds !== true) return null;
   return (
-    <aside className="affiliate" aria-labelledby={`${id}-label`} data-placement={placement}>
-      <span className="ad-slot__label" id={`${id}-label`}>
+    <aside className="affiliate" aria-label="Werbung: Affiliate-Link" data-placement={placement}>
+      <span className="ad-slot__label" aria-hidden>
         Werbung
       </span>
       <p className="affiliate__link">

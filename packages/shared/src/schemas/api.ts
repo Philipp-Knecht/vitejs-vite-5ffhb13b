@@ -302,6 +302,8 @@ export const ReminderDtoSchema = z.object({
   month: ReminderMonthSchema.nullable(),
   /** The due date the last e-mail was about (see `dueOccurrence`). */
   lastSentKey: z.string().nullable(),
+  /** False when it needs Pro (see `reminderAllowed`): it can be switched off, not on. */
+  editable: z.boolean(),
 });
 export type ReminderDto = z.infer<typeof ReminderDtoSchema>;
 
@@ -313,7 +315,7 @@ export const CarRemindersResponseSchema = z.object({
   emailConfirmed: z.boolean(),
   /** A confirmation link was sent and is still valid. */
   confirmationPending: z.boolean(),
-  /** False without Pro: reminders can be switched off, not on. */
+  /** False without Pro: only the HU reminder can be switched on (see the items). */
   editable: z.boolean(),
   /** Only after saving: a confirmation link was sent just now. */
   confirmationSent: z.boolean().optional(),

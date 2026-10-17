@@ -171,8 +171,7 @@ export function CarCard({
           </Link>
           {' – '}
           per E-Mail oder als Kalenderdatei: HU, Inspektion, Bremsflüssigkeit und Reifenwechsel.
-          {!reminders && ' Ohne Pro gibt es die Kalenderdatei für die HU.'}
-          {!reminders && <span className="tag tag--pro">Pro</span>}
+          {!reminders && ' Die Erinnerung an die HU ist kostenlos, die übrigen gehören zu Pro.'}
         </p>
       </div>
 

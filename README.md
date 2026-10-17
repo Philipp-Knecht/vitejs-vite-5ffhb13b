@@ -23,7 +23,7 @@ pages and the KBA recall database (`packages/catalog/src/recalls.ts`); KaufCheck
 them itself. Pro members can also prepare the price negotiation: points from the
 listing that apply, their own findings and a factual message to the seller, without suggested
 amounts (`packages/shared/src/negotiation.ts`). After the purchase, „Mein Auto“ (`/mein-auto`, one car free, up to
-ten with Pro) keeps the car in view: next HU from the badge with a calendar file instead of e-mails,
+ten with Pro) keeps the car in view: next HU from the badge with a calendar file and an e-mail reminder,
 the generation's known weaknesses, the recall check and the cost calculator
 (`apps/api/src/application/owned-car-service.ts`, `apps/web/src/features/my-car`). Only what the
 user enters is stored – no FIN, no plate. The web app is installable, and a check can be saved for
@@ -48,7 +48,8 @@ comparison, Pro members put the monthly costs of their saved offers side by side
 workshop from their own figures – KaufCheck has no price or consumption data and assumes none.
 A financing calculator (`packages/shared/src/financing.ts`) computes the monthly rate and the credit costs (interest and fees) from the effective annual rate of an offer; it is free in the cost calculator, and in the
 comparison the credit costs (interest and fees, not the repayment) are added to the monthly costs.
-Pro members can also switch on e-mail reminders per car (`/mein-auto/<id>/erinnerungen`,
+Owners can also switch on e-mail reminders per car (`/mein-auto/<id>/erinnerungen`; the HU
+reminder with any account, the others with Pro;
 `apps/api/src/application/reminder-service.ts`, rules in `packages/shared/src/reminders.ts`): HU,
 inspection, brake fluid and tyres, or a calendar file for each. The account address is confirmed
 by a link first (accounts are not verified at sign-up). A timer in the server process (hourly and two minutes after start) sends what is due,
@@ -415,7 +416,8 @@ or a workshop). `SPONSOR_ADS` is a JSON array, at most 20 entries:
   insurers, prices or recommendations, so it stays a „Tippgeber“ without a licence under § 34d
   GewO. Do not change the text into advice, rankings or a pre-filled form, and do not place it
   next to warnings, legal duties or step-by-step instructions.
-- Partner terms: the Tarifcheck partner program (TARIFCHECK24 GmbH) allows only its own
+- Partner terms (https://www.tarifcheck-partnerprogramm.de/agb/, read on 17.10.2026): the
+  Tarifcheck partner program (TARIFCHECK24 GmbH) allows only its own
   advertising material, unchanged, and names a contract penalty of 1,500 € per violation. Use the
   Kfz-Direktlink from the partner account unchanged, and get the link text and the name approved
   in writing by the partner support before setting the variables.

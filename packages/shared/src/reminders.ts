@@ -1,7 +1,8 @@
 import { fold, icsText } from './hu';
 
 /**
- * E-mail reminders for a car in „Mein Auto“ (Pro). Each reminder is switched
+ * E-mail reminders for a car in „Mein Auto“: the HU with any account, the
+ * others with Pro. Each reminder is switched
  * on by the owner, is sent once per due date, and says only what is due –
  * no advertising (§ 7 UWG): a reminder with promotion would need consent.
  */
@@ -15,6 +16,12 @@ export const REMINDER_LABELS: Record<ReminderKind, string> = {
   brakeFluid: 'Bremsflüssigkeit',
   tyres: 'Reifenwechsel',
 };
+
+/** Whether the owner may switch a reminder on or change it; switching off always works. */
+export const reminderAllowed = (
+  kind: ReminderKind,
+  entitlements: { reminders: boolean; huReminder: boolean },
+) => entitlements.reminders || (kind === 'hu' && entitlements.huReminder);
 
 /** Kinds where the owner enters a month: the next inspection, the last brake fluid change. */
 export const REMINDER_NEEDS_MONTH: ReadonlySet<ReminderKind> = new Set(['service', 'brakeFluid']);

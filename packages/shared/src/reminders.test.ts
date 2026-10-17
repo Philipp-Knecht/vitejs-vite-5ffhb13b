@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import {
   dueOccurrence,
+  reminderAllowed,
   reminderCalendarFile,
   reminderDueMonth,
   reminderMail,
@@ -72,6 +73,16 @@ describe('reminders', () => {
       state: 'scheduled',
       month: { year: 2026, month: 10 },
     });
+  });
+
+  it('allows the HU reminder with any account, the others with Pro', () => {
+    const free = { reminders: false, huReminder: true };
+    const anonymous = { reminders: false, huReminder: false };
+    expect(reminderAllowed('hu', free)).toBe(true);
+    expect(reminderAllowed('service', free)).toBe(false);
+    expect(reminderAllowed('tyres', free)).toBe(false);
+    expect(reminderAllowed('hu', anonymous)).toBe(false);
+    expect(reminderAllowed('brakeFluid', { reminders: true, huReminder: true })).toBe(true);
   });
 
   it('checks the months', () => {
