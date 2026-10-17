@@ -437,12 +437,14 @@ export function PrivacyPage() {
           <h2>Affiliate-Links</h2>
           <p>
             In einigen Ratgebern steht für Besucher ohne KaufCheck Pro ein Link zum Vergleich von
-            Kfz-Versicherungen bei {insurancePartner.name}, gekennzeichnet als Anzeige. Es ist ein
+            Kfz-Versicherungen bei {insurancePartner.name}, gekennzeichnet als Werbung. Es ist ein
             einfacher Link mit unserer Partnerkennung: Beim Aufruf unserer Seiten lädt dein Browser
             nichts vom Partner, und wir geben keine Daten über dich weiter. Erst wenn du den Link
-            anklickst, öffnet sich die Seite des Partners; sie erfährt dabei, dass du von KaufCheck
-            kommst, und kann mit Cookies erfassen, ob über den Link ein Vertrag zustande kommt.
-            Dafür ist der Partner verantwortlich; es gilt seine Datenschutzerklärung.
+            anklickst, öffnet sich die Seite des Partners. Wie bei jedem Seitenaufruf erhält er
+            dabei technisch deine IP-Adresse und erfährt, dass du von KaufCheck kommst; mit Cookies
+            oder ähnlichen Techniken kann er erfassen, ob über den Link ein Vertrag zustande kommt.
+            Für alles, was auf den Seiten des Partners geschieht, ist der Partner selbst
+            verantwortlich, nicht wir; es gelten die Datenschutzhinweise, die dort genannt sind.
             {features?.analytics !== false &&
               ' Klicks auf den Link zählen wir ohne Angaben zur Person in der Nutzungsstatistik.'}
           </p>

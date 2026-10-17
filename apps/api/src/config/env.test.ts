@@ -44,6 +44,8 @@ describe('loadConfig', () => {
       'javascript:alert(1)',
       'https://user:pass@partner.example/',
       'partner.example/kfz',
+      'https://partner.example/k fz',
+      'https://partner.example/\u202Ekfz',
     ])
       expect(() =>
         loadConfig({
@@ -62,6 +64,21 @@ describe('loadConfig', () => {
         AFFILIATE_CAR_INSURANCE_NAME: 'x'.repeat(101),
       }),
     ).toThrow(ConfigError);
+    expect(() =>
+      loadConfig({
+        ...BASE,
+        AFFILIATE_CAR_INSURANCE_URL: 'https://partner.example/',
+        AFFILIATE_CAR_INSURANCE_NAME: 'Portal\u202E',
+      }),
+    ).toThrow(ConfigError);
+    // Kept exactly as given: partner programs forbid changing their links.
+    expect(
+      loadConfig({
+        ...BASE,
+        AFFILIATE_CAR_INSURANCE_URL: 'https://partner.example?pid={id}',
+        AFFILIATE_CAR_INSURANCE_NAME: 'Portal',
+      }).affiliateCarInsurance?.url,
+    ).toBe('https://partner.example?pid={id}');
   });
 
   it('uses safe development defaults', () => {

@@ -361,15 +361,21 @@ local testing: `stripe listen --forward-to localhost:3000/api/billing/webhook`.
 
 ## Affiliate link
 
-- With `AFFILIATE_CAR_INSURANCE_URL` (an `https://` partner link) and
-  `AFFILIATE_CAR_INSURANCE_NAME` (who runs the comparison, e.g. „Tarifcheck (TARIFCHECK24 GmbH)“),
-  three guides (buying, registration, monthly costs) show a link „Kfz-Versicherungen vergleichen
-  bei …*“ to visitors without Pro, labelled „Anzeige“ and explained as an affiliate link. The
-  privacy policy gets a section „Affiliate-Links“.
+- With `AFFILIATE_CAR_INSURANCE_URL` (an `https://` partner link, at most 1,000 characters, used
+  exactly as given) and `AFFILIATE_CAR_INSURANCE_NAME` (the partner whose site the link opens, at
+  most 100 characters, e.g. „Tarifcheck.de“), three guides show a link „Kfz-Versicherungen bei …
+  vergleichen*“ to visitors without Pro: at the end of the budget section (buying guide), after
+  the fees (registration) and after the saving tips (monthly costs). It is labelled „Werbung“ and
+  explained as an affiliate link; the privacy policy gets a section „Affiliate-Links“.
 - It is a plain link (`rel="sponsored noopener"`): no partner script, pixel or banner is loaded,
   and nothing is handed over. KaufCheck only points to the general comparison and names no
   insurers, prices or recommendations, so it stays a „Tippgeber“ without a licence under § 34d
-  GewO. Do not change the text into advice, rankings or a pre-filled form.
+  GewO. Do not change the text into advice, rankings or a pre-filled form, and do not place it
+  next to warnings, legal duties or step-by-step instructions.
+- Partner terms: the Tarifcheck partner program (TARIFCHECK24 GmbH) allows only its own
+  advertising material, unchanged, and names a contract penalty of 1,500 € per violation. Use the
+  Kfz-Direktlink from the partner account unchanged, and get the link text and the name approved
+  in writing by the partner support before setting the variables.
 
 ## Analytics configuration
 
