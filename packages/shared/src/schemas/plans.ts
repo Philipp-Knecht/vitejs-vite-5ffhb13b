@@ -27,6 +27,8 @@ export const EntitlementsSchema = z.object({
   monthlyCosts: z.boolean(),
   /** E-mail reminders (HU, inspection, brake fluid, tyres) and calendar files for them. */
   reminders: z.boolean(),
+  /** The HU e-mail reminder alone; with an account also without Pro. */
+  huReminder: z.boolean(),
   photoAnalysis: z.boolean(),
   showAds: z.boolean(),
 });

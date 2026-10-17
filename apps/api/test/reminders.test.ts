@@ -98,10 +98,10 @@ describe('Reminders', () => {
     expect(response.statusCode).toBe(200);
     expect(response.json<CarRemindersResponse>()).toEqual({
       items: [
-        { kind: 'hu', email: false, month: null, lastSentKey: null },
-        { kind: 'service', email: false, month: null, lastSentKey: null },
-        { kind: 'brakeFluid', email: false, month: null, lastSentKey: null },
-        { kind: 'tyres', email: false, month: null, lastSentKey: null },
+        { kind: 'hu', email: false, month: null, lastSentKey: null, editable: true },
+        { kind: 'service', email: false, month: null, lastSentKey: null, editable: true },
+        { kind: 'brakeFluid', email: false, month: null, lastSentKey: null, editable: true },
+        { kind: 'tyres', email: false, month: null, lastSentKey: null, editable: true },
       ],
       emailAddress: account.email,
       emailConfirmed: false,
@@ -310,20 +310,37 @@ describe('Reminders', () => {
     expect((await anonymous.get(path(car.id))).statusCode).toBe(401);
   });
 
-  it('is part of Pro; after Pro ends reminders stop and can be switched off', async () => {
+  it('sends the HU reminder without Pro; the others need Pro and stop when it ends', async () => {
+    const huSubject = 'Erinnerung: HU für Volkswagen Golf bis Ende November 2026';
     const free = await owner('FREE');
-    const denied = await free.client.put(path(free.car.id, 'hu'), on());
+    const list = (await free.client.get(path(free.car.id))).json<CarRemindersResponse>();
+    expect(list.editable).toBe(false);
+    expect(list.items.map((item) => [item.kind, item.editable])).toEqual([
+      ['hu', true],
+      ['service', false],
+      ['brakeFluid', false],
+      ['tyres', false],
+    ]);
+    const denied = await free.client.put(path(free.car.id, 'tyres'), on());
     expect(denied.statusCode).toBe(403);
     expect(errorOf(denied).code).toBe('PLAN_LIMIT_REACHED');
-    expect((await free.client.get(path(free.car.id))).json<CarRemindersResponse>().editable).toBe(
-      false,
-    );
+    await confirmed(free.client, free.car.id);
+    expect(await built.services.reminders.sendDue()).toEqual({
+      remindersSent: 1,
+      remindersFailed: 0,
+    });
+    expect(email.sent.map((mail) => mail.subject)).toEqual([huSubject]);
+    email.sent.length = 0;
 
     const { client, car, account } = await owner();
     await confirmed(client, car.id);
     await client.put(path(car.id, 'service'), on({ year: 2026, month: 10 }));
     await built.services.db.user.update({ where: { id: account.id }, data: { plan: 'FREE' } });
-    expect((await built.services.reminders.sendDue()).remindersSent).toBe(0);
+    expect(await built.services.reminders.sendDue()).toEqual({
+      remindersSent: 1,
+      remindersFailed: 0,
+    });
+    expect(email.sent.map((mail) => mail.subject)).toEqual([huSubject]);
     // Changing the month needs Pro, switching off does not.
     const changed = await client.put(path(car.id, 'service'), {
       email: false,
@@ -341,6 +358,7 @@ describe('Reminders', () => {
       email: false,
       month: { year: 2026, month: 10 },
       lastSentKey: null,
+      editable: false,
     });
   });
 
