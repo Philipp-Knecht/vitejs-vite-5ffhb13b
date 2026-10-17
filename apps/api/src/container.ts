@@ -57,6 +57,7 @@ export interface Services {
   contracts: ContractService;
   /** Photos only come with retrieved listings, so pasted text never gets a photo analysis. */
   photoAnalysisAvailable: boolean;
+  now: () => Date;
 }
 
 export interface ServiceOverrides {
@@ -187,5 +188,6 @@ export function createServices(
     email,
     contracts,
     photoAnalysisAvailable,
+    now,
   };
 }
