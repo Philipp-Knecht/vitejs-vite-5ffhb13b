@@ -128,6 +128,29 @@ describe('offer signals', () => {
     expect(found.soldAs.map((s) => s.kind).sort()).toEqual(['bastler', 'export']);
   });
 
+  it('finds the warning signs for scams the police names', () => {
+    const kinds = (text: string) => signals(text).scamSignals.map((s) => s.kind);
+    expect(kinds('Zahlung per Vorkasse.')).toEqual(['prepayment']);
+    expect(kinds('Bitte 500 € Anzahlung zur Reservierung.')).toEqual(['prepayment']);
+    expect(kinds('Der Betrag ist im Voraus zu überweisen.')).toEqual(['prepayment']);
+    expect(kinds('Ich bin derzeit beruflich in England.')).toEqual(['abroad']);
+    expect(kinds('Ich wohne leider im Ausland.')).toEqual(['abroad']);
+    expect(kinds('Die Lieferung erfolgt über eine Spedition.')).toEqual(['shipping']);
+    expect(kinds('Abwicklung über einen Treuhandservice.')).toEqual(['escrow']);
+    expect(kinds('Kontakt nur per E-Mail, keine Anrufe.')).toEqual(['offPlatform']);
+    expect(kinds('Bitte nur über WhatsApp schreiben.')).toEqual(['offPlatform']);
+    // Ordinary private and dealer listings stay quiet.
+    for (const text of [
+      'Keine Vorkasse, Barzahlung bei Abholung.',
+      'Finanzierung ohne Anzahlung möglich. Lieferung bundesweit möglich.',
+      'Überführung gegen Aufpreis. Export möglich.',
+      'Ich wohne in Hamburg, Besichtigung jederzeit.',
+      'Bei Fragen gerne per E-Mail oder telefonisch.',
+      'Transporter mit Anhängerkupplung.',
+    ])
+      expect(kinds(text), text).toEqual([]);
+  });
+
   it('finds commercial wording and private-sale claims', () => {
     expect(
       signals('Finanzierung möglich, 12 Monate Gewährleistung.').commercialIndicators,

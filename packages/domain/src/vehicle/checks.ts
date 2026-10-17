@@ -250,6 +250,18 @@ export function collectChecks(ctx: VehicleRuleContext): CheckItem[] {
     );
   }
 
+  if (ctx.signals.scamSignals.length > 0) {
+    specific.push(
+      check(
+        'report_listing',
+        'Im Zweifel: Inserat melden',
+        'Kommt dir das Angebot verdächtig vor, melde das Inserat über die Meldefunktion im Inserat beim Marktplatz und verzichte im Zweifel auf das Auto. Hast du schon Geld überwiesen, wende dich sofort an deine Bank und erstatte Anzeige bei der Polizei.',
+        'Warnzeichen im Inserat',
+        'listing_fact',
+      ),
+    );
+  }
+
   const general: CheckItem[] = [
     check(
       'documents',

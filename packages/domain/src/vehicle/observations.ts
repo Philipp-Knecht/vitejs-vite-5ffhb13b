@@ -7,7 +7,7 @@ import {
 import { formatEuro, formatKm, formatNumber, formatYearMonth, joinGerman, plural } from '../format';
 import { compareYearMonth } from '../text/dates';
 import { parsePower } from '../text/numbers';
-import type { DamageCategory, DamageMention } from './description-signals';
+import type { DamageCategory, DamageMention, ScamSignalKind } from './description-signals';
 import type { VehicleRuleContext } from './rule-context';
 import { DIESEL_TOKEN, PETROL_TOKEN } from './vocabulary';
 
@@ -730,6 +730,66 @@ function missingInformationRules(ctx: VehicleRuleContext): Observation[] {
   return result;
 }
 
+/**
+ * Warning signs for scams, as the police describes them. Phrased as advice on
+ * how to pay and meet safely – never as a claim that the seller cheats.
+ */
+const SCAM_OBSERVATIONS: Record<
+  ScamSignalKind,
+  { id: string; title: string; detail: string; severity: Severity }
+> = {
+  prepayment: {
+    id: 'payment_in_advance',
+    title: 'Zahlung vor der Übergabe im Inserat',
+    detail:
+      'Im Inserat ist von Vorkasse, einer Anzahlung oder einer Zahlung im Voraus die Rede. Die Polizei rät, beim Autokauf im Internet nie in Vorleistung zu gehen: Zahl erst bei der Übergabe – gegen Auto, Schlüssel und Papiere.',
+    severity: 'warning',
+  },
+  escrow: {
+    id: 'escrow_service',
+    title: 'Treuhanddienst im Inserat',
+    detail:
+      'Laut Polizei und ADAC geben sich bei Betrug mit Gebrauchtwagen oft angebliche Treuhanddienste mit gefälschten Websites als sichere Zahlungsabwicklung aus. Zahl nicht über einen Dienst, den der Verkäufer vorschlägt; üblich ist die Bezahlung bei der Übergabe.',
+    severity: 'warning',
+  },
+  abroad: {
+    id: 'seller_abroad',
+    title: 'Verkäufer nach eigener Angabe im Ausland',
+    detail:
+      'Laut Inserat ist der Verkäufer nicht vor Ort. Die Polizei nennt Verkäufer, die im Ausland sein wollen und Vorkasse oder eine Zahlung über Dritte verlangen, als typisches Muster bei Betrug. Kauf nur nach einer Besichtigung und zahl bei der Übergabe.',
+    severity: 'notice',
+  },
+  shipping: {
+    id: 'shipping_offered',
+    title: 'Lieferung über eine Spedition im Inserat',
+    detail:
+      'Kauf kein Auto ungesehen und zahl nichts im Voraus an eine Spedition oder ein Transportunternehmen: Laut Polizei geben sich bei Betrug oft angebliche Speditionen als Treuhänder aus. Üblich sind Besichtigung, Probefahrt und Bezahlung bei der Übergabe.',
+    severity: 'notice',
+  },
+  offPlatform: {
+    id: 'contact_off_platform',
+    title: 'Kontakt nur per E-Mail oder Messenger',
+    detail:
+      'Laut Inserat möchte der Verkäufer nur per E-Mail oder Messenger Kontakt. Die Polizei nennt das als Warnzeichen. Ruf vor der Besichtigung an und lass dich nicht von der Plattform weglocken.',
+    severity: 'notice',
+  },
+};
+
+function scamRules(ctx: VehicleRuleContext): Observation[] {
+  return ctx.signals.scamSignals.map((signal) => {
+    const rule = SCAM_OBSERVATIONS[signal.kind];
+    return observation(
+      rule.id,
+      rule.title,
+      rule.detail,
+      rule.severity,
+      'listing_fact',
+      [],
+      [signal.quote],
+    );
+  });
+}
+
 const SEVERITY_ORDER: Record<Severity, number> = { warning: 0, notice: 1, info: 2 };
 
 /** Evidence-based observations ("Auffälligkeiten"), most important first. */
@@ -743,6 +803,7 @@ export function collectObservations(ctx: VehicleRuleContext): Observation[] {
     ...priceRules(ctx),
     ...damageRules(ctx),
     ...offerRules(ctx),
+    ...scamRules(ctx),
     ...descriptionRules(ctx),
     ...missingInformationRules(ctx),
   ];

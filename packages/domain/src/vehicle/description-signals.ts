@@ -50,6 +50,9 @@ export type PositiveKey =
   | 'german_vehicle'
   | 'second_tire_set';
 
+/** Arrangements the police names as warning signs for scams with used cars. */
+export type ScamSignalKind = 'prepayment' | 'abroad' | 'shipping' | 'escrow' | 'offPlatform';
+
 export interface DescriptionSignals {
   mileageMentions: (Quoted & { km: number })[];
   registrationMentions: (Quoted & { value: YearMonth })[];
@@ -82,6 +85,8 @@ export interface DescriptionSignals {
   batteryInfo: Quoted | null;
   /** A vehicle identification number (FIN) in the listing. */
   vinMention: Quoted | null;
+  /** At most one quote per kind. */
+  scamSignals: (Quoted & { kind: ScamSignalKind })[];
 }
 
 interface Match {
@@ -376,6 +381,38 @@ const VAGUE: readonly RegExp[] = [
   /\bbei\s+(?:fragen|interesse)\s+(?:einfach\s+)?(?:melden|schreiben|anrufen)\b/i,
 ];
 
+/**
+ * Wording that points to the arrangements behind most scams with used cars:
+ * payment before the handover, a seller who is abroad, delivery by a
+ * forwarder, an escrow service, contact only outside the marketplace
+ * (Polizeiliche Kriminalprävention, „Vorsicht bei Vorkasse“ and
+ * „Verdächtiges Inserat“). Dealers' delivery offers and financing down
+ * payments are left out on purpose.
+ */
+const SCAM_SIGNALS: readonly { kind: ScamSignalKind; pattern: RegExp }[] = [
+  {
+    kind: 'prepayment',
+    pattern:
+      /\bvorkasse\b|\banzahlung\s+(?:zur\s+reservierung|per\s+überweisung|vorab)\b|\b(?:vorab|im\s+voraus)\s+(?:zu\s+)?(?:überweis\w*|bezahl\w*)\b|\breservierungs(?:gebühr|anzahlung)\b/i,
+  },
+  {
+    kind: 'abroad',
+    pattern:
+      /\b(?:bin|wohne|lebe|arbeite)\s+(?:(?:derzeit|zurzeit|momentan|aktuell|beruflich|leider|jetzt)\s+)*(?:im\s+ausland|in\s+(?:england|großbritannien|irland|schottland|spanien|portugal|frankreich|italien|griechenland|polen|rumänien|bulgarien|dänemark|schweden|norwegen|finnland|belgien|dubai|der\s+türkei|den\s+niederlanden|den\s+usa))\b|\b(?:beruflich|dienstlich)\s+ins\s+ausland\b|\bins\s+ausland\s+(?:gezogen|umgezogen|versetzt)\b/i,
+  },
+  {
+    kind: 'shipping',
+    pattern:
+      /\bspedition\b|\btransport(?:unternehmen|firma|dienst)\b|\bverschiff\w*\b|\b(?:wird|werde)\s+(?:ihnen|dir|euch)\s+(?:das\s+(?:auto|fahrzeug)\s+)?(?:geliefert|zugestellt|gebracht)\b/i,
+  },
+  { kind: 'escrow', pattern: /\btreuhand\w*\b|\bescrow\b/i },
+  {
+    kind: 'offPlatform',
+    pattern:
+      /\bnur\s+(?:per|über|via|auf)\s+(?:e-?mail|mail|whats\s?app|telegram|sms)\b|\b(?:kontakt|anfragen)\s+(?:bitte\s+)?(?:nur\s+)?(?:per|über|via)\s+(?:whats\s?app|telegram)\b|\bkeine\s+(?:anrufe|telefonate)\b/i,
+  },
+];
+
 const POSITIVES: readonly { key: PositiveKey; pattern: RegExp }[] = [
   { key: 'non_smoker', pattern: /\bnichtraucher(?:fahrzeug|auto|wagen)?\b/i },
   {
@@ -661,6 +698,11 @@ export function extractDescriptionSignals(
 
   const vin = findVin(combined);
 
+  const scamSignals = SCAM_SIGNALS.flatMap(({ kind, pattern }) => {
+    const match = firstUnnegated(pattern, combined);
+    return match ? [{ kind, quote: quote(combined, match) }] : [];
+  });
+
   return {
     mileageMentions: extractMileage(text),
     registrationMentions,
@@ -694,5 +736,6 @@ export function extractDescriptionSignals(
     vinMention: vin
       ? { quote: quote(combined, { index: vin.index, text: vin.vin, groups: [] }) }
       : null,
+    scamSignals,
   };
 }
