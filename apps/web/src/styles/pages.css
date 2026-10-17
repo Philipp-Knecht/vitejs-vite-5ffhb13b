@@ -1543,3 +1543,26 @@
   display: grid;
   gap: 8px;
 }
+
+/* Inseratstext */
+.listing-text {
+  display: grid;
+  gap: 12px;
+  padding: 16px;
+  border: 1px solid var(--c-border);
+  border-radius: var(--radius);
+  background: var(--c-surface);
+}
+
+.listing-text h3 {
+  margin: 0;
+}
+
+.listing-text h3:focus {
+  outline: none;
+}
+
+.listing-text textarea {
+  font-family: inherit;
+  white-space: pre-wrap;
+}

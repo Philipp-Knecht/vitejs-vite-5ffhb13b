@@ -227,6 +227,11 @@ export function PrivacyPage() {
           es weder in deinem Browser noch auf unseren Servern und sendet es nirgendwohin; auch das
           PDF entsteht auf deinem Gerät. Schließt du den Tab, ist alles weg.
         </li>
+        <li>
+          Ebenso bleibt, was du für einen Inseratstext zum Verkauf deines Autos einträgst, im
+          geöffneten Browser-Tab; der Text entsteht auf deinem Gerät. Kommst du von „Mein Auto“,
+          lädt die Seite dafür deine Autos, die dort schon gespeichert sind.
+        </li>
       </ul>
       <p>
         Beide Cookies sind für den von dir angefragten Dienst unbedingt erforderlich (§ 25 Abs. 2

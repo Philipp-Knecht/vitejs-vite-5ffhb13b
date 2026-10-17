@@ -36,6 +36,11 @@ const GUIDES = [
     title: 'Kaufvertrag privat',
     text: 'Muster zum Ausfüllen, mit Übergabeprotokoll.',
   },
+  {
+    to: '/auto-verkaufen',
+    title: 'Auto privat verkaufen',
+    text: 'Inseratstext, Checkliste und Abmeldung.',
+  },
 ];
 
 export function GuideLayout({

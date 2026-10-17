@@ -26,6 +26,7 @@ test('guides are readable without JavaScript', async ({ browser }) => {
     ['/auto-besichtigung-checkliste', 'Auto-Besichtigung'],
     ['/kfz-steuer-rechner', 'Kfz-Steuer'],
     ['/kaufvertrag', 'Kaufvertrag'],
+    ['/auto-verkaufen', 'Auto privat verkaufen'],
   ] as const) {
     await page.goto(path);
     await expect(page.getByRole('heading', { level: 1 })).toContainText(heading);
@@ -42,6 +43,7 @@ test('sitemap, robots.txt, noindex and real 404 status codes', async ({ request 
     '/auto-besichtigung-checkliste',
     '/kfz-steuer-rechner',
     '/kaufvertrag',
+    '/auto-verkaufen',
     '/pro',
   ]) {
     expect(sitemap).toContain(`${path}</loc>`);

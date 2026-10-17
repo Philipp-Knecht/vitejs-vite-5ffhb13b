@@ -34,7 +34,11 @@ and account deletion. For a private purchase, Pro members can fill in
 a purchase contract on `/kaufvertrag` and download it as a PDF with a handover record and receipt;
 the text and its checks live in `packages/shared/src/sale-contract.ts`, the PDF is built in the
 browser with the embedded Liberation Sans font (SIL Open Font License, `fonts/OFL.txt`) and nothing
-is stored or sent (reasons for the clauses in DECISIONS.md).
+is stored or sent (reasons for the clauses in DECISIONS.md). To sell the car again, `/auto-verkaufen`
+is a guide from the documents to the deregistration, and Pro members build a listing text from
+their answers (`packages/shared/src/listing-text.ts`, fixed rules, no AI). It asks the same
+questions about the car's history as the contract and hands them over to it, so that listing and
+contract say the same.
 
 For the listing check, a user pastes the listing text (or a link); KaufCheck extracts and
 normalizes the vehicle data and shows a mobile-first dashboard:

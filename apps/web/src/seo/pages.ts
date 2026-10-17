@@ -59,6 +59,11 @@ export const STATIC_PAGE_META: Readonly<Record<string, PageMeta>> = {
     description:
       'Kaufvertrag für den privaten Autokauf: mit Angaben des Verkäufers zu Unfällen und Laufleistung, Gewährleistungsausschluss mit den gesetzlichen Ausnahmen, Übergabeprotokoll und Quittung.',
   },
+  '/auto-verkaufen': {
+    title: 'Auto privat verkaufen: Checkliste, Inserat und Abmeldung | KaufCheck',
+    description:
+      'Auto privat verkaufen: Unterlagen, ehrliches Inserat, sichere Probefahrt und Bezahlung, Kaufvertrag und was du nach dem Verkauf bei Zulassungsstelle und Versicherung melden musst.',
+  },
   '/pro': {
     title: 'KaufCheck Pro – mehr Prüfungen, Verlauf und keine Werbung',
     description:

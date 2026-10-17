@@ -28,7 +28,7 @@ import { keepSaleContractDraft, readSaleContractDraft, type ContractRole as Role
 
 const EV_FUELS: ReadonlySet<string> = new Set(['electric', 'plugin_hybrid']);
 
-function RadioGroup<T extends string>({
+export function RadioGroup<T extends string>({
   legend,
   name,
   value,
@@ -36,6 +36,7 @@ function RadioGroup<T extends string>({
   onChange,
   hint,
   clearable,
+  clearLabel = 'Offen lassen – auf Papier ankreuzen',
 }: {
   legend: ReactNode;
   name: string;
@@ -45,10 +46,12 @@ function RadioGroup<T extends string>({
   hint?: ReactNode;
   /** Adds „Offen lassen“: the boxes stay empty in the PDF, to be ticked on paper. */
   clearable?: boolean;
+  /** The label of the empty answer. */
+  clearLabel?: string;
 }) {
   const hintId = useId();
   const all: { value: T | ''; label: ReactNode }[] = clearable
-    ? [...options, { value: '', label: 'Offen lassen – auf Papier ankreuzen' }]
+    ? [...options, { value: '', label: clearLabel }]
     : options;
   return (
     <fieldset className="choice-group" aria-describedby={hint ? hintId : undefined}>
@@ -142,10 +145,13 @@ const ANSWER_ORDER: Exclude<ContractAnswer, ''>[] = ['yes', 'no', 'unknown'];
 export function SaleContractForm({
   initial,
   source,
+  applyToRestored,
 }: {
   initial: SaleContractValues;
   /** The check the form was prefilled from, or empty. */
   source: string;
+  /** Applied to what was typed before, e.g. a listing that changed since. */
+  applyToRestored?: (values: SaleContractValues) => SaleContractValues;
 }) {
   const me = useMe();
   const toast = useToast();
@@ -153,7 +159,9 @@ export function SaleContractForm({
   const [restored] = useState(() => readSaleContractDraft(source));
   const [seller, setSeller] = useState<Role>(restored?.seller ?? '');
   const [buyer, setBuyer] = useState<Role>(restored?.buyer ?? '');
-  const [values, setValues] = useState(restored?.values ?? initial);
+  const [values, setValues] = useState(() =>
+    restored ? (applyToRestored?.(restored.values) ?? restored.values) : initial,
+  );
   const [submitted, setSubmitted] = useState(false);
   const [busy, setBusy] = useState(false);
   const [upsell, setUpsell] = useState(false);

@@ -22,6 +22,7 @@ import type {
 } from '@kaufcheck/shared';
 import { QueryClient, useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { clearSaleContractDraft } from '../features/sale-contract/draft';
+import { clearListingTextDraft } from '../features/selling/draft';
 import { clearPrivateOfflineData } from '../lib/offline';
 import { useHydrated } from '../lib/use-hydrated';
 import { api, ApiRequestError } from './client';
@@ -194,6 +195,7 @@ function useInvalidateSession() {
       await clearPrivateOfflineData();
       // Another person may use the device next; signing in after typing keeps the draft.
       clearSaleContractDraft();
+      clearListingTextDraft();
     }
     queryClient.removeQueries({ queryKey: queryKeys.savedListings });
     queryClient.removeQueries({ queryKey: queryKeys.savedSearches });

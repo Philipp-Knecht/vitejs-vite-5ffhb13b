@@ -54,6 +54,7 @@ export function Footer() {
           <Link to="/auto-besichtigung-checkliste">Checkliste Besichtigung</Link>
           <Link to="/kfz-steuer-rechner">Kfz-Steuer-Rechner</Link>
           <Link to="/kaufvertrag">Kaufvertrag privat</Link>
+          <Link to="/auto-verkaufen">Auto privat verkaufen</Link>
           {MODEL_PAGES_AVAILABLE && <Link to="/modelle">Modelle von A bis Z</Link>}
         </nav>
         <nav className="footer__column" aria-label="Rechtliches">

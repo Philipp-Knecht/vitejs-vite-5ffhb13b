@@ -20,7 +20,7 @@ try {
   // No .env file – use the process environment.
 }
 const siteUrl = (process.env.PUBLIC_SITE_URL ?? 'http://localhost:5173').replace(/\/+$/, '');
-const MODIFIED = '2026-09-30';
+const MODIFIED = '2026-10-15';
 
 const { render, STATIC_PAGES, MODEL_PAGES } = await import(
   pathToFileURL(path.join(ssrDir, 'entry-server.js')).href
@@ -46,6 +46,7 @@ const GUIDES = new Set([
   '/auto-besichtigung-checkliste',
   '/kfz-steuer-rechner',
   '/kaufvertrag',
+  '/auto-verkaufen',
 ]);
 
 function structuredData(pagePath, meta) {

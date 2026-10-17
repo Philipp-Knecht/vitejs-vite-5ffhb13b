@@ -79,6 +79,9 @@ export function proFeatures(pro: Entitlements, options: { photoAnalysis: boolean
   if (pro.saleContract) {
     features.push('Kaufvertrag für den privaten Autokauf als PDF, mit deinen Angaben ausgefüllt');
   }
+  if (pro.listingText) {
+    features.push('Inseratstext für den Verkauf deines Autos aus deinen Angaben');
+  }
   if (pro.photoAnalysis && options.photoAnalysis) {
     features.push('KI-Fotoanalyse bei Inseraten mit Fotos');
   }
