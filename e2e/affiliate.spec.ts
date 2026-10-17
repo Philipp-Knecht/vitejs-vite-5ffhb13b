@@ -11,7 +11,7 @@ test('the insurance comparison link is labelled, plain and gone with Pro', async
   expect(html).not.toContain('partner.example');
 
   await page.goto('/autokosten-im-monat');
-  const ad = page.getByRole('complementary', { name: 'Werbung' });
+  const ad = page.getByRole('complementary', { name: 'Werbung: Affiliate-Link' });
   await expect(ad).toHaveCount(1);
   const link = ad.getByRole('link', {
     name: /^Kfz-Versicherungen bei Beispielportal vergleichen\*/,
@@ -28,7 +28,9 @@ test('the insurance comparison link is labelled, plain and gone with Pro', async
 
   for (const path of ['/auto-ummelden', '/gebrauchtwagen-kaufen']) {
     await page.goto(path);
-    await expect(page.getByRole('complementary', { name: 'Werbung' })).toHaveCount(1);
+    await expect(page.getByRole('complementary', { name: 'Werbung: Affiliate-Link' })).toHaveCount(
+      1,
+    );
   }
 
   await page.goto('/datenschutz');
@@ -41,7 +43,7 @@ test('the insurance comparison link is labelled, plain and gone with Pro', async
   await page.getByRole('button', { name: 'Konto erstellen' }).click();
   await expect(page).not.toHaveURL(/\/registrieren$/);
   await page.goto('/autokosten-im-monat');
-  await expect(page.getByRole('complementary', { name: 'Werbung' })).toHaveCount(1);
+  await expect(page.getByRole('complementary', { name: 'Werbung: Affiliate-Link' })).toHaveCount(1);
   await makePro(email);
   await page.reload();
   // Plan and configuration are loaded once the account link shows and /api/config was fetched.
@@ -50,5 +52,5 @@ test('the insurance comparison link is labelled, plain and gone with Pro', async
     performance.getEntriesByType('resource').some((entry) => entry.name.includes('/api/config')),
   );
   await page.evaluate(() => new Promise((resolve) => requestAnimationFrame(resolve)));
-  await expect(page.getByRole('complementary', { name: 'Werbung' })).toHaveCount(0);
+  await expect(page.getByRole('complementary', { name: 'Werbung: Affiliate-Link' })).toHaveCount(0);
 });

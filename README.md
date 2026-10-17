@@ -372,7 +372,8 @@ local testing: `stripe listen --forward-to localhost:3000/api/billing/webhook`.
   insurers, prices or recommendations, so it stays a „Tippgeber“ without a licence under § 34d
   GewO. Do not change the text into advice, rankings or a pre-filled form, and do not place it
   next to warnings, legal duties or step-by-step instructions.
-- Partner terms: the Tarifcheck partner program (TARIFCHECK24 GmbH) allows only its own
+- Partner terms (https://www.tarifcheck-partnerprogramm.de/agb/, read on 17.10.2026): the
+  Tarifcheck partner program (TARIFCHECK24 GmbH) allows only its own
   advertising material, unchanged, and names a contract penalty of 1,500 € per violation. Use the
   Kfz-Direktlink from the partner account unchanged, and get the link text and the name approved
   in writing by the partner support before setting the variables.

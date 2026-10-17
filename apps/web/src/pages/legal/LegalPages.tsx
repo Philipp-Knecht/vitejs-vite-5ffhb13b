@@ -103,7 +103,9 @@ export function PrivacyPage() {
         nötig sind.{' '}
         {ads
           ? 'Werbung von Google zeigen wir nur, wenn du einwilligst (siehe „Werbung“); wir selbst bilden keine Profile und verkaufen keine Daten.'
-          : 'Es gibt keine Werbe-Tracker, keine Profilbildung und keinen Verkauf von Daten.'}{' '}
+          : 'Es gibt keine Werbe-Tracker, keine Profilbildung und keinen Verkauf von Daten.'}
+        {insurancePartner &&
+          ' Was nach dem Klick auf einen Affiliate-Link geschieht, steht unter „Affiliate-Links“.'}{' '}
         Du musst keine Angaben zu deiner Person machen, um Inserate zu prüfen.
       </p>
 
