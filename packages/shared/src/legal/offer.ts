@@ -82,6 +82,11 @@ export function proFeatures(pro: Entitlements, options: { photoAnalysis: boolean
   if (pro.listingText) {
     features.push('Inseratstext für den Verkauf deines Autos aus deinen Angaben');
   }
+  if (pro.monthlyCosts) {
+    features.push(
+      'geschätzte Kosten pro Monat im Vergleich deiner gespeicherten Angebote: Wertverlust, Kraftstoff oder Strom, Steuer, Versicherung und Werkstatt aus deinen eigenen Annahmen; die Angaben bleiben nur in diesem Browser gespeichert und werden beim Abmelden gelöscht',
+    );
+  }
   if (pro.carLog) {
     features.push(
       'Kostenbuch für deine Autos unter „Mein Auto“: Tankungen, Wartung, Reparaturen und andere Kosten festhalten (bis zu 2.000 Einträge je Auto), mit Kosten pro Monat, Kraftstoffverbrauch, CSV-Export und einem selbst geführten Serviceheft als PDF; Belege lassen sich nicht hochladen',

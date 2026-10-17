@@ -24,7 +24,8 @@ PRs, **L** = mehrere Wochen.
 | 5.5 | PWA: installierbar, Prüfung für die Besichtigung offline                     | #25       |
 | 2.3 | Kaufvertrag für den Privatkauf als PDF (Pro)                                 | #28       |
 | 3.5 | Auto privat verkaufen: Ratgeber, Inseratstext (Pro), Übergabe an den Vertrag | #30       |
-| 3.3 | Kostenbuch und Serviceheft (Pro): Kosten, Verbrauch, CSV, Serviceheft-PDF    | dieser PR |
+| 3.3 | Kostenbuch und Serviceheft (Pro): Kosten, Verbrauch, CSV, Serviceheft-PDF    | #31       |
+| 1.4 | Kosten pro Monat im Vergleich (Pro), Hinweis im Auto-Berater                 | dieser PR |
 
 ## Arbeitsweise je Feature
 

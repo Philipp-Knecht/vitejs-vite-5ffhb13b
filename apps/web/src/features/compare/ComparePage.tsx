@@ -9,6 +9,7 @@ import { ButtonLink } from '../../components/ui/Button';
 import { PageLoading } from '../../components/ui/Spinner';
 import { cn } from '../../lib/format';
 import { DecisionPanel } from './DecisionPanel';
+import { MonthlyCosts } from './MonthlyCosts';
 import { appPageMeta } from '../../seo/pages';
 import { usePageMeta } from '../../seo/use-page-meta';
 
@@ -216,6 +217,7 @@ export function ComparePage() {
             Markierungen wie „niedrigster Preis“ beschreiben nur die Zahlen. Werte mit Punkt sind
             berechnet oder eingeschätzt.
           </p>
+          <MonthlyCosts comparison={comparison.data} />
           <EquipmentTable comparison={comparison.data} />
           {comparison.data.missingInformation.some((list) => list.length > 0) && (
             <section className="page__section" aria-labelledby="missing-title">

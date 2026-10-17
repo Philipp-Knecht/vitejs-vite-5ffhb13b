@@ -324,9 +324,14 @@ export const ComparisonItemSchema = z.object({
       make: z.string().nullable(),
       model: z.string().nullable(),
       firstRegistrationYear: z.number().int().nullable(),
+      /** For the monthly costs (Pro): tax calculator link and units. */
+      firstRegistrationMonth: z.number().int().nullable().optional(),
+      fuel: z.enum(FUEL_TYPES).nullable().optional(),
     })
     .nullable()
     .optional(),
+  /** The asking price, if the listing names one. */
+  askingPriceEur: z.number().int().nullable().optional(),
 });
 
 export const ComparisonDtoSchema = z.object({
