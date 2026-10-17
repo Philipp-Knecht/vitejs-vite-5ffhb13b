@@ -68,7 +68,6 @@ export function RegistrationGuidePage() {
         Hast du noch Kfz-Steuerschulden von 5 € oder mehr, darf die Zulassungsbehörde das Auto nicht
         auf dich zulassen (§ 13 Abs. 2 Kraftfahrzeugsteuergesetz).
       </p>
-      <InsuranceComparisonLink placement="guide_registration" />
 
       <h2 id="online">Online ummelden mit i-Kfz</h2>
       <p>
@@ -131,6 +130,7 @@ export function RegistrationGuidePage() {
         <li>Hamburg: 23,60 € bis 60,00 €</li>
       </ul>
       <p>Dazu kommen gegebenenfalls neue Schilder und ein Wunschkennzeichen.</p>
+      <InsuranceComparisonLink placement="guide_registration" />
 
       <h2 id="ueberfuehrung">Das Auto nach Hause bringen</h2>
       <p>

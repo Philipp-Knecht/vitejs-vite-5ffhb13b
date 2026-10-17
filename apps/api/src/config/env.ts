@@ -33,13 +33,16 @@ const optionalString = z
   .optional()
   .transform((value) => (value ? value : undefined));
 
-/** A partner link as given, when it is a plain https:// URL; it ends up in an href. */
+/**
+ * A partner link exactly as given, when it is a plain https:// URL; it ends up
+ * in an href. Not normalised: partner programs forbid changing their links.
+ */
 function affiliateUrl(value: string): string | null {
-  if (value.length > 1000) return null;
+  if (value.length > 1000 || /[\s\p{Cc}\p{Cf}]/u.test(value)) return null;
   try {
     const url = new URL(value);
     if (url.protocol !== 'https:' || url.username || url.password) return null;
-    return url.href;
+    return value;
   } catch {
     return null;
   }
@@ -140,7 +143,7 @@ const EnvSchema = z
      * the guides to visitors without Pro. A plain link: no script, no pixel.
      */
     AFFILIATE_CAR_INSURANCE_URL: optionalString,
-    /** Who runs that comparison, named next to the link, e.g. „Tarifcheck (TARIFCHECK24 GmbH)“. */
+    /** The partner whose site the link opens, named in the link text, e.g. „Tarifcheck.de“. */
     AFFILIATE_CAR_INSURANCE_NAME: optionalString,
 
     ANALYTICS_ENABLED: booleanString.default(true),
@@ -183,8 +186,12 @@ const EnvSchema = z
         );
       else if (!affiliateUrl(env.AFFILIATE_CAR_INSURANCE_URL))
         issue('AFFILIATE_CAR_INSURANCE_URL', 'must be an https:// link without user name');
-      if ((env.AFFILIATE_CAR_INSURANCE_NAME?.length ?? 0) > 100)
-        issue('AFFILIATE_CAR_INSURANCE_NAME', 'must be at most 100 characters');
+      const name = env.AFFILIATE_CAR_INSURANCE_NAME ?? '';
+      if (name.length > 100 || /[\p{Cc}\p{Cf}]/u.test(name))
+        issue(
+          'AFFILIATE_CAR_INSURANCE_NAME',
+          'must be at most 100 characters without control characters',
+        );
     }
     if (env.EMAIL_TRANSPORT === 'smtp' && (!env.SMTP_URL || !env.EMAIL_FROM)) {
       issue('SMTP_URL', 'SMTP_URL and EMAIL_FROM are required for EMAIL_TRANSPORT=smtp');
