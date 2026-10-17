@@ -357,6 +357,47 @@ describe('individual rules', () => {
     }
   });
 
+  it('leaves honest listings and dealer delivery offers without scam notes', async () => {
+    const scamIds = [
+      'payment_in_advance',
+      'escrow_service',
+      'seller_abroad',
+      'shipping_offered',
+      'contact_off_platform',
+    ];
+    const honest = await analyze(
+      listingFromText(
+        `${pasted(
+          { Marke: 'VW', Kilometerstand: '90.000 km' },
+          'Scheckheft gepflegt. Vorkasse ausgeschlossen, nur Barzahlung bei Übergabe. Keine Anrufe von Händlern!',
+        )}\nPrivater Nutzer`,
+      ),
+    );
+    expect(ids(honest.observations).filter((id) => scamIds.includes(id))).toEqual([]);
+    expect(honest.checks.map((item) => item.id)).not.toContain('report_listing');
+
+    const dealer = await analyze(
+      listingFromText(
+        `${pasted(
+          { Marke: 'VW', Kilometerstand: '90.000 km' },
+          'Unser Autohaus liefert bundesweit per Spedition. Anzahlung von 10 % bei Bestellung.',
+        )}\nGewerblicher Nutzer`,
+      ),
+    );
+    expect(ids(dealer.observations).filter((id) => scamIds.includes(id))).toEqual([]);
+    expect(dealer.checks.map((item) => item.id)).not.toContain('report_listing');
+
+    // A seller abroad alone is a hint, not a reason to report the listing.
+    const abroad = await analyze(
+      listingFromText(
+        pasted({ Marke: 'VW', Kilometerstand: '90.000 km' }, 'Ich wohne in den Niederlanden.'),
+      ),
+    );
+    expect(abroad.observations.find((o) => o.id === 'seller_abroad')?.severity).toBe('info');
+    expect(abroad.checks.map((item) => item.id)).not.toContain('report_listing');
+    expect(abroad.sellerQuestions.map((item) => item.id)).not.toContain('pay_on_handover');
+  });
+
   it('warns when basic facts are missing', async () => {
     const listing = listingFromText('Verkaufe meinen BMW 318i. TÜV neu. Bei Interesse melden.');
     const result = await analyze(listing);

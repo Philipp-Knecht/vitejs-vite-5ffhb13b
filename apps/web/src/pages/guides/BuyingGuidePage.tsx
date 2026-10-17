@@ -272,11 +272,13 @@ export function BuyingGuidePage() {
         </li>
       </ul>
       <p>
-        Die Prüfung von KaufCheck weist auf solche Stellen im Inserat hin, etwa auf Vorkasse, einen
-        Treuhanddienst, eine Spedition oder einen Verkäufer im Ausland. Kommt dir ein Angebot
-        verdächtig vor, melde das Inserat über die Meldefunktion des Marktplatzes und verzichte im
-        Zweifel darauf. Hast du schon Geld überwiesen, wende dich sofort an deine Bank und erstatte
-        Anzeige bei der Polizei. Mehr dazu bei der{' '}
+        Die Prüfung von KaufCheck erkennt typische Formulierungen im Inserat, etwa Vorkasse, einen
+        Treuhanddienst, eine Spedition, einen Verkäufer im Ausland oder Kontakt nur per E-Mail oder
+        Messenger. Fehlt ein solcher Hinweis, heißt das nicht, dass das Angebot sicher ist. Kommt
+        dir ein Angebot verdächtig vor, melde es dem Marktplatz – meist über einen Link im Inserat,
+        sonst über den Kundenservice – und verzichte im Zweifel darauf. Hast du schon Geld
+        überwiesen, wende dich sofort an deine Bank und erstatte Anzeige bei der Polizei. Mehr dazu
+        bei der{' '}
         <a
           href="https://www.polizei-beratung.de/themen-und-tipps/sicherer-autokauf/hilfe-und-kontaktadressen/verdaechtiges-inserat/"
           target="_blank"

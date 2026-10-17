@@ -130,23 +130,66 @@ describe('offer signals', () => {
 
   it('finds the warning signs for scams the police names', () => {
     const kinds = (text: string) => signals(text).scamSignals.map((s) => s.kind);
-    expect(kinds('Zahlung per Vorkasse.')).toEqual(['prepayment']);
-    expect(kinds('Bitte 500 € Anzahlung zur Reservierung.')).toEqual(['prepayment']);
-    expect(kinds('Der Betrag ist im Voraus zu überweisen.')).toEqual(['prepayment']);
-    expect(kinds('Ich bin derzeit beruflich in England.')).toEqual(['abroad']);
-    expect(kinds('Ich wohne leider im Ausland.')).toEqual(['abroad']);
-    expect(kinds('Die Lieferung erfolgt über eine Spedition.')).toEqual(['shipping']);
-    expect(kinds('Abwicklung über einen Treuhandservice.')).toEqual(['escrow']);
-    expect(kinds('Kontakt nur per E-Mail, keine Anrufe.')).toEqual(['offPlatform']);
-    expect(kinds('Bitte nur über WhatsApp schreiben.')).toEqual(['offPlatform']);
-    // Ordinary private and dealer listings stay quiet.
+    const found: [string, string][] = [
+      ['Zahlung per Vorkasse.', 'prepayment'],
+      ['Der Betrag muss vorab überwiesen werden.', 'prepayment'],
+      ['Zahlung im Voraus.', 'prepayment'],
+      ['Bitte vorab zahlen.', 'prepayment'],
+      ['Vorauszahlung erforderlich.', 'prepayment'],
+      ['Anzahlung von 500 Euro, dann wird das Auto geliefert.', 'prepayment'],
+      ['Lieferung nach Zahlungseingang.', 'prepayment'],
+      ['Kein Tausch, keine Probefahrt, Zahlung per Vorkasse.', 'prepayment'],
+      ['Bezahlung per Western Union.', 'prepayment'],
+      ['Payment in advance only.', 'prepayment'],
+      ['Ich bin derzeit beruflich in England.', 'abroad'],
+      ['Ich wohne leider im Ausland.', 'abroad'],
+      ['Bin gerade in Rumänien.', 'abroad'],
+      ['Ich lebe jetzt mit meiner Familie in Spanien.', 'abroad'],
+      ['Ich wurde nach England versetzt.', 'abroad'],
+      ['Ich bin Soldat im Ausland.', 'abroad'],
+      ['Die Lieferung erfolgt über eine Spedition.', 'shipping'],
+      ['Ich schicke das Auto mit einem Speditionsunternehmen.', 'shipping'],
+      ['Speditionskosten übernehme ich.', 'shipping'],
+      ['Abwicklung über einen Treuhandservice.', 'escrow'],
+      ['Treuhandgebühr trägt der Käufer.', 'escrow'],
+      ['Abwicklung über einen Treuhänder.', 'escrow'],
+      ['Kontakt nur per E-Mail, keine Anrufe.', 'offPlatform'],
+      ['Bitte nur über WhatsApp schreiben.', 'offPlatform'],
+      ['Ausschließlich per E-Mail erreichbar.', 'offPlatform'],
+      ['Ich bin telefonisch nicht erreichbar, bitte per Mail.', 'offPlatform'],
+    ];
+    for (const [text, kind] of found) expect(kinds(text), text).toEqual([kind]);
+
+    // Honest private and dealer listings stay quiet.
     for (const text of [
       'Keine Vorkasse, Barzahlung bei Abholung.',
+      'Vorkasse ausgeschlossen, nur Barzahlung bei Übergabe.',
+      'Vorkasse ist nicht möglich, nur Barzahlung.',
+      'Vorkasse? Nein!',
+      'Vorkasse lehne ich ab.',
+      'Bitte nichts vorab überweisen.',
+      'Treuhandservice? Nein danke!',
+      'Betrüger mit Treuhand-Masche bitte nicht melden.',
+      'Brief liegt bei der Bank, Ablösung erfolgt per Treuhandauftrag.',
       'Finanzierung ohne Anzahlung möglich. Lieferung bundesweit möglich.',
+      'Reservierung gegen Anzahlung bei Bestellung.',
       'Überführung gegen Aufpreis. Export möglich.',
-      'Ich wohne in Hamburg, Besichtigung jederzeit.',
-      'Bei Fragen gerne per E-Mail oder telefonisch.',
+      'War Firmenwagen einer Spedition.',
+      'Ich arbeite bei einer Spedition.',
+      'Import aus den USA, 2022 nach Deutschland verschifft.',
+      'Versand per Spedition nicht möglich.',
+      'Das Fahrzeug wird Ihnen zugestellt, Bezahlung bei Übergabe in bar.',
       'Transporter mit Anhängerkupplung.',
+      'Ich wohne in Hamburg, Besichtigung jederzeit.',
+      'Ich bin in Polen geboren und wohne seit 20 Jahren in Berlin.',
+      'Ich bin aktuell in Spanien im Urlaub, ab 25.10. wieder da.',
+      'Da ich beruflich ins Ausland gehe, verkaufe ich mein Auto.',
+      'Bei Fragen gerne per E-Mail oder telefonisch.',
+      'Keine Anrufe von Händlern oder Exporteuren!',
+      'Bitte keine Anrufe nach 20 Uhr.',
+      'Bitte nur per Mail oder Telefon melden.',
+      'Kontakt nur über WhatsApp oder Anruf.',
+      'Bitte nur per SMS, ich rufe zurück.',
     ])
       expect(kinds(text), text).toEqual([]);
   });

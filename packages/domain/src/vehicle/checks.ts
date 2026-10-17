@@ -1,5 +1,6 @@
 import { FUEL_LABELS, type CheckItem, type EvidenceType } from '@kaufcheck/shared';
 import { formatEuro, formatKm } from '../format';
+import { relevantScamSignals } from './observations';
 import type { VehicleRuleContext } from './rule-context';
 
 function check(
@@ -250,12 +251,17 @@ export function collectChecks(ctx: VehicleRuleContext): CheckItem[] {
     );
   }
 
-  if (ctx.signals.scamSignals.length > 0) {
+  // Reporting is suggested for strong signs (payment) or several signs together.
+  const scam = relevantScamSignals(ctx);
+  if (
+    scam.some((signal) => signal.kind === 'prepayment' || signal.kind === 'escrow') ||
+    scam.length >= 2
+  ) {
     specific.push(
       check(
         'report_listing',
-        'Im Zweifel: Inserat melden',
-        'Kommt dir das Angebot verdächtig vor, melde das Inserat über die Meldefunktion im Inserat beim Marktplatz und verzichte im Zweifel auf das Auto. Hast du schon Geld überwiesen, wende dich sofort an deine Bank und erstatte Anzeige bei der Polizei.',
+        'Verdächtiges Angebot melden',
+        'Kommt dir das Angebot verdächtig vor, melde es dem Marktplatz – meist geht das über einen Link direkt im Inserat, sonst über den Kundenservice – und verzichte lieber auf das Auto. Hast du schon Geld überwiesen, wende dich sofort an deine Bank, denn eine Überweisung lässt sich, wenn überhaupt, nur kurz danach stoppen. Erstatte Anzeige bei der Polizei, das geht auch online; sichere vorher Screenshots von Inserat und Nachrichten.',
         'Warnzeichen im Inserat',
         'listing_fact',
       ),

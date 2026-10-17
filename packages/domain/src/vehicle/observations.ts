@@ -731,8 +731,9 @@ function missingInformationRules(ctx: VehicleRuleContext): Observation[] {
 }
 
 /**
- * Warning signs for scams, as the police describes them. Phrased as advice on
- * how to pay and meet safely – never as a claim that the seller cheats.
+ * Warning signs for scams, as the police describes them. Each starts with what
+ * the listing says and adds advice on how to pay and meet safely – never a
+ * claim that the seller cheats.
  */
 const SCAM_OBSERVATIONS: Record<
   ScamSignalKind,
@@ -742,47 +743,69 @@ const SCAM_OBSERVATIONS: Record<
     id: 'payment_in_advance',
     title: 'Zahlung vor der Übergabe im Inserat',
     detail:
-      'Im Inserat ist von Vorkasse, einer Anzahlung oder einer Zahlung im Voraus die Rede. Die Polizei rät, beim Autokauf im Internet nie in Vorleistung zu gehen: Zahl erst bei der Übergabe – gegen Auto, Schlüssel und Papiere.',
+      'Im Inserat ist von Vorkasse, einer Anzahlung oder einer Zahlung im Voraus die Rede. Die Polizei rät, beim Autokauf über Online-Marktplätze nie in Vorleistung zu gehen. Üblich ist, dass Geld, Auto, Schlüssel und Papiere gleichzeitig übergeben werden.',
     severity: 'warning',
   },
   escrow: {
     id: 'escrow_service',
     title: 'Treuhanddienst im Inserat',
     detail:
-      'Laut Polizei und ADAC geben sich bei Betrug mit Gebrauchtwagen oft angebliche Treuhanddienste mit gefälschten Websites als sichere Zahlungsabwicklung aus. Zahl nicht über einen Dienst, den der Verkäufer vorschlägt; üblich ist die Bezahlung bei der Übergabe.',
+      'Im Inserat ist von einem Treuhanddienst die Rede. Polizei und ADAC warnen vor angeblichen Treuhanddiensten: Betrüger nutzen dafür immer wieder gefälschte Firmen und Websites. Zahl nicht über einen Dienst oder Link, den dir der Verkäufer nennt; üblich ist die Bezahlung bei der Übergabe.',
     severity: 'warning',
   },
   abroad: {
     id: 'seller_abroad',
     title: 'Verkäufer nach eigener Angabe im Ausland',
     detail:
-      'Laut Inserat ist der Verkäufer nicht vor Ort. Die Polizei nennt Verkäufer, die im Ausland sein wollen und Vorkasse oder eine Zahlung über Dritte verlangen, als typisches Muster bei Betrug. Kauf nur nach einer Besichtigung und zahl bei der Übergabe.',
+      'Laut Inserat lebt oder arbeitet der Verkäufer im Ausland. Das allein ist nicht ungewöhnlich. Die Polizei beschreibt aber eine häufige Masche: Der Anbieter ist angeblich im Ausland und verlangt Vorkasse oder eine Zahlung über Dritte. Sieh dir das Auto vor Ort an und zahl erst bei der Übergabe.',
     severity: 'notice',
   },
   shipping: {
     id: 'shipping_offered',
     title: 'Lieferung über eine Spedition im Inserat',
     detail:
-      'Kauf kein Auto ungesehen und zahl nichts im Voraus an eine Spedition oder ein Transportunternehmen: Laut Polizei geben sich bei Betrug oft angebliche Speditionen als Treuhänder aus. Üblich sind Besichtigung, Probefahrt und Bezahlung bei der Übergabe.',
+      'Im Inserat ist von einer Lieferung über eine Spedition die Rede. Die Polizei warnt vor angeblichen Speditionen, die als Treuhänder das Geld annehmen sollen. Zahl nichts im Voraus an eine Spedition und kauf kein Auto ungesehen.',
     severity: 'notice',
   },
   offPlatform: {
     id: 'contact_off_platform',
     title: 'Kontakt nur per E-Mail oder Messenger',
     detail:
-      'Laut Inserat möchte der Verkäufer nur per E-Mail oder Messenger Kontakt. Die Polizei nennt das als Warnzeichen. Ruf vor der Besichtigung an und lass dich nicht von der Plattform weglocken.',
+      'Laut Inserat möchte der Verkäufer nur per E-Mail oder Messenger Kontakt. Die Polizei nennt das als Anhaltspunkt für ein verdächtiges Inserat. Ruf vor der Besichtigung an und achte darauf, ob sich wirklich der Verkäufer meldet. Bleib für Absprachen möglichst im Nachrichtensystem des Marktplatzes.',
     severity: 'notice',
   },
 };
 
+/**
+ * The warning signs that count for this listing. Dealers often deliver by
+ * forwarder and take down payments for orders: alone, that is no sign.
+ */
+export function relevantScamSignals(ctx: VehicleRuleContext) {
+  const { signals, listing } = ctx;
+  const commercial = listing.seller.type === 'commercial';
+  const strong = signals.scamSignals.some(
+    (signal) =>
+      signal.kind === 'escrow' ||
+      (signal.kind === 'prepayment' && !/anzahlung/i.test(signal.quote)),
+  );
+  return signals.scamSignals.filter((signal) => {
+    if (!commercial || strong) return true;
+    if (signal.kind === 'shipping') return false;
+    return !(signal.kind === 'prepayment' && /anzahlung/i.test(signal.quote));
+  });
+}
+
 function scamRules(ctx: VehicleRuleContext): Observation[] {
-  return ctx.signals.scamSignals.map((signal) => {
+  const relevant = relevantScamSignals(ctx);
+  return relevant.map((signal) => {
     const rule = SCAM_OBSERVATIONS[signal.kind];
+    // A seller abroad alone is only a hint; with other signs it matters more.
+    const severity = signal.kind === 'abroad' && relevant.length === 1 ? 'info' : rule.severity;
     return observation(
       rule.id,
       rule.title,
       rule.detail,
-      rule.severity,
+      severity,
       'listing_fact',
       [],
       [signal.quote],
