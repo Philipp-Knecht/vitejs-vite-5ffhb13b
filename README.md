@@ -363,16 +363,16 @@ local testing: `stripe listen --forward-to localhost:3000/api/billing/webhook`.
 
 ## Ads sold directly
 
-KaufCheck can sell its two ad placements itself (sponsorships, e.g. a local dealer, an appraiser
-or a workshop). `SPONSOR_ADS` is a JSON array, at most 20 entries:
+KaufCheck can sell its two ad placements itself (e.g. to a local dealer, an appraiser or a
+workshop). `SPONSOR_ADS` is a JSON array, at most 20 entries:
 
 ```json
 [
   {
     "id": "autohaus-muster-2026-11",
     "advertiser": "Autohaus Muster GmbH",
-    "title": "Gebrauchtwagen mit Garantie",
-    "text": "Über 100 geprüfte Fahrzeuge in Musterstadt.",
+    "title": "Gebrauchtwagen in Musterstadt",
+    "text": "Rund 100 Fahrzeuge vor Ort, Probefahrt nach Termin.",
     "url": "https://autohaus-muster.example/gebrauchtwagen",
     "image": "/sponsors/autohaus-muster.webp",
     "imageAlt": "Autohaus Muster: Hof mit Gebrauchtwagen",
@@ -383,25 +383,53 @@ or a workshop). `SPONSOR_ADS` is a JSON array, at most 20 entries:
 ]
 ```
 
-- `id`: a-z, 0-9 and -, unique; `advertiser` (shown as „Werbung von …“, § 6 DDG), `title` (at
-  most 80 characters) and `url` (`https://`, used as given) are required; `text` (at most 200
-  characters), the image and `from`/`until` (German calendar days, both included) are optional.
-- The image is a file of this site (`.png`, `.jpg` or `.webp`, e.g. under
-  `apps/web/public/sponsors/`, wide format such as 1200 × 300 px); `imageAlt` describes it. Images
-  from other hosts are refused, so the advertiser never sees a visitor before a click.
-- Where an ad runs, it replaces AdSense; with several, one is picked per page view. Visitors with
-  Pro see none. A running ad adds the section „Anzeigen von Werbepartnern“ to the privacy policy.
-- Views (half of the ad on screen) and clicks are counted as analytics events
-  `sponsor_ad_viewed` and `sponsor_ad_clicked` with `campaign` = `id` – without personal data and
-  not with Do Not Track / Global Privacy Control, so the figures are lower bounds:
+- **Fields:**
+  - `id`: lowercase letters, digits and single hyphens, at most 40 characters, unique.
+  - `advertiser`: shown as „Werbung von …“. Use the name from the advertiser's imprint,
+    including the legal form (§ 6 Abs. 1 Nr. 2 DDG).
+  - `title` (at most 80 characters) and `url` (`https://`, used as given) are required.
+  - `text` (at most 200 characters), the image and `from`/`until` are optional. `from`/`until`
+    are German calendar days, both included.
+- **The image** is a file of this site, lowercase `.png`, `.jpg`/`.jpeg` or `.webp`, under
+  `apps/web/public/sponsors/`. It is shown in 4:1 format, e.g. 1200 × 300 px; `imageAlt`
+  describes it. Images from other hosts are refused, so the advertiser never sees a visitor
+  before a click. A new image needs a deploy. Remove it when the campaign ends.
+- **Display:**
+  - The browser asks `/api/sponsor-ads/<placement>` for an ad; the server picks one of the
+    running ads.
+  - The ad shows instead of AdSense, never with Pro, in a tinted, dashed box with „Werbung von
+    …“ and the note that it is no recommendation and has no influence on checks and guides.
+  - Ads are never chosen by the listing, its brand, region or seller.
+  - While `SPONSOR_ADS` is set, the privacy policy has the section „Anzeigen von
+    Werbepartnern“.
+- **Counting** happens only on the server, in `SponsorAdStat`, per campaign and German day:
+  - every delivery of an ad and every click through `/go/<id>`, which redirects to `url`;
+  - no IP address, identifier or cookie, nothing measured in the browser, and nothing counted
+    with Do Not Track / Global Privacy Control;
+  - bots can be counted too, so sell placements for a fixed price per period, not per view.
 
   ```sql
-  SELECT props->>'campaign' AS campaign, name, count(*) FROM "AnalyticsEvent"
-  WHERE name IN ('sponsor_ad_viewed', 'sponsor_ad_clicked') GROUP BY 1, 2 ORDER BY 1, 2;
+  SELECT campaign, sum(views) AS views, sum(clicks) AS clicks FROM "SponsorAdStat"
+  WHERE day BETWEEN '2026-11-01' AND '2026-11-30' GROUP BY campaign ORDER BY campaign;
   ```
 
-- Check every ad before it goes live (no misleading claims, § 5 UWG; nothing the guides warn
-  against) and agree on it in writing: placement, period, price and that KaufCheck may remove it.
+- **Check every ad before it goes live:**
+  - no unproven claims such as „geprüft“, „empfohlen“ or „Testsieger“ (§ 5 UWG);
+  - never the KaufCheck name or logo, and nothing that looks like a KaufCheck verdict;
+  - nothing the guides warn about (Vorkasse, Treuhand, delivery from abroad), and no insurance
+    or credit offers (§ 34d/§ 34c GewO, see the affiliate link).
+- **Agree in writing** (text form is enough) on:
+  - placement, period and a fixed price;
+  - that the advertiser has no influence on checks, guides or rules;
+  - that the advertiser is responsible for lawful content, image and trademark rights and its
+    landing page (imprint, privacy), and releases KaufCheck from claims;
+  - that KaufCheck approves the ad, may reject or remove it, and reports totals per campaign
+    only;
+  - no exclusivity unless agreed, and termination.
+- **Tax:** ad revenue counts towards the small-business limits of § 19 UStG together with Pro
+  (25,000 € in the previous year, 100,000 € in the current year). Invoice per § 34a UStDV with
+  „Gemäß § 19 UStG wird keine Umsatzsteuer berechnet.“ For income tax and trade questions, ask a
+  tax adviser.
 
 ## Affiliate link
 
@@ -425,12 +453,12 @@ or a workshop). `SPONSOR_ADS` is a JSON array, at most 20 entries:
 ## Analytics configuration
 
 First-party and cookieless: only an event name, a timestamp and a few allowlisted properties
-(`source`, `errorCode`, `placement`, `count`, `plan`, `aiStatus`, `path`, `campaign`) are stored – no user
+(`source`, `errorCode`, `placement`, `count`, `plan`, `aiStatus`, `path`) are stored – no user
 ids, IP addresses or free text. The browser sends nothing when „Do Not Track“ or „Global Privacy
 Control“ is set. Events: `landing_page_view`, `listing_analysis_started`, `listing_analysis_completed`,
 `listing_analysis_failed` (recorded by the server), `seller_questions_copied`,
 `seller_message_created`, `checklist_started`, `listing_saved`, `search_saved`, `comparison_created`,
-`pro_clicked`, `car_search_started`, `platform_search_opened`, `recall_check_opened`, `analysis_pdf_downloaded`, `negotiation_message_copied`, `owned_car_added`, `sale_contract_created`, `listing_text_created`, `service_history_pdf_downloaded`, `reminder_enabled`, `affiliate_clicked`, `sponsor_ad_viewed`, `sponsor_ad_clicked`.
+`pro_clicked`, `car_search_started`, `platform_search_opened`, `recall_check_opened`, `analysis_pdf_downloaded`, `negotiation_message_copied`, `owned_car_added`, `sale_contract_created`, `listing_text_created`, `service_history_pdf_downloaded`, `reminder_enabled`, `affiliate_clicked`.
 Disable with `ANALYTICS_ENABLED=false`. Events are kept for 400 days, for example:
 
 ```sql

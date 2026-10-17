@@ -32,7 +32,7 @@ describe('loadConfig', () => {
     const ad = {
       id: 'autohaus-muster-2026-11',
       advertiser: 'Autohaus Muster GmbH',
-      title: 'Gebrauchtwagen mit Garantie',
+      title: 'Gebrauchtwagen in Musterstadt',
       url: 'https://autohaus-muster.example/gebrauchtwagen',
       image: '/sponsors/autohaus-muster.webp',
       imageAlt: 'Autohaus Muster: Hof mit Gebrauchtwagen',
@@ -55,6 +55,8 @@ describe('loadConfig', () => {
       JSON.stringify([{ ...ad, until: '2026-02-30x' }]),
       JSON.stringify([{ ...ad, from: '2026-02-30' }]),
       JSON.stringify([{ ...ad, id: 'Autohaus Muster' }]),
+      JSON.stringify([{ ...ad, id: '-muster' }]),
+      JSON.stringify([{ ...ad, image: '/sponsors/Muster.PNG' }]),
       JSON.stringify([{ ...ad, extra: true }]),
       JSON.stringify([ad, ad]),
     ];

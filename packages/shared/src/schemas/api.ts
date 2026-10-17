@@ -441,19 +441,21 @@ export const MeDtoSchema = z.object({
 });
 export type MeDto = z.infer<typeof MeDtoSchema>;
 
-export const SponsorAdSchema = z.object({
-  /** Short id, also used to count views and clicks. */
+export const SponsorAdDtoSchema = z.object({
   id: z.string(),
   /** Who advertises, named on the ad (§ 6 Abs. 1 Nr. 2 DDG). */
   advertiser: z.string(),
   title: z.string(),
   text: z.string(),
-  url: z.string(),
   /** A file on KaufCheck's own server. */
   image: z.object({ src: z.string(), alt: z.string() }).nullable(),
-  placements: z.array(z.enum(AD_PLACEMENTS)),
+  /** Our own redirect (`/go/<id>`), which counts the click. */
+  href: z.string(),
 });
-export type SponsorAd = z.infer<typeof SponsorAdSchema>;
+export type SponsorAdDto = z.infer<typeof SponsorAdDtoSchema>;
+
+export const SponsorAdResponseSchema = z.object({ ad: SponsorAdDtoSchema.nullable() });
+export type SponsorAdResponse = z.infer<typeof SponsorAdResponseSchema>;
 
 export const PublicConfigSchema = z.object({
   features: z.object({
@@ -483,8 +485,8 @@ export const PublicConfigSchema = z.object({
   pro: z.object({ offer: ProOfferSchema.nullable() }),
   /** Google AdSense ad unit; null = no ads. */
   ads: z.object({ client: z.string(), slot: z.string() }).nullable(),
-  /** Own ads running today (sponsorships), shown instead of AdSense where they fit. */
-  sponsors: z.array(SponsorAdSchema),
+  /** Ads sold directly: configured at all, and the placements with an ad running today. */
+  sponsors: z.object({ configured: z.boolean(), placements: z.array(z.enum(AD_PLACEMENTS)) }),
   /** Affiliate links (plain links with the partner ID); null = not configured. */
   affiliates: z.object({
     carInsurance: z.object({ url: z.string(), name: z.string() }).nullable(),

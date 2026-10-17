@@ -25,8 +25,6 @@ export const ANALYTICS_EVENTS = [
   'service_history_pdf_downloaded',
   'reminder_enabled',
   'affiliate_clicked',
-  'sponsor_ad_viewed',
-  'sponsor_ad_clicked',
 ] as const;
 
 export type AnalyticsEventName = (typeof ANALYTICS_EVENTS)[number];
@@ -40,7 +38,6 @@ export const ANALYTICS_PROP_KEYS = [
   'plan',
   'aiStatus',
   'path',
-  'campaign',
 ] as const;
 
 export type AnalyticsPropKey = (typeof ANALYTICS_PROP_KEYS)[number];

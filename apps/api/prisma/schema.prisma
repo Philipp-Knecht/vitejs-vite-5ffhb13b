@@ -413,3 +413,15 @@ model AnalyticsEvent {
 
   @@index([name, createdAt])
 }
+
+/// Ads sold directly: how often each was delivered and clicked per German day.
+/// Totals only – no IP address, identifier or cookie.
+model SponsorAdStat {
+  campaign String
+  /// YYYY-MM-DD in German time.
+  day      String
+  views    Int    @default(0)
+  clicks   Int    @default(0)
+
+  @@id([campaign, day])
+}

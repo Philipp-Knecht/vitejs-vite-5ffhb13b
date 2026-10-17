@@ -1,7 +1,7 @@
-import type { AdPlacement, SponsorAd } from '@kaufcheck/shared';
+import type { AdPlacement, SponsorAdDto, SponsorAdResponse } from '@kaufcheck/shared';
 import { useEffect, useId, useRef, useState } from 'react';
+import { api } from '../api/client';
 import { useConfig, useMe } from '../api/queries';
-import { track } from '../lib/analytics';
 import { loadAdSense, requestAd } from '../lib/adsense';
 import { privacySignal } from '../lib/privacy-signals';
 import { useHydrated } from '../lib/use-hydrated';
@@ -37,64 +37,55 @@ function AdSenseUnit({ client, slot }: { client: string; slot: string }) {
 }
 
 /**
- * An ad sold directly: text and image come from our own server, the link
- * goes to the advertiser. Views (half of the ad on screen) and clicks are
- * counted without personal data, like any other event.
+ * An ad sold directly. The server picks it (and counts the delivery); text
+ * and image come from our own server, and the link goes through our own
+ * redirect, which counts the click. Nothing is measured in the browser.
  */
-function SponsorUnit({ ads, placement }: { ads: SponsorAd[]; placement: AdPlacement }) {
-  // One of the running ads per page view; ads are never prerendered, so no hydration mismatch.
-  const [index] = useState(() => Math.floor(Math.random() * ads.length));
-  const ad = ads[index % ads.length]!;
-  const ref = useRef<HTMLElement>(null);
+function SponsorUnit({ placement }: { placement: AdPlacement }) {
+  const [ad, setAd] = useState<SponsorAdDto | null>(null);
   const labelId = useId();
+  const noteId = useId();
   useEffect(() => {
-    const element = ref.current;
-    if (!element || typeof IntersectionObserver === 'undefined') return;
-    const observer = new IntersectionObserver(
-      (entries) => {
-        if (!entries.some((entry) => entry.isIntersecting)) return;
-        track('sponsor_ad_viewed', { placement, campaign: ad.id });
-        observer.disconnect();
-      },
-      { threshold: 0.5 },
-    );
-    observer.observe(element);
-    return () => observer.disconnect();
-  }, [ad.id, placement]);
+    const controller = new AbortController();
+    api
+      .get<SponsorAdResponse>(`/api/sponsor-ads/${placement}`, controller.signal)
+      .then((response) => setAd(response.ad))
+      .catch(() => setAd(null));
+    return () => controller.abort();
+  }, [placement]);
+  if (!ad) return null;
   return (
-    <aside
-      ref={ref}
-      className="ad-slot ad-slot--sponsor"
-      aria-labelledby={labelId}
-      data-placement={placement}
-    >
-      <span className="ad-slot__label" id={labelId}>
-        Werbung von {ad.advertiser}
-      </span>
+    <aside className="ad-slot sponsor-ad" aria-labelledby={labelId} data-placement={placement}>
+      <p className="sponsor-ad__label" id={labelId}>
+        <span className="sponsor-ad__badge">Werbung</span> von {ad.advertiser}
+      </p>
       <a
-        className="sponsor-ad"
-        href={ad.url}
+        className="sponsor-ad__link"
+        href={ad.href}
         target="_blank"
         rel="sponsored noopener"
-        onClick={() => track('sponsor_ad_clicked', { placement, campaign: ad.id })}
+        aria-describedby={`${labelId} ${noteId}`}
       >
-        {ad.image && (
-          <img className="sponsor-ad__image" src={ad.image.src} alt={ad.image.alt} loading="lazy" />
-        )}
+        {ad.image && <img className="sponsor-ad__image" src={ad.image.src} alt={ad.image.alt} />}
         <span className="sponsor-ad__title">{ad.title}</span>
         {ad.text && <span className="sponsor-ad__text">{ad.text}</span>}
         <span className="visually-hidden"> (öffnet in neuem Tab)</span>
       </a>
+      <p className="sponsor-ad__note" id={noteId}>
+        Die Anzeige ist keine Empfehlung von KaufCheck und hat keinen Einfluss auf Prüfungen und
+        Ratgeber.
+      </p>
     </aside>
   );
 }
 
 /**
  * Shows an ad sold directly when one runs for this placement, otherwise a
- * Google AdSense unit (configured on the server) to visitors
- * without Pro. Nothing is loaded for Pro, while the plan is unknown, or when
- * the browser sends Do Not Track / Global Privacy Control. Unfilled units –
- * for example without consent – stay invisible.
+ * Google AdSense unit (configured on the server), to visitors without Pro.
+ * Nothing is shown for Pro or while the plan is unknown. Google AdSense is not
+ * loaded when the browser sends Do Not Track / Global Privacy Control; ads
+ * sold directly load nothing from others and are then not counted. Unfilled
+ * AdSense units – for example without consent – stay invisible.
  */
 export function AdSlot({ placement }: { placement: AdPlacement }) {
   // Never part of a prerendered page: ads appear once the plan is known.
@@ -102,9 +93,10 @@ export function AdSlot({ placement }: { placement: AdPlacement }) {
   const me = useMe();
   const config = useConfig();
   const ads = config.data?.ads ?? null;
-  const sponsors = (config.data?.sponsors ?? []).filter((ad) => ad.placements.includes(placement));
+  // A configuration cached before ads sold directly existed has no `sponsors`.
+  const sponsored = config.data?.sponsors?.placements.includes(placement) ?? false;
   if (!hydrated || me.data?.entitlements.showAds !== true) return null;
-  if (sponsors.length > 0) return <SponsorUnit ads={sponsors} placement={placement} />;
+  if (sponsored) return <SponsorUnit placement={placement} />;
   if (ads) {
     if (privacySignal()) return null;
     return (

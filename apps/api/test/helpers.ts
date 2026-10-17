@@ -82,6 +82,7 @@ const TABLES = [
   'Subscription',
   'BillingEvent',
   'AnalyticsEvent',
+  'SponsorAdStat',
   'Order',
   'ContractNotice',
 ];

@@ -1,9 +1,4 @@
-import {
-  AnalyticsEventRequestSchema,
-  germanDay,
-  sponsorAdRuns,
-  type PublicConfig,
-} from '@kaufcheck/shared';
+import { AnalyticsEventRequestSchema, type PublicConfig } from '@kaufcheck/shared';
 import type { FastifyInstance } from 'fastify';
 import { AnalyticsService } from '../../application/analytics-service';
 import type { AppConfig } from '../../config/env';
@@ -13,7 +8,7 @@ import { adsTxt } from '../ads';
 import { parseInput } from '../errors';
 
 export function systemRoutes(app: FastifyInstance, services: Services): void {
-  const { config, db, plans, enricher, billing, auth, analytics, contracts } = services;
+  const { config, db, plans, enricher, billing, auth, analytics, contracts, sponsorAds } = services;
 
   app.get('/api/health', { config: { rateLimit: false } }, async (_request, reply) => {
     try {
@@ -47,17 +42,7 @@ export function systemRoutes(app: FastifyInstance, services: Services): void {
       ads: config.adsense?.slot
         ? { client: config.adsense.client, slot: config.adsense.slot }
         : null,
-      sponsors: config.sponsorAds
-        .filter((ad) => sponsorAdRuns(ad, germanDay(services.now())))
-        .map((ad) => ({
-          id: ad.id,
-          advertiser: ad.advertiser,
-          title: ad.title,
-          text: ad.text,
-          url: ad.url,
-          image: ad.image && ad.imageAlt ? { src: ad.image, alt: ad.imageAlt } : null,
-          placements: ad.placements,
-        })),
+      sponsors: { configured: sponsorAds.configured, placements: sponsorAds.placements() },
       affiliates: { carInsurance: config.affiliateCarInsurance },
       privacy: {
         hosting: config.hostingProvider,

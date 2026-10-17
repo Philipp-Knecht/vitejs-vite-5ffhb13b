@@ -86,8 +86,8 @@ const server = spawn(process.execPath, [path.join(root, 'apps/api/dist/server.js
       {
         id: 'e2e-autohaus',
         advertiser: 'Autohaus Beispiel',
-        title: 'Gebrauchtwagen mit Garantie',
-        text: 'Über 100 geprüfte Fahrzeuge in Musterstadt.',
+        title: 'Gebrauchtwagen in Musterstadt',
+        text: 'Rund 100 Fahrzeuge vor Ort, Probefahrt nach Termin.',
         url: 'https://autohaus.example/?ref=kaufcheck',
         image: '/og-image.png',
         imageAlt: 'Logo von Autohaus Beispiel',

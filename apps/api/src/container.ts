@@ -13,6 +13,7 @@ import { CarLogService } from './application/car-log-service';
 import { ReminderService } from './application/reminder-service';
 import { SavedSearchService } from './application/saved-search-service';
 import { UsageService } from './application/usage-service';
+import { SponsorAdService } from './application/sponsor-ad-service';
 import type { AppConfig } from './config/env';
 import { createAiProvider } from './infrastructure/ai/create-provider';
 import type { AiProvider } from './infrastructure/ai/types';
@@ -57,7 +58,7 @@ export interface Services {
   contracts: ContractService;
   /** Photos only come with retrieved listings, so pasted text never gets a photo analysis. */
   photoAnalysisAvailable: boolean;
-  now: () => Date;
+  sponsorAds: SponsorAdService;
 }
 
 export interface ServiceOverrides {
@@ -188,6 +189,6 @@ export function createServices(
     email,
     contracts,
     photoAnalysisAvailable,
-    now,
+    sponsorAds: new SponsorAdService(db, config.sponsorAds, now, logger),
   };
 }

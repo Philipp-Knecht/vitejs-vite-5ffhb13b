@@ -13,7 +13,15 @@ export const SPONSOR_IMAGE_PATTERN = /^\/(?:[a-z0-9_-]+\/)*[a-z0-9_-]+\.(?:png|j
 
 /** Day in Germany as YYYY-MM-DD: campaigns run from and until German calendar days. */
 export function germanDay(now: Date): string {
-  return new Intl.DateTimeFormat('en-CA', { timeZone: 'Europe/Berlin' }).format(now);
+  const parts = new Intl.DateTimeFormat('en', {
+    timeZone: 'Europe/Berlin',
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+  }).formatToParts(now);
+  const part = (type: Intl.DateTimeFormatPartTypes) =>
+    parts.find((item) => item.type === type)?.value ?? '';
+  return `${part('year')}-${part('month')}-${part('day')}`;
 }
 
 /** Whether a campaign runs on `day` (YYYY-MM-DD); both ends are included. */

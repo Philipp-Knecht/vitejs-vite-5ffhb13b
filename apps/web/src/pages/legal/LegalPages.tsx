@@ -88,7 +88,8 @@ export function PrivacyPage() {
   const emailProvider = config?.privacy.emailProvider ?? null;
   const ads = config?.ads ?? null;
   const insurancePartner = config?.affiliates.carInsurance ?? null;
-  const sponsorAds = (config?.sponsors.length ?? 0) > 0;
+  // A configuration cached before ads sold directly existed has no `sponsors`.
+  const sponsorAds = config?.sponsors?.configured ?? false;
 
   return (
     <div className="container page page--narrow prose">
@@ -396,15 +397,25 @@ export function PrivacyPage() {
         <>
           <h2>Anzeigen von Werbepartnern</h2>
           <p>
-            Auf Ergebnisseiten und in den Ratgebern zeigen wir Besuchern ohne KaufCheck Pro auch
+            Nutzt du KaufCheck ohne Pro, siehst du auf Ergebnisseiten und in einigen Ratgebern auch
             Anzeigen, die wir selbst an Werbepartner verkaufen; wer wirbt, steht an der Anzeige.
-            Text und Bild kommen von unserem Server: Beim Anzeigen lädt dein Browser nichts vom
-            Werbepartner, und wir geben keine Daten über dich weiter. Klickst du auf die Anzeige,
-            öffnet sich die Website des Werbepartners; wie bei jedem Seitenaufruf erhält er dabei
-            technisch deine IP-Adresse und erfährt, dass du von KaufCheck kommst. Für seine Seiten
-            ist er selbst verantwortlich.
-            {features?.analytics !== false &&
-              ' Wie oft eine Anzeige zu sehen war und angeklickt wurde, zählen wir ohne Angaben zur Person in der Nutzungsstatistik, um es den Werbepartnern mitteilen zu können.'}
+            Welche Anzeige du siehst, hängt nicht von deinem Inserat oder deinen Angaben ab. Text
+            und Bild kommen von unserem Server: Beim Anzeigen lädt dein Browser nichts vom
+            Werbepartner, und wir geben keine Daten über dich weiter.
+          </p>
+          <p>
+            Klickst du auf eine Anzeige, leitet dich unser Server zur Website des Werbepartners
+            weiter; wie bei jedem Seitenaufruf erhält der Werbepartner dabei technisch deine
+            IP-Adresse und erfährt, dass du von KaufCheck kommst. Für seine Seiten ist er selbst
+            verantwortlich.
+          </p>
+          <p>
+            Wie oft eine Anzeige ausgeliefert und angeklickt wurde, zählen wir auf unserem Server je
+            Anzeige und Tag – ohne IP-Adresse, Kennung oder Cookie und ohne Messung in deinem
+            Browser. Sendet dein Browser „Do Not Track“ oder „Global Privacy Control“, zählen wir
+            nicht mit. Werbepartner erhalten von uns nur Gesamtzahlen je Anzeige und Zeitraum.
+            Rechtsgrundlage ist unser berechtigtes Interesse, Anzeigen zu verkaufen und abzurechnen
+            (Art. 6 Abs. 1 lit. f DSGVO).
           </p>
         </>
       )}

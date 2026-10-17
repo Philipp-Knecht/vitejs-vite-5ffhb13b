@@ -62,7 +62,10 @@ const isoDay = z
 /** One ad sold directly (sponsorship), as configured in SPONSOR_ADS. */
 const SponsorAdConfigSchema = z
   .object({
-    id: z.string().regex(/^[a-z0-9-]{1,40}$/, 'only a-z, 0-9 and -, at most 40 characters'),
+    id: z
+      .string()
+      .max(40)
+      .regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/, 'only a-z, 0-9 and single - between them'),
     advertiser: z.string().trim().min(1).max(80),
     title: z.string().trim().min(1).max(80),
     text: z.string().trim().max(200).default(''),
@@ -75,7 +78,10 @@ const SponsorAdConfigSchema = z
       ),
     image: z
       .string()
-      .regex(SPONSOR_IMAGE_PATTERN, 'must be a .png, .jpg or .webp path on this site')
+      .regex(
+        SPONSOR_IMAGE_PATTERN,
+        'must be a lowercase .png, .jpg, .jpeg or .webp path on this site, e.g. /sponsors/name.webp',
+      )
       .optional(),
     imageAlt: z.string().trim().min(1).max(150).optional(),
     placements: z.array(z.enum(AD_PLACEMENTS)).min(1),
@@ -505,7 +511,7 @@ export function loadConfig(source: NodeJS.ProcessEnv = process.env): AppConfig {
     adsense: env.ADSENSE_CLIENT
       ? { client: env.ADSENSE_CLIENT, slot: env.ADSENSE_SLOT ?? null }
       : null,
-    sponsorAds: env.SPONSOR_ADS.map((ad) => ({ ...ad, url: affiliateUrl(ad.url)! })),
+    sponsorAds: env.SPONSOR_ADS,
     affiliateCarInsurance:
       env.AFFILIATE_CAR_INSURANCE_URL && env.AFFILIATE_CAR_INSURANCE_NAME
         ? {
