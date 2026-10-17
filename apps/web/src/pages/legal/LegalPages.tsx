@@ -88,6 +88,7 @@ export function PrivacyPage() {
   const emailProvider = config?.privacy.emailProvider ?? null;
   const ads = config?.ads ?? null;
   const insurancePartner = config?.affiliates.carInsurance ?? null;
+  const sponsorAds = (config?.sponsors.length ?? 0) > 0;
 
   return (
     <div className="container page page--narrow prose">
@@ -387,6 +388,23 @@ export function PrivacyPage() {
         {hosting === 'render' &&
           ' Die Protokolle liegen bei Render und werden je nach Tarif nach 7 bis 30 Tagen gelöscht.'}
       </p>
+
+      {sponsorAds && (
+        <>
+          <h2>Anzeigen von Werbepartnern</h2>
+          <p>
+            Auf Ergebnisseiten und in den Ratgebern zeigen wir Besuchern ohne KaufCheck Pro auch
+            Anzeigen, die wir selbst an Werbepartner verkaufen; wer wirbt, steht an der Anzeige.
+            Text und Bild kommen von unserem Server: Beim Anzeigen lädt dein Browser nichts vom
+            Werbepartner, und wir geben keine Daten über dich weiter. Klickst du auf die Anzeige,
+            öffnet sich die Website des Werbepartners; wie bei jedem Seitenaufruf erhält er dabei
+            technisch deine IP-Adresse und erfährt, dass du von KaufCheck kommst. Für seine Seiten
+            ist er selbst verantwortlich.
+            {features?.analytics !== false &&
+              ' Wie oft eine Anzeige zu sehen war und angeklickt wurde, zählen wir ohne Angaben zur Person in der Nutzungsstatistik, um es den Werbepartnern mitteilen zu können.'}
+          </p>
+        </>
+      )}
 
       {ads && (
         <>

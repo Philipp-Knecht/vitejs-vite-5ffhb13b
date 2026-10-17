@@ -126,6 +126,7 @@ or a short cookie secret). Only `VITE_*` variables are compiled into the browser
 | Payments          | `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET`, `STRIPE_PRICE_ID_PRO`, `VAT_MODE`, `STRIPE_PAYMENT_METHODS`                                                 | All three Stripe values or none; payments also need SMTP e-mail and the full operator details. |
 | Ads               | `ADSENSE_CLIENT`, `ADSENSE_SLOT`                                                                                                                          | See [Google AdSense](#google-adsense).                                                         |
 | Affiliate         | `AFFILIATE_CAR_INSURANCE_URL`, `AFFILIATE_CAR_INSURANCE_NAME`                                                                                             | See [Affiliate link](#affiliate-link).                                                         |
+| Own ads           | `SPONSOR_ADS`                                                                                                                                             | See [Ads sold directly](#ads-sold-directly).                                                   |
 | E-mail            | `EMAIL_TRANSPORT` (`none`/`smtp`/`console`), `SMTP_URL`, `EMAIL_FROM`                                                                                     | Needed for password reset; without e-mail the feature is shown as unavailable.                 |
 | Operations        | `ANALYTICS_ENABLED`, `SERVE_WEB`, `WEB_DIST_DIR`, `ANON_RETENTION_DAYS`, `HOSTING_PROVIDER`                                                               | `HOSTING_PROVIDER=render` names Render in the privacy policy (detected automatically there).   |
 | Web (build time)  | `VITE_IMPRINT_NAME`, `VITE_IMPRINT_ADDRESS` (lines separated by `\|`), `VITE_CONTACT_EMAIL`, `VITE_CONTACT_PHONE`, `VITE_ADS_PROVIDER`                    | The imprint is legally required in Germany; the server reads the same values for contracts.    |
@@ -359,6 +360,48 @@ local testing: `stripe listen --forward-to localhost:3000/api/billing/webhook`.
   Content-Security-Policy Google supports (`'strict-dynamic'`); API responses keep the strict
   default policy.
 
+## Ads sold directly
+
+KaufCheck can sell its two ad placements itself (sponsorships, e.g. a local dealer, an appraiser
+or a workshop). `SPONSOR_ADS` is a JSON array, at most 20 entries:
+
+```json
+[
+  {
+    "id": "autohaus-muster-2026-11",
+    "advertiser": "Autohaus Muster GmbH",
+    "title": "Gebrauchtwagen mit Garantie",
+    "text": "Über 100 geprüfte Fahrzeuge in Musterstadt.",
+    "url": "https://autohaus-muster.example/gebrauchtwagen",
+    "image": "/sponsors/autohaus-muster.webp",
+    "imageAlt": "Autohaus Muster: Hof mit Gebrauchtwagen",
+    "placements": ["result_bottom", "guide_bottom"],
+    "from": "2026-11-01",
+    "until": "2026-11-30"
+  }
+]
+```
+
+- `id`: a-z, 0-9 and -, unique; `advertiser` (shown as „Werbung von …“, § 6 DDG), `title` (at
+  most 80 characters) and `url` (`https://`, used as given) are required; `text` (at most 200
+  characters), the image and `from`/`until` (German calendar days, both included) are optional.
+- The image is a file of this site (`.png`, `.jpg` or `.webp`, e.g. under
+  `apps/web/public/sponsors/`, wide format such as 1200 × 300 px); `imageAlt` describes it. Images
+  from other hosts are refused, so the advertiser never sees a visitor before a click.
+- Where an ad runs, it replaces AdSense; with several, one is picked per page view. Visitors with
+  Pro see none. A running ad adds the section „Anzeigen von Werbepartnern“ to the privacy policy.
+- Views (half of the ad on screen) and clicks are counted as analytics events
+  `sponsor_ad_viewed` and `sponsor_ad_clicked` with `campaign` = `id` – without personal data and
+  not with Do Not Track / Global Privacy Control, so the figures are lower bounds:
+
+  ```sql
+  SELECT props->>'campaign' AS campaign, name, count(*) FROM "AnalyticsEvent"
+  WHERE name IN ('sponsor_ad_viewed', 'sponsor_ad_clicked') GROUP BY 1, 2 ORDER BY 1, 2;
+  ```
+
+- Check every ad before it goes live (no misleading claims, § 5 UWG; nothing the guides warn
+  against) and agree on it in writing: placement, period, price and that KaufCheck may remove it.
+
 ## Affiliate link
 
 - With `AFFILIATE_CAR_INSURANCE_URL` (an `https://` partner link, at most 1,000 characters, used
@@ -380,12 +423,12 @@ local testing: `stripe listen --forward-to localhost:3000/api/billing/webhook`.
 ## Analytics configuration
 
 First-party and cookieless: only an event name, a timestamp and a few allowlisted properties
-(`source`, `errorCode`, `placement`, `count`, `plan`, `aiStatus`, `path`) are stored – no user
+(`source`, `errorCode`, `placement`, `count`, `plan`, `aiStatus`, `path`, `campaign`) are stored – no user
 ids, IP addresses or free text. The browser sends nothing when „Do Not Track“ or „Global Privacy
 Control“ is set. Events: `landing_page_view`, `listing_analysis_started`, `listing_analysis_completed`,
 `listing_analysis_failed` (recorded by the server), `seller_questions_copied`,
 `seller_message_created`, `checklist_started`, `listing_saved`, `search_saved`, `comparison_created`,
-`pro_clicked`, `car_search_started`, `platform_search_opened`, `recall_check_opened`, `analysis_pdf_downloaded`, `negotiation_message_copied`, `owned_car_added`, `sale_contract_created`.
+`pro_clicked`, `car_search_started`, `platform_search_opened`, `recall_check_opened`, `analysis_pdf_downloaded`, `negotiation_message_copied`, `owned_car_added`, `sale_contract_created`, `listing_text_created`, `service_history_pdf_downloaded`, `reminder_enabled`, `affiliate_clicked`, `sponsor_ad_viewed`, `sponsor_ad_clicked`.
 Disable with `ANALYTICS_ENABLED=false`. Events are kept for 400 days, for example:
 
 ```sql

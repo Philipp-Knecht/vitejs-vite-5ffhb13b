@@ -1,9 +1,10 @@
 import type { AdPlacement, SponsorAd } from '@kaufcheck/shared';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useId, useRef, useState } from 'react';
 import { useConfig, useMe } from '../api/queries';
 import { track } from '../lib/analytics';
 import { loadAdSense, requestAd } from '../lib/adsense';
 import { privacySignal } from '../lib/privacy-signals';
+import { useHydrated } from '../lib/use-hydrated';
 
 /**
  * Designated ad placements: below editorial or analysis content – never next
@@ -45,6 +46,7 @@ function SponsorUnit({ ads, placement }: { ads: SponsorAd[]; placement: AdPlacem
   const [index] = useState(() => Math.floor(Math.random() * ads.length));
   const ad = ads[index % ads.length]!;
   const ref = useRef<HTMLElement>(null);
+  const labelId = useId();
   useEffect(() => {
     const element = ref.current;
     if (!element || typeof IntersectionObserver === 'undefined') return;
@@ -63,10 +65,12 @@ function SponsorUnit({ ads, placement }: { ads: SponsorAd[]; placement: AdPlacem
     <aside
       ref={ref}
       className="ad-slot ad-slot--sponsor"
-      aria-label="Werbung"
+      aria-labelledby={labelId}
       data-placement={placement}
     >
-      <span className="ad-slot__label">Werbung von {ad.advertiser}</span>
+      <span className="ad-slot__label" id={labelId}>
+        Werbung von {ad.advertiser}
+      </span>
       <a
         className="sponsor-ad"
         href={ad.url}
@@ -93,11 +97,13 @@ function SponsorUnit({ ads, placement }: { ads: SponsorAd[]; placement: AdPlacem
  * for example without consent – stay invisible.
  */
 export function AdSlot({ placement }: { placement: AdPlacement }) {
+  // Never part of a prerendered page: ads appear once the plan is known.
+  const hydrated = useHydrated();
   const me = useMe();
   const config = useConfig();
   const ads = config.data?.ads ?? null;
   const sponsors = (config.data?.sponsors ?? []).filter((ad) => ad.placements.includes(placement));
-  if (me.data?.entitlements.showAds !== true) return null;
+  if (!hydrated || me.data?.entitlements.showAds !== true) return null;
   if (sponsors.length > 0) return <SponsorUnit ads={sponsors} placement={placement} />;
   if (ads) {
     if (privacySignal()) return null;

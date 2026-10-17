@@ -81,6 +81,19 @@ const server = spawn(process.execPath, [path.join(root, 'apps/api/dist/server.js
     // A synthetic partner link; nothing is fetched from it.
     AFFILIATE_CAR_INSURANCE_URL: 'https://partner.example/kfz-vergleich?pid=e2e',
     AFFILIATE_CAR_INSURANCE_NAME: 'Beispielportal',
+    // A synthetic ad sold directly, in the guides only; its image is a file of the site.
+    SPONSOR_ADS: JSON.stringify([
+      {
+        id: 'e2e-autohaus',
+        advertiser: 'Autohaus Beispiel',
+        title: 'Gebrauchtwagen mit Garantie',
+        text: 'Über 100 geprüfte Fahrzeuge in Musterstadt.',
+        url: 'https://autohaus.example/?ref=kaufcheck',
+        image: '/og-image.png',
+        imageAlt: 'Logo von Autohaus Beispiel',
+        placements: ['guide_bottom'],
+      },
+    ]),
   },
 });
 

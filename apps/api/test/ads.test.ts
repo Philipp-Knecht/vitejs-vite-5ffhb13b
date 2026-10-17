@@ -104,4 +104,52 @@ describe('Google AdSense', () => {
       await built.app.close();
     }
   });
+
+  it('lists the ads sold directly that run today in Germany', async () => {
+    let now = new Date('2026-10-31T22:30:00Z');
+    const ad = {
+      advertiser: 'Autohaus Muster GmbH',
+      title: 'Gebrauchtwagen mit Garantie',
+      url: 'https://autohaus-muster.example/?ref=kaufcheck',
+      placements: ['guide_bottom'],
+    };
+    const built = await createTestApp(
+      {
+        SPONSOR_ADS: JSON.stringify([
+          { ...ad, id: 'oktober', until: '2026-10-31' },
+          {
+            ...ad,
+            id: 'november',
+            from: '2026-11-01',
+            image: '/sponsors/muster.webp',
+            imageAlt: 'Logo von Autohaus Muster',
+          },
+        ]),
+      },
+      { now: () => now },
+    );
+    try {
+      const client = new TestClient(built.app);
+      const ids = async () =>
+        PublicConfigSchema.parse((await client.get('/api/config')).json()).sponsors.map(
+          (sponsor) => sponsor.id,
+        );
+      // 23:30 in Germany: still 31 October.
+      expect(await ids()).toEqual(['oktober']);
+      now = new Date('2026-10-31T23:30:00Z');
+      expect(await ids()).toEqual(['november']);
+      const config = PublicConfigSchema.parse((await client.get('/api/config')).json());
+      expect(config.sponsors[0]).toEqual({
+        id: 'november',
+        advertiser: 'Autohaus Muster GmbH',
+        title: 'Gebrauchtwagen mit Garantie',
+        text: '',
+        url: 'https://autohaus-muster.example/?ref=kaufcheck',
+        image: { src: '/sponsors/muster.webp', alt: 'Logo von Autohaus Muster' },
+        placements: ['guide_bottom'],
+      });
+    } finally {
+      await built.app.close();
+    }
+  });
 });

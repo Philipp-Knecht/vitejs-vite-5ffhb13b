@@ -53,7 +53,11 @@ function affiliateUrl(value: string): string | null {
 const isoDay = z
   .string()
   .regex(/^\d{4}-\d{2}-\d{2}$/, 'must be a day like 2026-11-01')
-  .refine((value) => !Number.isNaN(Date.parse(`${value}T00:00:00Z`)), 'is not a valid day');
+  .refine((value) => {
+    const time = Date.parse(`${value}T00:00:00Z`);
+    // Date.parse rolls 30 February over to March: compare the day back.
+    return !Number.isNaN(time) && new Date(time).toISOString().startsWith(value);
+  }, 'is not a valid day');
 
 /** One ad sold directly (sponsorship), as configured in SPONSOR_ADS. */
 const SponsorAdConfigSchema = z
