@@ -136,7 +136,7 @@ function rows(
       ],
     },
     {
-      label: 'Erinnerungen an Inspektion, Bremsflüssigkeit und Reifen',
+      label: 'Erinnerungen an Inspektion, Bremsflüssigkeit und Reifen (E-Mail und Kalender)',
       cells: [
         flag(plans.anonymous.reminders),
         flag(plans.free.reminders),

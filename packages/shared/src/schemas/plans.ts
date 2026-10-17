@@ -25,7 +25,7 @@ export const EntitlementsSchema = z.object({
   carLog: z.boolean(),
   /** Monthly costs of the offers in a comparison, from the buyer's own figures. */
   monthlyCosts: z.boolean(),
-  /** E-mail reminders (HU, inspection, brake fluid, tyres) and calendar files for them. */
+  /** All e-mail reminders (also inspection, brake fluid, tyres) and calendar files for them. */
   reminders: z.boolean(),
   /** The HU e-mail reminder alone; with an account also without Pro. */
   huReminder: z.boolean(),

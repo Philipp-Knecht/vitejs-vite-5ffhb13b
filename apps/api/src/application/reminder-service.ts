@@ -236,7 +236,7 @@ export class ReminderService {
     const user = await this.requireUser(actor);
     if (!actor.entitlements.reminders && !actor.entitlements.huReminder)
       throw new AppError('PLAN_LIMIT_REACHED', {
-        message: 'Erinnerungen gehören zu KaufCheck Pro.',
+        message: 'E-Mail-Erinnerungen sind mit deinem Konto nicht verfügbar.',
       });
     if (user.remindersConfirmedAt !== null) return;
     if (!this.available)
@@ -363,7 +363,8 @@ export class ReminderService {
         where: {
           email: true,
           car: { user: { remindersConfirmedAt: { not: null } } },
-          // The HU reminder is free; the others go out only with Pro.
+          // As `reminderAllowed` with the plans in plans.ts: the HU with any account, the rest with Pro.
+          // Change both together.
           OR: [{ kind: 'hu' }, { car: { user: { plan: 'PRO' } } }],
           // Not a Prisma cursor: the last row may change or go while e-mails are sent.
           ...(cursor ? { id: { gt: cursor } } : {}),

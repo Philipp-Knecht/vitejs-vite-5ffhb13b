@@ -310,11 +310,12 @@ export function PrivacyPage() {
         kurze sachliche Hinweise dazu und wie du die Erinnerung abbestellst; sie enthalten keine
         Werbung, keine Zählpixel und keine nachverfolgten Links. Abbestellen kannst du jede
         Erinnerung über den Link in der E-Mail oder unter „Mein Auto“. Die Angaben löschen wir mit
-        dem Auto oder deinem Konto. Endet Pro, schicken wir nur noch die Erinnerungen an die HU;
-        deine übrigen Einstellungen bleiben gespeichert, bis du das Auto oder dein Konto löschst.
-        Buchst du Pro wieder, kommen die eingeschalteten Erinnerungen wieder. Ist der E-Mail-Versand
-        nicht verfügbar, speichern wir nur die Monate, die du einträgst. Bestätigungslinks schicken
-        wir höchstens dreimal am Tag. Rechtsgrundlage ist Art. 6 Abs. 1 lit. b DSGVO.
+        dem Auto oder deinem Konto. Endet Pro, schicken wir nur noch die Erinnerungen an die HU, die
+        du eingeschaltet hast; deine übrigen Einstellungen bleiben gespeichert, bis du das Auto oder
+        dein Konto löschst. Buchst du Pro wieder, kommen die eingeschalteten Erinnerungen wieder.
+        Ist der E-Mail-Versand nicht verfügbar, speichern wir nur die Monate, die du einträgst.
+        Bestätigungslinks schicken wir höchstens dreimal am Tag. Rechtsgrundlage ist Art. 6 Abs. 1
+        lit. b DSGVO.
       </p>
 
       {emailProvider && (

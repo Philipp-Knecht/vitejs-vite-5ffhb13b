@@ -192,6 +192,7 @@ function ReminderForm({
 
   const titleId = `reminder-${kind}-title`;
   const reasonId = `reminder-${kind}-reason`;
+  const pausedId = `reminder-${kind}-paused`;
   const monthErrorId = `reminder-${kind}-month-error`;
   const now = new Date();
   const today = germanToday(now);
@@ -336,7 +337,9 @@ function ReminderForm({
     : !emailAvailable
       ? 'E-Mail-Erinnerungen sind derzeit nicht verfügbar.'
       : null;
-  const checkboxDisabled = (!editable || !emailAvailable) && !email;
+  // Switched on with Pro and kept after it ended: not sent now, can still be switched off.
+  const paused = !editable && reminder.email;
+  const checkboxDisabled = (!editable || !emailAvailable) && !reminder.email;
 
   return (
     <section className="card reminder" aria-labelledby={titleId}>
@@ -363,7 +366,7 @@ function ReminderForm({
                   value={month}
                   disabled={!editable}
                   aria-invalid={error?.month ? true : undefined}
-                  aria-describedby={error?.month ? monthErrorId : undefined}
+                  aria-describedby={error?.month ? monthErrorId : paused ? pausedId : undefined}
                   onChange={(event) => setMonth(event.target.value)}
                 >
                   <option value="">Monat</option>
@@ -381,7 +384,7 @@ function ReminderForm({
                   disabled={!editable}
                   onChange={(event) => setYear(event.target.value)}
                   aria-invalid={error?.month ? true : undefined}
-                  aria-describedby={error?.month ? monthErrorId : undefined}
+                  aria-describedby={error?.month ? monthErrorId : paused ? pausedId : undefined}
                 />
               </div>
               {error?.month && (
@@ -399,7 +402,9 @@ function ReminderForm({
                 checked={email}
                 // Switching off always works, also without Pro.
                 disabled={checkboxDisabled}
-                aria-describedby={checkboxDisabled && reason ? reasonId : undefined}
+                aria-describedby={
+                  paused ? pausedId : checkboxDisabled && reason ? reasonId : undefined
+                }
                 onChange={(event) => setEmail(event.target.checked)}
               />
               <span>Per E-Mail erinnern</span>
@@ -407,6 +412,12 @@ function ReminderForm({
             {checkboxDisabled && reason && (
               <p className="field__hint" id={reasonId}>
                 {reason}
+              </p>
+            )}
+            {paused && (
+              <p className="field__hint" id={pausedId}>
+                Pausiert: Diese Erinnerung schicken wir nur mit KaufCheck Pro. Deine Einstellung
+                bleibt gespeichert; ausschalten kannst du sie jederzeit.
               </p>
             )}
           </div>
@@ -552,9 +563,10 @@ export function RemindersPage() {
 
   const data = reminders.data;
   const emailAvailable = config.data?.features.reminders ?? false;
-  const anyEmail = data?.items.some((item) => item.email) ?? false;
   // Switched on with Pro and kept after it ended: these are not sent now.
   const anyProEmail = data?.items.some((item) => item.email && !item.editable) ?? false;
+  // Only these are sent; the address matters for them.
+  const anySent = data?.items.some((item) => item.email && item.editable) ?? false;
 
   return (
     <div className="container page reminders">
@@ -594,12 +606,18 @@ export function RemindersPage() {
           {!data.editable && (
             <Alert
               tone="info"
-              title="Inspektion, Bremsflüssigkeit und Reifen gehören zu KaufCheck Pro"
+              title={
+                emailAvailable
+                  ? 'An die HU erinnern wir dich kostenlos'
+                  : 'Inspektion, Bremsflüssigkeit und Reifen gehören zu KaufCheck Pro'
+              }
             >
               <p>
                 {anyProEmail
-                  ? 'Ohne Pro verschicken wir nur die Erinnerung an die HU. Deine übrigen Einstellungen bleiben gespeichert und gelten wieder, sobald du Pro hast; ausschalten kannst du sie jederzeit.'
-                  : 'An die HU erinnern wir dich kostenlos. Mit Pro erinnert dich KaufCheck auch an Inspektion, Bremsflüssigkeit und Reifenwechsel, und du übernimmst diese Termine in deinen Kalender.'}
+                  ? 'Inspektion, Bremsflüssigkeit und Reifen schicken wir nur mit KaufCheck Pro. Deine Einstellungen dazu bleiben gespeichert und gelten wieder, sobald du Pro hast; ausschalten kannst du sie jederzeit.'
+                  : emailAvailable
+                    ? 'Mit KaufCheck Pro erinnern wir dich auch an Inspektion, Bremsflüssigkeit und Reifenwechsel – per E-Mail und als Kalenderdatei.'
+                    : 'Mit KaufCheck Pro übernimmst du auch diese Termine in deinen Kalender.'}
               </p>
               <p>
                 <Link to="/pro" onClick={() => track('pro_clicked', { placement: 'reminders' })}>
@@ -610,7 +628,11 @@ export function RemindersPage() {
           )}
           {!emailAvailable && (
             <Alert tone="info" title="E-Mail-Erinnerungen sind derzeit nicht verfügbar">
-              <p>Die Termine kannst du trotzdem in deinen Kalender übernehmen.</p>
+              <p>
+                {data.editable
+                  ? 'Die Termine kannst du trotzdem in deinen Kalender übernehmen.'
+                  : 'Die HU-Frist kannst du trotzdem in deinen Kalender übernehmen.'}
+              </p>
             </Alert>
           )}
           {emailAvailable && (
@@ -618,7 +640,7 @@ export function RemindersPage() {
               address={data.emailAddress}
               confirmed={data.emailConfirmed}
               pending={data.confirmationPending}
-              anyEmail={anyEmail}
+              anyEmail={anySent}
             />
           )}
           {data.items.map((reminder) => (

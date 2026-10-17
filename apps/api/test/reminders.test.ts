@@ -324,6 +324,15 @@ describe('Reminders', () => {
     const denied = await free.client.put(path(free.car.id, 'tyres'), on());
     expect(denied.statusCode).toBe(403);
     expect(errorOf(denied).code).toBe('PLAN_LIMIT_REACHED');
+    // A free account may ask for the confirmation link; anonymous visitors may not.
+    expect((await free.client.post('/api/reminders/confirmation')).statusCode).toBe(204);
+    expect(email.sent.at(-1)?.subject).toBe(
+      'KaufCheck: E-Mail-Adresse für Erinnerungen bestätigen',
+    );
+    email.sent.length = 0;
+    const anonymous = new TestClient(built.app, () => now);
+    expect((await anonymous.post('/api/reminders/confirmation')).statusCode).toBe(401);
+    now = new Date(now.getTime() + 11 * 60_000);
     await confirmed(free.client, free.car.id);
     expect(await built.services.reminders.sendDue()).toEqual({
       remindersSent: 1,
@@ -360,6 +369,17 @@ describe('Reminders', () => {
       lastSentKey: null,
       editable: false,
     });
+
+    // Booked again: the kept settings apply again.
+    await built.services.db.user.update({ where: { id: account.id }, data: { plan: 'PRO' } });
+    expect(
+      (await client.put(path(car.id, 'service'), on({ year: 2026, month: 11 }))).statusCode,
+    ).toBe(200);
+    email.sent.length = 0;
+    expect((await built.services.reminders.sendDue()).remindersSent).toBe(1);
+    expect(email.sent.map((mail) => mail.subject)).toEqual([
+      'Erinnerung: Inspektion für Volkswagen Golf im November 2026',
+    ]);
   });
 
   it('switches off whatever the month, but does not switch on what could never send', async () => {
