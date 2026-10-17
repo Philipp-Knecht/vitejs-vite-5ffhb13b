@@ -23,6 +23,7 @@ export const ANALYTICS_EVENTS = [
   'sale_contract_created',
   'listing_text_created',
   'service_history_pdf_downloaded',
+  'reminder_enabled',
 ] as const;
 
 export type AnalyticsEventName = (typeof ANALYTICS_EVENTS)[number];

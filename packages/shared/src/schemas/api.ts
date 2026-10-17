@@ -9,6 +9,7 @@ import {
 import { ApiErrorSchema } from './errors';
 import { FUEL_TYPES } from '../labels';
 import { CAR_LOG_KINDS } from '../car-log';
+import { REMINDER_KINDS } from '../reminders';
 import { EntitlementsSchema, PlanSchema } from './plans';
 import { LISTING_PLATFORMS, MAX_URL_INPUT_LENGTH } from '../url';
 import { AnalysisResultSchema, EvidenceTypeSchema } from './analysis';
@@ -285,6 +286,53 @@ export const CarLogResponseSchema = z.object({
 export type CarLogResponse = z.infer<typeof CarLogResponseSchema>;
 
 // ---------------------------------------------------------------------------
+// Reminders for the cars in „Mein Auto“
+// ---------------------------------------------------------------------------
+
+export const ReminderKindSchema = z.enum(REMINDER_KINDS);
+
+const ReminderMonthSchema = z.object({ year: CarYearSchema, month: CarMonthSchema });
+
+export const ReminderDtoSchema = z.object({
+  kind: ReminderKindSchema,
+  /** The e-mail reminder is switched on. */
+  email: z.boolean(),
+  /** Inspection: the month it is due; brake fluid: the month of the last change. */
+  month: ReminderMonthSchema.nullable(),
+  /** The due date the last e-mail was about (see `dueOccurrence`). */
+  lastSentKey: z.string().nullable(),
+});
+export type ReminderDto = z.infer<typeof ReminderDtoSchema>;
+
+export const CarRemindersResponseSchema = z.object({
+  /** One per kind, in the order of `REMINDER_KINDS`. */
+  items: z.array(ReminderDtoSchema),
+  /** The account's address: reminders go there once it is confirmed. */
+  emailAddress: z.string(),
+  emailConfirmed: z.boolean(),
+  /** A confirmation link was sent and is still valid. */
+  confirmationPending: z.boolean(),
+  /** False without Pro: reminders can be switched off, not on. */
+  editable: z.boolean(),
+  /** Only after saving: a confirmation link was sent just now. */
+  confirmationSent: z.boolean().optional(),
+});
+export type CarRemindersResponse = z.infer<typeof CarRemindersResponseSchema>;
+
+export const ReminderInputSchema = z.object({
+  email: z.boolean(),
+  month: ReminderMonthSchema.nullable(),
+});
+export type ReminderInput = z.infer<typeof ReminderInputSchema>;
+
+export const ReminderConfirmRequestSchema = z.object({ token: z.string().min(16).max(200) });
+
+export const ReminderUnsubscribeRequestSchema = z.object({
+  reminder: z.string().min(1).max(64),
+  token: z.string().min(16).max(200),
+});
+
+// ---------------------------------------------------------------------------
 // Comparison
 // ---------------------------------------------------------------------------
 
@@ -405,6 +453,8 @@ export const PublicConfigSchema = z.object({
     photoAnalysis: z.boolean(),
     billing: z.boolean(),
     passwordReset: z.boolean(),
+    /** E-mail reminders can be sent (e-mail and operator details configured). */
+    reminders: z.boolean(),
     analytics: z.boolean(),
   }),
   plans: z.object({

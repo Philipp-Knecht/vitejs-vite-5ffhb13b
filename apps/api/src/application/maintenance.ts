@@ -3,6 +3,7 @@ import type { Db } from '../infrastructure/db/client';
 export interface MaintenanceReport {
   expiredSessions: number;
   expiredResetTokens: number;
+  expiredReminderConfirmTokens: number;
   anonymousAnalyses: number;
   orphanedListings: number;
   oldUsage: number;
@@ -29,6 +30,9 @@ export async function runMaintenance(
   const expiredResetTokens = await db.passwordResetToken.deleteMany({
     where: { expiresAt: { lt: now } },
   });
+  const expiredReminderConfirmTokens = await db.reminderConfirmToken.deleteMany({
+    where: { expiresAt: { lt: now } },
+  });
   const anonymousAnalyses = await db.analysis.deleteMany({
     where: { userId: null, createdAt: { lt: anonCutoff } },
   });
@@ -43,6 +47,7 @@ export async function runMaintenance(
   return {
     expiredSessions: expiredSessions.count,
     expiredResetTokens: expiredResetTokens.count,
+    expiredReminderConfirmTokens: expiredReminderConfirmTokens.count,
     anonymousAnalyses: anonymousAnalyses.count,
     orphanedListings: orphanedListings.count,
     oldUsage: oldUsage.count,

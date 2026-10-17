@@ -27,3 +27,4 @@ export * from './sale-contract';
 export * from './listing-text';
 export * from './car-log';
 export * from './monthly-costs';
+export * from './reminders';

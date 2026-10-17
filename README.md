@@ -46,6 +46,13 @@ ends, the entries stay readable, exportable and deletable; no receipts are uploa
 comparison, Pro members put the monthly costs of their saved offers side by side
 (`packages/shared/src/monthly-costs.ts`): depreciation, fuel or electricity, tax, insurance and
 workshop from their own figures – KaufCheck has no price or consumption data and assumes none.
+Pro members can also switch on e-mail reminders per car (`/mein-auto/<id>/erinnerungen`,
+`apps/api/src/application/reminder-service.ts`, rules in `packages/shared/src/reminders.ts`): HU,
+inspection, brake fluid and tyres, or a calendar file for each. The account address is confirmed
+by a link first (accounts are not verified at sign-up). A timer in the server process (hourly and two minutes after start) sends what is due,
+each due date once, with a one-click unsubscribe link (RFC 8058, signed with `COOKIE_SECRET`) and
+no advertising. Reminders need SMTP and the operator details (`VITE_IMPRINT_*`,
+`VITE_CONTACT_EMAIL`) for the footer; without them the page offers calendar files only.
 
 For the listing check, a user pastes the listing text (or a link); KaufCheck extracts and
 normalizes the vehicle data and shows a mobile-first dashboard:
@@ -141,8 +148,8 @@ Main entities: `User`, `Session` (only the SHA-256 of the token is stored), `Pas
 version, AI status), `SellerQuestion`, `SavedListing`, `Usage` (monthly quota per account or
 anonymous id), `Subscription`, `BillingEvent` (webhook idempotency) and `AnalyticsEvent`.
 
-A maintenance job runs every 6 hours in the server process: it deletes expired sessions and reset
-tokens, anonymous analyses older than `ANON_RETENTION_DAYS`, orphaned listings, and usage rows and
+A maintenance job runs every 6 hours in the server process: it deletes expired sessions, reset
+tokens and reminder confirmation links, anonymous analyses older than `ANON_RETENTION_DAYS`, orphaned listings, and usage rows and
 analytics events older than 400 days. Deleting an account removes all of its data.
 
 To grant Pro manually (support cases, or while payments are not set up):

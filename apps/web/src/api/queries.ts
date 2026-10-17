@@ -13,6 +13,9 @@ import type {
   CarLogEntryDto,
   CarLogEntryInput,
   CarLogResponse,
+  CarRemindersResponse,
+  ReminderInput,
+  ReminderKind,
   OwnedCarsResponse,
   PublicConfig,
   RedirectResponse,
@@ -43,6 +46,7 @@ export const queryKeys = {
   savedSearches: ['saved-searches'] as const,
   ownedCars: ['owned-cars'] as const,
   carLog: (carId: string) => ['car-log', carId] as const,
+  reminders: (carId: string) => ['reminders', carId] as const,
   history: ['history'] as const,
   comparison: (ids: readonly string[]) => ['comparison', ...ids] as const,
   order: (number: string) => ['order', number] as const,
@@ -201,6 +205,70 @@ export function useDeleteCarLogEntry(carId: string) {
   });
 }
 
+export function useCarReminders(carId: string, enabled: boolean) {
+  return useQuery({
+    queryKey: queryKeys.reminders(carId),
+    queryFn: ({ signal }) =>
+      api.get<CarRemindersResponse>(
+        `/api/owned-cars/${encodeURIComponent(carId)}/reminders`,
+        signal,
+      ),
+    enabled,
+  });
+}
+
+export function useSaveReminder(carId: string) {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: ({ kind, input }: { kind: ReminderKind; input: ReminderInput }) =>
+      api.put<CarRemindersResponse>(
+        `/api/owned-cars/${encodeURIComponent(carId)}/reminders/${kind}`,
+        input,
+      ),
+    onSuccess: (data) => queryClient.setQueryData(queryKeys.reminders(carId), data),
+    // E.g. the confirmation e-mail could not be sent: show what the server holds.
+    onError: () => queryClient.invalidateQueries({ queryKey: queryKeys.reminders(carId) }),
+  });
+}
+
+export function useRequestReminderConfirmation() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: () => api.post('/api/reminders/confirmation'),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['reminders'] }),
+  });
+}
+
+export function useConfirmReminders() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (token: string) => api.post('/api/reminders/confirm', { token }),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['reminders'] }),
+  });
+}
+
+export function useUnsubscribeInfo(reminder: string, token: string) {
+  return useQuery({
+    queryKey: ['reminder-unsubscribe', reminder, token],
+    queryFn: ({ signal }) =>
+      api.get<{ kind: ReminderKind; carName: string; email: boolean }>(
+        `/api/reminders/unsubscribe?r=${encodeURIComponent(reminder)}&t=${encodeURIComponent(token)}`,
+        signal,
+      ),
+    enabled: Boolean(reminder && token),
+    retry: false,
+  });
+}
+
+export function useUnsubscribeReminder() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (input: { reminder: string; token: string }) =>
+      api.post('/api/reminders/unsubscribe', input),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['reminders'] }),
+  });
+}
+
 export function useDeleteSavedSearch() {
   const queryClient = useQueryClient();
   return useMutation({
@@ -247,6 +315,7 @@ function useInvalidateSession() {
     queryClient.removeQueries({ queryKey: queryKeys.savedSearches });
     queryClient.removeQueries({ queryKey: queryKeys.ownedCars });
     queryClient.removeQueries({ queryKey: ['car-log'] });
+    queryClient.removeQueries({ queryKey: ['reminders'] });
     queryClient.removeQueries({ queryKey: queryKeys.history });
     queryClient.removeQueries({ queryKey: ['comparison'] });
     queryClient.removeQueries({ queryKey: ['analysis'] });

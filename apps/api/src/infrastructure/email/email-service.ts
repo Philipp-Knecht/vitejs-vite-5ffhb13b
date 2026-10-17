@@ -7,6 +7,8 @@ export interface EmailMessage {
   text: string;
   /** Where replies go, e.g. the operator's contact address. */
   replyTo?: string;
+  /** Extra headers, e.g. List-Unsubscribe (RFC 8058) for reminders. */
+  headers?: Record<string, string>;
 }
 
 export interface EmailService {
@@ -46,6 +48,7 @@ export class SmtpEmailService implements EmailService {
       subject: message.subject,
       text: message.text,
       ...(message.replyTo ? { replyTo: message.replyTo } : {}),
+      ...(message.headers ? { headers: message.headers } : {}),
     });
   }
 }

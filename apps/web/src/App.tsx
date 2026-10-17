@@ -43,6 +43,21 @@ const MyCarPage = lazy(() =>
 const CarLogPage = lazy(() =>
   import('./features/car-log/CarLogPage').then((module) => ({ default: module.CarLogPage })),
 );
+const RemindersPage = lazy(() =>
+  import('./features/reminders/RemindersPage').then((module) => ({
+    default: module.RemindersPage,
+  })),
+);
+const ConfirmRemindersPage = lazy(() =>
+  import('./features/reminders/ReminderLinkPages').then((module) => ({
+    default: module.ConfirmRemindersPage,
+  })),
+);
+const UnsubscribeReminderPage = lazy(() =>
+  import('./features/reminders/ReminderLinkPages').then((module) => ({
+    default: module.UnsubscribeReminderPage,
+  })),
+);
 const ComparePage = lazy(() =>
   import('./features/compare/ComparePage').then((module) => ({ default: module.ComparePage })),
 );
@@ -184,6 +199,9 @@ export function App({ queryClient }: { queryClient: QueryClient }) {
               <Route path="/meine-angebote" element={<SavedListingsPage />} />
               <Route path="/mein-auto" element={<MyCarPage />} />
               <Route path="/mein-auto/:id/kostenbuch" element={<CarLogPage />} />
+              <Route path="/mein-auto/:id/erinnerungen" element={<RemindersPage />} />
+              <Route path="/erinnerungen-bestaetigen" element={<ConfirmRemindersPage />} />
+              <Route path="/erinnerung-abbestellen" element={<UnsubscribeReminderPage />} />
               <Route path="/vergleich" element={<ComparePage />} />
               <Route path="/verlauf" element={<HistoryPage />} />
               <Route path="/anmelden" element={<LoginPage />} />

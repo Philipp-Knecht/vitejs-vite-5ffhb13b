@@ -128,6 +128,14 @@ function rows(
       cells: [flag(plans.anonymous.carLog), flag(plans.free.carLog), flag(plans.pro.carLog)],
     },
     {
+      label: 'Erinnerungen an HU, Inspektion, Bremsflüssigkeit und Reifen',
+      cells: [
+        flag(plans.anonymous.reminders),
+        flag(plans.free.reminders),
+        flag(plans.pro.reminders),
+      ],
+    },
+    {
       label: photoAnalysisAvailable ? 'Fotoanalyse' : 'Fotoanalyse (derzeit nicht verfügbar)',
       cells: [
         flag(plans.anonymous.photoAnalysis),

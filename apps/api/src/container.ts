@@ -10,6 +10,7 @@ import { ContractService } from './application/contract-service';
 import { SavedListingService } from './application/saved-listing-service';
 import { OwnedCarService } from './application/owned-car-service';
 import { CarLogService } from './application/car-log-service';
+import { ReminderService } from './application/reminder-service';
 import { SavedSearchService } from './application/saved-search-service';
 import { UsageService } from './application/usage-service';
 import type { AppConfig } from './config/env';
@@ -49,6 +50,7 @@ export interface Services {
   savedSearches: SavedSearchService;
   ownedCars: OwnedCarService;
   carLog: CarLogService;
+  reminders: ReminderService;
   billing: BillingService;
   account: AccountService;
   email: EmailService;
@@ -157,6 +159,12 @@ export function createServices(
   const savedSearches = new SavedSearchService(db, analytics, now);
   const ownedCars = new OwnedCarService(db, analytics, now);
   const carLog = new CarLogService(db, now);
+  const reminders = new ReminderService(
+    db,
+    email,
+    { siteUrl: config.publicSiteUrl, operator: config.operator, secret: config.cookieSecret, now },
+    logger,
+  );
   const account = new AccountService(db, auth, billing);
 
   return {
@@ -173,6 +181,7 @@ export function createServices(
     savedSearches,
     ownedCars,
     carLog,
+    reminders,
     billing,
     account,
     email,

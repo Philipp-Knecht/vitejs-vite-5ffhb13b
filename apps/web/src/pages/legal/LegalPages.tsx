@@ -297,12 +297,33 @@ export function PrivacyPage() {
         </>
       )}
 
+      <h2>E-Mail-Erinnerungen</h2>
+      <p>
+        Mit KaufCheck Pro kannst du dich für jedes Auto in „Mein Auto“ an HU, Inspektion, Wechsel
+        der Bremsflüssigkeit und Reifenwechsel erinnern lassen. Das ist freiwillig und für jede
+        Erinnerung einzeln ausgeschaltet, bis du sie einschaltest. Vor der ersten Erinnerung
+        bestätigst du deine E-Mail-Adresse über einen Link, der 48 Stunden gilt. Dafür speichern
+        wir, welche Erinnerung du wann eingeschaltet hast, die Monate, die du dazu einträgst
+        (nächste Inspektion, letzter Wechsel der Bremsflüssigkeit), wann du deine Adresse bestätigt
+        hast und welche Erinnerung wir zuletzt wann verschickt haben, damit jede nur einmal kommt.
+        Die E-Mails gehen an die Adresse deines Kontos und nennen das Auto, die Frist, kurze
+        sachliche Hinweise dazu und wie du die Erinnerung abbestellst; sie enthalten keine Werbung,
+        keine Zählpixel und keine nachverfolgten Links. Abbestellen kannst du jede Erinnerung über
+        den Link in der E-Mail oder unter „Mein Auto“. Die Angaben löschen wir mit dem Auto oder
+        deinem Konto. Endet Pro, schicken wir keine Erinnerungen mehr; deine Einstellungen bleiben
+        gespeichert, bis du das Auto oder dein Konto löschst. Buchst du Pro wieder, kommen die
+        eingeschalteten Erinnerungen wieder. Ist der E-Mail-Versand nicht verfügbar, speichern wir
+        nur die Monate, die du einträgst. Bestätigungslinks schicken wir höchstens dreimal am Tag.
+        Rechtsgrundlage ist Art. 6 Abs. 1 lit. b DSGVO.
+      </p>
+
       {emailProvider && (
         <>
           <h2>E-Mails</h2>
           <p>
-            E-Mails – etwa zum Zurücksetzen des Passworts und die Bestätigungen zu Bestellungen,
-            Verträgen, Kündigungen und Widerrufen – verschicken wir über{' '}
+            E-Mails – etwa zum Zurücksetzen des Passworts, die Erinnerungen für dein Auto und die
+            Bestätigungen zu Bestellungen, Verträgen, Kündigungen und Widerrufen – verschicken wir
+            über{' '}
             {emailProvider === 'brevo' &&
               'die Brevo GmbH, Köpenicker Str. 126, 10179 Berlin, die in unserem Auftrag handelt (Auftragsverarbeitung nach Art. 28 DSGVO).'}
             {emailProvider === 'gmail' &&
