@@ -159,19 +159,18 @@ function PlanLine({
 function ReminderForm({
   car,
   reminder,
-  editable,
   emailAvailable,
   confirmed,
   address,
 }: {
   car: OwnedCarDto;
   reminder: ReminderDto;
-  editable: boolean;
   emailAvailable: boolean;
   confirmed: boolean;
   address: string;
 }) {
   const toast = useToast();
+  const editable = reminder.editable;
   const save = useSaveReminder(car.id);
   const kind = reminder.kind;
   const needsMonth = kind === 'service' || kind === 'brakeFluid';
@@ -193,6 +192,7 @@ function ReminderForm({
 
   const titleId = `reminder-${kind}-title`;
   const reasonId = `reminder-${kind}-reason`;
+  const pausedId = `reminder-${kind}-paused`;
   const monthErrorId = `reminder-${kind}-month-error`;
   const now = new Date();
   const today = germanToday(now);
@@ -333,11 +333,13 @@ function ReminderForm({
           : `Nächster Wechsel nach der Empfehlung: ${monthName(due)} (${BRAKE_FLUID_MONTHS / 12} Jahre nach dem letzten).`
         : null;
   const reason = !editable
-    ? 'Erinnerungen per E-Mail gehören zu KaufCheck Pro.'
+    ? 'Diese Erinnerung gehört zu KaufCheck Pro.'
     : !emailAvailable
       ? 'E-Mail-Erinnerungen sind derzeit nicht verfügbar.'
       : null;
-  const checkboxDisabled = (!editable || !emailAvailable) && !email;
+  // Switched on with Pro and kept after it ended: not sent now, can still be switched off.
+  const paused = !editable && reminder.email;
+  const checkboxDisabled = (!editable || !emailAvailable) && !reminder.email;
 
   return (
     <section className="card reminder" aria-labelledby={titleId}>
@@ -364,7 +366,7 @@ function ReminderForm({
                   value={month}
                   disabled={!editable}
                   aria-invalid={error?.month ? true : undefined}
-                  aria-describedby={error?.month ? monthErrorId : undefined}
+                  aria-describedby={error?.month ? monthErrorId : paused ? pausedId : undefined}
                   onChange={(event) => setMonth(event.target.value)}
                 >
                   <option value="">Monat</option>
@@ -382,7 +384,7 @@ function ReminderForm({
                   disabled={!editable}
                   onChange={(event) => setYear(event.target.value)}
                   aria-invalid={error?.month ? true : undefined}
-                  aria-describedby={error?.month ? monthErrorId : undefined}
+                  aria-describedby={error?.month ? monthErrorId : paused ? pausedId : undefined}
                 />
               </div>
               {error?.month && (
@@ -400,7 +402,9 @@ function ReminderForm({
                 checked={email}
                 // Switching off always works, also without Pro.
                 disabled={checkboxDisabled}
-                aria-describedby={checkboxDisabled && reason ? reasonId : undefined}
+                aria-describedby={
+                  paused ? pausedId : checkboxDisabled && reason ? reasonId : undefined
+                }
                 onChange={(event) => setEmail(event.target.checked)}
               />
               <span>Per E-Mail erinnern</span>
@@ -408,6 +412,13 @@ function ReminderForm({
             {checkboxDisabled && reason && (
               <p className="field__hint" id={reasonId}>
                 {reason}
+              </p>
+            )}
+            {paused && (
+              <p className="field__hint" id={pausedId}>
+                {emailAvailable
+                  ? 'Pausiert: Diese Erinnerung schicken wir nur mit KaufCheck Pro. Deine Einstellung bleibt gespeichert; ausschalten kannst du sie jederzeit.'
+                  : 'Pausiert: Diese Erinnerung gehört zu KaufCheck Pro. Deine Einstellung bleibt gespeichert; ausschalten kannst du sie jederzeit.'}
               </p>
             )}
           </div>
@@ -461,23 +472,14 @@ function EmailStatus({
   confirmed,
   pending,
   anyEmail,
-  editable,
 }: {
   address: string;
   confirmed: boolean;
   pending: boolean;
   anyEmail: boolean;
-  editable: boolean;
 }) {
   const resend = useRequestReminderConfirmation();
   const toast = useToast();
-  if (!editable)
-    return (
-      <p className="muted">
-        Erinnerungen gehen an <strong>{address}</strong>, sobald du wieder Pro hast
-        {confirmed ? '' : ' und die Adresse bestätigt ist'}.
-      </p>
-    );
   if (confirmed)
     return (
       <p>
@@ -520,7 +522,10 @@ function EmailStatus({
   );
 }
 
-/** Reminders for one car: e-mail (Pro, after confirming the address) and calendar files. */
+/**
+ * Reminders for one car: e-mail after confirming the address (the HU with any
+ * account, the others with Pro) and calendar files.
+ */
 export function RemindersPage() {
   usePageMeta(META);
   const { id = '' } = useParams();
@@ -559,7 +564,10 @@ export function RemindersPage() {
 
   const data = reminders.data;
   const emailAvailable = config.data?.features.reminders ?? false;
-  const anyEmail = data?.items.some((item) => item.email) ?? false;
+  // Switched on with Pro and kept after it ended: these are not sent now.
+  const anyProEmail = data?.items.some((item) => item.email && !item.editable) ?? false;
+  // Only these are sent; the address matters for them.
+  const anySent = data?.items.some((item) => item.email && item.editable) ?? false;
 
   return (
     <div className="container page reminders">
@@ -597,11 +605,20 @@ export function RemindersPage() {
       ) : (
         <div className="stack">
           {!data.editable && (
-            <Alert tone="info" title="Erinnerungen gehören zu KaufCheck Pro">
+            <Alert
+              tone="info"
+              title={
+                emailAvailable
+                  ? 'An die HU erinnern wir dich kostenlos'
+                  : 'Inspektion, Bremsflüssigkeit und Reifen gehören zu KaufCheck Pro'
+              }
+            >
               <p>
-                {anyEmail
-                  ? 'Ohne Pro verschicken wir keine Erinnerungen. Deine Einstellungen bleiben gespeichert und gelten wieder, sobald du Pro hast; ausschalten kannst du sie jederzeit.'
-                  : 'Mit Pro erinnert dich KaufCheck per E-Mail an Fristen deiner Autos, und du übernimmst Inspektion, Bremsflüssigkeit und Reifenwechsel in deinen Kalender. Die HU-Frist kannst du auch ohne Pro in den Kalender übernehmen.'}
+                {anyProEmail
+                  ? 'Die Erinnerungen an Inspektion, Bremsflüssigkeit und Reifen schicken wir nur mit KaufCheck Pro. Deine Einstellungen dazu bleiben gespeichert und gelten wieder, sobald du Pro hast; ausschalten kannst du sie jederzeit.'
+                  : emailAvailable
+                    ? 'Mit KaufCheck Pro erinnern wir dich auch an Inspektion, Bremsflüssigkeit und Reifenwechsel – per E-Mail und als Kalenderdatei.'
+                    : 'Mit KaufCheck Pro übernimmst du auch diese Termine in deinen Kalender.'}
               </p>
               <p>
                 <Link to="/pro" onClick={() => track('pro_clicked', { placement: 'reminders' })}>
@@ -610,18 +627,21 @@ export function RemindersPage() {
               </p>
             </Alert>
           )}
-          {data.editable && !emailAvailable && (
+          {!emailAvailable && (
             <Alert tone="info" title="E-Mail-Erinnerungen sind derzeit nicht verfügbar">
-              <p>Die Termine kannst du trotzdem in deinen Kalender übernehmen.</p>
+              <p>
+                {data.editable
+                  ? 'Die Termine kannst du trotzdem in deinen Kalender übernehmen.'
+                  : 'Die HU-Frist kannst du trotzdem in deinen Kalender übernehmen.'}
+              </p>
             </Alert>
           )}
-          {emailAvailable && (data.editable || anyEmail) && (
+          {emailAvailable && (
             <EmailStatus
               address={data.emailAddress}
               confirmed={data.emailConfirmed}
               pending={data.confirmationPending}
-              anyEmail={anyEmail}
-              editable={data.editable}
+              anyEmail={anySent}
             />
           )}
           {data.items.map((reminder) => (
@@ -629,7 +649,6 @@ export function RemindersPage() {
               key={reminder.kind}
               car={car}
               reminder={reminder}
-              editable={data.editable}
               emailAvailable={emailAvailable}
               confirmed={data.emailConfirmed}
               address={data.emailAddress}
