@@ -17,6 +17,7 @@ import { carLogRoutes } from './http/routes/car-log-routes';
 import { reminderRoutes } from './http/routes/reminder-routes';
 import { savedSearchRoutes } from './http/routes/saved-search-routes';
 import { contractRoutes } from './http/routes/contract-routes';
+import { sponsorAdRoutes } from './http/routes/sponsor-ad-routes';
 import { systemRoutes } from './http/routes/system-routes';
 import { registerSecurity } from './http/security';
 import { registerWeb } from './http/web';
@@ -85,6 +86,7 @@ export async function buildApp(
   await app.register(requestContextPlugin, { services });
 
   systemRoutes(app, services);
+  sponsorAdRoutes(app, services);
   accountRoutes(app, services);
   listingRoutes(app, services);
   savedListingRoutes(app, services);

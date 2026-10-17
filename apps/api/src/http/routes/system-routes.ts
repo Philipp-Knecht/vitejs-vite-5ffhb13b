@@ -8,7 +8,7 @@ import { adsTxt } from '../ads';
 import { parseInput } from '../errors';
 
 export function systemRoutes(app: FastifyInstance, services: Services): void {
-  const { config, db, plans, enricher, billing, auth, analytics, contracts } = services;
+  const { config, db, plans, enricher, billing, auth, analytics, contracts, sponsorAds } = services;
 
   app.get('/api/health', { config: { rateLimit: false } }, async (_request, reply) => {
     try {
@@ -42,6 +42,7 @@ export function systemRoutes(app: FastifyInstance, services: Services): void {
       ads: config.adsense?.slot
         ? { client: config.adsense.client, slot: config.adsense.slot }
         : null,
+      sponsors: { configured: sponsorAds.configured, placements: sponsorAds.placements() },
       affiliates: { carInsurance: config.affiliateCarInsurance },
       privacy: {
         hosting: config.hostingProvider,

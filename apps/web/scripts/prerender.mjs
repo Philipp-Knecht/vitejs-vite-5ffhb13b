@@ -185,6 +185,7 @@ const robots = [
   'User-agent: *',
   'Disallow: /api/',
   'Disallow: /analyse/',
+  'Disallow: /go/',
   '',
   `Sitemap: ${siteUrl}/sitemap.xml`,
   '',

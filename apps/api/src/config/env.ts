@@ -3,7 +3,9 @@ import { existsSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import {
+  AD_PLACEMENTS,
   PAYMENT_METHODS,
+  SPONSOR_IMAGE_PATTERN,
   VAT_MODES,
   type OperatorInfo,
   type PaymentMethod,
@@ -47,6 +49,74 @@ function affiliateUrl(value: string): string | null {
     return null;
   }
 }
+
+const isoDay = z
+  .string()
+  .regex(/^\d{4}-\d{2}-\d{2}$/, 'must be a day like 2026-11-01')
+  .refine((value) => {
+    const time = Date.parse(`${value}T00:00:00Z`);
+    // Date.parse rolls 30 February over to March: compare the day back.
+    return !Number.isNaN(time) && new Date(time).toISOString().startsWith(value);
+  }, 'is not a valid day');
+
+/** One ad sold directly (sponsorship), as configured in SPONSOR_ADS. */
+const SponsorAdConfigSchema = z
+  .object({
+    id: z
+      .string()
+      .max(40)
+      .regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/, 'only a-z, 0-9 and single - between them'),
+    advertiser: z.string().trim().min(1).max(80),
+    title: z.string().trim().min(1).max(80),
+    text: z.string().trim().max(200).default(''),
+    url: z
+      .string()
+      .trim()
+      .refine(
+        (value) => affiliateUrl(value) !== null,
+        'must be an https:// link without user name',
+      ),
+    image: z
+      .string()
+      .regex(
+        SPONSOR_IMAGE_PATTERN,
+        'must be a lowercase .png, .jpg, .jpeg or .webp path on this site, e.g. /sponsors/name.webp',
+      )
+      .optional(),
+    imageAlt: z.string().trim().min(1).max(150).optional(),
+    placements: z.array(z.enum(AD_PLACEMENTS)).min(1),
+    from: isoDay.optional(),
+    until: isoDay.optional(),
+  })
+  .strict()
+  .refine((ad) => Boolean(ad.image) === Boolean(ad.imageAlt), {
+    message: 'image and imageAlt go together',
+  })
+  .refine((ad) => !ad.from || !ad.until || ad.from <= ad.until, {
+    message: 'from must not be after until',
+  });
+export type SponsorAdConfig = z.infer<typeof SponsorAdConfigSchema>;
+
+const SponsorAdsSchema = z
+  .string()
+  .optional()
+  .transform((value, ctx) => {
+    if (!value?.trim()) return [];
+    try {
+      return JSON.parse(value) as unknown;
+    } catch {
+      ctx.addIssue({ code: 'custom', message: 'must be a JSON array' });
+      return z.NEVER;
+    }
+  })
+  .pipe(
+    z
+      .array(SponsorAdConfigSchema)
+      .max(20)
+      .refine((ads) => new Set(ads.map((ad) => ad.id)).size === ads.length, {
+        message: 'ids must be unique',
+      }),
+  );
 
 const EnvSchema = z
   .object({
@@ -145,6 +215,12 @@ const EnvSchema = z
     AFFILIATE_CAR_INSURANCE_URL: optionalString,
     /** The partner whose site the link opens, named in the link text, e.g. „Tarifcheck.de“. */
     AFFILIATE_CAR_INSURANCE_NAME: optionalString,
+
+    /**
+     * Ads sold directly (JSON array, see README): text and an optional image
+     * from this site, shown instead of AdSense to visitors without Pro.
+     */
+    SPONSOR_ADS: SponsorAdsSchema,
 
     ANALYTICS_ENABLED: booleanString.default(true),
     SERVE_WEB: booleanString.optional(),
@@ -291,6 +367,8 @@ export interface AppConfig {
   };
   /** Google AdSense; `slot` null = only verification (ads.txt, meta tag), no ads yet. */
   adsense: { client: string; slot: string | null } | null;
+  /** Ads sold directly; which of them run is decided per day. */
+  sponsorAds: SponsorAdConfig[];
   /** Affiliate link to a car insurance comparison; null = none. */
   affiliateCarInsurance: { url: string; name: string } | null;
   analyticsEnabled: boolean;
@@ -433,6 +511,7 @@ export function loadConfig(source: NodeJS.ProcessEnv = process.env): AppConfig {
     adsense: env.ADSENSE_CLIENT
       ? { client: env.ADSENSE_CLIENT, slot: env.ADSENSE_SLOT ?? null }
       : null,
+    sponsorAds: env.SPONSOR_ADS,
     affiliateCarInsurance:
       env.AFFILIATE_CAR_INSURANCE_URL && env.AFFILIATE_CAR_INSURANCE_NAME
         ? {
@@ -464,6 +543,7 @@ export function describeConfig(config: AppConfig): Record<string, unknown> {
     ads: config.adsense ? (config.adsense.slot ? 'adsense' : 'adsense_verification_only') : 'none',
     email: config.email.transport,
     affiliateCarInsurance: config.affiliateCarInsurance !== null,
+    sponsorAds: config.sponsorAds.length,
     analytics: config.analyticsEnabled,
     serveWeb: config.serveWeb,
   };

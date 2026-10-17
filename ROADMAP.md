@@ -30,7 +30,8 @@ PRs, **L** = mehrere Wochen.
 | 5.4 | Ratgeber (Teil 1): Auto ummelden, Rückrufe prüfen, Autokosten im Monat                    | #34       |
 | 1.5 | Finanzierungsrechner (kostenlos) und Kreditkosten im Vergleich der Kosten pro Monat (Pro) | #35       |
 | 3.2 | Erinnerung an die HU per E-Mail auch ohne Pro                                             | #36       |
-| 5.3 | Affiliate-Link zum Vergleich von Kfz-Versicherungen in drei Ratgebern (ohne Pro)          | dieser PR |
+| 5.3 | Affiliate-Link zum Vergleich von Kfz-Versicherungen in drei Ratgebern (ohne Pro)          | #37       |
+| 5.2 | Eigene Anzeigen (Sponsoring) vom eigenen Server statt AdSense, ohne Drittanbieter         | dieser PR |
 
 ## Arbeitsweise je Feature
 
