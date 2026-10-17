@@ -11,7 +11,11 @@ const reactRouterProduction = path.join(
 );
 
 const apiTarget = process.env.KAUFCHECK_API_URL ?? 'http://localhost:3000';
-const proxy = { '/api': { target: apiTarget, changeOrigin: false } };
+// /go: clicks on ads sold directly are redirects of the API server.
+const proxy = {
+  '/api': { target: apiTarget, changeOrigin: false },
+  '/go': { target: apiTarget, changeOrigin: false },
+};
 
 /** A NODE_ENV=development in an .env file would silently produce a development bundle. */
 const requireProductionBuild: Plugin = {

@@ -406,10 +406,14 @@ workshop). `SPONSOR_ADS` is a JSON array, at most 20 entries:
   - every delivery of an ad and every click through `/go/<id>`, which redirects to `url`;
   - no IP address, identifier or cookie, nothing measured in the browser, and nothing counted
     with Do Not Track / Global Privacy Control;
-  - bots can be counted too, so sell placements for a fixed price per period, not per view.
+  - in development, React's StrictMode asks twice per page view, so local figures are doubled;
+  - a delivery is not a view (the ad sits below the content), and bots can be counted too: report
+    „Auslieferungen“, never „Sichtkontakte“, and sell placements for a fixed price per period. In
+    the contract: „Gezählt werden Auslieferungen der Anzeige, nicht Sichtkontakte; ohne Besucher
+    mit Do Not Track/GPC und mit Pro; automatisierte Zugriffe sind nicht ausgeschlossen.“
 
   ```sql
-  SELECT campaign, sum(views) AS views, sum(clicks) AS clicks FROM "SponsorAdStat"
+  SELECT campaign, sum(deliveries) AS deliveries, sum(clicks) AS clicks FROM "SponsorAdStat"
   WHERE day BETWEEN '2026-11-01' AND '2026-11-30' GROUP BY campaign ORDER BY campaign;
   ```
 
@@ -427,9 +431,10 @@ workshop). `SPONSOR_ADS` is a JSON array, at most 20 entries:
     only;
   - no exclusivity unless agreed, and termination.
 - **Tax:** ad revenue counts towards the small-business limits of § 19 UStG together with Pro
-  (25,000 € in the previous year, 100,000 € in the current year). Invoice per § 34a UStDV with
-  „Gemäß § 19 UStG wird keine Umsatzsteuer berechnet.“ For income tax and trade questions, ask a
-  tax adviser.
+  (25,000 € in the previous year, 100,000 € in the current year). Invoices (§ 34a UStDV) name both
+  parties with full address, the Steuernummer, the date, the service (placement and period) and
+  the amount, with „Steuerfrei nach § 19 UStG (Kleinunternehmerregelung).“; an ordinary PDF is
+  enough. For income tax and trade questions, ask a tax adviser.
 
 ## Affiliate link
 

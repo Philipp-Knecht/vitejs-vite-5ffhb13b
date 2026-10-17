@@ -70,16 +70,24 @@ describe('ads sold directly', () => {
     ).toBeNull();
     expect((await client.get('/api/sponsor-ads/header')).statusCode).toBe(404);
 
+    // HEAD (link checkers) and a campaign outside its period are not counted.
+    expect((await built.app.inject({ method: 'HEAD', url: '/go/november' })).statusCode).toBe(302);
+    expect((await client.get('/go/oktober')).headers.location).toBe(
+      'https://autohaus-muster.example/?ref=kaufcheck',
+    );
     const click = await client.get('/go/november');
     expect(click.statusCode).toBe(302);
     expect(click.headers.location).toBe('https://autohaus-muster.example/?ref=kaufcheck');
     expect(click.headers['cache-control']).toBe('no-store');
-    expect((await client.get('/go/unbekannt')).statusCode).toBe(404);
-    expect((await client.get('/go/..%2Fapi')).statusCode).toBe(404);
+    for (const path of ['/go/unbekannt', '/go/..%2Fapi']) {
+      const unknown = await client.get(path);
+      expect(unknown.statusCode).toBe(302);
+      expect(unknown.headers.location).toBe('/');
+    }
 
     expect(await stats()).toEqual([
-      { campaign: 'november', day: '2026-11-01', views: 1, clicks: 1 },
-      { campaign: 'oktober', day: '2026-10-31', views: 1, clicks: 0 },
+      { campaign: 'november', day: '2026-11-01', deliveries: 1, clicks: 1 },
+      { campaign: 'oktober', day: '2026-10-31', deliveries: 1, clicks: 0 },
     ]);
   });
 

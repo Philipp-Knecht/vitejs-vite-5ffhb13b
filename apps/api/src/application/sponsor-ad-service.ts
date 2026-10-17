@@ -42,7 +42,7 @@ export class SponsorAdService {
     const candidates = this.running(day).filter((ad) => ad.placements.includes(placement));
     if (candidates.length === 0) return null;
     const ad = candidates[Math.floor(this.random() * candidates.length)] ?? candidates[0]!;
-    if (actor.trackingAllowed) await this.count(ad.id, day, 'views');
+    if (actor.trackingAllowed) await this.count(ad.id, day, 'deliveries');
     return {
       id: ad.id,
       advertiser: ad.advertiser,
@@ -53,15 +53,20 @@ export class SponsorAdService {
     };
   }
 
-  /** Where a click on the ad leads; also after the campaign has ended. */
-  async click(id: string, trackingAllowed: boolean): Promise<string | null> {
+  /** Where a click on the ad leads; also after the campaign has ended, but then not counted. */
+  async click(id: string, count: boolean): Promise<string | null> {
     const ad = this.ads.find((item) => item.id === id);
     if (!ad) return null;
-    if (trackingAllowed) await this.count(ad.id, germanDay(this.now()), 'clicks');
+    const day = germanDay(this.now());
+    if (count && sponsorAdRuns(ad, day)) await this.count(ad.id, day, 'clicks');
     return ad.url;
   }
 
-  private async count(campaign: string, day: string, field: 'views' | 'clicks'): Promise<void> {
+  private async count(
+    campaign: string,
+    day: string,
+    field: 'deliveries' | 'clicks',
+  ): Promise<void> {
     try {
       await this.db.sponsorAdStat.upsert({
         where: { campaign_day: { campaign, day } },

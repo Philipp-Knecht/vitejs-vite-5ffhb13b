@@ -3,7 +3,7 @@ import { expect, test } from '@playwright/test';
 import pg from 'pg';
 import { makePro, uniqueEmail } from './helpers';
 
-async function counts(): Promise<{ views: number; clicks: number }> {
+async function counts(): Promise<{ deliveries: number; clicks: number }> {
   const client = new pg.Client({
     connectionString:
       process.env.E2E_DATABASE_URL ??
@@ -11,12 +11,12 @@ async function counts(): Promise<{ views: number; clicks: number }> {
   });
   await client.connect();
   try {
-    const result = await client.query<{ views: string | null; clicks: string | null }>(
-      `SELECT sum("views") AS views, sum("clicks") AS clicks FROM "SponsorAdStat"
+    const result = await client.query<{ deliveries: string | null; clicks: string | null }>(
+      `SELECT sum("deliveries") AS deliveries, sum("clicks") AS clicks FROM "SponsorAdStat"
        WHERE "campaign" = 'e2e-autohaus'`,
     );
     const row = result.rows[0]!;
-    return { views: Number(row.views ?? 0), clicks: Number(row.clicks ?? 0) };
+    return { deliveries: Number(row.deliveries ?? 0), clicks: Number(row.clicks ?? 0) };
   } finally {
     await client.end();
   }
@@ -43,10 +43,10 @@ test('an ad sold directly comes from our own server, is counted there and gone w
   await expect(link).toHaveAttribute('href', '/go/e2e-autohaus');
   await expect(link).toHaveAttribute('rel', 'sponsored noopener');
   await expect(link).toHaveAccessibleDescription(
-    /^Werbung von Autohaus Beispiel Die Anzeige ist keine Empfehlung von KaufCheck/,
+    /^Werbung von Autohaus Beispiel Keine Empfehlung von KaufCheck\. Werbepartner haben keinen Einfluss/,
   );
   // Counted once by the server when it delivered the ad; nothing loaded from the advertiser.
-  await expect.poll(async () => (await counts()).views).toBe(before.views + 1);
+  await expect.poll(async () => (await counts()).deliveries).toBe(before.deliveries + 1);
   expect(external).toEqual([]);
   const results = await new AxeBuilder({ page })
     .include('.sponsor-ad')

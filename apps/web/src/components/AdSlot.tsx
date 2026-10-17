@@ -1,6 +1,5 @@
 import type { AdPlacement, SponsorAdDto, SponsorAdResponse } from '@kaufcheck/shared';
 import { useEffect, useId, useRef, useState } from 'react';
-import { api } from '../api/client';
 import { useConfig, useMe } from '../api/queries';
 import { loadAdSense, requestAd } from '../lib/adsense';
 import { privacySignal } from '../lib/privacy-signals';
@@ -47,9 +46,10 @@ function SponsorUnit({ placement }: { placement: AdPlacement }) {
   const noteId = useId();
   useEffect(() => {
     const controller = new AbortController();
-    api
-      .get<SponsorAdResponse>(`/api/sponsor-ads/${placement}`, controller.signal)
-      .then((response) => setAd(response.ad))
+    // Without cookies: the ad needs nothing from the visitor (Pro sees no ads anyway).
+    fetch(`/api/sponsor-ads/${placement}`, { credentials: 'omit', signal: controller.signal })
+      .then((response) => (response.ok ? (response.json() as Promise<SponsorAdResponse>) : null))
+      .then((response) => setAd(response?.ad ?? null))
       .catch(() => setAd(null));
     return () => controller.abort();
   }, [placement]);
@@ -72,7 +72,7 @@ function SponsorUnit({ placement }: { placement: AdPlacement }) {
         <span className="visually-hidden"> (öffnet in neuem Tab)</span>
       </a>
       <p className="sponsor-ad__note" id={noteId}>
-        Die Anzeige ist keine Empfehlung von KaufCheck und hat keinen Einfluss auf Prüfungen und
+        Keine Empfehlung von KaufCheck. Werbepartner haben keinen Einfluss auf Prüfungen und
         Ratgeber.
       </p>
     </aside>

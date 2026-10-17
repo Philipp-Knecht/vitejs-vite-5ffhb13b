@@ -23,11 +23,16 @@ export function sponsorAdRoutes(app: FastifyInstance, services: Services): void 
   // Outside /api/ there is no session context: only the opt-out signals matter here.
   app.get<{ Params: { id: string } }>('/go/:id', async (request, reply) => {
     const target = /^[a-z0-9-]{1,40}$/.test(request.params.id)
-      ? await sponsorAds.click(request.params.id, !trackingOptOut(request))
+      ? // HEAD (link checkers, previews) is not a click.
+        await sponsorAds.click(
+          request.params.id,
+          request.method === 'GET' && !trackingOptOut(request),
+        )
       : null;
     reply.header('cache-control', 'no-store');
     reply.header('x-robots-tag', 'noindex');
-    if (!target) return reply.status(404).type('text/plain; charset=utf-8').send('Nicht gefunden');
+    // An ad that no longer runs (a page left open): back to KaufCheck instead of an error.
+    if (!target) return reply.redirect('/', 302);
     return reply.redirect(target, 302);
   });
 }
