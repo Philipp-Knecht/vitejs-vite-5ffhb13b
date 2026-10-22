@@ -414,9 +414,9 @@ const SCAM_SIGNALS: readonly { kind: ScamSignalKind; pattern: RegExp }[] = [
     kind: 'abroad',
     pattern: new RegExp(
       [
-        String.raw`\b(?:bin|wohne|lebe|arbeite)\s+(?:(?!urlaub\b)[\p{L}\p{N}]+\s+){0,4}?(?:im\s+ausland|in\s+(?:${COUNTRIES}))\b(?!\s+(?:geboren|aufgewachsen|im\s+urlaub|zu\s+besuch|gefahren|gewesen|unterwegs))`,
+        String.raw`\b(?:bin|wohne|lebe|arbeite)\s+(?:(?!urlaub\b|nicht\b)[\p{L}\p{N}]+\s+){0,4}?(?:im\s+ausland|in\s+(?:${COUNTRIES}))\b(?!\s+(?:geboren|aufgewachsen|im\s+urlaub|zu\s+besuch|gefahren|gewesen|unterwegs))`,
         // Subordinate clause: „da ich beruflich in Spanien bin“.
-        String.raw`\b(?:ich|wir)\s+(?:(?!urlaub\b)[\p{L}\p{N}]+\s+){0,3}?(?:im\s+ausland|in\s+(?:${COUNTRIES}))\s+(?:bin|wohne|lebe|arbeite|sind|wohnen|leben|arbeiten)\b`,
+        String.raw`\b(?:ich|wir)\s+(?:(?!urlaub\b|nicht\b)[\p{L}\p{N}]+\s+){0,3}?(?:im\s+ausland|in\s+(?:${COUNTRIES}))\s+(?:bin|wohne|lebe|arbeite|sind|wohnen|leben|arbeiten)\b`,
         String.raw`\bsoldat\s+im\s+ausland\b`,
         String.raw`\b(?:wurde|bin)\s+(?:\p{L}+\s+){0,2}?nach\s+(?:${COUNTRIES})\s+versetzt\b`,
         String.raw`\bi\s+am\s+(?:currently\s+)?(?:abroad|in\s+(?:the\s+)?(?:uk|usa|spain|england))\b`,
@@ -439,8 +439,15 @@ const SCAM_SIGNALS: readonly { kind: ScamSignalKind; pattern: RegExp }[] = [
   { kind: 'escrow', pattern: /\btreuh[aä]nd\p{L}*|\bescrow\b/iu },
   {
     kind: 'noViewing',
-    pattern:
-      /\bbesichtigung\p{L}*\s+(?:\p{L}+\s+){0,2}?(?:nicht\s+möglich|ausgeschlossen)\b|\bungesehen\p{L}*/iu,
+    // Not „Besichtigung am Wochenende / ohne Termin nicht möglich“: those name a condition.
+    pattern: new RegExp(
+      [
+        String.raw`(?<!(?:spontane|kurzfristige)\s)\bbesichtigung\p{L}*\s+(?:(?!ohne\b|am\b|unter\b|nach\b|vor\b|außer\b|wochenend|termin|heute\b|morgen|derzeit|momentan|aktuell|werktag|wochentag|abends|vormittag|nachmittag|tagsüber)\p{L}+\s+){0,2}?(?:nicht\s+möglich|ausgeschlossen)\b(?![^.!?\n]{0,30}\b(?:gerne|ab|wieder|aber)\b)`,
+        String.raw`\b(?:ver)?kauf\p{L}*\s+(?:\p{L}+\s+){0,2}?ungesehen\b`,
+        String.raw`\bungesehen\s+(?:zu\s+)?(?:ge|ver)?kauf\p{L}*`,
+      ].join('|'),
+      'iu',
+    ),
   },
   {
     kind: 'offPlatform',
@@ -462,23 +469,23 @@ const SCAM_SIGNALS: readonly { kind: ScamSignalKind; pattern: RegExp }[] = [
  * Zahlung per Vorkasse“ is the classic scam text, not a rejection.
  */
 const SCAM_REJECTED_AFTER =
-  /^[\s\-–]*(?:\p{L}+\s+){0,3}?(?:ausgeschlossen|nicht\s+(?:möglich|akzeptiert|gewünscht|erwünscht|erforderlich|nötig|notwendig)|lehne\p{L}*|kommt\s+nicht\s+in\s+frage|masche|nichts)\b/iu;
+  /^[\s\-–]*(?:\p{L}+\s+){0,3}?(?:ausgeschlossen|nicht\s+(?:möglich|akzeptiert|gewünscht|erwünscht|erforderlich|nötig|notwendig)|lehne\p{L}*|kommt\s+nicht\s+in\s+frage|masche|(?:musst|müssen|muss)\s+(?:du\s+|sie\s+|ihr\s+)?nichts)\b/iu;
 const SCAM_ANSWERED_NO = /^\s*[?:!]+\s*nein\b/iu;
 /** A sentence that warns off scammers is no sign either: „Bitte keine Betrüger“. */
 const SCAM_WARNS_OFF =
-  /\b(?:kein\p{L}*|nicht)\b[^.!?\n,;]{0,30}\bbetrüg|\bbetrüg\p{L}*[^.!?\n,;]{0,40}\bnicht\b/iu;
+  /\b(?:kein\p{L}*|nicht)\b[^.!?\n,;]{0,30}\bbetrüg|\bbetrüg\p{L}*[^.!?\n,;]{0,40}\bnicht\b|\bwer\s+ungesehen\b/iu;
 /** Paying off a financed car through the bank is the safe route, not a sign. */
 const SCAM_SAFE_CONTEXT: Partial<Record<ScamSignalKind, RegExp>> = {
   // Financing examples, required by price rules in dealer listings, name a down payment.
   prepayment:
     /\b(?:finanzier\p{L}*|leasing\p{L}*|laufzeit|jahreszins|sollzins|monatliche\s+rate|schlussrate)\b/iu,
   escrow:
-    /\b(?:ablös\p{L}*|abgelöst|finanziert|treuhandauftrag)\b|\b(?:brief|zulassungsbescheinigung)\b[^.!?\n]{0,30}\bbank\b/iu,
+    /\b(?:ablös\p{L}*|abgelöst|finanziert|treuhandauftrag|nachlass\p{L}*)\b|\b(?:brief|zulassungsbescheinigung)\b[^.!?\n]{0,30}\bbank\b/iu,
 };
 const SCAM_NEGATION_BEFORE =
   /\b(?:kein\p{L}*|nicht|ohne|nie|niemals|nichts|keinesfalls|auf\s+keinen\s+fall)\s+(?:\p{L}+\s+){0,2}$/iu;
-/** These name a refusal themselves, so a refusal is no rejection. */
-const SCAM_SELF_NEGATED: ReadonlySet<ScamSignalKind> = new Set(['noViewing']);
+/** „Besichtigung nicht möglich“ names a refusal itself, so a refusal is no rejection. */
+const SELF_NEGATED = /^besichtigung/iu;
 
 /** The clause around a match: up to the next sentence end, comma or semicolon. */
 /** Context is looked at only this far around a match, so long texts stay fast. */
@@ -497,33 +504,20 @@ function clauseAround(text: string, index: number, length: number): string {
   return text.slice(start + 1, stop === -1 ? text.length : index + length + stop);
 }
 
-function sentenceAround(text: string, index: number, length: number): string {
-  const offset = Math.max(0, index - SCAM_WINDOW);
-  text = text.slice(offset, index + length + SCAM_WINDOW);
-  index -= offset;
-  const before = text.slice(0, index);
-  const start = Math.max(
-    before.lastIndexOf('.'),
-    before.lastIndexOf('!'),
-    before.lastIndexOf('\n'),
-  );
-  const rest = text.slice(index + length);
-  const stop = rest.search(/[.!\n]/);
-  return text.slice(start + 1, stop === -1 ? text.length : index + length + stop);
-}
-
 function scamMatch(kind: ScamSignalKind, pattern: RegExp, text: string): Match | null {
   for (const match of allMatches(pattern, text)) {
     const end = match.index + match.text.length;
     const after = text.slice(end, end + 60);
     const afterInClause = after.split(/[.!?\n,;]/)[0] ?? '';
-    if (!SCAM_SELF_NEGATED.has(kind)) {
+    if (!testPattern(SELF_NEGATED, match.text)) {
       if (testPattern(SCAM_REJECTED_AFTER, afterInClause)) continue;
       if (testPattern(SCAM_ANSWERED_NO, after)) continue;
     }
     if (testPattern(SCAM_WARNS_OFF, clauseAround(text, match.index, match.text.length))) continue;
-    const safe = SCAM_SAFE_CONTEXT[kind];
-    if (safe && testPattern(safe, sentenceAround(text, match.index, match.text.length))) continue;
+    // Financing words excuse only a down payment, not „Vorkasse“.
+    const safe =
+      kind === 'prepayment' && !/anzahlung/i.test(match.text) ? undefined : SCAM_SAFE_CONTEXT[kind];
+    if (safe && testPattern(safe, clauseAround(text, match.index, match.text.length))) continue;
     // Only the words right before: „Kein Tausch, Zahlung per Vorkasse“ is still a sign.
     const before = text.slice(Math.max(0, match.index - 40), match.index);
     if (testPattern(SCAM_NEGATION_BEFORE, before.split(/[,;:]/).at(-1) ?? '')) continue;

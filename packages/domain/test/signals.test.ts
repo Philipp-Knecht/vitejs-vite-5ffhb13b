@@ -188,6 +188,9 @@ describe('offer signals', () => {
     ]);
     expect(kinds('Weil ich jetzt im Ausland lebe, verkaufe ich.')).toEqual(['abroad']);
     expect(kinds('Ich wohne seit 2 Jahren in Italien.')).toEqual(['abroad']);
+    expect(kinds('Nur Vorkasse, Finanzierung nicht möglich.')).toEqual(['prepayment']);
+    expect(kinds('Zahlung per Vorkasse und sonst nichts.')).toEqual(['prepayment']);
+    expect(kinds('Notar-Treuhandkonto für die Abwicklung.')).toEqual(['escrow']);
 
     // Honest private and dealer listings stay quiet.
     for (const text of [
@@ -236,6 +239,16 @@ describe('offer signals', () => {
       'Ich bin derzeit im Urlaub in Spanien.',
       'Ich bin mit dem Auto oft in Italien gefahren.',
       'Bitte nur per Messenger hier auf der Plattform schreiben.',
+      'Besichtigung ohne Termin nicht möglich.',
+      'Besichtigung am Wochenende nicht möglich.',
+      'Besichtigung nur nach Terminvereinbarung, spontane Besichtigung nicht möglich.',
+      'Ungesehen kaufen ist ausgeschlossen.',
+      'Wer ungesehen kauft, ist selbst schuld. Besichtigung jederzeit.',
+      'Besichtigung werktags nicht möglich, gerne am Wochenende.',
+      'Besichtigung heute nicht möglich, ab morgen gerne.',
+      'Besichtigung derzeit nicht möglich, Auto steht in der Werkstatt, ab 1.11. wieder.',
+      'Ich wohne nicht in Spanien.',
+      'Treuhandverwaltung des Nachlasses.',
     ])
       expect(kinds(text), text).toEqual([]);
   });

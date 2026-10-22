@@ -771,7 +771,7 @@ const SCAM_OBSERVATIONS: Record<
     id: 'no_viewing',
     title: 'Besichtigung laut Inserat nicht möglich',
     detail:
-      'Laut Inserat kannst du das Auto vorher nicht ansehen. Die Polizei nennt die Bereitschaft, ein Auto ungesehen zu verkaufen, als Anhaltspunkt für ein verdächtiges Inserat. Kauf kein Auto, das du nicht gesehen und probegefahren hast, und zahl erst bei der Übergabe.',
+      'Laut Inserat kannst du das Auto vorher nicht ansehen. Die Polizei nennt es als Anhaltspunkt für ein verdächtiges Inserat, wenn ein Auto ungesehen gekauft werden soll; auch bei einer von ihr beschriebenen Masche ist eine Besichtigung angeblich nicht möglich. Kauf kein Auto, das du nicht gesehen und probegefahren hast, und zahl erst bei der Übergabe.',
     severity: 'notice',
   },
   offPlatform: {
@@ -785,7 +785,8 @@ const SCAM_OBSERVATIONS: Record<
 
 /**
  * The warning signs that count for this listing. Dealers often deliver by
- * forwarder and take down payments for orders: alone, that is no sign.
+ * forwarder, sell unseen on request and take down payments for orders:
+ * alone, that is no sign.
  */
 export function relevantScamSignals(ctx: VehicleRuleContext) {
   const { signals, listing } = ctx;
@@ -797,7 +798,8 @@ export function relevantScamSignals(ctx: VehicleRuleContext) {
   );
   return signals.scamSignals.filter((signal) => {
     if (!commercial || strong) return true;
-    if (signal.kind === 'shipping') return false;
+    // Dealers deliver by forwarder and sell unseen on request; alone that is no sign.
+    if (signal.kind === 'shipping' || signal.kind === 'noViewing') return false;
     return !(signal.kind === 'prepayment' && /anzahlung/i.test(signal.quote));
   });
 }
