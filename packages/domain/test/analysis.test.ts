@@ -329,6 +329,75 @@ describe('individual rules', () => {
     );
   });
 
+  it('names the warning signs for scams without accusing the seller', async () => {
+    const listing = listingFromText(
+      pasted(
+        { Marke: 'VW', Kilometerstand: '90.000 km' },
+        'Ich bin beruflich in Spanien. Das Auto wird Ihnen per Spedition geliefert, Bezahlung über einen Treuhandservice per Vorkasse.',
+      ),
+    );
+    const result = await analyze(listing);
+    expect(ids(result.observations)).toEqual(
+      expect.arrayContaining([
+        'payment_in_advance',
+        'escrow_service',
+        'seller_abroad',
+        'shipping_offered',
+      ]),
+    );
+    expect(result.checks.map((item) => item.id)).toContain('report_listing');
+    expect(result.sellerQuestions.map((item) => item.id)).toContain('pay_on_handover');
+    for (const item of result.observations.filter((o) =>
+      ['payment_in_advance', 'escrow_service', 'seller_abroad', 'shipping_offered'].includes(o.id),
+    )) {
+      expect(item.quotes).toHaveLength(1);
+      expect(`${item.title} ${item.detail}`).not.toMatch(
+        /\bbetrüger(?:isch)?\s+(?:ist|sind)\b|\bfake\b/i,
+      );
+    }
+  });
+
+  it('leaves honest listings and dealer delivery offers without scam notes', async () => {
+    const scamIds = [
+      'payment_in_advance',
+      'escrow_service',
+      'seller_abroad',
+      'shipping_offered',
+      'contact_off_platform',
+    ];
+    const honest = await analyze(
+      listingFromText(
+        `${pasted(
+          { Marke: 'VW', Kilometerstand: '90.000 km' },
+          'Scheckheft gepflegt. Vorkasse ausgeschlossen, nur Barzahlung bei Übergabe. Keine Anrufe von Händlern!',
+        )}\nPrivater Nutzer`,
+      ),
+    );
+    expect(ids(honest.observations).filter((id) => scamIds.includes(id))).toEqual([]);
+    expect(honest.checks.map((item) => item.id)).not.toContain('report_listing');
+
+    const dealer = await analyze(
+      listingFromText(
+        `${pasted(
+          { Marke: 'VW', Kilometerstand: '90.000 km' },
+          'Unser Autohaus liefert bundesweit per Spedition. Anzahlung von 10 % bei Bestellung.',
+        )}\nGewerblicher Nutzer`,
+      ),
+    );
+    expect(ids(dealer.observations).filter((id) => scamIds.includes(id))).toEqual([]);
+    expect(dealer.checks.map((item) => item.id)).not.toContain('report_listing');
+
+    // A seller abroad alone is a hint, not a reason to report the listing.
+    const abroad = await analyze(
+      listingFromText(
+        pasted({ Marke: 'VW', Kilometerstand: '90.000 km' }, 'Ich wohne in den Niederlanden.'),
+      ),
+    );
+    expect(abroad.observations.find((o) => o.id === 'seller_abroad')?.severity).toBe('info');
+    expect(abroad.checks.map((item) => item.id)).not.toContain('report_listing');
+    expect(abroad.sellerQuestions.map((item) => item.id)).not.toContain('pay_on_handover');
+  });
+
   it('warns when basic facts are missing', async () => {
     const listing = listingFromText('Verkaufe meinen BMW 318i. TÜV neu. Bei Interesse melden.');
     const result = await analyze(listing);

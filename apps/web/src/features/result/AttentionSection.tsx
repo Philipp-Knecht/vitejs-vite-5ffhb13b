@@ -1,5 +1,6 @@
 import type { CheckItem, Observation } from '@kaufcheck/shared';
 import { AlertTriangle, Info, SearchCheck, TriangleAlert } from 'lucide-react';
+import { Link } from 'react-router';
 import { EvidenceBadge } from '../../components/EvidenceBadge';
 import { cn } from '../../lib/format';
 import { Quote, ResultSection } from './Section';
@@ -7,6 +8,10 @@ import { Quote, ResultSection } from './Section';
 const SEVERITY_ORDER = { warning: 0, notice: 1, info: 2 } as const;
 const SEVERITY_LABELS = { warning: 'Wichtig', notice: 'Beachten', info: 'Hinweis' } as const;
 const SEVERITY_ICONS = { warning: TriangleAlert, notice: AlertTriangle, info: Info } as const;
+
+/** Polizeiliche Kriminalprävention: what to do with a suspicious listing. */
+const POLICE_SUSPICIOUS_LISTING_URL =
+  'https://www.polizei-beratung.de/themen-und-tipps/sicherer-autokauf/hilfe-und-kontaktadressen/verdaechtiges-inserat/';
 
 export function AttentionSection({
   observations,
@@ -68,6 +73,20 @@ export function AttentionSection({
                 <h4 className="check-item__title">{item.title}</h4>
                 <p className="check-item__detail">{item.detail}</p>
                 {item.basis && <p className="check-item__basis">Grund: {item.basis}</p>}
+                {item.id === 'report_listing' && (
+                  <p className="check-item__detail">
+                    <a
+                      href={POLICE_SUSPICIOUS_LISTING_URL}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      Polizei: Was tun bei einem verdächtigen Inserat?
+                      <span className="visually-hidden"> (öffnet in neuem Tab)</span>
+                    </a>
+                    {' · '}
+                    <Link to="/gebrauchtwagen-kaufen#betrug">Betrugsmaschen erkennen</Link>
+                  </p>
+                )}
                 {(item.evidence || item.origin === 'ai') && (
                   <EvidenceBadge evidence={item.evidence ?? 'inference'} origin={item.origin} />
                 )}

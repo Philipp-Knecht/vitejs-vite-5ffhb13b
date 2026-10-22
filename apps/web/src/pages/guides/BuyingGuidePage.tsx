@@ -23,7 +23,7 @@ export function BuyingGuidePage() {
       path="/gebrauchtwagen-kaufen"
       eyebrow="Ratgeber"
       title="Gebrauchtwagen privat kaufen: Schritt für Schritt"
-      updated="September 2026"
+      updated="Oktober 2026"
       toc={TOC}
       intro={
         <p>
@@ -271,6 +271,24 @@ export function BuyingGuidePage() {
           kein Auto kaufen.
         </li>
       </ul>
+      <p>
+        Die Prüfung von KaufCheck erkennt typische Formulierungen im Inserat, etwa Vorkasse, einen
+        Treuhanddienst, eine Spedition, einen Verkäufer im Ausland oder Kontakt nur per E-Mail oder
+        Messenger. Fehlt ein solcher Hinweis, heißt das nicht, dass das Angebot sicher ist. Kommt
+        dir ein Angebot verdächtig vor, melde es dem Marktplatz – meist über einen Link im Inserat,
+        sonst über den Kundenservice – und verzichte im Zweifel darauf. Hast du schon Geld
+        überwiesen, wende dich sofort an deine Bank und erstatte Anzeige bei der Polizei. Mehr dazu
+        bei der{' '}
+        <a
+          href="https://www.polizei-beratung.de/themen-und-tipps/sicherer-autokauf/hilfe-und-kontaktadressen/verdaechtiges-inserat/"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Polizeilichen Kriminalprävention
+          <span className="visually-hidden"> (öffnet in neuem Tab)</span>
+        </a>
+        .
+      </p>
 
       <h2 id="faq">Häufige Fragen</h2>
       <h3>Muss ein privater Verkäufer für Mängel haften?</h3>

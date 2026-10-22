@@ -7,7 +7,7 @@ import {
 import { formatEuro, formatKm, formatNumber, formatYearMonth, joinGerman, plural } from '../format';
 import { compareYearMonth } from '../text/dates';
 import { parsePower } from '../text/numbers';
-import type { DamageCategory, DamageMention } from './description-signals';
+import type { DamageCategory, DamageMention, ScamSignalKind } from './description-signals';
 import type { VehicleRuleContext } from './rule-context';
 import { DIESEL_TOKEN, PETROL_TOKEN } from './vocabulary';
 
@@ -730,6 +730,98 @@ function missingInformationRules(ctx: VehicleRuleContext): Observation[] {
   return result;
 }
 
+/**
+ * Warning signs for scams, as the police describes them. Each starts with what
+ * the listing says and adds advice on how to pay and meet safely – never a
+ * claim that the seller cheats.
+ */
+const SCAM_OBSERVATIONS: Record<
+  ScamSignalKind,
+  { id: string; title: string; detail: string; severity: Severity }
+> = {
+  prepayment: {
+    id: 'payment_in_advance',
+    title: 'Zahlung vor der Übergabe im Inserat',
+    detail:
+      'Im Inserat ist von Vorkasse, einer Anzahlung oder einer Zahlung im Voraus die Rede. Die Polizei rät, beim Autokauf über Online-Marktplätze nie in Vorleistung zu gehen. Üblich ist, dass Geld, Auto, Schlüssel und Papiere gleichzeitig übergeben werden.',
+    severity: 'warning',
+  },
+  escrow: {
+    id: 'escrow_service',
+    title: 'Treuhanddienst im Inserat',
+    detail:
+      'Im Inserat ist von einem Treuhanddienst die Rede. Polizei und ADAC warnen vor angeblichen Treuhanddiensten: Betrüger nutzen dafür immer wieder gefälschte Firmen und Websites. Zahl nicht über einen Dienst oder Link, den dir der Verkäufer nennt; üblich ist die Bezahlung bei der Übergabe.',
+    severity: 'warning',
+  },
+  abroad: {
+    id: 'seller_abroad',
+    title: 'Verkäufer nach eigener Angabe im Ausland',
+    detail:
+      'Laut Inserat lebt oder arbeitet der Verkäufer im Ausland. Das allein ist nicht ungewöhnlich. Die Polizei beschreibt aber eine häufige Masche: Ein Anbieter gibt an, im Ausland zu sein, und verlangt Vorkasse oder eine Zahlung über Dritte. Sieh dir das Auto vor Ort an und zahl erst bei der Übergabe.',
+    severity: 'notice',
+  },
+  shipping: {
+    id: 'shipping_offered',
+    title: 'Lieferung über eine Spedition im Inserat',
+    detail:
+      'Im Inserat ist von einer Lieferung über eine Spedition die Rede. Die Polizei warnt vor angeblichen Speditionen, die als Treuhänder das Geld annehmen sollen. Zahl nichts im Voraus an eine Spedition und kauf kein Auto ungesehen.',
+    severity: 'notice',
+  },
+  noViewing: {
+    id: 'no_viewing',
+    title: 'Besichtigung laut Inserat nicht möglich',
+    detail:
+      'Laut Inserat kannst du das Auto vorher nicht ansehen. Die Polizei nennt es als Anhaltspunkt für ein verdächtiges Inserat, wenn ein Auto ungesehen gekauft werden soll; auch bei einer von ihr beschriebenen Masche ist eine Besichtigung angeblich nicht möglich. Kauf kein Auto, das du nicht gesehen und probegefahren hast, und zahl erst bei der Übergabe.',
+    severity: 'notice',
+  },
+  offPlatform: {
+    id: 'contact_off_platform',
+    title: 'Kontakt nur per E-Mail oder Messenger',
+    detail:
+      'Laut Inserat möchte der Verkäufer nur per E-Mail oder Messenger Kontakt. Die Polizei nennt das als Anhaltspunkt für ein verdächtiges Inserat. Ruf vor der Besichtigung an und achte darauf, ob sich wirklich der Verkäufer meldet. Bleib für Absprachen möglichst im Nachrichtensystem des Marktplatzes.',
+    severity: 'notice',
+  },
+};
+
+/**
+ * The warning signs that count for this listing. Dealers often deliver by
+ * forwarder, sell unseen on request and take down payments for orders:
+ * alone, that is no sign.
+ */
+export function relevantScamSignals(ctx: VehicleRuleContext) {
+  const { signals, listing } = ctx;
+  const commercial = listing.seller.type === 'commercial';
+  const strong = signals.scamSignals.some(
+    (signal) =>
+      signal.kind === 'escrow' ||
+      (signal.kind === 'prepayment' && !/anzahlung/i.test(signal.quote)),
+  );
+  return signals.scamSignals.filter((signal) => {
+    if (!commercial || strong) return true;
+    // Dealers deliver by forwarder and sell unseen on request; alone that is no sign.
+    if (signal.kind === 'shipping' || signal.kind === 'noViewing') return false;
+    return !(signal.kind === 'prepayment' && /anzahlung/i.test(signal.quote));
+  });
+}
+
+function scamRules(ctx: VehicleRuleContext): Observation[] {
+  const relevant = relevantScamSignals(ctx);
+  return relevant.map((signal) => {
+    const rule = SCAM_OBSERVATIONS[signal.kind];
+    // A seller abroad alone is only a hint; with other signs it matters more.
+    const severity = signal.kind === 'abroad' && relevant.length === 1 ? 'info' : rule.severity;
+    return observation(
+      rule.id,
+      rule.title,
+      rule.detail,
+      severity,
+      'listing_fact',
+      [],
+      [signal.quote],
+    );
+  });
+}
+
 const SEVERITY_ORDER: Record<Severity, number> = { warning: 0, notice: 1, info: 2 };
 
 /** Evidence-based observations ("Auffälligkeiten"), most important first. */
@@ -743,6 +835,7 @@ export function collectObservations(ctx: VehicleRuleContext): Observation[] {
     ...priceRules(ctx),
     ...damageRules(ctx),
     ...offerRules(ctx),
+    ...scamRules(ctx),
     ...descriptionRules(ctx),
     ...missingInformationRules(ctx),
   ];

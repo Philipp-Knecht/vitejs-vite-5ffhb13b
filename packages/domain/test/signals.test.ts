@@ -128,6 +128,138 @@ describe('offer signals', () => {
     expect(found.soldAs.map((s) => s.kind).sort()).toEqual(['bastler', 'export']);
   });
 
+  it('finds the warning signs for scams the police names', () => {
+    const kinds = (text: string) => signals(text).scamSignals.map((s) => s.kind);
+    const found: [string, string][] = [
+      ['Zahlung per Vorkasse.', 'prepayment'],
+      ['Der Betrag muss vorab überwiesen werden.', 'prepayment'],
+      ['Zahlung im Voraus.', 'prepayment'],
+      ['Bitte vorab zahlen.', 'prepayment'],
+      ['Vorauszahlung erforderlich.', 'prepayment'],
+      ['Anzahlung von 500 Euro, dann wird das Auto geliefert.', 'prepayment'],
+      ['Lieferung nach Zahlungseingang.', 'prepayment'],
+      ['Kein Tausch, keine Probefahrt, Zahlung per Vorkasse.', 'prepayment'],
+      ['Bezahlung per Western Union.', 'prepayment'],
+      ['Payment in advance only.', 'prepayment'],
+      ['Ich bin derzeit beruflich in England.', 'abroad'],
+      ['Ich wohne leider im Ausland.', 'abroad'],
+      ['Bin gerade in Rumänien.', 'abroad'],
+      ['Ich lebe jetzt mit meiner Familie in Spanien.', 'abroad'],
+      ['Ich wurde nach England versetzt.', 'abroad'],
+      ['Ich bin Soldat im Ausland.', 'abroad'],
+      ['Die Lieferung erfolgt über eine Spedition.', 'shipping'],
+      ['Ich schicke das Auto mit einem Speditionsunternehmen.', 'shipping'],
+      ['Speditionskosten übernehme ich.', 'shipping'],
+      ['Abwicklung über einen Treuhandservice.', 'escrow'],
+      ['Treuhandgebühr trägt der Käufer.', 'escrow'],
+      ['Abwicklung über einen Treuhänder.', 'escrow'],
+      ['Kontakt nur per E-Mail, keine Anrufe.', 'offPlatform'],
+      ['Bitte 500 € Anzahlung zur Reservierung.', 'prepayment'],
+      ['Eine Besichtigung ist leider nicht möglich.', 'noViewing'],
+      ['Verkauf auch ungesehen.', 'noViewing'],
+      ['Bitte nur über WhatsApp schreiben.', 'offPlatform'],
+      ['Ausschließlich per E-Mail erreichbar.', 'offPlatform'],
+      ['Ich bin telefonisch nicht erreichbar, bitte per Mail.', 'offPlatform'],
+    ];
+    for (const [text, kind] of found) expect(kinds(text), text).toEqual([kind]);
+
+    // The classic scam text: refusals of other things in the same sentence do not hide the signs.
+    expect(
+      kinds(
+        'Eine Besichtigung ist leider nicht möglich, da ich beruflich in Spanien bin, das Auto wird per Spedition geliefert und die Zahlung erfolgt per Vorkasse über einen Treuhandservice.',
+      ).sort(),
+    ).toEqual(['abroad', 'escrow', 'noViewing', 'prepayment', 'shipping']);
+    expect(kinds('Unfall: nein, Zahlung per Vorkasse und Lieferung per Spedition.').sort()).toEqual(
+      ['prepayment', 'shipping'],
+    );
+    expect(kinds('Zahlung über Treuhand der Bank of Scotland.')).toEqual(['escrow']);
+    expect(kinds('Treuhändisch über meinen Notar.')).toEqual(['escrow']);
+    expect(kinds('Ich bin kein Betrüger, deshalb Abwicklung über Treuhandservice.')).toEqual([
+      'escrow',
+    ]);
+    for (const text of [
+      'Privatverkauf, Gewährleistung ausgeschlossen, Zahlung per Vorkasse.',
+      'Rücknahme ausgeschlossen, Bezahlung im Voraus.',
+      'Probefahrt nicht möglich, Lieferung nach Zahlungseingang.',
+    ])
+      expect(kinds(text), text).toEqual(['prepayment']);
+    expect(kinds('Da ich beruflich in England arbeite, verkaufe ich das Auto.')).toEqual([
+      'abroad',
+    ]);
+    expect(kinds('Weil ich jetzt im Ausland lebe, verkaufe ich.')).toEqual(['abroad']);
+    expect(kinds('Ich wohne seit 2 Jahren in Italien.')).toEqual(['abroad']);
+    expect(kinds('Nur Vorkasse, Finanzierung nicht möglich.')).toEqual(['prepayment']);
+    expect(kinds('Zahlung per Vorkasse und sonst nichts.')).toEqual(['prepayment']);
+    expect(kinds('Notar-Treuhandkonto für die Abwicklung.')).toEqual(['escrow']);
+
+    // Honest private and dealer listings stay quiet.
+    for (const text of [
+      'Keine Vorkasse, Barzahlung bei Abholung.',
+      'Vorkasse ausgeschlossen, nur Barzahlung bei Übergabe.',
+      'Vorkasse ist nicht möglich, nur Barzahlung.',
+      'Vorkasse? Nein!',
+      'Vorkasse lehne ich ab.',
+      'Bitte nichts vorab überweisen.',
+      'Treuhandservice? Nein danke!',
+      'Betrüger mit Treuhand-Masche bitte nicht melden.',
+      'Brief liegt bei der Bank, Ablösung erfolgt per Treuhandauftrag.',
+      'Finanzierung ohne Anzahlung möglich. Lieferung bundesweit möglich.',
+      'Reservierung gegen Anzahlung bei Bestellung.',
+      'Überführung gegen Aufpreis. Export möglich.',
+      'War Firmenwagen einer Spedition.',
+      'Ich arbeite bei einer Spedition.',
+      'Import aus den USA, 2022 nach Deutschland verschifft.',
+      'Versand per Spedition nicht möglich.',
+      'Das Fahrzeug wird Ihnen zugestellt, Bezahlung bei Übergabe in bar.',
+      'Transporter mit Anhängerkupplung.',
+      'Ich wohne in Hamburg, Besichtigung jederzeit.',
+      'Ich bin in Polen geboren und wohne seit 20 Jahren in Berlin.',
+      'Ich bin aktuell in Spanien im Urlaub, ab 25.10. wieder da.',
+      'Da ich beruflich ins Ausland gehe, verkaufe ich mein Auto.',
+      'Bei Fragen gerne per E-Mail oder telefonisch.',
+      'Keine Anrufe von Händlern oder Exporteuren!',
+      'Bitte keine Anrufe nach 20 Uhr.',
+      'Bitte nur per Mail oder Telefon melden.',
+      'Kontakt nur über WhatsApp oder Anruf.',
+      'Bitte nur per SMS, ich rufe zurück.',
+      'Zahlung im Voraus nicht erforderlich.',
+      'Vorab zahlen musst du nichts.',
+      'Brief liegt bei der Bank, die Restschuld wird per Treuhandauftrag abgelöst.',
+      'Ich bin aktuell im Urlaub in Spanien, Besichtigung ab 25.10.',
+      'Da ich in Polen geboren bin, spreche ich Polnisch.',
+      'Weil ich im Urlaub in Italien bin, Besichtigung erst ab November.',
+      'Besichtigung jederzeit möglich, Probefahrt nach Absprache.',
+      'Bitte nicht ungesehen kaufen, Besichtigung jederzeit.',
+      'Keine Zahlung per Vorkasse, nur bar bei Übergabe.',
+      'Auf keinen Fall Zahlung per Vorkasse.',
+      'Ich akzeptiere keine Zahlung per Vorkasse, nur bar.',
+      'Finanzierungsbeispiel: Anzahlung von 2.000 €, Laufzeit 48 Monate.',
+      'Kfz-Steuer und Versicherung sind bis Ende 2026 im Voraus bezahlt.',
+      'Inspektionspaket wurde vorab bezahlt und ist übertragbar.',
+      'Ich bin derzeit im Urlaub in Spanien.',
+      'Ich bin mit dem Auto oft in Italien gefahren.',
+      'Bitte nur per Messenger hier auf der Plattform schreiben.',
+      'Besichtigung ohne Termin nicht möglich.',
+      'Besichtigung am Wochenende nicht möglich.',
+      'Besichtigung nur nach Terminvereinbarung, spontane Besichtigung nicht möglich.',
+      'Ungesehen kaufen ist ausgeschlossen.',
+      'Wer ungesehen kauft, ist selbst schuld. Besichtigung jederzeit.',
+      'Besichtigung werktags nicht möglich, gerne am Wochenende.',
+      'Besichtigung heute nicht möglich, ab morgen gerne.',
+      'Besichtigung derzeit nicht möglich, Auto steht in der Werkstatt, ab 1.11. wieder.',
+      'Ich wohne nicht in Spanien.',
+      'Treuhandverwaltung des Nachlasses.',
+    ])
+      expect(kinds(text), text).toEqual([]);
+  });
+
+  it('stays fast on long texts', () => {
+    const started = performance.now();
+    signals('keine Vorkasse '.repeat(800));
+    signals('Treuhand ausgeschlossen, '.repeat(480));
+    expect(performance.now() - started).toBeLessThan(500);
+  });
+
   it('finds commercial wording and private-sale claims', () => {
     expect(
       signals('Finanzierung möglich, 12 Monate Gewährleistung.').commercialIndicators,

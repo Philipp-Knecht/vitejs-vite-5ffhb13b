@@ -50,6 +50,10 @@ export type PositiveKey =
   | 'german_vehicle'
   | 'second_tire_set';
 
+/** Arrangements the police names as warning signs for scams with used cars. */
+export type ScamSignalKind =
+  'prepayment' | 'abroad' | 'shipping' | 'escrow' | 'offPlatform' | 'noViewing';
+
 export interface DescriptionSignals {
   mileageMentions: (Quoted & { km: number })[];
   registrationMentions: (Quoted & { value: YearMonth })[];
@@ -82,6 +86,8 @@ export interface DescriptionSignals {
   batteryInfo: Quoted | null;
   /** A vehicle identification number (FIN) in the listing. */
   vinMention: Quoted | null;
+  /** At most one quote per kind. */
+  scamSignals: (Quoted & { kind: ScamSignalKind })[];
 }
 
 interface Match {
@@ -376,6 +382,150 @@ const VAGUE: readonly RegExp[] = [
   /\bbei\s+(?:fragen|interesse)\s+(?:einfach\s+)?(?:melden|schreiben|anrufen)\b/i,
 ];
 
+const COUNTRIES = String.raw`england|großbritannien|irland|schottland|spanien|portugal|frankreich|italien|griechenland|polen|tschechien|ungarn|rumänien|bulgarien|kroatien|slowenien|litauen|lettland|estland|ukraine|dänemark|schweden|norwegen|finnland|belgien|luxemburg|holland|malta|zypern|dubai|kanada|amerika|der\s+schweiz|der\s+türkei|der\s+slowakei|den\s+niederlanden|den\s+usa|den\s+vereinigten\s+staaten`;
+
+/**
+ * Wording that points to the arrangements behind most scams with used cars:
+ * payment before the handover, a seller who is abroad, delivery by a
+ * forwarder, an escrow service, contact only by e-mail or messenger
+ * (Polizeiliche Kriminalprävention, „Vorsicht bei Vorkasse“ and
+ * „Verdächtiges Inserat“; ADAC, „Auto sicher bezahlen“). Plain mentions of a
+ * forwarder or delivery are not enough: they need a delivery context.
+ */
+const SCAM_SIGNALS: readonly { kind: ScamSignalKind; pattern: RegExp }[] = [
+  {
+    kind: 'prepayment',
+    pattern: new RegExp(
+      [
+        String.raw`\bvorkasse\b`,
+        String.raw`\bvorauszahlung\b`,
+        String.raw`\b(?:vorab|im\s+voraus)\s+(?:zu\s+)?(?:überw\p{L}*|(?:be)?zahl(?:en|bar)\b|(?:be)?zahlt\s+werden)`,
+        String.raw`\b(?:zahlung|bezahlung|überweisung)\s+(?:bitte\s+)?(?:vorab|im\s+voraus)\b`,
+        String.raw`\b(?:lieferung|versand|übergabe)\s+(?:erst\s+)?nach\s+(?:zahlungseingang|(?:erhalt|eingang)\s+der\s+(?:zahlung|überweisung))\b`,
+        String.raw`\banzahlung\s+(?:von|in\s+höhe\s+von)\s+\d`,
+        String.raw`\banzahlung\s+(?:zur\s+reservierung|vorab)\b`,
+        String.raw`\b(?:western\s+union|moneygram|bargeldtransfer)\b`,
+        String.raw`\b(?:payment\s+in\s+advance|pay\s+in\s+advance|advance\s+payment)\b`,
+      ].join('|'),
+      'iu',
+    ),
+  },
+  {
+    kind: 'abroad',
+    pattern: new RegExp(
+      [
+        String.raw`\b(?:bin|wohne|lebe|arbeite)\s+(?:(?!urlaub\b|nicht\b)[\p{L}\p{N}]+\s+){0,4}?(?:im\s+ausland|in\s+(?:${COUNTRIES}))\b(?!\s+(?:geboren|aufgewachsen|im\s+urlaub|zu\s+besuch|gefahren|gewesen|unterwegs))`,
+        // Subordinate clause: „da ich beruflich in Spanien bin“.
+        String.raw`\b(?:ich|wir)\s+(?:(?!urlaub\b|nicht\b)[\p{L}\p{N}]+\s+){0,3}?(?:im\s+ausland|in\s+(?:${COUNTRIES}))\s+(?:bin|wohne|lebe|arbeite|sind|wohnen|leben|arbeiten)\b`,
+        String.raw`\bsoldat\s+im\s+ausland\b`,
+        String.raw`\b(?:wurde|bin)\s+(?:\p{L}+\s+){0,2}?nach\s+(?:${COUNTRIES})\s+versetzt\b`,
+        String.raw`\bi\s+am\s+(?:currently\s+)?(?:abroad|in\s+(?:the\s+)?(?:uk|usa|spain|england))\b`,
+      ].join('|'),
+      'iu',
+    ),
+  },
+  {
+    kind: 'shipping',
+    pattern: new RegExp(
+      [
+        String.raw`\b(?:liefer\p{L}*|geliefert|versand|versend\p{L}*|verschick\p{L}*|schick\p{L}*|zustell\p{L}*|bring\p{L}*|gebracht)\b[^.!?\n]{0,40}\b(?:speditions?\p{L}*|transport(?:unternehmen|firma|dienst)\p{L}*|verschiff\p{L}*)`,
+        String.raw`\b(?:speditions?\p{L}*|transport(?:unternehmen|firma|dienst)\p{L}*)\b[^.!?\n]{0,40}\b(?:liefer\p{L}*|geliefert|zugestellt|gebracht|bringt|vor\s+die\s+tür)`,
+        String.raw`\bspeditionskosten\b`,
+        String.raw`\bshipping\s+(?:company|agent)\b`,
+      ].join('|'),
+      'iu',
+    ),
+  },
+  { kind: 'escrow', pattern: /\btreuh[aä]nd\p{L}*|\bescrow\b/iu },
+  {
+    kind: 'noViewing',
+    // Not „Besichtigung am Wochenende / ohne Termin nicht möglich“: those name a condition.
+    pattern: new RegExp(
+      [
+        String.raw`(?<!(?:spontane|kurzfristige)\s)\bbesichtigung\p{L}*\s+(?:(?!ohne\b|am\b|unter\b|nach\b|vor\b|außer\b|wochenend|termin|heute\b|morgen|derzeit|momentan|aktuell|werktag|wochentag|abends|vormittag|nachmittag|tagsüber)\p{L}+\s+){0,2}?(?:nicht\s+möglich|ausgeschlossen)\b(?![^.!?\n]{0,30}\b(?:gerne|ab|wieder|aber)\b)`,
+        String.raw`\b(?:ver)?kauf\p{L}*\s+(?:\p{L}+\s+){0,2}?ungesehen\b`,
+        String.raw`\bungesehen\s+(?:zu\s+)?(?:ge|ver)?kauf\p{L}*`,
+      ].join('|'),
+      'iu',
+    ),
+  },
+  {
+    kind: 'offPlatform',
+    pattern: new RegExp(
+      [
+        String.raw`\b(?:nur|ausschließlich)\s+(?:per\s+|über\s+|via\s+|auf\s+)?(?:e-?mail|mail|whats\s?app|telegram|messenger)\b(?![^.!?\n]{0,30}\b(?:(?:oder|bzw\.?|und)\s+(?:tel\p{L}*|anruf\p{L}*|handy)|hier|plattform|kleinanzeigen|app)\b)`,
+        String.raw`\btelefonisch\s+nicht\s+erreichbar\b`,
+        String.raw`\bonly\s+(?:by|via)\s+e-?mail\b`,
+      ].join('|'),
+      'iu',
+    ),
+  },
+];
+
+/**
+ * Honest sellers often write the opposite: „Vorkasse ausgeschlossen“,
+ * „Treuhandservice? Nein danke!“, „Zahlung im Voraus nicht erforderlich“.
+ * Only the words right after the match count – „Besichtigung nicht möglich,
+ * Zahlung per Vorkasse“ is the classic scam text, not a rejection.
+ */
+const SCAM_REJECTED_AFTER =
+  /^[\s\-–]*(?:\p{L}+\s+){0,3}?(?:ausgeschlossen|nicht\s+(?:möglich|akzeptiert|gewünscht|erwünscht|erforderlich|nötig|notwendig)|lehne\p{L}*|kommt\s+nicht\s+in\s+frage|masche|(?:musst|müssen|muss)\s+(?:du\s+|sie\s+|ihr\s+)?nichts)\b/iu;
+const SCAM_ANSWERED_NO = /^\s*[?:!]+\s*nein\b/iu;
+/** A sentence that warns off scammers is no sign either: „Bitte keine Betrüger“. */
+const SCAM_WARNS_OFF =
+  /\b(?:kein\p{L}*|nicht)\b[^.!?\n,;]{0,30}\bbetrüg|\bbetrüg\p{L}*[^.!?\n,;]{0,40}\bnicht\b|\bwer\s+ungesehen\b/iu;
+/** Paying off a financed car through the bank is the safe route, not a sign. */
+const SCAM_SAFE_CONTEXT: Partial<Record<ScamSignalKind, RegExp>> = {
+  // Financing examples, required by price rules in dealer listings, name a down payment.
+  prepayment:
+    /\b(?:finanzier\p{L}*|leasing\p{L}*|laufzeit|jahreszins|sollzins|monatliche\s+rate|schlussrate)\b/iu,
+  escrow:
+    /\b(?:ablös\p{L}*|abgelöst|finanziert|treuhandauftrag|nachlass\p{L}*)\b|\b(?:brief|zulassungsbescheinigung)\b[^.!?\n]{0,30}\bbank\b/iu,
+};
+const SCAM_NEGATION_BEFORE =
+  /\b(?:kein\p{L}*|nicht|ohne|nie|niemals|nichts|keinesfalls|auf\s+keinen\s+fall)\s+(?:\p{L}+\s+){0,2}$/iu;
+/** „Besichtigung nicht möglich“ names a refusal itself, so a refusal is no rejection. */
+const SELF_NEGATED = /^besichtigung/iu;
+
+/** The clause around a match: up to the next sentence end, comma or semicolon. */
+/** Context is looked at only this far around a match, so long texts stay fast. */
+const SCAM_WINDOW = 300;
+
+function clauseAround(text: string, index: number, length: number): string {
+  const offset = Math.max(0, index - SCAM_WINDOW);
+  text = text.slice(offset, index + length + SCAM_WINDOW);
+  index -= offset;
+  const before = text.slice(0, index);
+  const start = Math.max(
+    ...['.', '!', '?', '\n', ',', ';'].map((mark) => before.lastIndexOf(mark)),
+  );
+  const rest = text.slice(index + length);
+  const stop = rest.search(/[.!?\n,;]/);
+  return text.slice(start + 1, stop === -1 ? text.length : index + length + stop);
+}
+
+function scamMatch(kind: ScamSignalKind, pattern: RegExp, text: string): Match | null {
+  for (const match of allMatches(pattern, text)) {
+    const end = match.index + match.text.length;
+    const after = text.slice(end, end + 60);
+    const afterInClause = after.split(/[.!?\n,;]/)[0] ?? '';
+    if (!testPattern(SELF_NEGATED, match.text)) {
+      if (testPattern(SCAM_REJECTED_AFTER, afterInClause)) continue;
+      if (testPattern(SCAM_ANSWERED_NO, after)) continue;
+    }
+    if (testPattern(SCAM_WARNS_OFF, clauseAround(text, match.index, match.text.length))) continue;
+    // Financing words excuse only a down payment, not „Vorkasse“.
+    const safe =
+      kind === 'prepayment' && !/anzahlung/i.test(match.text) ? undefined : SCAM_SAFE_CONTEXT[kind];
+    if (safe && testPattern(safe, clauseAround(text, match.index, match.text.length))) continue;
+    // Only the words right before: „Kein Tausch, Zahlung per Vorkasse“ is still a sign.
+    const before = text.slice(Math.max(0, match.index - 40), match.index);
+    if (testPattern(SCAM_NEGATION_BEFORE, before.split(/[,;:]/).at(-1) ?? '')) continue;
+    return match;
+  }
+  return null;
+}
+
 const POSITIVES: readonly { key: PositiveKey; pattern: RegExp }[] = [
   { key: 'non_smoker', pattern: /\bnichtraucher(?:fahrzeug|auto|wagen)?\b/i },
   {
@@ -661,6 +811,11 @@ export function extractDescriptionSignals(
 
   const vin = findVin(combined);
 
+  const scamSignals = SCAM_SIGNALS.flatMap(({ kind, pattern }) => {
+    const match = scamMatch(kind, pattern, combined);
+    return match ? [{ kind, quote: quote(combined, match) }] : [];
+  });
+
   return {
     mileageMentions: extractMileage(text),
     registrationMentions,
@@ -694,5 +849,6 @@ export function extractDescriptionSignals(
     vinMention: vin
       ? { quote: quote(combined, { index: vin.index, text: vin.vin, groups: [] }) }
       : null,
+    scamSignals,
   };
 }

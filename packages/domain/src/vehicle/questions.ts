@@ -42,6 +42,22 @@ export function generateSellerQuestions(
       ),
     );
   }
+  if (
+    has('payment_in_advance') ||
+    has('escrow_service') ||
+    has('shipping_offered') ||
+    has('no_viewing')
+  ) {
+    questions.push(
+      question(
+        'pay_on_handover',
+        'Kann ich das Fahrzeug vor dem Kauf vor Ort ansehen und bei der Übergabe bezahlen?',
+        'Kann ich mir das Auto vor dem Kauf vor Ort ansehen und bei der Übergabe bezahlen?',
+        'Im Inserat ist von Vorkasse, einem Treuhanddienst, einer Lieferung oder einem Kauf ohne Besichtigung die Rede.',
+        1,
+      ),
+    );
+  }
   if (has('price_conflict')) {
     questions.push(
       question(
