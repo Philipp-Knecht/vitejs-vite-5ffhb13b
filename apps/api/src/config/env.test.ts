@@ -27,6 +27,43 @@ const STRIPE = {
 };
 
 describe('loadConfig', () => {
+  it('reads ads sold directly from SPONSOR_ADS', () => {
+    expect(loadConfig(BASE).sponsorAds).toEqual([]);
+    const ad = {
+      id: 'autohaus-muster-2026-11',
+      advertiser: 'Autohaus Muster GmbH',
+      title: 'Gebrauchtwagen in Musterstadt',
+      url: 'https://autohaus-muster.example/gebrauchtwagen',
+      image: '/sponsors/autohaus-muster.webp',
+      imageAlt: 'Autohaus Muster: Hof mit Gebrauchtwagen',
+      placements: ['guide_bottom'],
+      from: '2026-11-01',
+      until: '2026-11-30',
+    };
+    const config = loadConfig({ ...BASE, SPONSOR_ADS: JSON.stringify([ad]) });
+    expect(config.sponsorAds).toEqual([{ ...ad, text: '' }]);
+    expect(describeConfig(config).sponsorAds).toBe(1);
+    const broken = [
+      'not json',
+      '{}',
+      JSON.stringify([{ ...ad, url: 'http://autohaus-muster.example' }]),
+      JSON.stringify([{ ...ad, image: 'https://cdn.example/ad.png' }]),
+      JSON.stringify([{ ...ad, imageAlt: undefined }]),
+      JSON.stringify([{ ...ad, placements: [] }]),
+      JSON.stringify([{ ...ad, placements: ['header'] }]),
+      JSON.stringify([{ ...ad, from: '2026-12-01' }]),
+      JSON.stringify([{ ...ad, until: '2026-02-30x' }]),
+      JSON.stringify([{ ...ad, from: '2026-02-30' }]),
+      JSON.stringify([{ ...ad, id: 'Autohaus Muster' }]),
+      JSON.stringify([{ ...ad, id: '-muster' }]),
+      JSON.stringify([{ ...ad, image: '/sponsors/Muster.PNG' }]),
+      JSON.stringify([{ ...ad, extra: true }]),
+      JSON.stringify([ad, ad]),
+    ];
+    for (const value of broken)
+      expect(() => loadConfig({ ...BASE, SPONSOR_ADS: value }), value).toThrow(ConfigError);
+  });
+
   it('takes an affiliate link only as a plain https link with a name', () => {
     expect(loadConfig(BASE).affiliateCarInsurance).toBeNull();
     const config = loadConfig({

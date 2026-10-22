@@ -87,8 +87,9 @@ export function PrivacyPage() {
   const aiProvider = features?.aiProvider ? AI_PROVIDER_NAMES[features.aiProvider] : null;
   const emailProvider = config?.privacy.emailProvider ?? null;
   const ads = config?.ads ?? null;
-  // A configuration cached before this field existed (HTTP cache, offline copy) lacks it.
+  // A configuration cached before these fields existed (HTTP cache, offline copy) lacks them.
   const insurancePartner = config?.affiliates?.carInsurance ?? null;
+  const sponsorAds = config?.sponsors?.configured ?? false;
 
   return (
     <div className="container page page--narrow prose">
@@ -391,6 +392,33 @@ export function PrivacyPage() {
         {hosting === 'render' &&
           ' Die Protokolle liegen bei Render und werden je nach Tarif nach 7 bis 30 Tagen gelöscht.'}
       </p>
+
+      {sponsorAds && (
+        <>
+          <h2>Anzeigen von Werbepartnern</h2>
+          <p>
+            Nutzt du KaufCheck ohne Pro, siehst du auf Ergebnisseiten und in einigen Ratgebern auch
+            Anzeigen, die wir selbst an Werbepartner verkaufen; wer wirbt, steht an der Anzeige.
+            Welche Anzeige du siehst, hängt nicht von deinem Inserat oder deinen Angaben ab. Text
+            und Bild kommen von unserem Server: Beim Anzeigen lädt dein Browser nichts vom
+            Werbepartner, und wir geben keine Daten über dich weiter.
+          </p>
+          <p>
+            Klickst du auf eine Anzeige, leitet dich unser Server zur Website des Werbepartners
+            weiter; wie bei jedem Seitenaufruf erhält der Werbepartner dabei technisch deine
+            IP-Adresse und erfährt, dass du von KaufCheck kommst. Für seine Seiten ist er selbst
+            verantwortlich.
+          </p>
+          <p>
+            Wie oft eine Anzeige ausgeliefert und angeklickt wurde, zählen wir auf unserem Server je
+            Anzeige und Tag – ohne IP-Adresse, Kennung oder Cookie und ohne Messung in deinem
+            Browser. Sendet dein Browser „Do Not Track“ oder „Global Privacy Control“, zählen wir
+            nicht mit. Werbepartner erhalten von uns nur Gesamtzahlen je Anzeige und Zeitraum.
+            Rechtsgrundlage ist unser berechtigtes Interesse, Anzeigen zu verkaufen und abzurechnen
+            (Art. 6 Abs. 1 lit. f DSGVO).
+          </p>
+        </>
+      )}
 
       {ads && (
         <>
