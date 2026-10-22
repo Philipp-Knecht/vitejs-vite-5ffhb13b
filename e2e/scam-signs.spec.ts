@@ -19,7 +19,9 @@ test('warning signs for scams are named with advice, not as an accusation', asyn
     'Lieferung über eine Spedition im Inserat',
   ])
     await expect(section.getByRole('heading', { name: title })).toBeVisible();
-  await expect(section.getByRole('heading', { name: 'Verdächtiges Angebot melden' })).toBeVisible();
+  await expect(
+    section.getByRole('heading', { name: 'Bei Verdacht: Angebot melden' }),
+  ).toBeVisible();
   await expect(
     section.getByRole('link', { name: /Polizei: Was tun bei einem verdächtigen Inserat\?/ }),
   ).toHaveAttribute('href', /polizei-beratung\.de/);

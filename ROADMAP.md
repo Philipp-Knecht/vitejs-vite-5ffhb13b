@@ -1,6 +1,6 @@
 # KaufCheck – Fahrplan
 
-Stand: 16.10.2026. Ziel: KaufCheck deckt den ganzen Weg eines Gebrauchtwagenkaufs ab – von der Planung über
+Stand: 22.10.2026. Ziel: KaufCheck deckt den ganzen Weg eines Gebrauchtwagenkaufs ab – von der Planung über
 Suche, Prüfung, Besichtigung, Kauf und Zulassung bis zu Wartung und Wiederverkauf. Grundlage sind die offenen
 Punkte aus [TODO.md](TODO.md), die Roadmap im [README](README.md#roadmap) und ein Abgleich des Kaufablaufs mit
 dem Code.
@@ -31,7 +31,7 @@ PRs, **L** = mehrere Wochen.
 | 1.5 | Finanzierungsrechner (kostenlos) und Kreditkosten im Vergleich der Kosten pro Monat (Pro) | #35       |
 | 3.2 | Erinnerung an die HU per E-Mail auch ohne Pro                                             | #36       |
 | 5.3 | Affiliate-Link zum Vergleich von Kfz-Versicherungen in drei Ratgebern (ohne Pro)          | #37       |
-| 2.9 | Betrugshinweise in der Prüfung (Vorkasse, Treuhand, Spedition, Ausland, Messenger)        | dieser PR |
+| 2.9 | Betrugshinweise (Vorkasse, Treuhand, Spedition, Ausland, Messenger, ungesehen)            | dieser PR |
 
 ## Arbeitsweise je Feature
 
@@ -65,18 +65,18 @@ PRs, **L** = mehrere Wochen.
 
 ## Etappe 2 – Kauf und Übergabe
 
-| #    | Feature                                                                                                           | Aufwand | Plan            | Anmerkung                                                                     |
-| ---- | ----------------------------------------------------------------------------------------------------------------- | ------- | --------------- | ----------------------------------------------------------------------------- |
-| 2.1  | Rückruf-Check: Fahrgestellnummer erfragen, Frage an den Verkäufer, Links zu Hersteller-Rückrufseiten und KBA      | S       | Kostenlos       | kein automatischer Abruf ohne geprüfte Nutzungsbedingungen                    |
-| 2.2  | Kauf-Assistent: Schritt-für-Schritt-Checkliste von Besichtigung bis Zulassung                                     | M       | Kostenlos       | baut auf Ratgeber und Checkliste auf, Fortschritt je gespeichertem Angebot    |
-| 2.3  | Kaufvertrag-Generator (aus dem Inserat vorbefüllt, PDF)                                                           | M       | Pro             | ohne Anwalt, nach Recherche (Entscheidung vom 15.10.2026, siehe DECISIONS.md) |
-| 2.4  | PDF-Export von Analyse und Checkliste                                                                             | S–M     | Pro             | zum Mitnehmen zur Besichtigung                                                |
-| 2.5  | Verhandlungshilfe: Mängel aus der Besichtigung als Argumente                                                      | S       | Pro             | ohne Preisangaben, solange keine Marktdaten vorliegen                         |
-| 2.6  | Preisänderung je gespeichertem Angebot: Preis bei jedem erneuten Einfügen festhalten und anzeigen                 | S       | Kostenlos       | Wettbewerb W2; nur Nutzereingaben, kein automatischer Abruf                   |
-| 2.7  | Standzeit: „online seit“ aus dem eingefügten Text oder eigener Angabe, Hinweis in der Verhandlungshilfe           | S       | Kostenlos / Pro | Wettbewerb W3                                                                 |
-| 2.8  | Angebot oder Vergleich teilen (nur lesbarer Link)                                                                 | S–M     | Kostenlos       | Wettbewerb W4; Datenschutz prüfen (keine Kontodaten im Link)                  |
-| 2.9  | Betrugshinweise in der Prüfung (z. B. Vorkasse, Verkäufer im Ausland) und Link zur Meldefunktion des Marktplatzes | S       | Kostenlos       | Wettbewerb W5; zuerst prüfen, was die Prüfung schon abdeckt                   |
-| 2.10 | Suche: Umkreis um PLZ und Länderseiten der Marktplätze als Deeplinks prüfen und ergänzen                          | S       | Kostenlos       | Wettbewerb W6; nur Deeplinks, keine Abrufe                                    |
+| #    | Feature                                                                                                      | Aufwand | Plan            | Anmerkung                                                                     |
+| ---- | ------------------------------------------------------------------------------------------------------------ | ------- | --------------- | ----------------------------------------------------------------------------- |
+| 2.1  | Rückruf-Check: Fahrgestellnummer erfragen, Frage an den Verkäufer, Links zu Hersteller-Rückrufseiten und KBA | S       | Kostenlos       | kein automatischer Abruf ohne geprüfte Nutzungsbedingungen                    |
+| 2.2  | Kauf-Assistent: Schritt-für-Schritt-Checkliste von Besichtigung bis Zulassung                                | M       | Kostenlos       | baut auf Ratgeber und Checkliste auf, Fortschritt je gespeichertem Angebot    |
+| 2.3  | Kaufvertrag-Generator (aus dem Inserat vorbefüllt, PDF)                                                      | M       | Pro             | ohne Anwalt, nach Recherche (Entscheidung vom 15.10.2026, siehe DECISIONS.md) |
+| 2.4  | PDF-Export von Analyse und Checkliste                                                                        | S–M     | Pro             | zum Mitnehmen zur Besichtigung                                                |
+| 2.5  | Verhandlungshilfe: Mängel aus der Besichtigung als Argumente                                                 | S       | Pro             | ohne Preisangaben, solange keine Marktdaten vorliegen                         |
+| 2.6  | Preisänderung je gespeichertem Angebot: Preis bei jedem erneuten Einfügen festhalten und anzeigen            | S       | Kostenlos       | Wettbewerb W2; nur Nutzereingaben, kein automatischer Abruf                   |
+| 2.7  | Standzeit: „online seit“ aus dem eingefügten Text oder eigener Angabe, Hinweis in der Verhandlungshilfe      | S       | Kostenlos / Pro | Wettbewerb W3                                                                 |
+| 2.8  | Angebot oder Vergleich teilen (nur lesbarer Link)                                                            | S–M     | Kostenlos       | Wettbewerb W4; Datenschutz prüfen (keine Kontodaten im Link)                  |
+| 2.9  | Betrugshinweise in der Prüfung (z. B. Vorkasse, Ausland), Hinweis aufs Melden, Link zur Polizei              | S       | Kostenlos       | Wettbewerb W5; zuerst prüfen, was die Prüfung schon abdeckt                   |
+| 2.10 | Suche: Umkreis um PLZ und Länderseiten der Marktplätze als Deeplinks prüfen und ergänzen                     | S       | Kostenlos       | Wettbewerb W6; nur Deeplinks, keine Abrufe                                    |
 
 ## Etappe 3 – Nach dem Kauf: „Mein Auto“
 

@@ -757,7 +757,7 @@ const SCAM_OBSERVATIONS: Record<
     id: 'seller_abroad',
     title: 'Verkäufer nach eigener Angabe im Ausland',
     detail:
-      'Laut Inserat lebt oder arbeitet der Verkäufer im Ausland. Das allein ist nicht ungewöhnlich. Die Polizei beschreibt aber eine häufige Masche: Der Anbieter ist angeblich im Ausland und verlangt Vorkasse oder eine Zahlung über Dritte. Sieh dir das Auto vor Ort an und zahl erst bei der Übergabe.',
+      'Laut Inserat lebt oder arbeitet der Verkäufer im Ausland. Das allein ist nicht ungewöhnlich. Die Polizei beschreibt aber eine häufige Masche: Ein Anbieter gibt an, im Ausland zu sein, und verlangt Vorkasse oder eine Zahlung über Dritte. Sieh dir das Auto vor Ort an und zahl erst bei der Übergabe.',
     severity: 'notice',
   },
   shipping: {
@@ -765,6 +765,13 @@ const SCAM_OBSERVATIONS: Record<
     title: 'Lieferung über eine Spedition im Inserat',
     detail:
       'Im Inserat ist von einer Lieferung über eine Spedition die Rede. Die Polizei warnt vor angeblichen Speditionen, die als Treuhänder das Geld annehmen sollen. Zahl nichts im Voraus an eine Spedition und kauf kein Auto ungesehen.',
+    severity: 'notice',
+  },
+  noViewing: {
+    id: 'no_viewing',
+    title: 'Besichtigung laut Inserat nicht möglich',
+    detail:
+      'Laut Inserat kannst du das Auto vorher nicht ansehen. Die Polizei nennt die Bereitschaft, ein Auto ungesehen zu verkaufen, als Anhaltspunkt für ein verdächtiges Inserat. Kauf kein Auto, das du nicht gesehen und probegefahren hast, und zahl erst bei der Übergabe.',
     severity: 'notice',
   },
   offPlatform: {

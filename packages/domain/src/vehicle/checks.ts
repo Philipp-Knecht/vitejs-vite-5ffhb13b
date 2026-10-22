@@ -260,7 +260,7 @@ export function collectChecks(ctx: VehicleRuleContext): CheckItem[] {
     specific.push(
       check(
         'report_listing',
-        'Verdächtiges Angebot melden',
+        'Bei Verdacht: Angebot melden',
         'Kommt dir das Angebot verdächtig vor, melde es dem Marktplatz – meist geht das über einen Link direkt im Inserat, sonst über den Kundenservice – und verzichte lieber auf das Auto. Hast du schon Geld überwiesen, wende dich sofort an deine Bank, denn eine Überweisung lässt sich, wenn überhaupt, nur kurz danach stoppen. Erstatte Anzeige bei der Polizei, das geht auch online; sichere vorher Screenshots von Inserat und Nachrichten.',
         'Warnzeichen im Inserat',
         'listing_fact',

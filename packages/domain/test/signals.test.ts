@@ -154,11 +154,40 @@ describe('offer signals', () => {
       ['Treuhandgebühr trägt der Käufer.', 'escrow'],
       ['Abwicklung über einen Treuhänder.', 'escrow'],
       ['Kontakt nur per E-Mail, keine Anrufe.', 'offPlatform'],
+      ['Bitte 500 € Anzahlung zur Reservierung.', 'prepayment'],
+      ['Eine Besichtigung ist leider nicht möglich.', 'noViewing'],
+      ['Verkauf auch ungesehen.', 'noViewing'],
       ['Bitte nur über WhatsApp schreiben.', 'offPlatform'],
       ['Ausschließlich per E-Mail erreichbar.', 'offPlatform'],
       ['Ich bin telefonisch nicht erreichbar, bitte per Mail.', 'offPlatform'],
     ];
     for (const [text, kind] of found) expect(kinds(text), text).toEqual([kind]);
+
+    // The classic scam text: refusals of other things in the same sentence do not hide the signs.
+    expect(
+      kinds(
+        'Eine Besichtigung ist leider nicht möglich, da ich beruflich in Spanien bin, das Auto wird per Spedition geliefert und die Zahlung erfolgt per Vorkasse über einen Treuhandservice.',
+      ).sort(),
+    ).toEqual(['abroad', 'escrow', 'noViewing', 'prepayment', 'shipping']);
+    expect(kinds('Unfall: nein, Zahlung per Vorkasse und Lieferung per Spedition.').sort()).toEqual(
+      ['prepayment', 'shipping'],
+    );
+    expect(kinds('Zahlung über Treuhand der Bank of Scotland.')).toEqual(['escrow']);
+    expect(kinds('Treuhändisch über meinen Notar.')).toEqual(['escrow']);
+    expect(kinds('Ich bin kein Betrüger, deshalb Abwicklung über Treuhandservice.')).toEqual([
+      'escrow',
+    ]);
+    for (const text of [
+      'Privatverkauf, Gewährleistung ausgeschlossen, Zahlung per Vorkasse.',
+      'Rücknahme ausgeschlossen, Bezahlung im Voraus.',
+      'Probefahrt nicht möglich, Lieferung nach Zahlungseingang.',
+    ])
+      expect(kinds(text), text).toEqual(['prepayment']);
+    expect(kinds('Da ich beruflich in England arbeite, verkaufe ich das Auto.')).toEqual([
+      'abroad',
+    ]);
+    expect(kinds('Weil ich jetzt im Ausland lebe, verkaufe ich.')).toEqual(['abroad']);
+    expect(kinds('Ich wohne seit 2 Jahren in Italien.')).toEqual(['abroad']);
 
     // Honest private and dealer listings stay quiet.
     for (const text of [
@@ -190,8 +219,32 @@ describe('offer signals', () => {
       'Bitte nur per Mail oder Telefon melden.',
       'Kontakt nur über WhatsApp oder Anruf.',
       'Bitte nur per SMS, ich rufe zurück.',
+      'Zahlung im Voraus nicht erforderlich.',
+      'Vorab zahlen musst du nichts.',
+      'Brief liegt bei der Bank, die Restschuld wird per Treuhandauftrag abgelöst.',
+      'Ich bin aktuell im Urlaub in Spanien, Besichtigung ab 25.10.',
+      'Da ich in Polen geboren bin, spreche ich Polnisch.',
+      'Weil ich im Urlaub in Italien bin, Besichtigung erst ab November.',
+      'Besichtigung jederzeit möglich, Probefahrt nach Absprache.',
+      'Bitte nicht ungesehen kaufen, Besichtigung jederzeit.',
+      'Keine Zahlung per Vorkasse, nur bar bei Übergabe.',
+      'Auf keinen Fall Zahlung per Vorkasse.',
+      'Ich akzeptiere keine Zahlung per Vorkasse, nur bar.',
+      'Finanzierungsbeispiel: Anzahlung von 2.000 €, Laufzeit 48 Monate.',
+      'Kfz-Steuer und Versicherung sind bis Ende 2026 im Voraus bezahlt.',
+      'Inspektionspaket wurde vorab bezahlt und ist übertragbar.',
+      'Ich bin derzeit im Urlaub in Spanien.',
+      'Ich bin mit dem Auto oft in Italien gefahren.',
+      'Bitte nur per Messenger hier auf der Plattform schreiben.',
     ])
       expect(kinds(text), text).toEqual([]);
+  });
+
+  it('stays fast on long texts', () => {
+    const started = performance.now();
+    signals('keine Vorkasse '.repeat(800));
+    signals('Treuhand ausgeschlossen, '.repeat(480));
+    expect(performance.now() - started).toBeLessThan(500);
   });
 
   it('finds commercial wording and private-sale claims', () => {
