@@ -10,6 +10,7 @@ import { ApiErrorSchema } from './errors';
 import { FUEL_TYPES } from '../labels';
 import { CAR_LOG_KINDS } from '../car-log';
 import { REMINDER_KINDS } from '../reminders';
+import { AD_PLACEMENTS } from '../sponsors';
 import { EntitlementsSchema, PlanSchema } from './plans';
 import { LISTING_PLATFORMS, MAX_URL_INPUT_LENGTH } from '../url';
 import { AnalysisResultSchema, EvidenceTypeSchema } from './analysis';
@@ -440,6 +441,22 @@ export const MeDtoSchema = z.object({
 });
 export type MeDto = z.infer<typeof MeDtoSchema>;
 
+export const SponsorAdDtoSchema = z.object({
+  id: z.string(),
+  /** Who advertises, named on the ad (§ 6 Abs. 1 Nr. 2 DDG). */
+  advertiser: z.string(),
+  title: z.string(),
+  text: z.string(),
+  /** A file on KaufCheck's own server. */
+  image: z.object({ src: z.string(), alt: z.string() }).nullable(),
+  /** Our own redirect (`/go/<id>`), which counts the click. */
+  href: z.string(),
+});
+export type SponsorAdDto = z.infer<typeof SponsorAdDtoSchema>;
+
+export const SponsorAdResponseSchema = z.object({ ad: SponsorAdDtoSchema.nullable() });
+export type SponsorAdResponse = z.infer<typeof SponsorAdResponseSchema>;
+
 export const PublicConfigSchema = z.object({
   features: z.object({
     /** Automatic retrieval of listing URLs is enabled on this server. */
@@ -468,6 +485,8 @@ export const PublicConfigSchema = z.object({
   pro: z.object({ offer: ProOfferSchema.nullable() }),
   /** Google AdSense ad unit; null = no ads. */
   ads: z.object({ client: z.string(), slot: z.string() }).nullable(),
+  /** Ads sold directly: configured at all, and the placements with an ad running today. */
+  sponsors: z.object({ configured: z.boolean(), placements: z.array(z.enum(AD_PLACEMENTS)) }),
   /** Affiliate links (plain links with the partner ID); null = not configured. */
   affiliates: z.object({
     carInsurance: z.object({ url: z.string(), name: z.string() }).nullable(),

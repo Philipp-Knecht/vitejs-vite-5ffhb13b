@@ -55,12 +55,15 @@ test('the insurance comparison link is labelled, plain and gone with Pro', async
   await expect(page.getByRole('complementary', { name: 'Werbung: Affiliate-Link' })).toHaveCount(0);
 });
 
-test('a configuration cached before affiliate links existed still renders', async ({ page }) => {
+test('a configuration cached before affiliate links and own ads existed still renders', async ({
+  page,
+}) => {
   // The browser or the offline copy may still hold /api/config from before the field.
   await page.route('**/api/config', async (route) => {
     const response = await route.fetch();
     const body = (await response.json()) as Record<string, unknown>;
     delete body.affiliates;
+    delete body.sponsors;
     await route.fulfill({ response, json: body });
   });
   await page.goto('/datenschutz');

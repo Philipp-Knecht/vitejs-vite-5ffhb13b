@@ -48,6 +48,8 @@ self.addEventListener('fetch', (event) => {
   if (request.method !== 'GET') return;
   const url = new URL(request.url);
   if (url.origin !== self.location.origin) return;
+  // Clicks on ads sold directly are redirects of the server, never the app.
+  if (url.pathname.startsWith('/go/')) return;
 
   if (request.mode === 'navigate') {
     // Every app page is the same shell; prerendered pages are not stored.

@@ -68,7 +68,7 @@ export function ensureAnonymousId(
 }
 
 /** Do Not Track (`DNT: 1`) or Global Privacy Control (`Sec-GPC: 1`). */
-function trackingOptOut(request: FastifyRequest): boolean {
+export function trackingOptOut(request: FastifyRequest): boolean {
   return request.headers.dnt === '1' || request.headers['sec-gpc'] === '1';
 }
 
