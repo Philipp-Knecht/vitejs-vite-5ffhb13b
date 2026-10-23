@@ -7,6 +7,7 @@ import {
   CONTRACT_STATEMENTS,
   FUEL_LABELS,
   FUEL_TYPES,
+  linkedPower,
   validateSaleContract,
   type ContractAnswer,
   type ContractParty,
@@ -395,6 +396,15 @@ export function SaleContractForm({
                 inputMode="numeric"
                 maxLength={6}
                 {...text('powerKw')}
+                onChange={(event) => update(linkedPower('kw', event.target.value))}
+              />
+              <TextField
+                label="Leistung in PS"
+                hint="Oder in PS eintragen: KaufCheck rechnet in kW um, verbindlich ist Feld P.2"
+                inputMode="numeric"
+                maxLength={6}
+                {...text('powerPs')}
+                onChange={(event) => update(linkedPower('ps', event.target.value))}
               />
               <SelectField
                 label="Kraftstoff oder Energiequelle"

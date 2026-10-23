@@ -64,6 +64,8 @@ export interface SaleContractValues {
   firstRegistration: string;
   registrationPart2Number: string;
   powerKw: string;
+  /** Typed in or worked out from the kW; the kW from field P.2 is the official figure. */
+  powerPs: string;
   fuel: FuelType | '';
   color: string;
   huUntil: string;
@@ -124,6 +126,7 @@ export const EMPTY_SALE_CONTRACT: SaleContractValues = {
   firstRegistration: '',
   registrationPart2Number: '',
   powerKw: '',
+  powerPs: '',
   fuel: '',
   color: '',
   huUntil: '',
@@ -251,6 +254,45 @@ export function parseWholeNumber(value: string): number | null {
   return Number(compact.replace(/[. \u00a0\u202f]/g, ''));
 }
 
+/** 1 PS = 0.73549875 kW. */
+export const KW_PER_PS = 0.73549875;
+
+/** The highest power KaufCheck takes, in kW and in PS (2,719 PS are 2,000 kW). */
+export const MAX_POWER = { kw: 2000, ps: 2719 } as const;
+
+/**
+ * How far apart kW and PS may be: each figure rounded to whole units from the
+ * exact power, as in a listing („67 kW (90 PS)“ for 66.5 kW), is off by up to
+ * 1.18 PS.
+ */
+const POWER_TOLERANCE_PS = 0.5 / KW_PER_PS + 0.5;
+
+/** The power in kW and PS: whole numbers above 0, and the two must agree. */
+export function powerErrors(kw: string, ps: string): { powerKw?: string; powerPs?: string } {
+  const errors: { powerKw?: string; powerPs?: string } = {};
+  const check = (value: string, unit: 'kw' | 'ps', name: string): number | null => {
+    if (!value.trim()) return null;
+    const parsed = parseWholeNumber(value);
+    const field = unit === 'kw' ? 'powerKw' : 'powerPs';
+    if (parsed === null || parsed === 0)
+      errors[field] = `Bitte gib die Leistung in ${name} als ganze Zahl an.`;
+    else if (parsed > MAX_POWER[unit])
+      errors[field] =
+        `Bitte prüf die Leistung: höchstens ${formatNumber(MAX_POWER.kw)} kW (${formatNumber(MAX_POWER.ps)} PS).`;
+    return errors[field] ? null : parsed;
+  };
+  const parsedKw = check(kw, 'kw', 'kW');
+  const parsedPs = check(ps, 'ps', 'PS');
+  if (
+    parsedKw !== null &&
+    parsedPs !== null &&
+    Math.abs(parsedKw / KW_PER_PS - parsedPs) > POWER_TOLERANCE_PS
+  )
+    errors.powerPs =
+      'kW und PS passen nicht zusammen. Trag einen Wert ein, den anderen rechnet KaufCheck um.';
+  return errors;
+}
+
 /** A date from an `<input type="date">` (YYYY-MM-DD) that exists. */
 function isDate(value: string): boolean {
   const match = /^(\d{4})-(\d{2})-(\d{2})$/.exec(value);
@@ -331,7 +373,7 @@ export function validateSaleContract(
     if (parsed === null || parsed > max) errors[field] = message;
     return parsed;
   };
-  number('powerKw', values.powerKw, 2000, 'Bitte gib die Leistung in kW als ganze Zahl an.');
+  Object.assign(errors, powerErrors(values.powerKw, values.powerPs));
   number('keepers', values.keepers, 99, 'Bitte gib die Zahl der Halter als ganze Zahl an.');
   number('keys', values.keys, 20, 'Bitte gib die Zahl der Schlüssel als ganze Zahl an.');
   number(
@@ -416,6 +458,13 @@ const formatNumber = (value: number) => value.toLocaleString('de-DE');
 function amount(value: string): string {
   const parsed = parseWholeNumber(value);
   return parsed === null ? '' : formatNumber(parsed);
+}
+
+/** „110 kW (150 PS)“, or one of the two. */
+function powerText(kw: string, ps: string): string {
+  const [inKw, inPs] = [amount(kw), amount(ps)];
+  if (inKw && inPs) return `${inKw} kW (${inPs} PS)`;
+  return inKw ? `${inKw} kW` : inPs && `${inPs} PS`;
 }
 
 /** „12.500 Euro (in Worten: zwölftausendfünfhundert Euro)“, or lines to fill in. */
@@ -505,7 +554,7 @@ export function saleContractBlocks(values: SaleContractValues): ContractBlock[] 
           label: `Zahl der Halter laut Zulassungsbescheinigung Teil${NBSP}II`,
           value: keepers === null ? '' : String(keepers),
         },
-        { label: 'Leistung', value: amount(values.powerKw) && `${amount(values.powerKw)} kW` },
+        { label: 'Leistung', value: powerText(values.powerKw, values.powerPs) },
         {
           label: 'Kraftstoff oder Energiequelle',
           value: values.fuel ? FUEL_LABELS[values.fuel] : '',

@@ -1,6 +1,7 @@
 import {
   FUEL_LABELS,
   FUEL_TYPES,
+  linkedPower,
   LISTING_LIMITS,
   LISTING_STATEMENT_TEXTS,
   LISTING_STATEMENTS,
@@ -197,10 +198,19 @@ export function ListingTextForm({
             </SelectField>
             <TextField
               label="Leistung in kW"
-              hint="Feld P.2 im Fahrzeugschein; PS rechnet KaufCheck aus"
+              hint="Feld P.2 im Fahrzeugschein"
               inputMode="numeric"
               maxLength={6}
               {...text('powerKw')}
+              onChange={(event) => update(linkedPower('kw', event.target.value))}
+            />
+            <TextField
+              label="Leistung in PS"
+              hint="Oder in PS eintragen: KaufCheck rechnet in kW um"
+              inputMode="numeric"
+              maxLength={6}
+              {...text('powerPs')}
+              onChange={(event) => update(linkedPower('ps', event.target.value))}
             />
             <SelectField
               label="Getriebe"

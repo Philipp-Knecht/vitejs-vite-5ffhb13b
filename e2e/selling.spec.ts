@@ -77,7 +77,9 @@ test('from „Mein Auto“ to the listing text and on to the contract', async ({
   await expect(page.getByLabel('Kilometerstand laut Tacho')).toHaveValue('');
 
   await page.getByLabel('Kilometerstand laut Tacho').fill('81500');
-  await page.getByLabel('Leistung in kW').fill('70');
+  // Typed in PS, worked out in kW.
+  await page.getByLabel('Leistung in PS').fill('95');
+  await expect(page.getByLabel('Leistung in kW')).toHaveValue('70');
   await page
     .getByRole('group', { name: /seit es dir gehört/ })
     .getByRole('radio', { name: 'Nein' })
@@ -116,6 +118,11 @@ test('from „Mein Auto“ to the listing text and on to the contract', async ({
     .check();
   await expect(page.getByLabel('Hersteller')).toHaveValue('Škoda');
   await expect(page.getByLabel('Farbe')).toHaveValue('Blau');
+  await expect(page.getByLabel('Leistung in kW')).toHaveValue('70');
+  await expect(page.getByLabel('Leistung in PS')).toHaveValue('95');
+  // Typed in PS in the contract as well.
+  await page.getByLabel('Leistung in PS').fill('100');
+  await expect(page.getByLabel('Leistung in kW')).toHaveValue('74');
   await expect(page.getByLabel('Tachostand in km')).toHaveValue('');
   await expect(page.getByLabel('Weitere bekannte Mängel und Schäden')).toHaveValue(
     'Kratzer an der Stoßstange hinten',
@@ -134,6 +141,8 @@ test('from „Mein Auto“ to the listing text and on to the contract', async ({
     'Delle in der Fahrertür',
   );
   await expect(page.getByLabel('Name, Vorname').nth(1)).toHaveValue('Käufer, Karl');
+  await expect(page.getByLabel('Leistung in kW')).toHaveValue('74');
+  await expect(page.getByLabel('Leistung in PS')).toHaveValue('100');
 
   await page.goBack();
   await expect(page.getByLabel('Farbe')).toHaveValue('Blau');

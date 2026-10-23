@@ -270,3 +270,31 @@ describe('parseWholeNumber', () => {
     expect(parseWholeNumber(value)).toBe(expected);
   });
 });
+
+describe('power', () => {
+  it('prints kW and PS, or the one given', () => {
+    const power = (powerKw: string, powerPs: string) =>
+      field(saleContractBlocks({ ...filled, powerKw, powerPs }), 'Leistung');
+    expect(power('110', '150')).toBe('110 kW (150 PS)');
+    expect(power('110', '')).toBe('110 kW');
+    expect(power('', '150')).toBe('150 PS');
+    expect(power('', '')).toBe('');
+  });
+
+  it('rejects kW and PS that do not agree', () => {
+    const errors = (powerKw: string, powerPs: string) =>
+      validateSaleContract({ ...filled, powerKw, powerPs }, new Date(2026, 9, 15));
+    expect(errors('110', '150')).toEqual({});
+    expect(errors('110', '149')).toEqual({});
+    expect(Object.keys(errors('110', '148'))).toEqual(['powerPs']);
+    expect(Object.keys(errors('110', 'viel'))).toEqual(['powerPs']);
+    expect(Object.keys(errors('2001', '150'))).toEqual(['powerKw']);
+    // Rounded each from the exact figure, as in a listing.
+    expect(errors('67', '90')).toEqual({});
+    expect(errors('0', '')).toEqual({ powerKw: 'Bitte gib die Leistung in kW als ganze Zahl an.' });
+    expect(errors('', '0')).toEqual({ powerPs: 'Bitte gib die Leistung in PS als ganze Zahl an.' });
+    expect(errors('', '3000')).toEqual({
+      powerPs: 'Bitte prüf die Leistung: höchstens 2.000 kW (2.719 PS).',
+    });
+  });
+});
