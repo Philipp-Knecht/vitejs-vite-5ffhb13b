@@ -23,6 +23,7 @@ export const STATIC_PAGES: readonly StaticPage[] = [
   { path: '/auto-verkaufen', indexable: true },
   { path: '/auto-ummelden', indexable: true },
   { path: '/auto-rueckruf-pruefen', indexable: true },
+  { path: '/auto-aus-den-niederlanden', indexable: true },
   { path: '/autokosten-im-monat', indexable: true },
   { path: '/pro', indexable: true },
   { path: '/bot', indexable: false },

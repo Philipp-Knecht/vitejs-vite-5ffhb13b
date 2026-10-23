@@ -57,6 +57,7 @@ export function Footer() {
           <Link to="/auto-verkaufen">Auto privat verkaufen</Link>
           <Link to="/auto-ummelden">Auto ummelden</Link>
           <Link to="/auto-rueckruf-pruefen">Rückrufe prüfen</Link>
+          <Link to="/auto-aus-den-niederlanden">Auto aus den Niederlanden</Link>
           <Link to="/autokosten-im-monat">Autokosten im Monat</Link>
           {MODEL_PAGES_AVAILABLE && <Link to="/modelle">Modelle von A bis Z</Link>}
         </nav>

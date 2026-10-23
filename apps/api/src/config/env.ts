@@ -142,6 +142,12 @@ const EnvSchema = z
     COOKIE_SECRET: optionalString,
 
     LISTING_FETCH_MODE: z.enum(['off', 'live', 'fixtures']).optional(),
+    /** The lookup of Dutch registration numbers at RDW Open Data. */
+    RDW_LOOKUP_MODE: z.enum(['off', 'live', 'fixtures']).optional(),
+    /** Socrata app token for RDW Open Data, against throttling (optional, free). */
+    RDW_APP_TOKEN: optionalString,
+    /** Lookups per minute for the whole server (each asks four or five datasets). */
+    RDW_LOOKUPS_PER_MINUTE: z.coerce.number().int().min(1).max(1000).default(60),
     LISTING_FIXTURES_DIR: optionalString,
     FETCH_USER_AGENT: optionalString,
     FETCH_TIMEOUT_MS: z.coerce.number().int().min(1000).max(30_000).default(8000),
@@ -248,6 +254,8 @@ const EnvSchema = z
     }
     if (production && env.AI_PROVIDER === 'mock')
       issue('AI_PROVIDER', 'the mock provider is not allowed in production');
+    if (production && env.RDW_LOOKUP_MODE === 'fixtures')
+      issue('RDW_LOOKUP_MODE', 'fixtures are development data and not allowed in production');
     if (production && env.LISTING_FETCH_MODE === 'fixtures') {
       issue('LISTING_FETCH_MODE', 'fixtures are development data and not allowed in production');
     }
@@ -328,6 +336,12 @@ export interface AppConfig {
   databaseUrl: string;
   cookieSecret: string;
   secureCookies: boolean;
+  rdw: {
+    mode: 'off' | 'live' | 'fixtures';
+    fixturesDir: string;
+    appToken: string | null;
+    lookupsPerMinute: number;
+  };
   fetch: {
     mode: 'off' | 'live' | 'fixtures';
     fixturesDir: string;
@@ -467,6 +481,12 @@ export function loadConfig(source: NodeJS.ProcessEnv = process.env): AppConfig {
     // Development falls back to a per-process secret: anonymous ids reset on restart.
     cookieSecret: env.COOKIE_SECRET ?? randomBytes(32).toString('hex'),
     secureCookies: publicSiteUrl.startsWith('https://'),
+    rdw: {
+      mode: env.RDW_LOOKUP_MODE ?? (env.NODE_ENV === 'test' ? 'fixtures' : 'live'),
+      fixturesDir: path.join(apiRoot, 'fixtures', 'rdw'),
+      appToken: env.RDW_APP_TOKEN ?? null,
+      lookupsPerMinute: env.RDW_LOOKUPS_PER_MINUTE,
+    },
     fetch: {
       mode: env.LISTING_FETCH_MODE ?? defaultFetchMode,
       fixturesDir: env.LISTING_FIXTURES_DIR ?? path.join(apiRoot, 'fixtures', 'listings'),

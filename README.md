@@ -484,6 +484,28 @@ workshop). `SPONSOR_ADS` is a JSON array, at most 20 entries:
   once, as the terms ask within 7 days after the end (9.2); a placement change carVertical asks for
   (5.7, within 30 days) needs a code change.
 
+## Dutch registration lookup (RDW)
+
+`/auto-aus-den-niederlanden` asks RDW Open Data (opendata.rdw.nl, public domain) for a Dutch
+registration number: registration dates, export and taxi flags, the RDW's odometer verdict with its
+explanation (translated close to the Dutch original), recalls and the defects and advice points of
+the APK (the open data keeps about the last three years, a window that moves on; gas systems and
+tachographs are left out).
+
+- The browser sends the plate to `POST /api/rdw` (in the body, so that no URL log holds it); the
+  server asks five datasets of the RDW, with a timeout of 8 seconds, and keeps an answer in memory
+  for an hour (at most 500). The same plate asked at once goes out once. Nothing is stored in the
+  database. 10 lookups per minute per client and `RDW_LOOKUPS_PER_MINUTE` (default 60) for the
+  whole server; beyond that the answer is 429.
+- `RDW_LOOKUP_MODE`: `live` (default), `off` (the lookup answers that it is switched off) or
+  `fixtures` (synthetic answers from `apps/api/fixtures/rdw`, the default in tests, refused in
+  production).
+- `RDW_APP_TOKEN` (optional): a free Socrata app token against throttling, sent as `X-App-Token`.
+  Without it the RDW's API throttles shared IP addresses sooner; KaufCheck then answers „not
+  reachable“.
+- An exported car stays in the open data only for a while; the page and the „not found“ message
+  say so.
+
 ## Analytics configuration
 
 First-party and cookieless: only an event name, a timestamp and a few allowlisted properties

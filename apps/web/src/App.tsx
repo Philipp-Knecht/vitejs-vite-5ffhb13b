@@ -14,6 +14,7 @@ import { SaleContractPage } from './pages/guides/SaleContractPage';
 import { SellingGuidePage } from './pages/guides/SellingGuidePage';
 import { RegistrationGuidePage } from './pages/guides/RegistrationGuidePage';
 import { RecallGuidePage } from './pages/guides/RecallGuidePage';
+import { NlImportPage } from './pages/guides/NlImportPage';
 import { CostsGuidePage } from './pages/guides/CostsGuidePage';
 import { TaxGuidePage } from './pages/guides/TaxGuidePage';
 import { AdvisorPage } from './pages/AdvisorPage';
@@ -189,6 +190,7 @@ export function App({ queryClient }: { queryClient: QueryClient }) {
               <Route path="/auto-verkaufen" element={<SellingGuidePage />} />
               <Route path="/auto-ummelden" element={<RegistrationGuidePage />} />
               <Route path="/auto-rueckruf-pruefen" element={<RecallGuidePage />} />
+              <Route path="/auto-aus-den-niederlanden" element={<NlImportPage />} />
               <Route path="/autokosten-im-monat" element={<CostsGuidePage />} />
               <Route path="/pro" element={<ProPage />} />
               <Route path="/bot" element={<BotPage />} />

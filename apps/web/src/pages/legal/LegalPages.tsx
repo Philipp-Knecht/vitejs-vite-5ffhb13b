@@ -499,6 +499,18 @@ export function PrivacyPage() {
         </>
       )}
 
+      <h2>Abfrage niederländischer Kennzeichen</h2>
+      <p>
+        Gibst du auf der Seite „Auto aus den Niederlanden“ ein niederländisches Kennzeichen ein,
+        fragt unser Server damit die offenen Daten der niederländischen Zulassungsbehörde RDW
+        (Dienst Wegverkeer, opendata.rdw.nl) ab. An die RDW geht nur das Kennzeichen, nicht deine
+        IP-Adresse. Das Ergebnis halten wir bis zu einer Stunde im Arbeitsspeicher des Servers,
+        damit dieselbe Abfrage nicht erneut an die RDW geht; in der Datenbank speichern wir es
+        nicht, und das Kennzeichen steht nicht in unseren Protokollen. Die RDW veröffentlicht keine
+        Angaben zu Haltern. Rechtsgrundlage ist die Erbringung der von dir angefragten Abfrage (Art.
+        6 Abs. 1 lit. b DSGVO).
+      </p>
+
       <h2>Keine automatisierten Entscheidungen</h2>
       <p>
         KaufCheck wertet Inserate automatisch aus. Das betrifft Fahrzeuge und Angebote, nicht dich:
