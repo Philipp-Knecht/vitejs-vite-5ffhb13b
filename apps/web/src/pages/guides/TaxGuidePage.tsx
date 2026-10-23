@@ -31,10 +31,21 @@ const DRIVE_PARAMS: Record<string, TaxFormValues['drive']> = {
  * (from a check). A full date is taken over; a month from a listing is only
  * shown as a hint, because the exact day matters (e.g. for electric cars).
  */
-function fromParams(params: URLSearchParams): { initial: TaxFormValues; hint: string | null } {
+function fromParams(params: URLSearchParams): {
+  initial: TaxFormValues;
+  hint: string | null;
+  model: { makeId: string; model: string; kw: number | null } | null;
+} {
   const ez = params.get('ez') ?? '';
   const month = /^(\d{4})-(\d{2})$/.exec(ez);
+  const makeId = params.get('marke') ?? '';
+  const model = (params.get('modell') ?? '').slice(0, 80);
+  const kw = Number(params.get('kw'));
   return {
+    model:
+      /^[a-z0-9-]{1,40}$/.test(makeId) && model
+        ? { makeId, model, kw: Number.isInteger(kw) && kw > 0 && kw <= 2000 ? kw : null }
+        : null,
     initial: {
       ...EMPTY_TAX_FORM,
       firstRegistration: /^\d{4}-\d{2}-\d{2}$/.test(ez) ? ez : '',
@@ -49,7 +60,7 @@ export function TaxGuidePage() {
   const [params] = useSearchParams();
   // Prerendered without parameters; a prefilled link is read once the page runs in the browser.
   const prefill = useMemo(
-    () => (hydrated ? fromParams(params) : { initial: EMPTY_TAX_FORM, hint: null }),
+    () => (hydrated ? fromParams(params) : { initial: EMPTY_TAX_FORM, hint: null, model: null }),
     [hydrated, params],
   );
 
@@ -73,6 +84,7 @@ export function TaxGuidePage() {
         key={`${hydrated}-${params.toString()}`}
         initial={prefill.initial}
         listingRegistration={prefill.hint}
+        listingModel={prefill.model}
       />
 
       <h2 id="finanzierung">Finanzierung durchrechnen</h2>

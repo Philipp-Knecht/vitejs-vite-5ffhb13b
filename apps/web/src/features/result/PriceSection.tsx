@@ -1,3 +1,4 @@
+import { findListingModel, findMake } from '@kaufcheck/catalog';
 import { LOAN_LIMITS, PRICE_KIND_LABELS, type PriceContext, type Vehicle } from '@kaufcheck/shared';
 import { Link } from 'react-router';
 import { EvidenceBadge } from '../../components/EvidenceBadge';
@@ -41,6 +42,17 @@ function MarketRange({
       </div>
     </div>
   );
+}
+
+/** Make and model of the listing for the engine picker: the catalog model, or the name as listed. */
+function listingModel(vehicle: Vehicle | null) {
+  const make = findMake(vehicle?.make);
+  if (!make || !vehicle?.model) return null;
+  return {
+    makeId: make.id,
+    model: findListingModel(make, vehicle.model)?.id ?? vehicle.model,
+    kw: vehicle.powerKw,
+  };
 }
 
 export function PriceSection({ price, vehicle }: { price: PriceContext; vehicle: Vehicle | null }) {
@@ -140,7 +152,9 @@ export function PriceSection({ price, vehicle }: { price: PriceContext; vehicle:
         )}
       <p className="price-costs">
         Zum Kaufpreis kommen laufende Kosten:{' '}
-        <Link to={taxCalculatorLink(vehicle)}>Kfz-Steuer für dieses Auto berechnen</Link>
+        <Link to={taxCalculatorLink(vehicle, listingModel(vehicle))}>
+          Kfz-Steuer und laufende Kosten für dieses Auto berechnen
+        </Link>
       </p>
     </ResultSection>
   );
