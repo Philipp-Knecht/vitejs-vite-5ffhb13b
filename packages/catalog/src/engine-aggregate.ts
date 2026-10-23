@@ -36,16 +36,32 @@ const LIQUID_FUELS: ReadonlySet<EngineFuel> = new Set([
   'hybrid_diesel',
 ]);
 
-/** Plug-in hybrids before 2019 are told apart from hybrids by their CO₂ value. */
-const PLUGIN_MAX_CO2 = 75;
+/**
+ * Plug-in hybrids before 2019 (fuel mode „M“) are told apart from hybrids by
+ * their electric consumption or a CO₂ value up to 100 g/km; above 120 g/km no
+ * car is a plug-in hybrid, whatever its fuel mode says.
+ */
+const PLUGIN_LIKELY_CO2 = 100;
+const PLUGIN_MAX_CO2 = 120;
 
-export function engineFuel(row: Pick<RawEngineRow, 'ft' | 'fm' | 'w' | 'e'>): EngineFuel | null {
+/** „999 kW“ and more stand for a missing figure. */
+const MAX_KW = 998;
+
+/** A typical value needs this share of the registrations to have it. */
+const MIN_COVERAGE = 0.5;
+
+export function engineFuel(
+  row: Pick<RawEngineRow, 'ft' | 'fm' | 'w' | 'e'> & { z?: number | null },
+): EngineFuel | null {
   const ft = (row.ft ?? '').toUpperCase();
   const fm = (row.fm ?? '').toUpperCase();
   const diesel = ft.includes('DIESEL');
   if (ft.includes('ELECTRIC') && (diesel || ft.includes('PETROL'))) {
     const co2 = row.w ?? row.e;
-    const plugin = fm === 'P' || (fm !== 'H' && co2 !== null && co2 <= PLUGIN_MAX_CO2);
+    const plugin =
+      (co2 === null || co2 <= PLUGIN_MAX_CO2) &&
+      (fm === 'P' ||
+        (fm !== 'H' && ((row.z ?? 0) > 0 || (co2 !== null && co2 <= PLUGIN_LIKELY_CO2))));
     if (plugin) return diesel ? 'plugin_hybrid_diesel' : 'plugin_hybrid';
     return diesel ? 'hybrid_diesel' : 'hybrid';
   }
@@ -89,7 +105,7 @@ export function aggregateEngines(rows: readonly RawEngineRow[]): EngineRecord[] 
     const electric = fuel === 'electric' || fuel === 'hydrogen';
     const ccm = electric ? null : row.ccm;
     // A combustion engine without displacement or any car without power is no usable engine.
-    if ((!electric && !ccm) || !row.kw) continue;
+    if ((!electric && !ccm) || !row.kw || row.kw > MAX_KW) continue;
     const key = `${row.y}|${fuel}|${ccm}|${row.kw}`;
     const group = groups.get(key) ?? {
       record: {
@@ -114,13 +130,26 @@ export function aggregateEngines(rows: readonly RawEngineRow[]): EngineRecord[] 
   for (const { record, rows: groupRows } of groups.values()) {
     if (record.registrations < MIN_REGISTRATIONS) continue;
     const electric = record.fuel === 'electric' || record.fuel === 'hydrogen';
-    const pick = (value: (row: RawEngineRow) => number | null, positive: boolean) =>
-      groupRows.flatMap((row): [number, number][] => {
+    // Only values that enough of the cars have: a few cars with a value are no typical one.
+    const pick = (value: (row: RawEngineRow) => number | null, positive: boolean) => {
+      const values = groupRows.flatMap((row): [number, number][] => {
         const v = value(row);
         return v !== null && (positive ? v > 0 : v >= 0) ? [[v, row.n]] : [];
       });
+      const covered = values.reduce((sum, [, count]) => sum + count, 0);
+      return covered >= MIN_REGISTRATIONS && covered >= record.registrations * MIN_COVERAGE
+        ? values
+        : [];
+    };
     record.co2Wltp = electric ? null : median(pick((row) => row.w, true));
     record.co2Nedc = electric ? null : median(pick((row) => row.e, true));
+    // WLTP is the stricter test: a WLTP value well below the NEDC one is a reporting error.
+    if (
+      record.co2Wltp !== null &&
+      record.co2Nedc !== null &&
+      record.co2Wltp < record.co2Nedc * 0.95
+    )
+      record.co2Wltp = null;
     // Only petrol and diesel: gas is reported in m³ and bi-fuel cars with their petrol CO₂ value.
     record.consumption = LIQUID_FUELS.has(record.fuel)
       ? round1(mean(pick((row) => row.fc, true)))

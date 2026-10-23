@@ -5,18 +5,24 @@ import {
   type VehicleTaxField,
   type VehicleTaxResult,
 } from '@kaufcheck/shared';
-import { engineTaxDrive, type EngineRecord } from '@kaufcheck/catalog/engines';
+import {
+  engineKey,
+  enginesOfYear,
+  engineTaxDrive,
+  engineYear,
+  findIndexModel,
+  type EngineRecord,
+} from '@kaufcheck/catalog/engines';
 import { useState } from 'react';
 import { SelectField, TextField } from '../../components/ui/Field';
 import type { TaxFormValues } from './form';
 import { toNumber } from './numbers';
 import { EnginePicker } from './EnginePicker';
 import {
-  engineKey,
-  enginesOfYear,
   engineValues,
-  engineYear,
-  findIndexModel,
+  mergeEngineFields,
+  missingValues,
+  NO_FIELDS,
   NO_PICK,
   useEngineIndex,
   useModelEngines,
@@ -140,49 +146,79 @@ export function TaxCalculator({
   const index = useEngineIndex();
   const [pick, setPick] = useState<EnginePick>(NO_PICK);
   const engines = useModelEngines(pick.modelId);
+  const engineList = engines.data?.engines;
+  const currentYear = Number(todayIso().slice(0, 4));
+  const registrationYear = Number(values.firstRegistration.slice(0, 4));
+  // While the year is typed, the date field passes on dates like 0002-06-01.
+  const plausibleDate = registrationYear >= 1990 && registrationYear <= currentYear;
   const [suggestion, setSuggestion] = useState<ConsumptionSuggestion | null>(null);
-  const applyEngine = (engine: EngineRecord | null, firstRegistration: string) => {
-    if (!engine || !index.data) {
-      setSuggestion(null);
-      return;
-    }
-    const engineFields = engineValues(engine, firstRegistration, index.data);
-    setValues((current) => ({
-      ...current,
-      drive: engineFields.drive,
-      displacementCcm: engineFields.displacementCcm,
-      co2GPerKm: engineFields.co2GPerKm,
-    }));
-    setSuggestion(engineFields.consumption);
+  // What the picked engine put into the fields, and for which first registration.
+  const [applied, setApplied] = useState({ fields: NO_FIELDS, firstRegistration: '' });
+  const applyEngine = (
+    engine: EngineRecord | null,
+    firstRegistration: string,
+    replace: boolean,
+  ) => {
+    const next = engine && index.data ? engineValues(engine, firstRegistration, index.data) : null;
+    const fields = next?.fields ?? NO_FIELDS;
+    setValues((current) => mergeEngineFields(current, applied.fields, fields, replace));
+    setApplied({ fields, firstRegistration });
+    setSuggestion(next?.consumption ? { ...next.consumption, replace } : null);
   };
+  const engineFor = (key: string, firstRegistration: string) => {
+    const year = engineList ? engineYear(engineList, firstRegistration, currentYear) : null;
+    return year === null || !engineList
+      ? null
+      : (enginesOfYear(engineList, year).find((engine) => engineKey(engine) === key) ?? null);
+  };
+  const [pending, setPending] = useState(listingModel);
   const choose = (next: EnginePick, engine: EngineRecord | null) => {
+    // A pick by hand ends the preselection from a check.
+    setPending(null);
     setPick(next);
-    applyEngine(engine, values.firstRegistration);
+    applyEngine(engine, values.firstRegistration, true);
   };
 
+  // A changed first registration: the same engine of the new year (its values, its test
+  // cycle), or no engine where the year has none.
+  if (
+    pick.engineKey &&
+    engineList &&
+    index.data &&
+    plausibleDate &&
+    values.firstRegistration !== applied.firstRegistration
+  ) {
+    const engine = engineFor(pick.engineKey, values.firstRegistration);
+    if (!engine) setPick({ ...pick, engineKey: '' });
+    applyEngine(engine, values.firstRegistration, false);
+  }
+
   // A check names the model: it is preselected once the index is there, and the engine once
-  // there is a single one with the listed power in the year of the first registration.
-  const [pending, setPending] = useState(listingModel);
-  if (pending && index.data && !pick.modelId) {
+  // there is a single one with the listed power in the year of the first registration. Values
+  // typed in stay.
+  if (pending && index.data && pick.makeId === '') {
     const found = findIndexModel(index.data, pending.makeId, pending.model);
     if (found) setPick({ ...found, engineKey: '' });
     if (!found || pending.kw === null) setPending(null);
   }
-  if (pending && pick.modelId && engines.data && values.firstRegistration) {
+  if (pending && pick.modelId && engines.isError) setPending(null);
+  if (pending && pick.modelId && engineList && index.data && plausibleDate) {
     setPending(null);
-    const year = engineYear(engines.data.engines, values.firstRegistration);
-    const matching =
+    const year = engineYear(engineList, values.firstRegistration, currentYear);
+    const fitting =
       year === null
         ? []
-        : enginesOfYear(engines.data.engines, year).filter((engine) => engine.kw === pending.kw);
-    const fitting = matching.filter(
-      (engine) => !values.drive || engineTaxDrive(engine.fuel) === values.drive,
-    );
+        : enginesOfYear(engineList, year).filter(
+            (engine) =>
+              engine.kw === pending.kw &&
+              (!values.drive || engineTaxDrive(engine.fuel) === values.drive),
+          );
     if (fitting.length === 1) {
       setPick({ ...pick, engineKey: engineKey(fitting[0]!) });
-      applyEngine(fitting[0]!, values.firstRegistration);
+      applyEngine(fitting[0]!, values.firstRegistration, false);
     }
   }
+  const pickedEngine = pick.engineKey ? engineFor(pick.engineKey, values.firstRegistration) : null;
 
   const before2009 = values.firstRegistration !== '' && values.firstRegistration < '2009-07-01';
   const electric = values.drive === 'electric';
@@ -245,9 +281,12 @@ export function TaxCalculator({
           />
           <EnginePicker
             index={index.data}
-            engines={engines.data?.engines}
+            engines={engineList}
+            enginesFailed={engines.isError}
             firstRegistration={values.firstRegistration}
+            currentYear={currentYear}
             value={pick}
+            missing={pickedEngine ? missingValues(pickedEngine, values.firstRegistration) : []}
             onChange={choose}
           />
           <SelectField label="Antrieb" value={values.drive} onChange={set('drive')}>

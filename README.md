@@ -184,8 +184,10 @@ Engine data (displacement, CO₂, consumption per model, year and engine) is in
 catalog:engines` builds it from the EEA's „Monitoring of CO2 emissions from passenger cars“ (new
 registrations in Germany, licence CC BY 4.0) through its public SQL API: names are mapped to the
 catalog in `src/engine-match.ts`, other models with at least 5,000 registrations get a file of their
-own. The raw rows are cached in the system temp directory (`ENGINES_CACHE`); delete the cache to
-fetch new data. The tax calculator offers the engines and names the source.
+own. Each year is in the EEA table twice; the final figures are used, the provisional ones only for a
+year without final ones (marked in the index). A typical CO₂ value needs half of an engine's cars to
+report it. The raw rows are cached per query in the system temp directory (`ENGINES_CACHE`); delete
+the cache to fetch new data. The tax calculator offers the engines and names source and licence.
 
 Development helpers, all clearly labelled in the UI and rejected in production:
 

@@ -1,7 +1,8 @@
 {
   "retrieved": "2026-10-23",
+  "provisionalYears": [2022],
   "consumptionPerCo2": {
-    "diesel": 0.03814,
+    "diesel": 0.03813,
     "petrol": 0.04409
   },
   "makes": {
@@ -91,6 +92,10 @@
         "name": "1er"
       },
       {
+        "id": "bmw-2er-active-tourer",
+        "name": "2er Active Tourer"
+      },
+      {
         "id": "bmw-3er",
         "name": "3er"
       },
@@ -167,10 +172,6 @@
         "name": "C5 Aircross"
       },
       {
-        "id": "citroen-jumper",
-        "name": "Jumper"
-      },
-      {
         "id": "citroen-jumpy",
         "name": "Jumpy"
       },
@@ -187,6 +188,10 @@
       {
         "id": "cupra-formentor",
         "name": "Formentor"
+      },
+      {
+        "id": "cupra-leon",
+        "name": "Leon"
       }
     ],
     "dacia": [
@@ -255,10 +260,6 @@
         "name": "500X"
       },
       {
-        "id": "fiat-bravo",
-        "name": "Bravo"
-      },
-      {
         "id": "fiat-doblo",
         "name": "Doblo"
       },
@@ -313,10 +314,6 @@
         "name": "Edge"
       },
       {
-        "id": "ford-explorer",
-        "name": "Explorer"
-      },
-      {
         "id": "ford-fiesta",
         "name": "Fiesta"
       },
@@ -369,10 +366,6 @@
         "name": "Transit Connect"
       },
       {
-        "id": "ford-transit-courier",
-        "name": "Transit Courier"
-      },
-      {
         "id": "ford-tourneo-custom",
         "name": "Transit Custom / Tourneo Custom"
       },
@@ -385,10 +378,6 @@
       {
         "id": "honda-accord",
         "name": "Accord"
-      },
-      {
-        "id": "honda-accord-tourer",
-        "name": "Accord Tourer"
       },
       {
         "id": "honda-civic",
@@ -539,10 +528,6 @@
         "name": "Sportage"
       },
       {
-        "id": "kia-stinger",
-        "name": "Stinger"
-      },
-      {
         "id": "kia-stonic",
         "name": "Stonic"
       },
@@ -597,10 +582,6 @@
       {
         "id": "lexus-rx",
         "name": "RX"
-      },
-      {
-        "id": "lexus-ux",
-        "name": "UX"
       }
     ],
     "mazda": [
@@ -779,14 +760,6 @@
         "name": "NV200"
       },
       {
-        "id": "nissan-nv300",
-        "name": "NV300"
-      },
-      {
-        "id": "nissan-pathfinder",
-        "name": "Pathfinder"
-      },
-      {
         "id": "nissan-pixo",
         "name": "Pixo"
       },
@@ -811,10 +784,6 @@
       {
         "id": "opel-agila",
         "name": "Agila"
-      },
-      {
-        "id": "opel-antara",
-        "name": "Antara"
       },
       {
         "id": "opel-astra",
@@ -897,14 +866,6 @@
       {
         "id": "peugeot-508",
         "name": "508"
-      },
-      {
-        "id": "peugeot-boxer",
-        "name": "Boxer"
-      },
-      {
-        "id": "peugeot-expert",
-        "name": "Expert"
       },
       {
         "id": "peugeot-expert-traveller",
@@ -993,10 +954,6 @@
         "name": "Laguna"
       },
       {
-        "id": "renault-master",
-        "name": "Master"
-      },
-      {
         "id": "renault-megane",
         "name": "Mégane"
       },
@@ -1019,10 +976,6 @@
       {
         "id": "renault-twingo",
         "name": "Twingo"
-      },
-      {
-        "id": "renault-wind",
-        "name": "Wind"
       },
       {
         "id": "renault-zoe",
@@ -1187,10 +1140,6 @@
         "name": "Splash"
       },
       {
-        "id": "suzuki-swace",
-        "name": "Swace"
-      },
-      {
         "id": "suzuki-swift",
         "name": "Swift"
       },
@@ -1239,14 +1188,6 @@
         "name": "Corolla / Auris"
       },
       {
-        "id": "toyota-gr-yaris",
-        "name": "GR Yaris"
-      },
-      {
-        "id": "toyota-gt86",
-        "name": "GT86"
-      },
-      {
         "id": "toyota-iq",
         "name": "iQ"
       },
@@ -1275,6 +1216,10 @@
         "name": "Verso"
       },
       {
+        "id": "toyota-verso-s",
+        "name": "Verso S"
+      },
+      {
         "id": "toyota-yaris",
         "name": "Yaris"
       }
@@ -1283,10 +1228,6 @@
       {
         "id": "volvo-c30",
         "name": "C30"
-      },
-      {
-        "id": "volvo-c70",
-        "name": "C70"
       },
       {
         "id": "volvo-v40",

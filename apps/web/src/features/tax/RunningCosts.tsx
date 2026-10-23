@@ -31,7 +31,15 @@ export interface ConsumptionSuggestion {
   value: number;
   /** Worked out from the CO₂ value, not reported. */
   estimated: boolean;
+  /** The test the value comes from. */
+  cycle: 'wltp' | 'nedc';
+  /** A pick by hand: the value also replaces one typed in. */
+  replace: boolean;
 }
+
+/** ICCT: real-world CO₂ emission values of vehicles in Europe (January 2024), with the NEDC gap. */
+const NEDC_GAP_URL =
+  'https://theicct.org/publication/real-world-co2-emission-values-vehicles-europe-jan24/';
 
 const decimal = (value: number) => value.toLocaleString('de-DE');
 
@@ -92,8 +100,9 @@ export function RunningCosts({
   const fromPick = suggested !== null && values.consumption === decimal(suggested.value);
   if (suggestion !== suggested) {
     setSuggested(suggestion);
-    // A value of the previous pick goes; one typed in stays.
-    if (suggestion || fromPick)
+    // A value of the previous pick goes; one typed in stays, unless an engine is picked by hand.
+    const ours = fromPick || values.consumption.trim() === '';
+    if (suggestion ? ours || suggestion.replace : fromPick)
       setValues((current) => ({
         ...current,
         consumption: suggestion ? decimal(suggestion.value) : '',
@@ -157,13 +166,25 @@ export function RunningCosts({
             ) : fromPick ? (
               <>
                 {suggested?.estimated
-                  ? 'Aus dem CO₂-Wert des Motors geschätzt (Normverbrauch).'
+                  ? `Aus dem CO₂-Wert des Motors (${suggested.cycle === 'wltp' ? 'WLTP' : 'NEFZ'}) geschätzt.`
                   : 'Normverbrauch (WLTP) laut EU-Daten.'}{' '}
-                Im Alltag liegt der Verbrauch von Benzinern und Dieseln laut{' '}
-                <a href={REAL_WORLD_GAP_URL} target="_blank" rel="noopener noreferrer">
-                  EU-Kommission
-                </a>{' '}
-                rund ein Fünftel höher.
+                {suggested?.cycle === 'wltp' ? (
+                  <>
+                    Im Alltag liegt der Verbrauch von Benzinern und Dieseln laut{' '}
+                    <a href={REAL_WORLD_GAP_URL} target="_blank" rel="noopener noreferrer">
+                      EU-Kommission
+                    </a>{' '}
+                    rund ein Fünftel höher.
+                  </>
+                ) : (
+                  <>
+                    Beim alten NEFZ-Test lag der Verbrauch im Alltag laut{' '}
+                    <a href={NEDC_GAP_URL} target="_blank" rel="noopener noreferrer">
+                      ICCT
+                    </a>{' '}
+                    rund ein Drittel höher.
+                  </>
+                )}
               </>
             ) : electric ? (
               'WLTP-Wert aus Inserat oder Datenblatt (mit Ladeverlusten); Bordcomputer-Werte ohne Ladeverluste. Wasserstoff: kg je 100 km.'

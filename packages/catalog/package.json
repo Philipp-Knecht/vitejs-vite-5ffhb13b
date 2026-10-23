@@ -15,7 +15,7 @@
   "scripts": {
     "typecheck": "tsc --noEmit -p tsconfig.json",
     "catalog:index": "tsx scripts/build-index.ts && prettier --write --log-level warn data",
-    "catalog:engines": "tsx scripts/fetch-engines.ts"
+    "catalog:engines": "tsx scripts/fetch-engines.ts && prettier --write --log-level warn data/engine-index.json"
   },
   "dependencies": {
     "@kaufcheck/shared": "1.0.0",

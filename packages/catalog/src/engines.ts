@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { foldName } from './models';
 
 /**
  * Engines registered in Germany per model and year, from the EEA's CO₂
@@ -64,6 +65,8 @@ export type EngineFile = z.infer<typeof EngineFileSchema>;
 
 export const ENGINE_SOURCE = {
   name: 'Europäische Umweltagentur (EEA): CO₂-Überwachung neuer Pkw',
+  /** The copyright holder named on the EEA's page. */
+  holder: 'Europäische Kommission, Generaldirektion Klimapolitik (GD CLIMA)',
   url: 'https://www.eea.europa.eu/en/datahub/datahubitem-view/fa8b1229-3db6-495d-b18e-9c9b3267c02b',
   licence: 'CC BY 4.0',
   licenceUrl: 'https://creativecommons.org/licenses/by/4.0/deed.de',
@@ -85,24 +88,10 @@ export async function loadEngines(modelId: string): Promise<EngineFile | null> {
   return EngineFileSchema.parse(await load());
 }
 
-/** The drive for the Kfz-Steuer: spark ignition, compression ignition or electric. */
-export function engineTaxDrive(fuel: EngineFuel): 'petrol' | 'diesel' | 'electric' {
-  if (fuel === 'electric' || fuel === 'hydrogen') return 'electric';
-  return fuel.includes('diesel') ? 'diesel' : 'petrol';
-}
-
-/** „1,5 l Benzin, 110 kW (150 PS)“. */
-export function engineLabel(engine: Pick<EngineRecord, 'fuel' | 'ccm' | 'kw'>): string {
-  const ps = Math.round(engine.kw / 0.73549875);
-  const litres =
-    engine.ccm === null
-      ? ''
-      : `${(Math.round(engine.ccm / 100) / 10).toLocaleString('de-DE', { minimumFractionDigits: 1 })} l `;
-  return `${litres}${ENGINE_FUEL_LABELS[engine.fuel]}, ${engine.kw} kW (${ps} PS)`;
-}
-
 export const EngineIndexSchema = z.object({
   retrieved: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
+  /** Years with provisional figures only (the EEA publishes final ones a year later). */
+  provisionalYears: z.array(z.number().int()),
   /** Litres per 100 km for each g/km of CO₂, to estimate years without a reported consumption. */
   consumptionPerCo2: z.object({ petrol: z.number().positive(), diesel: z.number().positive() }),
   /** Per make id, the models with engine data. */
@@ -115,32 +104,125 @@ export async function loadEngineIndex(): Promise<EngineIndex> {
   return EngineIndexSchema.parse((await import('../data/engine-index.json')).default);
 }
 
-/** CO₂ value for the tax: WLTP for first registration from 1 September 2018, NEDC before. */
+/** The test whose CO₂ value is in field V.7: WLTP from 1 September 2018, NEDC before. */
+export const testCycle = (firstRegistration: string): 'wltp' | 'nedc' =>
+  firstRegistration >= '2018-09-01' ? 'wltp' : 'nedc';
+
+/** The CO₂ value the tax counts, or null when the EU data has none for that test. */
 export function engineCo2(engine: EngineRecord, firstRegistration: string): number | null {
-  return firstRegistration >= '2018-09-01'
-    ? (engine.co2Wltp ?? null)
-    : (engine.co2Nedc ?? engine.co2Wltp ?? null);
+  return testCycle(firstRegistration) === 'wltp' ? engine.co2Wltp : engine.co2Nedc;
 }
 
 /**
- * Litres per 100 km: as reported, or estimated from the CO₂ value. Null for
- * plug-in hybrids (their test value is far below real use), gas and electric.
+ * Litres per 100 km: as reported (WLTP, from 2021), or estimated from the
+ * CO₂ value of either test. Null for plug-in hybrids (their test value is far
+ * below real use), gas and electric.
  */
 export function engineConsumption(
   engine: EngineRecord,
   index: Pick<EngineIndex, 'consumptionPerCo2'>,
-): { litres: number; estimated: boolean } | null {
-  if (engine.consumption !== null) return { litres: engine.consumption, estimated: false };
+): { litres: number; estimated: boolean; cycle: 'wltp' | 'nedc' } | null {
+  if (engine.consumption !== null)
+    return { litres: engine.consumption, estimated: false, cycle: 'wltp' };
   const group =
     engine.fuel === 'petrol' || engine.fuel === 'hybrid'
       ? 'petrol'
       : engine.fuel === 'diesel' || engine.fuel === 'hybrid_diesel'
         ? 'diesel'
         : null;
+  const cycle = engine.co2Wltp ? 'wltp' : 'nedc';
   const co2 = engine.co2Wltp ?? engine.co2Nedc;
   if (!group || !co2) return null;
   return {
     litres: Math.round(co2 * index.consumptionPerCo2[group] * 10) / 10,
     estimated: true,
+    cycle,
   };
+}
+
+/** An engine of a model as „fuel|ccm|kW“. */
+export const engineKey = (engine: Pick<EngineRecord, 'fuel' | 'ccm' | 'kw'>) =>
+  `${engine.fuel}|${engine.ccm ?? ''}|${engine.kw}`;
+
+/** The first and the last year of a model in the data. */
+export function engineYears(
+  engines: readonly EngineRecord[],
+): { first: number; last: number } | null {
+  if (engines.length === 0) return null;
+  const years = engines.map((engine) => engine.year);
+  return { first: Math.min(...years), last: Math.max(...years) };
+}
+
+/**
+ * The year whose engines fit a first registration: the year itself, else the
+ * last year of the model for a newer car (a model built on, or not yet in the
+ * data). Null without a plausible year or for a year the model has no data for.
+ */
+export function engineYear(
+  engines: readonly EngineRecord[],
+  firstRegistration: string,
+  currentYear: number,
+): number | null {
+  const year = Number(firstRegistration.slice(0, 4));
+  const range = engineYears(engines);
+  if (!range || !Number.isInteger(year) || year < 1990 || year > currentYear) return null;
+  if (year > range.last) return range.last;
+  return engines.some((engine) => engine.year === year) ? year : null;
+}
+
+/** The engines of a year, the most registered first. */
+export const enginesOfYear = (engines: readonly EngineRecord[], year: number) =>
+  engines
+    .filter((engine) => engine.year === year)
+    .sort((a, b) => b.registrations - a.registrations);
+
+/** The model a link names: a model id of the index, or a model name of the make. */
+export function findIndexModel(
+  index: Pick<EngineIndex, 'makes'>,
+  makeId: string,
+  model: string,
+): { makeId: string; modelId: string } | null {
+  const folded = foldName(model);
+  for (const [make, models] of Object.entries(index.makes)) {
+    if (make !== makeId) continue;
+    const found =
+      models.find((entry) => entry.id === model) ??
+      models.find((entry) => foldName(entry.name) === folded);
+    if (found) return { makeId: make, modelId: found.id };
+  }
+  return null;
+}
+
+/** The drive for the Kfz-Steuer: spark ignition, compression ignition or electric. */
+export function engineTaxDrive(fuel: EngineFuel): 'petrol' | 'diesel' | 'electric' {
+  if (fuel === 'electric' || fuel === 'hydrogen') return 'electric';
+  return fuel.includes('diesel') ? 'diesel' : 'petrol';
+}
+
+/**
+ * „1,5 l Benzin, 110 kW (150 PS)“; with the exact displacement where two
+ * engines of a list would read the same („1,4 l (1.364 cm³) Benzin, …“).
+ */
+export function engineLabels(engines: readonly EngineRecord[]): Map<string, string> {
+  const short = (engine: EngineRecord, exact: boolean) => {
+    const ps = Math.round(engine.kw / 0.73549875);
+    const litres =
+      engine.ccm === null
+        ? ''
+        : `${(Math.round(engine.ccm / 100) / 10).toLocaleString('de-DE', { minimumFractionDigits: 1 })} l ${
+            exact ? `(${engine.ccm.toLocaleString('de-DE')} cm³) ` : ''
+          }`;
+    return `${litres}${ENGINE_FUEL_LABELS[engine.fuel]}, ${engine.kw} kW (${ps} PS)`;
+  };
+  const counts = new Map<string, number>();
+  for (const engine of engines) {
+    const label = short(engine, false);
+    counts.set(label, (counts.get(label) ?? 0) + 1);
+  }
+  return new Map(
+    engines.map((engine) => {
+      const label = short(engine, false);
+      return [engineKey(engine), (counts.get(label) ?? 0) > 1 ? short(engine, true) : label];
+    }),
+  );
 }

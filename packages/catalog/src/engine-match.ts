@@ -85,8 +85,15 @@ function startsWithKey(name: string, key: string): boolean {
 
 /** BMW names the engine: „118i“ is a 1er, „X1 xDrive25e“ an X1, „M440i“ a 4er. */
 function bmwName(name: string): string {
-  const series = /^m?([1-8])(?:\d\d|er)/.exec(name);
-  if (series) return `${series[1]}er`;
+  const series = /^m?([1-8])(?:\d\d[a-z]*|er)\b(.*)$/.exec(name);
+  if (series) {
+    // The body stays: „218i Active Tourer“ is a 2er Active Tourer, „220i Coupé“ a 2er Coupé.
+    const body = series[2]!
+      .replace(/\b(x|s)drive(\s?\d+[a-z]*)?\b|\biperformance\b|\bmild hybrid\b|\breihe\b/g, ' ')
+      .replace(/\s+/g, ' ')
+      .trim();
+    return body ? `${series[1]}er ${body}` : `${series[1]}er`;
+  }
   if (/^i3s?\b/.test(name)) return 'i3';
   return name;
 }
@@ -116,8 +123,13 @@ function keysOf(makeId: string): Key[] {
         .filter(Boolean)
         .map((key) => ({ model, key })),
     )
-    // The longest name first: „500X“ before „500“, „C3 Aircross“ before „C3“.
-    .sort((a, b) => b.key.length - a.key.length);
+    // The longest name first: „500X“ before „500“, „C3 Aircross“ before „C3“; for the same
+    // name the make's own model („Leon“ of Cupra before the one of Seat).
+    .sort(
+      (a, b) =>
+        b.key.length - a.key.length ||
+        Number(b.model.makeId === makeId) - Number(a.model.makeId === makeId),
+    );
   keysByMake.set(makeId, keys);
   return keys;
 }
@@ -128,7 +140,18 @@ export function engineModelId(makeId: string, cn: string | null): string | null 
   let stripped = folded.replace(MAKE_WORDS, '');
   if (makeId === 'smart') stripped = stripped.replace(/^eq\s+/, '');
   // „MINI“ alone is the hatchback.
-  if (makeId === 'mini' && stripped === '') return 'mini-cooper';
+  if (makeId === 'mini') {
+    // „Cooper S Countryman ALL4“ is a Countryman: the body decides, wherever it stands.
+    if (/countryman/.test(stripped)) return 'mini-countryman';
+    if (/clubman/.test(stripped)) return 'mini-clubman';
+    // ALL4 (four-wheel drive) only came with Countryman, Clubman and Paceman.
+    if (/paceman|coupe|roadster|all4/.test(stripped)) return null;
+    if (stripped === '') return 'mini-cooper';
+  }
+  // Other models whose name starts like a catalog model.
+  if (makeId === 'fiat' && /^500\s?l\b/.test(stripped)) return null;
+  if (makeId === 'audi' && /\be ?tron gt\b/.test(stripped)) return null;
+  if (makeId === 'toyota' && /^verso\s?s\b/.test(stripped)) return null;
   const names = new Set<string>();
   for (const base of [stripped, folded].filter(Boolean)) {
     let name = base;
@@ -144,7 +167,10 @@ export function engineModelId(makeId: string, cn: string | null): string | null 
 
 /** Body and version words that do not make a model of their own. */
 const BODY_WORDS =
-  /\s+(cabriolet|cabrio|convertible|coupe|spyder|sportback|sportbrake|limousine|avant|plus|tdi|performance|srt|l|s|4s|gts|turbo|diesel|4)$/;
+  /\s+(cabriolet|cabrio|convertible|coupe|spyder|sportback|sportbrake|limousine|avant|plus|tdi|performance|srt)$/;
+
+/** Porsche's versions: „Panamera 4S“, „Boxster S“, „Cayenne E-Hybrid“. */
+const PORSCHE_VERSIONS = /\s+(4s|4|s|gts|turbo|diesel|e hybrid|hybrid)$/;
 
 /**
  * Names in the EEA data that need a hand: a catalog model id („vw-up“) or
@@ -195,6 +221,8 @@ export function extraModel(
   if (!cn || makeId === 'bmw' || makeId === 'mercedes') return null;
   let base = foldName(cn).replace(MAKE_WORDS, '');
   while (BODY_WORDS.test(base)) base = base.replace(BODY_WORDS, '');
+  if (makeId === 'porsche')
+    while (PORSCHE_VERSIONS.test(base)) base = base.replace(PORSCHE_VERSIONS, '');
   let words = base.split(' ').filter(Boolean);
   if (makeId === 'audi') words = audiName(words);
   if (words.length === 0 || ['kombi', 'pkw', 'limousine', 'ja'].includes(words.join(' ')))
