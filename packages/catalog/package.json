@@ -9,11 +9,13 @@
     ".": "./src/index.ts",
     "./knowledge": "./src/knowledge.ts",
     "./advisor-index": "./src/advisor-index.ts",
-    "./knowledge-eager": "./src/knowledge-eager.ts"
+    "./knowledge-eager": "./src/knowledge-eager.ts",
+    "./engines": "./src/engines.ts"
   },
   "scripts": {
     "typecheck": "tsc --noEmit -p tsconfig.json",
-    "catalog:index": "tsx scripts/build-index.ts && prettier --write --log-level warn data"
+    "catalog:index": "tsx scripts/build-index.ts && prettier --write --log-level warn data",
+    "catalog:engines": "tsx scripts/fetch-engines.ts"
   },
   "dependencies": {
     "@kaufcheck/shared": "1.0.0",

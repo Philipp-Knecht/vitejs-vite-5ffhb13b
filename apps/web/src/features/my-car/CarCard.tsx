@@ -188,7 +188,11 @@ export function CarCard({
       <div className="car-card__section">
         <h3>Kosten</h3>
         <p>
-          <Link to={taxCalculatorLink(car)}>Kfz-Steuer und laufende Kosten berechnen</Link>
+          <Link
+            to={taxCalculatorLink(car, { makeId: car.makeId, model: car.modelId ?? car.modelName })}
+          >
+            Kfz-Steuer und laufende Kosten berechnen
+          </Link>
         </p>
         <p>
           <Link to="/kfz-steuer-rechner#typklasse">

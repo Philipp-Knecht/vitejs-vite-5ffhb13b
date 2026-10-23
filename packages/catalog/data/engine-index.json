@@ -1,0 +1,1419 @@
+{
+  "retrieved": "2026-10-23",
+  "consumptionPerCo2": {
+    "diesel": 0.03814,
+    "petrol": 0.04409
+  },
+  "makes": {
+    "alfa-romeo": [
+      {
+        "id": "alfa-romeo-giulia",
+        "name": "Giulia"
+      },
+      {
+        "id": "alfa-romeo-giulietta",
+        "name": "Giulietta"
+      },
+      {
+        "id": "alfa-romeo-mito",
+        "name": "MiTo"
+      },
+      {
+        "id": "alfa-romeo-stelvio",
+        "name": "Stelvio"
+      }
+    ],
+    "audi": [
+      {
+        "id": "audi-a1",
+        "name": "A1"
+      },
+      {
+        "id": "audi-a3",
+        "name": "A3"
+      },
+      {
+        "id": "audi-a4",
+        "name": "A4"
+      },
+      {
+        "id": "audi-a5",
+        "name": "A5"
+      },
+      {
+        "id": "audi-a6",
+        "name": "A6"
+      },
+      {
+        "id": "audi-a7",
+        "name": "A7"
+      },
+      {
+        "id": "audi-a8",
+        "name": "A8"
+      },
+      {
+        "id": "audi-e-tron",
+        "name": "e-tron / Q8 e-tron"
+      },
+      {
+        "id": "audi-q2",
+        "name": "Q2"
+      },
+      {
+        "id": "audi-q3",
+        "name": "Q3"
+      },
+      {
+        "id": "audi-q5",
+        "name": "Q5"
+      },
+      {
+        "id": "audi-q7",
+        "name": "Q7"
+      },
+      {
+        "id": "audi-q8",
+        "name": "Q8"
+      },
+      {
+        "id": "audi-r8",
+        "name": "R8"
+      },
+      {
+        "id": "audi-tt",
+        "name": "TT"
+      }
+    ],
+    "bmw": [
+      {
+        "id": "bmw-1er",
+        "name": "1er"
+      },
+      {
+        "id": "bmw-3er",
+        "name": "3er"
+      },
+      {
+        "id": "bmw-4er",
+        "name": "4er"
+      },
+      {
+        "id": "bmw-5er",
+        "name": "5er"
+      },
+      {
+        "id": "bmw-i3",
+        "name": "i3"
+      },
+      {
+        "id": "bmw-x1",
+        "name": "X1"
+      },
+      {
+        "id": "bmw-x2",
+        "name": "X2"
+      },
+      {
+        "id": "bmw-x3",
+        "name": "X3"
+      },
+      {
+        "id": "bmw-x5",
+        "name": "X5"
+      },
+      {
+        "id": "bmw-z4",
+        "name": "Z4"
+      }
+    ],
+    "byd": [
+      {
+        "id": "byd-atto-3",
+        "name": "Atto 3"
+      }
+    ],
+    "citroen": [
+      {
+        "id": "citroen-berlingo",
+        "name": "Berlingo"
+      },
+      {
+        "id": "citroen-c1",
+        "name": "C1"
+      },
+      {
+        "id": "citroen-c3",
+        "name": "C3"
+      },
+      {
+        "id": "citroen-c3-aircross",
+        "name": "C3 Aircross"
+      },
+      {
+        "id": "citroen-c4",
+        "name": "C4"
+      },
+      {
+        "id": "citroen-c4-picasso",
+        "name": "C4 Picasso / SpaceTourer"
+      },
+      {
+        "id": "citroen-c5",
+        "name": "C5"
+      },
+      {
+        "id": "citroen-c5-aircross",
+        "name": "C5 Aircross"
+      },
+      {
+        "id": "citroen-jumper",
+        "name": "Jumper"
+      },
+      {
+        "id": "citroen-jumpy",
+        "name": "Jumpy"
+      },
+      {
+        "id": "citroen-jumpy-spacetourer",
+        "name": "Jumpy Spacetourer"
+      }
+    ],
+    "cupra": [
+      {
+        "id": "cupra-born",
+        "name": "Born"
+      },
+      {
+        "id": "cupra-formentor",
+        "name": "Formentor"
+      }
+    ],
+    "dacia": [
+      {
+        "id": "dacia-dokker",
+        "name": "Dokker"
+      },
+      {
+        "id": "dacia-duster",
+        "name": "Duster"
+      },
+      {
+        "id": "dacia-jogger",
+        "name": "Jogger"
+      },
+      {
+        "id": "dacia-lodgy",
+        "name": "Lodgy"
+      },
+      {
+        "id": "dacia-logan",
+        "name": "Logan"
+      },
+      {
+        "id": "dacia-sandero",
+        "name": "Sandero"
+      },
+      {
+        "id": "dacia-spring",
+        "name": "Spring"
+      }
+    ],
+    "ds": [
+      {
+        "id": "ds-ds-7",
+        "name": "DS 7"
+      },
+      {
+        "id": "ds-ds3",
+        "name": "DS3"
+      },
+      {
+        "id": "ds-ds4",
+        "name": "DS4"
+      },
+      {
+        "id": "ds-ds5",
+        "name": "DS5"
+      }
+    ],
+    "fiat": [
+      {
+        "id": "fiat-124-spider",
+        "name": "124 Spider"
+      },
+      {
+        "id": "fiat-500",
+        "name": "500"
+      },
+      {
+        "id": "fiat-500l",
+        "name": "500L"
+      },
+      {
+        "id": "fiat-500x",
+        "name": "500X"
+      },
+      {
+        "id": "fiat-bravo",
+        "name": "Bravo"
+      },
+      {
+        "id": "fiat-doblo",
+        "name": "Doblo"
+      },
+      {
+        "id": "fiat-ducato",
+        "name": "Ducato"
+      },
+      {
+        "id": "fiat-freemont",
+        "name": "Freemont"
+      },
+      {
+        "id": "fiat-panda",
+        "name": "Panda"
+      },
+      {
+        "id": "fiat-punto",
+        "name": "Punto"
+      },
+      {
+        "id": "fiat-qubo",
+        "name": "Qubo"
+      },
+      {
+        "id": "fiat-scudo",
+        "name": "Scudo"
+      },
+      {
+        "id": "fiat-sedici",
+        "name": "Sedici"
+      },
+      {
+        "id": "fiat-talento",
+        "name": "Talento"
+      },
+      {
+        "id": "fiat-tipo",
+        "name": "Tipo"
+      }
+    ],
+    "ford": [
+      {
+        "id": "ford-c-max",
+        "name": "C-Max"
+      },
+      {
+        "id": "ford-ecosport",
+        "name": "EcoSport"
+      },
+      {
+        "id": "ford-edge",
+        "name": "Edge"
+      },
+      {
+        "id": "ford-explorer",
+        "name": "Explorer"
+      },
+      {
+        "id": "ford-fiesta",
+        "name": "Fiesta"
+      },
+      {
+        "id": "ford-focus",
+        "name": "Focus"
+      },
+      {
+        "id": "ford-fusion",
+        "name": "Fusion"
+      },
+      {
+        "id": "ford-ka",
+        "name": "Ka"
+      },
+      {
+        "id": "ford-kuga",
+        "name": "Kuga"
+      },
+      {
+        "id": "ford-mondeo",
+        "name": "Mondeo"
+      },
+      {
+        "id": "ford-mustang",
+        "name": "Mustang"
+      },
+      {
+        "id": "ford-puma",
+        "name": "Puma"
+      },
+      {
+        "id": "ford-s-max",
+        "name": "S-Max / Galaxy"
+      },
+      {
+        "id": "ford-tourneo-connect",
+        "name": "Tourneo Connect"
+      },
+      {
+        "id": "ford-tourneo-courier",
+        "name": "Tourneo Courier"
+      },
+      {
+        "id": "ford-transit",
+        "name": "Transit"
+      },
+      {
+        "id": "ford-transit-connect",
+        "name": "Transit Connect"
+      },
+      {
+        "id": "ford-transit-courier",
+        "name": "Transit Courier"
+      },
+      {
+        "id": "ford-tourneo-custom",
+        "name": "Transit Custom / Tourneo Custom"
+      },
+      {
+        "id": "ford-transit-tourneo",
+        "name": "Transit Tourneo"
+      }
+    ],
+    "honda": [
+      {
+        "id": "honda-accord",
+        "name": "Accord"
+      },
+      {
+        "id": "honda-accord-tourer",
+        "name": "Accord Tourer"
+      },
+      {
+        "id": "honda-civic",
+        "name": "Civic"
+      },
+      {
+        "id": "honda-cr-v",
+        "name": "CR-V"
+      },
+      {
+        "id": "honda-hr-v",
+        "name": "HR-V"
+      },
+      {
+        "id": "honda-jazz",
+        "name": "Jazz"
+      }
+    ],
+    "hyundai": [
+      {
+        "id": "hyundai-bayon",
+        "name": "Bayon"
+      },
+      {
+        "id": "hyundai-h-1",
+        "name": "H-1"
+      },
+      {
+        "id": "hyundai-i10",
+        "name": "i10"
+      },
+      {
+        "id": "hyundai-i20",
+        "name": "i20"
+      },
+      {
+        "id": "hyundai-i30",
+        "name": "i30"
+      },
+      {
+        "id": "hyundai-i40",
+        "name": "i40"
+      },
+      {
+        "id": "hyundai-ioniq",
+        "name": "Ioniq"
+      },
+      {
+        "id": "hyundai-ioniq-5",
+        "name": "Ioniq 5"
+      },
+      {
+        "id": "hyundai-ix20",
+        "name": "ix20"
+      },
+      {
+        "id": "hyundai-kona",
+        "name": "Kona"
+      },
+      {
+        "id": "hyundai-santa-fe",
+        "name": "Santa Fe"
+      },
+      {
+        "id": "hyundai-tucson",
+        "name": "Tucson"
+      }
+    ],
+    "jaguar": [
+      {
+        "id": "jaguar-f-pace",
+        "name": "F-Pace"
+      },
+      {
+        "id": "jaguar-f-type",
+        "name": "F-Type"
+      },
+      {
+        "id": "jaguar-xe",
+        "name": "XE"
+      },
+      {
+        "id": "jaguar-xf",
+        "name": "XF"
+      }
+    ],
+    "jeep": [
+      {
+        "id": "jeep-cherokee",
+        "name": "Cherokee"
+      },
+      {
+        "id": "jeep-compass",
+        "name": "Compass"
+      },
+      {
+        "id": "jeep-grand-cherokee",
+        "name": "Grand Cherokee"
+      },
+      {
+        "id": "jeep-renegade",
+        "name": "Renegade"
+      },
+      {
+        "id": "jeep-wrangler",
+        "name": "Wrangler"
+      }
+    ],
+    "kia": [
+      {
+        "id": "kia-carens",
+        "name": "Carens"
+      },
+      {
+        "id": "kia-ceed",
+        "name": "Ceed"
+      },
+      {
+        "id": "kia-ev6",
+        "name": "EV6"
+      },
+      {
+        "id": "kia-niro",
+        "name": "Niro"
+      },
+      {
+        "id": "kia-optima",
+        "name": "Optima"
+      },
+      {
+        "id": "kia-picanto",
+        "name": "Picanto"
+      },
+      {
+        "id": "kia-rio",
+        "name": "Rio"
+      },
+      {
+        "id": "kia-sorento",
+        "name": "Sorento"
+      },
+      {
+        "id": "kia-soul",
+        "name": "Soul"
+      },
+      {
+        "id": "kia-sportage",
+        "name": "Sportage"
+      },
+      {
+        "id": "kia-stinger",
+        "name": "Stinger"
+      },
+      {
+        "id": "kia-stonic",
+        "name": "Stonic"
+      },
+      {
+        "id": "kia-venga",
+        "name": "Venga"
+      }
+    ],
+    "land-rover": [
+      {
+        "id": "land-rover-defender",
+        "name": "Defender"
+      },
+      {
+        "id": "land-rover-discovery",
+        "name": "Discovery"
+      },
+      {
+        "id": "land-rover-discovery-sport",
+        "name": "Discovery Sport"
+      },
+      {
+        "id": "land-rover-freelander-2",
+        "name": "Freelander 2"
+      },
+      {
+        "id": "land-rover-range-rover",
+        "name": "Range Rover"
+      },
+      {
+        "id": "land-rover-range-rover-evoque",
+        "name": "Range Rover Evoque"
+      },
+      {
+        "id": "land-rover-range-rover-sport",
+        "name": "Range Rover Sport"
+      },
+      {
+        "id": "land-rover-range-rover-velar",
+        "name": "Range Rover Velar"
+      }
+    ],
+    "lexus": [
+      {
+        "id": "lexus-ct",
+        "name": "CT"
+      },
+      {
+        "id": "lexus-nx",
+        "name": "NX"
+      },
+      {
+        "id": "lexus-rx",
+        "name": "RX"
+      },
+      {
+        "id": "lexus-ux",
+        "name": "UX"
+      }
+    ],
+    "mazda": [
+      {
+        "id": "mazda-cx-3",
+        "name": "CX-3"
+      },
+      {
+        "id": "mazda-cx-30",
+        "name": "CX-30"
+      },
+      {
+        "id": "mazda-cx-5",
+        "name": "CX-5"
+      },
+      {
+        "id": "mazda-cx-60",
+        "name": "CX-60"
+      },
+      {
+        "id": "mazda-cx-7",
+        "name": "CX-7"
+      },
+      {
+        "id": "mazda-2",
+        "name": "Mazda2"
+      },
+      {
+        "id": "mazda-3",
+        "name": "Mazda3"
+      },
+      {
+        "id": "mazda-6",
+        "name": "Mazda6"
+      },
+      {
+        "id": "mazda-mx-30",
+        "name": "MX-30"
+      },
+      {
+        "id": "mazda-mx-5",
+        "name": "MX-5"
+      }
+    ],
+    "mercedes": [
+      {
+        "id": "mercedes-a-klasse",
+        "name": "A-Klasse"
+      },
+      {
+        "id": "mercedes-b-klasse",
+        "name": "B-Klasse"
+      },
+      {
+        "id": "mercedes-c-klasse",
+        "name": "C-Klasse"
+      },
+      {
+        "id": "mercedes-cla",
+        "name": "CLA"
+      },
+      {
+        "id": "mercedes-e-klasse",
+        "name": "E-Klasse"
+      },
+      {
+        "id": "mercedes-eqa",
+        "name": "EQA"
+      },
+      {
+        "id": "mercedes-gla",
+        "name": "GLA"
+      },
+      {
+        "id": "mercedes-glb",
+        "name": "GLB"
+      },
+      {
+        "id": "mercedes-glc",
+        "name": "GLC"
+      },
+      {
+        "id": "mercedes-gle",
+        "name": "GLE"
+      },
+      {
+        "id": "mercedes-s-klasse",
+        "name": "S-Klasse"
+      },
+      {
+        "id": "mercedes-slk",
+        "name": "SLK / SLC"
+      },
+      {
+        "id": "mercedes-v-klasse",
+        "name": "V-Klasse / Vito"
+      }
+    ],
+    "mg": [
+      {
+        "id": "mg-ehs",
+        "name": "EHS"
+      },
+      {
+        "id": "mg-mg4",
+        "name": "MG4"
+      },
+      {
+        "id": "mg-zs",
+        "name": "ZS"
+      }
+    ],
+    "mini": [
+      {
+        "id": "mini-clubman",
+        "name": "Clubman"
+      },
+      {
+        "id": "mini-cooper",
+        "name": "Cooper / One"
+      },
+      {
+        "id": "mini-countryman",
+        "name": "Countryman"
+      }
+    ],
+    "mitsubishi": [
+      {
+        "id": "mitsubishi-asx",
+        "name": "ASX"
+      },
+      {
+        "id": "mitsubishi-colt",
+        "name": "Colt"
+      },
+      {
+        "id": "mitsubishi-eclipse-cross",
+        "name": "Eclipse Cross"
+      },
+      {
+        "id": "mitsubishi-lancer",
+        "name": "Lancer"
+      },
+      {
+        "id": "mitsubishi-outlander",
+        "name": "Outlander"
+      },
+      {
+        "id": "mitsubishi-pajero",
+        "name": "Pajero"
+      },
+      {
+        "id": "mitsubishi-space-star",
+        "name": "Space Star"
+      }
+    ],
+    "nissan": [
+      {
+        "id": "nissan-juke",
+        "name": "Juke"
+      },
+      {
+        "id": "nissan-leaf",
+        "name": "Leaf"
+      },
+      {
+        "id": "nissan-micra",
+        "name": "Micra"
+      },
+      {
+        "id": "nissan-note",
+        "name": "Note"
+      },
+      {
+        "id": "nissan-nv200",
+        "name": "NV200"
+      },
+      {
+        "id": "nissan-nv300",
+        "name": "NV300"
+      },
+      {
+        "id": "nissan-pathfinder",
+        "name": "Pathfinder"
+      },
+      {
+        "id": "nissan-pixo",
+        "name": "Pixo"
+      },
+      {
+        "id": "nissan-pulsar",
+        "name": "Pulsar"
+      },
+      {
+        "id": "nissan-qashqai",
+        "name": "Qashqai"
+      },
+      {
+        "id": "nissan-x-trail",
+        "name": "X-Trail"
+      }
+    ],
+    "opel": [
+      {
+        "id": "opel-adam",
+        "name": "Adam"
+      },
+      {
+        "id": "opel-agila",
+        "name": "Agila"
+      },
+      {
+        "id": "opel-antara",
+        "name": "Antara"
+      },
+      {
+        "id": "opel-astra",
+        "name": "Astra"
+      },
+      {
+        "id": "opel-cascada",
+        "name": "Cascada"
+      },
+      {
+        "id": "opel-combo",
+        "name": "Combo"
+      },
+      {
+        "id": "opel-corsa",
+        "name": "Corsa"
+      },
+      {
+        "id": "opel-crossland",
+        "name": "Crossland"
+      },
+      {
+        "id": "opel-grandland",
+        "name": "Grandland"
+      },
+      {
+        "id": "opel-insignia",
+        "name": "Insignia"
+      },
+      {
+        "id": "opel-karl",
+        "name": "Karl"
+      },
+      {
+        "id": "opel-meriva",
+        "name": "Meriva"
+      },
+      {
+        "id": "opel-mokka",
+        "name": "Mokka"
+      },
+      {
+        "id": "opel-vivaro",
+        "name": "Vivaro"
+      },
+      {
+        "id": "opel-vivaro-zafira-life",
+        "name": "Vivaro Zafira Life"
+      },
+      {
+        "id": "opel-zafira",
+        "name": "Zafira"
+      }
+    ],
+    "peugeot": [
+      {
+        "id": "peugeot-108",
+        "name": "108"
+      },
+      {
+        "id": "peugeot-2008",
+        "name": "2008"
+      },
+      {
+        "id": "peugeot-208",
+        "name": "208"
+      },
+      {
+        "id": "peugeot-3008",
+        "name": "3008"
+      },
+      {
+        "id": "peugeot-308",
+        "name": "308"
+      },
+      {
+        "id": "peugeot-5008",
+        "name": "5008"
+      },
+      {
+        "id": "peugeot-508",
+        "name": "508"
+      },
+      {
+        "id": "peugeot-boxer",
+        "name": "Boxer"
+      },
+      {
+        "id": "peugeot-expert",
+        "name": "Expert"
+      },
+      {
+        "id": "peugeot-expert-traveller",
+        "name": "Expert Traveller"
+      },
+      {
+        "id": "peugeot-rcz",
+        "name": "RCZ"
+      },
+      {
+        "id": "peugeot-rifter",
+        "name": "Rifter / Partner"
+      }
+    ],
+    "polestar": [
+      {
+        "id": "polestar-2",
+        "name": "2"
+      }
+    ],
+    "porsche": [
+      {
+        "id": "porsche-911",
+        "name": "911"
+      },
+      {
+        "id": "porsche-boxster",
+        "name": "Boxster"
+      },
+      {
+        "id": "porsche-cayenne",
+        "name": "Cayenne"
+      },
+      {
+        "id": "porsche-cayman",
+        "name": "Cayman"
+      },
+      {
+        "id": "porsche-macan",
+        "name": "Macan"
+      },
+      {
+        "id": "porsche-panamera",
+        "name": "Panamera"
+      },
+      {
+        "id": "porsche-taycan",
+        "name": "Taycan"
+      }
+    ],
+    "renault": [
+      {
+        "id": "renault-arkana",
+        "name": "Arkana"
+      },
+      {
+        "id": "renault-austral",
+        "name": "Austral"
+      },
+      {
+        "id": "renault-captur",
+        "name": "Captur"
+      },
+      {
+        "id": "renault-clio",
+        "name": "Clio"
+      },
+      {
+        "id": "renault-espace",
+        "name": "Espace"
+      },
+      {
+        "id": "renault-kadjar",
+        "name": "Kadjar"
+      },
+      {
+        "id": "renault-kangoo",
+        "name": "Kangoo"
+      },
+      {
+        "id": "renault-koleos",
+        "name": "Koleos"
+      },
+      {
+        "id": "renault-laguna",
+        "name": "Laguna"
+      },
+      {
+        "id": "renault-master",
+        "name": "Master"
+      },
+      {
+        "id": "renault-megane",
+        "name": "Mégane"
+      },
+      {
+        "id": "renault-modus",
+        "name": "Modus"
+      },
+      {
+        "id": "renault-scenic",
+        "name": "Scénic"
+      },
+      {
+        "id": "renault-talisman",
+        "name": "Talisman"
+      },
+      {
+        "id": "renault-trafic",
+        "name": "Trafic"
+      },
+      {
+        "id": "renault-twingo",
+        "name": "Twingo"
+      },
+      {
+        "id": "renault-wind",
+        "name": "Wind"
+      },
+      {
+        "id": "renault-zoe",
+        "name": "Zoe"
+      }
+    ],
+    "seat": [
+      {
+        "id": "seat-alhambra",
+        "name": "Alhambra"
+      },
+      {
+        "id": "seat-altea",
+        "name": "Altea"
+      },
+      {
+        "id": "seat-altea-xl",
+        "name": "Altea XL"
+      },
+      {
+        "id": "seat-arona",
+        "name": "Arona"
+      },
+      {
+        "id": "seat-ateca",
+        "name": "Ateca"
+      },
+      {
+        "id": "seat-exeo-st",
+        "name": "Exeo ST"
+      },
+      {
+        "id": "seat-ibiza",
+        "name": "Ibiza"
+      },
+      {
+        "id": "seat-leon",
+        "name": "Leon"
+      },
+      {
+        "id": "seat-mii",
+        "name": "Mii"
+      },
+      {
+        "id": "seat-tarraco",
+        "name": "Tarraco"
+      },
+      {
+        "id": "seat-toledo",
+        "name": "Toledo"
+      }
+    ],
+    "skoda": [
+      {
+        "id": "skoda-citigo",
+        "name": "Citigo"
+      },
+      {
+        "id": "skoda-enyaq",
+        "name": "Enyaq"
+      },
+      {
+        "id": "skoda-fabia",
+        "name": "Fabia"
+      },
+      {
+        "id": "skoda-kamiq",
+        "name": "Kamiq"
+      },
+      {
+        "id": "skoda-karoq",
+        "name": "Karoq"
+      },
+      {
+        "id": "skoda-kodiaq",
+        "name": "Kodiaq"
+      },
+      {
+        "id": "skoda-octavia",
+        "name": "Octavia"
+      },
+      {
+        "id": "skoda-rapid",
+        "name": "Rapid"
+      },
+      {
+        "id": "skoda-roomster",
+        "name": "Roomster"
+      },
+      {
+        "id": "skoda-scala",
+        "name": "Scala"
+      },
+      {
+        "id": "skoda-superb",
+        "name": "Superb"
+      },
+      {
+        "id": "skoda-yeti",
+        "name": "Yeti"
+      }
+    ],
+    "smart": [
+      {
+        "id": "smart-forfour",
+        "name": "forfour"
+      },
+      {
+        "id": "smart-fortwo",
+        "name": "fortwo"
+      }
+    ],
+    "subaru": [
+      {
+        "id": "subaru-forester",
+        "name": "Forester"
+      },
+      {
+        "id": "subaru-impreza",
+        "name": "Impreza"
+      },
+      {
+        "id": "subaru-legacy",
+        "name": "Legacy"
+      },
+      {
+        "id": "subaru-outback",
+        "name": "Outback"
+      },
+      {
+        "id": "subaru-xv",
+        "name": "XV"
+      }
+    ],
+    "suzuki": [
+      {
+        "id": "suzuki-alto",
+        "name": "Alto"
+      },
+      {
+        "id": "suzuki-baleno",
+        "name": "Baleno"
+      },
+      {
+        "id": "suzuki-celerio",
+        "name": "Celerio"
+      },
+      {
+        "id": "suzuki-grand-vitara",
+        "name": "Grand Vitara"
+      },
+      {
+        "id": "suzuki-ignis",
+        "name": "Ignis"
+      },
+      {
+        "id": "suzuki-jimny",
+        "name": "Jimny"
+      },
+      {
+        "id": "suzuki-splash",
+        "name": "Splash"
+      },
+      {
+        "id": "suzuki-swace",
+        "name": "Swace"
+      },
+      {
+        "id": "suzuki-swift",
+        "name": "Swift"
+      },
+      {
+        "id": "suzuki-sx4",
+        "name": "SX4"
+      },
+      {
+        "id": "suzuki-sx4-s-cross",
+        "name": "SX4 S-Cross"
+      },
+      {
+        "id": "suzuki-vitara",
+        "name": "Vitara"
+      }
+    ],
+    "tesla": [
+      {
+        "id": "tesla-model-3",
+        "name": "Model 3"
+      },
+      {
+        "id": "tesla-model-s",
+        "name": "Model S"
+      },
+      {
+        "id": "tesla-model-y",
+        "name": "Model Y"
+      }
+    ],
+    "toyota": [
+      {
+        "id": "toyota-avensis",
+        "name": "Avensis"
+      },
+      {
+        "id": "toyota-aygo",
+        "name": "Aygo"
+      },
+      {
+        "id": "toyota-c-hr",
+        "name": "C-HR"
+      },
+      {
+        "id": "toyota-corolla",
+        "name": "Corolla / Auris"
+      },
+      {
+        "id": "toyota-gr-yaris",
+        "name": "GR Yaris"
+      },
+      {
+        "id": "toyota-gt86",
+        "name": "GT86"
+      },
+      {
+        "id": "toyota-iq",
+        "name": "iQ"
+      },
+      {
+        "id": "toyota-land-cruiser",
+        "name": "Land Cruiser"
+      },
+      {
+        "id": "toyota-prius",
+        "name": "Prius"
+      },
+      {
+        "id": "toyota-proace",
+        "name": "Proace"
+      },
+      {
+        "id": "toyota-proace-city-verso",
+        "name": "Proace City Verso"
+      },
+      {
+        "id": "toyota-rav4",
+        "name": "RAV4"
+      },
+      {
+        "id": "toyota-verso",
+        "name": "Verso"
+      },
+      {
+        "id": "toyota-yaris",
+        "name": "Yaris"
+      }
+    ],
+    "volvo": [
+      {
+        "id": "volvo-c30",
+        "name": "C30"
+      },
+      {
+        "id": "volvo-c70",
+        "name": "C70"
+      },
+      {
+        "id": "volvo-v40",
+        "name": "V40"
+      },
+      {
+        "id": "volvo-v50",
+        "name": "V50"
+      },
+      {
+        "id": "volvo-v60",
+        "name": "V60"
+      },
+      {
+        "id": "volvo-v90",
+        "name": "V90 / V70"
+      },
+      {
+        "id": "volvo-xc40",
+        "name": "XC40"
+      },
+      {
+        "id": "volvo-xc60",
+        "name": "XC60"
+      },
+      {
+        "id": "volvo-xc90",
+        "name": "XC90"
+      }
+    ],
+    "vw": [
+      {
+        "id": "vw-arteon",
+        "name": "Arteon"
+      },
+      {
+        "id": "vw-beetle",
+        "name": "Beetle"
+      },
+      {
+        "id": "vw-caddy",
+        "name": "Caddy"
+      },
+      {
+        "id": "vw-cc",
+        "name": "CC"
+      },
+      {
+        "id": "vw-crafter",
+        "name": "Crafter"
+      },
+      {
+        "id": "vw-eos",
+        "name": "Eos"
+      },
+      {
+        "id": "vw-fox",
+        "name": "Fox"
+      },
+      {
+        "id": "vw-golf",
+        "name": "Golf"
+      },
+      {
+        "id": "vw-id-3",
+        "name": "ID.3"
+      },
+      {
+        "id": "vw-id-4",
+        "name": "ID.4"
+      },
+      {
+        "id": "vw-jetta",
+        "name": "Jetta"
+      },
+      {
+        "id": "vw-multivan",
+        "name": "Multivan / Transporter"
+      },
+      {
+        "id": "vw-passat",
+        "name": "Passat"
+      },
+      {
+        "id": "vw-phaeton",
+        "name": "Phaeton"
+      },
+      {
+        "id": "vw-polo",
+        "name": "Polo"
+      },
+      {
+        "id": "vw-scirocco",
+        "name": "Scirocco"
+      },
+      {
+        "id": "vw-sharan",
+        "name": "Sharan"
+      },
+      {
+        "id": "vw-t-cross",
+        "name": "T-Cross"
+      },
+      {
+        "id": "vw-t-roc",
+        "name": "T-Roc"
+      },
+      {
+        "id": "vw-taigo",
+        "name": "Taigo"
+      },
+      {
+        "id": "vw-tiguan",
+        "name": "Tiguan"
+      },
+      {
+        "id": "vw-touareg",
+        "name": "Touareg"
+      },
+      {
+        "id": "vw-touran",
+        "name": "Touran"
+      },
+      {
+        "id": "vw-up",
+        "name": "up!"
+      }
+    ]
+  }
+}

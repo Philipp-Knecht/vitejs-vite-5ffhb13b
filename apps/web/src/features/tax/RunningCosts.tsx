@@ -26,6 +26,19 @@ const euros = (value: number, fractions = 0) =>
     maximumFractionDigits: fractions,
   });
 
+export interface ConsumptionSuggestion {
+  /** Per 100 km, in the unit of the drive (litres or kWh). */
+  value: number;
+  /** Worked out from the CO₂ value, not reported. */
+  estimated: boolean;
+}
+
+const decimal = (value: number) => value.toLocaleString('de-DE');
+
+/** The European Commission's first report on real-world fuel consumption (March 2024). */
+const REAL_WORLD_GAP_URL =
+  'https://climate.ec.europa.eu/news-other-reads/news/first-commission-report-real-world-co2-emissions-cars-and-vans-using-data-board-fuel-consumption-2024-03-18_en';
+
 interface Parsed {
   value: number | null;
   error?: string;
@@ -49,18 +62,22 @@ function parse(
 /**
  * Rough running costs from the buyer's own figures: tax (from the calculator
  * above), energy, insurance and a reserve for workshop costs. KaufCheck has no
- * price data of its own, so nothing is prefilled with assumed values.
+ * price data of its own; only the consumption of an engine picked above is
+ * prefilled, from the EU data.
  */
 export function RunningCosts({
   taxAnnualEur,
   taxNote = null,
   electric,
+  suggestion = null,
 }: {
   /** Annual Kfz-Steuer from the calculator; `null` while it is unknown. */
   taxAnnualEur: number | null;
   /** E.g. when a tax exemption ends. */
   taxNote?: string | null;
   electric: boolean;
+  /** The consumption of an engine picked above; a new pick replaces the field. */
+  suggestion?: ConsumptionSuggestion | null;
 }) {
   const [values, setValues] = useState(EMPTY);
   const set = (key: keyof CostValues) => (event: { target: { value: string } }) =>
@@ -70,6 +87,17 @@ export function RunningCosts({
   if (unitsElectric !== electric) {
     setUnitsElectric(electric);
     setValues((current) => ({ ...current, consumption: '', price: '' }));
+  }
+  const [suggested, setSuggested] = useState<ConsumptionSuggestion | null>(null);
+  const fromPick = suggested !== null && values.consumption === decimal(suggested.value);
+  if (suggestion !== suggested) {
+    setSuggested(suggestion);
+    // A value of the previous pick goes; one typed in stays.
+    if (suggestion || fromPick)
+      setValues((current) => ({
+        ...current,
+        consumption: suggestion ? decimal(suggestion.value) : '',
+      }));
   }
 
   const km = parse(values.kmPerYear, toNumber, 300_000, 'Bitte prüfe die Fahrleistung.');
@@ -124,9 +152,24 @@ export function RunningCosts({
         <TextField
           label={electric ? 'Verbrauch in kWh je 100 km' : 'Verbrauch in Litern je 100 km'}
           hint={
-            electric
-              ? 'WLTP-Wert aus Inserat oder Datenblatt (mit Ladeverlusten); Bordcomputer-Werte ohne Ladeverluste. Wasserstoff: kg je 100 km.'
-              : 'Laut Inserat oder Hersteller; im Alltag meist etwas mehr. Erdgas (CNG): kg je 100 km und Preis je kg.'
+            fromPick && electric ? (
+              'Normverbrauch (WLTP) laut EU-Daten, mit Ladeverlusten.'
+            ) : fromPick ? (
+              <>
+                {suggested?.estimated
+                  ? 'Aus dem CO₂-Wert des Motors geschätzt (Normverbrauch).'
+                  : 'Normverbrauch (WLTP) laut EU-Daten.'}{' '}
+                Im Alltag liegt der Verbrauch von Benzinern und Dieseln laut{' '}
+                <a href={REAL_WORLD_GAP_URL} target="_blank" rel="noopener noreferrer">
+                  EU-Kommission
+                </a>{' '}
+                rund ein Fünftel höher.
+              </>
+            ) : electric ? (
+              'WLTP-Wert aus Inserat oder Datenblatt (mit Ladeverlusten); Bordcomputer-Werte ohne Ladeverluste. Wasserstoff: kg je 100 km.'
+            ) : (
+              'Laut Inserat oder Hersteller; im Alltag meist etwas mehr. Erdgas (CNG): kg je 100 km und Preis je kg.'
+            )
           }
           inputMode="decimal"
           error={consumption.error}

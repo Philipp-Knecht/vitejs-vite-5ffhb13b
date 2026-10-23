@@ -5,11 +5,24 @@ import {
   type VehicleTaxField,
   type VehicleTaxResult,
 } from '@kaufcheck/shared';
+import { engineTaxDrive, type EngineRecord } from '@kaufcheck/catalog/engines';
 import { useState } from 'react';
 import { SelectField, TextField } from '../../components/ui/Field';
 import type { TaxFormValues } from './form';
 import { toNumber } from './numbers';
-import { RunningCosts } from './RunningCosts';
+import { EnginePicker } from './EnginePicker';
+import {
+  engineKey,
+  enginesOfYear,
+  engineValues,
+  engineYear,
+  findIndexModel,
+  NO_PICK,
+  useEngineIndex,
+  useModelEngines,
+  type EnginePick,
+} from './engines';
+import { RunningCosts, type ConsumptionSuggestion } from './RunningCosts';
 
 const DRIVES: readonly { value: TaxDrive; label: string }[] = [
   { value: 'petrol', label: 'Benzin, auch Hybrid, Autogas (LPG) oder Erdgas (CNG)' },
@@ -112,14 +125,64 @@ function Result({ result }: { result: VehicleTaxResult }) {
 export function TaxCalculator({
   initial,
   listingRegistration = null,
+  listingModel = null,
 }: {
   initial: TaxFormValues;
   /** First registration as the listing states it (month/year), as a hint for the date. */
   listingRegistration?: string | null;
+  /** Make and model (id or name) and power from a check, to preselect the engine. */
+  listingModel?: { makeId: string; model: string; kw: number | null } | null;
 }) {
   const [values, setValues] = useState(initial);
   const set = (key: keyof TaxFormValues) => (event: { target: { value: string } }) =>
     setValues((current) => ({ ...current, [key]: event.target.value }));
+
+  const index = useEngineIndex();
+  const [pick, setPick] = useState<EnginePick>(NO_PICK);
+  const engines = useModelEngines(pick.modelId);
+  const [suggestion, setSuggestion] = useState<ConsumptionSuggestion | null>(null);
+  const applyEngine = (engine: EngineRecord | null, firstRegistration: string) => {
+    if (!engine || !index.data) {
+      setSuggestion(null);
+      return;
+    }
+    const engineFields = engineValues(engine, firstRegistration, index.data);
+    setValues((current) => ({
+      ...current,
+      drive: engineFields.drive,
+      displacementCcm: engineFields.displacementCcm,
+      co2GPerKm: engineFields.co2GPerKm,
+    }));
+    setSuggestion(engineFields.consumption);
+  };
+  const choose = (next: EnginePick, engine: EngineRecord | null) => {
+    setPick(next);
+    applyEngine(engine, values.firstRegistration);
+  };
+
+  // A check names the model: it is preselected once the index is there, and the engine once
+  // there is a single one with the listed power in the year of the first registration.
+  const [pending, setPending] = useState(listingModel);
+  if (pending && index.data && !pick.modelId) {
+    const found = findIndexModel(index.data, pending.makeId, pending.model);
+    if (found) setPick({ ...found, engineKey: '' });
+    if (!found || pending.kw === null) setPending(null);
+  }
+  if (pending && pick.modelId && engines.data && values.firstRegistration) {
+    setPending(null);
+    const year = engineYear(engines.data.engines, values.firstRegistration);
+    const matching =
+      year === null
+        ? []
+        : enginesOfYear(engines.data.engines, year).filter((engine) => engine.kw === pending.kw);
+    const fitting = matching.filter(
+      (engine) => !values.drive || engineTaxDrive(engine.fuel) === values.drive,
+    );
+    if (fitting.length === 1) {
+      setPick({ ...pick, engineKey: engineKey(fitting[0]!) });
+      applyEngine(fitting[0]!, values.firstRegistration);
+    }
+  }
 
   const before2009 = values.firstRegistration !== '' && values.firstRegistration < '2009-07-01';
   const electric = values.drive === 'electric';
@@ -179,6 +242,13 @@ export function TaxCalculator({
             error={errorFor('firstRegistration')}
             value={values.firstRegistration}
             onChange={set('firstRegistration')}
+          />
+          <EnginePicker
+            index={index.data}
+            engines={engines.data?.engines}
+            firstRegistration={values.firstRegistration}
+            value={pick}
+            onChange={choose}
           />
           <SelectField label="Antrieb" value={values.drive} onChange={set('drive')}>
             <option value="">Bitte wählen</option>
@@ -259,7 +329,12 @@ export function TaxCalculator({
         Mit deiner Fahrleistung, dem Verbrauch und deinen Preisen rechnest du grob aus, was das Auto
         im Monat kostet. Die Kfz-Steuer von oben ist schon eingerechnet.
       </p>
-      <RunningCosts taxAnnualEur={taxAnnualEur} taxNote={taxNote} electric={electric} />
+      <RunningCosts
+        taxAnnualEur={taxAnnualEur}
+        taxNote={taxNote}
+        electric={electric}
+        suggestion={suggestion}
+      />
     </>
   );
 }
