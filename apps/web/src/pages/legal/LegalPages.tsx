@@ -485,14 +485,14 @@ export function PrivacyPage() {
             )}
           </ul>
           <p>
-            Jeder dieser Links ist ein einfacher Link mit unserer Partnerkennung: Beim Aufruf
-            unserer Seiten lädt dein Browser nichts vom Partner, und wir geben keine Daten über dich
-            oder das Auto weiter. Erst wenn du einen solchen Link anklickst, öffnet sich die Seite
-            des Partners. Wie bei jedem Seitenaufruf erhält der Partner dabei technisch deine
-            IP-Adresse und erfährt, dass du von KaufCheck kommst; mit Cookies oder ähnlichen
-            Techniken kann er erfassen, ob über den Link ein Vertrag oder Kauf zustande kommt. Für
-            alles, was auf den Seiten des Partners geschieht, ist der Partner selbst verantwortlich,
-            nicht wir; es gelten die Datenschutzhinweise, die dort genannt sind.
+            Es sind einfache Links mit unserer Partnerkennung: Beim Aufruf unserer Seiten lädt dein
+            Browser nichts vom Partner, und wir geben keine Daten über dich oder das Auto weiter.
+            Erst wenn du einen solchen Link anklickst, öffnet sich die Seite des Partners. Wie bei
+            jedem Seitenaufruf erhält der Partner dabei technisch deine IP-Adresse und erfährt, dass
+            du von KaufCheck kommst; mit Cookies oder ähnlichen Techniken kann er erfassen, ob über
+            den Link ein Vertrag oder Kauf zustande kommt. Für alles, was auf den Seiten des
+            Partners geschieht, ist der Partner selbst verantwortlich, nicht wir; es gelten die
+            Datenschutzhinweise, die dort genannt sind.
             {features?.analytics !== false &&
               ' Klicks auf diese Links zählen wir ohne Angaben zur Person in der Nutzungsstatistik.'}
           </p>

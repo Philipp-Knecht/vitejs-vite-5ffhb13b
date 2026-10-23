@@ -146,6 +146,10 @@ test('a configuration cached before the vehicle history link still shows the ins
   });
   await page.goto('/gebrauchtwagen-checkliste');
   await expect(page.getByRole('heading', { level: 1 })).toBeVisible();
+  await page.waitForFunction(() =>
+    performance.getEntriesByType('resource').some((entry) => entry.name.includes('/api/config')),
+  );
+  await page.evaluate(() => new Promise((resolve) => requestAnimationFrame(resolve)));
   await expect(page.getByRole('complementary', { name: 'Werbung: Affiliate-Link' })).toHaveCount(0);
   await page.goto('/autokosten-im-monat');
   await expect(page.getByRole('complementary', { name: 'Werbung: Affiliate-Link' })).toHaveCount(1);
