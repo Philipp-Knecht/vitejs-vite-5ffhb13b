@@ -1034,6 +1034,15 @@
   margin-top: 12px;
 }
 
+.financing-proposal {
+  margin-top: 24px;
+}
+
+.financing-proposal .tax-result__title {
+  margin: 0 0 8px;
+  font-size: 1rem;
+}
+
 .price-costs {
   margin-top: 12px;
   font-size: 0.95rem;

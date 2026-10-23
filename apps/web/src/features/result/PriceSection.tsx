@@ -1,9 +1,10 @@
-import { PRICE_KIND_LABELS, type PriceContext, type Vehicle } from '@kaufcheck/shared';
 import { findListingModel, findMake } from '@kaufcheck/catalog';
+import { LOAN_LIMITS, PRICE_KIND_LABELS, type PriceContext, type Vehicle } from '@kaufcheck/shared';
 import { Link } from 'react-router';
 import { EvidenceBadge } from '../../components/EvidenceBadge';
 import { formatEuro, formatNumber } from '../../lib/format';
 import { taxCalculatorLink } from '../tax/tax-link';
+import { FinancingProposal } from './FinancingProposal';
 import { ResultSection } from './Section';
 
 function MarketRange({
@@ -140,6 +141,15 @@ export function PriceSection({ price, vehicle }: { price: PriceContext; vehicle:
           ))}
         </ul>
       )}
+      {askingPrice &&
+        askingPrice.kind !== 'give_away' &&
+        askingPrice.amountEur >= LOAN_LIMITS.amount.min &&
+        askingPrice.amountEur <= LOAN_LIMITS.amount.max && (
+          <FinancingProposal
+            priceEur={askingPrice.amountEur}
+            negotiable={askingPrice.kind === 'negotiable'}
+          />
+        )}
       <p className="price-costs">
         Zum Kaufpreis kommen laufende Kosten:{' '}
         <Link to={taxCalculatorLink(vehicle, listingModel(vehicle))}>

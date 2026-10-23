@@ -1,5 +1,7 @@
+import type { LoanResult } from '@kaufcheck/shared';
 import { useState } from 'react';
 import { TextField } from '../../components/ui/Field';
+import { euros } from './euros';
 import { parseLoanForm } from './loan-form';
 
 interface LoanValues {
@@ -11,13 +13,25 @@ interface LoanValues {
 
 const EMPTY: LoanValues = { amount: '', rate: '', months: '', balloon: '' };
 
-const euros = (value: number, fractions = 0) =>
-  value.toLocaleString('de-DE', {
-    style: 'currency',
-    currency: 'EUR',
-    minimumFractionDigits: fractions,
-    maximumFractionDigits: fractions,
-  });
+/** Credit costs and the total of a loan. */
+export function LoanFigures({ result }: { result: LoanResult }) {
+  return (
+    <ul className="tax-result__parts">
+      <li>
+        <span>Kreditkosten insgesamt (Zinsen und Gebühren)</span>
+        <span className="tax-result__value">{euros(result.totalInterest, 2)}</span>
+      </li>
+      <li>
+        <span>Kreditkosten im Schnitt pro Monat</span>
+        <span className="tax-result__value">{euros(result.interestPerMonth, 2)}</span>
+      </li>
+      <li>
+        <span>Du zahlst insgesamt</span>
+        <span className="tax-result__value">{euros(result.totalPaid, 2)}</span>
+      </li>
+    </ul>
+  );
+}
 
 /**
  * Monthly rate of a car loan from the figures of an offer. KaufCheck has no
@@ -86,20 +100,7 @@ export function Financing() {
         </p>
         {result && (
           <>
-            <ul className="tax-result__parts">
-              <li>
-                <span>Kreditkosten insgesamt (Zinsen und Gebühren)</span>
-                <span className="tax-result__value">{euros(result.totalInterest, 2)}</span>
-              </li>
-              <li>
-                <span>Kreditkosten im Schnitt pro Monat</span>
-                <span className="tax-result__value">{euros(result.interestPerMonth, 2)}</span>
-              </li>
-              <li>
-                <span>Du zahlst insgesamt</span>
-                <span className="tax-result__value">{euros(result.totalPaid, 2)}</span>
-              </li>
-            </ul>
+            <LoanFigures result={result} />
             {parsed.balloon > 0 && (
               <p className="tax-result__hint">
                 Darin ist die Schlussrate von {euros(parsed.balloon)} enthalten. Sie ist am Ende auf

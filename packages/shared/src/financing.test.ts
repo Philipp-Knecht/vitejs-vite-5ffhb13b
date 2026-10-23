@@ -1,5 +1,13 @@
 import { describe, expect, it } from 'vitest';
-import { loan, loanProblem } from './financing';
+import {
+  AVERAGE_LOAN_RATE,
+  financingProposal,
+  loan,
+  LOAN_LIMITS,
+  loanProblem,
+  PROPOSAL_DEFAULT_MONTHS,
+  PROPOSAL_MONTHS,
+} from './financing';
 
 describe('car loan', () => {
   it('computes the rate of an annuity loan from the effective annual rate', () => {
@@ -37,5 +45,49 @@ describe('car loan', () => {
     expect(problem({ months: 36.5 })).toBe('months');
     expect(problem({ balloon: 10_000 })).toBe('balloon');
     expect(problem({})).toBeUndefined();
+  });
+});
+
+describe('the average rate for the example in a check', () => {
+  it('is a plausible Bundesbank figure with its month', () => {
+    expect(AVERAGE_LOAN_RATE.percent).toBeGreaterThan(LOAN_LIMITS.ratePercent.min);
+    expect(AVERAGE_LOAN_RATE.percent).toBeLessThan(LOAN_LIMITS.ratePercent.max);
+    expect(AVERAGE_LOAN_RATE.month).toMatch(/^20\d{2}-(0[1-9]|1[0-2])$/);
+    expect(AVERAGE_LOAN_RATE.source).toMatch(/^https:\/\/www\.bundesbank\.de\//);
+  });
+
+  it('offers the default term', () => {
+    expect(PROPOSAL_MONTHS).toContain(PROPOSAL_DEFAULT_MONTHS);
+  });
+
+  it('finances the price minus the down payment, to the cent', () => {
+    const proposal = financingProposal({
+      priceEur: 10_000,
+      downPaymentEur: 1.234,
+      months: 48,
+      ratePercent: 6,
+    });
+    expect(proposal.kind).toBe('loan');
+    if (proposal.kind !== 'loan') return;
+    expect(proposal.amount).toBe(9998.77);
+    expect(proposal.result).toEqual(
+      loan({ amount: 9998.77, effectiveRatePercent: 6, months: 48, balloon: 0 }),
+    );
+  });
+
+  it('needs no loan when the down payment covers the price', () => {
+    const base = { priceEur: 8450, months: 48, ratePercent: 6 };
+    expect(financingProposal({ ...base, downPaymentEur: 8450 })).toEqual({
+      kind: 'noLoan',
+      covered: true,
+    });
+    expect(financingProposal({ ...base, downPaymentEur: 8400 })).toEqual({
+      kind: 'noLoan',
+      covered: false,
+    });
+    expect(financingProposal({ ...base, downPaymentEur: 0, ratePercent: 31 })).toMatchObject({
+      kind: 'invalid',
+      field: 'rate',
+    });
   });
 });

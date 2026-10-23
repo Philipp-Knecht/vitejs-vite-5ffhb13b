@@ -173,6 +173,7 @@ npm run user:set-plan -w @kaufcheck/api -- nutzer@example.de pro
 | `npm run typecheck`               | TypeScript for all workspaces                           |
 | `npm run catalog:index`           | Rebuilds `packages/catalog/data/index.json` (see below) |
 | `npm run catalog:engines`         | Rebuilds the engine data from the EEA (see below)       |
+| `npm run loan-rate:update`        | Newest Bundesbank average rate for the loan example     |
 
 Model knowledge is one JSON file per model in `packages/catalog/data/models` (format and rules in
 its README). After adding or changing a file, run `npm run catalog:index`: the advisor reads the
@@ -368,6 +369,8 @@ local testing: `stripe listen --forward-to localhost:3000/api/billing/webhook`.
   regulations message, with „Do not consent“ on the first layer). The footer button
   „Datenschutz- und Cookie-Einstellungen“ reopens it. Turn off „programmatic limited ads“ so that
   no ads (and no ad cookies) are served without consent – the privacy policy says so.
+- Block the AdSense ad categories for loans and credit (blocking controls): result pages show a
+  loan example (see Ads sold directly).
 - While ads are on, HTML pages carry a nonce per response and the strict, nonce-based
   Content-Security-Policy Google supports (`'strict-dynamic'`); API responses keep the strict
   default policy.
@@ -411,6 +414,8 @@ workshop). `SPONSOR_ADS` is a JSON array, at most 20 entries:
   - The ad shows instead of AdSense, never with Pro, in a tinted, dashed box with „Werbung von
     …“ and the note that it is no recommendation and has no influence on checks and guides.
   - Ads are never chosen by the listing, its brand, region or seller.
+  - No ads for loans or credit comparisons: the check shows a loan example, and an ad next to
+    it would make it loan advertising (§ 17 PAngV).
   - While `SPONSOR_ADS` is set, the privacy policy has the section „Anzeigen von
     Werbepartnern“.
 - **Counting** happens only on the server, in `SponsorAdStat`, per campaign and German day:
