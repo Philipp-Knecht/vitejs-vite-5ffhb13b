@@ -62,6 +62,8 @@ test('a changed first registration takes the values of that year and test', asyn
   await page.getByLabel('Erstzulassung').fill('2009-03-01');
   await expect(picker(page).getByLabel('Motor')).toHaveValue('');
   await expect(page.getByLabel('CO₂-Wert in g/km')).toHaveValue('120');
+  // Drive and displacement do not change with the year.
+  await expect(page.getByLabel('Hubraum in cm³')).toHaveValue('1968');
   await expect(
     picker(page).getByText(/hat dieses Modell keine Daten; vorhanden sind 2011/),
   ).toBeVisible();

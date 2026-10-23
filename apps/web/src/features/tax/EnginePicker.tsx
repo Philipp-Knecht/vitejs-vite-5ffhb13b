@@ -120,30 +120,32 @@ export function EnginePicker({
           </option>
         ))}
       </SelectField>
-      {picked && (
-        <div className="field__hint engine-picker__source" aria-live="polite">
-          <p>
-            Eingetragen sind typische Werte von {formatNumber(picked.registrations)} Neuzulassungen;
-            verbindlich ist dein Fahrzeugschein (P.1, V.7).
-            {picked.fuel === 'electric' &&
-              ' Die kW sind die an die EU gemeldete Leistung; im Inserat steht oft eine höhere Spitzenleistung.'}
-            {missing.length > 0 &&
-              ` In den EU-Daten fehlt ${missing.join(' und ')}: bitte aus dem Fahrzeugschein eintragen.`}
-          </p>
-          <p>
-            Quelle:{' '}
-            <a href={ENGINE_SOURCE.url} target="_blank" rel="noopener noreferrer">
-              {ENGINE_SOURCE.name}
-            </a>
-            , © {ENGINE_SOURCE.holder}, Lizenz{' '}
-            <a href={ENGINE_SOURCE.licenceUrl} target="_blank" rel="noopener noreferrer">
-              {ENGINE_SOURCE.licence}
-            </a>
-            ; von KaufCheck zusammengefasst (Median je Motor), abgerufen am{' '}
-            {index && day(index.retrieved)}.
-          </p>
-        </div>
-      )}
+      <div aria-live="polite">
+        {picked && (
+          <div className="field__hint engine-picker__source">
+            <p>
+              Eingetragen sind typische Werte von {formatNumber(picked.registrations)}{' '}
+              Neuzulassungen; verbindlich ist dein Fahrzeugschein (P.1, V.7).
+              {picked.fuel === 'electric' &&
+                ' Die kW sind die an die EU gemeldete Leistung; im Inserat steht oft eine höhere Spitzenleistung.'}
+              {missing.length > 0 &&
+                ` In den EU-Daten fehlt ${missing.join(' und ')}: bitte aus dem Fahrzeugschein eintragen.`}
+            </p>
+            <p>
+              Quelle:{' '}
+              <a href={ENGINE_SOURCE.url} target="_blank" rel="noopener noreferrer">
+                {ENGINE_SOURCE.name}
+              </a>
+              , © {ENGINE_SOURCE.holder}, Lizenz{' '}
+              <a href={ENGINE_SOURCE.licenceUrl} target="_blank" rel="noopener noreferrer">
+                {ENGINE_SOURCE.licence}
+              </a>
+              ; von KaufCheck zusammengefasst (Median je Motor), abgerufen am{' '}
+              {index && day(index.retrieved)}.
+            </p>
+          </div>
+        )}
+      </div>
     </fieldset>
   );
 }

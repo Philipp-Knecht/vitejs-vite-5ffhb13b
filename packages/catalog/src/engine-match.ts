@@ -139,14 +139,14 @@ export function engineModelId(makeId: string, cn: string | null): string | null 
   const folded = foldName(cn);
   let stripped = folded.replace(MAKE_WORDS, '');
   if (makeId === 'smart') stripped = stripped.replace(/^eq\s+/, '');
-  // „MINI“ alone is the hatchback.
   if (makeId === 'mini') {
     // „Cooper S Countryman ALL4“ is a Countryman: the body decides, wherever it stands.
     if (/countryman/.test(stripped)) return 'mini-countryman';
     if (/clubman/.test(stripped)) return 'mini-clubman';
     // ALL4 (four-wheel drive) only came with Countryman, Clubman and Paceman.
     if (/paceman|coupe|roadster|all4/.test(stripped)) return null;
-    if (stripped === '') return 'mini-cooper';
+    // „MINI“ alone stands for the whole make in 2010–2012 (Countryman and Clubman included).
+    if (stripped === '') return null;
   }
   // Other models whose name starts like a catalog model.
   if (makeId === 'fiat' && /^500\s?l\b/.test(stripped)) return null;

@@ -189,8 +189,15 @@ export function TaxCalculator({
     values.firstRegistration !== applied.firstRegistration
   ) {
     const engine = engineFor(pick.engineKey, values.firstRegistration);
-    if (!engine) setPick({ ...pick, engineKey: '' });
-    applyEngine(engine, values.firstRegistration, false);
+    if (engine) applyEngine(engine, values.firstRegistration, false);
+    else {
+      // Drive and displacement stay; the CO₂ value belongs to the year.
+      setPick({ ...pick, engineKey: '' });
+      const kept = { ...applied.fields, co2GPerKm: '' };
+      setValues((current) => mergeEngineFields(current, applied.fields, kept, false));
+      setApplied({ fields: kept, firstRegistration: values.firstRegistration });
+      setSuggestion(null);
+    }
   }
 
   // A check names the model: it is preselected once the index is there, and the engine once

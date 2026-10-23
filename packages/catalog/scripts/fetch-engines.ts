@@ -99,9 +99,10 @@ async function download(): Promise<{ retrieved: string; rows: Row[] }> {
   return { retrieved, rows };
 }
 
-const cached = existsSync(cache)
-  ? (JSON.parse(readFileSync(cache, 'utf8')) as { retrieved: string; rows: Row[] })
-  : null;
+const cachedFile: unknown = existsSync(cache) ? JSON.parse(readFileSync(cache, 'utf8')) : null;
+// A cache in another format is fetched again.
+const cached =
+  z.object({ retrieved: z.string(), rows: z.array(RowSchema) }).safeParse(cachedFile).data ?? null;
 const download_ = cached ?? (await download());
 if (!cached) writeFileSync(cache, JSON.stringify(download_));
 const { retrieved } = download_;

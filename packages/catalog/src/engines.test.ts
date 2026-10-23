@@ -63,7 +63,9 @@ describe('EEA names', () => {
     expect(engineModelId('mercedes', 'C 220 D')).toBe('mercedes-c-klasse');
     expect(engineModelId('mercedes', 'GLC 300 DE 4MATIC')).toBe('mercedes-glc');
     expect(engineModelId('mercedes', 'CLA 250 E')).toBe('mercedes-cla');
-    expect(engineModelId('mini', 'MINI')).toBe('mini-cooper');
+    expect(engineModelId('mini', 'COOPER S')).toBe('mini-cooper');
+    // The make alone, as for 2010–2012, could be any Mini.
+    expect(engineModelId('mini', 'MINI')).toBeNull();
     expect(engineModelId('bmw', '218I ACTIVE TOURER')).toBe('bmw-2er-active-tourer');
     expect(engineModelId('bmw', '220D XDRIVE GRAN TOURER')).toBe('bmw-2er-active-tourer');
     expect(engineModelId('bmw', 'M240I XDRIVE COUPE')).toBe('bmw-2er');
