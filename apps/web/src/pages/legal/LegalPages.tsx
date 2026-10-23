@@ -89,6 +89,8 @@ export function PrivacyPage() {
   const ads = config?.ads ?? null;
   // A configuration cached before these fields existed (HTTP cache, offline copy) lacks them.
   const insurancePartner = config?.affiliates?.carInsurance ?? null;
+  const historyPartner = config?.affiliates?.vehicleHistory ?? null;
+  const affiliates = insurancePartner !== null || historyPartner !== null;
   const sponsorAds = config?.sponsors?.configured ?? false;
 
   return (
@@ -106,7 +108,7 @@ export function PrivacyPage() {
         {ads
           ? 'Werbung von Google zeigen wir nur, wenn du einwilligst (siehe „Werbung“); wir selbst bilden keine Profile und verkaufen keine Daten.'
           : 'Es gibt keine Werbe-Tracker, keine Profilbildung und keinen Verkauf von Daten.'}
-        {insurancePartner &&
+        {affiliates &&
           ' Was nach dem Klick auf einen Affiliate-Link geschieht, steht unter „Affiliate-Links“.'}{' '}
         Du musst keine Angaben zu deiner Person machen, um Inserate zu prüfen.
       </p>
@@ -464,21 +466,35 @@ export function PrivacyPage() {
         </>
       )}
 
-      {insurancePartner && (
+      {affiliates && (
         <>
           <h2>Affiliate-Links</h2>
+          <p>Für Besucher ohne KaufCheck Pro zeigen wir, gekennzeichnet als Werbung:</p>
+          <ul>
+            {insurancePartner && (
+              <li>
+                in einigen Ratgebern einen Link zum Vergleich von Kfz-Versicherungen bei{' '}
+                {insurancePartner.name}
+              </li>
+            )}
+            {historyPartner && (
+              <li>
+                in der Inseratsprüfung und im Ratgeber „Gebrauchtwagen-Checkliste“ einen Link zu
+                kostenpflichtigen Berichten über die Fahrzeughistorie bei {historyPartner.name}
+              </li>
+            )}
+          </ul>
           <p>
-            In einigen Ratgebern steht für Besucher ohne KaufCheck Pro ein Link zum Vergleich von
-            Kfz-Versicherungen bei {insurancePartner.name}, gekennzeichnet als Werbung. Es ist ein
-            einfacher Link mit unserer Partnerkennung: Beim Aufruf unserer Seiten lädt dein Browser
-            nichts vom Partner, und wir geben keine Daten über dich weiter. Erst wenn du den Link
-            anklickst, öffnet sich die Seite des Partners. Wie bei jedem Seitenaufruf erhält er
-            dabei technisch deine IP-Adresse und erfährt, dass du von KaufCheck kommst; mit Cookies
-            oder ähnlichen Techniken kann er erfassen, ob über den Link ein Vertrag zustande kommt.
-            Für alles, was auf den Seiten des Partners geschieht, ist der Partner selbst
-            verantwortlich, nicht wir; es gelten die Datenschutzhinweise, die dort genannt sind.
+            Es sind einfache Links mit unserer Partnerkennung: Beim Aufruf unserer Seiten lädt dein
+            Browser nichts vom Partner, und wir geben keine Daten über dich oder das Auto weiter.
+            Erst wenn du einen solchen Link anklickst, öffnet sich die Seite des Partners. Wie bei
+            jedem Seitenaufruf erhält der Partner dabei technisch deine IP-Adresse und erfährt, dass
+            du von KaufCheck kommst; mit Cookies oder ähnlichen Techniken kann er erfassen, ob über
+            den Link ein Vertrag oder Kauf zustande kommt. Für alles, was auf den Seiten des
+            Partners geschieht, ist der Partner selbst verantwortlich, nicht wir; es gelten die
+            Datenschutzhinweise, die dort genannt sind.
             {features?.analytics !== false &&
-              ' Klicks auf den Link zählen wir ohne Angaben zur Person in der Nutzungsstatistik.'}
+              ' Klicks auf diese Links zählen wir ohne Angaben zur Person in der Nutzungsstatistik.'}
           </p>
         </>
       )}

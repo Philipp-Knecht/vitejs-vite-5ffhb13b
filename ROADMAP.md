@@ -35,6 +35,7 @@ PRs, **L** = mehrere Wochen.
 | 2.9 | Betrugshinweise (Vorkasse, Treuhand, Spedition, Ausland, Messenger, ungesehen)            | #40       |
 | 1.5 | Finanzierungsbeispiel in der Prüfung mit dem Bundesbank-Durchschnittszins                 | #42       |
 | 1.1 | Steuer- und Kostenrechner: Werte aus Modell und Motor (EU-Daten, 319 Modelle)             | #43       |
+| neu | Affiliate-Link zu Berichten über die Fahrzeughistorie (aus, bis der Partner zustimmt)     | #44       |
 | neu | Auto aus den Niederlanden: Kennzeichen bei der RDW prüfen (Tacho, Rückrufe, APK)          | dieser PR |
 
 ## Arbeitsweise je Feature

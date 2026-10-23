@@ -64,6 +64,48 @@ describe('loadConfig', () => {
       expect(() => loadConfig({ ...BASE, SPONSOR_ADS: value }), value).toThrow(ConfigError);
   });
 
+  it('takes the vehicle history link the same way', () => {
+    expect(loadConfig(BASE).affiliateVehicleHistory).toBeNull();
+    const config = loadConfig({
+      ...BASE,
+      AFFILIATE_VEHICLE_HISTORY_URL: 'https://partner.example/history?a=1',
+      AFFILIATE_VEHICLE_HISTORY_NAME: 'carVertical',
+    });
+    expect(config.affiliateVehicleHistory).toEqual({
+      url: 'https://partner.example/history?a=1',
+      name: 'carVertical',
+    });
+    expect(describeConfig(config).affiliateVehicleHistory).toBe(true);
+    for (const env of [
+      { AFFILIATE_VEHICLE_HISTORY_URL: 'https://partner.example/' },
+      { AFFILIATE_VEHICLE_HISTORY_NAME: 'carVertical' },
+    ])
+      expect(() => loadConfig({ ...BASE, ...env })).toThrow(
+        'AFFILIATE_VEHICLE_HISTORY_URL and AFFILIATE_VEHICLE_HISTORY_NAME must be set together',
+      );
+    expect(() =>
+      loadConfig({
+        ...BASE,
+        AFFILIATE_VEHICLE_HISTORY_URL: 'http://partner.example/',
+        AFFILIATE_VEHICLE_HISTORY_NAME: 'X',
+      }),
+    ).toThrow(/AFFILIATE_VEHICLE_HISTORY_URL.*must be an https:\/\/ link without user name/);
+    for (const name of ['x'.repeat(101), 'Bericht\u202E'])
+      expect(() =>
+        loadConfig({
+          ...BASE,
+          AFFILIATE_VEHICLE_HISTORY_URL: 'https://partner.example/',
+          AFFILIATE_VEHICLE_HISTORY_NAME: name,
+        }),
+      ).toThrow(
+        /AFFILIATE_VEHICLE_HISTORY_NAME.*at most 100 characters without control characters/,
+      );
+    // The insurance link keeps its messages.
+    expect(() =>
+      loadConfig({ ...BASE, AFFILIATE_CAR_INSURANCE_URL: 'https://partner.example/' }),
+    ).toThrow('AFFILIATE_CAR_INSURANCE_URL and AFFILIATE_CAR_INSURANCE_NAME must be set together');
+  });
+
   it('takes an affiliate link only as a plain https link with a name', () => {
     expect(loadConfig(BASE).affiliateCarInsurance).toBeNull();
     const config = loadConfig({

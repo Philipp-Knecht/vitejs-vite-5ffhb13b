@@ -3,6 +3,7 @@ import { useParams } from 'react-router';
 import { ApiRequestError } from '../../api/client';
 import { useAnalysis, useConfig } from '../../api/queries';
 import { AdSlot } from '../../components/AdSlot';
+import { VehicleHistoryLink } from '../../components/VehicleHistoryLink';
 import { EvidenceLegend } from '../../components/EvidenceBadge';
 import { Alert } from '../../components/ui/Alert';
 import { Button, ButtonLink } from '../../components/ui/Button';
@@ -109,6 +110,8 @@ function ResultView({ dto }: { dto: AnalysisDto }) {
           />
           <RecallSection listing={listing} />
           <ChecklistSection analysisId={dto.id} sections={analysis.inspectionChecklist} />
+          {/* Between sections, apart from the recall steps and warnings. */}
+          <VehicleHistoryLink placement="result" />
           <NegotiationSection
             analysisId={dto.id}
             observations={analysis.observations}
