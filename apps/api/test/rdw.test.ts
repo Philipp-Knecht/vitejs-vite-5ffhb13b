@@ -29,6 +29,11 @@ const ROWS: Record<string, Record<string, string>[]> = {
   ],
   '8ys7-d773': [
     { kenteken: 'AB123C', brandstof_omschrijving: 'Diesel', nettomaximumvermogen: '81.00' },
+    {
+      kenteken: 'AB123C',
+      brandstof_omschrijving: 'Elektriciteit',
+      netto_max_vermogen_elektrisch: '40.00',
+    },
   ],
   't49b-isb7': [
     { kenteken: 'AB123C', referentiecode_rdw: 'RA2019-001', code_status: 'O' },
@@ -76,7 +81,8 @@ describe('RDW lookup', () => {
   const rdwFetch: RdwFetch = (dataset, query) => {
     calls.push({ dataset, query });
     if (failing) return Promise.reject(new Error('timeout'));
-    if (query.kenteken && query.kenteken !== 'AB123C') return Promise.resolve([]);
+    const plate = query.kenteken ?? /kenteken='(\w+)'/.exec(query.$where ?? '')?.[1];
+    if (plate && plate !== 'AB123C') return Promise.resolve([]);
     return Promise.resolve(ROWS[dataset] ?? []);
   };
 
@@ -105,21 +111,35 @@ describe('RDW lookup', () => {
         { reference: 'RA2019-001', open: true },
         { reference: 'RA2017-123', open: false },
       ],
-      fuels: [{ fuel: 'Diesel', kw: 81 }],
+      fuels: [
+        { fuel: 'Diesel', kw: 81 },
+        { fuel: 'Elektriciteit', kw: 40 },
+      ],
     });
     // The newest inspection first, the newest description of a defect, the code where there is none.
     expect(vehicle?.inspections).toEqual([
-      { date: '2025-03-05', defects: [{ code: '205', count: 1, description: 'Band profiel' }] },
+      {
+        date: '2025-03-05',
+        defects: [{ code: '205', count: 1, description: 'Band profiel', advisory: false }],
+      },
       {
         date: '2023-03-01',
         defects: [
-          { code: '205', count: 2, description: 'Band profiel' },
-          { code: 'AC1', count: 1, description: null },
+          { code: '205', count: 2, description: 'Band profiel', advisory: false },
+          { code: 'AC1', count: 1, description: null, advisory: true },
         ],
       },
     ]);
     const defects = calls.find((call) => call.dataset === 'hx2c-gt7k');
     expect(defects?.query.$where).toBe("gebrek_identificatie in ('205','AC1')");
+    // Only the APK, not gas systems or tachographs.
+    const inspections = calls.find((call) => call.dataset === 'a34c-vvps');
+    expect(inspections?.query.$where).toBe(
+      "kenteken='AB123C' AND soort_erkenning_keuringsinstantie in ('AL','AZ')",
+    );
+    expect(calls.find((call) => call.dataset === '8ys7-d773')?.query.$order).toBe(
+      'brandstof_volgnummer',
+    );
   });
 
   it('answers „no vehicle“ for an unknown plate and asks the RDW once per hour', async () => {
@@ -144,5 +164,51 @@ describe('RDW lookup', () => {
     failing = false;
     expect(response.statusCode).toBe(503);
     expect(response.json<{ error: { message: string } }>().error.message).toContain('RDW');
+  });
+
+  it('asks the RDW once for the same plate at the same time', async () => {
+    const client = new TestClient(built.app);
+    calls.length = 0;
+    await Promise.all([
+      client.post('/api/rdw', { plate: 'YY11YY' }),
+      client.post('/api/rdw', { plate: 'YY-11-YY' }),
+    ]);
+    expect(calls.filter((call) => call.dataset === 'm9d7-ebf2')).toHaveLength(1);
+  });
+});
+
+describe('RDW lookup switched off', () => {
+  let built: BuiltApp;
+  beforeAll(async () => {
+    built = await createTestApp({ RDW_LOOKUP_MODE: 'off' });
+  });
+  afterAll(() => built.app.close());
+
+  it('says so', async () => {
+    const response = await new TestClient(built.app).post('/api/rdw', { plate: 'QQ999Q' });
+    expect(response.statusCode).toBe(503);
+    expect(response.json<{ error: { message: string } }>().error.message).toBe(
+      'Die Abfrage bei der RDW ist zurzeit abgeschaltet.',
+    );
+  });
+});
+
+describe('RDW lookup with fixtures', () => {
+  let built: BuiltApp;
+  beforeAll(async () => {
+    built = await createTestApp({ RDW_LOOKUP_MODE: 'fixtures' });
+  });
+  afterAll(() => built.app.close());
+
+  it('answers from the synthetic files', async () => {
+    const client = new TestClient(built.app);
+    const known = RdwLookupResponseSchema.parse(
+      (await client.post('/api/rdw', { plate: 'QQ999Q' })).json(),
+    );
+    expect(known.vehicle?.odometer.verdict).toBe('logical');
+    const unknown = RdwLookupResponseSchema.parse(
+      (await client.post('/api/rdw', { plate: 'QQ777Q' })).json(),
+    );
+    expect(unknown.vehicle).toBeNull();
   });
 });

@@ -17,10 +17,17 @@ describe('Dutch registration numbers', () => {
     expect(formatDutchPlate('AB123C')).toBe('AB-123-C');
     expect(formatDutchPlate('12ABC3')).toBe('12-ABC-3');
     expect(formatDutchPlate('XX99XX')).toBe('XX-99-XX');
+    // The older sidecodes: two runs, the one of four split in the middle.
+    expect(formatDutchPlate('NBPZ15')).toBe('NB-PZ-15');
+    expect(formatDutchPlate('XX9999')).toBe('XX-99-99');
+    expect(formatDutchPlate('99XXXX')).toBe('99-XX-XX');
+    expect(formatDutchPlate('9999XX')).toBe('99-99-XX');
   });
 
   it('explains every code of the RDW', () => {
     for (const code of ['00', '01', '02', '03', '04', '05', '06', '07', 'NG'])
       expect(ODOMETER_EXPLANATIONS[code]).toBeTruthy();
+    // The RDW's text for NG is no more than that.
+    expect(ODOMETER_EXPLANATIONS.NG).toBe('Nicht registriert.');
   });
 });

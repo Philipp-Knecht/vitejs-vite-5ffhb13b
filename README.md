@@ -474,17 +474,22 @@ workshop). `SPONSOR_ADS` is a JSON array, at most 20 entries:
 ## Dutch registration lookup (RDW)
 
 `/auto-aus-den-niederlanden` asks RDW Open Data (opendata.rdw.nl, public domain) for a Dutch
-registration number: registration dates, export and taxi flags, the RDW's odometer verdict
-(translated), recalls and the defects found at the APK.
+registration number: registration dates, export and taxi flags, the RDW's odometer verdict with its
+explanation (translated close to the Dutch original), recalls and the defects and advice points of
+the APK (the open data has them since 2 June 2022; gas systems and tachographs are left out).
 
 - The browser sends the plate to `POST /api/rdw` (in the body, so that no URL log holds it); the
   server asks five datasets of the RDW, with a timeout of 8 seconds, and keeps an answer in memory
-  for an hour (at most 500). Nothing is stored in the database. 20 lookups per minute per client.
-- `RDW_LOOKUP_MODE`: `live` (default), `off` (the page says the lookup is unavailable) or
+  for an hour (at most 500). The same plate asked at once goes out once. Nothing is stored in the
+  database. 20 lookups per minute per client and 60 per minute for the whole server.
+- `RDW_LOOKUP_MODE`: `live` (default), `off` (the lookup answers that it is switched off) or
   `fixtures` (synthetic answers from `apps/api/fixtures/rdw`, the default in tests, refused in
   production).
-- No key is needed. The RDW's Socrata API throttles requests without an app token; should that
-  happen, KaufCheck answers „not reachable“.
+- `RDW_APP_TOKEN` (optional): a free Socrata app token against throttling, sent as `X-App-Token`.
+  Without it the RDW's API throttles shared IP addresses sooner; KaufCheck then answers „not
+  reachable“.
+- An exported car stays in the open data only for a while; the page and the „not found“ message
+  say so.
 
 ## Analytics configuration
 

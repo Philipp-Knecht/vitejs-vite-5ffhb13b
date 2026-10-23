@@ -1747,3 +1747,74 @@
 .monthly-costs__loan-result {
   margin-top: 8px;
 }
+
+/* ---------- Auto aus den Niederlanden (RDW) ---------- */
+.rdw-check {
+  display: grid;
+  gap: 16px;
+  margin: 8px 0 24px;
+}
+
+.rdw-result {
+  padding: 20px;
+  border: 1px solid var(--c-border);
+  border-radius: var(--radius-lg);
+  background: var(--c-surface);
+}
+
+.prose .rdw-result h3 {
+  margin-top: 0;
+}
+
+.rdw-result__plate {
+  display: inline-block;
+  padding: 0 8px;
+  border-radius: var(--radius-sm);
+  background: #f7c600;
+  color: #111;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+}
+
+.rdw-result__facts {
+  display: grid;
+  gap: 8px;
+  margin: 0;
+}
+
+.rdw-result__facts div {
+  display: grid;
+  gap: 2px;
+}
+
+.rdw-result__facts dt {
+  color: var(--c-text-2);
+  font-size: 0.925rem;
+}
+
+.rdw-result__facts dd {
+  margin: 0;
+  font-weight: 600;
+}
+
+.rdw-result__verdict {
+  padding: 8px 12px;
+  border-left: 4px solid var(--c-border);
+  border-radius: var(--radius-sm);
+}
+
+.rdw-result__verdict--logical {
+  border-left-color: var(--c-success);
+}
+
+.rdw-result__verdict--illogical {
+  border-left-color: var(--c-danger);
+  font-weight: 600;
+}
+
+@media (min-width: 700px) {
+  .rdw-result__facts {
+    grid-template-columns: 1fr 1fr;
+  }
+}

@@ -144,6 +144,8 @@ const EnvSchema = z
     LISTING_FETCH_MODE: z.enum(['off', 'live', 'fixtures']).optional(),
     /** The lookup of Dutch registration numbers at RDW Open Data. */
     RDW_LOOKUP_MODE: z.enum(['off', 'live', 'fixtures']).optional(),
+    /** Socrata app token for RDW Open Data, against throttling (optional, free). */
+    RDW_APP_TOKEN: optionalString,
     LISTING_FIXTURES_DIR: optionalString,
     FETCH_USER_AGENT: optionalString,
     FETCH_TIMEOUT_MS: z.coerce.number().int().min(1000).max(30_000).default(8000),
@@ -328,7 +330,7 @@ export interface AppConfig {
   databaseUrl: string;
   cookieSecret: string;
   secureCookies: boolean;
-  rdw: { mode: 'off' | 'live' | 'fixtures'; fixturesDir: string };
+  rdw: { mode: 'off' | 'live' | 'fixtures'; fixturesDir: string; appToken: string | null };
   fetch: {
     mode: 'off' | 'live' | 'fixtures';
     fixturesDir: string;
@@ -470,6 +472,7 @@ export function loadConfig(source: NodeJS.ProcessEnv = process.env): AppConfig {
     rdw: {
       mode: env.RDW_LOOKUP_MODE ?? (env.NODE_ENV === 'test' ? 'fixtures' : 'live'),
       fixturesDir: path.join(apiRoot, 'fixtures', 'rdw'),
+      appToken: env.RDW_APP_TOKEN ?? null,
     },
     fetch: {
       mode: env.LISTING_FETCH_MODE ?? defaultFetchMode,

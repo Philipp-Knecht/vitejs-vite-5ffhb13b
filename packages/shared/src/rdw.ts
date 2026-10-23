@@ -4,8 +4,8 @@ import { z } from 'zod';
  * Vehicles registered in the Netherlands, from the open data of the Dutch
  * vehicle authority RDW (public domain): registration, the RDW's verdict on
  * the odometer readings, open recalls and the defects found at the periodic
- * inspection (APK). Asked by the Dutch registration number (kenteken), which
- * stays in the data after a car was exported.
+ * inspection (APK). Asked by the Dutch registration number (kenteken). An
+ * exported car stays in the data only for a while.
  */
 
 export const RDW_SOURCE = {
@@ -21,9 +21,17 @@ export function normalizeDutchPlate(raw: string): string | null {
   return /^[A-Z0-9]{6}$/.test(plate) && /\d/.test(plate) && /[A-Z]/.test(plate) ? plate : null;
 }
 
-/** „AB123C“ → „AB-123-C“: a hyphen where letters and digits meet, as on the plate. */
+/**
+ * „AB123C“ → „AB-123-C“, „NBPZ15“ → „NB-PZ-15“: hyphens where letters and
+ * digits meet, and a run of four split in the middle (the older sidecodes).
+ */
 export function formatDutchPlate(plate: string): string {
-  return plate.replace(/(?<=[A-Z])(?=\d)|(?<=\d)(?=[A-Z])/g, '-');
+  const runs = plate.match(/[A-Z]+|\d+/g) ?? [plate];
+  return runs
+    .flatMap((run) =>
+      runs.length === 2 && run.length === 4 ? [run.slice(0, 2), run.slice(2)] : [run],
+    )
+    .join('-');
 }
 
 export const ODOMETER_VERDICTS = ['logical', 'illogical', 'none', 'unregistered'] as const;
@@ -31,26 +39,53 @@ export type OdometerVerdict = (typeof ODOMETER_VERDICTS)[number];
 
 /** The RDW's verdicts in German („Logisch“, „Onlogisch“, „Geen oordeel“, „Niet geregistreerd“). */
 export const ODOMETER_VERDICT_LABELS: Record<OdometerVerdict, string> = {
-  logical: 'Logisch (plausibel)',
+  logical: 'Logisch',
   illogical: 'Unlogisch',
-  none: 'Keine Bewertung',
+  none: 'Kein Urteil',
   unregistered: 'Nicht registriert',
 };
 
 /**
  * KaufCheck's translation of the RDW's explanations of its verdict (dataset
- * „Tellerstandoordeel Trend Toelichting“, codes 00–07 and NG).
+ * „Tellerstandoordeel Trend Toelichting“, codes 00–07 and NG), close to the
+ * Dutch original; „wir“ of the RDW is written as „die RDW“.
  */
 export const ODOMETER_EXPLANATIONS: Record<string, string> = {
-  '00': 'Jeder gemeldete Kilometerstand ist höher als der davor. Die RDW bewertet den Verlauf deshalb als logisch.',
-  '01': 'Der Tacho zählt nicht bis 999.999 oder ist nach dem Höchststand wieder auf null gesprungen. Der angezeigte Stand entspricht deshalb womöglich nicht der echten Laufleistung; die RDW bewertet den Verlauf nicht.',
-  '02': 'Der Tacho wurde ersetzt oder repariert. Wie weit das Auto genau gefahren ist, ist unklar; die RDW bewertet den Verlauf nicht.',
-  '03': 'Jeder gemeldete Kilometerstand ist höher als der davor. Die RDW bewertet den Verlauf deshalb als logisch.',
-  '04': 'Ein gemeldeter Kilometerstand ist niedriger als der davor. Der Tacho kann zurückgedreht oder ein Tippfehler gemacht worden sein. Als „unlogisch“ bewertet die RDW nur Messungen ab dem 1. Januar 2014.',
-  '05': 'Die RDW bewertet den Verlauf nicht: Das Auto war außerhalb der Niederlande zugelassen, oder es hat nach einer Änderung ein anderes Kennzeichen bekommen.',
-  '06': 'Es sind weniger als zwei Kilometerstände gemeldet. Bewerten kann die RDW nur eine Reihe von Ständen.',
-  '07': 'Die Stiftung NAP, die früher in den Niederlanden Kilometerstände erfasste, hat den Verlauf als „unlogisch“ bewertet: Der Tacho kann zurückgedreht oder ein Tippfehler gemacht worden sein. Die RDW selbst bewertet nur Messungen ab dem 1. Januar 2014 und deshalb nicht die ganze Reihe.',
-  NG: 'Für dieses Auto sind keine Kilometerstände registriert.',
+  '00': 'Der registrierte Kilometerstand ist jedes Mal höher als der davor registrierte. Die RDW urteilt dann, dass der Kilometerstand logisch erklärbar ist.',
+  '01': 'Dieses Fahrzeug hat einen Zähler, der nicht bis 999.999 zählt, oder der Zähler hat den Höchststand erreicht und ist danach wieder auf null gesprungen. Dadurch stimmt der Stand auf dem Zähler möglicherweise nicht mit den Kilometern oder Meilen überein, die das Fahrzeug wirklich gefahren ist. Deshalb gibt die RDW kein Urteil über die Reihe der Kilometerstände dieses Fahrzeugs ab.',
+  '02': 'In diesem Fahrzeug wurde der Zähler ersetzt oder repariert. In diesem Fall ist nicht klar, wie viel das Fahrzeug genau gefahren ist. Deshalb gibt die RDW kein Urteil über die Reihe der Kilometerstände dieses Fahrzeugs ab.',
+  '03': 'Der registrierte Kilometerstand ist jedes Mal höher als der davor registrierte. Die RDW urteilt dann, dass der Kilometerstand logisch erklärbar ist.',
+  '04': 'In der Reihe der Kilometerstände ist ein Stand registriert, der niedriger ist als der Stand davor. Es kann sein, dass der Zähler zurückgedreht wurde oder dass ein Tippfehler gemacht wurde. Die RDW stützt das Urteil „unlogisch“ nur auf Messungen nach dem 1. Januar 2014. Seit diesem Datum ist sie für die Registrierung der Kilometerstände verantwortlich.',
+  '05': 'Die RDW gibt kein Urteil über die Reihe der Kilometerstände dieses Fahrzeugs ab. Das kann zwei Ursachen haben: Das Fahrzeug war außerhalb der Niederlande registriert, oder am Fahrzeug wurde etwas geändert, wodurch es ein anderes Kennzeichen bekommen hat.',
+  '06': 'Für dieses Fahrzeug sind weniger als zwei Stände registriert. Die RDW kann nur über eine Reihe von Kilometerständen urteilen. Deshalb gibt sie kein Urteil über den Kilometerstand ab.',
+  '07': 'Der Kilometerstand dieses Fahrzeugs hat von der Stiftung NAP, die früher in den Niederlanden Kilometerstände registrierte, das Urteil „unlogisch“ bekommen. Es kann sein, dass der Zähler zurückgedreht wurde oder dass ein Tippfehler gemacht wurde. Die RDW darf das Urteil „unlogisch“ nur bei Messungen nach dem 1. Januar 2014 abgeben. Deshalb gibt sie kein Urteil über die Zuverlässigkeit der gesamten Reihe der Kilometerstände dieses Fahrzeugs ab.',
+  NG: 'Nicht registriert.',
+};
+
+/** The first day of the defects found at the APK in the open data. */
+export const RDW_INSPECTIONS_SINCE = '2022-06-02';
+
+/** The RDW's fuel names in German; others as given. */
+export const RDW_FUEL_LABELS: Record<string, string> = {
+  Benzine: 'Benzin',
+  Diesel: 'Diesel',
+  Elektriciteit: 'Strom',
+  LPG: 'Autogas (LPG)',
+  CNG: 'Erdgas (CNG)',
+  LNG: 'Flüssigerdgas (LNG)',
+  Waterstof: 'Wasserstoff',
+  Alcohol: 'Ethanol',
+};
+
+/** The RDW's vehicle types in German; others as given. */
+export const RDW_KIND_LABELS: Record<string, string> = {
+  Personenauto: 'Pkw',
+  Bedrijfsauto: 'Nutzfahrzeug',
+  Motorfiets: 'Motorrad',
+  Bromfiets: 'Moped',
+  Aanhangwagen: 'Anhänger',
+  Oplegger: 'Auflieger',
+  Bus: 'Bus',
 };
 
 const Day = z.string().regex(/^\d{4}-\d{2}-\d{2}$/);
@@ -88,7 +123,7 @@ export const RdwVehicleSchema = z.object({
       open: z.boolean(),
     }),
   ),
-  /** Defects found at inspections, the newest first. */
+  /** Defects and advice points found at APK inspections since RDW_INSPECTIONS_SINCE, the newest first. */
   inspections: z.array(
     z.object({
       date: Day,
@@ -98,6 +133,8 @@ export const RdwVehicleSchema = z.object({
           count: z.number().int().positive(),
           /** The RDW's Dutch description. */
           description: z.string().nullable(),
+          /** An advice point (codes AC…), no failure. */
+          advisory: z.boolean(),
         }),
       ),
     }),

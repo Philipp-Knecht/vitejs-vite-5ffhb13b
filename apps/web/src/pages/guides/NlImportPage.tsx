@@ -6,13 +6,15 @@ import { GuideLayout, type TocEntry } from './GuideLayout';
 const TOC: TocEntry[] = [
   { id: 'abfrage', title: 'Kennzeichen abfragen' },
   { id: 'daten', title: 'Was die RDW-Daten zeigen' },
-  { id: 'tacho', title: 'Die Bewertung des Kilometerstands' },
+  { id: 'tacho', title: 'Das Urteil über den Kilometerstand' },
   { id: 'grenzen', title: 'Was die Daten nicht zeigen' },
   { id: 'kennzeichen', title: 'Woher du das Kennzeichen bekommst' },
 ];
 
 const external = { target: '_blank', rel: 'noopener noreferrer' } as const;
 const NEW_TAB = <span className="visually-hidden"> (öffnet in neuem Tab)</span>;
+/** The RDW on odometer readings: who reports them, and the verdicts. */
+const RDW_ODOMETER_URL = 'https://www.rdw.nl/over-rdw/actueel/dossiers/tellerstanden';
 
 export function NlImportPage() {
   return (
@@ -25,9 +27,9 @@ export function NlImportPage() {
       intro={
         <p>
           War das Auto in den Niederlanden zugelassen, verrät sein niederländisches Kennzeichen mehr
-          als die meisten Inserate: Die Zulassungsbehörde RDW veröffentlicht kostenlos, wie sie den
-          Verlauf der Kilometerstände bewertet, welche Rückrufe offen sind und welche Mängel bei der
-          Hauptuntersuchung (APK) gefunden wurden.
+          als die meisten Inserate: Die Zulassungsbehörde RDW veröffentlicht kostenlos ihr Urteil
+          über den Verlauf der Kilometerstände, Rückrufe und die Befunde der Hauptuntersuchung
+          (APK).
         </p>
       }
     >
@@ -36,36 +38,40 @@ export function NlImportPage() {
 
       <h2 id="daten">Was die RDW-Daten zeigen</h2>
       <p>
-        Die RDW (Rijksdienst voor het Wegverkeer) führt das niederländische Fahrzeugregister und
-        stellt Teile davon als{' '}
+        Die RDW (Dienst Wegverkeer) führt das niederländische Fahrzeugregister und stellt Teile
+        davon als{' '}
         <a href={RDW_SOURCE.url} {...external}>
           offene Daten{NEW_TAB}
         </a>{' '}
         bereit, gemeinfrei und ohne Anmeldung. KaufCheck zeigt daraus:
       </p>
       <ul>
-        <li>
-          die Erstzulassung und die erste Zulassung in den Niederlanden – liegt die zweite deutlich
-          später, kam das Auto schon als Gebrauchtwagen in die Niederlande;
-        </li>
-        <li>ob das Auto als ausgeführt gemeldet ist und ob es als Taxi zugelassen war;</li>
-        <li>die Bewertung der Kilometerstände durch die RDW;</li>
+        <li>die Erstzulassung und die erste Zulassung in den Niederlanden;</li>
+        <li>ob das Auto als ausgeführt gemeldet ist und ob die RDW es als Taxi kennzeichnet;</li>
+        <li>das Urteil der RDW über die Kilometerstände, mit ihrer Erläuterung;</li>
         <li>Rückrufe, die für dieses Kennzeichen offen oder als erledigt gemeldet sind;</li>
-        <li>Mängel, die Prüfstellen bei der APK festgestellt haben, mit Datum.</li>
+        <li>Mängel und Hinweise der APK seit Juni 2022, mit Datum.</li>
       </ul>
       <p>
-        Die Daten bleiben nach der Ausfuhr abrufbar, aber sie enden dort: Was danach mit dem Auto
-        geschah, steht nicht darin.
+        Ein ausgeführtes Auto bleibt nur eine Zeit lang in den offenen Daten; ist es schon länger
+        weg, findet die Abfrage es nicht mehr. Was nach der Ausfuhr mit dem Auto geschah, steht
+        ohnehin nicht darin.
       </p>
 
-      <h2 id="tacho">Die Bewertung des Kilometerstands</h2>
+      <h2 id="tacho">Das Urteil über den Kilometerstand</h2>
       <p>
-        In den Niederlanden melden Werkstätten, Prüfstellen und Händler den Kilometerstand bei jedem
-        Termin an die RDW. Ist jeder Stand höher als der davor, bewertet die RDW den Verlauf als
-        „logisch“. Ist ein Stand niedriger als ein früherer, lautet die Bewertung „unlogisch“: Der
-        Tacho kann zurückgedreht worden sein, oder jemand hat sich vertippt. Keine Bewertung gibt es
-        zum Beispiel, wenn der Tacho getauscht wurde oder das Auto vorher im Ausland zugelassen war.
-        KaufCheck zeigt die Erläuterung der RDW zu jeder Bewertung, ins Deutsche übersetzt.
+        In den Niederlanden müssen von der RDW anerkannte Betriebe den Kilometerstand an die RDW
+        melden, etwa bei APK, Reparatur, Wartung und Reifenwechsel, beim Halterwechsel und bei der
+        Ausfuhr (
+        <a href={RDW_ODOMETER_URL} {...external}>
+          RDW: Tellerstanden{NEW_TAB}
+        </a>
+        ). Ist jeder Stand höher als der davor, urteilt die RDW „logisch“. Ist ein Stand niedriger
+        als der davor, kann der Tacho zurückgedreht oder ein Tippfehler gemacht worden sein; das
+        Urteil „unlogisch“ darf die RDW nur für Messungen nach dem 1. Januar 2014 abgeben. Kein
+        Urteil gibt es zum Beispiel, wenn der Tacho ersetzt wurde oder das Auto vorher außerhalb der
+        Niederlande registriert war. KaufCheck zeigt die Erläuterung der RDW zu jedem Urteil, ins
+        Deutsche übersetzt.
       </p>
       <p>
         „Unlogisch“ ist ein Grund, genau nachzufragen und Belege zu verlangen, aber noch kein Beweis
@@ -79,10 +85,11 @@ export function NlImportPage() {
           Unfälle und Schäden: Sie stehen nicht in den offenen Daten der RDW. Lass das Auto vor dem
           Kauf von einer Werkstatt oder Prüforganisation ansehen.
         </li>
-        <li>Die Kilometerstände selbst – nur die Bewertung des Verlaufs.</li>
+        <li>Die Kilometerstände selbst – nur das Urteil über den Verlauf.</li>
         <li>Halter und ihre Zahl: Personenbezogene Daten veröffentlicht die RDW nicht.</li>
         <li>
-          APK-Termine ohne Mangel: Die Daten nennen nur Prüfungen, bei denen etwas gefunden wurde.
+          APK-Termine ohne Befund und Prüfungen vor Juni 2022: Die Daten nennen nur Prüfungen, bei
+          denen seitdem ein Mangel oder Hinweis notiert wurde.
         </li>
       </ul>
       <p>
@@ -95,11 +102,10 @@ export function NlImportPage() {
       <h2 id="kennzeichen">Woher du das Kennzeichen bekommst</h2>
       <p>
         Das niederländische Kennzeichen steht auf dem niederländischen Fahrzeugschein
-        (kentekenbewijs, seit 2014 eine Karte) und auf den Kennzeichenschildern, solange das Auto
-        sie noch trägt – oft auch auf älteren Fotos im Inserat. Ist das Auto schon in Deutschland
-        zugelassen, frag den Verkäufer: Bei einem Import aus den Niederlanden kennt er das alte
-        Kennzeichen aus den Einfuhrunterlagen. Weigert er sich, ist das ein Hinweis, vorsichtig zu
-        sein.
+        (kentekenbewijs, seit 2014 meist eine Karte) und auf den Kennzeichenschildern, solange das
+        Auto sie noch trägt – manchmal auch auf älteren Fotos im Inserat. Ist das Auto schon in
+        Deutschland zugelassen, frag den Verkäufer, ob er das alte Kennzeichen kennt, etwa aus den
+        Unterlagen der Einfuhr.
       </p>
     </GuideLayout>
   );

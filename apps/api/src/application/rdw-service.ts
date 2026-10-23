@@ -7,6 +7,7 @@ import {
   type RdwVehicle,
 } from '@kaufcheck/shared';
 import { AppError } from '../lib/errors';
+import { RateLimiter } from '../lib/rate-limiter';
 
 /** Datasets of RDW Open Data (opendata.rdw.nl), all public domain. */
 const DATASETS = {
@@ -21,6 +22,10 @@ const BASE = 'https://opendata.rdw.nl/resource';
 const CACHE_SIZE = 500;
 const CACHE_MS = 60 * 60 * 1000;
 const TIMEOUT_MS = 8000;
+/** Lookups per minute for the whole server: each one asks four or five datasets. */
+const LOOKUPS_PER_MINUTE = 60;
+/** Inspection types of the APK (light and heavy vehicles); gas systems and tachographs are none. */
+const APK_TYPES = ['AL', 'AZ'];
 
 type Row = Record<string, string | undefined>;
 export type RdwFetch = (dataset: string, query: Record<string, string>) => Promise<Row[]>;
@@ -28,24 +33,28 @@ export type RdwFetch = (dataset: string, query: Record<string, string>) => Promi
 export interface RdwServiceOptions {
   mode: 'off' | 'live' | 'fixtures';
   fixturesDir: string;
+  /** Socrata app token, against throttling (optional). */
+  appToken?: string | null;
   /** For tests: the request to the RDW. */
   fetchRows?: RdwFetch;
   now?: () => Date;
 }
 
-const liveFetch: RdwFetch = async (dataset, query) => {
-  const url = new URL(`${BASE}/${dataset}.json`);
-  for (const [key, value] of Object.entries(query)) url.searchParams.set(key, value);
-  const response = await fetch(url, {
-    signal: AbortSignal.timeout(TIMEOUT_MS),
-    redirect: 'error',
-    headers: { accept: 'application/json' },
-  });
-  if (!response.ok) throw new Error(`RDW ${dataset}: HTTP ${response.status}`);
-  const body: unknown = await response.json();
-  if (!Array.isArray(body)) throw new Error(`RDW ${dataset}: no list`);
-  return body as Row[];
-};
+const liveFetch =
+  (appToken: string | null): RdwFetch =>
+  async (dataset, query) => {
+    const url = new URL(`${BASE}/${dataset}.json`);
+    for (const [key, value] of Object.entries(query)) url.searchParams.set(key, value);
+    const response = await fetch(url, {
+      signal: AbortSignal.timeout(TIMEOUT_MS),
+      redirect: 'error',
+      headers: { accept: 'application/json', ...(appToken ? { 'x-app-token': appToken } : {}) },
+    });
+    if (!response.ok) throw new Error(`RDW ${dataset}: HTTP ${response.status}`);
+    const body: unknown = await response.json();
+    if (!Array.isArray(body)) throw new Error(`RDW ${dataset}: no list`);
+    return body as Row[];
+  };
 
 /** „20110228“ → „2011-02-28“. */
 const day = (value: string | undefined) =>
@@ -70,25 +79,40 @@ const quoted = (value: string) => `'${value.replace(/[^A-Za-z0-9]/g, '')}'`;
 
 export class RdwService {
   private readonly cache = new Map<string, { at: number; response: RdwLookupResponse }>();
+  /** The same plate asked twice at once goes to the RDW once. */
+  private readonly pending = new Map<string, Promise<RdwLookupResponse>>();
   private readonly fetchRows: RdwFetch;
   private readonly now: () => Date;
+  private readonly limiter: RateLimiter;
 
   constructor(private readonly options: RdwServiceOptions) {
-    this.fetchRows = options.fetchRows ?? liveFetch;
+    this.fetchRows = options.fetchRows ?? liveFetch(options.appToken ?? null);
     this.now = options.now ?? (() => new Date());
-  }
-
-  get available(): boolean {
-    return this.options.mode !== 'off';
+    this.limiter = new RateLimiter(LOOKUPS_PER_MINUTE, 60_000, () => this.now().getTime());
   }
 
   /** The vehicle with a normalized Dutch registration number, or null when the RDW has none. */
   async lookup(plate: string): Promise<RdwLookupResponse> {
-    if (this.options.mode === 'off') throw new AppError('SERVICE_UNAVAILABLE');
-    const now = this.now();
+    if (this.options.mode === 'off')
+      throw new AppError('SERVICE_UNAVAILABLE', {
+        message: 'Die Abfrage bei der RDW ist zurzeit abgeschaltet.',
+      });
     const cached = this.cache.get(plate);
-    if (cached && now.getTime() - cached.at < CACHE_MS) return cached.response;
+    if (cached && this.now().getTime() - cached.at < CACHE_MS) return cached.response;
+    const running = this.pending.get(plate);
+    if (running) return running;
+    if (!this.limiter.tryTake())
+      throw new AppError('SERVICE_UNAVAILABLE', {
+        message:
+          'Gerade fragen sehr viele bei der RDW an. Bitte versuch es in einer Minute noch einmal.',
+      });
+    const request = this.ask(plate).finally(() => this.pending.delete(plate));
+    this.pending.set(plate, request);
+    return request;
+  }
 
+  private async ask(plate: string): Promise<RdwLookupResponse> {
+    const now = this.now();
     let vehicle: RdwVehicle | null;
     try {
       vehicle =
@@ -122,10 +146,10 @@ export class RdwService {
     const where = { kenteken: plate };
     const [vehicles, fuels, recalls, inspections] = await Promise.all([
       this.fetchRows(DATASETS.vehicles, { ...where, $limit: '1' }),
-      this.fetchRows(DATASETS.fuels, { ...where, $limit: '10' }),
+      this.fetchRows(DATASETS.fuels, { ...where, $order: 'brandstof_volgnummer', $limit: '10' }),
       this.fetchRows(DATASETS.recalls, { ...where, $limit: '100' }),
       this.fetchRows(DATASETS.inspections, {
-        ...where,
+        $where: `kenteken=${quoted(plate)} AND soort_erkenning_keuringsinstantie in (${APK_TYPES.map(quoted).join(',')})`,
         $order: 'meld_datum_door_keuringsinstantie DESC',
         $limit: '200',
       }),
@@ -160,6 +184,7 @@ export class RdwService {
         code,
         count: Math.max(1, number(item.aantal_gebreken_geconstateerd) ?? 1),
         description: descriptions.get(code) ?? null,
+        advisory: /^AC\d/.test(code),
       });
       byDate.set(date, list);
     }
@@ -191,7 +216,8 @@ export class RdwService {
         .map(([date, defects]) => ({ date, defects })),
       fuels: fuels.map((item) => ({
         fuel: item.brandstof_omschrijving ?? '',
-        kw: number(item.nettomaximumvermogen),
+        // The combustion engine's power; an electric drive has its own field.
+        kw: number(item.nettomaximumvermogen) ?? number(item.netto_max_vermogen_elektrisch),
       })),
     });
   }

@@ -3,6 +3,9 @@ import {
   normalizeDutchPlate,
   ODOMETER_EXPLANATIONS,
   ODOMETER_VERDICT_LABELS,
+  RDW_FUEL_LABELS,
+  RDW_INSPECTIONS_SINCE,
+  RDW_KIND_LABELS,
   RDW_SOURCE,
   type RdwLookupResponse,
   type RdwVehicle,
@@ -17,26 +20,22 @@ import { formatEuro } from '../../lib/format';
 
 const day = (iso: string | null) => (iso ? iso.split('-').reverse().join('.') : '–');
 const external = { target: '_blank', rel: 'noopener noreferrer' } as const;
-
-/** An import: first admitted elsewhere, registered in the Netherlands later. */
-function importedToNl(vehicle: RdwVehicle): boolean {
-  return (
-    !!vehicle.firstAdmission &&
-    !!vehicle.firstRegistrationNl &&
-    vehicle.firstRegistrationNl.slice(0, 7) > vehicle.firstAdmission.slice(0, 7)
-  );
-}
+const fuelName = (fuel: string) => RDW_FUEL_LABELS[fuel] ?? fuel;
 
 function Result({ vehicle, checkedAt }: { vehicle: RdwVehicle; checkedAt: string }) {
   const open = vehicle.recalls.filter((recall) => recall.open);
   const odometer = vehicle.odometer;
   const explanation = odometer.code ? ODOMETER_EXPLANATIONS[odometer.code] : undefined;
+  const kind = RDW_KIND_LABELS[vehicle.kind] ?? vehicle.kind;
   return (
     <div className="rdw-result">
       <h3>
         {vehicle.make} {vehicle.model}{' '}
         <span className="rdw-result__plate">{formatDutchPlate(vehicle.plate)}</span>
       </h3>
+      {vehicle.kind && vehicle.kind !== 'Personenauto' && (
+        <p className="rdw-result__kind">Fahrzeugart laut RDW: {kind}</p>
+      )}
       <dl className="rdw-result__facts">
         <div>
           <dt>Erstzulassung</dt>
@@ -44,25 +43,24 @@ function Result({ vehicle, checkedAt }: { vehicle: RdwVehicle; checkedAt: string
         </div>
         <div>
           <dt>Erste Zulassung in den Niederlanden</dt>
-          <dd>
-            {day(vehicle.firstRegistrationNl)}
-            {importedToNl(vehicle) && ' (in die Niederlande eingeführt)'}
-          </dd>
+          <dd>{day(vehicle.firstRegistrationNl)}</dd>
         </div>
-        <div>
-          <dt>Letzter Halterwechsel in den Niederlanden</dt>
-          <dd>{day(vehicle.lastKeeperChange)}</dd>
-        </div>
+        {vehicle.lastKeeperChange && (
+          <div>
+            <dt>Letzter Halterwechsel in den Niederlanden</dt>
+            <dd>{day(vehicle.lastKeeperChange)}</dd>
+          </div>
+        )}
         <div>
           <dt>Ausgeführt</dt>
-          <dd>{vehicle.exported ? 'Ja, das Auto ist aus den Niederlanden ausgeführt' : 'Nein'}</dd>
+          <dd>{vehicle.exported ? 'Ja, laut RDW aus den Niederlanden ausgeführt' : 'Nein'}</dd>
         </div>
         <div>
           <dt>Niederländische Hauptuntersuchung (APK) gültig bis</dt>
           <dd>{day(vehicle.apkUntil)}</dd>
         </div>
         <div>
-          <dt>Als Taxi genutzt</dt>
+          <dt>Taxi-Kennzeichnung der RDW</dt>
           <dd>{vehicle.taxi ? 'Ja' : 'Nein'}</dd>
         </div>
         {vehicle.listPriceEur !== null && vehicle.listPriceEur > 0 && (
@@ -76,7 +74,9 @@ function Result({ vehicle, checkedAt }: { vehicle: RdwVehicle; checkedAt: string
             <dt>Kraftstoff und Leistung</dt>
             <dd>
               {vehicle.fuels
-                .map((fuel) => (fuel.kw ? `${fuel.fuel}, ${fuel.kw} kW` : fuel.fuel))
+                .map((fuel) =>
+                  fuel.kw ? `${fuelName(fuel.fuel)}, ${fuel.kw} kW` : fuelName(fuel.fuel),
+                )
                 .join('; ')}
             </dd>
           </div>
@@ -85,12 +85,12 @@ function Result({ vehicle, checkedAt }: { vehicle: RdwVehicle; checkedAt: string
 
       <h4>Kilometerstand</h4>
       <p className={`rdw-result__verdict rdw-result__verdict--${odometer.verdict}`}>
-        Bewertung der RDW: <strong>{ODOMETER_VERDICT_LABELS[odometer.verdict]}</strong>
-        {odometer.lastReadingYear && ` – letzter gemeldeter Stand ${odometer.lastReadingYear}`}
+        Urteil der RDW: <strong>{ODOMETER_VERDICT_LABELS[odometer.verdict]}</strong>
+        {odometer.lastReadingYear && ` · Stand zuletzt gemeldet: ${odometer.lastReadingYear}`}
       </p>
       {explanation && <p>{explanation}</p>}
       <p className="field__hint">
-        Die RDW nennt keine Kilometerstände, nur ihre Bewertung des Verlaufs. Nach der Ausfuhr
+        Die RDW nennt keine Kilometerstände, nur ihr Urteil über den Verlauf. Nach der Ausfuhr
         meldet niemand mehr Stände an die RDW; vergleiche den Tacho mit Serviceheft und
         Prüfberichten.
       </p>
@@ -101,10 +101,11 @@ function Result({ vehicle, checkedAt }: { vehicle: RdwVehicle; checkedAt: string
       ) : (
         <>
           <p>
-            {open.length > 0
-              ? `${open.length} von ${vehicle.recalls.length} Rückrufen sind laut RDW noch offen.`
-              : `Alle ${vehicle.recalls.length} Rückrufe hat der Hersteller als erledigt gemeldet.`}{' '}
-            Lass dir offene Rückrufe in einer Vertragswerkstatt der Marke erledigen.
+            {open.length === 0
+              ? vehicle.recalls.length === 1
+                ? 'Den Rückruf hat der Hersteller als erledigt gemeldet.'
+                : `Alle ${vehicle.recalls.length} Rückrufe hat der Hersteller als erledigt gemeldet.`
+              : `${open.length} von ${vehicle.recalls.length} ${vehicle.recalls.length === 1 ? 'Rückruf ist' : 'Rückrufen sind'} laut RDW noch offen. Lass offene Rückrufe in einer Vertragswerkstatt der Marke erledigen.`}
           </p>
           <ul className="rdw-result__list">
             {vehicle.recalls.map((recall) => (
@@ -116,35 +117,31 @@ function Result({ vehicle, checkedAt }: { vehicle: RdwVehicle; checkedAt: string
         </>
       )}
 
-      <h4>Mängel bei der APK</h4>
+      <h4>Befunde bei der APK</h4>
+      <p className="field__hint">
+        Die offenen Daten nennen Mängel und Hinweise der APK seit dem {day(RDW_INSPECTIONS_SINCE)};
+        Prüfungen ohne Befund und frühere Prüfungen stehen nicht darin. Die Beschreibungen sind die
+        der RDW (niederländisch).
+      </p>
       {vehicle.inspections.length === 0 ? (
-        <p>
-          Die RDW nennt für dieses Kennzeichen keine festgestellten Mängel. Prüfungen ohne Mangel
-          stehen nicht in diesen Daten.
-        </p>
+        <p>Für dieses Kennzeichen nennt die RDW seitdem keine Befunde.</p>
       ) : (
-        <>
-          <p>
-            Festgestellte Mängel nach Prüfdatum, in der Beschreibung der RDW (niederländisch).
-            Prüfungen ohne Mangel stehen nicht in diesen Daten.
-          </p>
-          <ul className="rdw-result__list">
-            {vehicle.inspections.map((inspection) => (
-              <li key={inspection.date}>
-                <strong>{day(inspection.date)}:</strong>{' '}
-                {inspection.defects
-                  .map(
-                    (defect) =>
-                      `${defect.count > 1 ? `${defect.count} × ` : ''}${defect.description ?? `Mangel ${defect.code}`}`,
-                  )
-                  .join('; ')}
-              </li>
-            ))}
-          </ul>
-        </>
+        <ul className="rdw-result__list">
+          {vehicle.inspections.map((inspection) => (
+            <li key={inspection.date}>
+              <strong>{day(inspection.date)}:</strong>{' '}
+              {inspection.defects
+                .map(
+                  (defect) =>
+                    `${defect.advisory ? 'Hinweis (kein Mangel): ' : 'Mangel: '}${defect.count > 1 ? `${defect.count} × ` : ''}${defect.description ?? defect.code}`,
+                )
+                .join('; ')}
+            </li>
+          ))}
+        </ul>
       )}
       <p className="field__hint">
-        Unfälle und Schäden stehen nicht in den offenen Daten der RDW. Stand der Abfrage:{' '}
+        Unfälle und Schäden stehen nicht in den offenen Daten der RDW. Abgefragt am{' '}
         {new Date(checkedAt).toLocaleString('de-DE')}. Quelle:{' '}
         <a href={RDW_SOURCE.url} {...external}>
           {RDW_SOURCE.name}
@@ -155,9 +152,17 @@ function Result({ vehicle, checkedAt }: { vehicle: RdwVehicle; checkedAt: string
   );
 }
 
+/** A short sentence for screen readers when an answer arrives. */
+function summary(response: RdwLookupResponse | undefined): string {
+  if (!response) return '';
+  const vehicle = response.vehicle;
+  if (!vehicle) return 'Kein Fahrzeug zu diesem Kennzeichen gefunden.';
+  return `Ergebnis für ${vehicle.make} ${vehicle.model}: Kilometerstand ${ODOMETER_VERDICT_LABELS[vehicle.odometer.verdict]}, ${vehicle.recalls.filter((recall) => recall.open).length} offene Rückrufe.`;
+}
+
 /** The lookup of a Dutch registration number at RDW Open Data, through KaufCheck's server. */
 export function RdwCheck() {
-  const resultId = useId();
+  const inputId = useId();
   const [plate, setPlate] = useState('');
   const [error, setError] = useState<string | undefined>();
   const lookup = useMutation({
@@ -170,6 +175,7 @@ export function RdwCheck() {
     const normalized = normalizeDutchPlate(plate);
     if (!normalized) {
       setError('Bitte gib ein niederländisches Kennzeichen ein, zum Beispiel AB-123-C.');
+      document.getElementById(inputId)?.focus();
       return;
     }
     setError(undefined);
@@ -180,6 +186,7 @@ export function RdwCheck() {
     <div className="rdw-check">
       <form className="tax-form" onSubmit={submit} noValidate>
         <TextField
+          id={inputId}
           label="Niederländisches Kennzeichen"
           hint="Steht auf dem niederländischen Fahrzeugschein (kentekenbewijs), zum Beispiel AB-123-C"
           autoCapitalize="characters"
@@ -196,21 +203,19 @@ export function RdwCheck() {
           KaufCheck fragt die RDW von seinem Server aus ab; deine IP-Adresse erfährt die RDW nicht.
         </p>
       </form>
-      <section aria-live="polite" aria-labelledby={resultId}>
-        <h3 id={resultId} className="visually-hidden">
-          Ergebnis der Abfrage
-        </h3>
-        {lookup.isError && <Alert tone="error">{toApiRequestError(lookup.error).message}</Alert>}
-        {lookup.data && !lookup.data.vehicle && (
-          <Alert tone="info">
-            Unter diesem Kennzeichen kennt die RDW kein Fahrzeug. Prüf die Schreibweise – Buchstaben
-            und Ziffern genau wie auf dem Kennzeichen.
-          </Alert>
-        )}
-        {lookup.data?.vehicle && (
-          <Result vehicle={lookup.data.vehicle} checkedAt={lookup.data.checkedAt} />
-        )}
-      </section>
+      <p className="visually-hidden" aria-live="polite">
+        {lookup.isSuccess ? summary(lookup.data) : ''}
+      </p>
+      {lookup.isError && <Alert tone="error">{toApiRequestError(lookup.error).message}</Alert>}
+      {lookup.data && !lookup.data.vehicle && (
+        <Alert tone="info">
+          Unter diesem Kennzeichen kennt die RDW kein Fahrzeug. Prüf die Schreibweise – oder das
+          Auto ist schon länger ausgeführt: Dann steht es nicht mehr in den offenen Daten.
+        </Alert>
+      )}
+      {lookup.data?.vehicle && (
+        <Result vehicle={lookup.data.vehicle} checkedAt={lookup.data.checkedAt} />
+      )}
     </div>
   );
 }

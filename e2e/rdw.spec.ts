@@ -10,18 +10,23 @@ test('a Dutch registration number shows the RDW data in German', async ({ page }
 
   await plate.fill('AB-12');
   await page.getByRole('button', { name: 'Bei der RDW abfragen' }).click();
-  await expect(page.getByText('Bitte gib ein niederländisches Kennzeichen ein')).toBeVisible();
+  await expect(page.getByText(/Bitte gib ein niederländisches Kennzeichen ein/)).toBeVisible();
+  await expect(plate).toBeFocused();
 
   await plate.fill('qq-999-q');
   await page.getByRole('button', { name: 'Bei der RDW abfragen' }).click();
   const result = page.locator('.rdw-result');
   await expect(result.getByRole('heading', { name: /VOLKSWAGEN GOLF/ })).toBeVisible();
   await expect(result).toContainText('QQ-999-Q');
-  await expect(result).toContainText('Logisch (plausibel)');
-  await expect(result).toContainText('Jeder gemeldete Kilometerstand ist höher als der davor.');
+  await expect(result).toContainText('Urteil der RDW: Logisch');
+  await expect(result).toContainText(
+    'Die RDW urteilt dann, dass der Kilometerstand logisch erklärbar ist.',
+  );
+  await expect(result).toContainText('Hinweis (kein Mangel)');
+  await expect(result).toContainText('Mangel: Band onvoldoende profiel');
   await expect(result).toContainText('1 von 2 Rückrufen sind laut RDW noch offen.');
-  await expect(result).toContainText('Band onvoldoende profieldiepte');
-  await expect(result).toContainText('Ja, das Auto ist aus den Niederlanden ausgeführt');
+  await expect(result).toContainText('Ja, laut RDW aus den Niederlanden ausgeführt');
+  await expect(result).toContainText('Benzin, 92 kW');
   await expect(result.getByRole('link', { name: 'RDW Open Data' })).toHaveAttribute(
     'href',
     'https://opendata.rdw.nl/',
@@ -30,8 +35,9 @@ test('a Dutch registration number shows the RDW data in German', async ({ page }
   await plate.fill('QQ888Q');
   await page.getByRole('button', { name: 'Bei der RDW abfragen' }).click();
   await expect(result).toContainText('Unlogisch');
-  await expect(result).toContainText('Der Tacho kann zurückgedreht oder ein Tippfehler gemacht');
-  await expect(result).toContainText('(in die Niederlande eingeführt)');
+  await expect(result).toContainText(
+    'Es kann sein, dass der Zähler zurückgedreht wurde oder dass ein Tippfehler gemacht wurde.',
+  );
   await expect(result).toContainText('Die RDW kennt für dieses Kennzeichen keine Rückrufe.');
 
   await plate.fill('QQ777Q');
