@@ -1,8 +1,8 @@
+import { MIN_COMPARABLES } from '@kaufcheck/shared';
 import { describe, expect, it } from 'vitest';
 import {
   getExampleListing,
   INSUFFICIENT_MARKET_DATA_MESSAGE,
-  MIN_COMPARABLES,
   NBSP,
   parseListingText,
   prepareListing,
@@ -84,6 +84,7 @@ describe('example listing (Audi A7)', async () => {
     expect(result.priceContext.market).toEqual({
       status: 'insufficient_data',
       message: INSUFFICIENT_MARKET_DATA_MESSAGE,
+      reason: 'few_comparables',
       sampleSize: 0,
     });
     expect(result.priceContext.metrics.map((m) => [m.key, m.evidence])).toEqual([
@@ -437,8 +438,19 @@ describe('market context', () => {
       lowerQuartileEur: 12750,
       upperQuartileEur: 16250,
       deviationPercent: -11,
+      method: 'median',
+      expectedEur: 14500,
+      verdict: 'good',
+      unusuallyLow: false,
     });
     expect(enough.priceContext.metrics.map((m) => m.key)).toContain('comparable_deviation');
+    // The listing names defects: the advice says to count the repair in.
+    expect(enough.priceContext.advice).toMatchObject({
+      action: 'inspect',
+      title: 'Guter Preis – ansehen lohnt sich',
+      targetPriceEur: null,
+    });
+    expect(enough.priceContext.advice?.text).toContain('Mängel');
   });
 });
 

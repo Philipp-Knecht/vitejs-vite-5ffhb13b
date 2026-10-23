@@ -6,8 +6,9 @@ import {
   recallCheckFor,
   type CarModel,
 } from '@kaufcheck/catalog';
-import { EVIDENCE_LABELS, type AnalysisDto } from '@kaufcheck/shared';
+import { EVIDENCE_LABELS, PRICE_VERDICT_LABELS, type AnalysisDto } from '@kaufcheck/shared';
 import { jsPDF } from 'jspdf';
+import { formatEuro } from '../../lib/format';
 import { toPdfText } from './pdf-text';
 
 /**
@@ -206,6 +207,25 @@ export function buildAnalysisPdf(input: AnalysisPdfInput): jsPDF {
   });
   w.text(analysis.disclaimer, { size: 9, muted: true, gap: 2 });
 
+  // Price check
+  const { advice, market } = analysis.priceContext;
+  if (advice) {
+    w.heading('Preis-Check');
+    if (market.status === 'available' && market.verdict) {
+      w.text(`Preisstufe: ${PRICE_VERDICT_LABELS[market.verdict]}`, { bold: true, gap: 0.5 });
+    }
+    w.text(advice.title, { bold: true, gap: 0.5 });
+    w.text(advice.text, { gap: 1 });
+    if (advice.targetPriceEur !== null) {
+      w.text(`Zielpreis für die Verhandlung: etwa ${formatEuro(advice.targetPriceEur)}`, {
+        gap: 1,
+      });
+    }
+    if (market.status === 'available') {
+      w.text(`${market.message} ${market.source}`, { size: 9, muted: true });
+    }
+  }
+
   // Summary
   w.heading('Das Wichtigste in Kürze');
   w.text(analysis.summary.text);
@@ -350,7 +370,7 @@ export function buildAnalysisPdf(input: AnalysisPdfInput): jsPDF {
   w.heading('Notizen', 67);
   w.noteLines(8);
 
-  w.footer('KaufCheck · keine Kaufempfehlung, Angaben ohne Gewähr');
+  w.footer('KaufCheck · ersetzt keine Besichtigung, Angaben ohne Gewähr');
   return w.doc;
 }
 

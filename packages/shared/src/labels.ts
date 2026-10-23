@@ -103,3 +103,39 @@ export const PRICE_KIND_LABELS: Record<PriceKind, string> = {
   fixed: 'Festpreis',
   give_away: 'Zu verschenken',
 };
+
+/**
+ * Price levels from the comparison with similar offers, cheapest first. The
+ * thresholds are fixed (see `priceVerdict` in the domain package), so the same
+ * deviation always gets the same level.
+ */
+export const PRICE_VERDICTS = ['very_good', 'good', 'fair', 'increased', 'high'] as const;
+export type PriceVerdict = (typeof PRICE_VERDICTS)[number];
+
+/**
+ * Limits in percent from the usual price: at most −15 % is a very good price,
+ * at most −5 % a good one, below +5 % fair, below +15 % increased, from +15 %
+ * high.
+ */
+export const PRICE_VERDICT_LIMITS = { veryGood: -15, good: -5, fair: 5, increased: 15 } as const;
+
+/** Minimum number of comparable offers (after removing outliers) before a price is rated. */
+export const MIN_COMPARABLES = 8;
+
+export const PRICE_VERDICT_LABELS: Record<PriceVerdict, string> = {
+  very_good: 'Sehr guter Preis',
+  good: 'Guter Preis',
+  fair: 'Fairer Preis',
+  increased: 'Erhöhter Preis',
+  high: 'Hoher Preis',
+};
+
+/** What to do about the price: look at the car, negotiate, look further, be careful, compare. */
+export const PRICE_ADVICE_ACTIONS = [
+  'inspect',
+  'negotiate',
+  'search_on',
+  'caution',
+  'compare',
+] as const;
+export type PriceAdviceAction = (typeof PRICE_ADVICE_ACTIONS)[number];

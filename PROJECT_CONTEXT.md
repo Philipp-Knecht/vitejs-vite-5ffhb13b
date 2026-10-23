@@ -38,7 +38,7 @@ Weitere Seiten: Ratgeber (`/gebrauchtwagen-kaufen`, `/gebrauchtwagen-checkliste`
 | Kostenlos          | 10              | 5                     | 3         | –                   | 1 Auto    | Werbung                                                                                 |
 | Pro (4,99 €/Monat) | 300             | 500                   | 6         | 50                  | 10 Autos  | Verlauf, PDF-Mappe, Verhandlungshilfe, Foto-Analyse (nur mit Link-Abruf), keine Werbung |
 
-Grundsätze (vom Nutzer vorgegeben, im Code umgesetzt): keine erfundenen Daten, keine Kaufempfehlung,
+Grundsätze (vom Nutzer vorgegeben, im Code umgesetzt): keine erfundenen Daten, kein Gesamturteil über das Auto (nur ein Preis-Check nach festen Regeln),
 keine Umgehung technischer Schutzmaßnahmen, kein Scraping von Marktplätzen, UI auf Deutsch, Code und
 README auf Englisch.
 

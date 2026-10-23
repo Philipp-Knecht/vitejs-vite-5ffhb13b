@@ -19,6 +19,7 @@ import { NegotiationSection } from './NegotiationSection';
 import { OverviewSection } from './OverviewSection';
 import { PhotosSection } from './PhotosSection';
 import { PriceSection } from './PriceSection';
+import { PriceVerdict } from './PriceVerdict';
 import { QuestionsSection } from './QuestionsSection';
 import { RecallSection } from './RecallSection';
 import { SummarySection } from './SummarySection';
@@ -92,6 +93,7 @@ function ResultView({ dto }: { dto: AnalysisDto }) {
           <SectionNav withModel={modelId !== null} />
         </aside>
         <div className="result__content">
+          <PriceVerdict price={analysis.priceContext} vehicle={listing.vehicle} />
           <SummarySection analysis={analysis} />
           <OverviewSection items={analysis.overview} />
           <PriceSection

@@ -36,7 +36,8 @@ PRs, **L** = mehrere Wochen.
 | 1.5 | Finanzierungsbeispiel in der Prüfung mit dem Bundesbank-Durchschnittszins                 | #42       |
 | 1.1 | Steuer- und Kostenrechner: Werte aus Modell und Motor (EU-Daten, 319 Modelle)             | #43       |
 | neu | Affiliate-Link zu Berichten über die Fahrzeughistorie (aus, bis der Partner zustimmt)     | #44       |
-| neu | Auto aus den Niederlanden: Kennzeichen bei der RDW prüfen (Tacho, Rückrufe, APK)          | dieser PR |
+| neu | Auto aus den Niederlanden: Kennzeichen bei der RDW prüfen (Tacho, Rückrufe, APK)          | #45       |
+| 4.3 | Preis-Check: Preisstufe und Empfehlung aus bei KaufCheck geprüften Inseraten              | dieser PR |
 
 ## Arbeitsweise je Feature
 

@@ -1,10 +1,19 @@
 import { findListingModel, findMake } from '@kaufcheck/catalog';
-import { LOAN_LIMITS, PRICE_KIND_LABELS, type PriceContext, type Vehicle } from '@kaufcheck/shared';
+import {
+  LOAN_LIMITS,
+  MIN_COMPARABLES,
+  PRICE_KIND_LABELS,
+  PRICE_VERDICT_LABELS,
+  PRICE_VERDICT_LIMITS,
+  type PriceContext,
+  type Vehicle,
+} from '@kaufcheck/shared';
 import { Link } from 'react-router';
 import { EvidenceBadge } from '../../components/EvidenceBadge';
 import { formatEuro, formatNumber } from '../../lib/format';
 import { taxCalculatorLink } from '../tax/tax-link';
 import { FinancingProposal } from './FinancingProposal';
+import { similarOffersLink } from './similar-offers';
 import { ResultSection } from './Section';
 
 function MarketRange({
@@ -43,6 +52,9 @@ function MarketRange({
     </div>
   );
 }
+
+/** "+5 %", "−15 %": signed, with a non-breaking space. */
+const percent = (value: number) => `${value > 0 ? '+' : '−'}${Math.abs(value)}\u00A0%`;
 
 /** Make and model of the listing for the engine picker: the catalog model, or the name as listed. */
 function listingModel(vehicle: Vehicle | null) {
@@ -96,40 +108,64 @@ export function PriceSection({ price, vehicle }: { price: PriceContext; vehicle:
             <p>{market.message}</p>
             {askingPrice && (
               <MarketRange
-                lower={market.lowerQuartileEur}
-                upper={market.upperQuartileEur}
-                median={market.medianEur}
+                lower={market.typicalLowEur ?? market.lowerQuartileEur}
+                upper={market.typicalHighEur ?? market.upperQuartileEur}
+                median={market.expectedEur ?? market.medianEur}
                 asking={askingPrice.amountEur}
               />
             )}
             <dl className="market__facts">
+              {market.verdict && (
+                <div>
+                  <dt>Preisstufe</dt>
+                  <dd>{PRICE_VERDICT_LABELS[market.verdict]}</dd>
+                </div>
+              )}
               <div>
-                <dt>Median</dt>
-                <dd>{formatEuro(market.medianEur)}</dd>
+                <dt>{market.method && market.method !== 'median' ? 'Üblicher Preis' : 'Median'}</dt>
+                <dd>{formatEuro(market.expectedEur ?? market.medianEur)}</dd>
               </div>
               <div>
                 <dt>Mittlere Hälfte</dt>
                 <dd>
-                  {formatEuro(market.lowerQuartileEur)} bis {formatEuro(market.upperQuartileEur)}
+                  {formatEuro(market.typicalLowEur ?? market.lowerQuartileEur)} bis{' '}
+                  {formatEuro(market.typicalHighEur ?? market.upperQuartileEur)}
                 </dd>
               </div>
-              <div>
-                <dt>Vergleichsangebote</dt>
-                <dd>{formatNumber(market.sampleSize)}</dd>
-              </div>
+              {market.method !== 'valuation' && (
+                <div>
+                  <dt>Vergleichsangebote</dt>
+                  <dd>{formatNumber(market.sampleSize)}</dd>
+                </div>
+              )}
             </dl>
             <p className="market__source">
               Auswahl: {market.criteria}. {market.source}
             </p>
+            {market.verdict && (
+              <p className="market__source">
+                Preisstufen: bis {percent(PRICE_VERDICT_LIMITS.veryGood)} sehr gut, bis{' '}
+                {percent(PRICE_VERDICT_LIMITS.good)} gut, unter {percent(PRICE_VERDICT_LIMITS.fair)}{' '}
+                fair, unter {percent(PRICE_VERDICT_LIMITS.increased)} erhöht, darüber hoch.
+                {market.method === 'age_mileage' &&
+                  ' Der übliche Preis ist auf Alter und Kilometerstand dieses Autos umgerechnet.'}
+              </p>
+            )}
             <EvidenceBadge evidence="calculation" />
           </>
         ) : (
           <>
             <p className="market__insufficient">{market.message}</p>
-            <p className="market__hint">
-              KaufCheck nennt einen Vergleich erst, wenn genügend ähnliche Inserate vorliegen, die
-              tatsächlich abgerufen wurden.
-            </p>
+            {market.reason !== 'not_comparable' && market.reason !== 'no_price' && (
+              <p className="market__hint">
+                KaufCheck bewertet den Preis, sobald mindestens {MIN_COMPARABLES} ähnliche Inserate
+                bei KaufCheck geprüft wurden. Bis dahin:{' '}
+                <Link to={similarOffersLink(vehicle)}>
+                  ähnliche Angebote auf den Börsen ansehen
+                </Link>
+                .
+              </p>
+            )}
           </>
         )}
       </div>
