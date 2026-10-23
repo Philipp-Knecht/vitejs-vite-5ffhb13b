@@ -12,11 +12,21 @@ const DRIVE_PARAM: Partial<Record<FuelType, string>> = {
   hydrogen: 'elektro',
 };
 
-/** Link to the tax calculator, prefilled with what the listing says (month of first registration, drive). */
+/**
+ * Link to the tax calculator, prefilled with what the listing says (month of
+ * first registration, drive) and, where known, the model and power to pick
+ * the engine from the EU data.
+ */
 export function taxCalculatorLink(
   vehicle: Pick<Vehicle, 'firstRegistration' | 'fuel'> | null,
+  model: { makeId: string; model: string; kw?: number | null } | null = null,
 ): string {
   const params = new URLSearchParams();
+  if (model?.makeId && model.model) {
+    params.set('marke', model.makeId);
+    params.set('modell', model.model);
+    if (model.kw) params.set('kw', String(model.kw));
+  }
   const registration = vehicle?.firstRegistration;
   if (registration?.month) {
     params.set('ez', `${registration.year}-${String(registration.month).padStart(2, '0')}`);

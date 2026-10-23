@@ -172,12 +172,23 @@ npm run user:set-plan -w @kaufcheck/api -- nutzer@example.de pro
 | `npm run lint` / `npm run format` | ESLint (type-aware, React Compiler rules) / Prettier    |
 | `npm run typecheck`               | TypeScript for all workspaces                           |
 | `npm run catalog:index`           | Rebuilds `packages/catalog/data/index.json` (see below) |
+| `npm run catalog:engines`         | Rebuilds the engine data from the EEA (see below)       |
 | `npm run loan-rate:update`        | Newest Bundesbank average rate for the loan example     |
 
 Model knowledge is one JSON file per model in `packages/catalog/data/models` (format and rules in
 its README). After adding or changing a file, run `npm run catalog:index`: the advisor reads the
 compact summaries in `data/index.json`, and `src/catalog.test.ts` fails when they are out of date,
 when a weakness has no source or when make and class differ from the catalog.
+
+Engine data (displacement, CO₂, consumption per model, year and engine) is in
+`packages/catalog/data/engines`, one file per model, and `data/engine-index.json`. `npm run
+catalog:engines` builds it from the EEA's „Monitoring of CO2 emissions from passenger cars“ (new
+registrations in Germany, licence CC BY 4.0) through its public SQL API: names are mapped to the
+catalog in `src/engine-match.ts`, other models with at least 5,000 registrations get a file of their
+own. Each year is in the EEA table twice; the final figures are used, the provisional ones only for a
+year without final ones (marked in the index). A typical CO₂ value needs half of an engine's cars to
+report it. The raw rows are cached per query in the system temp directory (`ENGINES_CACHE`); delete
+the cache to fetch new data. The tax calculator offers the engines and names source and licence.
 
 Development helpers, all clearly labelled in the UI and rejected in production:
 
