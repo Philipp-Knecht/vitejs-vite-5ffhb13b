@@ -1,8 +1,8 @@
 /**
  * Monthly rate of a car loan from the buyer's own figures: the effective
  * annual rate (effektiver Jahreszins) from the offer, the term and an
- * optional final instalment (Schlussrate). Nothing is assumed: KaufCheck has
- * no rates of its own and compares no offers.
+ * optional final instalment (Schlussrate). KaufCheck compares no offers; the
+ * check of a listing shows an example with the Bundesbank's average rate.
  */
 export interface LoanInput {
   /** The amount borrowed in euros. */
@@ -84,3 +84,25 @@ export function loan(input: LoanInput): LoanResult | null {
     interestPerMonth: cents(totalInterest / months),
   };
 }
+
+/**
+ * The average effective annual rate of new consumer loans to households with
+ * a fixed rate for over 1 up to 5 years: Deutsche Bundesbank, MFI interest
+ * rate statistics, series BBIM1.M.DE.B.A2B.I.R.A.2250.EUR.N (SUD114). It
+ * covers interest only, no other costs, and is updated with
+ * `npm run loan-rate:update`.
+ */
+export const AVERAGE_LOAN_RATE = {
+  percent: 7.53,
+  /** The month of the figure, „YYYY-MM“. */
+  month: '2026-08',
+  /** The Bundesbank marks the newest month as provisional. */
+  provisional: true,
+  source:
+    'https://www.bundesbank.de/de/statistiken/geld-und-kapitalmaerkte/zinssaetze-und-renditen/konsumentenkredite-an-private-haushalte-ratenkredite-615046',
+} as const;
+
+/** Terms within the Bundesbank's range of over 1 up to 5 years. */
+export const PROPOSAL_MONTHS = [24, 36, 48, 60] as const;
+
+export const PROPOSAL_DEFAULT_MONTHS = 48;

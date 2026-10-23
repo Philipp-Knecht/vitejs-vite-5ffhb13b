@@ -32,7 +32,8 @@ PRs, **L** = mehrere Wochen.
 | 3.2 | Erinnerung an die HU per E-Mail auch ohne Pro                                             | #36       |
 | 5.3 | Affiliate-Link zum Vergleich von Kfz-Versicherungen in drei Ratgebern (ohne Pro)          | #37       |
 | 5.2 | Eigene Anzeigen (Sponsoring) vom eigenen Server statt AdSense, ohne Drittanbieter         | #39       |
-| 2.9 | Betrugshinweise (Vorkasse, Treuhand, Spedition, Ausland, Messenger, ungesehen)            | dieser PR |
+| 2.9 | Betrugshinweise (Vorkasse, Treuhand, Spedition, Ausland, Messenger, ungesehen)            | #40       |
+| 1.5 | Finanzierungsbeispiel in der Prüfung mit dem Bundesbank-Durchschnittszins                 | dieser PR |
 
 ## Arbeitsweise je Feature
 

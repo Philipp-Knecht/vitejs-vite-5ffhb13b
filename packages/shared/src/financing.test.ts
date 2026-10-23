@@ -1,5 +1,12 @@
 import { describe, expect, it } from 'vitest';
-import { loan, loanProblem } from './financing';
+import {
+  AVERAGE_LOAN_RATE,
+  loan,
+  LOAN_LIMITS,
+  loanProblem,
+  PROPOSAL_DEFAULT_MONTHS,
+  PROPOSAL_MONTHS,
+} from './financing';
 
 describe('car loan', () => {
   it('computes the rate of an annuity loan from the effective annual rate', () => {
@@ -37,5 +44,22 @@ describe('car loan', () => {
     expect(problem({ months: 36.5 })).toBe('months');
     expect(problem({ balloon: 10_000 })).toBe('balloon');
     expect(problem({})).toBeUndefined();
+  });
+});
+
+describe('the average rate for the example in a check', () => {
+  it('is a plausible Bundesbank figure with its month', () => {
+    expect(AVERAGE_LOAN_RATE.percent).toBeGreaterThan(LOAN_LIMITS.ratePercent.min);
+    expect(AVERAGE_LOAN_RATE.percent).toBeLessThan(LOAN_LIMITS.ratePercent.max);
+    expect(AVERAGE_LOAN_RATE.month).toMatch(/^20\d{2}-(0[1-9]|1[0-2])$/);
+    expect(AVERAGE_LOAN_RATE.source).toMatch(/^https:\/\/www\.bundesbank\.de\//);
+  });
+
+  it('offers terms within the range of the average, over 1 up to 5 years', () => {
+    expect(PROPOSAL_MONTHS).toContain(PROPOSAL_DEFAULT_MONTHS);
+    for (const months of PROPOSAL_MONTHS) {
+      expect(months).toBeGreaterThan(12);
+      expect(months).toBeLessThanOrEqual(60);
+    }
   });
 });
