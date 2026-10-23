@@ -1,7 +1,9 @@
 import {
+  MIN_COMPARABLE_VISITORS,
   MIN_COMPARABLES,
   PRICE_VERDICT_LABELS,
   PRICE_VERDICT_LIMITS,
+  UNUSUALLY_LOW_PERCENT,
   type MarketContext,
   type Observation,
   type PriceAdvice,
@@ -9,7 +11,7 @@ import {
   type PriceMetric,
   type PriceVerdict,
 } from '@kaufcheck/shared';
-import { formatDecimal, formatEuro, formatKm, formatNumber, NBSP } from '../format';
+import { formatDecimal, formatEuro, formatKm, formatNumber, joinGerman, NBSP } from '../format';
 import { expectedPrice, type ExpectedPrice, type PriceTarget } from './market-model';
 import type { VehicleRuleContext } from './rule-context';
 
@@ -18,6 +20,22 @@ export const INSUFFICIENT_MARKET_DATA_MESSAGE =
 
 export const NO_PRICE_MESSAGE =
   'Ohne einen echten Angebotspreis lässt sich der Preis nicht mit anderen Angeboten vergleichen.';
+
+export const NOT_COMPARABLE_MESSAGE =
+  'Laut Inserat ist das Auto beschädigt, nicht fahrbereit oder hat einen schweren Mangel. Mit intakten Autos lässt sich der Preis nicht vergleichen.';
+
+/**
+ * Findings that make a car incomparable with intact ones: sold as defective,
+ * or the description names engine or gearbox damage, through-rust or that it
+ * does not drive. Such offers are no comparables either.
+ */
+export const NOT_COMPARABLE_OBSERVATIONS: readonly string[] = [
+  'sold_as_defective',
+  'damage_engine',
+  'damage_transmission',
+  'damage_roadworthiness',
+  'damage_rust',
+];
 
 export interface MarketComparable {
   priceEur: number;
@@ -40,15 +58,14 @@ export interface ValuationReference {
  */
 export interface MarketData {
   comparables: readonly MarketComparable[];
+  /** Browsers or accounts the comparables come from; one alone must not decide the price. */
+  visitors?: number;
   valuation?: ValuationReference;
   /** Human-readable selection criteria, e.g. "Audi A7, EZ 2010–2014, 135.000–235.000 km". */
   criteria: string;
   /** Human-readable data source. */
   source: string;
 }
-
-/** From 30 % below the usual price the reason needs asking: defects, or a fake offer. */
-export const UNUSUALLY_LOW_PERCENT = -30;
 
 /** The same deviation always gets the same level. */
 export function priceVerdict(deviationPercent: number): PriceVerdict {
@@ -64,16 +81,20 @@ export function decimalRegistration(year: number, month: number | null): number 
   return year + ((month ?? 6.5) - 1) / 12;
 }
 
-function fromValuation(valuation: ValuationReference): ExpectedPrice {
-  const low = valuation.lowEur ?? valuation.expectedEur;
-  const high = valuation.highEur ?? valuation.expectedEur;
+function fromValuation(valuation: ValuationReference): ExpectedPrice | null {
+  const expected = Math.round(valuation.expectedEur);
+  if (!Number.isFinite(expected) || expected <= 0) return null;
+  const valid = (value: number | null) =>
+    value !== null && Number.isFinite(value) && value > 0 ? Math.round(value) : expected;
+  const low = Math.min(valid(valuation.lowEur), expected);
+  const high = Math.max(valid(valuation.highEur), expected);
   return {
-    expectedEur: valuation.expectedEur,
+    expectedEur: expected,
     lowEur: low,
     highEur: high,
     method: 'valuation',
     sampleSize: 0,
-    medianEur: valuation.expectedEur,
+    medianEur: expected,
     lowerQuartileEur: low,
     upperQuartileEur: high,
   };
@@ -106,15 +127,17 @@ export function assessMarket(
     ? null
     : market.valuation
       ? fromValuation(market.valuation)
-      : expectedPrice(
-          market.comparables.map((comparable) => ({
-            priceEur: comparable.priceEur,
-            registration: comparable.registration ?? null,
-            mileageKm: comparable.mileageKm ?? null,
-          })),
-          target,
-          MIN_COMPARABLES,
-        );
+      : market.visitors !== undefined && market.visitors < MIN_COMPARABLE_VISITORS
+        ? null
+        : expectedPrice(
+            market.comparables.map((comparable) => ({
+              priceEur: comparable.priceEur,
+              registration: comparable.registration ?? null,
+              mileageKm: comparable.mileageKm ?? null,
+            })),
+            target,
+            MIN_COMPARABLES,
+          );
 
   if (askingPriceEur === null || askingPriceEur <= 0) {
     return {
@@ -143,6 +166,9 @@ export function assessMarket(
         ? `liegt ${formatDecimal(Math.abs(deviationPercent))}${NBSP}% unter ${usual}`
         : `liegt ${formatDecimal(deviationPercent)}${NBSP}% über ${usual}`;
 
+  // Within the middle half of comparable offers a price is fair, whatever the
+  // deviation: with few offers the usual price itself is uncertain.
+  const withinUsual = askingPriceEur >= expected.lowEur && askingPriceEur <= expected.highEur;
   return {
     status: 'available',
     sampleSize: expected.sampleSize,
@@ -157,7 +183,7 @@ export function assessMarket(
     typicalLowEur: expected.lowEur,
     typicalHighEur: expected.highEur,
     method: expected.method,
-    verdict: priceVerdict(deviationPercent),
+    verdict: withinUsual ? 'fair' : priceVerdict(deviationPercent),
     unusuallyLow: deviationPercent <= UNUSUALLY_LOW_PERCENT,
   };
 }
@@ -172,20 +198,20 @@ const SCAM_OBSERVATIONS = new Set([
   'contact_off_platform',
 ]);
 
-/** A car that compares with no intact one: damaged, not roadworthy, sold as defective. */
+/** A car that compares with no intact one: damaged, not roadworthy, a severe defect. */
 function notComparable(ctx: VehicleRuleContext, observations: readonly Observation[]): boolean {
   const { vehicle } = ctx;
   return (
     vehicle.condition === 'damaged' ||
     vehicle.condition === 'not_roadworthy' ||
     vehicle.accidentHistory === 'unrepaired_damage' ||
-    observations.some((o) => o.id === 'sold_as_defective')
+    observations.some((o) => NOT_COMPARABLE_OBSERVATIONS.includes(o.id))
   );
 }
 
-/** A price worth aiming for: the usual price, rounded to 100 €. */
+/** A price worth aiming for: the usual price, rounded down to 100 € (so below the asking price). */
 function targetPrice(expectedEur: number): number {
-  return Math.max(100, Math.round(expectedEur / 100) * 100);
+  return Math.max(100, Math.floor(expectedEur / 100) * 100);
 }
 
 /**
@@ -208,33 +234,44 @@ export function priceAdvice(
     };
   }
   if (market.status !== 'available' || market.verdict === undefined) {
-    return market.status === 'insufficient_data' && market.reason === 'not_comparable'
-      ? {
-          action: 'compare',
-          title: 'Kein Preisvergleich bei Schäden',
-          text: 'Laut Inserat ist das Auto beschädigt, nicht fahrbereit oder defekt. Der Preis hängt dann vor allem von den Reparaturkosten ab: Lass den Schaden vor dem Kauf von einer Werkstatt schätzen.',
-          targetPriceEur: null,
-        }
-      : {
-          action: 'compare',
-          title: 'Noch zu wenige Vergleichsangebote',
-          text: 'Für dieses Auto kennt KaufCheck noch nicht genug ähnliche Inserate, um den Preis zu bewerten. Vergleich selbst: Die Suche öffnet ähnliche Angebote auf den großen Börsen.',
-          targetPriceEur: null,
-        };
+    const reason = market.status === 'insufficient_data' ? market.reason : undefined;
+    if (reason === 'not_comparable')
+      return {
+        action: 'compare',
+        title: 'Kein Preisvergleich bei Schäden',
+        text: 'Laut Inserat ist das Auto beschädigt, nicht fahrbereit oder hat einen schweren Mangel. Der Preis hängt dann vor allem von den Reparaturkosten ab: Lass den Schaden vor dem Kauf von einer Werkstatt schätzen.',
+        targetPriceEur: null,
+      };
+    if (reason === 'missing_basics')
+      return {
+        action: 'compare',
+        title: 'Für den Preisvergleich fehlen Angaben',
+        text: `${market.message} Frag den Verkäufer danach; erst dann lässt sich der Preis mit vergleichbaren Angeboten vergleichen.`,
+        targetPriceEur: null,
+      };
+    return {
+      action: 'compare',
+      title: 'Noch zu wenige Vergleichsangebote',
+      text: 'Für dieses Auto kennt KaufCheck noch nicht genug vergleichbare Inserate, um den Preis zu bewerten. Vergleich selbst ähnliche Angebote auf den großen Börsen.',
+      targetPriceEur: null,
+    };
   }
 
   const expected = market.expectedEur ?? market.medianEur;
   const percent = `${formatDecimal(Math.abs(market.deviationPercent))}${NBSP}%`;
-  const defects = observations.some((o) => o.id === 'damage_mentioned' && o.severity !== 'info')
-    ? ' Das Inserat nennt Mängel: Rechne die Reparatur ein, bevor du zusagst.'
-    : '';
+  const damage = observations.filter((o) => o.id.startsWith('damage_'));
+  const defects = damage.some((o) => o.severity === 'warning')
+    ? ' Das Inserat nennt einen Mangel, der teuer werden kann: Lass ihn vor dem Kauf prüfen und rechne die Reparatur ein.'
+    : damage.length > 0
+      ? ' Das Inserat nennt Mängel: Rechne die Reparatur ein, bevor du zusagst.'
+      : '';
   const fixed = kind === 'fixed' ? ' Laut Inserat ist es ein Festpreis; frag trotzdem.' : '';
 
   if (market.unusuallyLow) {
     return {
       action: 'caution',
       title: 'Auffällig günstig – Grund klären',
-      text: `Der Preis liegt ${percent} unter dem, was vergleichbare Angebote kosten (etwa ${formatEuro(expected)}). Das kann ein Glücksfall sein, aber auch auf Mängel oder ein unseriöses Angebot hindeuten. Frag nach dem Grund, sieh dir das Auto genau an und zahl nichts im Voraus.`,
+      text: `Der Preis liegt ${percent} unter dem, was vergleichbare Angebote kosten (etwa ${formatEuro(expected)}). Das kann ein Glücksfall sein, aber auch auf Mängel hindeuten oder darauf, dass mit dem Angebot etwas nicht stimmt. Frag nach dem Grund, sieh dir das Auto genau an und zahl nichts im Voraus.`,
       targetPriceEur: null,
     };
   }
@@ -251,7 +288,7 @@ export function priceAdvice(
       return {
         action: 'inspect',
         title: 'Fairer Preis – ansehen lohnt sich',
-        text: `Der Preis entspricht etwa dem, was vergleichbare Angebote kosten (etwa ${formatEuro(expected)}). Handeln kannst du bei Mängeln, die du bei der Besichtigung findest.${defects}`,
+        text: `Der Preis passt zu dem, was vergleichbare Angebote kosten (rund ${formatEuro(expected)}). Handeln kannst du bei Mängeln, die du bei der Besichtigung findest.${defects}`,
         targetPriceEur: null,
       };
     case 'increased':
@@ -264,8 +301,8 @@ export function priceAdvice(
     case 'high':
       return {
         action: 'search_on',
-        title: 'Teurer als üblich – weitersuchen',
-        text: `Der Preis liegt ${percent} über dem, was vergleichbare Angebote kosten. Such lieber weiter, außer der Verkäufer geht auf etwa ${formatEuro(targetPrice(expected))} herunter.${defects}`,
+        title: 'Teurer als vergleichbare Angebote – weitersuchen',
+        text: `Der Preis liegt ${percent} über dem, was vergleichbare Angebote kosten. Such lieber weiter, außer der Verkäufer geht auf etwa ${formatEuro(targetPrice(expected))} herunter.${fixed}${defects}`,
         targetPriceEur: targetPrice(expected),
       };
   }
@@ -321,20 +358,31 @@ export function assessPrice(
   }
 
   const placeholder = observations.some((o) => o.id === 'price_placeholder');
+  const missing = [
+    vehicle.make && vehicle.model ? null : 'Marke und Modell',
+    vehicle.firstRegistration ? null : 'Erstzulassung',
+    vehicle.mileageKm === null ? 'Kilometerstand' : null,
+  ].filter((item): item is string => item !== null);
   const marketContext: MarketContext = notComparable(ctx, observations)
     ? {
         status: 'insufficient_data',
-        message:
-          'Laut Inserat ist das Auto beschädigt, nicht fahrbereit oder defekt. Mit intakten Autos lässt sich der Preis nicht vergleichen.',
+        message: NOT_COMPARABLE_MESSAGE,
         sampleSize: 0,
         reason: 'not_comparable',
       }
-    : assessMarket(placeholder ? null : amount, market, {
-        registration: vehicle.firstRegistration
-          ? decimalRegistration(vehicle.firstRegistration.year, vehicle.firstRegistration.month)
-          : null,
-        mileageKm: vehicle.mileageKm,
-      });
+    : missing.length > 0 && amount !== null && amount > 0 && !placeholder
+      ? {
+          status: 'insufficient_data',
+          message: `Im Inserat fehlen Angaben zu ${joinGerman(missing)}.`,
+          sampleSize: 0,
+          reason: 'missing_basics',
+        }
+      : assessMarket(placeholder ? null : amount, market, {
+          registration: vehicle.firstRegistration
+            ? decimalRegistration(vehicle.firstRegistration.year, vehicle.firstRegistration.month)
+            : null,
+          mileageKm: vehicle.mileageKm,
+        });
   if (marketContext.status === 'available') {
     metrics.push({
       key: 'comparable_deviation',

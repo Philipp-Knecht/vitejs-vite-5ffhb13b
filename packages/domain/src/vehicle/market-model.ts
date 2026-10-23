@@ -49,12 +49,27 @@ export function percentile(sorted: readonly number[], p: number): number {
   return a + (b - a) * (index - lower);
 }
 
-/** The items whose value lies within Tukey's fences: `k` interquartile ranges beyond the quartiles. */
-export function withinFences<T>(items: readonly T[], value: (item: T) => number, k: number): T[] {
+/**
+ * In log prices: below this, the spread counts as 5 %. With many identical
+ * prices the interquartile range is 0, and the fences would drop every other
+ * offer.
+ */
+export const MIN_LOG_SPREAD = 0.05;
+
+/**
+ * The items whose value lies within Tukey's fences: `k` interquartile ranges
+ * (at least `minSpread`) beyond the quartiles.
+ */
+export function withinFences<T>(
+  items: readonly T[],
+  value: (item: T) => number,
+  k: number,
+  minSpread = 0,
+): T[] {
   const sorted = items.map(value).sort((a, b) => a - b);
   const q1 = percentile(sorted, 0.25);
   const q3 = percentile(sorted, 0.75);
-  const spread = q3 - q1;
+  const spread = Math.max(q3 - q1, minSpread);
   return items.filter((item) => {
     const v = value(item);
     return v >= q1 - k * spread && v <= q3 + k * spread;
@@ -162,13 +177,8 @@ function adjusted(rows: readonly Row[], minSample: number): { fit: Fit; rows: Ro
     const first = fit(rows, predictors);
     if (!first) continue;
     // Offers far from the fitted line (a typo, a damaged car) are left out once.
-    const sorted = [...first.residuals].sort((a, b) => a - b);
-    const q1 = percentile(sorted, 0.25);
-    const q3 = percentile(sorted, 0.75);
-    const kept = rows.filter((_, i) => {
-      const r = first.residuals[i]!;
-      return r >= q1 - 1.5 * (q3 - q1) && r <= q3 + 1.5 * (q3 - q1);
-    });
+    const residualOf = new Map(rows.map((row, i) => [row, first.residuals[i]!]));
+    const kept = withinFences(rows, (row) => residualOf.get(row)!, 1.5, MIN_LOG_SPREAD);
     if (kept.length < minSample) continue;
     const second = fit(kept, predictors);
     if (second) return { fit: second, rows: kept };
@@ -197,7 +207,7 @@ export function expectedPrice(
 ): ExpectedPrice | null {
   const valid = points.filter((point) => Number.isFinite(point.priceEur) && point.priceEur > 0);
   // Placeholders like 1 € or 99.999 € go first, before they can bend anything.
-  const plausible = withinFences(valid, (point) => Math.log(point.priceEur), 3);
+  const plausible = withinFences(valid, (point) => Math.log(point.priceEur), 3, MIN_LOG_SPREAD);
 
   if (target.registration !== null && target.mileageKm !== null) {
     const rows = plausible.flatMap((point): Row[] =>
@@ -220,10 +230,18 @@ export function expectedPrice(
       // Never beyond the offers themselves: no extrapolation to prices nobody asked.
       const clamp = (value: number) =>
         Math.min(Math.max(value, raw.sorted[0]!), raw.sorted[raw.sorted.length - 1]!);
+      const expectedEur = Math.round(clamp(Math.exp(model.fit.intercept)));
+      // Skewed residuals could leave the expected price outside its own range.
       return {
-        expectedEur: Math.round(clamp(Math.exp(model.fit.intercept))),
-        lowEur: Math.round(clamp(Math.exp(model.fit.intercept + percentile(residuals, 0.25)))),
-        highEur: Math.round(clamp(Math.exp(model.fit.intercept + percentile(residuals, 0.75)))),
+        expectedEur,
+        lowEur: Math.min(
+          expectedEur,
+          Math.round(clamp(Math.exp(model.fit.intercept + percentile(residuals, 0.25)))),
+        ),
+        highEur: Math.max(
+          expectedEur,
+          Math.round(clamp(Math.exp(model.fit.intercept + percentile(residuals, 0.75)))),
+        ),
         method: 'age_mileage',
         sampleSize: model.rows.length,
         medianEur: raw.medianEur,
@@ -233,7 +251,7 @@ export function expectedPrice(
     }
   }
 
-  const kept = withinFences(plausible, (point) => Math.log(point.priceEur), 1.5);
+  const kept = withinFences(plausible, (point) => Math.log(point.priceEur), 1.5, MIN_LOG_SPREAD);
   if (kept.length < minSample) return null;
   const raw = stats(kept.map((point) => point.priceEur));
   return {

@@ -1,22 +1,20 @@
 # Anfrage an Bewertungsdienste (Preis-Check)
 
 Der Preis-Check bewertet Angebotspreise bisher nur mit Inseraten, die bei KaufCheck geprüft wurden. Mit einem
-Bewertungsdienst gäbe es für fast jedes Auto sofort einen üblichen Preis. Die Schnittstelle dafür ist im Code
+Bewertungsdienst gäbe es auch für Autos einen üblichen Preis, die noch niemand bei KaufCheck geprüft hat. Die Schnittstelle dafür ist im Code
 vorbereitet (`apps/api/src/infrastructure/valuation/types.ts`); es fehlt nur ein Vertrag und der Adapter für die
 API des Anbieters.
 
 ## Anbieter
 
-| Anbieter                              | Was er anbietet                                                                                                                                               | Kontakt                                                                                              |
-| ------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------- |
-| **AutoUncle**                         | Marktpreis aus aktuellen Inseraten (Algorithmus AutoScore), API mit einem Schlüssel für alle Marken, 14 Länder; Preisbewertung u. a. auf Facebook Marketplace | [b2b.autouncle.com/automotive-api](https://b2b.autouncle.com/automotive-api)                         |
-| **J.D. Power / Autovista (Schwacke)** | Bewertungs-API (AutovistaVALUATION), in Deutschland verfügbar; Preise nur auf Anfrage                                                                         | [jdpower.com/business/autovista-api](https://jdpower.com/business/autovista-api/) („Request a Demo“) |
-| **DAT**                               | SilverDAT Valuate auf Basis von Markttransaktionen; Lizenz nach Nutzung und Branche, nur über den Vertrieb                                                    | Vertrieb über [dat.de](https://www.dat.de)                                                           |
+| Anbieter                              | Was die Seite des Anbieters sagt                                                                                                                                                                                                                                                     | Kontakt                                                                           |
+| ------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | --------------------------------------------------------------------------------- |
+| **AutoUncle**                         | Marktpreise aus aktuellen Inseraten (AutoScore), API für 14 Länder mit API-Schlüssel; die Preisbewertung läuft u. a. auf Facebook Marketplace ([autohaus.de](https://www.autohaus.de/nachrichten/autohandel/gebrauchtwagen-facebook-setzt-auf-preisbewertung-von-autouncle-2703908)) | [b2b.autouncle.com/automotive-api](https://b2b.autouncle.com/automotive-api)      |
+| **J.D. Power / Autovista (Schwacke)** | APIs für Fahrzeugdaten und Bewertungen; die Seite blockt automatische Abrufe, Angaben zu Deutschland und Preisen bitte dort selbst prüfen                                                                                                                                            | [jdpower.com/business/autovista-api](https://jdpower.com/business/autovista-api/) |
+| **DAT**                               | Gebrauchtwagenbewertung (SilverDAT); Konditionen nicht veröffentlicht, Anfrage über den Vertrieb                                                                                                                                                                                     | [dat.de](https://www.dat.de)                                                      |
 
-Quellen: Produktseiten der Anbieter; zu AutoUncle auf Facebook Marketplace
-[autohaus.de](https://www.autohaus.de/nachrichten/autohandel/gebrauchtwagen-facebook-setzt-auf-preisbewertung-von-autouncle-2703908).
-Für Verbraucher-Apps passt AutoUncle am besten (Marktpreis aus Inseraten, wie der Preis-Check selbst); DAT und
-Schwacke liefern Händlerwerte; Preise nennen alle drei nur auf Anfrage.
+Für Verbraucher-Apps passt AutoUncle am besten (Marktpreis aus Inseraten, wie der Preis-Check selbst). Preise
+nennt keiner der drei öffentlich.
 
 ## E-Mail-Entwurf
 
@@ -40,7 +38,9 @@ Betreff: Anfrage API-Zugang Gebrauchtwagen-Bewertung für KaufCheck (kaufcheck-a
 > 2. ob wir den Wert Verbrauchern anzeigen und Ihren Namen als Quelle nennen dürfen,
 > 3. ob und wie lange wir Ergebnisse zwischenspeichern dürfen,
 > 4. welche Angaben Ihre API zur Fahrzeugbestimmung braucht (z. B. Ihre eigenen Typcodes) und ob es eine
->    Testumgebung gibt.
+>    Testumgebung gibt,
+> 5. ob wir aus Ihrem Wert eine Einordnung ableiten und anzeigen dürfen, etwa eine Preisstufe („fairer Preis“,
+>    „hoher Preis“) und einen Rat („verhandeln“, „weitersuchen“).
 >
 > Mit freundlichen Grüßen
 >

@@ -273,31 +273,33 @@ describe('price verdict from comparable offers', () => {
     rmSync(directory, { recursive: true, force: true });
   });
 
-  it('counts retrieved and pasted offers, each car once and at most ten per visitor', async () => {
-    const client = new TestClient(built.app);
+  it('counts retrieved and pasted offers, each car once, from several visitors', async () => {
+    // Five visitors, each with their own browser.
+    const visitors = Array.from({ length: 5 }, () => new TestClient(built.app));
+    const [first] = visitors as [TestClient];
     // The same car pasted again and again, with a new price each time, counts once.
     for (let index = 0; index < 8; index += 1) {
-      const response = await client.post('/api/listings/analyze-text', {
+      const response = await first.post('/api/listings/analyze-text', {
         text: `Audi A7 Sportback\n${(9000 + index * 100).toLocaleString('de-DE')} €\nDetails\nMarke\nAudi\nModell\nA7\nKilometerstand\n180.000 km\nErstzulassung\nMai 2012\nBeschreibung\nKopie ${index}`,
       });
       expect(response.statusCode, response.body).toBe(201);
     }
 
-    const first = await client.analyzeUrl(listingUrl('2930000000'));
-    expect(first.analysis.priceContext.market).toMatchObject({
+    const check = await first.analyzeUrl(listingUrl('2930000000'));
+    expect(check.analysis.priceContext.market).toMatchObject({
       status: 'insufficient_data',
       reason: 'few_comparables',
       sampleSize: 1,
     });
-    expect(first.analysis.priceContext.advice?.action).toBe('compare');
+    expect(check.analysis.priceContext.advice?.action).toBe('compare');
 
+    // Offers 1–8 from the five visitors in turn; re-analysing one adds no second sample.
     for (let index = 1; index < 9; index += 1)
-      await client.analyzeUrl(listingUrl(String(2930000000 + index)));
-    // Re-analysing the same offer does not add a second sample.
-    await client.analyzeUrl(listingUrl('2930000001'));
+      await visitors[index % 5]!.analyzeUrl(listingUrl(String(2930000000 + index)));
+    await visitors[1]!.analyzeUrl(listingUrl('2930000001'));
 
     // Nine retrieved offers from 11.000 to 14.200 € and the pasted car at its latest 9.700 €.
-    const target = await client.analyzeUrl(listingUrl('2930000009'));
+    const target = await visitors[4]!.analyzeUrl(listingUrl('2930000009'));
     const market = target.analysis.priceContext.market;
     expect(market).toMatchObject({
       status: 'available',
@@ -314,10 +316,27 @@ describe('price verdict from comparable offers', () => {
       action: 'search_on',
       targetPriceEur: 12_400,
     });
+  });
 
-    // One more offer from the same visitor: still ten.
-    const capped = await client.analyzeUrl(listingUrl('2930000010'));
-    expect(capped.analysis.priceContext.market.sampleSize).toBe(10);
+  it('lets no single visitor decide the price', async () => {
+    const visitor = new TestClient(built.app);
+    const golf = (km: number, price: number) =>
+      `VW Golf 1.4 TSI\n${price.toLocaleString('de-DE')} €\nDetails\nMarke\nVolkswagen\nModell\nGolf\nKilometerstand\n${km.toLocaleString('de-DE')} km\nErstzulassung\nMärz 2015\nKraftstoffart\nBenzin`;
+    for (let index = 0; index < 9; index += 1) {
+      const response = await visitor.post('/api/listings/analyze-text', {
+        text: golf(100_000 + index * 2_000, 9_000 + index * 100),
+      });
+      expect(response.statusCode, response.body).toBe(201);
+    }
+    const target = (
+      await visitor.post('/api/listings/analyze-text', { text: golf(103_500, 12_000) })
+    ).json<AnalysisDto>();
+    // Three of the nine count, all from one browser: no rating.
+    expect(target.analysis.priceContext.market).toMatchObject({
+      status: 'insufficient_data',
+      reason: 'few_comparables',
+      sampleSize: 3,
+    });
   });
 });
 

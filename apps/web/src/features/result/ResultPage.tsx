@@ -93,7 +93,11 @@ function ResultView({ dto }: { dto: AnalysisDto }) {
           <SectionNav withModel={modelId !== null} />
         </aside>
         <div className="result__content">
-          <PriceVerdict price={analysis.priceContext} vehicle={listing.vehicle} />
+          <PriceVerdict
+            price={analysis.priceContext}
+            vehicle={listing.vehicle}
+            checkedAt={dto.createdAt}
+          />
           <SummarySection analysis={analysis} />
           <OverviewSection items={analysis.overview} />
           <PriceSection

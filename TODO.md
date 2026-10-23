@@ -58,8 +58,8 @@ Behörden, Dashboards); **(Code)** = Entwicklungsarbeit.
 7. **Betreiber-Anleitung sichern (Betreiber).** Das Claude-Docs-Dokument ist an den alten Account gebunden; bei
    Bedarf exportieren.
 8. **Bewertungsdienst anfragen (Betreiber).** Der Preis-Check bewertet nur mit Inseraten, die bei KaufCheck
-   geprüft wurden, und braucht dafür mindestens 8 ähnliche. Ein Bewertungsdienst (AutoUncle, Autovista/Schwacke,
-   DAT) liefert für fast jedes Auto einen Preis. Anbieter und E-Mail-Entwurf:
+   geprüft wurden, und braucht dafür mindestens 8 ähnliche von 5 Besuchern. Ein Bewertungsdienst (AutoUncle,
+   Autovista/Schwacke, DAT) liefert auch Preise für Autos, die noch niemand bei KaufCheck geprüft hat. Anbieter und E-Mail-Entwurf:
    [docs/anfrage-bewertungsdienste.md](docs/anfrage-bewertungsdienste.md). Nach einer Zusage: Adapter bauen
    (Code), Schlüssel nur bei Render eintragen.
 

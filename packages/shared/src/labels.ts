@@ -115,12 +115,21 @@ export type PriceVerdict = (typeof PRICE_VERDICTS)[number];
 /**
  * Limits in percent from the usual price: at most −15 % is a very good price,
  * at most −5 % a good one, below +5 % fair, below +15 % increased, from +15 %
- * high.
+ * high. A price within the middle half of comparable offers is always fair.
  */
 export const PRICE_VERDICT_LIMITS = { veryGood: -15, good: -5, fair: 5, increased: 15 } as const;
 
+/** From 30 % below the usual price the reason needs asking: defects, or something wrong with the offer. */
+export const UNUSUALLY_LOW_PERCENT = -30;
+
 /** Minimum number of comparable offers (after removing outliers) before a price is rated. */
 export const MIN_COMPARABLES = 8;
+
+/** The comparable offers must come from at least this many browsers or accounts. */
+export const MIN_COMPARABLE_VISITORS = 5;
+
+/** Each browser or account adds at most this many comparable offers. */
+export const MAX_COMPARABLES_PER_VISITOR = 3;
 
 export const PRICE_VERDICT_LABELS: Record<PriceVerdict, string> = {
   very_good: 'Sehr guter Preis',

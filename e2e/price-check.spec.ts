@@ -24,11 +24,12 @@ test('the price check rates the price against similar offers checked before', as
   page,
   baseURL,
 }) => {
-  // Nine similar offers from 11.000 to 11.800 €, three per visitor (the limit without an account).
-  for (let visitor = 0; visitor < 3; visitor += 1) {
+  // Ten similar offers from 11.000 to 11.900 €, from five visitors (the comparison needs
+  // five; three checks a month are free without an account).
+  for (let visitor = 0; visitor < 5; visitor += 1) {
     const api = await request.newContext({ baseURL });
-    for (let offer = 0; offer < 3; offer += 1) {
-      const index = visitor * 3 + offer;
+    for (let offer = 0; offer < 2; offer += 1) {
+      const index = visitor * 2 + offer;
       const response = await api.post('/api/listings/analyze-text', {
         data: { text: astra(90_000 + index * 2_000, 11_000 + index * 100, `Angebot ${index}`) },
       });
@@ -44,18 +45,21 @@ test('the price check rates the price against similar offers checked before', as
   await page.getByRole('button', { name: 'Inserat prüfen' }).click();
   await expect(page).toHaveURL(/\/analyse\/[0-9a-f-]{36}$/);
 
-  // Median 11.400 €: 13.500 € is 18,4 % above – a high price, look further.
-  const check = page.getByRole('region', { name: /Teurer als üblich – weitersuchen/ });
+  // Median 11.450 €: 13.500 € is 17,9 % above – a high price, look further.
+  const check = page.getByRole('region', {
+    name: /Preis-Check Teurer als vergleichbare Angebote – weitersuchen/,
+  });
   await expect(check).toBeVisible();
   await expect(check.getByRole('listitem').filter({ hasText: 'Hoher Preis' })).toHaveAttribute(
     'aria-current',
     'true',
   );
   await expect(check.getByText(/Zielpreis für die Verhandlung: etwa 11\.400/)).toBeVisible();
-  await expect(check.getByText(/Verglichen mit 9 ähnlichen Inseraten/)).toBeVisible();
+  await expect(check.getByText(/Grundlage: 10 vergleichbare Inserate/)).toBeVisible();
+  await expect(check.getByText(/keine repräsentative Marktanalyse/i)).toBeVisible();
 
   const price = page.locator('#preis .market');
-  await expect(price.getByText(/18,4\s%\süber dem Median von 9 vergleichbaren/)).toBeVisible();
+  await expect(price.getByText(/17,9\s%\süber dem Median von 10 vergleichbaren/)).toBeVisible();
   await expect(price.getByText(/keine repräsentative Marktanalyse/)).toBeVisible();
 });
 
@@ -72,7 +76,7 @@ test('without enough similar offers, the price check links to the marketplaces',
   const check = page.getByRole('region', { name: /Noch zu wenige Vergleichsangebote/ });
   await expect(check).toBeVisible();
   await expect(
-    check.getByRole('link', { name: 'Ähnliche Angebote auf den Börsen ansehen' }),
+    check.getByRole('link', { name: 'Vergleichbare Angebote auf den Börsen ansehen' }),
   ).toHaveAttribute(
     'href',
     /^\/auto-finden\?marke=opel&modell=opel-insignia&.*ez_ab=2015&ez_bis=2019/,

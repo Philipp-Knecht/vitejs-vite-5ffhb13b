@@ -174,13 +174,19 @@ export function PrivacyPage() {
       </p>
       <p>
         Für den Preis-Check vergleichen wir den Preis mit ähnlichen Inseraten, die in den letzten 90
-        Tagen bei KaufCheck geprüft wurden. Dafür nutzen wir aus diesen Inseraten nur Preis, Marke,
-        Modell, Erstzulassung, Kilometerstand, Kraftstoff, Leistung, Zustand und Postleitzahl (damit
-        jedes Auto nur einmal zählt). Angezeigt werden nur zusammengefasste Werte wie der übliche
-        Preis und die Zahl der Inserate, nie ein einzelnes Inserat. Damit niemand den Vergleich
-        allein verzerrt, zählen aus einem Browser oder Konto höchstens zehn Inserate. Wird eine
-        Prüfung gelöscht, fällt das Inserat aus dem Vergleich. Rechtsgrundlage ist unser
-        berechtigtes Interesse, Preise nachvollziehbar einzuordnen (Art. 6 Abs. 1 lit. f DSGVO).
+        Tagen bei KaufCheck geprüft wurden – auch mit Inseraten, die vor Einführung des Preis-Checks
+        am 23. Oktober 2026 geprüft wurden. Dafür nutzen wir aus diesen Inseraten Preis und
+        Preisart, Marke, Modell, Erstzulassung, Kilometerstand, Kraftstoff, Leistung, Zustand und
+        Unfallangaben, die Postleitzahl (damit jedes Auto nur einmal zählt), Zeitpunkt und Ergebnis
+        der Prüfung (um Autos mit schweren Mängeln auszulassen) und die Kennung des Kontos oder
+        Browsers (damit aus einem Browser oder Konto höchstens drei Inserate zählen und niemand den
+        Vergleich allein bestimmt). Angezeigt werden nur zusammengefasste Werte wie der übliche
+        Preis und die Zahl der Inserate, nie ein einzelnes Inserat. Ein Inserat fällt aus dem
+        Vergleich, wenn die Prüfung gelöscht wird: ohne Konto nach Ablauf der Aufbewahrungsfrist
+        unten, mit Konto mit dessen Löschung. Rechtsgrundlage ist unser berechtigtes Interesse,
+        Preise nachvollziehbar einzuordnen (Art. 6 Abs. 1 lit. f DSGVO); dieser Zweck ist mit dem
+        ursprünglichen, der Prüfung eines Angebots, vereinbar (Art. 6 Abs. 4 DSGVO), weil nur
+        zusammengefasste Werte entstehen.
       </p>
       <p>
         Prüfungen ohne Konto löschen wir nach {retentionDays} Tagen, Prüfungen mit Konto bewahren

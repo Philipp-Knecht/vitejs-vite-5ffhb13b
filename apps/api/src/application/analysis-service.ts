@@ -328,7 +328,8 @@ export class AnalysisService {
           },
           signal,
         );
-        if (valuation) {
+        // A service answer that is no usable price counts as none.
+        if (valuation && Number.isFinite(valuation.expectedEur) && valuation.expectedEur >= 1) {
           return {
             comparables: [],
             valuation,

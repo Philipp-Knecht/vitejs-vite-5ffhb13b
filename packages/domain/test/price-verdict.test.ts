@@ -1,6 +1,7 @@
-import { MIN_COMPARABLES } from '@kaufcheck/shared';
+import { MIN_COMPARABLE_VISITORS, MIN_COMPARABLES } from '@kaufcheck/shared';
 import { describe, expect, it } from 'vitest';
 import {
+  assessMarket,
   decimalRegistration,
   expectedPrice,
   NO_PRICE_MESSAGE,
@@ -81,8 +82,52 @@ describe('expectedPrice', () => {
     expect(result.expectedEur).toBeLessThanOrEqual(Math.max(...offers(30).map((p) => p.priceEur)));
   });
 
+  it('keeps offers with the same price apart from a few others', () => {
+    const prices = [5000, 5000, 5000, 5000, 5000, 5000, 4800, 5100, 5200];
+    const result = expectedPrice(
+      prices.map((priceEur) => ({ priceEur, registration: null, mileageKm: null })),
+      { registration: null, mileageKm: null },
+      8,
+    );
+    expect(result?.sampleSize).toBe(9);
+  });
+
   it('gives nothing below the minimum', () => {
     expect(expectedPrice(offers(7), { registration: 2016, mileageKm: 100_000 }, 8)).toBeNull();
+  });
+});
+
+describe('assessMarket', () => {
+  const comparables = [11000, 12000, 13000, 14000, 15000, 16000, 17000, 18000].map((priceEur) => ({
+    priceEur,
+  }));
+  const market = { comparables, criteria: 'Test', source: 'Test' };
+
+  it('rates a price within the middle half of the offers as fair', () => {
+    expect(assessMarket(13_000, market)).toMatchObject({
+      verdict: 'fair',
+      deviationPercent: -10.3,
+    });
+    expect(assessMarket(12_500, market)).toMatchObject({ verdict: 'good' });
+    expect(assessMarket(17_000, market)).toMatchObject({ verdict: 'high' });
+  });
+
+  it('needs offers from several visitors', () => {
+    const few = assessMarket(13_000, { ...market, visitors: MIN_COMPARABLE_VISITORS - 1 });
+    expect(few).toMatchObject({ status: 'insufficient_data', reason: 'few_comparables' });
+    const enough = assessMarket(13_000, { ...market, visitors: MIN_COMPARABLE_VISITORS });
+    expect(enough.status).toBe('available');
+  });
+
+  it('takes a valuation only when it is a price', () => {
+    const valuation = (expectedEur: number, lowEur: number | null = null) =>
+      assessMarket(12_000, { ...market, valuation: { expectedEur, lowEur, highEur: null } });
+    expect(valuation(10_000.4, 0)).toMatchObject({
+      method: 'valuation',
+      expectedEur: 10_000,
+      typicalLowEur: 10_000,
+    });
+    expect(valuation(0)).toMatchObject({ status: 'insufficient_data' });
   });
 });
 
@@ -172,6 +217,35 @@ describe('price advice', () => {
       action: 'compare',
       title: 'Kein Preisvergleich bei Schäden',
     });
+    for (const description of ['Motorschaden, springt aber an.', 'Fahrzeug ist nicht fahrbereit.'])
+      expect((await advise(1.2, description)).market).toMatchObject({ reason: 'not_comparable' });
+  });
+
+  it('warns more about a costly defect than about scratches', async () => {
+    const light = await advise(1 / 1.04, 'Kleine Kratzer an der Stoßstange.');
+    expect(light.advice?.text).toContain('Das Inserat nennt Mängel');
+    const costly = await advise(1 / 1.04, 'Die Motorkontrollleuchte leuchtet.');
+    expect(costly.advice?.text).toContain('Mangel, der teuer werden kann');
+  });
+
+  it('asks for what the listing leaves out', async () => {
+    const price = (
+      await analyze(
+        listingFromText(
+          pasted(
+            { Marke: 'VW', Modell: 'Golf', Kraftstoffart: 'Benzin', Getriebe: 'Manuell' },
+            '',
+            'VW Golf 1.4 TSI',
+          ),
+        ),
+        market(1),
+      )
+    ).priceContext;
+    expect(price.market).toMatchObject({ reason: 'missing_basics' });
+    expect(price.market.message).toBe(
+      'Im Inserat fehlen Angaben zu Erstzulassung und Kilometerstand.',
+    );
+    expect(price.advice?.title).toBe('Für den Preisvergleich fehlen Angaben');
   });
 
   it('points to the marketplaces without enough offers', async () => {

@@ -440,14 +440,15 @@ describe('market context', () => {
       deviationPercent: -11,
       method: 'median',
       expectedEur: 14500,
-      verdict: 'good',
+      // 11 % below the median, but within the middle half of the offers: fair.
+      verdict: 'fair',
       unusuallyLow: false,
     });
     expect(enough.priceContext.metrics.map((m) => m.key)).toContain('comparable_deviation');
     // The listing names defects: the advice says to count the repair in.
     expect(enough.priceContext.advice).toMatchObject({
       action: 'inspect',
-      title: 'Guter Preis – ansehen lohnt sich',
+      title: 'Fairer Preis – ansehen lohnt sich',
       targetPriceEur: null,
     });
     expect(enough.priceContext.advice?.text).toContain('Mängel');

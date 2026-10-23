@@ -222,7 +222,10 @@ export function buildAnalysisPdf(input: AnalysisPdfInput): jsPDF {
       });
     }
     if (market.status === 'available') {
-      w.text(`${market.message} ${market.source}`, { size: 9, muted: true });
+      w.text(
+        `${market.message} ${market.source} Stand der Preiseinordnung: ${formatDay(new Date(dto.createdAt))}.`,
+        { size: 9, muted: true },
+      );
     }
   }
 

@@ -19,20 +19,43 @@ const ICONS: Record<PriceAdviceAction, ReactNode> = {
   compare: <BadgeEuro aria-hidden size={22} />,
 };
 
+const checkedOn = (iso: string) =>
+  new Date(iso).toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit', year: 'numeric' });
+
 /**
  * The answer to „Is the price worth it?“ at the top of the result: the price
- * level on a fixed scale and what to do. Rules only, the same for everyone.
+ * level on a fixed scale and what to do, with the data it rests on. Rules
+ * only, the same for everyone.
  */
-export function PriceVerdict({ price, vehicle }: { price: PriceContext; vehicle: Vehicle | null }) {
+export function PriceVerdict({
+  price,
+  vehicle,
+  checkedAt,
+}: {
+  price: PriceContext;
+  vehicle: Vehicle | null;
+  /** When the check ran: the comparison is as of then. */
+  checkedAt: string;
+}) {
   const { advice, market } = price;
   if (!advice) return null;
-  const verdict = market.status === 'available' ? market.verdict : undefined;
+  // With warning signs the level would read as praise; the title says what matters.
+  const verdict =
+    market.status === 'available' && advice.action !== 'caution' ? market.verdict : undefined;
+  const similar =
+    advice.action === 'compare' &&
+    market.status === 'insufficient_data' &&
+    market.reason !== 'not_comparable'
+      ? similarOffersLink(vehicle)
+      : null;
   return (
     <section
       className={`price-verdict price-verdict--${advice.action}`}
-      aria-labelledby="price-verdict-title"
+      aria-labelledby="price-verdict-eyebrow price-verdict-title"
     >
-      <p className="price-verdict__eyebrow">Preis-Check</p>
+      <p id="price-verdict-eyebrow" className="price-verdict__eyebrow">
+        Preis-Check
+      </p>
       <h2 id="price-verdict-title" className="price-verdict__title">
         {ICONS[advice.action]} {advice.title}
       </h2>
@@ -45,6 +68,7 @@ export function PriceVerdict({ price, vehicle }: { price: PriceContext; vehicle:
               aria-current={level === verdict ? 'true' : undefined}
             >
               {PRICE_VERDICT_LABELS[level]}
+              {level === verdict && <span className="visually-hidden"> – dieses Angebot</span>}
             </li>
           ))}
         </ol>
@@ -55,21 +79,19 @@ export function PriceVerdict({ price, vehicle }: { price: PriceContext; vehicle:
           Zielpreis für die Verhandlung: <strong>etwa {formatEuro(advice.targetPriceEur)}</strong>
         </p>
       )}
-      <p className="price-verdict__meta">
-        {market.status === 'available' ? (
-          <>
-            {market.method === 'valuation'
-              ? `Üblicher Preis laut ${market.source}.`
-              : `Verglichen mit ${formatNumber(market.sampleSize)} ähnlichen Inseraten, die bei KaufCheck geprüft wurden.`}{' '}
-            <a href="#preis">So ist das gerechnet</a>
-          </>
-        ) : (
-          advice.action === 'compare' &&
-          market.reason !== 'not_comparable' && (
-            <Link to={similarOffersLink(vehicle)}>Ähnliche Angebote auf den Börsen ansehen</Link>
-          )
-        )}
-      </p>
+      {market.status === 'available' && (
+        <p className="price-verdict__meta">
+          {market.method === 'valuation'
+            ? `Grundlage: übliche Preise laut ${market.source}. Ausstattung und Zustand zählen nicht.`
+            : `Grundlage: ${formatNumber(market.sampleSize)} vergleichbare Inserate, die bei KaufCheck geprüft wurden – Angebotspreise, teils eingefügt und nicht überprüft. Keine repräsentative Marktanalyse; Ausstattung und Zustand zählen nicht.`}{' '}
+          Stand: {checkedOn(checkedAt)}. <a href="#preis">Details zur Rechnung</a>
+        </p>
+      )}
+      {similar && (
+        <p className="price-verdict__meta">
+          <Link to={similar}>Vergleichbare Angebote auf den Börsen ansehen</Link>
+        </p>
+      )}
     </section>
   );
 }

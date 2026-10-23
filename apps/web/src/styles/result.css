@@ -637,6 +637,8 @@
   color: #fff;
   outline: 2px solid var(--c-text);
   outline-offset: 1px;
+  /* Without it, printing drops the background and leaves white text. */
+  print-color-adjust: exact;
 }
 
 .price-scale__step--very_good[aria-current='true'] {

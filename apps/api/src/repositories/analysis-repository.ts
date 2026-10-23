@@ -1,7 +1,14 @@
-import { decimalRegistration, formatKm, NBSP, type MarketData } from '@kaufcheck/domain';
+import {
+  decimalRegistration,
+  formatKm,
+  NBSP,
+  NOT_COMPARABLE_OBSERVATIONS,
+  type MarketData,
+} from '@kaufcheck/domain';
 import {
   AnalysisResultSchema,
   FUEL_LABELS,
+  MAX_COMPARABLES_PER_VISITOR,
   OriginSchema,
   type AnalysisDto,
   type AnalysisListItem,
@@ -24,8 +31,8 @@ const StoredResultSchema = AnalysisResultSchema.omit({ sellerQuestions: true });
 /** Like the default retention of anonymous checks (`ANON_RETENTION_DAYS`): older prices say little. */
 const COMPARABLE_DAYS = 90;
 
-/** So that one visitor cannot tip the comparison alone. */
-const MAX_COMPARABLES_PER_VISITOR = 10;
+/** Offers that are no comparables: severe defects (see the domain rules) and placeholder prices. */
+const EXCLUDED_OBSERVATIONS = [...NOT_COMPARABLE_OBSERVATIONS, 'price_placeholder'];
 
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
@@ -191,9 +198,11 @@ export class AnalysisRepository {
   /**
    * Comparable offers for the price verdict: listings checked with KaufCheck
    * in the last 90 days, retrieved or pasted, never examples. Each car counts
-   * once with its latest price (same make, model, registration, mileage and
-   * postcode), at most ten per visitor, so nobody tips the comparison alone.
-   * Damaged cars, cars sold as defective and placeholder prices stay out.
+   * once with its latest snapshot (same make, model, registration, mileage,
+   * fuel, power and postcode); a car whose latest snapshot is damaged,
+   * defective or has a placeholder price drops out. Each browser or account
+   * adds at most three; how many there are goes to the domain, which wants
+   * several before it rates a price.
    */
   async findComparables(
     listing: NormalizedListing,
@@ -209,13 +218,12 @@ export class AnalysisRepository {
     )
       return null;
     const year = vehicle.firstRegistration.year;
-    const month = vehicle.firstRegistration.month ?? 0;
+    const month = vehicle.firstRegistration.month;
+    const km = vehicle.mileageKm;
+    const postalCode = listing.location?.postalCode ?? null;
     // ±30 %, at least ±10,000 km for cars with few kilometres.
-    const minKm = Math.max(
-      0,
-      Math.round(Math.min(vehicle.mileageKm * 0.7, vehicle.mileageKm - 10_000)),
-    );
-    const maxKm = Math.round(Math.max(vehicle.mileageKm * 1.3, vehicle.mileageKm + 10_000));
+    const minKm = Math.max(0, Math.round(Math.min(km * 0.7, km - 10_000)));
+    const maxKm = Math.round(Math.max(km * 1.3, km + 10_000));
     const since = new Date(now.getTime() - COMPARABLE_DAYS * 24 * 60 * 60 * 1000);
     const fuel = vehicle.fuel;
     const kw = vehicle.powerKw;
@@ -223,15 +231,14 @@ export class AnalysisRepository {
     const maxKw = kw === null ? null : Math.round(kw * 1.2);
 
     const rows = await this.db.$queryRaw<
-      { priceEur: number; year: number; month: number | null; km: number }[]
+      { priceEur: number; year: number; month: number | null; km: number; owner: string }[]
     >`
-      WITH latest AS (
-        SELECT DISTINCT ON (lower(v.make), lower(v.model), v."firstRegistrationYear",
-                            coalesce(v."firstRegistrationMonth", 0), v."mileageKm",
-                            coalesce(l."postalCode", ''))
-          l."priceEur", v."firstRegistrationYear" AS year, v."firstRegistrationMonth" AS month,
-          v."mileageKm" AS km, l."retrievedAt",
-          coalesce(a."userId"::text, a."anonymousId", l.id::text) AS owner
+      WITH recent AS (
+        SELECT l."priceEur", l."priceKind", l."retrievedAt", l."postalCode",
+               v."firstRegistrationYear" AS year, v."firstRegistrationMonth" AS month,
+               v."mileageKm" AS km, v.fuel, v."powerKw", v.condition, v."accidentHistory",
+               a.result -> 'observations' AS observations,
+               coalesce(a."userId"::text, a."anonymousId", l.id::text) AS owner
         FROM "Listing" l
         JOIN "Vehicle" v ON v."listingId" = l.id
         JOIN "Analysis" a ON a."listingId" = l.id
@@ -239,37 +246,47 @@ export class AnalysisRepository {
           AND l."isExample" = false
           AND l."retrievedAt" >= ${since}
           AND l.fingerprint <> ${fingerprint}
-          AND l."priceEur" IS NOT NULL AND l."priceEur" >= 100
-          AND l."priceKind" IS DISTINCT FROM 'give_away'
           AND lower(v.make) = lower(${vehicle.make})
           AND lower(v.model) = lower(${vehicle.model})
           AND v."firstRegistrationYear" BETWEEN ${year - 2} AND ${year + 2}
           AND v."mileageKm" BETWEEN ${minKm} AND ${maxKm}
-          AND NOT (v."firstRegistrationYear" = ${year}
-                   AND coalesce(v."firstRegistrationMonth", 0) = ${month}
-                   AND v."mileageKm" = ${vehicle.mileageKm})
-          AND v.condition IS DISTINCT FROM 'damaged'
-          AND v.condition IS DISTINCT FROM 'not_roadworthy'
-          AND v."accidentHistory" IS DISTINCT FROM 'unrepaired_damage'
-          AND NOT coalesce(a.result -> 'observations', '[]'::jsonb)
-                  @> '[{"id": "sold_as_defective"}]'::jsonb
-          AND NOT coalesce(a.result -> 'observations', '[]'::jsonb)
-                  @> '[{"id": "price_placeholder"}]'::jsonb
+          -- The checked car itself, pasted again (with or without month and postcode).
+          AND NOT (v."firstRegistrationYear" = ${year} AND v."mileageKm" = ${km}
+                   AND (v."firstRegistrationMonth" IS NULL OR ${month}::int IS NULL
+                        OR v."firstRegistrationMonth" = ${month}::int)
+                   AND (l."postalCode" IS NULL OR ${postalCode}::text IS NULL
+                        OR l."postalCode" = ${postalCode}::text))
           ${fuel ? Prisma.sql`AND (v.fuel IS NULL OR v.fuel = ${fuel})` : Prisma.empty}
           ${
             minKw !== null && maxKw !== null
               ? Prisma.sql`AND (v."powerKw" IS NULL OR v."powerKw" BETWEEN ${minKw} AND ${maxKw})`
               : Prisma.empty
           }
-        ORDER BY lower(v.make), lower(v.model), v."firstRegistrationYear",
-                 coalesce(v."firstRegistrationMonth", 0), v."mileageKm",
-                 coalesce(l."postalCode", ''), l."retrievedAt" DESC
+      ),
+      latest AS (
+        SELECT DISTINCT ON (year, coalesce(month, 0), km, coalesce(fuel, ''),
+                            coalesce("powerKw", 0), coalesce("postalCode", '')) *
+        FROM recent
+        ORDER BY year, coalesce(month, 0), km, coalesce(fuel, ''), coalesce("powerKw", 0),
+                 coalesce("postalCode", ''), "retrievedAt" DESC
+      ),
+      usable AS (
+        SELECT * FROM latest
+        WHERE "priceEur" IS NOT NULL AND "priceEur" >= 100
+          AND "priceKind" IS DISTINCT FROM 'give_away'
+          AND condition IS DISTINCT FROM 'damaged'
+          AND condition IS DISTINCT FROM 'not_roadworthy'
+          AND "accidentHistory" IS DISTINCT FROM 'unrepaired_damage'
+          AND NOT EXISTS (
+            SELECT 1 FROM jsonb_array_elements(coalesce(observations, '[]'::jsonb)) AS o
+            WHERE o ->> 'id' = ANY(${EXCLUDED_OBSERVATIONS}::text[])
+          )
       ),
       capped AS (
         SELECT *, row_number() OVER (PARTITION BY owner ORDER BY "retrievedAt" DESC) AS rank
-        FROM latest
+        FROM usable
       )
-      SELECT "priceEur", year, month, km FROM capped
+      SELECT "priceEur", year, month, km, owner FROM capped
       WHERE rank <= ${MAX_COMPARABLES_PER_VISITOR}
       ORDER BY "retrievedAt" DESC
       LIMIT 500`;
@@ -290,8 +307,9 @@ export class AnalysisRepository {
         ),
         mileageKm: Number(row.km),
       })),
+      visitors: new Set(rows.map((row) => row.owner)).size,
       criteria: criteria.join(', '),
-      source: `Inserate, die in den letzten ${COMPARABLE_DAYS} Tagen bei KaufCheck geprüft wurden (abgerufen oder als Text eingefügt), jedes Auto einmal. Es sind Angebots-, keine Verkaufspreise; das ist keine repräsentative Marktanalyse.`,
+      source: `Inserate, die in den letzten ${COMPARABLE_DAYS} Tagen bei KaufCheck geprüft wurden (abgerufen oder als Text eingefügt und nicht überprüft), jedes Auto einmal. Es sind Angebots-, keine Verkaufspreise; Ausstattung und Zustand zählen nicht. Das ist keine repräsentative Marktanalyse.`,
     };
   }
 }

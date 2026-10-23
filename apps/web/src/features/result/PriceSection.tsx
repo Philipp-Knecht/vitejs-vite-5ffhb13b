@@ -1,10 +1,12 @@
 import { findListingModel, findMake } from '@kaufcheck/catalog';
 import {
   LOAN_LIMITS,
+  MIN_COMPARABLE_VISITORS,
   MIN_COMPARABLES,
   PRICE_KIND_LABELS,
   PRICE_VERDICT_LABELS,
   PRICE_VERDICT_LIMITS,
+  UNUSUALLY_LOW_PERCENT,
   type PriceContext,
   type Vehicle,
 } from '@kaufcheck/shared';
@@ -21,11 +23,13 @@ function MarketRange({
   upper,
   median,
   asking,
+  bandLabel,
 }: {
   lower: number;
   upper: number;
   median: number;
   asking: number;
+  bandLabel: string;
 }) {
   const min = Math.min(lower, asking) * 0.9;
   const max = Math.max(upper, asking) * 1.1;
@@ -42,8 +46,7 @@ function MarketRange({
       </div>
       <div className="market-range__legend">
         <span>
-          <span className="market-range__swatch market-range__swatch--band" /> mittlere Hälfte der
-          Vergleichsangebote
+          <span className="market-range__swatch market-range__swatch--band" /> {bandLabel}
         </span>
         <span>
           <span className="market-range__swatch market-range__swatch--asking" /> dieses Angebot
@@ -69,6 +72,9 @@ function listingModel(vehicle: Vehicle | null) {
 
 export function PriceSection({ price, vehicle }: { price: PriceContext; vehicle: Vehicle | null }) {
   const { askingPrice, metrics, market, notes } = price;
+  const similar = similarOffersLink(vehicle);
+  const usualLabel =
+    market.status === 'available' && market.method === 'median' ? 'Median' : 'üblichen Preis';
   return (
     <ResultSection id="preis" title="Preis einordnen">
       <div className="price-summary">
@@ -112,6 +118,11 @@ export function PriceSection({ price, vehicle }: { price: PriceContext; vehicle:
                 upper={market.typicalHighEur ?? market.upperQuartileEur}
                 median={market.expectedEur ?? market.medianEur}
                 asking={askingPrice.amountEur}
+                bandLabel={
+                  market.method === 'valuation'
+                    ? `übliche Spanne laut ${market.source}`
+                    : 'mittlere Hälfte der Vergleichsangebote'
+                }
               />
             )}
             <dl className="market__facts">
@@ -144,9 +155,13 @@ export function PriceSection({ price, vehicle }: { price: PriceContext; vehicle:
             </p>
             {market.verdict && (
               <p className="market__source">
-                Preisstufen: bis {percent(PRICE_VERDICT_LIMITS.veryGood)} sehr gut, bis{' '}
+                Preisstufen nach der Abweichung vom {usualLabel}: bis{' '}
+                {percent(PRICE_VERDICT_LIMITS.veryGood)} sehr gut, bis{' '}
                 {percent(PRICE_VERDICT_LIMITS.good)} gut, unter {percent(PRICE_VERDICT_LIMITS.fair)}{' '}
-                fair, unter {percent(PRICE_VERDICT_LIMITS.increased)} erhöht, darüber hoch.
+                fair, unter {percent(PRICE_VERDICT_LIMITS.increased)} erhöht, ab{' '}
+                {percent(PRICE_VERDICT_LIMITS.increased)} hoch. Liegt der Preis in der mittleren
+                Hälfte, gilt er immer als fair; ab {percent(UNUSUALLY_LOW_PERCENT)} heißt es
+                „auffällig günstig“.
                 {market.method === 'age_mileage' &&
                   ' Der übliche Preis ist auf Alter und Kilometerstand dieses Autos umgerechnet.'}
               </p>
@@ -156,14 +171,18 @@ export function PriceSection({ price, vehicle }: { price: PriceContext; vehicle:
         ) : (
           <>
             <p className="market__insufficient">{market.message}</p>
-            {market.reason !== 'not_comparable' && market.reason !== 'no_price' && (
+            {(market.reason === undefined || market.reason === 'few_comparables') && (
               <p className="market__hint">
-                KaufCheck bewertet den Preis, sobald mindestens {MIN_COMPARABLES} ähnliche Inserate
-                bei KaufCheck geprüft wurden. Bis dahin:{' '}
-                <Link to={similarOffersLink(vehicle)}>
-                  ähnliche Angebote auf den Börsen ansehen
-                </Link>
-                .
+                KaufCheck bewertet den Preis, sobald mindestens {MIN_COMPARABLES} vergleichbare
+                Inserate von mindestens {MIN_COMPARABLE_VISITORS} Besuchern bei KaufCheck geprüft
+                wurden.
+                {similar && (
+                  <>
+                    {' '}
+                    Bis dahin:{' '}
+                    <Link to={similar}>vergleichbare Angebote auf den Börsen ansehen</Link>.
+                  </>
+                )}
               </p>
             )}
           </>
