@@ -80,6 +80,8 @@ const server = spawn(process.execPath, [path.join(root, 'apps/api/dist/server.js
     VITE_CONTACT_PHONE: '+49 30 1234567',
     // A synthetic partner link; nothing is fetched from it.
     AFFILIATE_CAR_INSURANCE_URL: 'https://partner.example/kfz-vergleich?pid=e2e',
+    AFFILIATE_VEHICLE_HISTORY_URL: 'https://history.example/check?aff=e2e',
+    AFFILIATE_VEHICLE_HISTORY_NAME: 'Beispielhistorie',
     AFFILIATE_CAR_INSURANCE_NAME: 'Beispielportal',
     // A synthetic ad sold directly, in the guides only; its image is a file of the site.
     SPONSOR_ADS: JSON.stringify([

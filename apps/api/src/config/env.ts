@@ -215,6 +215,13 @@ const EnvSchema = z
     AFFILIATE_CAR_INSURANCE_URL: optionalString,
     /** The partner whose site the link opens, named in the link text, e.g. „Tarifcheck.de“. */
     AFFILIATE_CAR_INSURANCE_NAME: optionalString,
+    /**
+     * Partner link to vehicle history reports by VIN (affiliate program, e.g.
+     * carVertical), shown in a check and the checklist to visitors without Pro.
+     */
+    AFFILIATE_VEHICLE_HISTORY_URL: optionalString,
+    /** The partner named in the link text, e.g. „carVertical“. */
+    AFFILIATE_VEHICLE_HISTORY_NAME: optionalString,
 
     /**
      * Ads sold directly (JSON array, see README): text and an optional image
@@ -254,20 +261,17 @@ const EnvSchema = z
         'OPENAI_API_KEY and OPENAI_MODEL are required for AI_PROVIDER=openai',
       );
     }
-    if (env.AFFILIATE_CAR_INSURANCE_URL || env.AFFILIATE_CAR_INSURANCE_NAME) {
-      if (!env.AFFILIATE_CAR_INSURANCE_URL || !env.AFFILIATE_CAR_INSURANCE_NAME)
-        issue(
-          'AFFILIATE_CAR_INSURANCE_URL',
-          'AFFILIATE_CAR_INSURANCE_URL and AFFILIATE_CAR_INSURANCE_NAME must be set together',
-        );
-      else if (!affiliateUrl(env.AFFILIATE_CAR_INSURANCE_URL))
-        issue('AFFILIATE_CAR_INSURANCE_URL', 'must be an https:// link without user name');
-      const name = env.AFFILIATE_CAR_INSURANCE_NAME ?? '';
-      if (name.length > 100 || /[\p{Cc}\p{Cf}]/u.test(name))
-        issue(
-          'AFFILIATE_CAR_INSURANCE_NAME',
-          'must be at most 100 characters without control characters',
-        );
+    for (const [urlKey, nameKey] of [
+      ['AFFILIATE_CAR_INSURANCE_URL', 'AFFILIATE_CAR_INSURANCE_NAME'],
+      ['AFFILIATE_VEHICLE_HISTORY_URL', 'AFFILIATE_VEHICLE_HISTORY_NAME'],
+    ] as const) {
+      const url = env[urlKey];
+      const name = env[nameKey];
+      if (!url && !name) continue;
+      if (!url || !name) issue(urlKey, `${urlKey} and ${nameKey} must be set together`);
+      else if (!affiliateUrl(url)) issue(urlKey, 'must be an https:// link without user name');
+      if ((name ?? '').length > 100 || /[\p{Cc}\p{Cf}]/u.test(name ?? ''))
+        issue(nameKey, 'must be at most 100 characters without control characters');
     }
     if (env.EMAIL_TRANSPORT === 'smtp' && (!env.SMTP_URL || !env.EMAIL_FROM)) {
       issue('SMTP_URL', 'SMTP_URL and EMAIL_FROM are required for EMAIL_TRANSPORT=smtp');
@@ -371,6 +375,7 @@ export interface AppConfig {
   sponsorAds: SponsorAdConfig[];
   /** Affiliate link to a car insurance comparison; null = none. */
   affiliateCarInsurance: { url: string; name: string } | null;
+  affiliateVehicleHistory: { url: string; name: string } | null;
   analyticsEnabled: boolean;
   serveWeb: boolean;
   webDistDir: string;
@@ -519,6 +524,13 @@ export function loadConfig(source: NodeJS.ProcessEnv = process.env): AppConfig {
             name: env.AFFILIATE_CAR_INSURANCE_NAME,
           }
         : null,
+    affiliateVehicleHistory:
+      env.AFFILIATE_VEHICLE_HISTORY_URL && env.AFFILIATE_VEHICLE_HISTORY_NAME
+        ? {
+            url: affiliateUrl(env.AFFILIATE_VEHICLE_HISTORY_URL)!,
+            name: env.AFFILIATE_VEHICLE_HISTORY_NAME,
+          }
+        : null,
     analyticsEnabled: env.ANALYTICS_ENABLED,
     serveWeb: env.SERVE_WEB ?? production,
     webDistDir: env.WEB_DIST_DIR ?? path.resolve(apiRoot, '../web/dist'),
@@ -543,6 +555,7 @@ export function describeConfig(config: AppConfig): Record<string, unknown> {
     ads: config.adsense ? (config.adsense.slot ? 'adsense' : 'adsense_verification_only') : 'none',
     email: config.email.transport,
     affiliateCarInsurance: config.affiliateCarInsurance !== null,
+    affiliateVehicleHistory: config.affiliateVehicleHistory !== null,
     sponsorAds: config.sponsorAds.length,
     analytics: config.analyticsEnabled,
     serveWeb: config.serveWeb,

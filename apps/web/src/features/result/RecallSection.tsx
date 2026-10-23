@@ -1,5 +1,6 @@
 import { findMake } from '@kaufcheck/catalog';
 import { findVin, type NormalizedListing } from '@kaufcheck/shared';
+import { VehicleHistoryLink } from '../../components/VehicleHistoryLink';
 import { RecallCheck } from '../recalls/RecallCheck';
 import { RECALL_LEAD } from '../recalls/texts';
 import { ResultSection } from './Section';
@@ -18,6 +19,7 @@ export function RecallSection({
         placement="result"
         listingVin={vin?.vin ?? null}
       />
+      <VehicleHistoryLink placement="result_recalls" />
     </ResultSection>
   );
 }

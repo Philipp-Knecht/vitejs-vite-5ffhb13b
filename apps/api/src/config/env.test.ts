@@ -64,6 +64,27 @@ describe('loadConfig', () => {
       expect(() => loadConfig({ ...BASE, SPONSOR_ADS: value }), value).toThrow(ConfigError);
   });
 
+  it('takes the vehicle history link the same way', () => {
+    expect(loadConfig(BASE).affiliateVehicleHistory).toBeNull();
+    expect(
+      loadConfig({
+        ...BASE,
+        AFFILIATE_VEHICLE_HISTORY_URL: 'https://partner.example/history?a=1',
+        AFFILIATE_VEHICLE_HISTORY_NAME: 'carVertical',
+      }).affiliateVehicleHistory,
+    ).toEqual({ url: 'https://partner.example/history?a=1', name: 'carVertical' });
+    expect(() =>
+      loadConfig({ ...BASE, AFFILIATE_VEHICLE_HISTORY_URL: 'https://partner.example/' }),
+    ).toThrow(/AFFILIATE_VEHICLE_HISTORY_NAME must be set together/);
+    expect(() =>
+      loadConfig({
+        ...BASE,
+        AFFILIATE_VEHICLE_HISTORY_URL: 'http://partner.example/',
+        AFFILIATE_VEHICLE_HISTORY_NAME: 'X',
+      }),
+    ).toThrow(/AFFILIATE_VEHICLE_HISTORY_URL/);
+  });
+
   it('takes an affiliate link only as a plain https link with a name', () => {
     expect(loadConfig(BASE).affiliateCarInsurance).toBeNull();
     const config = loadConfig({
