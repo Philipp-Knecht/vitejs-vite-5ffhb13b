@@ -476,12 +476,14 @@ workshop). `SPONSOR_ADS` is a JSON array, at most 20 entries:
 `/auto-aus-den-niederlanden` asks RDW Open Data (opendata.rdw.nl, public domain) for a Dutch
 registration number: registration dates, export and taxi flags, the RDW's odometer verdict with its
 explanation (translated close to the Dutch original), recalls and the defects and advice points of
-the APK (the open data has them since 2 June 2022; gas systems and tachographs are left out).
+the APK (the open data keeps about the last three years, a window that moves on; gas systems and
+tachographs are left out).
 
 - The browser sends the plate to `POST /api/rdw` (in the body, so that no URL log holds it); the
   server asks five datasets of the RDW, with a timeout of 8 seconds, and keeps an answer in memory
   for an hour (at most 500). The same plate asked at once goes out once. Nothing is stored in the
-  database. 20 lookups per minute per client and 60 per minute for the whole server.
+  database. 10 lookups per minute per client and `RDW_LOOKUPS_PER_MINUTE` (default 60) for the
+  whole server; beyond that the answer is 429.
 - `RDW_LOOKUP_MODE`: `live` (default), `off` (the lookup answers that it is switched off) or
   `fixtures` (synthetic answers from `apps/api/fixtures/rdw`, the default in tests, refused in
   production).

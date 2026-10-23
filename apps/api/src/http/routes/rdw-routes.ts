@@ -11,7 +11,7 @@ export function rdwRoutes(app: FastifyInstance, services: Services): void {
   // It travels in the body, so that it is in no log of a URL (ours, the host's, the CDN's).
   app.post(
     '/api/rdw',
-    { config: { rateLimit: { max: 20, timeWindow: '1 minute' } } },
+    { config: { rateLimit: { max: 10, timeWindow: '1 minute' } } },
     async (request, reply): Promise<RdwLookupResponse> => {
       const body = BodySchema.safeParse(request.body);
       const plate = body.success ? normalizeDutchPlate(body.data.plate) : null;

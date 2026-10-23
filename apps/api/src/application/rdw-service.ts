@@ -22,8 +22,6 @@ const BASE = 'https://opendata.rdw.nl/resource';
 const CACHE_SIZE = 500;
 const CACHE_MS = 60 * 60 * 1000;
 const TIMEOUT_MS = 8000;
-/** Lookups per minute for the whole server: each one asks four or five datasets. */
-const LOOKUPS_PER_MINUTE = 60;
 /** Inspection types of the APK (light and heavy vehicles); gas systems and tachographs are none. */
 const APK_TYPES = ['AL', 'AZ'];
 
@@ -35,6 +33,8 @@ export interface RdwServiceOptions {
   fixturesDir: string;
   /** Socrata app token, against throttling (optional). */
   appToken?: string | null;
+  /** Lookups per minute for the whole server. */
+  lookupsPerMinute?: number;
   /** For tests: the request to the RDW. */
   fetchRows?: RdwFetch;
   now?: () => Date;
@@ -88,7 +88,9 @@ export class RdwService {
   constructor(private readonly options: RdwServiceOptions) {
     this.fetchRows = options.fetchRows ?? liveFetch(options.appToken ?? null);
     this.now = options.now ?? (() => new Date());
-    this.limiter = new RateLimiter(LOOKUPS_PER_MINUTE, 60_000, () => this.now().getTime());
+    this.limiter = new RateLimiter(options.lookupsPerMinute ?? 60, 60_000, () =>
+      this.now().getTime(),
+    );
   }
 
   /** The vehicle with a normalized Dutch registration number, or null when the RDW has none. */
@@ -102,7 +104,7 @@ export class RdwService {
     const running = this.pending.get(plate);
     if (running) return running;
     if (!this.limiter.tryTake())
-      throw new AppError('SERVICE_UNAVAILABLE', {
+      throw new AppError('RATE_LIMITED', {
         message:
           'Gerade fragen sehr viele bei der RDW an. Bitte versuch es in einer Minute noch einmal.',
       });

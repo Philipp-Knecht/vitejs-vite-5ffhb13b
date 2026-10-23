@@ -4,7 +4,6 @@ import {
   ODOMETER_EXPLANATIONS,
   ODOMETER_VERDICT_LABELS,
   RDW_FUEL_LABELS,
-  RDW_INSPECTIONS_SINCE,
   RDW_KIND_LABELS,
   RDW_SOURCE,
   type RdwLookupResponse,
@@ -119,8 +118,8 @@ function Result({ vehicle, checkedAt }: { vehicle: RdwVehicle; checkedAt: string
 
       <h4>Befunde bei der APK</h4>
       <p className="field__hint">
-        Die offenen Daten nennen Mängel und Hinweise der APK seit dem {day(RDW_INSPECTIONS_SINCE)};
-        Prüfungen ohne Befund und frühere Prüfungen stehen nicht darin. Die Beschreibungen sind die
+        Die offenen Daten nennen Mängel und Hinweise der APK aus etwa den letzten drei Jahren;
+        ältere Prüfungen und Prüfungen ohne Befund stehen nicht darin. Die Beschreibungen sind die
         der RDW (niederländisch).
       </p>
       {vehicle.inspections.length === 0 ? (
@@ -156,8 +155,10 @@ function Result({ vehicle, checkedAt }: { vehicle: RdwVehicle; checkedAt: string
 function summary(response: RdwLookupResponse | undefined): string {
   if (!response) return '';
   const vehicle = response.vehicle;
-  if (!vehicle) return 'Kein Fahrzeug zu diesem Kennzeichen gefunden.';
-  return `Ergebnis für ${vehicle.make} ${vehicle.model}: Kilometerstand ${ODOMETER_VERDICT_LABELS[vehicle.odometer.verdict]}, ${vehicle.recalls.filter((recall) => recall.open).length} offene Rückrufe.`;
+  // „Not found“ is announced by its own message.
+  if (!vehicle) return '';
+  const open = vehicle.recalls.filter((recall) => recall.open).length;
+  return `Ergebnis für ${vehicle.make} ${vehicle.model}: Kilometerstand ${ODOMETER_VERDICT_LABELS[vehicle.odometer.verdict]}, ${open === 1 ? 'ein offener Rückruf' : `${open} offene Rückrufe`}.`;
 }
 
 /** The lookup of a Dutch registration number at RDW Open Data, through KaufCheck's server. */

@@ -62,9 +62,6 @@ export const ODOMETER_EXPLANATIONS: Record<string, string> = {
   NG: 'Nicht registriert.',
 };
 
-/** The first day of the defects found at the APK in the open data. */
-export const RDW_INSPECTIONS_SINCE = '2022-06-02';
-
 /** The RDW's fuel names in German; others as given. */
 export const RDW_FUEL_LABELS: Record<string, string> = {
   Benzine: 'Benzin',
@@ -74,7 +71,7 @@ export const RDW_FUEL_LABELS: Record<string, string> = {
   CNG: 'Erdgas (CNG)',
   LNG: 'Flüssigerdgas (LNG)',
   Waterstof: 'Wasserstoff',
-  Alcohol: 'Ethanol',
+  Alcohol: 'Alkohol',
 };
 
 /** The RDW's vehicle types in German; others as given. */
@@ -123,7 +120,7 @@ export const RdwVehicleSchema = z.object({
       open: z.boolean(),
     }),
   ),
-  /** Defects and advice points found at APK inspections since RDW_INSPECTIONS_SINCE, the newest first. */
+  /** Defects and advice points of the APK (the open data keeps about three years), the newest first. */
   inspections: z.array(
     z.object({
       date: Day,

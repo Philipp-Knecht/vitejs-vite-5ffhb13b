@@ -212,3 +212,21 @@ describe('RDW lookup with fixtures', () => {
     expect(unknown.vehicle).toBeNull();
   });
 });
+
+describe('RDW lookup limit for the server', () => {
+  let built: BuiltApp;
+  beforeAll(async () => {
+    built = await createTestApp(
+      { RDW_LOOKUPS_PER_MINUTE: '1' },
+      { rdwFetch: () => Promise.resolve([]) },
+    );
+  });
+  afterAll(() => built.app.close());
+
+  it('answers 429 beyond it, and the cache still answers', async () => {
+    const client = new TestClient(built.app);
+    expect((await client.post('/api/rdw', { plate: 'AB123C' })).statusCode).toBe(200);
+    expect((await client.post('/api/rdw', { plate: 'AB124C' })).statusCode).toBe(429);
+    expect((await client.post('/api/rdw', { plate: 'AB123C' })).statusCode).toBe(200);
+  });
+});

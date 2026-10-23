@@ -50,7 +50,7 @@ export function NlImportPage() {
         <li>ob das Auto als ausgeführt gemeldet ist und ob die RDW es als Taxi kennzeichnet;</li>
         <li>das Urteil der RDW über die Kilometerstände, mit ihrer Erläuterung;</li>
         <li>Rückrufe, die für dieses Kennzeichen offen oder als erledigt gemeldet sind;</li>
-        <li>Mängel und Hinweise der APK seit Juni 2022, mit Datum.</li>
+        <li>Mängel und Hinweise der APK aus etwa den letzten drei Jahren, mit Datum.</li>
       </ul>
       <p>
         Ein ausgeführtes Auto bleibt nur eine Zeit lang in den offenen Daten; ist es schon länger
@@ -61,13 +61,13 @@ export function NlImportPage() {
       <h2 id="tacho">Das Urteil über den Kilometerstand</h2>
       <p>
         In den Niederlanden müssen von der RDW anerkannte Betriebe den Kilometerstand an die RDW
-        melden, etwa bei APK, Reparatur, Wartung und Reifenwechsel, beim Halterwechsel und bei der
-        Ausfuhr (
+        melden, etwa bei APK, Reparatur, Wartung und Reifenwechsel, bei einem Halterwechsel über
+        einen solchen Betrieb und bei der Ausfuhr (
         <a href={RDW_ODOMETER_URL} {...external}>
           RDW: Tellerstanden{NEW_TAB}
         </a>
         ). Ist jeder Stand höher als der davor, urteilt die RDW „logisch“. Ist ein Stand niedriger
-        als der davor, kann der Tacho zurückgedreht oder ein Tippfehler gemacht worden sein; das
+        als der davor, kann der Tacho zurückgedreht worden sein, oder jemand hat sich vertippt; das
         Urteil „unlogisch“ darf die RDW nur für Messungen nach dem 1. Januar 2014 abgeben. Kein
         Urteil gibt es zum Beispiel, wenn der Tacho ersetzt wurde oder das Auto vorher außerhalb der
         Niederlande registriert war. KaufCheck zeigt die Erläuterung der RDW zu jedem Urteil, ins
@@ -88,8 +88,8 @@ export function NlImportPage() {
         <li>Die Kilometerstände selbst – nur das Urteil über den Verlauf.</li>
         <li>Halter und ihre Zahl: Personenbezogene Daten veröffentlicht die RDW nicht.</li>
         <li>
-          APK-Termine ohne Befund und Prüfungen vor Juni 2022: Die Daten nennen nur Prüfungen, bei
-          denen seitdem ein Mangel oder Hinweis notiert wurde.
+          APK-Termine ohne Befund und ältere Prüfungen: Die Daten nennen nur Prüfungen der letzten
+          rund drei Jahre (Stand Oktober 2026), bei denen ein Mangel oder Hinweis notiert wurde.
         </li>
       </ul>
       <p>
