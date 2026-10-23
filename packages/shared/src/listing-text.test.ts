@@ -2,6 +2,8 @@ import { describe, expect, it } from 'vitest';
 import {
   EMPTY_LISTING_TEXT,
   kwToPs,
+  linkedPower,
+  psToKw,
   mergeListingIntoContract,
   saleContractFromListing,
   LISTING_TITLE_MAX,
@@ -288,5 +290,60 @@ describe('round 3', () => {
   it('keeps keys typed into the contract when the listing gets some later', () => {
     const contract = { ...saleContractFromListing(golf), keys: '3' };
     expect(mergeListingIntoContract(contract, golf, { ...golf, keys: '2' }).keys).toBe('3');
+  });
+});
+
+describe('power in PS', () => {
+  it('links kW and PS both ways', () => {
+    expect(linkedPower('kw', '110')).toEqual({ powerKw: '110', powerPs: '150' });
+    expect(linkedPower('ps', '78')).toEqual({ powerKw: '57', powerPs: '78' });
+    expect(linkedPower('ps', '1.000')).toEqual({ powerKw: '735', powerPs: '1.000' });
+    expect(linkedPower('ps', '15o')).toEqual({ powerKw: '', powerPs: '15o' });
+    expect(linkedPower('kw', '0')).toEqual({ powerKw: '0', powerPs: '' });
+    expect(linkedPower('kw', '')).toEqual({ powerKw: '', powerPs: '' });
+    expect(psToKw(150)).toBe(110);
+  });
+
+  it('agrees with itself for every whole PS figure', () => {
+    for (let ps = 1; ps <= 2719; ps++) {
+      const power = linkedPower('ps', String(ps));
+      expect(validateListingText({ ...golf, ...power }, NOW)).toEqual({});
+      expect(validateSaleContract({ ...saleContractFromListing(golf), ...power }, NOW)).toEqual({});
+    }
+  });
+
+  it('keeps the PS as typed in', () => {
+    const typed = { ...golf, ...linkedPower('ps', '78') };
+    expect(listingDescription(typed)).toContain('- Leistung: 57 kW (78 PS)');
+    expect(saleContractFromListing(typed)).toMatchObject({ powerKw: '57', powerPs: '78' });
+    // Without a PS figure, it is worked out from the kW.
+    expect(listingDescription(golf)).toContain('- Leistung: 96 kW (131 PS)');
+    expect(saleContractFromListing(golf)).toMatchObject({ powerKw: '96', powerPs: '131' });
+  });
+
+  it('rejects PS that do not fit the kW', () => {
+    expect(validateListingText({ ...golf, powerKw: '96', powerPs: '150' }, NOW)).toEqual({
+      powerPs: expect.stringContaining('passen nicht zusammen') as string,
+    });
+    expect(Object.keys(validateListingText({ ...golf, powerPs: '0' }, NOW))).toEqual(['powerPs']);
+    expect(Object.keys(validateListingText({ ...golf, powerPs: '2720' }, NOW))).toEqual([
+      'powerPs',
+    ]);
+  });
+
+  it('takes a changed power over as a pair', () => {
+    const first = saleContractFromListing(golf);
+    const next = { ...golf, ...linkedPower('kw', '110') };
+    expect(mergeListingIntoContract(first, golf, next)).toMatchObject({
+      powerKw: '110',
+      powerPs: '150',
+    });
+    // Changed in the contract: both stay, even if one of them still matches the listing.
+    const typed = { ...first, ...linkedPower('ps', '130') };
+    expect(typed.powerKw).toBe(first.powerKw);
+    expect(mergeListingIntoContract(typed, golf, next)).toMatchObject({
+      powerKw: '96',
+      powerPs: '130',
+    });
   });
 });

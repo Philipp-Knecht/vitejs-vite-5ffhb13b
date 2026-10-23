@@ -4,7 +4,10 @@ import {
   cleanText,
   CONTRACT_LIMITS,
   EMPTY_SALE_CONTRACT,
+  KW_PER_PS,
+  MAX_POWER,
   parseWholeNumber,
+  powerErrors,
   type ContractAnswer,
   type ContractStatement,
   type SaleContractValues,
@@ -46,6 +49,8 @@ export interface ListingTextValues {
   totalMileageKm: string;
   fuel: FuelType | '';
   powerKw: string;
+  /** Typed in or worked out from the kW. */
+  powerPs: string;
   transmission: TransmissionType | '';
   color: string;
   /** MM/YYYY or MM.YYYY. */
@@ -86,6 +91,7 @@ export const EMPTY_LISTING_TEXT: ListingTextValues = {
   totalMileageKm: '',
   fuel: '',
   powerKw: '',
+  powerPs: '',
   transmission: '',
   color: '',
   huUntil: '',
@@ -278,7 +284,7 @@ export function validateListingText(
     const parsed = parseWholeNumber(value);
     if (parsed === null || parsed > max) errors[field] = message;
   };
-  number('powerKw', values.powerKw, 2000, 'Bitte gib die Leistung in kW als ganze Zahl an.');
+  Object.assign(errors, powerErrors(values.powerKw, values.powerPs));
   number('keepers', values.keepers, 99, 'Bitte gib die Zahl der Halter als ganze Zahl an.');
   if (!errors.keepers && values.keepers.trim() && parseWholeNumber(values.keepers) === 0)
     errors.keepers = 'Ein Auto hat mindestens einen Halter.';
@@ -304,12 +310,22 @@ export function validateListingText(
   }
   if (values.powerKw.trim() && !errors.powerKw && powerKw(values) === null)
     errors.powerKw = 'Bitte gib die Leistung in kW als ganze Zahl an.';
+  if (values.powerPs.trim() && !errors.powerPs && parseWholeNumber(values.powerPs) === 0)
+    errors.powerPs = 'Bitte gib die Leistung in PS als ganze Zahl an.';
   return errors;
 }
 
 function powerKw(values: ListingTextValues): number | null {
   const kw = parseWholeNumber(values.powerKw);
   return kw !== null && kw > 0 ? kw : null;
+}
+
+/** The PS as typed in, or worked out from the kW. */
+function powerPs(values: ListingTextValues, kw: number): number {
+  const ps = parseWholeNumber(values.powerPs);
+  return ps !== null && ps > 0 && powerErrors(values.powerKw, values.powerPs).powerPs === undefined
+    ? ps
+    : kwToPs(kw);
 }
 
 // ---------------------------------------------------------------------------
@@ -354,7 +370,26 @@ const items = (value: string) =>
     .filter(Boolean);
 
 /** kW to PS (1 PS = 0.73549875 kW), as on the registration certificate. */
-export const kwToPs = (kw: number) => Math.round(kw / 0.73549875);
+export const kwToPs = (kw: number) => Math.round(kw / KW_PER_PS);
+
+/** PS to whole kW. */
+export const psToKw = (ps: number) => Math.round(ps * KW_PER_PS);
+
+/**
+ * The power typed into one of the two fields: the other one follows, worked
+ * out and rounded, and is emptied while the entry is no whole number.
+ */
+export function linkedPower(
+  unit: 'kw' | 'ps',
+  value: string,
+): { powerKw: string; powerPs: string } {
+  const parsed = parseWholeNumber(value);
+  const other =
+    parsed === null || parsed === 0 || parsed > MAX_POWER[unit]
+      ? ''
+      : String(unit === 'kw' ? kwToPs(parsed) : psToKw(parsed));
+  return unit === 'kw' ? { powerKw: value, powerPs: other } : { powerKw: other, powerPs: value };
+}
 
 function km(value: string): string {
   const parsed = parseWholeNumber(value);
@@ -400,7 +435,8 @@ export function listingDescription(values: ListingTextValues): string {
     facts.push(`Gesamtlaufleistung nach meiner Kenntnis: ${km(values.totalMileageKm)}`);
   if (values.fuel) facts.push(`Kraftstoff: ${FUEL_LABELS[values.fuel]}`);
   const kw = powerKw(values);
-  if (kw !== null) facts.push(`Leistung: ${formatNumber(kw)} kW (${formatNumber(kwToPs(kw))} PS)`);
+  if (kw !== null)
+    facts.push(`Leistung: ${formatNumber(kw)} kW (${formatNumber(powerPs(values, kw))} PS)`);
   if (values.transmission) facts.push(`Getriebe: ${TRANSMISSION_LABELS[values.transmission]}`);
   const color = cleanLine(values.color);
   if (color) facts.push(`Farbe: ${color}`);
@@ -494,7 +530,7 @@ export function applyListingToContract(
     fuel: values.fuel,
     // A battery answer belongs to an electric drive only.
     battery: EV_FUELS.has(values.fuel) ? contract.battery : '',
-    powerKw: powerKw(values) === null ? '' : String(powerKw(values)),
+    ...contractPower(values),
     color: line(values.color),
     huUntil: monthYearText(values.huUntil),
     keepers: keepers !== null && keepers > 0 && keepers <= 99 ? String(keepers) : '',
@@ -511,6 +547,14 @@ export function applyListingToContract(
   };
 }
 
+/** The power for the contract: both figures, or none. */
+function contractPower(values: ListingTextValues): { powerKw: string; powerPs: string } {
+  const kw = powerKw(values);
+  return kw === null
+    ? { powerKw: '', powerPs: '' }
+    : { powerKw: String(kw), powerPs: String(powerPs(values, kw)) };
+}
+
 /** A new purchase contract prefilled from the listing. */
 export const saleContractFromListing = (values: ListingTextValues): SaleContractValues =>
   applyListingToContract(EMPTY_SALE_CONTRACT, values);
@@ -522,7 +566,6 @@ const LISTING_CONTRACT_FIELDS = [
   'firstRegistration',
   'fuel',
   'battery',
-  'powerKw',
   'color',
   'huUntil',
   'keepers',
@@ -557,6 +600,11 @@ export function mergeListingIntoContract(
   const target = merged as unknown as Record<string, unknown>;
   for (const field of LISTING_CONTRACT_FIELDS)
     if (contract[field] === before[field]) target[field] = after[field];
+  // kW and PS as a pair, so that the two keep agreeing.
+  if (contract.powerKw === before.powerKw && contract.powerPs === before.powerPs) {
+    merged.powerKw = after.powerKw;
+    merged.powerPs = after.powerPs;
+  }
   for (const statement of LISTING_STATEMENTS) {
     if (contract.answers[statement] === before.answers[statement])
       merged.answers[statement] = after.answers[statement];

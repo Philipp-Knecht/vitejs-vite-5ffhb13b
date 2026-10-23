@@ -2,6 +2,7 @@ import { findMake } from '@kaufcheck/catalog';
 import {
   mergeListingIntoContract,
   EMPTY_SALE_CONTRACT,
+  linkedPower,
   saleContractFromListing,
   type AnalysisDto,
   type SaleContractValues,
@@ -50,7 +51,7 @@ function fromAnalysis(dto: AnalysisDto): SaleContractValues {
         : String(registration.year)
       : '',
     fuel: vehicle?.fuel ?? '',
-    powerKw: vehicle?.powerKw ? String(vehicle.powerKw) : '',
+    ...linkedPower('kw', vehicle?.powerKw ? String(vehicle.powerKw) : ''),
   };
 }
 
