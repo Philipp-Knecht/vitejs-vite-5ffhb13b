@@ -26,6 +26,7 @@ test('static pages meet WCAG 2.1 AA checks', async ({ page }) => {
     '/gebrauchtwagen-checkliste',
     '/auto-ummelden',
     '/auto-rueckruf-pruefen',
+    '/auto-aus-den-niederlanden',
     '/autokosten-im-monat',
     '/anmelden',
     '/registrieren',

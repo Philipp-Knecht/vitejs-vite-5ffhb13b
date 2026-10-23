@@ -29,6 +29,7 @@ test('guides are readable without JavaScript', async ({ browser }) => {
     ['/auto-verkaufen', 'Auto privat verkaufen'],
     ['/auto-ummelden', 'Auto ummelden'],
     ['/auto-rueckruf-pruefen', 'Rückrufe'],
+    ['/auto-aus-den-niederlanden', 'Auto aus den Niederlanden'],
     ['/autokosten-im-monat', 'Was kostet ein Auto im Monat?'],
   ] as const) {
     await page.goto(path);
@@ -49,6 +50,7 @@ test('sitemap, robots.txt, noindex and real 404 status codes', async ({ request 
     '/auto-verkaufen',
     '/auto-ummelden',
     '/auto-rueckruf-pruefen',
+    '/auto-aus-den-niederlanden',
     '/autokosten-im-monat',
     '/pro',
   ]) {

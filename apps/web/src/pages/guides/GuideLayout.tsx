@@ -52,6 +52,11 @@ const GUIDES = [
     text: 'KBA-Datenbank, FIN-Abfrage und Pflichten.',
   },
   {
+    to: '/auto-aus-den-niederlanden',
+    title: 'Auto aus den Niederlanden',
+    text: 'Tacho-Bewertung, Rückrufe und APK bei der RDW.',
+  },
+  {
     to: '/autokosten-im-monat',
     title: 'Autokosten im Monat',
     text: 'Kostenblöcke, Beispiele und Spartipps.',

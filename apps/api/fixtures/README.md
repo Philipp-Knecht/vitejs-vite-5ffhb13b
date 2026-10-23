@@ -14,3 +14,15 @@ real listings**; names, phone numbers and e-mail addresses are fictional.
 
 Any other ad id behaves like a failed retrieval. Example URL:
 `https://www.kleinanzeigen.de/s-anzeige/audi-a7/2912345678-216-3331`
+
+## RDW lookups (`rdw/`)
+
+Synthetic answers of the RDW lookup when `RDW_LOOKUP_MODE=fixtures` (the default in tests;
+rejected in production). The data is made up and never sent to or compared with the RDW.
+
+| Plate | Content |
+| --- | --- |
+| `QQ999Q` | VW Golf, odometer „logical“, one open and one finished recall, one APK defect, exported |
+| `QQ888Q` | Opel Astra imported into the Netherlands, odometer „illogical“, used as a taxi |
+
+Any other valid plate is answered with „no vehicle“.

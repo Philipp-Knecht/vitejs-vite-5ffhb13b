@@ -460,6 +460,21 @@ workshop). `SPONSOR_ADS` is a JSON array, at most 20 entries:
   Kfz-Direktlink from the partner account unchanged, and get the link text and the name approved
   in writing by the partner support before setting the variables.
 
+## Dutch registration lookup (RDW)
+
+`/auto-aus-den-niederlanden` asks RDW Open Data (opendata.rdw.nl, public domain) for a Dutch
+registration number: registration dates, export and taxi flags, the RDW's odometer verdict
+(translated), recalls and the defects found at the APK.
+
+- The browser sends the plate to `POST /api/rdw` (in the body, so that no URL log holds it); the
+  server asks five datasets of the RDW, with a timeout of 8 seconds, and keeps an answer in memory
+  for an hour (at most 500). Nothing is stored in the database. 20 lookups per minute per client.
+- `RDW_LOOKUP_MODE`: `live` (default), `off` (the page says the lookup is unavailable) or
+  `fixtures` (synthetic answers from `apps/api/fixtures/rdw`, the default in tests, refused in
+  production).
+- No key is needed. The RDW's Socrata API throttles requests without an app token; should that
+  happen, KaufCheck answers „not reachable“.
+
 ## Analytics configuration
 
 First-party and cookieless: only an event name, a timestamp and a few allowlisted properties

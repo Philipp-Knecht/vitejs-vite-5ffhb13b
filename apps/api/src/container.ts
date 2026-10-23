@@ -14,6 +14,7 @@ import { ReminderService } from './application/reminder-service';
 import { SavedSearchService } from './application/saved-search-service';
 import { UsageService } from './application/usage-service';
 import { SponsorAdService } from './application/sponsor-ad-service';
+import { RdwService, type RdwFetch } from './application/rdw-service';
 import type { AppConfig } from './config/env';
 import { createAiProvider } from './infrastructure/ai/create-provider';
 import type { AiProvider } from './infrastructure/ai/types';
@@ -59,6 +60,7 @@ export interface Services {
   /** Photos only come with retrieved listings, so pasted text never gets a photo analysis. */
   photoAnalysisAvailable: boolean;
   sponsorAds: SponsorAdService;
+  rdw: RdwService;
 }
 
 export interface ServiceOverrides {
@@ -68,6 +70,7 @@ export interface ServiceOverrides {
   billing?: BillingService;
   email?: EmailService;
   now?: () => Date;
+  rdwFetch?: RdwFetch;
 }
 
 function createRetriever(config: AppConfig): ListingUrlRetriever {
@@ -190,5 +193,10 @@ export function createServices(
     contracts,
     photoAnalysisAvailable,
     sponsorAds: new SponsorAdService(db, config.sponsorAds, now, logger),
+    rdw: new RdwService({
+      ...config.rdw,
+      ...(overrides.rdwFetch ? { mode: 'live' as const, fetchRows: overrides.rdwFetch } : {}),
+      now,
+    }),
   };
 }

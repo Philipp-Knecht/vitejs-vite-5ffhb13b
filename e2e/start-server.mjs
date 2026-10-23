@@ -68,6 +68,7 @@ const server = spawn(process.execPath, [path.join(root, 'apps/api/dist/server.js
     COOKIE_SECRET: 'e2e-cookie-secret-that-is-long-enough-123456',
     SERVE_WEB: 'true',
     LISTING_FETCH_MODE: 'fixtures',
+    RDW_LOOKUP_MODE: 'fixtures',
     AI_PROVIDER: 'mock',
     EMAIL_TRANSPORT: 'console',
     ANALYZE_RATE_PER_MINUTE: '1000',

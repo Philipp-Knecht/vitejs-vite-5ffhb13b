@@ -1,0 +1,19 @@
+{
+  "plate": "QQ888Q",
+  "make": "OPEL",
+  "model": "ASTRA",
+  "kind": "Personenauto",
+  "firstAdmission": "2014-05-02",
+  "firstRegistrationNl": "2018-09-20",
+  "lastKeeperChange": "2018-09-20",
+  "apkUntil": null,
+  "exported": false,
+  "taxi": true,
+  "insured": true,
+  "listPriceEur": null,
+  "color": null,
+  "odometer": { "verdict": "illogical", "code": "04", "lastReadingYear": 2023 },
+  "recalls": [],
+  "inspections": [],
+  "fuels": []
+}

@@ -1,0 +1,29 @@
+{
+  "plate": "QQ999Q",
+  "make": "VOLKSWAGEN",
+  "model": "GOLF",
+  "kind": "Personenauto",
+  "firstAdmission": "2016-03-14",
+  "firstRegistrationNl": "2016-03-14",
+  "lastKeeperChange": "2021-07-02",
+  "apkUntil": "2027-03-14",
+  "exported": true,
+  "taxi": false,
+  "insured": false,
+  "listPriceEur": 27450,
+  "color": "GRIJS",
+  "odometer": { "verdict": "logical", "code": "00", "lastReadingYear": 2025 },
+  "recalls": [
+    { "reference": "QQ-TEST-1", "open": true },
+    { "reference": "QQ-TEST-2", "open": false }
+  ],
+  "inspections": [
+    {
+      "date": "2025-03-10",
+      "defects": [
+        { "code": "205", "count": 1, "description": "Band onvoldoende profieldiepte (synthetisch)" }
+      ]
+    }
+  ],
+  "fuels": [{ "fuel": "Benzine", "kw": 92 }]
+}

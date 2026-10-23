@@ -74,6 +74,11 @@ export const STATIC_PAGE_META: Readonly<Record<string, PageMeta>> = {
     description:
       'Ist dein Auto von einem Rückruf betroffen? Rückrufdatenbank des KBA, FIN-Abfrage beim Hersteller, Kosten und was passiert, wenn du nicht reagierst.',
   },
+  '/auto-aus-den-niederlanden': {
+    title: 'Auto aus den Niederlanden prüfen: Kennzeichen bei der RDW | KaufCheck',
+    description:
+      'Gebrauchtwagen aus den Niederlanden: Mit dem niederländischen Kennzeichen kostenlos die Bewertung des Kilometerstands, offene Rückrufe und APK-Mängel bei der RDW abfragen.',
+  },
   '/autokosten-im-monat': {
     title: 'Was kostet ein Auto im Monat? Kosten und Beispiele | KaufCheck',
     description:
