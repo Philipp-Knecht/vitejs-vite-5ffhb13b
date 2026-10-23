@@ -59,5 +59,6 @@ test('a car given away gets no loan example', async ({ page }) => {
   await page.getByRole('button', { name: 'Inserat prüfen' }).click();
   await expect(page).toHaveURL(/\/analyse\//);
   await expect(page.getByRole('heading', { level: 2, name: 'Preis einordnen' })).toBeVisible();
+  await expect(page.locator('.price-summary__kind')).toContainText('Zu verschenken');
   await expect(page.locator('.financing-proposal')).toHaveCount(0);
 });

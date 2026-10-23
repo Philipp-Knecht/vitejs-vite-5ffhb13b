@@ -92,7 +92,7 @@ export function FinancingProposal({
         <form className="tax-form" onSubmit={(event) => event.preventDefault()} noValidate>
           <TextField
             label="Anzahlung in €"
-            hint={`Wird vom ${negotiable ? 'Verhandlungspreis' : 'Preis'} ${euros(priceEur)} abgezogen; leer lassen ohne Anzahlung`}
+            hint={`Wird vom Preis${negotiable ? ' (VB)' : ''} ${euros(priceEur)} abgezogen; leer lassen ohne Anzahlung`}
             inputMode="decimal"
             error={downError}
             value={downPayment}
