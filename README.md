@@ -470,6 +470,19 @@ workshop). `SPONSOR_ADS` is a JSON array, at most 20 entries:
   advertising material, unchanged, and names a contract penalty of 1,500 € per violation. Use the
   Kfz-Direktlink from the partner account unchanged, and get the link text and the name approved
   in writing by the partner support before setting the variables.
+- The same way, `AFFILIATE_VEHICLE_HISTORY_URL` and `AFFILIATE_VEHICLE_HISTORY_NAME` (e.g.
+  „carVertical“) show „Kostenpflichtigen Bericht zur Fahrzeughistorie bei … abrufen*“ in a check
+  (between the checklist and the negotiation section, never inside the recall check with its
+  official steps and warnings) and in the checklist guide, with the note that a report only holds
+  what the provider's sources recorded. No VIN or other data goes to the partner; the visitor
+  enters the VIN there.
+- Partner terms of carVertical (https://www.carvertical.com/de/affiliate-program-terms, read on
+  23.10.2026): own links and creatives only as provided (4.1, 5.4), disclosure on every page
+  (5.6), no rebates from the commission (4.3) and no disparaging statements about carVertical
+  (5.13); Lithuanian law (13.1). Before setting the variables, get the link text and the note
+  above approved in writing by the affiliate team. Removing the variables removes both links at
+  once, as the terms ask within 7 days after the end (9.2); a placement change carVertical asks for
+  (5.7, within 30 days) needs a code change.
 
 ## Analytics configuration
 

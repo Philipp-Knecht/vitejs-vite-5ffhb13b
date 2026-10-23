@@ -1,6 +1,7 @@
 import { Printer } from 'lucide-react';
 import { Link } from 'react-router';
 import { Button } from '../../components/ui/Button';
+import { VehicleHistoryLink } from '../../components/VehicleHistoryLink';
 import { GuideLayout, type TocEntry } from './GuideLayout';
 
 interface Group {
@@ -164,6 +165,7 @@ export function ChecklistGuidePage() {
         konkretes Inserat erstellt <Link to="/">KaufCheck</Link> eine passende Checkliste mit
         Hinweisen, die sich aus den Angaben im Inserat ergeben.
       </p>
+      <VehicleHistoryLink placement="guide_checklist" />
     </GuideLayout>
   );
 }
