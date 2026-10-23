@@ -1,16 +1,15 @@
 import {
   AVERAGE_LOAN_RATE,
-  LOAN_LIMITS,
+  financingProposal,
   PROPOSAL_DEFAULT_MONTHS,
   PROPOSAL_MONTHS,
 } from '@kaufcheck/shared';
-import { useState } from 'react';
+import { useId, useState } from 'react';
 import { Link } from 'react-router';
 import { SelectField, TextField } from '../../components/ui/Field';
 import { euros } from '../tax/euros';
 import { LoanFigures } from '../tax/Financing';
-import { parseLoanForm } from '../tax/loan-form';
-import { toNumber } from '../tax/numbers';
+import { toDecimal, toNumber } from '../tax/numbers';
 
 const MONTH_NAMES = [
   'Januar',
@@ -34,25 +33,57 @@ const monthText = (month: string) =>
 const rateText = (percent: number) =>
   percent.toLocaleString('de-DE', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
+/** Empty, or only the first keystroke of „,9“. */
+const blank = (raw: string) => /^\s*[.,]?\s*$/.test(raw);
+
+const NUMBER_ONLY = 'Bitte gib nur eine Zahl ein.';
+
 /**
  * A loan for the asking price as an example: the down payment and term are
  * the buyer's, the rate is the Bundesbank's average until they type their own.
  * No offer and no comparison of offers; everything stays in the browser.
  */
-export function FinancingProposal({ priceEur }: { priceEur: number }) {
+export function FinancingProposal({
+  priceEur,
+  negotiable,
+}: {
+  priceEur: number;
+  /** Verhandlungsbasis: the final price may be lower. */
+  negotiable: boolean;
+}) {
+  const titleId = useId();
   const [downPayment, setDownPayment] = useState('');
   const [months, setMonths] = useState(String(PROPOSAL_DEFAULT_MONTHS));
   const [rate, setRate] = useState(rateText(AVERAGE_LOAN_RATE.percent));
 
-  const down = downPayment.trim() ? toNumber(downPayment) : 0;
-  const amount = down === null ? null : priceEur - down;
-  const noLoan = amount !== null && amount < LOAN_LIMITS.amount.min;
-  const parsed =
-    amount === null || noLoan
+  const down = blank(downPayment) ? 0 : toNumber(downPayment);
+  const ratePercent = blank(rate) ? null : toDecimal(rate);
+  const proposal =
+    down === null || ratePercent === null
       ? null
-      : parseLoanForm({ amount: String(amount), rate, months, balloon: '' });
-  const result = parsed?.result ?? null;
-  const average = rate.trim() === rateText(AVERAGE_LOAN_RATE.percent);
+      : financingProposal({
+          priceEur,
+          downPaymentEur: down,
+          months: Number(months),
+          ratePercent,
+        });
+  const downError =
+    down === null
+      ? NUMBER_ONLY
+      : proposal?.kind === 'noLoan'
+        ? proposal.covered
+          ? 'Die Anzahlung deckt den ganzen Preis, dafür brauchst du keinen Kredit.'
+          : 'Für den Rest unter 100 € rechnet KaufCheck keinen Kredit.'
+        : undefined;
+  const rateError =
+    !blank(rate) && ratePercent === null
+      ? NUMBER_ONLY
+      : proposal?.kind === 'invalid' && proposal.field === 'rate'
+        ? proposal.message
+        : undefined;
+  const loan = proposal?.kind === 'loan' ? proposal : null;
+  const average = ratePercent === AVERAGE_LOAN_RATE.percent;
+  const amountText = (value: number) => euros(value, Number.isInteger(value) ? 0 : 2);
 
   return (
     <div className="financing-proposal">
@@ -61,15 +92,9 @@ export function FinancingProposal({ priceEur }: { priceEur: number }) {
         <form className="tax-form" onSubmit={(event) => event.preventDefault()} noValidate>
           <TextField
             label="Anzahlung in €"
-            hint={`Vom Preis ${euros(priceEur)} ab; leer lassen ohne Anzahlung`}
-            inputMode="numeric"
-            error={
-              down === null
-                ? 'Bitte gib nur eine Zahl ein.'
-                : noLoan
-                  ? 'Mit dieser Anzahlung brauchst du keinen Kredit.'
-                  : undefined
-            }
+            hint={`Wird vom ${negotiable ? 'Verhandlungspreis' : 'Preis'} ${euros(priceEur)} abgezogen; leer lassen ohne Anzahlung`}
+            inputMode="decimal"
+            error={downError}
             value={downPayment}
             onChange={(event) => setDownPayment(event.target.value)}
           />
@@ -86,50 +111,51 @@ export function FinancingProposal({ priceEur }: { priceEur: number }) {
           </SelectField>
           <TextField
             label="Effektiver Jahreszins in %"
-            hint="Vorbelegt mit dem Durchschnitt; hast du ein Angebot, trag dessen Zins ein"
+            hint="Vorbelegt mit dem Durchschnitt; hast du ein Angebot, trag dessen effektiven Jahreszins ein"
             inputMode="decimal"
-            error={parsed?.fields.rate}
+            error={rateError}
             value={rate}
             onChange={(event) => setRate(event.target.value)}
           />
         </form>
-        <section className="tax-result" aria-labelledby="proposal-result-title">
-          <h4 id="proposal-result-title" className="tax-result__title">
+        <section className="tax-result" aria-labelledby={titleId}>
+          <h4 id={titleId} className="tax-result__title">
             Monatsrate
           </h4>
-          <p className={result ? 'tax-result__amount' : 'tax-result__hint'} aria-live="polite">
-            {result ? (
+          <p className={loan ? 'tax-result__amount' : 'tax-result__hint'} aria-live="polite">
+            {loan ? (
               <>
                 <span className="visually-hidden">Monatsrate: </span>
-                {euros(result.monthlyRate, 2)} <span>im Monat</span>
+                {euros(loan.result.monthlyRate, 2)} <span>im Monat</span>
               </>
-            ) : parsed?.incomplete || !rate.trim() ? (
-              'Für die Rate fehlt noch der Zins.'
-            ) : (
+            ) : downError || rateError ? (
               'Bitte prüfe die markierten Angaben.'
+            ) : (
+              'Für die Rate fehlt noch der Zins.'
             )}
           </p>
-          {result && amount !== null && (
+          {loan && (
             <>
               <ul className="tax-result__parts">
                 <li>
                   <span>Kreditbetrag</span>
-                  <span className="tax-result__value">{euros(amount)}</span>
+                  <span className="tax-result__value">{amountText(loan.amount)}</span>
                 </li>
               </ul>
-              <LoanFigures result={result} />
+              <LoanFigures result={loan.result} />
             </>
           )}
           <p className="tax-result__rule">
             {average ? 'Gerechnet mit dem' : 'Zum Vergleich: der'} Durchschnitt aller neuen
-            Ratenkredite an Privatleute mit 1 bis 5 Jahren Zinsbindung im{' '}
-            {monthText(AVERAGE_LOAN_RATE.month)}: {rateText(AVERAGE_LOAN_RATE.percent)} % effektiv
+            Ratenkredite deutscher Banken an Privatleute im {monthText(AVERAGE_LOAN_RATE.month)}:{' '}
+            {rateText(AVERAGE_LOAN_RATE.percent)} % effektiver Jahreszins einschließlich Kosten
             {AVERAGE_LOAN_RATE.provisional ? ' (vorläufiger Wert)' : ''}, laut{' '}
             <a href={AVERAGE_LOAN_RATE.source} target="_blank" rel="noopener noreferrer">
               Deutscher Bundesbank
             </a>
-            . Kein Angebot: Dein Zins hängt von Bank, Bonität und Laufzeit ab, Gebühren sind im
-            Durchschnitt nicht enthalten.
+            . Kein Angebot: Dein Zins hängt von Bank, Bonität, Betrag und Laufzeit ab und kann
+            deutlich höher oder niedriger sein.
+            {negotiable && ' Der Preis ist Verhandlungsbasis, der Kaufpreis kann niedriger sein.'}
           </p>
           <p className="tax-result__rule">
             Mit Schlussrate oder eigenem Kreditbetrag rechnen:{' '}

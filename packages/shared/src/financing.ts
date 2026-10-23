@@ -86,14 +86,13 @@ export function loan(input: LoanInput): LoanResult | null {
 }
 
 /**
- * The average effective annual rate of new consumer loans to households with
- * a fixed rate for over 1 up to 5 years: Deutsche Bundesbank, MFI interest
- * rate statistics, series BBIM1.M.DE.B.A2B.I.R.A.2250.EUR.N (SUD114). It
- * covers interest only, no other costs, and is updated with
+ * The average effective annual rate including costs of new consumer loans to
+ * households, all terms: Deutsche Bundesbank, MFI interest rate statistics,
+ * series BBIM1.M.DE.B.A2B.A.C.A.2250.EUR.N (SUD130). Updated with
  * `npm run loan-rate:update`.
  */
 export const AVERAGE_LOAN_RATE = {
-  percent: 7.53,
+  percent: 8.99,
   /** The month of the figure, „YYYY-MM“. */
   month: '2026-08',
   /** The Bundesbank marks the newest month as provisional. */
@@ -102,7 +101,34 @@ export const AVERAGE_LOAN_RATE = {
     'https://www.bundesbank.de/de/statistiken/geld-und-kapitalmaerkte/zinssaetze-und-renditen/konsumentenkredite-an-private-haushalte-ratenkredite-615046',
 } as const;
 
-/** Terms within the Bundesbank's range of over 1 up to 5 years. */
-export const PROPOSAL_MONTHS = [24, 36, 48, 60] as const;
+/** Terms offered in the example of a check. */
+export const PROPOSAL_MONTHS = [12, 24, 36, 48, 60, 72, 84] as const;
 
 export const PROPOSAL_DEFAULT_MONTHS = 48;
+
+export type FinancingProposal =
+  /** The down payment covers the price, or leaves less than the smallest loan. */
+  | { kind: 'noLoan'; covered: boolean }
+  | { kind: 'invalid'; field: LoanField; message: string }
+  | { kind: 'loan'; amount: number; result: LoanResult };
+
+/** A loan for the asking price minus the down payment, with equal monthly rates. */
+export function financingProposal(input: {
+  priceEur: number;
+  downPaymentEur: number;
+  months: number;
+  ratePercent: number;
+}): FinancingProposal {
+  const amount = cents(input.priceEur - input.downPaymentEur);
+  if (amount < LOAN_LIMITS.amount.min)
+    return { kind: 'noLoan', covered: input.downPaymentEur >= input.priceEur };
+  const loanInput = {
+    amount,
+    effectiveRatePercent: input.ratePercent,
+    months: input.months,
+    balloon: 0,
+  };
+  const problem = loanProblem(loanInput);
+  if (problem) return { kind: 'invalid', ...problem };
+  return { kind: 'loan', amount, result: loan(loanInput)! };
+}

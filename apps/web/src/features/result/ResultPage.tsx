@@ -93,7 +93,12 @@ function ResultView({ dto }: { dto: AnalysisDto }) {
         <div className="result__content">
           <SummarySection analysis={analysis} />
           <OverviewSection items={analysis.overview} />
-          <PriceSection price={analysis.priceContext} vehicle={listing.vehicle} />
+          <PriceSection
+            // Typed figures belong to one check.
+            key={dto.id}
+            price={analysis.priceContext}
+            vehicle={listing.vehicle}
+          />
           <CompletenessSection completeness={analysis.completeness} />
           <AttentionSection observations={analysis.observations} checks={analysis.checks} />
           {modelId && <ModelKnowledgeSection modelId={modelId} vehicle={listing.vehicle} />}

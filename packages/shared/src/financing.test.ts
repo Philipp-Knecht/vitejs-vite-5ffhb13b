@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import {
   AVERAGE_LOAN_RATE,
+  financingProposal,
   loan,
   LOAN_LIMITS,
   loanProblem,
@@ -55,11 +56,38 @@ describe('the average rate for the example in a check', () => {
     expect(AVERAGE_LOAN_RATE.source).toMatch(/^https:\/\/www\.bundesbank\.de\//);
   });
 
-  it('offers terms within the range of the average, over 1 up to 5 years', () => {
+  it('offers the default term', () => {
     expect(PROPOSAL_MONTHS).toContain(PROPOSAL_DEFAULT_MONTHS);
-    for (const months of PROPOSAL_MONTHS) {
-      expect(months).toBeGreaterThan(12);
-      expect(months).toBeLessThanOrEqual(60);
-    }
+  });
+
+  it('finances the price minus the down payment, to the cent', () => {
+    const proposal = financingProposal({
+      priceEur: 10_000,
+      downPaymentEur: 1.234,
+      months: 48,
+      ratePercent: 6,
+    });
+    expect(proposal.kind).toBe('loan');
+    if (proposal.kind !== 'loan') return;
+    expect(proposal.amount).toBe(9998.77);
+    expect(proposal.result).toEqual(
+      loan({ amount: 9998.77, effectiveRatePercent: 6, months: 48, balloon: 0 }),
+    );
+  });
+
+  it('needs no loan when the down payment covers the price', () => {
+    const base = { priceEur: 8450, months: 48, ratePercent: 6 };
+    expect(financingProposal({ ...base, downPaymentEur: 8450 })).toEqual({
+      kind: 'noLoan',
+      covered: true,
+    });
+    expect(financingProposal({ ...base, downPaymentEur: 8400 })).toEqual({
+      kind: 'noLoan',
+      covered: false,
+    });
+    expect(financingProposal({ ...base, downPaymentEur: 0, ratePercent: 31 })).toMatchObject({
+      kind: 'invalid',
+      field: 'rate',
+    });
   });
 });

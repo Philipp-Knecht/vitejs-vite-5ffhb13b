@@ -133,7 +133,10 @@ export function PriceSection({ price, vehicle }: { price: PriceContext; vehicle:
         askingPrice.kind !== 'give_away' &&
         askingPrice.amountEur >= LOAN_LIMITS.amount.min &&
         askingPrice.amountEur <= LOAN_LIMITS.amount.max && (
-          <FinancingProposal priceEur={askingPrice.amountEur} />
+          <FinancingProposal
+            priceEur={askingPrice.amountEur}
+            negotiable={askingPrice.kind === 'negotiable'}
+          />
         )}
       <p className="price-costs">
         Zum Kaufpreis kommen laufende Kosten:{' '}
