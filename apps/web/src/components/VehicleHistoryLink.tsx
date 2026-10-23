@@ -3,13 +3,15 @@ import { useConfig, useMe } from '../api/queries';
 import { track } from '../lib/analytics';
 import { useHydrated } from '../lib/use-hydrated';
 
-export type HistoryPlacement = 'result_recalls' | 'guide_checklist';
+export type HistoryPlacement = 'result' | 'guide_checklist';
 
 /**
  * A partner link to vehicle history reports by VIN (affiliate), for visitors
  * without Pro, configured on the server. A plain link: nothing is loaded from
  * the partner before the click, and no VIN or other data is handed over.
  * KaufCheck does not check the reports; the note says what they can miss.
+ * Placed between sections, never inside the recall check, its steps or
+ * warnings, so that it does not read as part of the free official checks.
  */
 export function VehicleHistoryLink({ placement }: { placement: HistoryPlacement }) {
   const id = useId();
@@ -33,7 +35,7 @@ export function VehicleHistoryLink({ placement }: { placement: HistoryPlacement 
           aria-describedby={`${id}-note`}
           onClick={() => track('affiliate_clicked', { placement })}
         >
-          Fahrzeughistorie mit der FIN bei {partner.name} abfragen*
+          Kostenpflichtigen Bericht zur Fahrzeughistorie bei {partner.name} abrufen*
           <span className="visually-hidden"> (öffnet in neuem Tab)</span>
         </a>
       </p>

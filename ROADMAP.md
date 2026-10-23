@@ -34,7 +34,8 @@ PRs, **L** = mehrere Wochen.
 | 5.2 | Eigene Anzeigen (Sponsoring) vom eigenen Server statt AdSense, ohne Drittanbieter         | #39       |
 | 2.9 | Betrugshinweise (Vorkasse, Treuhand, Spedition, Ausland, Messenger, ungesehen)            | #40       |
 | 1.5 | Finanzierungsbeispiel in der Prüfung mit dem Bundesbank-Durchschnittszins                 | #42       |
-| 1.1 | Steuer- und Kostenrechner: Werte aus Modell und Motor (EU-Daten, 319 Modelle)             | dieser PR |
+| 1.1 | Steuer- und Kostenrechner: Werte aus Modell und Motor (EU-Daten, 319 Modelle)             | #43       |
+| neu | Affiliate-Link zu Berichten über die Fahrzeughistorie (aus, bis der Partner zustimmt)     | dieser PR |
 
 ## Arbeitsweise je Feature
 

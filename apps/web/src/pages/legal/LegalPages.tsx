@@ -469,31 +469,32 @@ export function PrivacyPage() {
       {affiliates && (
         <>
           <h2>Affiliate-Links</h2>
-          <p>
-            Für Besucher ohne KaufCheck Pro stehen, gekennzeichnet als Werbung,{' '}
+          <p>Für Besucher ohne KaufCheck Pro zeigen wir, gekennzeichnet als Werbung:</p>
+          <ul>
             {insurancePartner && (
-              <>
-                in einigen Ratgebern ein Link zum Vergleich von Kfz-Versicherungen bei{' '}
+              <li>
+                in einigen Ratgebern einen Link zum Vergleich von Kfz-Versicherungen bei{' '}
                 {insurancePartner.name}
-              </>
+              </li>
             )}
-            {insurancePartner && historyPartner && ' und '}
             {historyPartner && (
-              <>
-                in der Prüfung und der Checkliste ein Link zu Berichten über die Fahrzeughistorie
-                bei {historyPartner.name}
-              </>
+              <li>
+                in der Inseratsprüfung und im Ratgeber „Gebrauchtwagen-Checkliste“ einen Link zu
+                kostenpflichtigen Berichten über die Fahrzeughistorie bei {historyPartner.name}
+              </li>
             )}
-            . Jeder ist ein einfacher Link mit unserer Partnerkennung: Beim Aufruf unserer Seiten
-            lädt dein Browser nichts vom Partner, und wir geben keine Daten über dich oder das Auto
-            weiter. Erst wenn du den Link anklickst, öffnet sich die Seite des Partners. Wie bei
-            jedem Seitenaufruf erhält er dabei technisch deine IP-Adresse und erfährt, dass du von
-            KaufCheck kommst; mit Cookies oder ähnlichen Techniken kann er erfassen, ob über den
-            Link ein Vertrag zustande kommt. Für alles, was auf den Seiten des Partners geschieht,
-            ist der Partner selbst verantwortlich, nicht wir; es gelten die Datenschutzhinweise, die
-            dort genannt sind.
+          </ul>
+          <p>
+            Jeder dieser Links ist ein einfacher Link mit unserer Partnerkennung: Beim Aufruf
+            unserer Seiten lädt dein Browser nichts vom Partner, und wir geben keine Daten über dich
+            oder das Auto weiter. Erst wenn du einen solchen Link anklickst, öffnet sich die Seite
+            des Partners. Wie bei jedem Seitenaufruf erhält der Partner dabei technisch deine
+            IP-Adresse und erfährt, dass du von KaufCheck kommst; mit Cookies oder ähnlichen
+            Techniken kann er erfassen, ob über den Link ein Vertrag oder Kauf zustande kommt. Für
+            alles, was auf den Seiten des Partners geschieht, ist der Partner selbst verantwortlich,
+            nicht wir; es gelten die Datenschutzhinweise, die dort genannt sind.
             {features?.analytics !== false &&
-              ' Klicks auf die Links zählen wir ohne Angaben zur Person in der Nutzungsstatistik.'}
+              ' Klicks auf diese Links zählen wir ohne Angaben zur Person in der Nutzungsstatistik.'}
           </p>
         </>
       )}
