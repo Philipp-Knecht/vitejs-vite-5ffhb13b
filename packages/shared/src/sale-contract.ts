@@ -277,7 +277,8 @@ export function powerErrors(kw: string, ps: string): { powerKw?: string; powerPs
     if (parsed === null || parsed === 0)
       errors[field] = `Bitte gib die Leistung in ${name} als ganze Zahl an.`;
     else if (parsed > MAX_POWER[unit])
-      errors[field] = 'Bitte prüf die Leistung: höchstens 2.000 kW (2.719 PS).';
+      errors[field] =
+        `Bitte prüf die Leistung: höchstens ${formatNumber(MAX_POWER.kw)} kW (${formatNumber(MAX_POWER.ps)} PS).`;
     return errors[field] ? null : parsed;
   };
   const parsedKw = check(kw, 'kw', 'kW');

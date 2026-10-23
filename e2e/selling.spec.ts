@@ -141,6 +141,8 @@ test('from „Mein Auto“ to the listing text and on to the contract', async ({
     'Delle in der Fahrertür',
   );
   await expect(page.getByLabel('Name, Vorname').nth(1)).toHaveValue('Käufer, Karl');
+  await expect(page.getByLabel('Leistung in kW')).toHaveValue('74');
+  await expect(page.getByLabel('Leistung in PS')).toHaveValue('100');
 
   await page.goBack();
   await expect(page.getByLabel('Farbe')).toHaveValue('Blau');
