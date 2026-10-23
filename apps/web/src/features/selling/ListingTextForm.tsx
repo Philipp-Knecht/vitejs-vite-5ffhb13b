@@ -205,8 +205,8 @@ export function ListingTextForm({
               onChange={(event) => update(linkedPower('kw', event.target.value))}
             />
             <TextField
-              label="oder in PS"
-              hint="KaufCheck rechnet in kW um"
+              label="Leistung in PS"
+              hint="Oder in PS eintragen: KaufCheck rechnet in kW um"
               inputMode="numeric"
               maxLength={6}
               {...text('powerPs')}

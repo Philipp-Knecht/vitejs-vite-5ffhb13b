@@ -3,6 +3,7 @@ import {
   EMPTY_LISTING_TEXT,
   kwToPs,
   linkedPower,
+  listedPower,
   psToKw,
   mergeListingIntoContract,
   saleContractFromListing,
@@ -329,6 +330,35 @@ describe('power in PS', () => {
     expect(Object.keys(validateListingText({ ...golf, powerPs: '2720' }, NOW))).toEqual([
       'powerPs',
     ]);
+  });
+
+  it('keeps the figures a listing states when they agree', () => {
+    expect(listedPower(57, 78)).toEqual({ powerKw: '57', powerPs: '78' });
+    expect(listedPower(67, 90)).toEqual({ powerKw: '67', powerPs: '90' });
+    expect(listedPower(96, 150)).toEqual({ powerKw: '96', powerPs: '131' });
+    expect(listedPower(96, null)).toEqual({ powerKw: '96', powerPs: '131' });
+    expect(listedPower(null, 150)).toEqual({ powerKw: '', powerPs: '' });
+  });
+
+  it('hands too much power to the contract without a PS figure', () => {
+    expect(saleContractFromListing({ ...golf, powerKw: '2500' })).toMatchObject({
+      powerKw: '2500',
+      powerPs: '',
+    });
+  });
+
+  it('takes a PS figure from the listing that differs from the worked-out one', () => {
+    const typed = { ...golf, ...linkedPower('ps', '78') };
+    const contract = saleContractFromListing(typed);
+    const next = { ...typed, color: 'Blau' };
+    expect(mergeListingIntoContract(contract, typed, next)).toMatchObject({
+      powerKw: '57',
+      powerPs: '78',
+      color: 'Blau',
+    });
+    expect(
+      mergeListingIntoContract(contract, typed, { ...typed, ...linkedPower('ps', '80') }),
+    ).toMatchObject({ powerKw: '59', powerPs: '80' });
   });
 
   it('takes a changed power over as a pair', () => {

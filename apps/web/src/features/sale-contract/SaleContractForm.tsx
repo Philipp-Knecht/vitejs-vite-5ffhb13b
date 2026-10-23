@@ -399,8 +399,8 @@ export function SaleContractForm({
                 onChange={(event) => update(linkedPower('kw', event.target.value))}
               />
               <TextField
-                label="oder in PS"
-                hint="KaufCheck rechnet in kW um – im Zweifel gilt Feld P.2"
+                label="Leistung in PS"
+                hint="Oder in PS eintragen: KaufCheck rechnet in kW um, verbindlich ist Feld P.2"
                 inputMode="numeric"
                 maxLength={6}
                 {...text('powerPs')}

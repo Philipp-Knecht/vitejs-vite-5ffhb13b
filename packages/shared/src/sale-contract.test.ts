@@ -289,5 +289,12 @@ describe('power', () => {
     expect(Object.keys(errors('110', '148'))).toEqual(['powerPs']);
     expect(Object.keys(errors('110', 'viel'))).toEqual(['powerPs']);
     expect(Object.keys(errors('2001', '150'))).toEqual(['powerKw']);
+    // Rounded each from the exact figure, as in a listing.
+    expect(errors('67', '90')).toEqual({});
+    expect(errors('0', '')).toEqual({ powerKw: 'Bitte gib die Leistung in kW als ganze Zahl an.' });
+    expect(errors('', '0')).toEqual({ powerPs: 'Bitte gib die Leistung in PS als ganze Zahl an.' });
+    expect(errors('', '3000')).toEqual({
+      powerPs: 'Bitte prüf die Leistung: höchstens 2.000 kW (2.719 PS).',
+    });
   });
 });

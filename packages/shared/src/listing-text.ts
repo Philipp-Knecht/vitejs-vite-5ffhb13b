@@ -308,10 +308,6 @@ export function validateListingText(
         'Bitte gib die Laufleistung in ganzen Kilometern an.',
       );
   }
-  if (values.powerKw.trim() && !errors.powerKw && powerKw(values) === null)
-    errors.powerKw = 'Bitte gib die Leistung in kW als ganze Zahl an.';
-  if (values.powerPs.trim() && !errors.powerPs && parseWholeNumber(values.powerPs) === 0)
-    errors.powerPs = 'Bitte gib die Leistung in PS als ganze Zahl an.';
   return errors;
 }
 
@@ -374,6 +370,20 @@ export const kwToPs = (kw: number) => Math.round(kw / KW_PER_PS);
 
 /** PS to whole kW. */
 export const psToKw = (ps: number) => Math.round(ps * KW_PER_PS);
+
+/**
+ * The power a listing states: kW and PS as given when they agree, else the PS
+ * worked out from the kW (the domain derives the kW from a PS figure alone).
+ */
+export function listedPower(
+  kw: number | null | undefined,
+  ps: number | null | undefined,
+): { powerKw: string; powerPs: string } {
+  if (!kw) return { powerKw: '', powerPs: '' };
+  if (ps && Object.keys(powerErrors(String(kw), String(ps))).length === 0)
+    return { powerKw: String(kw), powerPs: String(ps) };
+  return linkedPower('kw', String(kw));
+}
 
 /**
  * The power typed into one of the two fields: the other one follows, worked
@@ -550,9 +560,10 @@ export function applyListingToContract(
 /** The power for the contract: both figures, or none. */
 function contractPower(values: ListingTextValues): { powerKw: string; powerPs: string } {
   const kw = powerKw(values);
-  return kw === null
-    ? { powerKw: '', powerPs: '' }
-    : { powerKw: String(kw), powerPs: String(powerPs(values, kw)) };
+  if (kw === null) return { powerKw: '', powerPs: '' };
+  // Too much power is marked in the contract, without a PS figure no one typed in.
+  if (kw > MAX_POWER.kw) return { powerKw: String(kw), powerPs: '' };
+  return { powerKw: String(kw), powerPs: String(powerPs(values, kw)) };
 }
 
 /** A new purchase contract prefilled from the listing. */

@@ -261,23 +261,31 @@ export const KW_PER_PS = 0.73549875;
 export const MAX_POWER = { kw: 2000, ps: 2719 } as const;
 
 /**
- * The power in kW and PS: whole numbers, and the two must agree within the
- * rounding of a conversion (a PS figure turned into whole kW is off by up to
- * 0.68 PS).
+ * How far apart kW and PS may be: each figure rounded to whole units from the
+ * exact power, as in a listing („67 kW (90 PS)“ for 66.5 kW), is off by up to
+ * 1.18 PS.
  */
+const POWER_TOLERANCE_PS = 0.5 / KW_PER_PS + 0.5;
+
+/** The power in kW and PS: whole numbers above 0, and the two must agree. */
 export function powerErrors(kw: string, ps: string): { powerKw?: string; powerPs?: string } {
   const errors: { powerKw?: string; powerPs?: string } = {};
-  const parsedKw = kw.trim() ? parseWholeNumber(kw) : null;
-  const parsedPs = ps.trim() ? parseWholeNumber(ps) : null;
-  if (kw.trim() && (parsedKw === null || parsedKw > MAX_POWER.kw))
-    errors.powerKw = 'Bitte gib die Leistung in kW als ganze Zahl an.';
-  if (ps.trim() && (parsedPs === null || parsedPs > MAX_POWER.ps))
-    errors.powerPs = 'Bitte gib die Leistung in PS als ganze Zahl an.';
-  else if (
+  const check = (value: string, unit: 'kw' | 'ps', name: string): number | null => {
+    if (!value.trim()) return null;
+    const parsed = parseWholeNumber(value);
+    const field = unit === 'kw' ? 'powerKw' : 'powerPs';
+    if (parsed === null || parsed === 0)
+      errors[field] = `Bitte gib die Leistung in ${name} als ganze Zahl an.`;
+    else if (parsed > MAX_POWER[unit])
+      errors[field] = 'Bitte prüf die Leistung: höchstens 2.000 kW (2.719 PS).';
+    return errors[field] ? null : parsed;
+  };
+  const parsedKw = check(kw, 'kw', 'kW');
+  const parsedPs = check(ps, 'ps', 'PS');
+  if (
     parsedKw !== null &&
     parsedPs !== null &&
-    !errors.powerKw &&
-    Math.abs(parsedKw / KW_PER_PS - parsedPs) > 1
+    Math.abs(parsedKw / KW_PER_PS - parsedPs) > POWER_TOLERANCE_PS
   )
     errors.powerPs =
       'kW und PS passen nicht zusammen. Trag einen Wert ein, den anderen rechnet KaufCheck um.';
