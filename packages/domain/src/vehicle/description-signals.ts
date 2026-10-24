@@ -253,8 +253,9 @@ function clausesAround(text: string, index: number, length: number): string[] {
   const from = starts.length > 0 ? before.length - (starts.at(-1)!.index + 1) : before.length;
   const after = text.slice(index + length, index + length + 120);
   const stop = /[.!?](?=\s|$)|\n/.exec(after)?.index ?? after.length;
-  const head = text.slice(index - from, index).split(/[,;]/);
-  const tail = text.slice(index + length, index + length + stop).split(/[,;]/);
+  const clause = /[,;]|\s(?:und|sowie)\s/i;
+  const head = text.slice(index - from, index).split(clause);
+  const tail = text.slice(index + length, index + length + stop).split(clause);
   const own = `${head.at(-1) ?? ''}${text.slice(index, index + length)}${tail[0] ?? ''}`;
   return [own, ...head.slice(0, -1), ...tail.slice(1)];
 }
@@ -406,6 +407,11 @@ const DAMAGE_TERMS: readonly {
   },
   { pattern: /\bdefekt(?:e|en|er|es)?\b/i, category: 'general', severity: 'notice' },
 ];
+
+/** Serious findings first, so a mild one next to it cannot hide it. */
+const DAMAGE_TERMS_WARNINGS_FIRST = [...DAMAGE_TERMS].sort(
+  (a, b) => (a.severity === 'warning' ? 0 : 1) - (b.severity === 'warning' ? 0 : 1),
+);
 
 // --- Other claims ------------------------------------------------------------
 
@@ -769,7 +775,7 @@ export function extractDescriptionSignals(
   // Damage mentions (specific terms first; generic "defekt" only if not overlapping)
   const damageMentions: DamageMention[] = [];
   const covered: { start: number; end: number; category: DamageCategory }[] = [];
-  for (const term of DAMAGE_TERMS) {
+  for (const term of DAMAGE_TERMS_WARNINGS_FIRST) {
     for (const match of allMatches(term.pattern, text)) {
       const start = match.index;
       const end = match.index + match.text.length;

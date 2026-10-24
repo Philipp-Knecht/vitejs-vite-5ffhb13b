@@ -267,6 +267,7 @@ describe('price advice', () => {
       'Auto fährt nicht\nTÜV bis 2027',
       'Fährt nicht - Batterie leer?',
       'TÜV neu, Bremsen erneuert, Motorschaden.',
+      'Motorschaden und Bremsen erneuert.',
       'Motorschaden, Zahnriemen wurde 2023 gewechselt.',
     ])
       expect((await advise(1.2, description)).market, description).toMatchObject({
@@ -300,6 +301,11 @@ describe('price advice', () => {
     const ids = result.observations.map((o) => o.id);
     expect(ids).toEqual(expect.arrayContaining(['damage_engine', 'damage_roadworthiness']));
     expect(ids.filter((id) => id === 'damage_general')).toEqual([]);
+    const mild = await analyze(
+      listingFromText(pasted(details, 'Erhöhter Ölverbrauch, Zylinderkopfdichtung.')),
+      market(1),
+    );
+    expect(mild.observations.map((o) => o.id)).toContain('damage_engine');
     for (const description of [
       'Zylinderkopfdichtung defekt.',
       'Kupplung defekt, Getriebe defekt.',
