@@ -13,7 +13,7 @@ import type {
   ChatModelTurn,
 } from '../src/infrastructure/ai/chat-model';
 import { AiProviderError } from '../src/infrastructure/ai/types';
-import { createTestApp, PASTED_LISTING, resetDatabase, TestClient } from './helpers';
+import { createTestApp, PASSWORD, PASTED_LISTING, resetDatabase, TestClient } from './helpers';
 
 function events(response: LightMyRequestResponse): ChatStreamEvent[] {
   return response.body
@@ -141,6 +141,28 @@ describe('chat with the scripted development model', () => {
         expect(row.subjectId).toMatch(/^[0-9a-f]{32}$/);
         expect(row.subjectId).not.toContain(client.remoteAddress);
       }
+    } finally {
+      await app.app.close();
+    }
+  });
+
+  it('counts accounts per connection too, with more room, and never Pro', async () => {
+    const app = await createTestApp({ AI_PROVIDER: 'mock', CHAT_DAILY_PER_ADDRESS: '1' });
+    try {
+      await resetDatabase(app.services.db);
+      const client = new TestClient(app.app);
+      const send = () => client.post('/api/chat', { messages: [user('Hallo')] });
+      expect((await send()).statusCode).toBe(200);
+      expect((await send()).statusCode).toBe(429);
+      // A new account from the same connection gets its own, larger share – not an unlimited one.
+      const registered = await client.post('/api/auth/register', {
+        email: 'chat@example.com',
+        password: PASSWORD,
+      });
+      expect(registered.statusCode, registered.body).toBe(201);
+      const codes: number[] = [];
+      for (let index = 0; index < 6; index += 1) codes.push((await send()).statusCode);
+      expect(codes).toEqual([200, 200, 200, 200, 200, 429]);
     } finally {
       await app.app.close();
     }

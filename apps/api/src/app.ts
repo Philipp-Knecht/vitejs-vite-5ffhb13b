@@ -6,6 +6,7 @@ import Fastify, { type FastifyInstance } from 'fastify';
 import type { AppConfig } from './config/env';
 import { createServices, type ServiceOverrides, type Services } from './container';
 import { clientAddress } from './http/client-address';
+import { subscriberOf } from './lib/network';
 import { registerErrorHandling } from './http/errors';
 import { redirectToPublicSite } from './http/public-site';
 import { requestContextPlugin } from './http/request-context';
@@ -74,7 +75,8 @@ export async function buildApp(
     global: true,
     max: 300,
     timeWindow: '1 minute',
-    keyGenerator: (request) => clientAddress(request, config.clientIpHeader),
+    // With IPv6 a subscriber has a whole /64: rotating addresses in it does not reset the limits.
+    keyGenerator: (request) => subscriberOf(clientAddress(request, config.clientIpHeader)),
     // Every page view loads several fingerprinted build files; they are cheap and never count.
     allowList: (request) =>
       (request.method === 'GET' || request.method === 'HEAD') && request.url.startsWith('/assets/'),

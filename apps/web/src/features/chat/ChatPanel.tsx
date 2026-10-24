@@ -158,17 +158,15 @@ export function ChatPanel({
 
   /**
    * Where the focus goes when the control that had it disappears: the input,
-   * kept in view. On phones the keyboard closes instead of popping up.
+   * kept in view. On phones the conversation instead, so no keyboard pops up.
    */
   const focusAfterSend = () => {
-    const element = textarea.current;
-    if (!element) return;
     if (touchScreen()) {
-      element.blur();
+      log.current?.focus({ preventScroll: true });
       return;
     }
-    element.focus({ preventScroll: true });
-    element.scrollIntoView({ block: 'nearest' });
+    textarea.current?.focus({ preventScroll: true });
+    textarea.current?.scrollIntoView({ block: 'nearest' });
   };
 
   // Yesterday's count no longer applies.

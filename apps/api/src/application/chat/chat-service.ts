@@ -31,7 +31,7 @@ export interface ChatRunContext {
   emit: (event: ChatStreamEvent) => void;
 }
 
-/** What the visitor has seen of the answer so far. */
+/** What the visitor has seen of the answer so far: text not taken back, tools that worked. */
 interface Shown {
   text: string;
   tools: number;
@@ -219,7 +219,6 @@ export class ChatService {
           continue;
         }
         ctx.emit({ type: 'tool', label: tool.label, status: 'started' });
-        shown.tools += 1;
         try {
           const outcome = await tool.run(call.input, {
             actor: ctx.actor,
@@ -237,6 +236,7 @@ export class ChatService {
             label: tool.label,
             status: outcome.isError ? 'failed' : 'completed',
           });
+          if (!outcome.isError) shown.tools += 1;
           if (tool.once)
             ran.set(tool.spec.name, {
               toolUseId: call.id,

@@ -342,12 +342,13 @@ export function PrivacyPage() {
             weg, wenn du den Tab schließt, und sofort, wenn du „Neues Gespräch“ wählst. Auf unserem
             Server speichern wir vom Gespräch nichts; wir zählen nur, wie viele Nachrichten dein
             Browser (Kennung kc_anon) oder dein Konto am Tag schickt. Damit niemand das Tageslimit
-            umgeht, indem er die Kennung löscht, zählen wir ohne Konto außerdem die Nachrichten je
-            Internetanschluss: Dafür speichern wir keine IP-Adresse, sondern nur einen mit einem
-            geheimen Schlüssel gebildeten Prüfwert, der jeden Tag wechselt (Rechtsgrundlage: unser
-            berechtigtes Interesse, Missbrauch und Kosten zu begrenzen, Art. 6 Abs. 1 lit. f DSGVO).
-            Alle Zähler löschen wir nach sieben Tagen. Prüft der Assistent ein Inserat, das du
-            einfügst, ist das eine Prüfung wie unter „Geprüfte Inserate“ beschrieben.
+            umgeht, indem er die Kennung löscht oder neue Konten anlegt, zählen wir ohne Pro
+            außerdem die Nachrichten je Internetanschluss (bei IPv6 auch je Adressbereich): Dafür
+            speichern wir keine IP-Adresse, sondern nur mit einem geheimen Schlüssel gebildete
+            Prüfwerte, die jeden Tag wechseln (Rechtsgrundlage: unser berechtigtes Interesse,
+            Missbrauch und Kosten zu begrenzen, Art. 6 Abs. 1 lit. f DSGVO). Alle Zähler löschen wir
+            nach sieben Tagen. Prüft der Assistent ein Inserat, das du einfügst, ist das eine
+            Prüfung wie unter „Geprüfte Inserate“ beschrieben.
             {!chat.isMock &&
               ' Der Anbieter kann die Daten außerhalb der EU verarbeiten; die Übermittlung erfolgt auf Grundlage geeigneter Garantien wie der EU-Standardvertragsklauseln (Art. 46 Abs. 2 lit. c DSGVO).'}{' '}
             Rechtsgrundlage ist die Bereitstellung des angefragten Dienstes (Art. 6 Abs. 1 lit. b

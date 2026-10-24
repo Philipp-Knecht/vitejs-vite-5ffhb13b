@@ -1,8 +1,8 @@
 import { createHmac } from 'node:crypto';
-import net from 'node:net';
 import { germanDay, type ChatUsage } from '@kaufcheck/shared';
 import { isUniqueViolation, type Db } from '../../infrastructure/db/client';
 import { AppError } from '../../lib/errors';
+import { blockOf, subscriberOf } from '../../lib/network';
 import { usageSubject, type Actor } from '../actor';
 
 export interface ChatLimits {
@@ -10,7 +10,7 @@ export interface ChatLimits {
   dailyPro: number;
   /** All messages of all visitors per day, to cap the costs. */
   dailyTotal: number;
-  /** Messages per internet connection and day, for visitors without an account. */
+  /** Messages per internet connection and day without an account (accounts get more, Pro none). */
   dailyPerAddress: number;
 }
 
@@ -22,30 +22,10 @@ export interface ChatReservation {
 
 const ALL = { subjectType: 'all', subjectId: 'all' } as const;
 
-/** A /48 holds 65,536 networks of /64: it gets this many times the limit of one. */
-const NETWORK_FACTOR = 5;
-
-/**
- * The connections a message counts against: an IPv4 address, or with IPv6 the
- * /64 network a device gets and the /48 a line or server can rotate within.
- */
-export function connections(address: string): { id: string; factor: number }[] {
-  if (!net.isIPv6(address)) return [{ id: address, factor: 1 }];
-  const mapped = /^::ffff:(\d+\.\d+\.\d+\.\d+)$/i.exec(address);
-  if (mapped?.[1]) return [{ id: mapped[1], factor: 1 }];
-  const [head = '', tail = ''] = address.toLowerCase().split('%')[0]!.split('::');
-  const left = head ? head.split(':') : [];
-  const right = tail ? tail.split(':') : [];
-  const groups = (
-    address.includes('::')
-      ? [...left, ...Array<string>(8 - left.length - right.length).fill('0'), ...right]
-      : left
-  ).map((group) => group.replace(/^0+(?=.)/, ''));
-  return [
-    { id: groups.slice(0, 4).join(':'), factor: 1 },
-    { id: `${groups.slice(0, 3).join(':')}::/48`, factor: NETWORK_FACTOR },
-  ];
-}
+/** Free accounts count per connection too (no e-mail confirmation needed), with more room. */
+const ACCOUNT_FACTOR = 5;
+/** No single IPv6 /48 takes more than this many times the limit of one connection. */
+const BLOCK_FACTOR = 5;
 
 /** The German day after `day`, „YYYY-MM-DD“. */
 function nextDay(day: string): string {
@@ -129,20 +109,34 @@ export class ChatUsageService {
         details: { limit, used: limit, resetsAt: resetsOn },
       });
     }
-    // A client that drops its cookie is a new visitor each time; its connection is not.
-    // Accounts have their own limit: a shared network (office, mobile carrier) never blocks them.
+    // A client that drops its cookie (or signs up again) is a new visitor each time; its
+    // connection is not. Visitors and accounts count apart, so a shared network (office,
+    // mobile carrier) leaves room for accounts; Pro is never limited by the connection.
     const taken: { subjectType: string; subjectId: string; day: string }[] = [own];
     const giveBack = () => Promise.all(taken.map((key) => this.give(key)));
-    for (const { id, factor } of actor.userId ? [] : connections(address)) {
+    const perConnection = this.limits.dailyPerAddress;
+    const subscriber = subscriberOf(address);
+    const block = blockOf(address);
+    const connectionLimits =
+      actor.plan === 'pro'
+        ? []
+        : [
+            actor.userId
+              ? { id: `account|${subscriber}`, limit: perConnection * ACCOUNT_FACTOR }
+              : { id: `visitor|${subscriber}`, limit: perConnection },
+            ...(block ? [{ id: `block|${block}`, limit: perConnection * BLOCK_FACTOR }] : []),
+          ];
+    for (const { id, limit: connectionLimit } of connectionLimits) {
       const key = this.addressKey(id, day);
-      if ((await this.take(key, this.limits.dailyPerAddress * factor)) !== null) {
+      if ((await this.take(key, connectionLimit)) !== null) {
         taken.push(key);
         continue;
       }
       await giveBack();
       throw new AppError('USAGE_LIMIT_REACHED', {
-        message:
-          'Von deinem Internetanschluss kamen heute schon sehr viele Nachrichten an den Assistenten. Mit einem kostenlosen Konto zählt nur dein eigenes Limit; sonst geht es morgen weiter. Alle Rechner und die Inseratsprüfung funktionieren auch ohne Assistent.',
+        message: actor.userId
+          ? 'Von deinem Internetanschluss kamen heute schon sehr viele Nachrichten an den Assistenten. Morgen geht es weiter; alle Rechner und die Inseratsprüfung funktionieren auch ohne Assistent.'
+          : 'Von deinem Internetanschluss kamen heute schon sehr viele Nachrichten an den Assistenten. Mit einem kostenlosen Konto zählen deine Nachrichten getrennt; sonst geht es morgen weiter. Alle Rechner und die Inseratsprüfung funktionieren auch ohne Assistent.',
         internalReason: 'chat_daily_per_address',
       });
     }

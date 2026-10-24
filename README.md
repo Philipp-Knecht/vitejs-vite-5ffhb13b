@@ -339,9 +339,11 @@ The start page offers a chat assistant (`POST /api/chat`, NDJSON stream). It run
   tools read the original. A message may be as long as a listing the check accepts (20,000
   characters).
 - Limits: `CHAT_DAILY_FREE` (15) without an account or with a free one, `CHAT_DAILY_PRO` (150),
-  `CHAT_DAILY_PER_ADDRESS` (60) per internet connection without an account (stored as a keyed hash that
-  changes daily, so dropping the cookie does not help), `CHAT_DAILY_TOTAL` (500) for all visitors
-  together as a cost cap, `CHAT_RATE_PER_MINUTE` (10) per IP address. A message whose answer
+  `CHAT_DAILY_PER_ADDRESS` (60) per internet connection without an account and 5× that for free
+  accounts, counted apart (an IPv6 /64 is one connection, a /48 gets at most 5× as well; stored as
+  keyed hashes that change daily, so dropping the cookie or signing up again does not help; Pro is
+  exempt), `CHAT_DAILY_TOTAL` (500) for all visitors together as a cost cap,
+  `CHAT_RATE_PER_MINUTE` (10) per IP address (an IPv6 /64 for all rate limits). A message whose answer
   fails or shows nothing is not counted.
 - Model: `CHAT_MODEL` (default `ANTHROPIC_MODEL`), `CHAT_EFFORT` (default `low`). Requests stream
   with adaptive thinking, a cached system prompt and conversation, and the server-side refusal
