@@ -242,18 +242,46 @@ const SERVICE_NONE: readonly RegExp[] = [
 
 // --- Damage and defects ------------------------------------------------------
 
-/** The sentence around a match: up to the previous and next sentence end. */
-function sentenceAround(text: string, index: number, length: number): string {
-  const end = /[.!?](?=\s|$)|\n/;
+/**
+ * The sentence around a match, cut into its comma clauses: the clause with
+ * the match first. A sentence ends at a full stop before a space (not at the
+ * dot in „120.000 km“) or a line break.
+ */
+function clausesAround(text: string, index: number, length: number): string[] {
   const before = text.slice(Math.max(0, index - 120), index);
   const starts = [...before.matchAll(/[.!?](?=\s)|\n/g)];
   const from = starts.length > 0 ? before.length - (starts.at(-1)!.index + 1) : before.length;
   const after = text.slice(index + length, index + length + 120);
-  const stop = end.exec(after)?.index ?? after.length;
-  return text.slice(index - from, index + length + stop);
+  const stop = /[.!?](?=\s|$)|\n/.exec(after)?.index ?? after.length;
+  const head = text.slice(index - from, index).split(/[,;]/);
+  const tail = text.slice(index + length, index + length + stop).split(/[,;]/);
+  const own = `${head.at(-1) ?? ''}${text.slice(index, index + length)}${tail[0] ?? ''}`;
+  return [own, ...head.slice(0, -1), ...tail.slice(1)];
 }
 
-/** Words in the sentence of a damage term that say it was repaired; „neu“ alone is too vague. */
+/** The part a repair must name when it stands in another clause of the sentence. */
+const REPAIRED_PART: Partial<Record<DamageCategory, RegExp>> = {
+  engine: /\b(?:motor|austauschmotor)\b/i,
+  transmission: /\b(?:getriebe|austauschgetriebe)\b/i,
+  rust: /\b(?:rost\w*|schweller|blech)\b/i,
+};
+
+/**
+ * „Motorschaden wurde behoben“, „Neuer Motor nach Motorschaden“, „Motorschaden,
+ * Austauschmotor eingebaut“: dealt with. A repair in another clause counts only
+ * when it names the same part – „Bremsen erneuert, Motorschaden“ does not.
+ */
+function repaired(text: string, index: number, length: number, category: DamageCategory): boolean {
+  const [own = '', ...others] = clausesAround(text, index, length);
+  if (testPattern(REPAIRED, own)) return true;
+  const part = REPAIRED_PART[category];
+  return (
+    part !== undefined &&
+    others.some((clause) => testPattern(REPAIRED, clause) && testPattern(part, clause))
+  );
+}
+
+/** Words that say damage was repaired; „neu“ alone is too vague. */
 const REPAIRED =
   /\b(?:repariert|behoben|instandgesetzt|überholt|getauscht|ausgetauscht|erneuert|gewechselt|geschweißt|geschweisst|verschweißt|verschweisst|austauschmotor|austauschgetriebe|neuer\s+motor|neues\s+getriebe)\b/i;
 
@@ -746,13 +774,20 @@ export function extractDescriptionSignals(
       const start = match.index;
       const end = match.index + match.text.length;
       // The same words twice, or the same kind of damage right next to it, count once;
-      // „Ölverlust, fährt nicht mehr“ are two findings.
-      const taken = covered.some(
+      // „Ölverlust, fährt nicht mehr“ are two findings. A plain „defekt“ next to any
+      // finding belongs to it.
+      if (covered.some((other) => start < other.end && end > other.start)) continue;
+      const near = covered.some(
         (other) =>
-          (start < other.end && end > other.start) ||
-          (other.category === term.category && start < other.end + 12 && end > other.start - 12),
+          (other.category === term.category || term.category === 'general') &&
+          start < other.end + 12 &&
+          end > other.start - 12,
       );
-      if (taken) continue;
+      if (near) {
+        // Its words stay taken, so a plain „defekt“ inside them does not come back.
+        covered.push({ start, end, category: term.category });
+        continue;
+      }
       if ((term.negationSensitive ?? true) && isNegated(text, start, match.text.length)) continue;
       covered.push({ start, end, category: term.category });
       damageMentions.push({
@@ -772,9 +807,7 @@ export function extractDescriptionSignals(
     for (const match of allMatches(term.pattern, text)) {
       if ((term.negationSensitive ?? true) && isNegated(text, match.index, match.text.length))
         continue;
-      // „Motorschaden wurde behoben“, „Neuer Motor nach Motorschaden“: dealt with. The
-      // sentence ends at a full stop before a space, not at the dot in „120.000 km“.
-      if (testPattern(REPAIRED, sentenceAround(text, match.index, match.text.length))) continue;
+      if (repaired(text, match.index, match.text.length, term.category)) continue;
       severeDamage = { term: match.text, quote: quote(text, match) };
       break;
     }
