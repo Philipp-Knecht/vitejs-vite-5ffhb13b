@@ -22,6 +22,8 @@ const AI_NOTE =
   'Der Assistent ist eine KI (Claude von Anthropic) und kann sich irren; Zahlen kommen aus den Rechnern von KaufCheck.';
 const PLACEHOLDER = 'Frag etwas oder füg den Text eines Inserats ein …';
 const INPUT_LABEL = 'Nachricht an den KI-Assistenten von KaufCheck';
+const SPEECH_NOTE =
+  'Spracheingabe: Die Sprache erkennt dein Browser. Meist schickt er die Aufnahme dafür an einen Online-Dienst, bei Chrome an Google. Die Diktierfunktion deiner Tastatur geht auch.';
 /** A long pasted listing scrolls inside its bubble; from here on it can be reached by keyboard. */
 const LONG_MESSAGE = 400;
 
@@ -145,6 +147,8 @@ export function ChatPanel({
 
   // New content scrolls into view, inside the log only.
   const last = items.at(-1);
+  // A conversation restored from the tab is not read out again.
+  const [restoredLast] = useState(last?.id);
   const lastLength =
     last?.role === 'assistant' ? last.text.length + last.cards.length + last.tools.length : 0;
   useEffect(() => {
@@ -152,14 +156,24 @@ export function ChatPanel({
     if (element) element.scrollTop = element.scrollHeight;
   }, [items.length, lastLength]);
 
-  /** Where the focus goes when the control that had it disappears. */
+  /**
+   * Where the focus goes when the control that had it disappears: the input,
+   * kept in view. On phones the keyboard closes instead of popping up.
+   */
   const focusAfterSend = () => {
-    if (touchScreen()) log.current?.focus({ preventScroll: true });
-    else textarea.current?.focus({ preventScroll: true });
+    const element = textarea.current;
+    if (!element) return;
+    if (touchScreen()) {
+      element.blur();
+      return;
+    }
+    element.focus({ preventScroll: true });
+    element.scrollIntoView({ block: 'nearest' });
   };
 
-  const exhausted =
-    usage !== null && usage.used >= usage.limit && germanDay(new Date()) < usage.resetsOn;
+  // Yesterday's count no longer applies.
+  const today = usage !== null && germanDay(new Date()) < usage.resetsOn ? usage : null;
+  const exhausted = today !== null && today.used >= today.limit;
   const tooLong = input.trim().length > CHAT_LIMITS.messageChars;
 
   const sendMessage = (text: string) => {
@@ -199,15 +213,22 @@ export function ChatPanel({
     else if (starter?.message) sendMessage(starter.message);
   };
 
-  const left = usage ? Math.max(0, usage.limit - usage.used) : null;
+  const left = today ? Math.max(0, today.limit - today.used) : null;
 
   return (
     <section className="chat" aria-labelledby={headingId}>
       <h2 id={headingId} className="visually-hidden">
         {TITLE}
       </h2>
-      <div className="chat__log" ref={log} tabIndex={-1}>
-        {items.length === 0 && <Welcome disabled={busy} onStarter={onStarter} />}
+      <div
+        className="chat__log"
+        ref={log}
+        role="region"
+        aria-label="Gesprächsverlauf"
+        // Scrollable by keyboard, also when it holds only text.
+        tabIndex={0}
+      >
+        {items.length === 0 && <Welcome disabled={busy || exhausted} onStarter={onStarter} />}
         {items.map((item) =>
           item.role === 'user' ? (
             <div key={item.id} className="chat-message chat-message--user">
@@ -225,18 +246,23 @@ export function ChatPanel({
             <div key={item.id} className="chat-message chat-message--assistant">
               <ChatCardView
                 card={item.card}
-                busy={busy}
+                busy={busy || exhausted}
                 autoFocus={item.id === focusId}
                 onSubmit={sendMessage}
               />
             </div>
           ) : (
-            <AssistantMessage key={item.id} item={item} busy={busy} onSubmit={sendMessage} />
+            <AssistantMessage
+              key={item.id}
+              item={item}
+              busy={busy || exhausted}
+              onSubmit={sendMessage}
+            />
           ),
         )}
       </div>
       <p className="visually-hidden" role="status">
-        {announcement(last)}
+        {last?.id === restoredLast ? '' : announcement(last)}
       </p>
 
       <form className="chat__composer" onSubmit={submit}>
@@ -294,19 +320,13 @@ export function ChatPanel({
         <p>
           {isMock ? 'Entwicklungsmodus: feste Regeln statt KI. ' : `${AI_NOTE} `}
           {exhausted
-            ? `Für heute sind alle ${usage.limit} Nachrichten verbraucht; morgen geht es weiter.`
+            ? `Für heute sind alle ${today.limit} Nachrichten verbraucht; morgen geht es weiter.`
             : left !== null
-              ? `Heute noch ${left} von ${usage?.limit ?? dailyLimit} Nachrichten.`
+              ? `Heute noch ${left} von ${today?.limit ?? dailyLimit} Nachrichten.`
               : `${dailyLimit} Nachrichten am Tag kostenlos.`}{' '}
           <Link to="/datenschutz#assistent">Datenschutz</Link>
         </p>
-        {speech.supported && (
-          <p id={speechNoteId}>
-            {speech.local
-              ? 'Spracheingabe: Dein Browser erkennt die Sprache auf diesem Gerät; die Aufnahme verlässt es nicht.'
-              : 'Spracheingabe: Die Sprache erkennt dein Browser. Meist schickt er die Aufnahme dafür an einen Online-Dienst, bei Chrome an Google. Die Diktierfunktion deiner Tastatur geht auch.'}
-          </p>
-        )}
+        {speech.supported && <p id={speechNoteId}>{SPEECH_NOTE}</p>}
         {items.length > 0 && (
           <button
             type="button"
@@ -352,7 +372,10 @@ export function ChatPlaceholder() {
         </div>
       </div>
       <div className="chat__footer">
-        <p>{AI_NOTE}</p>
+        <p>
+          {AI_NOTE} <Link to="/datenschutz#assistent">Datenschutz</Link>
+        </p>
+        <p>{SPEECH_NOTE}</p>
       </div>
     </section>
   );

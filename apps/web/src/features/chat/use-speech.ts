@@ -5,7 +5,6 @@ interface Recognition {
   lang: string;
   interimResults: boolean;
   continuous: boolean;
-  processLocally?: boolean;
   start(): void;
   stop(): void;
   abort(): void;
@@ -19,14 +18,7 @@ interface RecognitionResultEvent {
   results: ArrayLike<{ isFinal: boolean; 0: { transcript: string } }>;
 }
 
-type RecognitionConstructor = (new () => Recognition) & {
-  /** Newer browsers: whether recognition can run on this device (experimental). */
-  available?: (options: {
-    langs: string[];
-    processLocally: boolean;
-    quality?: string;
-  }) => Promise<string>;
-};
+type RecognitionConstructor = new () => Recognition;
 
 const LANGUAGE = 'de-DE';
 
@@ -51,14 +43,14 @@ const ERRORS: Record<string, string> = {
 
 /**
  * Speech input through the browser's own recognition (Web Speech API), in
- * German. Where the browser can recognise German on the device, the audio
- * stays there; otherwise the browser decides where it goes – Chrome, for
- * example, sends it to a Google service. The chat says which next to the button.
+ * German. The browser decides where the audio goes – Chrome, for example,
+ * sends it to a Google service; the chat says so next to the button.
+ * On-device recognition (`SpeechRecognition.available`) is left out: in
+ * Chromium 2026 the check crashed the page.
  */
 export function useSpeech(onText: (text: string) => void) {
   const supported = recognitionClass() !== null;
   const [listening, setListening] = useState(false);
-  const [local, setLocal] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const recognition = useRef<Recognition | null>(null);
   const callback = useRef(onText);
@@ -66,24 +58,6 @@ export function useSpeech(onText: (text: string) => void) {
     callback.current = onText;
   }, [onText]);
   useEffect(() => () => recognition.current?.abort(), []);
-
-  // Only a language pack that is already there: nothing is downloaded unasked.
-  useEffect(() => {
-    let active = true;
-    try {
-      void recognitionClass()
-        ?.available?.({ langs: [LANGUAGE], processLocally: true, quality: 'dictation' })
-        .then((status) => {
-          if (active) setLocal(status === 'available');
-        })
-        .catch(() => undefined);
-    } catch {
-      // Not offered, or blocked by the page's permissions policy.
-    }
-    return () => {
-      active = false;
-    };
-  }, []);
 
   const start = useCallback(() => {
     const Class = recognitionClass();
@@ -93,7 +67,6 @@ export function useSpeech(onText: (text: string) => void) {
     current.lang = LANGUAGE;
     current.interimResults = true;
     current.continuous = false;
-    if (local) current.processLocally = true;
     current.onresult = (event) => {
       if (recognition.current !== current) return;
       let text = '';
@@ -117,7 +90,7 @@ export function useSpeech(onText: (text: string) => void) {
       setListening(false);
       setError('Die Spracheingabe hat nicht geklappt.');
     }
-  }, [local]);
+  }, []);
 
   /** Stops listening; what was said so far still arrives. */
   const stop = useCallback(() => recognition.current?.stop(), []);
@@ -130,5 +103,5 @@ export function useSpeech(onText: (text: string) => void) {
     setListening(false);
   }, []);
 
-  return { supported, local, listening, error, start, stop, cancel };
+  return { supported, listening, error, start, stop, cancel };
 }

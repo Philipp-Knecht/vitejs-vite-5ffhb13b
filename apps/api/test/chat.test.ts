@@ -294,6 +294,47 @@ describe('chat tool loop', () => {
     expect(again.statusCode).toBe(200);
   });
 
+  it('does not count a message whose text was taken back before it failed', async () => {
+    const model = new ScriptedModel([
+      (request) => {
+        request.onText('Ich schaue nach ');
+        throw new AiProviderError('invalid_output', 'Tool input is no JSON');
+      },
+      () => {
+        throw new AiProviderError('unavailable', 'Overloaded');
+      },
+    ]);
+    const list = await run(model, { CHAT_DAILY_FREE: '1' });
+    expect(list.at(-1)).toMatchObject({ type: 'error' });
+    const again = await new TestClient(built!.app).post('/api/chat', {
+      messages: [user('Hallo')],
+    });
+    expect(again.statusCode).toBe(200);
+  });
+
+  it('says when a later step is declined', async () => {
+    const model = new ScriptedModel([
+      (request) => {
+        request.onText('Ich rechne.');
+        return {
+          text: 'Ich rechne.',
+          toolCalls: [{ id: 'f', name: 'financing', input: { price_eur: 10_000 } }],
+          stop: 'tool_use',
+          fallback: false,
+          raw: [],
+        };
+      },
+      (request) => {
+        request.onText('Teil');
+        return { text: 'Teil', toolCalls: [], stop: 'refusal', fallback: false, raw: [] };
+      },
+    ]);
+    const list = await run(model);
+    expect(done(list)?.turn.content).toBe(
+      'Ich rechne.\n\nWeiter kann ich dabei leider nicht helfen.',
+    );
+  });
+
   it('checks a listing only once per message', async () => {
     const model = new ScriptedModel([
       (): ChatModelTurn => ({
@@ -317,7 +358,7 @@ describe('chat tool loop', () => {
     expect(cards(list).filter((card) => card.type === 'analysis')).toHaveLength(1);
     const results = model.requests[1]?.messages.at(-1);
     const [, second] = results?.role === 'tool_results' ? results.results : [];
-    expect(second?.content).toMatch(/^Schon erledigt/);
+    expect(second?.content).toMatch(/^Schon in dieser Nachricht aufgerufen/);
     expect(await built.services.db.analysis.count()).toBe(1);
   });
 
@@ -398,6 +439,15 @@ describe('chat tools', () => {
     expect(card).toMatchObject({ type: 'tax' });
     if (card?.type === 'tax')
       expect(card.inputs).toContainEqual({ label: 'Erstzulassung', value: '03/2016' });
+  });
+
+  it('takes the current month as it is so far', async () => {
+    const { card } = await tool(
+      'vehicle_tax',
+      { first_registration: '2026-10', drive: 'petrol', displacement_ccm: 1498, co2_g_per_km: 130 },
+      { now: () => new Date('2026-10-15T10:00:00Z') },
+    );
+    expect(card).toMatchObject({ type: 'tax' });
   });
 
   it('asks for the day when a rule changes within the month', async () => {

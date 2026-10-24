@@ -1,5 +1,6 @@
 import {
   CHAT_LIMITS,
+  germanDay,
   type ChatCard,
   type ChatStreamEvent,
   type ChatTurn,
@@ -96,7 +97,9 @@ function load(): Stored {
       version: 1,
       items,
       history: value.history.filter(isTurn),
-      usage: isUsage(value.usage) ? value.usage : null,
+      // Yesterday's count no longer applies.
+      usage:
+        isUsage(value.usage) && germanDay(new Date()) < value.usage.resetsOn ? value.usage : null,
     };
   } catch {
     return empty;

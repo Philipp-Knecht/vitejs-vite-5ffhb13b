@@ -31,6 +31,12 @@ export interface ChatRunContext {
   emit: (event: ChatStreamEvent) => void;
 }
 
+/** What the visitor has seen of the answer so far. */
+interface Shown {
+  text: string;
+  tools: number;
+}
+
 function clip(text: string, max: number): string {
   return text.length <= max ? text : `${text.slice(0, max - 1)}…`;
 }
@@ -102,14 +108,16 @@ export class ChatService {
     reservation: ChatReservation,
     ctx: ChatRunContext,
   ): Promise<void> {
-    let answered = false;
+    const shown: Shown = { text: '', tools: 0 };
     try {
-      await this.answer(request, ctx, () => {
-        answered = true;
-      }).then((done) => ctx.emit({ ...done, usage: reservation.usage }));
+      await this.answer(request, ctx, shown).then((done) =>
+        ctx.emit({ ...done, usage: reservation.usage }),
+      );
     } catch (error) {
+      // Nothing the visitor can use (text taken back, no tool ran): the message does not count.
       const empty = isAppError(error) && error.internalReason === 'chat_empty_answer';
-      if (!answered || empty) await reservation.release().catch(() => undefined);
+      if (empty || (!shown.text.trim() && shown.tools === 0))
+        await reservation.release().catch(() => undefined);
       throw providerError(error);
     }
   }
@@ -117,7 +125,7 @@ export class ChatService {
   private async answer(
     request: ChatRequest,
     ctx: ChatRunContext,
-    onOutput: () => void,
+    shown: Shown,
   ): Promise<Omit<Extract<ChatStreamEvent, { type: 'done' }>, 'usage'>> {
     const latest = request.messages[request.messages.length - 1]!;
     const messages = history(request);
@@ -129,13 +137,14 @@ export class ChatService {
     let invalidRetries = 0;
     let shownCards = 0;
     /** Tools that run once per message, with what they answered. */
-    const ran = new Map<string, string>();
+    const ran = new Map<string, ChatToolResult>();
 
     /** Takes back what a step wrote: it is repeated or was declined. */
     const retract = (length: number, separateBefore: boolean) => {
       separate = separateBefore;
       if (text.length <= length) return;
       text = text.slice(0, length);
+      shown.text = text;
       ctx.emit({ type: 'retract', length });
     };
 
@@ -147,7 +156,7 @@ export class ChatService {
       }
       separate = false;
       text += delta;
-      onOutput();
+      shown.text = text;
       ctx.emit({ type: 'text', delta });
     };
 
@@ -179,10 +188,14 @@ export class ChatService {
       fallback ||= turn.fallback;
 
       if (turn.stop === 'refusal') {
-        // A declined step's partial text is not kept.
+        // A declined step's partial text is not kept; a later step says that it stopped.
         retract(mark, separateBefore);
-        if (!text)
-          onText('Dabei kann ich leider nicht helfen. Frag mich gern etwas rund ums Auto.');
+        separate = true;
+        onText(
+          text
+            ? 'Weiter kann ich dabei leider nicht helfen.'
+            : 'Dabei kann ich leider nicht helfen. Frag mich gern etwas rund ums Auto.',
+        );
         break;
       }
       // A tool input cut off at max_tokens can look complete: never run it.
@@ -200,13 +213,13 @@ export class ChatService {
         if (earlier !== undefined) {
           results.push({
             toolUseId: call.id,
-            content: `Schon erledigt, das Ergebnis steht oben: ${earlier}`,
-            isError: false,
+            content: `Schon in dieser Nachricht aufgerufen: ${earlier.content}`,
+            isError: earlier.isError,
           });
           continue;
         }
         ctx.emit({ type: 'tool', label: tool.label, status: 'started' });
-        onOutput();
+        shown.tools += 1;
         try {
           const outcome = await tool.run(call.input, {
             actor: ctx.actor,
@@ -224,7 +237,12 @@ export class ChatService {
             label: tool.label,
             status: outcome.isError ? 'failed' : 'completed',
           });
-          if (tool.once) ran.set(tool.spec.name, outcome.content);
+          if (tool.once)
+            ran.set(tool.spec.name, {
+              toolUseId: call.id,
+              content: outcome.content,
+              isError: outcome.isError ?? false,
+            });
           if (outcome.card) {
             ctx.emit({ type: 'card', card: outcome.card });
             shownCards += 1;

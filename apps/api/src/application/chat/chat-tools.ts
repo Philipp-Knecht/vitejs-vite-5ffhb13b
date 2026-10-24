@@ -546,7 +546,10 @@ const vehicleTaxTool = tool(
         germanDay(ctx.now),
       );
     const result = taxFor(firstRegistration);
-    const monthEnd = month ? taxFor(lastDayOfMonth(month)) : result;
+    // In the current month, the last day that can be meant is today.
+    const today = germanDay(ctx.now);
+    const monthEnd = month ? taxFor([lastDayOfMonth(month), today].sort()[0]!) : result;
+    if (result.kind === 'invalid') return fail(result.message);
     if (!sameTax(result, monthEnd)) {
       return {
         content: `Im Monat ${month?.split('-').reverse().join('/')} hängt die Steuer vom Tag der Erstzulassung ab (eine Stichtagsregel greift in diesem Monat). Frag nach dem genauen Datum (Fahrzeugschein, Feld B) und ruf das Werkzeug mit YYYY-MM-DD erneut auf.`,
@@ -558,7 +561,6 @@ const vehicleTaxTool = tool(
       input.drive === 'petrol' ? 'benzin' : input.drive === 'diesel' ? 'diesel' : 'elektro',
     );
     const calculatorUrl = `/kfz-steuer-rechner?${params.toString()}`;
-    if (result.kind === 'invalid') return fail(result.message);
     if (result.kind === 'missing') {
       return {
         content: `Es fehlen Angaben: ${result.fields.join(', ')}${result.note ? ` (${result.note})` : ''}. Frag den Nutzer danach (Fahrzeugschein) oder zeig das Formular „tax“. Rechner: ${calculatorUrl}`,
