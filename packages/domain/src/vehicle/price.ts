@@ -22,18 +22,6 @@ export const NO_PRICE_MESSAGE =
   'Ohne einen echten Angebotspreis lässt sich der Preis nicht mit anderen Angeboten vergleichen.';
 
 /**
- * Damage that rules out a comparison with intact cars, when the description
- * says so in plain words. Signals like „Zylinderkopfdichtung“ alone are not
- * enough: they also appear for repaired parts.
- */
-const SEVERE_DAMAGE =
-  /\b(?:motorschaden|getriebeschaden|nicht\s+(?:fahrbereit|fahrtüchtig|fahrtauglich)|springt\s+nicht\s+(?:mehr\s+)?an|fährt\s+nicht|durchgerostet|rostl(?:o|ö)ch(?:er)?)\b/i;
-
-/** Words that say the damage was dealt with („wurde repariert“, „neu“). */
-const REPAIRED =
-  /\b(?:repariert|behoben|erneuert|getauscht|ausgetauscht|gewechselt|instandgesetzt|überholt|neu)\b/i;
-
-/**
  * Why the car compares with no intact one, as the listing says it – or null.
  * Such offers are no comparables either (the stored reason is checked).
  */
@@ -49,14 +37,8 @@ function notComparableReason(
     return 'Laut Inserat hat das Auto einen nicht reparierten Schaden.';
   if (observations.some((o) => o.id === 'sold_as_defective'))
     return 'Laut Inserat wird das Auto für Bastler oder als defekt angeboten.';
-  for (const observation of observations) {
-    if (!observation.id.startsWith('damage_')) continue;
-    for (const quote of observation.quotes) {
-      const term = SEVERE_DAMAGE.exec(quote)?.[0];
-      if (term && !REPAIRED.test(quote)) return `Die Beschreibung nennt „${term}“.`;
-    }
-  }
-  return null;
+  const severe = ctx.signals.damageMentions.find((mention) => mention.severe);
+  return severe ? `Die Beschreibung nennt „${severe.term}“.` : null;
 }
 
 export interface MarketComparable {

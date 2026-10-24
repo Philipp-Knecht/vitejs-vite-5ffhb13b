@@ -38,6 +38,11 @@ export interface DamageMention extends Quoted {
   category: DamageCategory;
   severity: 'notice' | 'warning';
   term: string;
+  /**
+   * Engine or gearbox damage, not driving, through-rust – and no repair named
+   * right after it. Such a car compares with no intact one (price check).
+   */
+  severe: boolean;
 }
 
 export type PositiveKey =
@@ -237,21 +242,29 @@ const SERVICE_NONE: readonly RegExp[] = [
 
 // --- Damage and defects ------------------------------------------------------
 
+/** Words after a damage term that say it was repaired; „neu“ alone is too vague. */
+const REPAIRED_AFTER =
+  /\b(?:repariert|behoben|instandgesetzt|überholt|getauscht|ausgetauscht|erneuert|gewechselt|austauschmotor|austauschgetriebe|neuer\s+motor|neues\s+getriebe)\b/i;
+
 const DAMAGE_TERMS: readonly {
   pattern: RegExp;
   category: DamageCategory;
   severity: 'notice' | 'warning';
   negationSensitive?: boolean;
+  /** Rules out a price comparison with intact cars, unless a repair follows. */
+  severe?: boolean;
 }[] = [
   {
     pattern: /\bmotorschaden\b|\bmotor\s+(?:ist\s+)?defekt\b/i,
     category: 'engine',
     severity: 'warning',
+    severe: true,
   },
   {
     pattern: /\bgetriebeschaden\b|\bgetriebe\s+(?:ist\s+)?defekt\b/i,
     category: 'transmission',
     severity: 'warning',
+    severe: true,
   },
   {
     pattern:
@@ -274,10 +287,11 @@ const DAMAGE_TERMS: readonly {
   { pattern: /\bturbo(?:lader)?\s+(?:ist\s+)?defekt\b/i, category: 'engine', severity: 'warning' },
   {
     pattern:
-      /\bspringt\s+nicht\s+(?:mehr\s+)?an\b|\bnicht\s+(?:fahrbereit|fahrtüchtig|fahrtauglich)\b|\bfährt\s+nicht\b/i,
+      /\bspringt\s+nicht\s+(?:mehr\s+)?an\b|\bnicht\s+(?:fahrbereit|fahrtüchtig|fahrtauglich)\b|\bfährt\s+nicht(?:\s+mehr)?(?=\s*(?:[.,;!?)]|$))/i,
     category: 'roadworthiness',
     severity: 'warning',
     negationSensitive: false,
+    severe: true,
   },
   {
     pattern: /\b(?:motorkontroll(?:leuchte|lampe)|motor-kontrollleuchte|mkl)\b/i,
@@ -302,7 +316,12 @@ const DAMAGE_TERMS: readonly {
     category: 'electrical',
     severity: 'notice',
   },
-  { pattern: /\b(?:durchgerostet|rostloch|rostlöcher)\b/i, category: 'rust', severity: 'warning' },
+  {
+    pattern: /\b(?:durchgerostet|rostloch|rostlöcher)\b/i,
+    category: 'rust',
+    severity: 'warning',
+    severe: true,
+  },
   {
     pattern: /\brost(?:ansatz|ansätze|stellen?|blasen|nester|befall|schaden|schäden|spuren)?\b/i,
     category: 'rust',
@@ -718,11 +737,14 @@ export function extractDescriptionSignals(
       if (covered.some(([a, b]) => start < b + 12 && end > a - 12)) continue;
       if ((term.negationSensitive ?? true) && isNegated(text, start, match.text.length)) continue;
       covered.push([start, end]);
+      // „Motorschaden wurde behoben“, „Motorschaden, Austauschmotor eingebaut“: dealt with.
+      const rest = text.slice(end, end + 80).split(/[.!?\n]/)[0] ?? '';
       damageMentions.push({
         category: term.category,
         severity: term.severity,
         term: match.text,
         quote: quote(text, match),
+        severe: (term.severe ?? false) && !testPattern(REPAIRED_AFTER, rest),
       });
     }
   }

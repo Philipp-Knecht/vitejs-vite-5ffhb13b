@@ -31,6 +31,17 @@ const COMPARABLE_DAYS = 90;
  */
 const EXCLUDED_OBSERVATIONS = ['sold_as_defective', 'price_placeholder'];
 
+/**
+ * Checks from before the stored price reason: any damage warning of these
+ * kinds keeps the offer out (stricter than today's rule, which spares repairs).
+ */
+const LEGACY_DAMAGE_OBSERVATIONS = [
+  'damage_engine',
+  'damage_transmission',
+  'damage_roadworthiness',
+  'damage_rust',
+];
+
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
 export function isUuid(value: string): boolean {
@@ -275,6 +286,10 @@ export class AnalysisRepository {
           AND "accidentHistory" IS DISTINCT FROM 'unrepaired_damage'
           -- The car's own check found it incomparable (severe damage named in the text).
           AND "marketReason" IS DISTINCT FROM 'not_comparable'
+          AND NOT ("marketReason" IS NULL AND EXISTS (
+            SELECT 1 FROM jsonb_array_elements(coalesce(observations, '[]'::jsonb)) AS o
+            WHERE o ->> 'id' = ANY(${LEGACY_DAMAGE_OBSERVATIONS}::text[])
+          ))
           AND NOT EXISTS (
             SELECT 1 FROM jsonb_array_elements(coalesce(observations, '[]'::jsonb)) AS o
             WHERE o ->> 'id' = ANY(${EXCLUDED_OBSERVATIONS}::text[])

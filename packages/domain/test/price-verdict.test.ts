@@ -253,13 +253,30 @@ describe('price advice', () => {
     expect((await advise(1.2, 'Fahrzeug ist nicht fahrbereit.')).market).toMatchObject({
       reason: 'not_comparable',
     });
-    // Repaired parts and wear are no reason: the comparison stays.
+    for (const description of [
+      'Motorschaden, TÜV neu.',
+      'Motorschaden, Reifen und Bremsen neu.',
+      'Motor defekt, Auto steht seit Monaten.',
+      'Getriebe ist defekt.',
+      'Das Auto fährt nicht.',
+      'Schweller durchgerostet.',
+    ])
+      expect((await advise(1.2, description)).market, description).toMatchObject({
+        reason: 'not_comparable',
+      });
+    // Negated, repaired, or wear: the comparison stays.
     for (const description of [
       'Zylinderkopfdichtung wurde 2024 erneuert.',
       'Ölverlust wurde behoben.',
       'Kupplung muss neu gemacht werden.',
+      'Leichter Ölverlust, kein Motorschaden.',
+      'Kein Motorschaden, aber leichter Ölverlust am Ventildeckel.',
+      'Kupplung rutscht, fährt nicht mehr gut.',
+      'Motorschaden, Motor wurde komplett überholt.',
+      'Hatte einen Motorschaden, Austauschmotor eingebaut.',
+      'Motorschaden wurde repariert.',
     ])
-      expect((await advise(1 / 1.04, description)).market.status).toBe('available');
+      expect((await advise(1 / 1.04, description)).market.status, description).toBe('available');
   });
 
   it('warns more about a costly defect than about scratches', async () => {
