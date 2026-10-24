@@ -6,6 +6,7 @@ import { useEffect, useMemo, useRef, useState, type KeyboardEvent } from 'react'
 import { Link, useNavigate } from 'react-router';
 import { useHydratedConfig } from '../api/queries';
 import { ADVISOR_AVAILABLE } from '../features/advisor/availability';
+import { ChatPanel } from '../features/chat/ChatPanel';
 import { PLATFORM_LIST } from '../features/analysis/check-content';
 import { FeatureGrid, PlatformChips } from '../features/analysis/CheckContent';
 import { ListingAnalysisForm } from '../features/analysis/ListingAnalysisForm';
@@ -125,6 +126,7 @@ export function LandingPage() {
   const plans = config?.plans ?? DEFAULT_ENTITLEMENTS;
   // Until the configuration has loaded, assume the default: no automatic retrieval.
   const retrieval = config?.features.urlRetrieval === true;
+  const chat = config?.features.chat ?? null;
   const faq = FAQ.filter((item) =>
     item.when === 'knowledge'
       ? KNOWLEDGE_IDS.length > 0
@@ -170,6 +172,13 @@ export function LandingPage() {
           <p className="hero__lead">
             Eine Suche für alle großen Börsen – und jedes Angebot geprüft, bevor du anrufst.
           </p>
+
+          {chat && (
+            <>
+              <ChatPanel isMock={chat.isMock} dailyLimit={chat.dailyFree} />
+              <p className="home-tabs__or">Oder direkt ohne Assistent:</p>
+            </>
+          )}
 
           <div className="home-tabs">
             <div

@@ -15,8 +15,14 @@ import { SavedSearchService } from './application/saved-search-service';
 import { UsageService } from './application/usage-service';
 import { SponsorAdService } from './application/sponsor-ad-service';
 import { RdwService, type RdwFetch } from './application/rdw-service';
+import { ChatService } from './application/chat/chat-service';
+import { createChatTools } from './application/chat/chat-tools';
+import { ChatUsageService } from './application/chat/chat-usage';
 import type { AppConfig } from './config/env';
+import { AnthropicChatModel } from './infrastructure/ai/anthropic-chat-model';
+import type { ChatModel } from './infrastructure/ai/chat-model';
 import { createAiProvider } from './infrastructure/ai/create-provider';
+import { MockChatModel } from './infrastructure/ai/mock-chat-model';
 import type { AiProvider } from './infrastructure/ai/types';
 import {
   NotConfiguredBillingService,
@@ -62,6 +68,8 @@ export interface Services {
   photoAnalysisAvailable: boolean;
   sponsorAds: SponsorAdService;
   rdw: RdwService;
+  /** The chat assistant; null without a chat model. */
+  chat: ChatService | null;
 }
 
 export interface ServiceOverrides {
@@ -73,6 +81,22 @@ export interface ServiceOverrides {
   now?: () => Date;
   rdwFetch?: RdwFetch;
   valuation?: ValuationProvider;
+  /** null switches the chat off. */
+  chatModel?: ChatModel | null;
+}
+
+/** Claude with an API key, the scripted model outside production with AI_PROVIDER=mock. */
+function createChatModel(config: AppConfig): ChatModel | null {
+  if (!config.chat.enabled) return null;
+  if (config.ai.provider === 'anthropic' && config.ai.anthropic.apiKey) {
+    return new AnthropicChatModel({
+      apiKey: config.ai.anthropic.apiKey,
+      model: config.chat.model,
+      effort: config.chat.effort,
+    });
+  }
+  if (config.ai.provider === 'mock' && !config.isProduction) return new MockChatModel();
+  return null;
 }
 
 function createRetriever(config: AppConfig): ListingUrlRetriever {
@@ -183,6 +207,14 @@ export function createServices(
   );
   const account = new AccountService(db, auth, billing);
 
+  const rdw = new RdwService({
+    ...config.rdw,
+    ...(overrides.rdwFetch ? { mode: 'live' as const, fetchRows: overrides.rdwFetch } : {}),
+    now,
+  });
+  const chatModel =
+    overrides.chatModel === undefined ? createChatModel(config) : overrides.chatModel;
+
   return {
     config,
     db,
@@ -204,10 +236,15 @@ export function createServices(
     contracts,
     photoAnalysisAvailable,
     sponsorAds: new SponsorAdService(db, config.sponsorAds, now, logger),
-    rdw: new RdwService({
-      ...config.rdw,
-      ...(overrides.rdwFetch ? { mode: 'live' as const, fetchRows: overrides.rdwFetch } : {}),
-      now,
-    }),
+    rdw,
+    chat: chatModel
+      ? new ChatService({
+          model: chatModel,
+          tools: createChatTools({ analyses, rdw }),
+          usage: new ChatUsageService(db, config.chat, now),
+          logger,
+          now,
+        })
+      : null,
   };
 }

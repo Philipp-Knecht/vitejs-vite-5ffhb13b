@@ -323,6 +323,27 @@ How AI output is handled:
   recorded. `ANTHROPIC_EFFORT` is sent only to models that support it, so a budget model such as
   `ANTHROPIC_MODEL=claude-haiku-4-5` works without further settings.
 
+## Chat assistant
+
+The start page offers a chat assistant (`POST /api/chat`, NDJSON stream). It runs with
+`AI_PROVIDER=anthropic` (or the scripted `mock` outside production) and can be switched off with
+`CHAT_ENABLED=false`.
+
+- The model calls KaufCheck's own functions as tools: listing check (with price check), marketplace
+  search links, model knowledge, Kfz tax (with EU engine data), financing, the car advisor, the RDW
+  check, input forms in the chat and buttons to app pages. Cards in the chat show the tool results;
+  links in the model's text are only rendered for KaufCheck's own pages.
+- The browser keeps the conversation (session storage of the tab) and sends it with each message;
+  the server stores nothing of it, only daily counts (`ChatUsage`, deleted after seven days).
+- Limits: `CHAT_DAILY_FREE` (15) without an account or with a free one, `CHAT_DAILY_PRO` (150),
+  `CHAT_DAILY_TOTAL` (1500) for all visitors together as a cost cap, `CHAT_RATE_PER_MINUTE` (10)
+  per IP address. A message whose answer fails is not counted.
+- Model: `CHAT_MODEL` (default `ANTHROPIC_MODEL`), `CHAT_EFFORT` (default `low`). Requests stream
+  with adaptive thinking, strict tool schemas, a cached system prompt and the server-side refusal
+  fallback where the model supports it; the chat says when the fallback model answered.
+- The server build bundles the catalog's JSON files (model knowledge, engine data) through an
+  `import.meta.glob` plugin in `apps/api/scripts/build.mjs`.
+
 ## Stripe configuration
 
 Without the three Stripe variables, KaufCheck shows „Pro – bald verfügbar“ and ordering answers

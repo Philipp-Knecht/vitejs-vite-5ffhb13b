@@ -1,0 +1,372 @@
+/* ---------- Chat assistant (start page) ---------- */
+.chat {
+  display: grid;
+  /* Long words or wide cards must not widen the chat beyond the screen. */
+  grid-template-columns: minmax(0, 1fr);
+  margin: 20px 0 8px;
+  border: 1px solid var(--c-border);
+  border-radius: var(--radius-xl);
+  background: var(--c-surface);
+  box-shadow: var(--shadow);
+}
+
+.chat__log {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 12px;
+  align-content: start;
+  max-height: min(70vh, 640px);
+  min-height: 160px;
+  padding: 16px;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+.chat__welcome p {
+  margin: 0 0 10px;
+}
+
+.chat__welcome-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 1.1rem;
+  font-weight: 650;
+}
+
+.chat__starters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.chip-button {
+  padding: 8px 12px;
+  border: 1px solid var(--c-border-strong);
+  border-radius: var(--radius-pill);
+  background: var(--c-surface);
+  color: var(--c-primary);
+  font: inherit;
+  font-size: 0.9rem;
+  font-weight: 550;
+  cursor: pointer;
+}
+
+.chip-button:hover:not(:disabled) {
+  background: var(--c-primary-50);
+}
+
+.chip-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.chat-message {
+  max-width: 100%;
+  overflow-wrap: anywhere;
+}
+
+.chat-message--user {
+  justify-self: end;
+  max-width: 85%;
+  padding: 10px 14px;
+  border-radius: var(--radius-lg) var(--radius-lg) 4px var(--radius-lg);
+  background: var(--c-primary);
+  color: #fff;
+}
+
+.chat-message__user-text {
+  margin: 0;
+  white-space: pre-wrap;
+  /* A pasted listing stays readable without filling the chat. */
+  max-height: 12em;
+  overflow-y: auto;
+}
+
+.chat-message--assistant {
+  display: grid;
+  gap: 10px;
+  justify-self: start;
+  width: 100%;
+}
+
+.chat-message__text p,
+.chat-message__text ul,
+.chat-message__text ol {
+  margin: 0 0 8px;
+}
+
+.chat-message__text ul,
+.chat-message__text ol {
+  padding-left: 1.2em;
+}
+
+.chat-message__status,
+.chat-message__note {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 0;
+  font-size: 0.875rem;
+  color: var(--c-text-3);
+}
+
+.chat-message__error {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+  margin: 0;
+  padding: 10px 12px;
+  border: 1px solid var(--c-danger-border);
+  border-radius: var(--radius);
+  background: var(--c-danger-bg);
+  color: var(--c-danger);
+}
+
+.spin {
+  animation: spin 1s linear infinite;
+}
+
+.chat__composer {
+  display: flex;
+  align-items: flex-end;
+  gap: 8px;
+  padding: 12px;
+  border-top: 1px solid var(--c-border);
+}
+
+.chat__input {
+  flex: 1;
+  min-width: 0;
+  min-height: 48px;
+  max-height: 200px;
+  padding: 10px 12px;
+  border: 1px solid var(--c-border-strong);
+  border-radius: var(--radius);
+  background: var(--c-surface);
+  color: var(--c-text);
+  font: inherit;
+  resize: vertical;
+}
+
+.chat__input:focus-visible {
+  outline: 2px solid var(--c-focus);
+  outline-offset: 1px;
+}
+
+.chat__actions {
+  display: flex;
+  gap: 6px;
+}
+
+.chat__icon-button {
+  display: inline-grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border: 1px solid var(--c-border-strong);
+  border-radius: var(--radius);
+  background: var(--c-surface);
+  color: var(--c-primary);
+  cursor: pointer;
+}
+
+.chat__icon-button.is-active {
+  border-color: var(--c-danger);
+  color: var(--c-danger);
+}
+
+.chat__send {
+  border-color: var(--c-primary);
+  background: var(--c-primary);
+  color: #fff;
+}
+
+.chat__icon-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.chat__speech-error {
+  margin: 0;
+  padding: 0 12px 8px;
+  font-size: 0.875rem;
+  color: var(--c-danger);
+}
+
+.chat__footer {
+  padding: 0 12px 12px;
+  font-size: 0.8rem;
+  color: var(--c-text-3);
+}
+
+.chat__footer p {
+  margin: 0 0 4px;
+}
+
+.chat__reset {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.8rem;
+}
+
+/* Cards with the results of KaufCheck's tools. */
+.chat-card {
+  display: grid;
+  gap: 8px;
+  padding: 14px;
+  border: 1px solid var(--c-border);
+  border-radius: var(--radius-lg);
+  background: var(--c-surface-2);
+}
+
+.chat-card > * {
+  margin: 0;
+}
+
+.chat-card--links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  background: transparent;
+  border: 0;
+  padding: 0;
+}
+
+.chat-card__eyebrow {
+  font-size: 0.75rem;
+  font-weight: 650;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--c-text-3);
+}
+
+.chat-card__title {
+  font-size: 1.05rem;
+}
+
+.chat-card__price,
+.chat-card__figure {
+  font-size: 1.25rem;
+  font-weight: 700;
+}
+
+.chat-card__advice {
+  padding: 10px 12px;
+  border-left: 4px solid var(--c-info);
+  border-radius: var(--radius);
+  background: var(--c-surface);
+}
+
+.chat-card__advice p {
+  margin: 0 0 4px;
+}
+
+.chat-card__advice--inspect {
+  border-left-color: var(--c-success);
+}
+
+.chat-card__advice--negotiate,
+.chat-card__advice--caution {
+  border-left-color: var(--c-warning);
+}
+
+.chat-card__advice--search_on {
+  border-left-color: var(--c-danger);
+}
+
+.chat-card__advice-title {
+  font-weight: 700;
+}
+
+.chat-card__label {
+  font-size: 0.85rem;
+  font-weight: 650;
+}
+
+.chat-card__list {
+  padding-left: 1.2em;
+}
+
+.chat-card__list--warn {
+  color: var(--c-danger);
+}
+
+.chat-card__links {
+  display: grid;
+  gap: 6px;
+  padding: 0;
+  list-style: none;
+}
+
+.chat-card__links a {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-weight: 600;
+}
+
+.chat-card__applied,
+.chat-card__hint {
+  font-size: 0.85rem;
+  color: var(--c-text-3);
+}
+
+.chat-card__facts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 24px;
+}
+
+.chat-card__facts dt {
+  font-size: 0.75rem;
+  color: var(--c-text-3);
+}
+
+.chat-card__facts dd {
+  margin: 0;
+  font-weight: 650;
+}
+
+.chat-form {
+  display: grid;
+  gap: 10px;
+  padding: 14px;
+  border: 1px solid var(--c-border);
+  border-radius: var(--radius-lg);
+  background: var(--c-surface-2);
+}
+
+.chat-form__title {
+  margin: 0;
+  font-weight: 650;
+}
+
+.chat-form__grid {
+  display: grid;
+  gap: 10px;
+}
+
+.chat-form .btn {
+  justify-self: start;
+}
+
+@media (min-width: 640px) {
+  .chat-form__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .spin {
+    animation-duration: 2s;
+  }
+}
+
+.home-tabs__or {
+  margin: 16px 0 8px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--c-text-2);
+}

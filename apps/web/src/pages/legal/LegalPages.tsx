@@ -67,7 +67,7 @@ export function ImprintPage() {
   );
 }
 
-const PRIVACY_POLICY_DATE = '23. Oktober 2026';
+const PRIVACY_POLICY_DATE = '24. Oktober 2026';
 const AI_PROVIDER_NAMES = { anthropic: 'Anthropic', openai: 'OpenAI' } as const;
 
 /**
@@ -85,6 +85,7 @@ export function PrivacyPage() {
   const hosting = config?.privacy.hosting ?? null;
   const retentionDays = config?.privacy.anonymousRetentionDays ?? 90;
   const aiProvider = features?.aiProvider ? AI_PROVIDER_NAMES[features.aiProvider] : null;
+  const chat = features?.chat ?? null;
   const emailProvider = config?.privacy.emailProvider ?? null;
   const ads = config?.ads ?? null;
   // A configuration cached before these fields existed (HTTP cache, offline copy) lacks them.
@@ -225,9 +226,10 @@ export function PrivacyPage() {
       <ul>
         <li>
           <strong>kc_anon</strong> – eine zufällige Kennung ohne Bezug zu Name oder Kontaktdaten.
-          Sie wird erst gesetzt, wenn du eine Prüfung startest, und dient dazu, das kostenlose
-          Kontingent einzuhalten: Wir zählen, wie viele Prüfungen im Monat mit dieser Kennung
-          gestartet wurden. Speicherdauer bis zu 400 Tage.
+          Sie wird erst gesetzt, wenn du eine Prüfung startest oder dem Assistenten schreibst, und
+          dient dazu, die kostenlosen Kontingente einzuhalten: Wir zählen, wie viele Prüfungen im
+          Monat und wie viele Nachrichten an den Assistenten am Tag mit dieser Kennung gestartet
+          wurden. Speicherdauer bis zu 400 Tage.
         </li>
         <li>
           <strong>kc_session</strong> – hält dich nach der Anmeldung angemeldet. Speicherdauer 30
@@ -316,6 +318,37 @@ export function PrivacyPage() {
             erfolgt auf Grundlage geeigneter Garantien wie der EU-Standardvertragsklauseln (Art. 46
             Abs. 2 lit. c DSGVO). Rechtsgrundlage ist die Bereitstellung des angefragten Dienstes
             (Art. 6 Abs. 1 lit. b DSGVO).
+          </p>
+        </>
+      )}
+
+      {chat && (
+        <>
+          <h2 id="assistent">Assistent auf der Startseite</h2>
+          <p>
+            Wenn du dem Assistenten schreibst, schicken wir deine Nachricht zusammen mit dem
+            bisherigen Gespräch an den KI-Anbieter{' '}
+            {chat.isMock ? 'KaufCheck (Testbetrieb ohne KI)' : (aiProvider ?? 'Anthropic')}, damit
+            er antworten kann. Schreib dort bitte nichts über dich, was er nicht braucht, etwa Name,
+            Anschrift oder Telefonnummer. Den Verlauf speichert nur dein Browser, und nur für den
+            geöffneten Tab (Session Storage): Er ist weg, wenn du den Tab schließt oder „Neues
+            Gespräch“ wählst. Auf unserem Server speichern wir vom Gespräch nichts; wir zählen nur,
+            wie viele Nachrichten dein Browser (Kennung kc_anon) oder dein Konto am Tag schickt, und
+            löschen diese Zähler nach sieben Tagen. Prüft der Assistent ein Inserat, das du
+            einfügst, ist das eine Prüfung wie unter „Geprüfte Inserate“ beschrieben.
+            {!chat.isMock &&
+              ' Der Anbieter kann die Daten außerhalb der EU verarbeiten; die Übermittlung erfolgt auf Grundlage geeigneter Garantien wie der EU-Standardvertragsklauseln (Art. 46 Abs. 2 lit. c DSGVO).'}{' '}
+            Rechtsgrundlage ist die Bereitstellung des angefragten Dienstes (Art. 6 Abs. 1 lit. b
+            DSGVO).
+          </p>
+          <p>
+            <strong>Spracheingabe:</strong> Nutzt du das Mikrofon im Assistenten, erkennt dein
+            Browser die Sprache mit seiner eigenen Spracherkennung (Web Speech API); KaufCheck
+            bekommt nur den erkannten Text, keine Aufnahme. Viele Browser schicken die Aufnahme
+            dafür an einen Dienst ihres Herstellers, Chrome etwa an Google. Dafür ist der Hersteller
+            deines Browsers verantwortlich, es gelten seine Datenschutzhinweise. Das Mikrofon läuft
+            nur, wenn du die Taste drückst und es im Browser erlaubst; du kannst stattdessen auch
+            die Diktierfunktion deiner Tastatur nutzen.
           </p>
         </>
       )}

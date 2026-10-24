@@ -19,6 +19,7 @@ import { savedSearchRoutes } from './http/routes/saved-search-routes';
 import { contractRoutes } from './http/routes/contract-routes';
 import { sponsorAdRoutes } from './http/routes/sponsor-ad-routes';
 import { rdwRoutes } from './http/routes/rdw-routes';
+import { chatRoutes } from './http/routes/chat-routes';
 import { systemRoutes } from './http/routes/system-routes';
 import { registerSecurity } from './http/security';
 import { registerWeb } from './http/web';
@@ -89,6 +90,7 @@ export async function buildApp(
   systemRoutes(app, services);
   sponsorAdRoutes(app, services);
   rdwRoutes(app, services);
+  chatRoutes(app, services);
   accountRoutes(app, services);
   listingRoutes(app, services);
   savedListingRoutes(app, services);

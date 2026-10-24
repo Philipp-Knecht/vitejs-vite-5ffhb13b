@@ -83,6 +83,7 @@ const TABLES = [
   'BillingEvent',
   'AnalyticsEvent',
   'SponsorAdStat',
+  'ChatUsage',
   'Order',
   'ContractNotice',
 ];

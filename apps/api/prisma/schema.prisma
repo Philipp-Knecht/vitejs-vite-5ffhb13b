@@ -426,3 +426,15 @@ model SponsorAdStat {
 
   @@id([campaign, day])
 }
+
+/// Chat messages per visitor (or account) and German day, for the daily limits; subjectType
+/// `all` counts every message. Nothing of the conversation is stored.
+model ChatUsage {
+  subjectType String
+  subjectId   String
+  /// YYYY-MM-DD in German time.
+  day         String
+  count       Int    @default(0)
+
+  @@id([subjectType, subjectId, day])
+}

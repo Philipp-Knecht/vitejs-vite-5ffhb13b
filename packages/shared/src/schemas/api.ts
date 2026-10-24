@@ -475,6 +475,16 @@ export const PublicConfigSchema = z.object({
     /** E-mail reminders can be sent (e-mail and operator details configured). */
     reminders: z.boolean(),
     analytics: z.boolean(),
+    /** The chat assistant; missing in configurations cached before it existed. */
+    chat: z
+      .object({
+        isMock: z.boolean(),
+        /** Messages per day without an account or with a free one, and with Pro. */
+        dailyFree: z.number().int().nonnegative(),
+        dailyPro: z.number().int().nonnegative(),
+      })
+      .nullable()
+      .optional(),
   }),
   plans: z.object({
     anonymous: EntitlementsSchema,
