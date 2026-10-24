@@ -16,6 +16,7 @@ export * from './vehicle/description-signals';
 export * from './vehicle/normalize-vehicle';
 export * from './vehicle/rule-context';
 export * from './vehicle/completeness';
+export * from './vehicle/market-model';
 export * from './vehicle/price';
 export * from './vehicle/observations';
 export * from './vehicle/checks';

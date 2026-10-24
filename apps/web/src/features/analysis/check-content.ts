@@ -38,7 +38,7 @@ export const CHECK_FEATURES = [
   {
     icon: Scale,
     title: 'Preis mit Augenmaß',
-    text: 'Rechnungen wie Preis pro Jahr oder pro 10.000 km. Eine Marktpreis-Einschätzung gibt es nur mit genügend echten Vergleichsdaten.',
+    text: 'Preis-Check mit fünf Preisstufen, sobald genug vergleichbare Inserate bei KaufCheck geprüft wurden, dazu Rechnungen wie Preis pro Jahr oder pro 10.000 km.',
   },
 ];
 

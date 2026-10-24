@@ -57,17 +57,22 @@ Behörden, Dashboards); **(Code)** = Entwicklungsarbeit.
    Status (unbekannt).
 7. **Betreiber-Anleitung sichern (Betreiber).** Das Claude-Docs-Dokument ist an den alten Account gebunden; bei
    Bedarf exportieren.
+8. **Bewertungsdienst anfragen (Betreiber).** Der Preis-Check bewertet nur mit Inseraten, die bei KaufCheck
+   geprüft wurden, und braucht dafür mindestens 8 ähnliche von 5 Besuchern. Ein Bewertungsdienst (AutoUncle,
+   Autovista/Schwacke, DAT) liefert auch Preise für Autos, die noch niemand bei KaufCheck geprüft hat. Anbieter und E-Mail-Entwurf:
+   [docs/anfrage-bewertungsdienste.md](docs/anfrage-bewertungsdienste.md). Nach einer Zusage: Adapter bauen
+   (Code), Schlüssel nur bei Render eintragen.
 
 ## Priorität 3 – Weiterentwicklung (Code)
 
-8. Auto-Berater mit mehr Modellen nachprüfen: Mit 43 Modellen fand das Profil „7 Sitze“ nur wenige Kandidaten
+9. Auto-Berater mit mehr Modellen nachprüfen: Mit 43 Modellen fand das Profil „7 Sitze“ nur wenige Kandidaten
    (Caddy, Touran, Tiguan Allspace, 2er Gran Tourer); mit Sharan/Alhambra, Zafira, S-Max, Kodiaq, Berlingo usw.
    erneut prüfen und die Budget-Schätzung (`packages/catalog/src/advisor.ts`) bei Ausreißern nachkalibrieren.
-9. Der vollständige Fahrplan mit allen fehlenden Features (Kosten, Kauf und Übergabe, „Mein Auto“, Daten und
-   Partner, Reichweite) steht in [ROADMAP.md](ROADMAP.md). Ursprüngliche Roadmap aus dem README: weitere Kategorien (Verträge/DB reserviert), offizielle Datenquellen/Partner-APIs oder
-   Browser-Erweiterung statt Seitenabruf, Marktvergleich mit mehr verifizierten Vergleichsdaten, Alerts für
-   gespeicherte Suchen und Preisänderungen (brauchen lizenzierte Daten), PDF-Export von Analyse und Checkliste,
-   datenschutzfreundliches Werbenetz hinter der `AdSlot`-Abstraktion.
+10. Der vollständige Fahrplan mit allen fehlenden Features (Kosten, Kauf und Übergabe, „Mein Auto“, Daten und
+    Partner, Reichweite) steht in [ROADMAP.md](ROADMAP.md). Ursprüngliche Roadmap aus dem README: weitere Kategorien (Verträge/DB reserviert), offizielle Datenquellen/Partner-APIs oder
+    Browser-Erweiterung statt Seitenabruf, Marktvergleich mit mehr verifizierten Vergleichsdaten, Alerts für
+    gespeicherte Suchen und Preisänderungen (brauchen lizenzierte Daten), PDF-Export von Analyse und Checkliste,
+    datenschutzfreundliches Werbenetz hinter der `AdSlot`-Abstraktion.
 
 ## Unvollständige Funktionen
 

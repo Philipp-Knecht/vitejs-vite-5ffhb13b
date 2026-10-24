@@ -67,7 +67,7 @@ export function ImprintPage() {
   );
 }
 
-const PRIVACY_POLICY_DATE = '17. Oktober 2026';
+const PRIVACY_POLICY_DATE = '23. Oktober 2026';
 const AI_PROVIDER_NAMES = { anthropic: 'Anthropic', openai: 'OpenAI' } as const;
 
 /**
@@ -171,6 +171,22 @@ export function PrivacyPage() {
         Telefonnummern, E-Mail-Adressen und Bankverbindungen werden vor dem Speichern automatisch
         entfernt. Aus den Angaben zum Anbieter übernehmen wir nur, ob privat oder gewerblich
         verkauft wird und seit wann das Konto besteht, nicht den Namen.
+      </p>
+      <p>
+        Für den Preis-Check vergleichen wir den Preis mit ähnlichen Inseraten, die in den letzten 90
+        Tagen bei KaufCheck geprüft wurden – auch mit Inseraten, die vor Einführung des Preis-Checks
+        am 23. Oktober 2026 geprüft wurden. Dafür nutzen wir aus diesen Inseraten Preis und
+        Preisart, Marke, Modell, Erstzulassung, Kilometerstand, Kraftstoff, Leistung, Zustand und
+        Unfallangaben, die Postleitzahl (damit jedes Auto nur einmal zählt), Zeitpunkt und Ergebnis
+        der Prüfung (um Autos mit schweren Mängeln auszulassen) und die Kennung des Kontos oder
+        Browsers (damit aus einem Browser oder Konto höchstens drei Inserate zählen und niemand den
+        Vergleich allein bestimmt). Angezeigt werden nur zusammengefasste Werte wie der übliche
+        Preis und die Zahl der Inserate, nie ein einzelnes Inserat. Ein Inserat fällt aus dem
+        Vergleich, wenn die Prüfung gelöscht wird: ohne Konto nach Ablauf der Aufbewahrungsfrist
+        unten, mit Konto mit dessen Löschung. Rechtsgrundlage ist unser berechtigtes Interesse,
+        Preise nachvollziehbar einzuordnen (Art. 6 Abs. 1 lit. f DSGVO); dieser Zweck ist mit dem
+        ursprünglichen, der Prüfung eines Angebots, vereinbar (Art. 6 Abs. 4 DSGVO), weil nur
+        zusammengefasste Werte entstehen.
       </p>
       <p>
         Prüfungen ohne Konto löschen wir nach {retentionDays} Tagen, Prüfungen mit Konto bewahren

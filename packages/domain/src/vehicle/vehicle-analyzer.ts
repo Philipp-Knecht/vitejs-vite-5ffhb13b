@@ -17,7 +17,7 @@ import { buildRuleContext } from './rule-context';
 import { buildSummary } from './summary';
 
 /** Bump when rules change in a way that affects results. Stored with each analysis. */
-export const VEHICLE_RULES_VERSION = '2026.10.4';
+export const VEHICLE_RULES_VERSION = '2026.10.5';
 
 function initialPhotoAnalysis(listing: NormalizedListing): PhotoAnalysis {
   if (listing.images.length === 0) {
@@ -52,7 +52,7 @@ export class VehicleAnalyzer implements StagedListingAnalyzer {
       summary: buildSummary(ctx, completeness, observations),
       overview: buildOverview(ctx),
       completeness,
-      priceContext: assessPrice(ctx, context.market ?? null),
+      priceContext: assessPrice(ctx, context.market ?? null, observations),
       observations,
       checks: collectChecks(ctx),
       photoAnalysis: initialPhotoAnalysis(listing),

@@ -1,6 +1,6 @@
 import { z } from 'zod';
 import { EVIDENCE_TYPES } from '../evidence';
-import { PRICE_KINDS } from '../labels';
+import { PRICE_ADVICE_ACTIONS, PRICE_KINDS, PRICE_VERDICTS } from '../labels';
 import { ListingCategorySchema } from './listing';
 
 export const EvidenceTypeSchema = z.enum(EVIDENCE_TYPES);
@@ -84,25 +84,66 @@ export const PriceMetricSchema = z.object({
 });
 export type PriceMetric = z.infer<typeof PriceMetricSchema>;
 
+/**
+ * Why there is no comparison: too few offers (or from too few visitors), no
+ * price, a car that compares with no intact one, make, model, first
+ * registration or mileage missing in the listing, or a fictional example.
+ */
+export const MARKET_GAPS = [
+  'few_comparables',
+  'no_price',
+  'not_comparable',
+  'missing_basics',
+  'example',
+] as const;
+
 export const MarketContextSchema = z.discriminatedUnion('status', [
   z.object({
     status: z.literal('insufficient_data'),
     message: z.string(),
     sampleSize: z.number().int().nonnegative(),
+    /** Absent in results from before rules 2026.10.5. */
+    reason: z.enum(MARKET_GAPS).optional(),
   }),
   z.object({
     status: z.literal('available'),
-    sampleSize: z.number().int().positive(),
+    /** Comparable offers; 0 with a valuation service. */
+    sampleSize: z.number().int().nonnegative(),
     medianEur: z.number().int(),
     lowerQuartileEur: z.number().int(),
     upperQuartileEur: z.number().int(),
+    /** Deviation from `expectedEur`, in older results from the median. */
     deviationPercent: z.number(),
     criteria: z.string(),
     source: z.string(),
     message: z.string(),
+    // The fields below are absent in results from before rules 2026.10.5.
+    /** What comparable offers cost at this age and mileage (or their median). */
+    expectedEur: z.number().int().positive().optional(),
+    /** The middle half of comparable offers around `expectedEur`. */
+    typicalLowEur: z.number().int().positive().optional(),
+    typicalHighEur: z.number().int().positive().optional(),
+    /**
+     * `age_mileage`: adjusted to this car's age and mileage; `median`: plain
+     * median; `valuation`: from a valuation service named in `source`.
+     */
+    method: z.enum(['median', 'age_mileage', 'valuation']).optional(),
+    verdict: z.enum(PRICE_VERDICTS).optional(),
+    /** So far below the usual price that the reason needs asking. */
+    unusuallyLow: z.boolean().optional(),
   }),
 ]);
 export type MarketContext = z.infer<typeof MarketContextSchema>;
+
+/** The answer to „Is the price worth it?“, from fixed rules – never from the AI. */
+export const PriceAdviceSchema = z.object({
+  action: z.enum(PRICE_ADVICE_ACTIONS),
+  title: z.string(),
+  text: z.string(),
+  /** A price worth aiming for, from the comparison; null without one. */
+  targetPriceEur: z.number().int().positive().nullable(),
+});
+export type PriceAdvice = z.infer<typeof PriceAdviceSchema>;
 
 export const PriceContextSchema = z.object({
   askingPrice: z
@@ -115,6 +156,8 @@ export const PriceContextSchema = z.object({
   metrics: z.array(PriceMetricSchema),
   market: MarketContextSchema,
   notes: z.array(z.string()),
+  /** Absent in results from before rules 2026.10.5 and without an asking price. */
+  advice: PriceAdviceSchema.optional(),
 });
 export type PriceContext = z.infer<typeof PriceContextSchema>;
 

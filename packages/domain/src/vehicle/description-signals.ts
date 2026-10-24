@@ -68,6 +68,11 @@ export interface DescriptionSignals {
   huNew: Quoted | null;
   huMention: (Quoted & { value: YearMonth }) | null;
   damageMentions: DamageMention[];
+  /**
+   * Engine or gearbox damage, not driving or through-rust, not negated and no
+   * repair named right after it: such a car compares with no intact one.
+   */
+  severeDamage: (Quoted & { term: string }) | null;
   tuningMentions: Quoted[];
   emissionTampering: Quoted[];
   soldAs: (Quoted & { kind: 'bastler' | 'export' | 'defect' })[];
@@ -128,7 +133,7 @@ function testPattern(pattern: RegExp, text: string): boolean {
   return allMatches(pattern, text).length > 0;
 }
 
-const NEGATIONS = /^(kein|keine|keinen|keinem|keiner|keines|nicht|ohne|nie|niemals)$/i;
+const NEGATIONS = /^(kein|keine|keinen|keinem|keiner|keines|nicht|ohne|nie|niemals|weder)$/i;
 const CLAUSE_BREAK =
   /[.!?\n;]|\b(?:aber|jedoch|allerdings|sonst|außer|ausser|bis auf|lediglich|nur)\b/gi;
 
@@ -237,21 +242,69 @@ const SERVICE_NONE: readonly RegExp[] = [
 
 // --- Damage and defects ------------------------------------------------------
 
+/**
+ * The sentence around a match, cut into its comma clauses: the clause with
+ * the match first. A sentence ends at a full stop before a space (not at the
+ * dot in „120.000 km“) or a line break.
+ */
+function clausesAround(text: string, index: number, length: number): string[] {
+  const before = text.slice(Math.max(0, index - 120), index);
+  const starts = [...before.matchAll(/[.!?](?=\s)|\n/g)];
+  const from = starts.length > 0 ? before.length - (starts.at(-1)!.index + 1) : before.length;
+  const after = text.slice(index + length, index + length + 120);
+  const stop = /[.!?](?=\s|$)|\n/.exec(after)?.index ?? after.length;
+  const clause = /[,;]|\s(?:und|sowie)\s/i;
+  const head = text.slice(index - from, index).split(clause);
+  const tail = text.slice(index + length, index + length + stop).split(clause);
+  const own = `${head.at(-1) ?? ''}${text.slice(index, index + length)}${tail[0] ?? ''}`;
+  return [own, ...head.slice(0, -1), ...tail.slice(1)];
+}
+
+/** The part a repair must name when it stands in another clause of the sentence. */
+const REPAIRED_PART: Partial<Record<DamageCategory, RegExp>> = {
+  engine: /\b(?:motor|austauschmotor)\b/i,
+  transmission: /\b(?:getriebe|austauschgetriebe)\b/i,
+  rust: /\b(?:rost\w*|schweller|blech)\b/i,
+};
+
+/**
+ * „Motorschaden wurde behoben“, „Neuer Motor nach Motorschaden“, „Motorschaden,
+ * Austauschmotor eingebaut“: dealt with. A repair in another clause counts only
+ * when it names the same part – „Bremsen erneuert, Motorschaden“ does not.
+ */
+function repaired(text: string, index: number, length: number, category: DamageCategory): boolean {
+  const [own = '', ...others] = clausesAround(text, index, length);
+  if (testPattern(REPAIRED, own)) return true;
+  const part = REPAIRED_PART[category];
+  return (
+    part !== undefined &&
+    others.some((clause) => testPattern(REPAIRED, clause) && testPattern(part, clause))
+  );
+}
+
+/** Words that say damage was repaired; „neu“ alone is too vague. */
+const REPAIRED =
+  /\b(?:repariert|behoben|instandgesetzt|überholt|getauscht|ausgetauscht|erneuert|gewechselt|geschweißt|geschweisst|verschweißt|verschweisst|austauschmotor|austauschgetriebe|neuer\s+motor|neues\s+getriebe)\b/i;
+
 const DAMAGE_TERMS: readonly {
   pattern: RegExp;
   category: DamageCategory;
   severity: 'notice' | 'warning';
   negationSensitive?: boolean;
+  /** Rules out a price comparison with intact cars, unless a repair follows. */
+  severe?: boolean;
 }[] = [
   {
     pattern: /\bmotorschaden\b|\bmotor\s+(?:ist\s+)?defekt\b/i,
     category: 'engine',
     severity: 'warning',
+    severe: true,
   },
   {
     pattern: /\bgetriebeschaden\b|\bgetriebe\s+(?:ist\s+)?defekt\b/i,
     category: 'transmission',
     severity: 'warning',
+    severe: true,
   },
   {
     pattern:
@@ -274,10 +327,11 @@ const DAMAGE_TERMS: readonly {
   { pattern: /\bturbo(?:lader)?\s+(?:ist\s+)?defekt\b/i, category: 'engine', severity: 'warning' },
   {
     pattern:
-      /\bspringt\s+nicht\s+(?:mehr\s+)?an\b|\bnicht\s+(?:fahrbereit|fahrtüchtig|fahrtauglich)\b|\bfährt\s+nicht\b/i,
+      /\bspringt\s+nicht\s+(?:mehr\s+)?an\b|\bnicht\s+(?:fahrbereit|fahrtüchtig|fahrtauglich)\b|\bfährt\s+nicht(?:\s+mehr)?(?=\s*(?:[.,;:!?)\-–]|\n|$))/i,
     category: 'roadworthiness',
     severity: 'warning',
     negationSensitive: false,
+    severe: true,
   },
   {
     pattern: /\b(?:motorkontroll(?:leuchte|lampe)|motor-kontrollleuchte|mkl)\b/i,
@@ -302,7 +356,12 @@ const DAMAGE_TERMS: readonly {
     category: 'electrical',
     severity: 'notice',
   },
-  { pattern: /\b(?:durchgerostet|rostloch|rostlöcher)\b/i, category: 'rust', severity: 'warning' },
+  {
+    pattern: /\b(?:durchgerostet|rostloch|rostlöcher)\b/i,
+    category: 'rust',
+    severity: 'warning',
+    severe: true,
+  },
   {
     pattern: /\brost(?:ansatz|ansätze|stellen?|blasen|nester|befall|schaden|schäden|spuren)?\b/i,
     category: 'rust',
@@ -348,6 +407,11 @@ const DAMAGE_TERMS: readonly {
   },
   { pattern: /\bdefekt(?:e|en|er|es)?\b/i, category: 'general', severity: 'notice' },
 ];
+
+/** Serious findings first, so a mild one next to it cannot hide it. */
+const DAMAGE_TERMS_WARNINGS_FIRST = [...DAMAGE_TERMS].sort(
+  (a, b) => (a.severity === 'warning' ? 0 : 1) - (b.severity === 'warning' ? 0 : 1),
+);
 
 // --- Other claims ------------------------------------------------------------
 
@@ -710,20 +774,48 @@ export function extractDescriptionSignals(
 
   // Damage mentions (specific terms first; generic "defekt" only if not overlapping)
   const damageMentions: DamageMention[] = [];
-  const covered: [number, number][] = [];
-  for (const term of DAMAGE_TERMS) {
+  const covered: { start: number; end: number; category: DamageCategory }[] = [];
+  for (const term of DAMAGE_TERMS_WARNINGS_FIRST) {
     for (const match of allMatches(term.pattern, text)) {
       const start = match.index;
       const end = match.index + match.text.length;
-      if (covered.some(([a, b]) => start < b + 12 && end > a - 12)) continue;
+      // The same words twice, or the same kind of damage right next to it, count once;
+      // „Ölverlust, fährt nicht mehr“ are two findings. A plain „defekt“ next to any
+      // finding belongs to it.
+      if (covered.some((other) => start < other.end && end > other.start)) continue;
+      const near = covered.some(
+        (other) =>
+          (other.category === term.category || term.category === 'general') &&
+          start < other.end + 12 &&
+          end > other.start - 12,
+      );
+      if (near) {
+        // Its words stay taken, so a plain „defekt“ inside them does not come back.
+        covered.push({ start, end, category: term.category });
+        continue;
+      }
       if ((term.negationSensitive ?? true) && isNegated(text, start, match.text.length)) continue;
-      covered.push([start, end]);
+      covered.push({ start, end, category: term.category });
       damageMentions.push({
         category: term.category,
         severity: term.severity,
         term: match.text,
         quote: quote(text, match),
       });
+    }
+  }
+
+  // Its own pass: a severe term right after another one („Kupplung defekt, nicht
+  // fahrbereit“) must not get lost to the overlap rule above.
+  let severeDamage: DescriptionSignals['severeDamage'] = null;
+  for (const term of DAMAGE_TERMS) {
+    if (!term.severe || severeDamage) continue;
+    for (const match of allMatches(term.pattern, text)) {
+      if ((term.negationSensitive ?? true) && isNegated(text, match.index, match.text.length))
+        continue;
+      if (repaired(text, match.index, match.text.length, term.category)) continue;
+      severeDamage = { term: match.text, quote: quote(text, match) };
+      break;
     }
   }
 
@@ -830,6 +922,7 @@ export function extractDescriptionSignals(
     huNew: huNewMatch ? { quote: quote(combined, huNewMatch) } : null,
     huMention,
     damageMentions,
+    severeDamage,
     tuningMentions,
     emissionTampering: tampering,
     soldAs,

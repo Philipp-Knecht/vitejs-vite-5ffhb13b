@@ -1,8 +1,7 @@
+import { MIN_COMPARABLES } from '@kaufcheck/shared';
 import { describe, expect, it } from 'vitest';
 import {
   getExampleListing,
-  INSUFFICIENT_MARKET_DATA_MESSAGE,
-  MIN_COMPARABLES,
   NBSP,
   parseListingText,
   prepareListing,
@@ -81,9 +80,11 @@ describe('example listing (Audi A7)', async () => {
   });
 
   it('never invents market data', () => {
+    expect(result.priceContext.advice).toBeUndefined();
     expect(result.priceContext.market).toEqual({
       status: 'insufficient_data',
-      message: INSUFFICIENT_MARKET_DATA_MESSAGE,
+      message: 'Für das Beispiel gibt es keinen Preisvergleich.',
+      reason: 'example',
       sampleSize: 0,
     });
     expect(result.priceContext.metrics.map((m) => [m.key, m.evidence])).toEqual([
@@ -414,7 +415,8 @@ describe('individual rules', () => {
 });
 
 describe('market context', () => {
-  const listing = listingFromText(getExampleListing()!.text, 'example');
+  // The example's text, pasted: the example itself is never compared.
+  const listing = listingFromText(getExampleListing()!.text);
 
   it('shows a range only with enough verified comparables', async () => {
     const few = await analyze(listing, {
@@ -437,8 +439,20 @@ describe('market context', () => {
       lowerQuartileEur: 12750,
       upperQuartileEur: 16250,
       deviationPercent: -11,
+      method: 'median',
+      expectedEur: 14500,
+      // 11 % below the median, but within the middle half of the offers: fair.
+      verdict: 'fair',
+      unusuallyLow: false,
     });
     expect(enough.priceContext.metrics.map((m) => m.key)).toContain('comparable_deviation');
+    // The listing names defects: the advice says to count the repair in.
+    expect(enough.priceContext.advice).toMatchObject({
+      action: 'inspect',
+      title: 'Fairer Preis – ansehen lohnt sich',
+      targetPriceEur: null,
+    });
+    expect(enough.priceContext.advice?.text).toContain('Mängel');
   });
 });
 

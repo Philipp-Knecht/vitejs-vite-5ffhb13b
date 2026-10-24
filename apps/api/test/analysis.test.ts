@@ -6,6 +6,7 @@ import type { AnalysisDto } from '@kaufcheck/shared';
 import { afterAll, beforeAll, beforeEach, describe, expect, it } from 'vitest';
 import type { BuiltApp } from '../src/app';
 import type { ListingUrlRetriever } from '../src/infrastructure/listing-sources/types';
+import type { ValuationProvider, ValuationRequest } from '../src/infrastructure/valuation/types';
 import {
   createTestApp,
   errorOf,
@@ -49,6 +50,7 @@ describe('analysis pipeline', () => {
     expect(dto.analysis.priceContext.market).toEqual({
       status: 'insufficient_data',
       message: INSUFFICIENT,
+      reason: 'few_comparables',
       sampleSize: 0,
     });
     expect(dto.analysis.ai.status).toBe('not_configured');
@@ -245,7 +247,7 @@ describe('analysis pipeline', () => {
   });
 });
 
-describe('price context from verified comparables', () => {
+describe('price verdict from comparable offers', () => {
   let built: BuiltApp;
   let directory: string;
 
@@ -253,7 +255,7 @@ describe('price context from verified comparables', () => {
     // Synthetic Audi A7 offers with different ad ids, prices and mileage.
     directory = mkdtempSync(path.join(tmpdir(), 'kc-fixtures-'));
     const template = readFileSync(path.join(FIXTURES, '2912345678.html'), 'utf8');
-    for (let index = 0; index < 10; index += 1) {
+    for (let index = 0; index < 11; index += 1) {
       const id = String(2930000000 + index);
       const price = 11_000 + index * 400;
       const km = 170_000 + index * 3_000;
@@ -271,30 +273,124 @@ describe('price context from verified comparables', () => {
     rmSync(directory, { recursive: true, force: true });
   });
 
-  it('shows market context only with enough retrieved comparables, and never from pasted text', async () => {
-    const client = new TestClient(built.app);
-    // Pasted copies do not count as market data.
+  it('counts retrieved and pasted offers, each car once, from several visitors', async () => {
+    // Five visitors, each with their own browser.
+    const visitors = Array.from({ length: 5 }, () => new TestClient(built.app));
+    const [first] = visitors as [TestClient];
+    // The same car pasted again and again, with a new price each time, counts once.
     for (let index = 0; index < 8; index += 1) {
-      const response = await client.post('/api/listings/analyze-text', {
+      const response = await first.post('/api/listings/analyze-text', {
         text: `Audi A7 Sportback\n${(9000 + index * 100).toLocaleString('de-DE')} €\nDetails\nMarke\nAudi\nModell\nA7\nKilometerstand\n180.000 km\nErstzulassung\nMai 2012\nBeschreibung\nKopie ${index}`,
       });
       expect(response.statusCode, response.body).toBe(201);
     }
 
-    const first = await client.analyzeUrl(listingUrl('2930000000'));
-    expect(first.analysis.priceContext.market.status).toBe('insufficient_data');
+    const check = await first.analyzeUrl(listingUrl('2930000000'));
+    expect(check.analysis.priceContext.market).toMatchObject({
+      status: 'insufficient_data',
+      reason: 'few_comparables',
+      sampleSize: 1,
+    });
+    expect(check.analysis.priceContext.advice?.action).toBe('compare');
 
+    // Offers 1–8 from the five visitors in turn; re-analysing one adds no second sample.
     for (let index = 1; index < 9; index += 1)
-      await client.analyzeUrl(listingUrl(String(2930000000 + index)));
-    // Re-analysing the same offer does not add a second sample.
-    await client.analyzeUrl(listingUrl('2930000001'));
+      await visitors[index % 5]!.analyzeUrl(listingUrl(String(2930000000 + index)));
+    await visitors[1]!.analyzeUrl(listingUrl('2930000001'));
 
-    const target = await client.analyzeUrl(listingUrl('2930000009'));
+    // Nine retrieved offers from 11.000 to 14.200 € and the pasted car at its latest 9.700 €.
+    const target = await visitors[4]!.analyzeUrl(listingUrl('2930000009'));
     const market = target.analysis.priceContext.market;
-    expect(market.status).toBe('available');
+    expect(market).toMatchObject({
+      status: 'available',
+      sampleSize: 10,
+      medianEur: 12_400,
+      expectedEur: 12_400,
+      method: 'median',
+      verdict: 'high',
+    });
     if (market.status !== 'available') return;
-    expect(market.sampleSize).toBe(9);
-    expect(market.medianEur).toBe(12_600);
     expect(market.source).toContain('keine repräsentative Marktanalyse');
+    expect(market.criteria).toMatch(/^Audi A7, Erstzulassung 2010–2014/);
+    expect(target.analysis.priceContext.advice).toMatchObject({
+      action: 'search_on',
+      targetPriceEur: 12_400,
+    });
+  });
+
+  it('lets no single visitor decide the price', async () => {
+    const visitor = new TestClient(built.app);
+    const golf = (km: number, price: number) =>
+      `VW Golf 1.4 TSI\n${price.toLocaleString('de-DE')} €\nDetails\nMarke\nVolkswagen\nModell\nGolf\nKilometerstand\n${km.toLocaleString('de-DE')} km\nErstzulassung\nMärz 2015\nKraftstoffart\nBenzin`;
+    for (let index = 0; index < 9; index += 1) {
+      const response = await visitor.post('/api/listings/analyze-text', {
+        text: golf(100_000 + index * 2_000, 9_000 + index * 100),
+      });
+      expect(response.statusCode, response.body).toBe(201);
+    }
+    const target = (
+      await visitor.post('/api/listings/analyze-text', { text: golf(103_500, 12_000) })
+    ).json<AnalysisDto>();
+    // Three of the nine count, all from one browser: no rating.
+    expect(target.analysis.priceContext.market).toMatchObject({
+      status: 'insufficient_data',
+      reason: 'few_comparables',
+      sampleSize: 3,
+    });
+  });
+});
+
+describe('price verdict from a valuation service', () => {
+  let built: BuiltApp;
+  let failing = false;
+  const requests: ValuationRequest[] = [];
+  const valuation: ValuationProvider = {
+    name: 'Testbewertung',
+    valuate: (request) => {
+      requests.push(request);
+      if (failing) return Promise.reject(new Error('timeout'));
+      return Promise.resolve({ expectedEur: 10_000, lowEur: 9_000, highEur: 11_000 });
+    },
+  };
+  const text = `VW Golf\n12.000 €\nDetails\nMarke\nVW\nModell\nGolf\nKilometerstand\n100.000 km\nErstzulassung\n06/2016\nLeistung\n81 kW`;
+
+  beforeAll(async () => {
+    built = await createTestApp({ ANON_MONTHLY_ANALYSES: '100' }, { valuation });
+  });
+  afterAll(() => built.app.close());
+
+  it('rates the price against the service, and falls back to own offers when it fails', async () => {
+    const client = new TestClient(built.app);
+    const rated = (await client.post('/api/listings/analyze-text', { text })).json<AnalysisDto>();
+    expect(requests[0]).toMatchObject({
+      make: 'Volkswagen',
+      model: 'Golf',
+      firstRegistration: { year: 2016, month: 6 },
+      mileageKm: 100_000,
+      powerKw: 81,
+    });
+    expect(rated.analysis.priceContext.market).toMatchObject({
+      status: 'available',
+      method: 'valuation',
+      expectedEur: 10_000,
+      deviationPercent: 20,
+      verdict: 'high',
+      source: 'Testbewertung',
+      sampleSize: 0,
+    });
+    expect(rated.analysis.priceContext.advice).toMatchObject({
+      action: 'search_on',
+      targetPriceEur: 10_000,
+    });
+
+    failing = true;
+    const fallback = (
+      await client.post('/api/listings/analyze-text', { text })
+    ).json<AnalysisDto>();
+    failing = false;
+    expect(fallback.analysis.priceContext.market).toMatchObject({
+      status: 'insufficient_data',
+      reason: 'few_comparables',
+    });
   });
 });

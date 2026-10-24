@@ -1,6 +1,8 @@
-import { formatKm, type MarketData } from '@kaufcheck/domain';
+import { decimalRegistration, formatKm, NBSP, type MarketData } from '@kaufcheck/domain';
 import {
   AnalysisResultSchema,
+  FUEL_LABELS,
+  MAX_COMPARABLES_PER_VISITOR,
   OriginSchema,
   type AnalysisDto,
   type AnalysisListItem,
@@ -9,15 +11,36 @@ import {
   type SellerQuestion,
 } from '@kaufcheck/shared';
 import type { Db } from '../infrastructure/db/client';
-import type {
-  Analysis,
-  Listing,
-  SellerQuestion as SellerQuestionRow,
-  Vehicle,
+import {
+  Prisma,
+  type Analysis,
+  type Listing,
+  type SellerQuestion as SellerQuestionRow,
+  type Vehicle,
 } from '../generated/prisma/client';
 import { listingFromRow, sourceTypeFromDb, toListingCreate } from './listing-mapper';
 
 const StoredResultSchema = AnalysisResultSchema.omit({ sellerQuestions: true });
+
+/** Like the default retention of anonymous checks (`ANON_RETENTION_DAYS`): older prices say little. */
+const COMPARABLE_DAYS = 90;
+
+/**
+ * Findings that make an offer no comparable, also in checks from before the
+ * stored price reason (rules 2026.10.5): defective cars and placeholder prices.
+ */
+const EXCLUDED_OBSERVATIONS = ['sold_as_defective', 'price_placeholder'];
+
+/**
+ * Checks from before the stored price reason: any damage warning of these
+ * kinds keeps the offer out (stricter than today's rule, which spares repairs).
+ */
+const LEGACY_DAMAGE_OBSERVATIONS = [
+  'damage_engine',
+  'damage_transmission',
+  'damage_roadworthiness',
+  'damage_rust',
+];
 
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
@@ -181,9 +204,13 @@ export class AnalysisRepository {
   }
 
   /**
-   * Comparable listings for price context. Only listings that were actually
-   * retrieved from Kleinanzeigen count (never pasted text or examples), one
-   * snapshot per offer, similar model, age and mileage, last 90 days.
+   * Comparable offers for the price verdict: listings checked with KaufCheck
+   * in the last 90 days, retrieved or pasted, never examples. Each car counts
+   * once with its latest snapshot (same make, model, registration, mileage
+   * and postcode); a car whose latest snapshot is damaged,
+   * defective or has a placeholder price drops out. Each browser or account
+   * adds at most three; who checked each offer goes to the domain, which
+   * wants offers from several people before it rates a price.
    */
   async findComparables(
     listing: NormalizedListing,
@@ -199,31 +226,106 @@ export class AnalysisRepository {
     )
       return null;
     const year = vehicle.firstRegistration.year;
-    const minKm = Math.round(vehicle.mileageKm * 0.7);
-    const maxKm = Math.round(vehicle.mileageKm * 1.3);
-    const since = new Date(now.getTime() - 90 * 24 * 60 * 60 * 1000);
+    const month = vehicle.firstRegistration.month;
+    const km = vehicle.mileageKm;
+    const postalCode = listing.location?.postalCode ?? null;
+    // ±30 %, at least ±10,000 km for cars with few kilometres.
+    const minKm = Math.max(0, Math.round(Math.min(km * 0.7, km - 10_000)));
+    const maxKm = Math.round(Math.max(km * 1.3, km + 10_000));
+    const since = new Date(now.getTime() - COMPARABLE_DAYS * 24 * 60 * 60 * 1000);
+    const fuel = vehicle.fuel;
+    const kw = vehicle.powerKw;
+    const minKw = kw === null ? null : Math.round(kw * 0.8);
+    const maxKw = kw === null ? null : Math.round(kw * 1.2);
 
-    const rows = await this.db.$queryRaw<{ priceEur: number }[]>`
-      SELECT DISTINCT ON (l.fingerprint) l."priceEur"
-      FROM "Listing" l
-      JOIN "Vehicle" v ON v."listingId" = l.id
-      WHERE l."sourceType" = 'KLEINANZEIGEN_URL'
-        AND l."isExample" = false
-        AND l."retrievedAt" >= ${since}
-        AND l.fingerprint <> ${fingerprint}
-        AND l."priceEur" IS NOT NULL AND l."priceEur" >= 100
-        AND lower(v.make) = lower(${vehicle.make})
-        AND lower(v.model) = lower(${vehicle.model})
-        AND v."firstRegistrationYear" BETWEEN ${year - 2} AND ${year + 2}
-        AND v."mileageKm" BETWEEN ${minKm} AND ${maxKm}
-      ORDER BY l.fingerprint, l."retrievedAt" DESC
+    const rows = await this.db.$queryRaw<
+      { priceEur: number; year: number; month: number | null; km: number; owner: string }[]
+    >`
+      WITH recent AS (
+        SELECT l."priceEur", l."priceKind", l."retrievedAt", l."postalCode",
+               v."firstRegistrationYear" AS year, v."firstRegistrationMonth" AS month,
+               v."mileageKm" AS km, v.fuel, v."powerKw", v.condition, v."accidentHistory",
+               a.result -> 'observations' AS observations,
+               a.result #>> '{priceContext,market,reason}' AS "marketReason",
+               -- Checks from before rules 2026.10.5 stored neither a reason nor advice.
+               (a.result #> '{priceContext,market,reason}') IS NULL
+                 AND (a.result #> '{priceContext,advice}') IS NULL AS legacy,
+               coalesce(a."userId"::text, a."anonymousId", l.id::text) AS owner
+        FROM "Listing" l
+        JOIN "Vehicle" v ON v."listingId" = l.id
+        JOIN "Analysis" a ON a."listingId" = l.id
+        WHERE l."sourceType" IN ('KLEINANZEIGEN_URL', 'TEXT')
+          AND l."isExample" = false
+          AND l."retrievedAt" >= ${since}
+          AND l.fingerprint <> ${fingerprint}
+          AND lower(v.make) = lower(${vehicle.make})
+          AND lower(v.model) = lower(${vehicle.model})
+          AND v."firstRegistrationYear" BETWEEN ${year - 2} AND ${year + 2}
+          AND v."mileageKm" BETWEEN ${minKm} AND ${maxKm}
+          -- The checked car itself, pasted again (with or without month and postcode).
+          AND NOT (v."firstRegistrationYear" = ${year} AND v."mileageKm" = ${km}
+                   AND (v."firstRegistrationMonth" IS NULL OR ${month}::int IS NULL
+                        OR v."firstRegistrationMonth" = ${month}::int)
+                   AND (l."postalCode" IS NULL OR ${postalCode}::text IS NULL
+                        OR l."postalCode" = ${postalCode}::text))
+          ${fuel ? Prisma.sql`AND (v.fuel IS NULL OR v.fuel = ${fuel})` : Prisma.empty}
+          ${
+            minKw !== null && maxKw !== null
+              ? Prisma.sql`AND (v."powerKw" IS NULL OR v."powerKw" BETWEEN ${minKw} AND ${maxKw})`
+              : Prisma.empty
+          }
+      ),
+      latest AS (
+        SELECT DISTINCT ON (year, coalesce(month, 0), km, coalesce("postalCode", '')) *
+        FROM recent
+        ORDER BY year, coalesce(month, 0), km, coalesce("postalCode", ''), "retrievedAt" DESC
+      ),
+      usable AS (
+        SELECT * FROM latest
+        WHERE "priceEur" IS NOT NULL AND "priceEur" >= 100
+          AND "priceKind" IS DISTINCT FROM 'give_away'
+          AND condition IS DISTINCT FROM 'damaged'
+          AND condition IS DISTINCT FROM 'not_roadworthy'
+          AND "accidentHistory" IS DISTINCT FROM 'unrepaired_damage'
+          -- The car's own check found it incomparable (severe damage named in the text).
+          AND "marketReason" IS DISTINCT FROM 'not_comparable'
+          AND NOT (legacy AND EXISTS (
+            SELECT 1 FROM jsonb_array_elements(coalesce(observations, '[]'::jsonb)) AS o
+            WHERE o ->> 'id' = ANY(${LEGACY_DAMAGE_OBSERVATIONS}::text[])
+          ))
+          AND NOT EXISTS (
+            SELECT 1 FROM jsonb_array_elements(coalesce(observations, '[]'::jsonb)) AS o
+            WHERE o ->> 'id' = ANY(${EXCLUDED_OBSERVATIONS}::text[])
+          )
+      ),
+      capped AS (
+        SELECT *, row_number() OVER (PARTITION BY owner ORDER BY "retrievedAt" DESC) AS rank
+        FROM usable
+      )
+      SELECT "priceEur", year, month, km, owner FROM capped
+      WHERE rank <= ${MAX_COMPARABLES_PER_VISITOR}
+      ORDER BY "retrievedAt" DESC
       LIMIT 500`;
 
+    const criteria = [
+      `${vehicle.make} ${vehicle.model}`,
+      `Erstzulassung ${year - 2}–${year + 2}`,
+      `${formatKm(minKm)} bis ${formatKm(maxKm)}`,
+      ...(fuel ? [FUEL_LABELS[fuel]] : []),
+      ...(minKw !== null && maxKw !== null ? [`${minKw}–${maxKw}${NBSP}kW`] : []),
+    ];
     return {
-      comparables: rows.map((row) => ({ priceEur: Number(row.priceEur) })),
-      criteria: `${vehicle.make} ${vehicle.model}, Erstzulassung ${year - 2}–${year + 2}, ${formatKm(minKm)} bis ${formatKm(maxKm)}`,
-      source:
-        'Über KaufCheck abgerufene Kleinanzeigen-Inserate der letzten 90 Tage. Das ist keine repräsentative Marktanalyse.',
+      comparables: rows.map((row) => ({
+        priceEur: Number(row.priceEur),
+        registration: decimalRegistration(
+          Number(row.year),
+          row.month === null ? null : Number(row.month),
+        ),
+        mileageKm: Number(row.km),
+        owner: row.owner,
+      })),
+      criteria: criteria.join(', '),
+      source: `Inserate, die in den letzten ${COMPARABLE_DAYS} Tagen bei KaufCheck geprüft wurden (abgerufen oder als Text eingefügt und nicht überprüft), jedes Auto einmal. Es sind Angebots-, keine Verkaufspreise; Ausstattung und Zustand zählen nicht. Das ist keine repräsentative Marktanalyse.`,
     };
   }
 }

@@ -4,6 +4,7 @@ import {
   parseListingText,
   prepareListing,
   DEFAULT_EXAMPLE_ID,
+  type MarketData,
 } from '@kaufcheck/domain';
 import {
   PLATFORM_NAMES,
@@ -20,6 +21,7 @@ import type {
   RetrievedListing,
 } from '../infrastructure/listing-sources/types';
 import type { Db } from '../infrastructure/db/client';
+import type { ValuationProvider } from '../infrastructure/valuation/types';
 import { AppError, isAppError } from '../lib/errors';
 import { AnalysisRepository } from '../repositories/analysis-repository';
 import { listingFingerprint } from '../repositories/listing-mapper';
@@ -48,6 +50,8 @@ export interface AnalysisServiceDeps {
   analytics: AnalyticsService;
   logger: FastifyBaseLogger;
   now?: () => Date;
+  /** A contracted valuation service; without one, own comparable offers only. */
+  valuation?: ValuationProvider | null;
 }
 
 function sourceLabel(input: AnalysisInput): 'url' | 'text' | 'example' | 'reanalysis' {
@@ -226,7 +230,7 @@ export class AnalysisService {
       const { assessment, context } = await this.stage(ctx, 'analyze', async () => {
         const market = listing.source.isExample
           ? null
-          : await this.repository.findComparables(listing, fingerprint, now);
+          : await this.findMarket(listing, fingerprint, now, ctx.signal);
         const analysisContext = { now, market };
         return { assessment: analyzer.assess(listing, analysisContext), context: analysisContext };
       });
@@ -290,6 +294,55 @@ export class AnalysisService {
       await quota.reservation?.release().catch(() => undefined);
       throw error;
     }
+  }
+
+  /**
+   * The valuation service's price when one is connected and knows the car,
+   * else the comparable offers checked with KaufCheck.
+   */
+  private async findMarket(
+    listing: NormalizedListing,
+    fingerprint: string,
+    now: Date,
+    signal: AbortSignal,
+  ): Promise<MarketData | null> {
+    const provider = this.deps.valuation;
+    const vehicle = listing.vehicle;
+    if (
+      provider &&
+      vehicle?.make &&
+      vehicle.model &&
+      vehicle.firstRegistration &&
+      vehicle.mileageKm !== null
+    ) {
+      try {
+        const valuation = await provider.valuate(
+          {
+            make: vehicle.make,
+            model: vehicle.model,
+            variant: vehicle.variant,
+            firstRegistration: vehicle.firstRegistration,
+            mileageKm: vehicle.mileageKm,
+            fuel: vehicle.fuel,
+            powerKw: vehicle.powerKw,
+          },
+          signal,
+        );
+        // A service answer that is no usable price counts as none.
+        if (valuation && Number.isFinite(valuation.expectedEur) && valuation.expectedEur >= 1) {
+          return {
+            comparables: [],
+            valuation,
+            criteria: `${vehicle.make} ${vehicle.model}, Erstzulassung ${vehicle.firstRegistration.year}, ${vehicle.mileageKm.toLocaleString('de-DE')} km`,
+            source: provider.name,
+          };
+        }
+      } catch (error) {
+        ensureNotAborted(signal);
+        this.deps.logger.warn({ err: error, provider: provider.name }, 'valuation failed');
+      }
+    }
+    return this.repository.findComparables(listing, fingerprint, now);
   }
 
   private fromText(text: string, url: string | undefined): RetrievedListing {

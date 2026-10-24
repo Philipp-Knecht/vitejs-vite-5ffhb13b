@@ -37,6 +37,7 @@ import {
 } from './infrastructure/listing-sources/kleinanzeigen-retriever';
 import type { ListingUrlRetriever } from './infrastructure/listing-sources/types';
 import { RobotsPolicy } from './infrastructure/net/robots-policy';
+import type { ValuationProvider } from './infrastructure/valuation/types';
 
 export interface Services {
   config: AppConfig;
@@ -71,6 +72,7 @@ export interface ServiceOverrides {
   email?: EmailService;
   now?: () => Date;
   rdwFetch?: RdwFetch;
+  valuation?: ValuationProvider;
 }
 
 function createRetriever(config: AppConfig): ListingUrlRetriever {
@@ -137,7 +139,16 @@ export function createServices(
   const retriever = overrides.retriever ?? createRetriever(config);
   const usage = new UsageService(db, now);
   const analytics = new AnalyticsService(db, config.analyticsEnabled, logger);
-  const analyses = new AnalysisService({ db, retriever, enricher, usage, analytics, logger, now });
+  const analyses = new AnalysisService({
+    db,
+    retriever,
+    enricher,
+    usage,
+    analytics,
+    logger,
+    now,
+    valuation: overrides.valuation ?? null,
+  });
   const email = overrides.email ?? createEmail(config, logger);
   const auth = new AuthService(db, analyses.analyses, email, config.publicSiteUrl, now);
   const billing =

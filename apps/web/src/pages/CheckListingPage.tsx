@@ -123,10 +123,10 @@ export function CheckListingPage() {
               Angaben im Inserat werden nicht überprüft – auch dann nicht, wenn sie plausibel
               wirken.
             </li>
+            <li>Den Preis bewertet KaufCheck nur, wenn genügend ähnliche Inserate vorliegen.</li>
             <li>
-              Einen Marktpreis nennt KaufCheck nur, wenn genügend vergleichbare Inserate vorliegen.
+              Bewertet wird der Preis, nicht das Auto: Wie gut es ist, zeigt erst die Besichtigung.
             </li>
-            <li>KaufCheck gibt keine Kaufempfehlung. Die Entscheidung triffst du.</li>
           </ul>
         </div>
       </section>
