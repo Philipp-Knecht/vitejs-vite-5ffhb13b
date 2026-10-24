@@ -211,7 +211,8 @@ export function buildAnalysisPdf(input: AnalysisPdfInput): jsPDF {
   const { advice, market } = analysis.priceContext;
   if (advice) {
     w.heading('Preis-Check');
-    if (market.status === 'available' && market.verdict) {
+    // With warning signs the level would read as praise (as on the result page).
+    if (market.status === 'available' && market.verdict && advice.action !== 'caution') {
       w.text(`Preisstufe: ${PRICE_VERDICT_LABELS[market.verdict]}`, { bold: true, gap: 0.5 });
     }
     w.text(advice.title, { bold: true, gap: 0.5 });

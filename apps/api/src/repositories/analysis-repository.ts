@@ -1,10 +1,4 @@
-import {
-  decimalRegistration,
-  formatKm,
-  NBSP,
-  NOT_COMPARABLE_OBSERVATIONS,
-  type MarketData,
-} from '@kaufcheck/domain';
+import { decimalRegistration, formatKm, NBSP, type MarketData } from '@kaufcheck/domain';
 import {
   AnalysisResultSchema,
   FUEL_LABELS,
@@ -31,8 +25,11 @@ const StoredResultSchema = AnalysisResultSchema.omit({ sellerQuestions: true });
 /** Like the default retention of anonymous checks (`ANON_RETENTION_DAYS`): older prices say little. */
 const COMPARABLE_DAYS = 90;
 
-/** Offers that are no comparables: severe defects (see the domain rules) and placeholder prices. */
-const EXCLUDED_OBSERVATIONS = [...NOT_COMPARABLE_OBSERVATIONS, 'price_placeholder'];
+/**
+ * Findings that make an offer no comparable, also in checks from before the
+ * stored price reason (rules 2026.10.5): defective cars and placeholder prices.
+ */
+const EXCLUDED_OBSERVATIONS = ['sold_as_defective', 'price_placeholder'];
 
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
@@ -198,11 +195,11 @@ export class AnalysisRepository {
   /**
    * Comparable offers for the price verdict: listings checked with KaufCheck
    * in the last 90 days, retrieved or pasted, never examples. Each car counts
-   * once with its latest snapshot (same make, model, registration, mileage,
-   * fuel, power and postcode); a car whose latest snapshot is damaged,
+   * once with its latest snapshot (same make, model, registration, mileage
+   * and postcode); a car whose latest snapshot is damaged,
    * defective or has a placeholder price drops out. Each browser or account
-   * adds at most three; how many there are goes to the domain, which wants
-   * several before it rates a price.
+   * adds at most three; who checked each offer goes to the domain, which
+   * wants offers from several people before it rates a price.
    */
   async findComparables(
     listing: NormalizedListing,
@@ -238,6 +235,7 @@ export class AnalysisRepository {
                v."firstRegistrationYear" AS year, v."firstRegistrationMonth" AS month,
                v."mileageKm" AS km, v.fuel, v."powerKw", v.condition, v."accidentHistory",
                a.result -> 'observations' AS observations,
+               a.result #>> '{priceContext,market,reason}' AS "marketReason",
                coalesce(a."userId"::text, a."anonymousId", l.id::text) AS owner
         FROM "Listing" l
         JOIN "Vehicle" v ON v."listingId" = l.id
@@ -264,11 +262,9 @@ export class AnalysisRepository {
           }
       ),
       latest AS (
-        SELECT DISTINCT ON (year, coalesce(month, 0), km, coalesce(fuel, ''),
-                            coalesce("powerKw", 0), coalesce("postalCode", '')) *
+        SELECT DISTINCT ON (year, coalesce(month, 0), km, coalesce("postalCode", '')) *
         FROM recent
-        ORDER BY year, coalesce(month, 0), km, coalesce(fuel, ''), coalesce("powerKw", 0),
-                 coalesce("postalCode", ''), "retrievedAt" DESC
+        ORDER BY year, coalesce(month, 0), km, coalesce("postalCode", ''), "retrievedAt" DESC
       ),
       usable AS (
         SELECT * FROM latest
@@ -277,6 +273,8 @@ export class AnalysisRepository {
           AND condition IS DISTINCT FROM 'damaged'
           AND condition IS DISTINCT FROM 'not_roadworthy'
           AND "accidentHistory" IS DISTINCT FROM 'unrepaired_damage'
+          -- The car's own check found it incomparable (severe damage named in the text).
+          AND "marketReason" IS DISTINCT FROM 'not_comparable'
           AND NOT EXISTS (
             SELECT 1 FROM jsonb_array_elements(coalesce(observations, '[]'::jsonb)) AS o
             WHERE o ->> 'id' = ANY(${EXCLUDED_OBSERVATIONS}::text[])
@@ -306,8 +304,8 @@ export class AnalysisRepository {
           row.month === null ? null : Number(row.month),
         ),
         mileageKm: Number(row.km),
+        owner: row.owner,
       })),
-      visitors: new Set(rows.map((row) => row.owner)).size,
       criteria: criteria.join(', '),
       source: `Inserate, die in den letzten ${COMPARABLE_DAYS} Tagen bei KaufCheck geprüft wurden (abgerufen oder als Text eingefügt und nicht überprüft), jedes Auto einmal. Es sind Angebots-, keine Verkaufspreise; Ausstattung und Zustand zählen nicht. Das ist keine repräsentative Marktanalyse.`,
     };

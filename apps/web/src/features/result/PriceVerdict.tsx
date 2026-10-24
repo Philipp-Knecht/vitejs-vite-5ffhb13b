@@ -83,7 +83,7 @@ export function PriceVerdict({
         <p className="price-verdict__meta">
           {market.method === 'valuation'
             ? `Grundlage: übliche Preise laut ${market.source}. Ausstattung und Zustand zählen nicht.`
-            : `Grundlage: ${formatNumber(market.sampleSize)} vergleichbare Inserate, die bei KaufCheck geprüft wurden – Angebotspreise, teils eingefügt und nicht überprüft. Keine repräsentative Marktanalyse; Ausstattung und Zustand zählen nicht.`}{' '}
+            : `Grundlage: ${formatNumber(market.sampleSize)} vergleichbare Inserate, die bei KaufCheck geprüft wurden – Angebotspreise, abgerufen oder eingefügt und nicht überprüft. Keine repräsentative Marktanalyse; Ausstattung und Zustand zählen nicht.`}{' '}
           Stand: {checkedOn(checkedAt)}. <a href="#preis">Details zur Rechnung</a>
         </p>
       )}

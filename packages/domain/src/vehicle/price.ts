@@ -21,27 +21,51 @@ export const INSUFFICIENT_MARKET_DATA_MESSAGE =
 export const NO_PRICE_MESSAGE =
   'Ohne einen echten Angebotspreis lässt sich der Preis nicht mit anderen Angeboten vergleichen.';
 
-export const NOT_COMPARABLE_MESSAGE =
-  'Laut Inserat ist das Auto beschädigt, nicht fahrbereit oder hat einen schweren Mangel. Mit intakten Autos lässt sich der Preis nicht vergleichen.';
+/**
+ * Damage that rules out a comparison with intact cars, when the description
+ * says so in plain words. Signals like „Zylinderkopfdichtung“ alone are not
+ * enough: they also appear for repaired parts.
+ */
+const SEVERE_DAMAGE =
+  /\b(?:motorschaden|getriebeschaden|nicht\s+(?:fahrbereit|fahrtüchtig|fahrtauglich)|springt\s+nicht\s+(?:mehr\s+)?an|fährt\s+nicht|durchgerostet|rostl(?:o|ö)ch(?:er)?)\b/i;
+
+/** Words that say the damage was dealt with („wurde repariert“, „neu“). */
+const REPAIRED =
+  /\b(?:repariert|behoben|erneuert|getauscht|ausgetauscht|gewechselt|instandgesetzt|überholt|neu)\b/i;
 
 /**
- * Findings that make a car incomparable with intact ones: sold as defective,
- * or the description names engine or gearbox damage, through-rust or that it
- * does not drive. Such offers are no comparables either.
+ * Why the car compares with no intact one, as the listing says it – or null.
+ * Such offers are no comparables either (the stored reason is checked).
  */
-export const NOT_COMPARABLE_OBSERVATIONS: readonly string[] = [
-  'sold_as_defective',
-  'damage_engine',
-  'damage_transmission',
-  'damage_roadworthiness',
-  'damage_rust',
-];
+function notComparableReason(
+  ctx: VehicleRuleContext,
+  observations: readonly Observation[],
+): string | null {
+  const { vehicle } = ctx;
+  if (vehicle.condition === 'damaged') return 'Laut Inserat ist das Auto beschädigt.';
+  if (vehicle.condition === 'not_roadworthy')
+    return 'Laut Inserat ist das Auto nicht fahrtauglich.';
+  if (vehicle.accidentHistory === 'unrepaired_damage')
+    return 'Laut Inserat hat das Auto einen nicht reparierten Schaden.';
+  if (observations.some((o) => o.id === 'sold_as_defective'))
+    return 'Laut Inserat wird das Auto für Bastler oder als defekt angeboten.';
+  for (const observation of observations) {
+    if (!observation.id.startsWith('damage_')) continue;
+    for (const quote of observation.quotes) {
+      const term = SEVERE_DAMAGE.exec(quote)?.[0];
+      if (term && !REPAIRED.test(quote)) return `Die Beschreibung nennt „${term}“.`;
+    }
+  }
+  return null;
+}
 
 export interface MarketComparable {
   priceEur: number;
   /** First registration as a decimal year (2016.5 = July 2016); absent when unknown. */
   registration?: number | null;
   mileageKm?: number | null;
+  /** Who checked the offer (browser or account), so that one alone cannot decide the price. */
+  owner?: string;
 }
 
 /** The usual retail price of the car from a valuation service such as DAT or Schwacke. */
@@ -58,8 +82,6 @@ export interface ValuationReference {
  */
 export interface MarketData {
   comparables: readonly MarketComparable[];
-  /** Browsers or accounts the comparables come from; one alone must not decide the price. */
-  visitors?: number;
   valuation?: ValuationReference;
   /** Human-readable selection criteria, e.g. "Audi A7, EZ 2010–2014, 135.000–235.000 km". */
   criteria: string;
@@ -127,17 +149,17 @@ export function assessMarket(
     ? null
     : market.valuation
       ? fromValuation(market.valuation)
-      : market.visitors !== undefined && market.visitors < MIN_COMPARABLE_VISITORS
-        ? null
-        : expectedPrice(
-            market.comparables.map((comparable) => ({
-              priceEur: comparable.priceEur,
-              registration: comparable.registration ?? null,
-              mileageKm: comparable.mileageKm ?? null,
-            })),
-            target,
-            MIN_COMPARABLES,
-          );
+      : expectedPrice(
+          market.comparables.map((comparable) => ({
+            priceEur: comparable.priceEur,
+            registration: comparable.registration ?? null,
+            mileageKm: comparable.mileageKm ?? null,
+            ...(comparable.owner === undefined ? {} : { owner: comparable.owner }),
+          })),
+          target,
+          MIN_COMPARABLES,
+          MIN_COMPARABLE_VISITORS,
+        );
 
   if (askingPriceEur === null || askingPriceEur <= 0) {
     return {
@@ -184,7 +206,8 @@ export function assessMarket(
     typicalHighEur: expected.highEur,
     method: expected.method,
     verdict: withinUsual ? 'fair' : priceVerdict(deviationPercent),
-    unusuallyLow: deviationPercent <= UNUSUALLY_LOW_PERCENT,
+    // Only below the middle half: a price the comparison calls fair is not suspicious.
+    unusuallyLow: deviationPercent <= UNUSUALLY_LOW_PERCENT && askingPriceEur < expected.lowEur,
   };
 }
 
@@ -197,17 +220,6 @@ const SCAM_OBSERVATIONS = new Set([
   'no_viewing',
   'contact_off_platform',
 ]);
-
-/** A car that compares with no intact one: damaged, not roadworthy, a severe defect. */
-function notComparable(ctx: VehicleRuleContext, observations: readonly Observation[]): boolean {
-  const { vehicle } = ctx;
-  return (
-    vehicle.condition === 'damaged' ||
-    vehicle.condition === 'not_roadworthy' ||
-    vehicle.accidentHistory === 'unrepaired_damage' ||
-    observations.some((o) => NOT_COMPARABLE_OBSERVATIONS.includes(o.id))
-  );
-}
 
 /** A price worth aiming for: the usual price, rounded down to 100 € (so below the asking price). */
 function targetPrice(expectedEur: number): number {
@@ -239,14 +251,14 @@ export function priceAdvice(
       return {
         action: 'compare',
         title: 'Kein Preisvergleich bei Schäden',
-        text: 'Laut Inserat ist das Auto beschädigt, nicht fahrbereit oder hat einen schweren Mangel. Der Preis hängt dann vor allem von den Reparaturkosten ab: Lass den Schaden vor dem Kauf von einer Werkstatt schätzen.',
+        text: `${market.message} Der Preis hängt dann vor allem von den Reparaturkosten ab: Lass den Schaden vor dem Kauf von einer Werkstatt schätzen.`,
         targetPriceEur: null,
       };
     if (reason === 'missing_basics')
       return {
         action: 'compare',
         title: 'Für den Preisvergleich fehlen Angaben',
-        text: `${market.message} Frag den Verkäufer danach; erst dann lässt sich der Preis mit vergleichbaren Angeboten vergleichen.`,
+        text: `${market.message} Steht etwas davon im Inserat, füg den ganzen Text ein; sonst frag den Verkäufer danach. Ohne diese Angaben gibt es keinen Preisvergleich.`,
         targetPriceEur: null,
       };
     return {
@@ -359,30 +371,39 @@ export function assessPrice(
 
   const placeholder = observations.some((o) => o.id === 'price_placeholder');
   const missing = [
-    vehicle.make && vehicle.model ? null : 'Marke und Modell',
+    vehicle.make ? null : 'Marke',
+    vehicle.model ? null : 'Modell',
     vehicle.firstRegistration ? null : 'Erstzulassung',
     vehicle.mileageKm === null ? 'Kilometerstand' : null,
   ].filter((item): item is string => item !== null);
-  const marketContext: MarketContext = notComparable(ctx, observations)
+  const damage = notComparableReason(ctx, observations);
+  const marketContext: MarketContext = listing.source.isExample
     ? {
         status: 'insufficient_data',
-        message: NOT_COMPARABLE_MESSAGE,
+        message: 'Für das Beispiel gibt es keinen Preisvergleich.',
         sampleSize: 0,
-        reason: 'not_comparable',
+        reason: 'example',
       }
-    : missing.length > 0 && amount !== null && amount > 0 && !placeholder
+    : damage
       ? {
           status: 'insufficient_data',
-          message: `Im Inserat fehlen Angaben zu ${joinGerman(missing)}.`,
+          message: `${damage} Mit intakten Autos lässt sich der Preis nicht vergleichen.`,
           sampleSize: 0,
-          reason: 'missing_basics',
+          reason: 'not_comparable',
         }
-      : assessMarket(placeholder ? null : amount, market, {
-          registration: vehicle.firstRegistration
-            ? decimalRegistration(vehicle.firstRegistration.year, vehicle.firstRegistration.month)
-            : null,
-          mileageKm: vehicle.mileageKm,
-        });
+      : missing.length > 0 && amount !== null && amount > 0 && !placeholder
+        ? {
+            status: 'insufficient_data',
+            message: `KaufCheck hat im Inserat diese Angaben nicht gefunden: ${joinGerman(missing)}.`,
+            sampleSize: 0,
+            reason: 'missing_basics',
+          }
+        : assessMarket(placeholder ? null : amount, market, {
+            registration: vehicle.firstRegistration
+              ? decimalRegistration(vehicle.firstRegistration.year, vehicle.firstRegistration.month)
+              : null,
+            mileageKm: vehicle.mileageKm,
+          });
   if (marketContext.status === 'available') {
     metrics.push({
       key: 'comparable_deviation',
@@ -421,7 +442,11 @@ export function assessPrice(
     metrics,
     market: marketContext,
     notes,
-    ...(price && price.kind !== 'give_away' && price.amountEur > 0 && !placeholder
+    ...(price &&
+    price.kind !== 'give_away' &&
+    price.amountEur > 0 &&
+    !placeholder &&
+    !listing.source.isExample
       ? { advice: priceAdvice(marketContext, observations, price.kind) }
       : {}),
   };

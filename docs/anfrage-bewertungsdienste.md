@@ -14,7 +14,7 @@ API des Anbieters.
 | **DAT**                               | Gebrauchtwagenbewertung (SilverDAT); Konditionen nicht veröffentlicht, Anfrage über den Vertrieb                                                                                                                                                                                     | [dat.de](https://www.dat.de)                                                      |
 
 Für Verbraucher-Apps passt AutoUncle am besten (Marktpreis aus Inseraten, wie der Preis-Check selbst). Preise
-nennt keiner der drei öffentlich.
+nennen AutoUncle und DAT nicht öffentlich; die Seite von J.D. Power ließ sich nicht automatisch prüfen.
 
 ## E-Mail-Entwurf
 

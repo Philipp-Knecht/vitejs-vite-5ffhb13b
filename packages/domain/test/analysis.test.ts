@@ -2,7 +2,6 @@ import { MIN_COMPARABLES } from '@kaufcheck/shared';
 import { describe, expect, it } from 'vitest';
 import {
   getExampleListing,
-  INSUFFICIENT_MARKET_DATA_MESSAGE,
   NBSP,
   parseListingText,
   prepareListing,
@@ -81,10 +80,11 @@ describe('example listing (Audi A7)', async () => {
   });
 
   it('never invents market data', () => {
+    expect(result.priceContext.advice).toBeUndefined();
     expect(result.priceContext.market).toEqual({
       status: 'insufficient_data',
-      message: INSUFFICIENT_MARKET_DATA_MESSAGE,
-      reason: 'few_comparables',
+      message: 'Für das Beispiel gibt es keinen Preisvergleich.',
+      reason: 'example',
       sampleSize: 0,
     });
     expect(result.priceContext.metrics.map((m) => [m.key, m.evidence])).toEqual([
@@ -415,7 +415,8 @@ describe('individual rules', () => {
 });
 
 describe('market context', () => {
-  const listing = listingFromText(getExampleListing()!.text, 'example');
+  // The example's text, pasted: the example itself is never compared.
+  const listing = listingFromText(getExampleListing()!.text);
 
   it('shows a range only with enough verified comparables', async () => {
     const few = await analyze(listing, {

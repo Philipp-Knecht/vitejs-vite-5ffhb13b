@@ -126,7 +126,7 @@ export function PriceSection({ price, vehicle }: { price: PriceContext; vehicle:
               />
             )}
             <dl className="market__facts">
-              {market.verdict && (
+              {market.verdict && price.advice?.action !== 'caution' && (
                 <div>
                   <dt>Preisstufe</dt>
                   <dd>{PRICE_VERDICT_LABELS[market.verdict]}</dd>

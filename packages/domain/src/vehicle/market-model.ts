@@ -9,6 +9,8 @@ export interface PricePoint {
   /** First registration as a decimal year (2016.5 = July 2016); null when unknown. */
   registration: number | null;
   mileageKm: number | null;
+  /** Who checked the offer (browser or account); absent when it does not matter. */
+  owner?: string;
 }
 
 export interface PriceTarget {
@@ -196,14 +198,24 @@ function stats(prices: readonly number[]) {
   };
 }
 
+/** Offers from enough different people: counted on the offers that are actually used. */
+function enoughOwners(points: readonly PricePoint[], minOwners: number): boolean {
+  const owners = new Set(
+    points.flatMap((point) => (point.owner === undefined ? [] : [point.owner])),
+  );
+  return owners.size === 0 || owners.size >= minOwners;
+}
+
 /**
  * The usual asking price for the target from comparable offers, or null with
- * fewer than `minSample` offers left after removing outliers.
+ * fewer than `minSample` offers (or offers from fewer than `minOwners`
+ * people) left after removing outliers.
  */
 export function expectedPrice(
   points: readonly PricePoint[],
   target: PriceTarget,
   minSample: number,
+  minOwners = 0,
 ): ExpectedPrice | null {
   const valid = points.filter((point) => Number.isFinite(point.priceEur) && point.priceEur > 0);
   // Placeholders like 1 € or 99.999 € go first, before they can bend anything.
@@ -224,7 +236,13 @@ export function expectedPrice(
     );
     const model =
       rows.length >= Math.max(minSample, MIN_FOR_ADJUSTMENT) ? adjusted(rows, minSample) : null;
-    if (model) {
+    if (
+      model &&
+      enoughOwners(
+        model.rows.map((row) => row.point),
+        minOwners,
+      )
+    ) {
       const raw = stats(model.rows.map((row) => row.point.priceEur));
       const residuals = [...model.fit.residuals].sort((a, b) => a - b);
       // Never beyond the offers themselves: no extrapolation to prices nobody asked.
@@ -252,7 +270,7 @@ export function expectedPrice(
   }
 
   const kept = withinFences(plausible, (point) => Math.log(point.priceEur), 1.5, MIN_LOG_SPREAD);
-  if (kept.length < minSample) return null;
+  if (kept.length < minSample || !enoughOwners(kept, minOwners)) return null;
   const raw = stats(kept.map((point) => point.priceEur));
   return {
     expectedEur: raw.medianEur,

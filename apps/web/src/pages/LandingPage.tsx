@@ -73,7 +73,7 @@ const FAQ: FaqItem[] = [
   {
     question: 'Bewertet KaufCheck, ob das Auto gut ist?',
     answer: () =>
-      'Das Auto nicht, aber den Preis: Wenn genug ähnliche Inserate bei KaufCheck geprüft wurden, zeigt der Preis-Check, ob der Preis gut, fair oder hoch ist und ob sich Verhandeln lohnt. Dazu ordnet KaufCheck die Angaben aus dem Inserat, zeigt Lücken und Widersprüche und hilft dir bei den richtigen Fragen. Ob das Auto in Ordnung ist, zeigt erst die Besichtigung – im Zweifel mit einer Werkstatt oder einem Gutachter.',
+      'Das Auto nicht, aber den Preis: Wenn genug vergleichbare Inserate bei KaufCheck geprüft wurden, zeigt der Preis-Check im Vergleich mit ihnen, ob der Preis gut, fair oder hoch ist und ob sich Verhandeln lohnt – eine Einordnung, keine repräsentative Marktanalyse. Dazu ordnet KaufCheck die Angaben aus dem Inserat, zeigt Lücken und Widersprüche und hilft dir bei den richtigen Fragen. Ob das Auto in Ordnung ist, zeigt erst die Besichtigung – im Zweifel mit einer Werkstatt oder einem Gutachter.',
   },
   {
     question: 'Was passiert mit meinen Daten?',

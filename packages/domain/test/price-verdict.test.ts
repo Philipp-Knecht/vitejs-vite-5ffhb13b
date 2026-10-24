@@ -112,11 +112,38 @@ describe('assessMarket', () => {
     expect(assessMarket(17_000, market)).toMatchObject({ verdict: 'high' });
   });
 
-  it('needs offers from several visitors', () => {
-    const few = assessMarket(13_000, { ...market, visitors: MIN_COMPARABLE_VISITORS - 1 });
-    expect(few).toMatchObject({ status: 'insufficient_data', reason: 'few_comparables' });
-    const enough = assessMarket(13_000, { ...market, visitors: MIN_COMPARABLE_VISITORS });
-    expect(enough.status).toBe('available');
+  it('needs offers from several visitors, among those it uses', () => {
+    const from = (owners: number) => ({
+      ...market,
+      comparables: comparables.map((comparable, i) => ({ ...comparable, owner: `v${i % owners}` })),
+    });
+    expect(assessMarket(13_000, from(MIN_COMPARABLE_VISITORS - 1))).toMatchObject({
+      status: 'insufficient_data',
+      reason: 'few_comparables',
+    });
+    expect(assessMarket(13_000, from(MIN_COMPARABLE_VISITORS)).status).toBe('available');
+    // Five visitors, but the outliers dropped are the only offers of two of them.
+    const lopsided = {
+      ...market,
+      comparables: [
+        ...[14900, 15000, 15100].flatMap((priceEur) =>
+          ['a', 'b', 'c'].map((owner) => ({ priceEur, owner })),
+        ),
+        { priceEur: 9_000, owner: 'd' },
+        { priceEur: 9_500, owner: 'e' },
+      ],
+    };
+    expect(assessMarket(12_000, lopsided).status).toBe('insufficient_data');
+  });
+
+  it('calls a price within the middle half never unusually low', () => {
+    const wide = {
+      ...market,
+      comparables: [5000, 6000, 7000, 8000, 10000, 12000, 13000, 14000, 15000].map((priceEur) => ({
+        priceEur,
+      })),
+    };
+    expect(assessMarket(7_000, wide)).toMatchObject({ verdict: 'fair', unusuallyLow: false });
   });
 
   it('takes a valuation only when it is a price', () => {
@@ -217,8 +244,22 @@ describe('price advice', () => {
       action: 'compare',
       title: 'Kein Preisvergleich bei Schäden',
     });
-    for (const description of ['Motorschaden, springt aber an.', 'Fahrzeug ist nicht fahrbereit.'])
-      expect((await advise(1.2, description)).market).toMatchObject({ reason: 'not_comparable' });
+    const engine = await advise(1.2, 'Motorschaden, springt aber an.');
+    expect(engine.market).toMatchObject({
+      reason: 'not_comparable',
+      message:
+        'Die Beschreibung nennt „Motorschaden“. Mit intakten Autos lässt sich der Preis nicht vergleichen.',
+    });
+    expect((await advise(1.2, 'Fahrzeug ist nicht fahrbereit.')).market).toMatchObject({
+      reason: 'not_comparable',
+    });
+    // Repaired parts and wear are no reason: the comparison stays.
+    for (const description of [
+      'Zylinderkopfdichtung wurde 2024 erneuert.',
+      'Ölverlust wurde behoben.',
+      'Kupplung muss neu gemacht werden.',
+    ])
+      expect((await advise(1 / 1.04, description)).market.status).toBe('available');
   });
 
   it('warns more about a costly defect than about scratches', async () => {
@@ -243,7 +284,7 @@ describe('price advice', () => {
     ).priceContext;
     expect(price.market).toMatchObject({ reason: 'missing_basics' });
     expect(price.market.message).toBe(
-      'Im Inserat fehlen Angaben zu Erstzulassung und Kilometerstand.',
+      'KaufCheck hat im Inserat diese Angaben nicht gefunden: Erstzulassung und Kilometerstand.',
     );
     expect(price.advice?.title).toBe('Für den Preisvergleich fehlen Angaben');
   });

@@ -86,14 +86,15 @@ export type PriceMetric = z.infer<typeof PriceMetricSchema>;
 
 /**
  * Why there is no comparison: too few offers (or from too few visitors), no
- * price, a car that compares with no intact one, or make, model, first
- * registration or mileage missing in the listing.
+ * price, a car that compares with no intact one, make, model, first
+ * registration or mileage missing in the listing, or a fictional example.
  */
 export const MARKET_GAPS = [
   'few_comparables',
   'no_price',
   'not_comparable',
   'missing_basics',
+  'example',
 ] as const;
 
 export const MarketContextSchema = z.discriminatedUnion('status', [
