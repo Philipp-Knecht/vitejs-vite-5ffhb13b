@@ -175,7 +175,7 @@ const EnvSchema = z
     CHAT_DAILY_FREE: z.coerce.number().int().min(0).max(10_000).default(15),
     CHAT_DAILY_PRO: z.coerce.number().int().min(0).max(10_000).default(150),
     /** All messages of all visitors per day, to cap the costs. */
-    CHAT_DAILY_TOTAL: z.coerce.number().int().min(0).max(1_000_000).default(1500),
+    CHAT_DAILY_TOTAL: z.coerce.number().int().min(0).max(1_000_000).default(500),
     /** Messages per IP address and minute. */
     CHAT_RATE_PER_MINUTE: z.coerce.number().int().min(1).max(1000).default(10),
 

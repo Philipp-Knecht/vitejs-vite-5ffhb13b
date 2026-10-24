@@ -233,3 +233,90 @@ describe('chat tool loop', () => {
     expect(response.statusCode).toBe(503);
   });
 });
+
+describe('chat tools', () => {
+  let built: BuiltApp | undefined;
+  afterAll(() => built?.app.close());
+
+  /** Runs one tool through the loop and returns its card and what the model read. */
+  async function tool(name: string, input: unknown, env: Record<string, string> = {}) {
+    const model = new ScriptedModel([call(name, input), say('Fertig.')]);
+    await built?.app.close();
+    built = await createTestApp(env, { chatModel: model });
+    await resetDatabase(built.services.db);
+    const list = events(
+      await new TestClient(built.app).post('/api/chat', { messages: [user('Bitte')] }),
+    );
+    const last = model.requests[1]?.messages.at(-1);
+    const result = last?.role === 'tool_results' ? last.results[0] : undefined;
+    return { card: cards(list)[0], result };
+  }
+
+  it('takes displacement and CO₂ from the EU engine data for the tax', async () => {
+    const { card, result } = await tool('vehicle_tax', {
+      first_registration: '2016-03',
+      drive: 'petrol',
+      make: 'VW',
+      model: 'Golf',
+    });
+    // Several engines in 2016: the model is asked to find out which one.
+    expect(result?.content).toMatch(/Mehrere Motoren möglich/);
+    expect(card).toBeUndefined();
+  });
+
+  it('computes the tax from the values of the registration document', async () => {
+    const { card } = await tool('vehicle_tax', {
+      first_registration: '2016-03-01',
+      drive: 'petrol',
+      displacement_ccm: 1395,
+      co2_g_per_km: 119,
+    });
+    expect(card).toMatchObject({ type: 'tax', annualEur: expect.any(Number) as number });
+    if (card?.type === 'tax')
+      expect(card.calculatorUrl).toBe('/kfz-steuer-rechner?ez=2016-03&antrieb=benzin');
+  });
+
+  it('passes on only researched model knowledge', async () => {
+    const known = await tool('model_info', { make: 'VW', model: 'Golf', year: 2014 });
+    expect(known.card).toMatchObject({
+      type: 'model',
+      modelId: 'vw-golf',
+      url: '/modelle/vw-golf',
+    });
+    const unknown = await tool('model_info', { make: 'Lada', model: 'Niva' });
+    expect(unknown.card).toBeUndefined();
+    expect(unknown.result?.content).toContain('kein recherchiertes Modellwissen');
+  });
+
+  it('suggests models from the advisor', async () => {
+    const { card } = await tool('car_advisor', { budget_eur: 12_000, usage: 'familie', people: 5 });
+    expect(card?.type).toBe('advisor');
+    if (card?.type === 'advisor') {
+      expect(card.items.length).toBeGreaterThan(0);
+      expect(card.items[0]?.url).toMatch(/^\/modelle\//);
+    }
+  });
+
+  it('asks the RDW about a Dutch plate', async () => {
+    const { card } = await tool(
+      'rdw_check',
+      { plate: 'QQ-999-Q' },
+      { RDW_LOOKUP_MODE: 'fixtures' },
+    );
+    expect(card).toMatchObject({ type: 'rdw', plate: 'QQ-999-Q' });
+  });
+
+  it('shows only KaufCheck pages as buttons', async () => {
+    const ok = await tool('show_links', { pages: ['contract', 'checklist'] });
+    expect(ok.card).toEqual({
+      type: 'links',
+      links: [
+        { label: 'Kaufvertrag erstellen', href: '/kaufvertrag' },
+        { label: 'Checkliste Besichtigung', href: '/auto-besichtigung-checkliste' },
+      ],
+    });
+    const bad = await tool('show_links', { pages: ['https://evil.example'] });
+    expect(bad.card).toBeUndefined();
+    expect(bad.result?.isError).toBe(true);
+  });
+});

@@ -336,7 +336,7 @@ The start page offers a chat assistant (`POST /api/chat`, NDJSON stream). It run
 - The browser keeps the conversation (session storage of the tab) and sends it with each message;
   the server stores nothing of it, only daily counts (`ChatUsage`, deleted after seven days).
 - Limits: `CHAT_DAILY_FREE` (15) without an account or with a free one, `CHAT_DAILY_PRO` (150),
-  `CHAT_DAILY_TOTAL` (1500) for all visitors together as a cost cap, `CHAT_RATE_PER_MINUTE` (10)
+  `CHAT_DAILY_TOTAL` (500) for all visitors together as a cost cap, `CHAT_RATE_PER_MINUTE` (10)
   per IP address. A message whose answer fails is not counted.
 - Model: `CHAT_MODEL` (default `ANTHROPIC_MODEL`), `CHAT_EFFORT` (default `low`). Requests stream
   with adaptive thinking, strict tool schemas, a cached system prompt and the server-side refusal
