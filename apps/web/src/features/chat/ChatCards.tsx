@@ -19,10 +19,13 @@ export function ChatCardView({
   card,
   busy,
   onSubmit,
+  autoFocus = false,
 }: {
   card: ChatCard;
   busy: boolean;
   onSubmit: (message: string) => void;
+  /** A form the visitor just opened: its first field gets the focus. */
+  autoFocus?: boolean;
 }) {
   switch (card.type) {
     case 'analysis':
@@ -103,7 +106,7 @@ export function ChatCardView({
           <p className="chat-card__figure">
             {card.annualEur !== null
               ? `${formatEuro(card.annualEur)} im Jahr`
-              : `Steuerfrei${card.exemptUntil ? ` bis ${card.exemptUntil.split('-').reverse().join('.')}` : ''}`}
+              : `Steuerfrei${card.exemptUntil ? ` bis ${card.exemptUntil}` : ''}`}
           </p>
           <dl className="chat-card__facts">
             {card.inputs.map((input) => (
@@ -163,7 +166,8 @@ export function ChatCardView({
             <ul className="chat-card__list">
               {card.issues.map((issue) => (
                 <li key={issue.title}>
-                  {issue.title} <span className="chat-card__applied">({issue.severity})</span>
+                  {issue.title}{' '}
+                  <span className="chat-card__applied">(Schwere: {issue.severity})</span>
                 </li>
               ))}
             </ul>
@@ -229,7 +233,13 @@ export function ChatCardView({
       );
     case 'form':
       return (
-        <ChatForm form={card.form} prefill={card.prefill} disabled={busy} onSubmit={onSubmit} />
+        <ChatForm
+          form={card.form}
+          prefill={card.prefill}
+          disabled={busy}
+          autoFocus={autoFocus}
+          onSubmit={onSubmit}
+        />
       );
   }
 }

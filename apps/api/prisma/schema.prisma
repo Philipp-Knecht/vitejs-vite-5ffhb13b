@@ -428,7 +428,8 @@ model SponsorAdStat {
 }
 
 /// Chat messages per visitor (or account) and German day, for the daily limits; subjectType
-/// `all` counts every message. Nothing of the conversation is stored.
+/// `address` counts per internet connection (a keyed hash, never the address) and `all` counts
+/// every message. Nothing of the conversation is stored.
 model ChatUsage {
   subjectType String
   subjectId   String

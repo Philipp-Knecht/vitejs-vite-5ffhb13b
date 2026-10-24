@@ -41,6 +41,10 @@ export function parseChatEvent(value: unknown): ChatStreamEvent | null {
   switch (value.type) {
     case 'text':
       return typeof value.delta === 'string' ? { type: 'text', delta: value.delta } : null;
+    case 'retract':
+      return typeof value.length === 'number' && value.length >= 0
+        ? { type: 'retract', length: value.length }
+        : null;
     case 'tool':
       return typeof value.label === 'string' &&
         (value.status === 'started' || value.status === 'completed' || value.status === 'failed')

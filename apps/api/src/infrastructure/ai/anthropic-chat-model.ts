@@ -11,6 +11,15 @@ export interface AnthropicChatModelOptions {
   client?: Anthropic;
 }
 
+/** Room for adaptive thinking and the answer; more effort thinks longer. */
+const MAX_TOKENS: Record<AnthropicChatModelOptions['effort'], number> = {
+  low: 8_000,
+  medium: 12_000,
+  high: 16_000,
+  xhigh: 32_000,
+  max: 32_000,
+};
+
 const STOP: Record<string, ChatModelTurn['stop']> = {
   end_turn: 'end',
   stop_sequence: 'end',
@@ -69,7 +78,9 @@ export class AnthropicChatModel implements ChatModel {
       const stream = this.client.beta.messages.stream(
         {
           model: this.model,
-          max_tokens: 4096,
+          max_tokens: MAX_TOKENS[this.effort],
+          // The conversation so far is cached too: the next step and the next message read it.
+          cache_control: { type: 'ephemeral' },
           thinking: { type: 'adaptive' },
           ...(this.features.effort ? { output_config: { effort: this.effort } } : {}),
           ...(this.features.refusalFallbacks
@@ -83,7 +94,7 @@ export class AnthropicChatModel implements ChatModel {
             name: tool.name,
             description: tool.description,
             input_schema: tool.inputSchema as Anthropic.Beta.BetaTool.InputSchema,
-            strict: true,
+            strict: tool.strict,
             eager_input_streaming: true,
           })),
           messages: request.messages.map(toParam),
@@ -97,10 +108,14 @@ export class AnthropicChatModel implements ChatModel {
       throw mapAnthropicError(error);
     }
 
-    const text = message.content
-      .flatMap((block) => (block.type === 'text' ? [block.text] : []))
-      .join('');
-    const toolCalls = message.content.flatMap((block) =>
+    // After a fallback mid-answer, the declined model's thinking and tool calls
+    // before the last `fallback` block are neither run nor sent back; its text stays.
+    const boundary = message.content.findLastIndex((block) => block.type === 'fallback');
+    const content = message.content.filter(
+      (block, index) => index > boundary || (block.type === 'text' && boundary !== -1),
+    );
+    const text = content.flatMap((block) => (block.type === 'text' ? [block.text] : [])).join('');
+    const toolCalls = content.flatMap((block) =>
       block.type === 'tool_use' ? [{ id: block.id, name: block.name, input: block.input }] : [],
     );
     const stop = STOP[message.stop_reason ?? ''] ?? 'other';
@@ -112,7 +127,7 @@ export class AnthropicChatModel implements ChatModel {
       toolCalls,
       stop,
       fallback: (message.usage.iterations ?? []).some((entry) => entry.type === 'fallback_message'),
-      raw: message.content,
+      raw: content,
     };
   }
 }

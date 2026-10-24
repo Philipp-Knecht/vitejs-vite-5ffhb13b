@@ -4,9 +4,10 @@ import { DEFAULT_ENTITLEMENTS } from '@kaufcheck/shared';
 import { ClipboardCheck, FileSearch, ListChecks, Scale, Search } from 'lucide-react';
 import { useEffect, useMemo, useRef, useState, type KeyboardEvent } from 'react';
 import { Link, useNavigate } from 'react-router';
-import { useHydratedConfig } from '../api/queries';
+import { useConfig, useHydratedConfig, useMe } from '../api/queries';
 import { ADVISOR_AVAILABLE } from '../features/advisor/availability';
-import { ChatPanel } from '../features/chat/ChatPanel';
+import { ChatBoundary } from '../features/chat/ChatBoundary';
+import { ChatPanel, ChatPlaceholder } from '../features/chat/ChatPanel';
 import { PLATFORM_LIST } from '../features/analysis/check-content';
 import { FeatureGrid, PlatformChips } from '../features/analysis/CheckContent';
 import { ListingAnalysisForm } from '../features/analysis/ListingAnalysisForm';
@@ -127,6 +128,11 @@ export function LandingPage() {
   // Until the configuration has loaded, assume the default: no automatic retrieval.
   const retrieval = config?.features.urlRetrieval === true;
   const chat = config?.features.chat ?? null;
+  // The prerendered page shows an empty chat until the configuration says more: nothing jumps.
+  const hydrated = useHydrated();
+  const configQuery = useConfig();
+  const chatPending = !hydrated || configQuery.isPending;
+  const me = useMe();
   const faq = FAQ.filter((item) =>
     item.when === 'knowledge'
       ? KNOWLEDGE_IDS.length > 0
@@ -173,12 +179,19 @@ export function LandingPage() {
             Eine Suche für alle großen Börsen – und jedes Angebot geprüft, bevor du anrufst.
           </p>
 
-          {chat && (
-            <>
-              <ChatPanel isMock={chat.isMock} dailyLimit={chat.dailyFree} />
-              <p className="home-tabs__or">Oder direkt ohne Assistent:</p>
-            </>
+          {chatPending ? (
+            <ChatPlaceholder />
+          ) : (
+            chat && (
+              <ChatBoundary>
+                <ChatPanel
+                  isMock={chat.isMock}
+                  dailyLimit={me.data?.plan === 'pro' ? chat.dailyPro : chat.dailyFree}
+                />
+              </ChatBoundary>
+            )
           )}
+          {(chatPending || chat) && <p className="home-tabs__or">Oder direkt ohne Assistent:</p>}
 
           <div className="home-tabs">
             <div

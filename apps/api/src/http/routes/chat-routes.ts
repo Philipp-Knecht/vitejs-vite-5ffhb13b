@@ -3,6 +3,7 @@ import { ChatRequestSchema, NDJSON_CONTENT_TYPE, type ChatStreamEvent } from '@k
 import type { FastifyInstance } from 'fastify';
 import type { Services } from '../../container';
 import { AppError, isAppError } from '../../lib/errors';
+import { clientAddress } from '../client-address';
 import { parseInput } from '../errors';
 import { ensureAnonymousId } from '../request-context';
 
@@ -16,7 +17,7 @@ export function chatRoutes(app: FastifyInstance, services: Services): void {
   app.post(
     '/api/chat',
     {
-      bodyLimit: 128 * 1024,
+      bodyLimit: 256 * 1024,
       config: {
         rateLimit: { max: config.chat.ratePerMinute, timeWindow: '1 minute' },
         compress: false,
@@ -31,7 +32,10 @@ export function chatRoutes(app: FastifyInstance, services: Services): void {
       const body = parseInput(ChatRequestSchema, request.body);
       ensureAnonymousId(request, reply, { secure: config.secureCookies });
       // Over a daily limit, the answer is a plain 429 before anything streams.
-      const reservation = await chat.reserve(request.actor);
+      const reservation = await chat.reserve(
+        request.actor,
+        clientAddress(request, config.clientIpHeader),
+      );
 
       const controller = new AbortController();
       reply.raw.on('close', () => {

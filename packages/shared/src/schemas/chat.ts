@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { MAX_LISTING_TEXT_LENGTH } from '../constants';
 import { PRICE_ADVICE_ACTIONS, PRICE_VERDICTS } from '../labels';
 import { ApiErrorSchema } from './errors';
 
@@ -8,8 +9,8 @@ import { ApiErrorSchema } from './errors';
  * counts messages per day.
  */
 export const CHAT_LIMITS = {
-  /** One message; a pasted listing fits easily. */
-  messageChars: 12_000,
+  /** One message: as long as a listing the check takes. */
+  messageChars: MAX_LISTING_TEXT_LENGTH,
   /** Facts from the tools of one answer, kept for follow-up questions. */
   contextChars: 4_000,
   /** Older messages are dropped by the browser first. */
@@ -78,6 +79,7 @@ export const ChatCardSchema = z.discriminatedUnion('type', [
     type: z.literal('tax'),
     /** Annual tax; null while exempt. */
     annualEur: z.number().int().nonnegative().nullable(),
+    /** End of the exemption as shown, e.g. „31.12.2030“ or „03/2026 (je nach Tag …)“. */
     exemptUntil: z.string().nullable(),
     rule: z.string(),
     inputs: z.array(z.object({ label: z.string(), value: z.string() })),
@@ -138,6 +140,8 @@ export type ChatUsage = z.infer<typeof ChatUsageSchema>;
 /** The answer streams as NDJSON: text pieces, tool steps and cards, then `done` or `error`. */
 export const ChatStreamEventSchema = z.discriminatedUnion('type', [
   z.object({ type: z.literal('text'), delta: z.string() }),
+  /** The text from `length` on is withdrawn: a step was repeated or declined. */
+  z.object({ type: z.literal('retract'), length: z.number().int().nonnegative() }),
   z.object({
     type: z.literal('tool'),
     /** What the assistant is doing, e.g. „Prüfe das Inserat“. */

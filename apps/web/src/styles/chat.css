@@ -204,6 +204,12 @@
   margin: 0 0 4px;
 }
 
+.chat-form__problem {
+  margin: 0;
+  font-size: 0.875rem;
+  color: var(--c-danger);
+}
+
 .chat__reset {
   display: inline-flex;
   align-items: center;
@@ -360,7 +366,7 @@
 
 @media (prefers-reduced-motion: reduce) {
   .spin {
-    animation-duration: 2s;
+    animation: none;
   }
 }
 

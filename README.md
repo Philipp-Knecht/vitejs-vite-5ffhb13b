@@ -335,12 +335,19 @@ The start page offers a chat assistant (`POST /api/chat`, NDJSON stream). It run
   links in the model's text are only rendered for KaufCheck's own pages.
 - The browser keeps the conversation (session storage of the tab) and sends it with each message;
   the server stores nothing of it, only daily counts (`ChatUsage`, deleted after seven days).
+  Phone numbers, e-mail addresses and IBANs are removed before messages reach the model; the
+  tools read the original. A message may be as long as a listing the check accepts (20,000
+  characters).
 - Limits: `CHAT_DAILY_FREE` (15) without an account or with a free one, `CHAT_DAILY_PRO` (150),
-  `CHAT_DAILY_TOTAL` (500) for all visitors together as a cost cap, `CHAT_RATE_PER_MINUTE` (10)
-  per IP address. A message whose answer fails is not counted.
+  `CHAT_DAILY_PER_ADDRESS` (60) per internet connection without Pro (stored as a keyed hash that
+  changes daily, so dropping the cookie does not help), `CHAT_DAILY_TOTAL` (500) for all visitors
+  together as a cost cap, `CHAT_RATE_PER_MINUTE` (10) per IP address. A message whose answer
+  fails or shows nothing is not counted.
 - Model: `CHAT_MODEL` (default `ANTHROPIC_MODEL`), `CHAT_EFFORT` (default `low`). Requests stream
-  with adaptive thinking, strict tool schemas, a cached system prompt and the server-side refusal
-  fallback where the model supports it; the chat says when the fallback model answered.
+  with adaptive thinking, a cached system prompt and conversation, and the server-side refusal
+  fallback where the model supports it; the chat says when the fallback model answered. Tools with
+  few optional fields use strict schemas; the API compiles at most 24 optional parameters across
+  strict tools per request, which `chat-tools.test.ts` checks. Every tool validates its input.
 - The server build bundles the catalog's JSON files (model knowledge, engine data) through an
   `import.meta.glob` plugin in `apps/api/scripts/build.mjs`.
 

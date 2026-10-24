@@ -1,20 +1,13 @@
-import type { ChatForm as ChatFormKind } from '@kaufcheck/shared';
-import { useState, type FormEvent } from 'react';
+import { CHAT_LIMITS, type ChatForm as ChatFormKind } from '@kaufcheck/shared';
+import { useEffect, useRef, useState, type FormEvent } from 'react';
 import { Button } from '../../components/ui/Button';
 import { SelectField, TextAreaField, TextField } from '../../components/ui/Field';
+import { FORM_TITLES } from './chat-labels';
 
 type Prefill = Record<string, string | number>;
 
 const text = (prefill: Prefill, key: string) =>
   prefill[key] === undefined ? '' : String(prefill[key]);
-
-const TITLES: Record<ChatFormKind, string> = {
-  listing: 'Inserat einfügen',
-  search: 'Auto suchen',
-  financing: 'Finanzierung rechnen',
-  tax: 'Kfz-Steuer berechnen',
-  rdw: 'Kennzeichen aus den Niederlanden prüfen',
-};
 
 const euros = (value: string) => {
   const number = Number(value.replace(/\./g, '').replace(',', '.'));
@@ -29,13 +22,19 @@ export function ChatForm({
   form,
   prefill,
   disabled,
+  autoFocus,
   onSubmit,
 }: {
   form: ChatFormKind;
   prefill: Prefill;
   disabled: boolean;
+  autoFocus: boolean;
   onSubmit: (message: string) => void;
 }) {
+  const element = useRef<HTMLFormElement>(null);
+  useEffect(() => {
+    if (autoFocus) element.current?.querySelector<HTMLElement>('input, textarea, select')?.focus();
+  }, [autoFocus]);
   const [values, setValues] = useState<Record<string, string>>(() => ({
     make: text(prefill, 'make'),
     model: text(prefill, 'model'),
@@ -55,13 +54,13 @@ export function ChatForm({
     plate: text(prefill, 'plate'),
     listing: '',
   }));
-  const [sent, setSent] = useState(false);
+  const [problem, setProblem] = useState<string | null>(null);
   const set = (key: string) => (value: string) =>
     setValues((current) => ({ ...current, [key]: value }));
   const field = (key: string) => ({
     value: values[key] ?? '',
     onChange: (event: { target: { value: string } }) => set(key)(event.target.value),
-    disabled: disabled || sent,
+    disabled,
   });
 
   const message = (): string | null => {
@@ -109,14 +108,23 @@ export function ChatForm({
   const submit = (event: FormEvent) => {
     event.preventDefault();
     const text = message();
-    if (!text) return;
-    setSent(true);
+    if (!text) {
+      setProblem('Gib mindestens eine Angabe ein.');
+      return;
+    }
+    if (text.length > CHAT_LIMITS.messageChars) {
+      setProblem(
+        `Der Text ist zu lang: höchstens ${CHAT_LIMITS.messageChars.toLocaleString('de-DE')} Zeichen.`,
+      );
+      return;
+    }
+    setProblem(null);
     onSubmit(text);
   };
 
   return (
-    <form className="chat-form" onSubmit={submit} aria-label={TITLES[form]}>
-      <p className="chat-form__title">{TITLES[form]}</p>
+    <form ref={element} className="chat-form" onSubmit={submit} aria-label={FORM_TITLES[form]}>
+      <p className="chat-form__title">{FORM_TITLES[form]}</p>
       {form === 'listing' && (
         <TextAreaField
           label="Text des Inserats"
@@ -190,8 +198,13 @@ export function ChatForm({
           {...field('plate')}
         />
       )}
-      <Button type="submit" size="sm" disabled={disabled || sent}>
-        {sent ? 'Gesendet' : 'Absenden'}
+      {problem && (
+        <p className="chat-form__problem" role="alert">
+          {problem}
+        </p>
+      )}
+      <Button type="submit" size="sm" disabled={disabled}>
+        Absenden
       </Button>
     </form>
   );

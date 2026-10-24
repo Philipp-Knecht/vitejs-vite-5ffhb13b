@@ -241,7 +241,7 @@ export function createServices(
       ? new ChatService({
           model: chatModel,
           tools: createChatTools({ analyses, rdw }),
-          usage: new ChatUsageService(db, config.chat, now),
+          usage: new ChatUsageService(db, config.chat, config.cookieSecret, now),
           logger,
           now,
         })

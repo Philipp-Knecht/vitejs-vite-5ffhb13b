@@ -16,6 +16,7 @@ import {
   USAGES,
   MILEAGES,
   PRIORITIES,
+  type Generation,
   type SearchQuery,
 } from '@kaufcheck/catalog';
 import { MODEL_INDEX } from '@kaufcheck/catalog/advisor-index';
@@ -41,6 +42,7 @@ import {
   vehicleTax,
   type AnalysisDto,
   type ChatCard,
+  type VehicleTaxResult,
 } from '@kaufcheck/shared';
 import { z } from 'zod';
 import type { ChatToolSpec } from '../../infrastructure/ai/chat-model';
@@ -72,6 +74,8 @@ export interface ChatTool {
   spec: ChatToolSpec;
   /** Shown while it runs, e.g. „Prüfe das Inserat“. */
   label: string;
+  /** Runs at most once per message (a check costs one of the visitor's checks). */
+  once?: boolean;
   run(input: unknown, ctx: ChatToolContext): Promise<ChatToolOutcome>;
 }
 
@@ -170,10 +174,12 @@ function analysisOutcome(dto: AnalysisDto): ChatToolOutcome {
   };
 }
 
-const analyzeListing = (deps: ChatToolDeps) =>
-  tool(
+const analyzeListing = (deps: ChatToolDeps): ChatTool => ({
+  once: true,
+  ...tool(
     {
       name: 'analyze_listing',
+      strict: true,
       description:
         'Prüft das Auto-Inserat, das in der letzten Nachricht des Nutzers steht (kopierter Text von mobile.de, AutoScout24, Kleinanzeigen usw.): Angaben, Widersprüche, Warnzeichen, Fragen an den Verkäufer und der Preis-Check mit Preisstufe und Empfehlung. Speichert die Prüfung und zählt als eine der Inseratsprüfungen des Nutzers. Nur aufrufen, wenn die letzte Nachricht einen Inseratstext enthält; der Text wird direkt aus der Nachricht genommen.',
       inputSchema: objectSchema({}),
@@ -197,7 +203,8 @@ const analyzeListing = (deps: ChatToolDeps) =>
         throw error;
       }
     },
-  );
+  ),
+});
 
 // ---------------------------------------------------------------------------
 // Car search
@@ -242,6 +249,7 @@ function describeSearch(query: SearchQuery, makeName: string | null, modelName: 
 const searchCars = tool(
   {
     name: 'search_cars',
+    strict: false,
     description:
       'Baut Suchlinks zu den Ergebnisseiten von mobile.de, AutoScout24, Kleinanzeigen, eBay, Autohero, pkw.de und Facebook mit den Wünschen des Nutzers. KaufCheck ruft die Börsen nie selbst ab: Der Nutzer öffnet die Links und sieht die Angebote dort. Nur Angaben setzen, die der Nutzer genannt hat.',
     inputSchema: objectSchema({
@@ -261,6 +269,10 @@ const searchCars = tool(
   'Baue die Suche',
   SearchInput,
   (input) => {
+    if (input.model && !input.make)
+      return Promise.resolve(
+        fail('Zum Modell fehlt die Marke: gib make mit an (z. B. make „VW“, model „Golf“).'),
+      );
     const make = input.make ? findMake(input.make) : null;
     if (input.make && !make)
       return Promise.resolve(fail(`Die Marke „${input.make}“ kennt KaufCheck nicht.`));
@@ -318,6 +330,7 @@ const searchCars = tool(
 const modelInfo = tool(
   {
     name: 'model_info',
+    strict: true,
     description:
       'Recherchiertes Wissen von KaufCheck zu einem Modell: Generationen, bekannte Schwachstellen mit Prüftipp (aus ADAC-Pannenstatistik, TÜV-Report, Rückrufen, Fachpresse), Tipps für die Besichtigung, Bewertungen und wo man Rückrufe prüft. Nur dieses Wissen weitergeben, nichts dazuerfinden.',
     inputSchema: objectSchema(
@@ -335,7 +348,7 @@ const modelInfo = tool(
     model: z.string().min(1).max(60),
     year: z.number().int().min(1950).max(2100).optional(),
   }),
-  (input) => {
+  (input, ctx) => {
     const make = findMake(input.make);
     const entry = make ? findListingModel(make, input.model) : null;
     const knowledge = entry ? ALL_KNOWLEDGE.find((model) => model.id === entry.id) : undefined;
@@ -348,42 +361,62 @@ const modelInfo = tool(
       });
     }
     const year = input.year ?? null;
-    const generation = defaultGeneration(knowledge, year, year);
+    // In a changeover year both generations were sold: show both and let the user confirm.
+    const current = ctx.now.getUTCFullYear();
+    const inYear =
+      year === null
+        ? []
+        : knowledge.generations.filter(
+            (item) => item.years[0] <= year && year <= (item.years[1] ?? current),
+          );
+    const fallback = defaultGeneration(knowledge, year, year);
+    const generations = inYear.length > 1 ? inYear : fallback ? [fallback] : [];
     const url = `/modelle/${knowledge.id}`;
     const name = `${knowledge.make} ${knowledge.model}`;
-    const issues = generation?.issues ?? [];
+    const label = (item: Generation) => `${item.name} (${generationYearsLabel(item.years)})`;
+    const several = generations.length > 1;
+    const confirm =
+      year === null
+        ? ' – Erstzulassung unbekannt, Generation bitte bestätigen lassen'
+        : several
+          ? ` – ${year} wurden beide gebaut, Generation bitte bestätigen lassen`
+          : '';
     const lines = [
       `Modell: ${name} (Seite: ${url})`,
-      generation
-        ? `Generation: ${generation.name} (${generationYearsLabel(generation.years)})${
-            year === null ? ' – Erstzulassung unbekannt, Generation bitte bestätigen lassen' : ''
-          }`
+      generations.length > 0
+        ? `Generation: ${generations.map(label).join(' oder ')}${confirm}`
         : 'Keine passende Generation.',
       `Bewertungen (1–5): Zuverlässigkeit ${knowledge.ratings.reliability}, Unterhalt ${knowledge.ratings.runningCosts}, Platz ${knowledge.ratings.space}, Komfort ${knowledge.ratings.comfort}`,
-      ...issues.map(
-        (issue) =>
-          `Schwachstelle (${issue.severity}): ${issue.title}. Betrifft: ${issue.affects}. ${issue.detail} Prüfen: ${issue.check} Quellen: ${issue.sources.map((source) => source.label).join(', ')}`,
-      ),
-      ...(issues.length === 0
-        ? ['Für diese Generation sind keine Schwachstellen mit Quelle erfasst.']
-        : []),
-      ...(generation?.tips ?? []).map((tip) => `Tipp: ${tip}`),
+      ...generations.flatMap((item) => [
+        ...item.issues.map(
+          (issue) =>
+            `Schwachstelle${several ? ` ${item.name}` : ''} (${issue.severity}): ${issue.title}. Betrifft: ${issue.affects}. ${issue.detail} Prüfen: ${issue.check} Quellen: ${issue.sources.map((source) => source.label).join(', ')}`,
+        ),
+        ...(item.issues.length === 0
+          ? [`Für ${item.name} sind keine Schwachstellen mit Quelle erfasst.`]
+          : []),
+        ...item.tips.map((tip) => `Tipp${several ? ` ${item.name}` : ''}: ${tip}`),
+      ]),
       'Nicht jedes Auto ist betroffen; den Zustand zeigt erst die Besichtigung.',
       recallLine,
     ];
+    const issues = generations.flatMap((item) =>
+      item.issues.map((issue) => ({
+        title: several ? `${item.name}: ${issue.title}` : issue.title,
+        severity: issue.severity,
+      })),
+    );
     return Promise.resolve({
       content: lines.join('\n'),
       card: {
         type: 'model',
         modelId: knowledge.id,
         name,
-        generation: generation
-          ? `${generation.name} (${generationYearsLabel(generation.years)})`
-          : null,
-        issues: issues.map((issue) => ({ title: issue.title, severity: issue.severity })),
+        generation: generations.length > 0 ? generations.map(label).join(' oder ') : null,
+        issues,
         url,
       },
-      context: `Modellwissen ${name}${generation ? ` ${generation.name}` : ''}: ${issues.map((issue) => issue.title).join(', ') || 'keine Schwachstellen erfasst'} (${url})`,
+      context: `Modellwissen ${name} ${generations.map((item) => item.name).join(' oder ')}: ${issues.map((issue) => issue.title).join(', ') || 'keine Schwachstellen erfasst'} (${url})`,
     });
   },
 );
@@ -405,6 +438,23 @@ const TaxInput = z.object({
 
 const DRIVE_LABELS = { petrol: 'Benzin (Fremdzündung)', diesel: 'Diesel', electric: 'Elektro' };
 
+const germanDate = (day: string) => day.split('-').reverse().join('.');
+
+/** The same tax for every day of the month: a month-only registration is enough. */
+function sameTax(a: VehicleTaxResult, b: VehicleTaxResult): boolean {
+  if (a.kind === 'amount' && b.kind === 'amount')
+    return a.annualEur === b.annualEur && a.rule === b.rule;
+  if (a.kind === 'exempt' && b.kind === 'exempt')
+    return a.rule === b.rule && a.afterwardsEur === b.afterwardsEur;
+  return a.kind === b.kind;
+}
+
+function lastDayOfMonth(month: string): string {
+  const [year = 0, number = 1] = month.split('-').map(Number);
+  const day = new Date(Date.UTC(year, number, 0)).getUTCDate();
+  return `${month}-${String(day).padStart(2, '0')}`;
+}
+
 async function engineValues(
   input: z.infer<typeof TaxInput>,
   firstRegistration: string,
@@ -422,7 +472,10 @@ async function engineValues(
   const candidates = enginesOfYear(file.engines, year).filter(
     (engine) =>
       engineTaxDrive(engine.fuel) === input.drive &&
-      (input.power_kw === undefined || Math.abs(engine.kw - input.power_kw) <= 2),
+      (input.power_kw === undefined || Math.abs(engine.kw - input.power_kw) <= 2) &&
+      (input.displacement_ccm === undefined ||
+        engine.ccm === null ||
+        Math.abs(engine.ccm - input.displacement_ccm) <= 50),
   );
   if (candidates.length === 1) {
     const engine = candidates[0]!;
@@ -445,6 +498,7 @@ async function engineValues(
 const vehicleTaxTool = tool(
   {
     name: 'vehicle_tax',
+    strict: true,
     description:
       'Rechnet die jährliche Kfz-Steuer nach KraftStG. Braucht die Erstzulassung und den Antrieb (petrol gilt für Benzin, Autogas, Erdgas und Benzin-Hybride). Hubraum und CO₂ stehen im Fahrzeugschein (P.1 und V.7); fehlen sie, mit Marke, Modell und Leistung aus den EU-Motordaten ergänzen lassen. Nie Werte raten.',
     inputSchema: objectSchema(
@@ -464,10 +518,9 @@ const vehicleTaxTool = tool(
   'Rechne die Kfz-Steuer',
   TaxInput,
   async (input, ctx) => {
-    const firstRegistration =
-      input.first_registration.length === 7
-        ? `${input.first_registration}-15`
-        : input.first_registration;
+    // Only the month known: the tax is worked out for its first and last day.
+    const month = input.first_registration.length === 7 ? input.first_registration : null;
+    const firstRegistration = month ? `${month}-01` : input.first_registration;
     let ccm = input.displacement_ccm ?? null;
     let co2 = input.co2_g_per_km ?? null;
     let note = '';
@@ -480,17 +533,25 @@ const vehicleTaxTool = tool(
         note = values.note;
       }
     }
-    const result = vehicleTax(
-      {
-        firstRegistration,
-        drive: input.drive,
-        displacementCcm: ccm,
-        co2GPerKm: co2,
-        emissionClass: null,
-        grossWeightKg: input.gross_weight_kg ?? null,
-      },
-      germanDay(ctx.now),
-    );
+    const taxFor = (day: string) =>
+      vehicleTax(
+        {
+          firstRegistration: day,
+          drive: input.drive,
+          displacementCcm: ccm,
+          co2GPerKm: co2,
+          emissionClass: null,
+          grossWeightKg: input.gross_weight_kg ?? null,
+        },
+        germanDay(ctx.now),
+      );
+    const result = taxFor(firstRegistration);
+    const monthEnd = month ? taxFor(lastDayOfMonth(month)) : result;
+    if (!sameTax(result, monthEnd)) {
+      return {
+        content: `Im Monat ${month?.split('-').reverse().join('/')} hängt die Steuer vom Tag der Erstzulassung ab (eine Stichtagsregel greift in diesem Monat). Frag nach dem genauen Datum (Fahrzeugschein, Feld B) und ruf das Werkzeug mit YYYY-MM-DD erneut auf.`,
+      };
+    }
     const params = new URLSearchParams({ ez: firstRegistration.slice(0, 7) });
     params.set(
       'antrieb',
@@ -504,21 +565,31 @@ const vehicleTaxTool = tool(
       };
     }
     const inputs = [
-      { label: 'Erstzulassung', value: firstRegistration.split('-').reverse().join('.') },
+      {
+        label: 'Erstzulassung',
+        value: month ? month.split('-').reverse().join('/') : germanDate(firstRegistration),
+      },
       { label: 'Antrieb', value: DRIVE_LABELS[input.drive] },
       ...(ccm !== null ? [{ label: 'Hubraum', value: `${ccm.toLocaleString('de-DE')} cm³` }] : []),
       ...(co2 !== null ? [{ label: 'CO₂', value: `${co2.toLocaleString('de-DE')} g/km` }] : []),
     ];
+    // With only the month known, the end of an exemption is only known to the month as well.
+    const exemptUntil =
+      result.kind !== 'exempt'
+        ? ''
+        : monthEnd.kind === 'exempt' && monthEnd.until !== result.until
+          ? `${result.until.slice(5, 7)}/${result.until.slice(0, 4)} (je nach Tag der Erstzulassung)`
+          : germanDate(result.until);
     const text =
       result.kind === 'amount'
         ? `Kfz-Steuer: ${euro(result.annualEur)} im Jahr (${result.parts.map((part) => `${part.label}: ${euro(part.amountEur)}`).join(', ')}). Regel: ${result.rule}`
-        : `Steuerfrei bis ${result.until.split('-').reverse().join('.')}${result.afterwardsEur !== null ? `, danach ${euro(result.afterwardsEur)} im Jahr` : ''}. Regel: ${result.rule}`;
+        : `Steuerfrei bis ${exemptUntil}${result.afterwardsEur !== null ? `, danach ${euro(result.afterwardsEur)} im Jahr` : ''}. Regel: ${result.rule}`;
     return {
       content: `${text}\nEingaben: ${inputs.map((item) => `${item.label} ${item.value}`).join(', ')}. ${note} Verbindlich setzt das Hauptzollamt fest. Rechner: ${calculatorUrl}`,
       card: {
         type: 'tax',
         annualEur: result.kind === 'amount' ? result.annualEur : null,
-        exemptUntil: result.kind === 'exempt' ? result.until : null,
+        exemptUntil: result.kind === 'exempt' ? exemptUntil : null,
         rule: result.rule,
         inputs,
         calculatorUrl,
@@ -535,6 +606,7 @@ const vehicleTaxTool = tool(
 const financing = tool(
   {
     name: 'financing',
+    strict: true,
     description:
       'Rechnet eine Autofinanzierung mit gleichen Monatsraten: Kaufpreis minus Anzahlung, Laufzeit und effektiver Jahreszins. Ohne Zins aus einem Angebot rechnet es mit dem Durchschnittszins der Bundesbank für Konsumentenkredite – das ist ein Beispiel, kein Angebot. KaufCheck vermittelt keine Kredite.',
     inputSchema: objectSchema(
@@ -602,6 +674,7 @@ const financing = tool(
 const carAdvisor = tool(
   {
     name: 'car_advisor',
+    strict: true,
     description:
       'Schlägt passende Modelle aus den recherchierten Modellen von KaufCheck vor (Auto-Berater): nach Budget, Nutzung, Fahrleistung, Personen, Lademöglichkeit, Getriebe und bis zu zwei Prioritäten. Nur Antworten setzen, die der Nutzer gegeben hat.',
     inputSchema: objectSchema({
@@ -690,6 +763,7 @@ const rdwCheck = (deps: ChatToolDeps) =>
   tool(
     {
       name: 'rdw_check',
+      strict: true,
       description:
         'Fragt ein niederländisches Kennzeichen bei der RDW (offene Daten der niederländischen Zulassungsbehörde) ab: Tacho-Urteil, Rückrufe, APK (Hauptuntersuchung), Export, Taxi. Nur für Autos aus den Niederlanden.',
       inputSchema: objectSchema({ plate: string('Niederländisches Kennzeichen, z. B. 12-ABC-3') }, [
@@ -764,6 +838,7 @@ const FormInput = z.object({
 const showForm = tool(
   {
     name: 'show_form',
+    strict: false,
     description:
       'Zeigt dem Nutzer ein Eingabefeld im Chat, wenn mehrere Angaben fehlen: „listing“ (Inseratstext einfügen), „search“ (Autosuche), „financing“ (Kaufpreis, Anzahlung, Laufzeit, Zins), „tax“ (Werte aus dem Fahrzeugschein), „rdw“ (niederländisches Kennzeichen). Bekannte Werte vorausfüllen. Danach nur kurz sagen, dass das Formular unten steht, und auf die Eingabe warten.',
     inputSchema: objectSchema(
@@ -824,6 +899,7 @@ const PAGE_KEYS = Object.keys(APP_PAGES) as [AppPage, ...AppPage[]];
 const showLinks = tool(
   {
     name: 'show_links',
+    strict: true,
     description:
       'Zeigt Schaltflächen zu Seiten von KaufCheck, wenn der Nutzer dort weitermachen soll (z. B. Kaufvertrag, Checkliste, Mein Auto). Höchstens drei.',
     inputSchema: objectSchema(

@@ -68,7 +68,10 @@ export function ImprintPage() {
 }
 
 const PRIVACY_POLICY_DATE = '24. Oktober 2026';
-const AI_PROVIDER_NAMES = { anthropic: 'Anthropic', openai: 'OpenAI' } as const;
+// For customers in the EEA, Anthropic's contracting party is Anthropic Ireland, Limited
+// (https://www.anthropic.com/legal/commercial-terms).
+const ANTHROPIC = 'Anthropic (Anthropic Ireland, Limited)';
+const AI_PROVIDER_NAMES = { anthropic: ANTHROPIC, openai: 'OpenAI' } as const;
 
 /**
  * The privacy policy follows the server configuration (`/api/config`):
@@ -328,14 +331,20 @@ export function PrivacyPage() {
           <p>
             Wenn du dem Assistenten schreibst, schicken wir deine Nachricht zusammen mit dem
             bisherigen Gespräch an den KI-Anbieter{' '}
-            {chat.isMock ? 'KaufCheck (Testbetrieb ohne KI)' : (aiProvider ?? 'Anthropic')}, damit
-            er antworten kann. Schreib dort bitte nichts über dich, was er nicht braucht, etwa Name,
-            Anschrift oder Telefonnummer. Den Verlauf speichert nur dein Browser, und nur für den
-            geöffneten Tab (Session Storage): Er ist weg, wenn du den Tab schließt oder „Neues
-            Gespräch“ wählst. Auf unserem Server speichern wir vom Gespräch nichts; wir zählen nur,
-            wie viele Nachrichten dein Browser (Kennung kc_anon) oder dein Konto am Tag schickt, und
-            löschen diese Zähler nach sieben Tagen. Prüft der Assistent ein Inserat, das du
-            einfügst, ist das eine Prüfung wie unter „Geprüfte Inserate“ beschrieben.
+            {chat.isMock ? 'KaufCheck (Testbetrieb ohne KI)' : (aiProvider ?? ANTHROPIC)}, damit er
+            antworten kann. Telefonnummern, E-Mail-Adressen und IBANs entfernen wir vorher, auch aus
+            eingefügten Inseraten. Schreib dort bitte nichts über dich, was er nicht braucht, etwa
+            Name oder Anschrift. Den Verlauf speichert nur dein Browser, und nur für den geöffneten
+            Tab (Session Storage): In der Regel ist er weg, wenn du den Tab schließt, und sofort,
+            wenn du „Neues Gespräch“ wählst. Auf unserem Server speichern wir vom Gespräch nichts;
+            wir zählen nur, wie viele Nachrichten dein Browser (Kennung kc_anon) oder dein Konto am
+            Tag schickt. Damit niemand das Tageslimit umgeht, indem er die Kennung löscht, zählen
+            wir ohne Pro außerdem die Nachrichten je Internetanschluss: Dafür speichern wir keine
+            IP-Adresse, sondern nur einen mit einem geheimen Schlüssel gebildeten Prüfwert, der
+            jeden Tag wechselt (Rechtsgrundlage: unser berechtigtes Interesse, Missbrauch und Kosten
+            zu begrenzen, Art. 6 Abs. 1 lit. f DSGVO). Alle Zähler löschen wir nach sieben Tagen.
+            Prüft der Assistent ein Inserat, das du einfügst, ist das eine Prüfung wie unter
+            „Geprüfte Inserate“ beschrieben.
             {!chat.isMock &&
               ' Der Anbieter kann die Daten außerhalb der EU verarbeiten; die Übermittlung erfolgt auf Grundlage geeigneter Garantien wie der EU-Standardvertragsklauseln (Art. 46 Abs. 2 lit. c DSGVO).'}{' '}
             Rechtsgrundlage ist die Bereitstellung des angefragten Dienstes (Art. 6 Abs. 1 lit. b
@@ -344,11 +353,12 @@ export function PrivacyPage() {
           <p>
             <strong>Spracheingabe:</strong> Nutzt du das Mikrofon im Assistenten, erkennt dein
             Browser die Sprache mit seiner eigenen Spracherkennung (Web Speech API); KaufCheck
-            bekommt nur den erkannten Text, keine Aufnahme. Viele Browser schicken die Aufnahme
-            dafür an einen Dienst ihres Herstellers, Chrome etwa an Google. Dafür ist der Hersteller
-            deines Browsers verantwortlich, es gelten seine Datenschutzhinweise. Das Mikrofon läuft
-            nur, wenn du die Taste drückst und es im Browser erlaubst; du kannst stattdessen auch
-            die Diktierfunktion deiner Tastatur nutzen.
+            bekommt nur den erkannten Text, keine Aufnahme. Kann dein Browser Deutsch auf dem Gerät
+            selbst erkennen, nutzen wir das, und die Aufnahme verlässt dein Gerät nicht. Sonst
+            schicken viele Browser die Aufnahme an einen Dienst ihres Herstellers, Chrome etwa an
+            Google. Dafür ist der Hersteller deines Browsers verantwortlich, es gelten seine
+            Datenschutzhinweise. Das Mikrofon läuft nur, wenn du die Taste drückst und es im Browser
+            erlaubst; du kannst stattdessen auch die Diktierfunktion deiner Tastatur nutzen.
           </p>
         </>
       )}

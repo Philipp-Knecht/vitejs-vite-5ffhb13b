@@ -12,6 +12,7 @@ import type {
   ChatModelRequest,
   ChatModelTurn,
 } from '../src/infrastructure/ai/chat-model';
+import { AiProviderError } from '../src/infrastructure/ai/types';
 import { createTestApp, PASTED_LISTING, resetDatabase, TestClient } from './helpers';
 
 function events(response: LightMyRequestResponse): ChatStreamEvent[] {
@@ -113,6 +114,38 @@ describe('chat with the scripted development model', () => {
     expect(error.message).toContain('heute schon 3 Nachrichten');
   });
 
+  it('counts per internet connection, so dropping the cookie does not help', async () => {
+    const app = await createTestApp({ AI_PROVIDER: 'mock', CHAT_DAILY_PER_ADDRESS: '2' });
+    try {
+      await resetDatabase(app.services.db);
+      const client = new TestClient(app.app);
+      for (let index = 0; index < 2; index += 1) {
+        client.forgetCookies();
+        expect((await client.post('/api/chat', { messages: [user('Hallo')] })).statusCode).toBe(
+          200,
+        );
+      }
+      client.forgetCookies();
+      const response = await client.post('/api/chat', { messages: [user('Hallo')] });
+      expect(response.statusCode).toBe(429);
+      expect(response.json<{ error: { message: string } }>().error.message).toContain(
+        'Internetanschluss',
+      );
+      // Another connection is not affected, and no address is stored.
+      expect(
+        (await new TestClient(app.app).post('/api/chat', { messages: [user('Hallo')] })).statusCode,
+      ).toBe(200);
+      const rows = await app.services.db.chatUsage.findMany({ where: { subjectType: 'address' } });
+      expect(rows).toHaveLength(2);
+      for (const row of rows) {
+        expect(row.subjectId).toMatch(/^[0-9a-f]{32}$/);
+        expect(row.subjectId).not.toContain(client.remoteAddress);
+      }
+    } finally {
+      await app.app.close();
+    }
+  });
+
   it('rejects a conversation that does not end with the visitor', async () => {
     const client = new TestClient(built.app);
     const response = await client.post('/api/chat', {
@@ -204,6 +237,90 @@ describe('chat tool loop', () => {
     expect(done(list)?.fallbackModel).toBe(true);
   });
 
+  it('keeps phone numbers, e-mail addresses and IBANs from the model', async () => {
+    const model = new ScriptedModel([say('Danke.')]);
+    await built?.app.close();
+    built = await createTestApp({}, { chatModel: model });
+    await resetDatabase(built.services.db);
+    await new TestClient(built.app).post('/api/chat', {
+      messages: [user('Ruf an: 0171 2345678, max@example.de, IBAN DE89 3704 0044 0532 0130 00')],
+    });
+    const sent = model.requests[0]?.messages[0];
+    const text = sent?.role === 'user' ? sent.text : '';
+    expect(text).toContain('[Telefonnummer entfernt]');
+    expect(text).not.toContain('2345678');
+    expect(text).not.toContain('max@example.de');
+    expect(text).not.toContain('0532');
+  });
+
+  it('takes back the text of a step it repeats', async () => {
+    const model = new ScriptedModel([
+      (request) => {
+        request.onText('Ich suche dir ');
+        throw new AiProviderError('invalid_output', 'Tool input is no JSON');
+      },
+      say('Ich suche dir passende Autos.'),
+    ]);
+    const list = await run(model);
+    expect(list).toContainEqual({ type: 'retract', length: 0 });
+    expect(done(list)?.turn.content).toBe('Ich suche dir passende Autos.');
+  });
+
+  it('drops the partial text of a declined step', async () => {
+    const model = new ScriptedModel([
+      (request) => {
+        request.onText('Angefangen');
+        return { text: 'Angefangen', toolCalls: [], stop: 'refusal', fallback: false, raw: [] };
+      },
+    ]);
+    const list = await run(model);
+    expect(list).toContainEqual({ type: 'retract', length: 0 });
+    expect(done(list)?.turn.content).toContain('Dabei kann ich leider nicht helfen');
+  });
+
+  it('does not count an answer without anything to show', async () => {
+    const empty = () => (): ChatModelTurn => ({
+      text: '',
+      toolCalls: [],
+      stop: 'max_tokens',
+      fallback: false,
+      raw: [],
+    });
+    const list = await run(new ScriptedModel([empty()]), { CHAT_DAILY_FREE: '1' });
+    expect(list.at(-1)).toMatchObject({ type: 'error', error: { code: 'SERVICE_UNAVAILABLE' } });
+    const again = await new TestClient(built!.app).post('/api/chat', {
+      messages: [user('Hallo')],
+    });
+    expect(again.statusCode).toBe(200);
+  });
+
+  it('checks a listing only once per message', async () => {
+    const model = new ScriptedModel([
+      (): ChatModelTurn => ({
+        text: '',
+        toolCalls: [
+          { id: 'one', name: 'analyze_listing', input: {} },
+          { id: 'two', name: 'analyze_listing', input: {} },
+        ],
+        stop: 'tool_use',
+        fallback: false,
+        raw: [],
+      }),
+      say('Geprüft.'),
+    ]);
+    await built?.app.close();
+    built = await createTestApp({ ANON_MONTHLY_ANALYSES: '100' }, { chatModel: model });
+    await resetDatabase(built.services.db);
+    const list = events(
+      await new TestClient(built.app).post('/api/chat', { messages: [user(PASTED_LISTING)] }),
+    );
+    expect(cards(list).filter((card) => card.type === 'analysis')).toHaveLength(1);
+    const results = model.requests[1]?.messages.at(-1);
+    const [, second] = results?.role === 'tool_results' ? results.results : [];
+    expect(second?.content).toMatch(/^Schon erledigt/);
+    expect(await built.services.db.analysis.count()).toBe(1);
+  });
+
   it('gives the message back when the model is unreachable', async () => {
     const model = new ScriptedModel([]);
     const list = await run(model, { CHAT_DAILY_FREE: '1' });
@@ -239,10 +356,17 @@ describe('chat tools', () => {
   afterAll(() => built?.app.close());
 
   /** Runs one tool through the loop and returns its card and what the model read. */
-  async function tool(name: string, input: unknown, env: Record<string, string> = {}) {
+  async function tool(
+    name: string,
+    input: unknown,
+    options: { env?: Record<string, string>; now?: () => Date } = {},
+  ) {
     const model = new ScriptedModel([call(name, input), say('Fertig.')]);
     await built?.app.close();
-    built = await createTestApp(env, { chatModel: model });
+    built = await createTestApp(options.env ?? {}, {
+      chatModel: model,
+      ...(options.now ? { now: options.now } : {}),
+    });
     await resetDatabase(built.services.db);
     const list = events(
       await new TestClient(built.app).post('/api/chat', { messages: [user('Bitte')] }),
@@ -261,6 +385,29 @@ describe('chat tools', () => {
     });
     // Several engines in 2016: the model is asked to find out which one.
     expect(result?.content).toMatch(/Mehrere Motoren möglich/);
+    expect(card).toBeUndefined();
+  });
+
+  it('works with the month of the first registration where the day does not matter', async () => {
+    const { card } = await tool('vehicle_tax', {
+      first_registration: '2016-03',
+      drive: 'petrol',
+      displacement_ccm: 1395,
+      co2_g_per_km: 119,
+    });
+    expect(card).toMatchObject({ type: 'tax' });
+    if (card?.type === 'tax')
+      expect(card.inputs).toContainEqual({ label: 'Erstzulassung', value: '03/2016' });
+  });
+
+  it('asks for the day when a rule changes within the month', async () => {
+    // Ten years tax-free from the day of registration: on 15.10.2026 that depends on the day.
+    const { card, result } = await tool(
+      'vehicle_tax',
+      { first_registration: '2016-10', drive: 'electric', gross_weight_kg: 1900 },
+      { now: () => new Date('2026-10-15T10:00:00Z') },
+    );
+    expect(result?.content).toMatch(/hängt die Steuer vom Tag der Erstzulassung ab/);
     expect(card).toBeUndefined();
   });
 
@@ -288,6 +435,19 @@ describe('chat tools', () => {
     expect(unknown.result?.content).toContain('kein recherchiertes Modellwissen');
   });
 
+  it('shows both generations in a changeover year', async () => {
+    const { card, result } = await tool('model_info', { make: 'Audi', model: 'A3', year: 2020 });
+    expect(card).toMatchObject({ type: 'model', modelId: 'audi-a3' });
+    if (card?.type === 'model') expect(card.generation).toMatch(/ oder /);
+    expect(result?.content).toContain('beide gebaut');
+  });
+
+  it('needs the make for a model search', async () => {
+    const { card, result } = await tool('search_cars', { model: 'Golf' });
+    expect(result?.isError).toBe(true);
+    expect(card).toBeUndefined();
+  });
+
   it('suggests models from the advisor', async () => {
     const { card } = await tool('car_advisor', { budget_eur: 12_000, usage: 'familie', people: 5 });
     expect(card?.type).toBe('advisor');
@@ -301,7 +461,7 @@ describe('chat tools', () => {
     const { card } = await tool(
       'rdw_check',
       { plate: 'QQ-999-Q' },
-      { RDW_LOOKUP_MODE: 'fixtures' },
+      { env: { RDW_LOOKUP_MODE: 'fixtures' } },
     );
     expect(card).toMatchObject({ type: 'rdw', plate: 'QQ-999-Q' });
   });

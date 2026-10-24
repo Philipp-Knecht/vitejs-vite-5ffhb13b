@@ -37,24 +37,67 @@ interface Stored {
 }
 
 /** Kept for this tab only and gone when it closes. */
-const STORAGE_KEY = 'kaufcheck:chat';
+export const CHAT_STORAGE_KEY = 'kaufcheck:chat';
 const MAX_ITEMS = 60;
+
+const isRecord = (value: unknown): value is Record<string, unknown> =>
+  typeof value === 'object' && value !== null && !Array.isArray(value);
+const isCard = (value: unknown): value is ChatCard =>
+  isRecord(value) && typeof value.type === 'string';
+
+/** Drops what an older version of the page left behind; the chat's error boundary catches the rest. */
+function isItem(value: unknown): value is ChatItem {
+  if (!isRecord(value) || typeof value.id !== 'string') return false;
+  switch (value.role) {
+    case 'user':
+      return typeof value.text === 'string';
+    case 'local':
+      return isCard(value.card);
+    case 'assistant':
+      return (
+        typeof value.text === 'string' &&
+        Array.isArray(value.cards) &&
+        value.cards.every(isCard) &&
+        Array.isArray(value.tools)
+      );
+    default:
+      return false;
+  }
+}
+
+const isTurn = (value: unknown): value is ChatTurn =>
+  isRecord(value) &&
+  (value.role === 'user' || value.role === 'assistant') &&
+  typeof value.content === 'string';
+
+const isUsage = (value: unknown): value is ChatUsage =>
+  isRecord(value) &&
+  typeof value.used === 'number' &&
+  typeof value.limit === 'number' &&
+  typeof value.resetsOn === 'string';
 
 function load(): Stored {
   const empty: Stored = { version: 1, items: [], history: [], usage: null };
   try {
-    const raw = window.sessionStorage.getItem(STORAGE_KEY);
+    const raw = window.sessionStorage.getItem(CHAT_STORAGE_KEY);
     if (!raw) return empty;
-    const value = JSON.parse(raw) as Partial<Stored>;
-    if (value.version !== 1 || !Array.isArray(value.items) || !Array.isArray(value.history))
-      return empty;
+    const value = JSON.parse(raw) as unknown;
+    if (!isRecord(value) || value.version !== 1) return empty;
+    if (!Array.isArray(value.items) || !Array.isArray(value.history)) return empty;
     // An answer cut off by a reload stays cut off.
-    const items = value.items.map((item) =>
-      item.role === 'assistant' && item.status === 'streaming'
-        ? { ...item, status: 'error' as const, error: 'Die Antwort wurde unterbrochen.' }
-        : item,
-    );
-    return { version: 1, items, history: value.history, usage: value.usage ?? null };
+    const items = value.items
+      .filter(isItem)
+      .map((item) =>
+        item.role === 'assistant' && item.status === 'streaming'
+          ? { ...item, status: 'error' as const, error: 'Die Antwort wurde unterbrochen.' }
+          : item,
+      );
+    return {
+      version: 1,
+      items,
+      history: value.history.filter(isTurn),
+      usage: isUsage(value.usage) ? value.usage : null,
+    };
   } catch {
     return empty;
   }
@@ -63,7 +106,7 @@ function load(): Stored {
 function save(state: Stored): void {
   try {
     window.sessionStorage.setItem(
-      STORAGE_KEY,
+      CHAT_STORAGE_KEY,
       JSON.stringify({ ...state, items: state.items.slice(-MAX_ITEMS) }),
     );
   } catch {
@@ -91,14 +134,17 @@ export function useChat() {
   const [state, setState] = useState<Stored>(load);
   const [busy, setBusy] = useState(false);
   const controller = useRef<AbortController | null>(null);
+  // Two clicks in one frame must not send twice; `busy` only changes on the next render.
+  const sending = useRef(false);
 
   useEffect(() => save(state), [state]);
   useEffect(() => () => controller.current?.abort(), []);
 
   const send = useCallback(
     (text: string) => {
-      const content = text.trim().slice(0, CHAT_LIMITS.messageChars);
-      if (!content || busy) return;
+      const content = text.trim();
+      if (!content || content.length > CHAT_LIMITS.messageChars || busy || sending.current) return;
+      sending.current = true;
       const assistantId = nextId();
       const turns = trimHistory([...state.history, { role: 'user', content }]);
       setState((current) => ({
@@ -130,6 +176,9 @@ export function useChat() {
         switch (event.type) {
           case 'text':
             update((item) => ({ ...item, text: item.text + event.delta }));
+            break;
+          case 'retract':
+            update((item) => ({ ...item, text: item.text.slice(0, event.length) }));
             break;
           case 'tool':
             update((item) => {
@@ -176,6 +225,19 @@ export function useChat() {
       streamChat(turns, { signal: current.signal, onEvent })
         .catch((error: unknown) => {
           if (error instanceof ApiRequestError && error.code === 'REQUEST_ABORTED') return;
+          const details = error instanceof ApiRequestError ? error.details : undefined;
+          if (
+            error instanceof ApiRequestError &&
+            error.code === 'USAGE_LIMIT_REACHED' &&
+            details?.limit !== undefined &&
+            details.resetsAt !== undefined
+          ) {
+            const { limit, resetsAt } = details;
+            setState((current) => ({
+              ...current,
+              usage: { used: details.used ?? limit, limit, resetsOn: resetsAt },
+            }));
+          }
           update((item) => ({
             ...item,
             status: 'error',
@@ -186,23 +248,29 @@ export function useChat() {
           }));
         })
         .finally(() => {
-          if (controller.current === current) controller.current = null;
+          if (controller.current !== current) return;
+          controller.current = null;
+          sending.current = false;
           setBusy(false);
         });
     },
     [busy, state.history],
   );
 
-  /** Shows a form in the chat without asking the server. */
+  /** Shows a form in the chat without asking the server; returns its id. */
   const showForm = useCallback((card: ChatCard) => {
+    const id = nextId();
     setState((current) => ({
       ...current,
-      items: [...current.items, { id: nextId(), role: 'local', card }],
+      items: [...current.items, { id, role: 'local', card }],
     }));
+    return id;
   }, []);
 
   const reset = useCallback(() => {
     controller.current?.abort();
+    controller.current = null;
+    sending.current = false;
     setBusy(false);
     setState((current) => ({ version: 1, items: [], history: [], usage: current.usage }));
   }, []);

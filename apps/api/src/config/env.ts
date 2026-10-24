@@ -176,6 +176,8 @@ const EnvSchema = z
     CHAT_DAILY_PRO: z.coerce.number().int().min(0).max(10_000).default(150),
     /** All messages of all visitors per day, to cap the costs. */
     CHAT_DAILY_TOTAL: z.coerce.number().int().min(0).max(1_000_000).default(500),
+    /** Messages per internet connection and day without Pro: no fresh cookie gets around the limit. */
+    CHAT_DAILY_PER_ADDRESS: z.coerce.number().int().min(0).max(1_000_000).default(60),
     /** Messages per IP address and minute. */
     CHAT_RATE_PER_MINUTE: z.coerce.number().int().min(1).max(1000).default(10),
 
@@ -379,6 +381,7 @@ export interface AppConfig {
     dailyFree: number;
     dailyPro: number;
     dailyTotal: number;
+    dailyPerAddress: number;
     ratePerMinute: number;
   };
   limits: {
@@ -537,6 +540,7 @@ export function loadConfig(source: NodeJS.ProcessEnv = process.env): AppConfig {
       dailyFree: env.CHAT_DAILY_FREE,
       dailyPro: env.CHAT_DAILY_PRO,
       dailyTotal: env.CHAT_DAILY_TOTAL,
+      dailyPerAddress: env.CHAT_DAILY_PER_ADDRESS,
       ratePerMinute: env.CHAT_RATE_PER_MINUTE,
     },
     limits: {

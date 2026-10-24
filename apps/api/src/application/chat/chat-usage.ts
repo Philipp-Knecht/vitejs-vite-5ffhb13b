@@ -1,3 +1,5 @@
+import { createHmac } from 'node:crypto';
+import net from 'node:net';
 import { germanDay, type ChatUsage } from '@kaufcheck/shared';
 import { isUniqueViolation, type Db } from '../../infrastructure/db/client';
 import { AppError } from '../../lib/errors';
@@ -8,6 +10,8 @@ export interface ChatLimits {
   dailyPro: number;
   /** All messages of all visitors per day, to cap the costs. */
   dailyTotal: number;
+  /** Messages per internet connection and day, without Pro. */
+  dailyPerAddress: number;
 }
 
 export interface ChatReservation {
@@ -17,6 +21,25 @@ export interface ChatReservation {
 }
 
 const ALL = { subjectType: 'all', subjectId: 'all' } as const;
+
+/** One connection: an IPv4 address, or the /64 network a device gets with IPv6. */
+export function connection(address: string): string {
+  if (net.isIPv6(address)) {
+    const mapped = /^::ffff:(\d+\.\d+\.\d+\.\d+)$/i.exec(address);
+    if (mapped?.[1]) return mapped[1];
+    const [head = '', tail = ''] = address.toLowerCase().split('::');
+    const left = head ? head.split(':') : [];
+    const right = tail ? tail.split(':') : [];
+    const groups = address.includes('::')
+      ? [...left, ...Array<string>(8 - left.length - right.length).fill('0'), ...right]
+      : left;
+    return groups
+      .slice(0, 4)
+      .map((group) => group.replace(/^0+(?=.)/, ''))
+      .join(':');
+  }
+  return address;
+}
 
 /** The German day after `day`, „YYYY-MM-DD“. */
 function nextDay(day: string): string {
@@ -34,8 +57,18 @@ export class ChatUsageService {
   constructor(
     private readonly db: Db,
     private readonly limits: ChatLimits,
+    /** Turns addresses into keyed hashes: the table never holds an address. */
+    private readonly secret: string,
     private readonly now: () => Date = () => new Date(),
   ) {}
+
+  private addressKey(address: string, day: string) {
+    const subjectId = createHmac('sha256', this.secret)
+      .update(`chat|${day}|${connection(address)}`)
+      .digest('hex')
+      .slice(0, 32);
+    return { subjectType: 'address', subjectId, day };
+  }
 
   limitFor(actor: Actor): number {
     return actor.plan === 'pro' ? this.limits.dailyPro : this.limits.dailyFree;
@@ -74,7 +107,7 @@ export class ChatUsageService {
     });
   }
 
-  async reserve(actor: Actor): Promise<ChatReservation> {
+  async reserve(actor: Actor, address: string): Promise<ChatReservation> {
     const subject = usageSubject(actor);
     if (!subject) throw new AppError('INTERNAL_ERROR', { internalReason: 'chat_without_subject' });
     const day = germanDay(this.now());
@@ -92,9 +125,20 @@ export class ChatUsageService {
         details: { limit, used: limit, resetsAt: resetsOn },
       });
     }
+    // A client that drops its cookie is a new visitor each time; its connection is not.
+    const connectionKey = actor.plan === 'pro' ? null : this.addressKey(address, day);
+    if (connectionKey && (await this.take(connectionKey, this.limits.dailyPerAddress)) === null) {
+      await this.give(own);
+      throw new AppError('USAGE_LIMIT_REACHED', {
+        message:
+          'Von deinem Internetanschluss kamen heute schon sehr viele Nachrichten an den Assistenten. Morgen geht es weiter; alle Rechner und die Inseratsprüfung funktionieren auch ohne Assistent.',
+        internalReason: 'chat_daily_per_address',
+      });
+    }
     const all = { ...ALL, day };
     if ((await this.take(all, this.limits.dailyTotal)) === null) {
       await this.give(own);
+      if (connectionKey) await this.give(connectionKey);
       throw new AppError('SERVICE_UNAVAILABLE', {
         message:
           'Der Assistent hat für heute sein Limit erreicht. Morgen geht es weiter; alle Rechner und die Inseratsprüfung funktionieren wie gewohnt.',
@@ -105,6 +149,7 @@ export class ChatUsageService {
       usage: { used, limit, resetsOn },
       release: async () => {
         await this.give(own);
+        if (connectionKey) await this.give(connectionKey);
         await this.give(all);
       },
     };

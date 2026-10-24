@@ -9,6 +9,12 @@ export interface ChatToolSpec {
   name: string;
   description: string;
   inputSchema: Record<string, unknown>;
+  /**
+   * The model's input always matches the schema. The API caps strict schemas
+   * per request (24 optional parameters in all), so tools with many optional
+   * fields rely on their own validation instead.
+   */
+  strict: boolean;
 }
 
 export interface ChatToolCall {
