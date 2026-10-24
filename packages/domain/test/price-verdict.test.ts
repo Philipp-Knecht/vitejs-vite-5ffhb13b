@@ -260,6 +260,12 @@ describe('price advice', () => {
       'Getriebe ist defekt.',
       'Das Auto fährt nicht.',
       'Schweller durchgerostet.',
+      'Kupplung defekt, nicht fahrbereit.',
+      'Turbo defekt, fährt nicht.',
+      'Zylinderkopfdichtung defekt, springt nicht an.',
+      'Ölverlust, fährt nicht mehr.',
+      'Auto fährt nicht\nTÜV bis 2027',
+      'Fährt nicht - Batterie leer?',
     ])
       expect((await advise(1.2, description)).market, description).toMatchObject({
         reason: 'not_comparable',
@@ -275,8 +281,22 @@ describe('price advice', () => {
       'Motorschaden, Motor wurde komplett überholt.',
       'Hatte einen Motorschaden, Austauschmotor eingebaut.',
       'Motorschaden wurde repariert.',
+      'Weder Unfall noch Motorschaden.',
+      'Rostloch im Schweller wurde geschweißt.',
+      'Motorschaden bei 120.000 km, Motor wurde getauscht.',
+      'Neuer Motor nach Motorschaden.',
     ])
       expect((await advise(1 / 1.04, description)).market.status, description).toBe('available');
+  });
+
+  it('keeps two kinds of damage named side by side', async () => {
+    const result = await analyze(
+      listingFromText(pasted(details, 'Ölverlust, fährt nicht mehr. Motor defekt.')),
+      market(1),
+    );
+    const ids = result.observations.map((o) => o.id);
+    expect(ids).toEqual(expect.arrayContaining(['damage_engine', 'damage_roadworthiness']));
+    expect(ids.filter((id) => id === 'damage_general')).toEqual([]);
   });
 
   it('warns more about a costly defect than about scratches', async () => {

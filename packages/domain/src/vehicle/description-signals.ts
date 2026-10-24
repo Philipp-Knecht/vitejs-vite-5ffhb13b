@@ -38,11 +38,6 @@ export interface DamageMention extends Quoted {
   category: DamageCategory;
   severity: 'notice' | 'warning';
   term: string;
-  /**
-   * Engine or gearbox damage, not driving, through-rust – and no repair named
-   * right after it. Such a car compares with no intact one (price check).
-   */
-  severe: boolean;
 }
 
 export type PositiveKey =
@@ -73,6 +68,11 @@ export interface DescriptionSignals {
   huNew: Quoted | null;
   huMention: (Quoted & { value: YearMonth }) | null;
   damageMentions: DamageMention[];
+  /**
+   * Engine or gearbox damage, not driving or through-rust, not negated and no
+   * repair named right after it: such a car compares with no intact one.
+   */
+  severeDamage: (Quoted & { term: string }) | null;
   tuningMentions: Quoted[];
   emissionTampering: Quoted[];
   soldAs: (Quoted & { kind: 'bastler' | 'export' | 'defect' })[];
@@ -133,7 +133,7 @@ function testPattern(pattern: RegExp, text: string): boolean {
   return allMatches(pattern, text).length > 0;
 }
 
-const NEGATIONS = /^(kein|keine|keinen|keinem|keiner|keines|nicht|ohne|nie|niemals)$/i;
+const NEGATIONS = /^(kein|keine|keinen|keinem|keiner|keines|nicht|ohne|nie|niemals|weder)$/i;
 const CLAUSE_BREAK =
   /[.!?\n;]|\b(?:aber|jedoch|allerdings|sonst|außer|ausser|bis auf|lediglich|nur)\b/gi;
 
@@ -242,9 +242,20 @@ const SERVICE_NONE: readonly RegExp[] = [
 
 // --- Damage and defects ------------------------------------------------------
 
-/** Words after a damage term that say it was repaired; „neu“ alone is too vague. */
-const REPAIRED_AFTER =
-  /\b(?:repariert|behoben|instandgesetzt|überholt|getauscht|ausgetauscht|erneuert|gewechselt|austauschmotor|austauschgetriebe|neuer\s+motor|neues\s+getriebe)\b/i;
+/** The sentence around a match: up to the previous and next sentence end. */
+function sentenceAround(text: string, index: number, length: number): string {
+  const end = /[.!?](?=\s|$)|\n/;
+  const before = text.slice(Math.max(0, index - 120), index);
+  const starts = [...before.matchAll(/[.!?](?=\s)|\n/g)];
+  const from = starts.length > 0 ? before.length - (starts.at(-1)!.index + 1) : before.length;
+  const after = text.slice(index + length, index + length + 120);
+  const stop = end.exec(after)?.index ?? after.length;
+  return text.slice(index - from, index + length + stop);
+}
+
+/** Words in the sentence of a damage term that say it was repaired; „neu“ alone is too vague. */
+const REPAIRED =
+  /\b(?:repariert|behoben|instandgesetzt|überholt|getauscht|ausgetauscht|erneuert|gewechselt|geschweißt|geschweisst|verschweißt|verschweisst|austauschmotor|austauschgetriebe|neuer\s+motor|neues\s+getriebe)\b/i;
 
 const DAMAGE_TERMS: readonly {
   pattern: RegExp;
@@ -287,7 +298,7 @@ const DAMAGE_TERMS: readonly {
   { pattern: /\bturbo(?:lader)?\s+(?:ist\s+)?defekt\b/i, category: 'engine', severity: 'warning' },
   {
     pattern:
-      /\bspringt\s+nicht\s+(?:mehr\s+)?an\b|\bnicht\s+(?:fahrbereit|fahrtüchtig|fahrtauglich)\b|\bfährt\s+nicht(?:\s+mehr)?(?=\s*(?:[.,;!?)]|$))/i,
+      /\bspringt\s+nicht\s+(?:mehr\s+)?an\b|\bnicht\s+(?:fahrbereit|fahrtüchtig|fahrtauglich)\b|\bfährt\s+nicht(?:\s+mehr)?(?=\s*(?:[.,;:!?)\-–]|\n|$))/i,
     category: 'roadworthiness',
     severity: 'warning',
     negationSensitive: false,
@@ -729,23 +740,43 @@ export function extractDescriptionSignals(
 
   // Damage mentions (specific terms first; generic "defekt" only if not overlapping)
   const damageMentions: DamageMention[] = [];
-  const covered: [number, number][] = [];
+  const covered: { start: number; end: number; category: DamageCategory }[] = [];
   for (const term of DAMAGE_TERMS) {
     for (const match of allMatches(term.pattern, text)) {
       const start = match.index;
       const end = match.index + match.text.length;
-      if (covered.some(([a, b]) => start < b + 12 && end > a - 12)) continue;
+      // The same words twice, or the same kind of damage right next to it, count once;
+      // „Ölverlust, fährt nicht mehr“ are two findings.
+      const taken = covered.some(
+        (other) =>
+          (start < other.end && end > other.start) ||
+          (other.category === term.category && start < other.end + 12 && end > other.start - 12),
+      );
+      if (taken) continue;
       if ((term.negationSensitive ?? true) && isNegated(text, start, match.text.length)) continue;
-      covered.push([start, end]);
-      // „Motorschaden wurde behoben“, „Motorschaden, Austauschmotor eingebaut“: dealt with.
-      const rest = text.slice(end, end + 80).split(/[.!?\n]/)[0] ?? '';
+      covered.push({ start, end, category: term.category });
       damageMentions.push({
         category: term.category,
         severity: term.severity,
         term: match.text,
         quote: quote(text, match),
-        severe: (term.severe ?? false) && !testPattern(REPAIRED_AFTER, rest),
       });
+    }
+  }
+
+  // Its own pass: a severe term right after another one („Kupplung defekt, nicht
+  // fahrbereit“) must not get lost to the overlap rule above.
+  let severeDamage: DescriptionSignals['severeDamage'] = null;
+  for (const term of DAMAGE_TERMS) {
+    if (!term.severe || severeDamage) continue;
+    for (const match of allMatches(term.pattern, text)) {
+      if ((term.negationSensitive ?? true) && isNegated(text, match.index, match.text.length))
+        continue;
+      // „Motorschaden wurde behoben“, „Neuer Motor nach Motorschaden“: dealt with. The
+      // sentence ends at a full stop before a space, not at the dot in „120.000 km“.
+      if (testPattern(REPAIRED, sentenceAround(text, match.index, match.text.length))) continue;
+      severeDamage = { term: match.text, quote: quote(text, match) };
+      break;
     }
   }
 
@@ -852,6 +883,7 @@ export function extractDescriptionSignals(
     huNew: huNewMatch ? { quote: quote(combined, huNewMatch) } : null,
     huMention,
     damageMentions,
+    severeDamage,
     tuningMentions,
     emissionTampering: tampering,
     soldAs,

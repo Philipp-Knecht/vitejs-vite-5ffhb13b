@@ -247,6 +247,9 @@ export class AnalysisRepository {
                v."mileageKm" AS km, v.fuel, v."powerKw", v.condition, v."accidentHistory",
                a.result -> 'observations' AS observations,
                a.result #>> '{priceContext,market,reason}' AS "marketReason",
+               -- Checks from before rules 2026.10.5 stored neither a reason nor advice.
+               (a.result #> '{priceContext,market,reason}') IS NULL
+                 AND (a.result #> '{priceContext,advice}') IS NULL AS legacy,
                coalesce(a."userId"::text, a."anonymousId", l.id::text) AS owner
         FROM "Listing" l
         JOIN "Vehicle" v ON v."listingId" = l.id
@@ -286,7 +289,7 @@ export class AnalysisRepository {
           AND "accidentHistory" IS DISTINCT FROM 'unrepaired_damage'
           -- The car's own check found it incomparable (severe damage named in the text).
           AND "marketReason" IS DISTINCT FROM 'not_comparable'
-          AND NOT ("marketReason" IS NULL AND EXISTS (
+          AND NOT (legacy AND EXISTS (
             SELECT 1 FROM jsonb_array_elements(coalesce(observations, '[]'::jsonb)) AS o
             WHERE o ->> 'id' = ANY(${LEGACY_DAMAGE_OBSERVATIONS}::text[])
           ))

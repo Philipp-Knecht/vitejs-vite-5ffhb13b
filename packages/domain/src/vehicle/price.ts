@@ -37,7 +37,7 @@ function notComparableReason(
     return 'Laut Inserat hat das Auto einen nicht reparierten Schaden.';
   if (observations.some((o) => o.id === 'sold_as_defective'))
     return 'Laut Inserat wird das Auto für Bastler oder als defekt angeboten.';
-  const severe = ctx.signals.damageMentions.find((mention) => mention.severe);
+  const severe = ctx.signals.severeDamage;
   return severe ? `Die Beschreibung nennt „${severe.term}“.` : null;
 }
 
