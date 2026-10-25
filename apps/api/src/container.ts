@@ -86,13 +86,14 @@ export interface ServiceOverrides {
 }
 
 /** Claude with an API key, the scripted model outside production with AI_PROVIDER=mock. */
-function createChatModel(config: AppConfig): ChatModel | null {
+function createChatModel(config: AppConfig, logger: FastifyBaseLogger): ChatModel | null {
   if (!config.chat.enabled) return null;
   if (config.ai.provider === 'anthropic' && config.ai.anthropic.apiKey) {
     return new AnthropicChatModel({
       apiKey: config.ai.anthropic.apiKey,
       model: config.chat.model,
       effort: config.chat.effort,
+      onRejected: (detail) => logger.warn({ detail }, 'chat model request rejected'),
     });
   }
   if (config.ai.provider === 'mock' && !config.isProduction) return new MockChatModel();
@@ -213,7 +214,7 @@ export function createServices(
     now,
   });
   const chatModel =
-    overrides.chatModel === undefined ? createChatModel(config) : overrides.chatModel;
+    overrides.chatModel === undefined ? createChatModel(config, logger) : overrides.chatModel;
 
   return {
     config,

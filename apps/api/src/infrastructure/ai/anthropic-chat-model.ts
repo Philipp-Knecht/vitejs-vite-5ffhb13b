@@ -9,6 +9,8 @@ export interface AnthropicChatModelOptions {
   effort: 'low' | 'medium' | 'high' | 'xhigh' | 'max';
   /** Injectable for tests. */
   client?: Anthropic;
+  /** Told why the API rejected a request (no message content, only the API's reason). */
+  onRejected?: (detail: string) => void;
 }
 
 /** Room for adaptive thinking and the answer; more effort thinks longer. */
@@ -64,46 +66,78 @@ export class AnthropicChatModel implements ChatModel {
   private readonly client: Anthropic;
   private readonly effort: AnthropicChatModelOptions['effort'];
   private readonly features: ReturnType<typeof claudeModelFeatures>;
+  private readonly onRejected: (detail: string) => void;
+  /**
+   * After the API rejected the full request once, the chat runs with the
+   * basic form (no strict schemas, eager tool streaming, automatic caching or
+   * refusal fallback) until the next restart.
+   */
+  private basic = false;
 
   constructor(options: AnthropicChatModelOptions) {
     this.model = options.model;
     this.effort = options.effort;
     this.features = claudeModelFeatures(options.model);
     this.client = options.client ?? new Anthropic({ apiKey: options.apiKey, maxRetries: 1 });
+    this.onRejected = options.onRejected ?? (() => undefined);
+  }
+
+  private body(request: ChatModelRequest, basic: boolean) {
+    return {
+      model: this.model,
+      max_tokens: MAX_TOKENS[this.effort],
+      // The conversation so far is cached too: the next step and the next message read it.
+      ...(basic ? {} : { cache_control: { type: 'ephemeral' as const } }),
+      thinking: { type: 'adaptive' as const },
+      ...(this.features.effort ? { output_config: { effort: this.effort } } : {}),
+      ...(this.features.refusalFallbacks && !basic
+        ? { betas: ['server-side-fallback-2026-07-01'], fallbacks: 'default' as const }
+        : {}),
+      system: [
+        {
+          type: 'text' as const,
+          text: request.system.stable,
+          cache_control: { type: 'ephemeral' as const },
+        },
+        { type: 'text' as const, text: request.system.dynamic },
+      ],
+      tools: request.tools.map((tool) => ({
+        name: tool.name,
+        description: tool.description,
+        input_schema: tool.inputSchema as Anthropic.Beta.BetaTool.InputSchema,
+        ...(basic ? {} : { strict: tool.strict, eager_input_streaming: true }),
+      })),
+      messages: request.messages.map(toParam),
+    };
+  }
+
+  private async send(
+    request: ChatModelRequest,
+    basic: boolean,
+  ): Promise<Anthropic.Beta.BetaMessage> {
+    const stream = this.client.beta.messages.stream(this.body(request, basic), {
+      signal: request.signal,
+      timeout: 90_000,
+    });
+    stream.on('text', (delta) => request.onText(delta));
+    return stream.finalMessage();
   }
 
   async turn(request: ChatModelRequest): Promise<ChatModelTurn> {
     let message: Anthropic.Beta.BetaMessage;
     try {
-      const stream = this.client.beta.messages.stream(
-        {
-          model: this.model,
-          max_tokens: MAX_TOKENS[this.effort],
-          // The conversation so far is cached too: the next step and the next message read it.
-          cache_control: { type: 'ephemeral' },
-          thinking: { type: 'adaptive' },
-          ...(this.features.effort ? { output_config: { effort: this.effort } } : {}),
-          ...(this.features.refusalFallbacks
-            ? { betas: ['server-side-fallback-2026-07-01'], fallbacks: 'default' as const }
-            : {}),
-          system: [
-            { type: 'text', text: request.system.stable, cache_control: { type: 'ephemeral' } },
-            { type: 'text', text: request.system.dynamic },
-          ],
-          tools: request.tools.map((tool) => ({
-            name: tool.name,
-            description: tool.description,
-            input_schema: tool.inputSchema as Anthropic.Beta.BetaTool.InputSchema,
-            strict: tool.strict,
-            eager_input_streaming: true,
-          })),
-          messages: request.messages.map(toParam),
-        },
-        { signal: request.signal, timeout: 90_000 },
-      );
-      stream.on('text', (delta) => request.onText(delta));
-      message = await stream.finalMessage();
+      try {
+        message = await this.send(request, this.basic);
+      } catch (error) {
+        // Rejected before any output: tell why and try the basic form once.
+        if (this.basic || !(error instanceof Anthropic.BadRequestError)) throw error;
+        this.onRejected(error.message.slice(0, 500));
+        this.basic = true;
+        message = await this.send(request, true);
+      }
     } catch (error) {
+      if (error instanceof Anthropic.APIError && !(error instanceof Anthropic.APIUserAbortError))
+        this.onRejected(`${error.status ?? 'no status'}: ${error.message.slice(0, 500)}`);
       // A tool input that is no JSON at all ends up here too: the chat retries the turn.
       throw mapAnthropicError(error);
     }
