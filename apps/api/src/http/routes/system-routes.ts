@@ -36,6 +36,13 @@ export function systemRoutes(app: FastifyInstance, services: Services): void {
         passwordReset: auth.passwordResetEnabled,
         reminders: services.reminders.available,
         analytics: analytics.isEnabled,
+        chat: services.chat
+          ? {
+              isMock: services.chat.model.isMock,
+              dailyFree: config.chat.dailyFree,
+              dailyPro: config.chat.dailyPro,
+            }
+          : null,
       },
       plans,
       pro: { offer },

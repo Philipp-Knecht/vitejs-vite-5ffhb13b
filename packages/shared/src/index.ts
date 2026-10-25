@@ -13,6 +13,7 @@ export * from './schemas/listing';
 export * from './schemas/analysis';
 export * from './schemas/api';
 export * from './schemas/contracts';
+export * from './schemas/chat';
 export * from './legal';
 export * from './message';
 export * from './negotiation';

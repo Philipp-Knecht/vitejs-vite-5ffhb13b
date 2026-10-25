@@ -8,6 +8,7 @@ export interface MaintenanceReport {
   orphanedListings: number;
   oldUsage: number;
   oldAnalyticsEvents: number;
+  oldChatUsage: number;
 }
 
 const DAY_MS = 24 * 60 * 60 * 1000;
@@ -43,6 +44,9 @@ export async function runMaintenance(
   const oldAnalyticsEvents = await db.analyticsEvent.deleteMany({
     where: { createdAt: { lt: retentionCutoff } },
   });
+  // Daily chat counts are only needed for the day itself.
+  const chatCutoff = new Date(now.getTime() - 7 * DAY_MS).toISOString().slice(0, 10);
+  const oldChatUsage = await db.chatUsage.deleteMany({ where: { day: { lt: chatCutoff } } });
 
   return {
     expiredSessions: expiredSessions.count,
@@ -52,5 +56,6 @@ export async function runMaintenance(
     orphanedListings: orphanedListings.count,
     oldUsage: oldUsage.count,
     oldAnalyticsEvents: oldAnalyticsEvents.count,
+    oldChatUsage: oldChatUsage.count,
   };
 }

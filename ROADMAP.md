@@ -37,7 +37,8 @@ PRs, **L** = mehrere Wochen.
 | 1.1 | Steuer- und Kostenrechner: Werte aus Modell und Motor (EU-Daten, 319 Modelle)             | #43       |
 | neu | Affiliate-Link zu Berichten über die Fahrzeughistorie (aus, bis der Partner zustimmt)     | #44       |
 | neu | Auto aus den Niederlanden: Kennzeichen bei der RDW prüfen (Tacho, Rückrufe, APK)          | #45       |
-| 4.3 | Preis-Check: Preisstufe und Empfehlung aus bei KaufCheck geprüften Inseraten              | dieser PR |
+| 4.3 | Preis-Check: Preisstufe und Empfehlung aus bei KaufCheck geprüften Inseraten              | #46       |
+| neu | Chat-Assistent als Startpunkt: Prüfung, Preis-Check, Suche, Steuer, Finanzierung, Sprache | dieser PR |
 
 ## Arbeitsweise je Feature
 

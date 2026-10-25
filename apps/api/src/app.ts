@@ -6,6 +6,7 @@ import Fastify, { type FastifyInstance } from 'fastify';
 import type { AppConfig } from './config/env';
 import { createServices, type ServiceOverrides, type Services } from './container';
 import { clientAddress } from './http/client-address';
+import { subscriberOf } from './lib/network';
 import { registerErrorHandling } from './http/errors';
 import { redirectToPublicSite } from './http/public-site';
 import { requestContextPlugin } from './http/request-context';
@@ -19,6 +20,7 @@ import { savedSearchRoutes } from './http/routes/saved-search-routes';
 import { contractRoutes } from './http/routes/contract-routes';
 import { sponsorAdRoutes } from './http/routes/sponsor-ad-routes';
 import { rdwRoutes } from './http/routes/rdw-routes';
+import { chatRoutes } from './http/routes/chat-routes';
 import { systemRoutes } from './http/routes/system-routes';
 import { registerSecurity } from './http/security';
 import { registerWeb } from './http/web';
@@ -73,7 +75,8 @@ export async function buildApp(
     global: true,
     max: 300,
     timeWindow: '1 minute',
-    keyGenerator: (request) => clientAddress(request, config.clientIpHeader),
+    // With IPv6 a subscriber has a whole /64: rotating addresses in it does not reset the limits.
+    keyGenerator: (request) => subscriberOf(clientAddress(request, config.clientIpHeader)),
     // Every page view loads several fingerprinted build files; they are cheap and never count.
     allowList: (request) =>
       (request.method === 'GET' || request.method === 'HEAD') && request.url.startsWith('/assets/'),
@@ -89,6 +92,7 @@ export async function buildApp(
   systemRoutes(app, services);
   sponsorAdRoutes(app, services);
   rdwRoutes(app, services);
+  chatRoutes(app, services);
   accountRoutes(app, services);
   listingRoutes(app, services);
   savedListingRoutes(app, services);

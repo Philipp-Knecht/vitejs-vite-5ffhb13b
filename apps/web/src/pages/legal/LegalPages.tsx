@@ -67,8 +67,11 @@ export function ImprintPage() {
   );
 }
 
-const PRIVACY_POLICY_DATE = '23. Oktober 2026';
-const AI_PROVIDER_NAMES = { anthropic: 'Anthropic', openai: 'OpenAI' } as const;
+const PRIVACY_POLICY_DATE = '24. Oktober 2026';
+// For customers in the EEA, Anthropic's contracting party is Anthropic Ireland, Limited
+// (https://www.anthropic.com/legal/commercial-terms).
+const ANTHROPIC = 'Anthropic (Anthropic Ireland, Limited)';
+const AI_PROVIDER_NAMES = { anthropic: ANTHROPIC, openai: 'OpenAI' } as const;
 
 /**
  * The privacy policy follows the server configuration (`/api/config`):
@@ -85,6 +88,7 @@ export function PrivacyPage() {
   const hosting = config?.privacy.hosting ?? null;
   const retentionDays = config?.privacy.anonymousRetentionDays ?? 90;
   const aiProvider = features?.aiProvider ? AI_PROVIDER_NAMES[features.aiProvider] : null;
+  const chat = features?.chat ?? null;
   const emailProvider = config?.privacy.emailProvider ?? null;
   const ads = config?.ads ?? null;
   // A configuration cached before these fields existed (HTTP cache, offline copy) lacks them.
@@ -225,9 +229,10 @@ export function PrivacyPage() {
       <ul>
         <li>
           <strong>kc_anon</strong> – eine zufällige Kennung ohne Bezug zu Name oder Kontaktdaten.
-          Sie wird erst gesetzt, wenn du eine Prüfung startest, und dient dazu, das kostenlose
-          Kontingent einzuhalten: Wir zählen, wie viele Prüfungen im Monat mit dieser Kennung
-          gestartet wurden. Speicherdauer bis zu 400 Tage.
+          Sie wird erst gesetzt, wenn du eine Prüfung startest oder dem Assistenten schreibst, und
+          dient dazu, die kostenlosen Kontingente einzuhalten: Wir zählen, wie viele Prüfungen im
+          Monat und wie viele Nachrichten an den Assistenten am Tag mit dieser Kennung gestartet
+          wurden. Speicherdauer bis zu 400 Tage.
         </li>
         <li>
           <strong>kc_session</strong> – hält dich nach der Anmeldung angemeldet. Speicherdauer 30
@@ -316,6 +321,47 @@ export function PrivacyPage() {
             erfolgt auf Grundlage geeigneter Garantien wie der EU-Standardvertragsklauseln (Art. 46
             Abs. 2 lit. c DSGVO). Rechtsgrundlage ist die Bereitstellung des angefragten Dienstes
             (Art. 6 Abs. 1 lit. b DSGVO).
+          </p>
+        </>
+      )}
+
+      {chat && (
+        <>
+          <h2 id="assistent">Assistent auf der Startseite</h2>
+          <p>
+            Wenn du dem Assistenten schreibst, schicken wir deine Nachricht zusammen mit dem
+            bisherigen Gespräch an den KI-Anbieter{' '}
+            {chat.isMock ? 'KaufCheck (Testbetrieb ohne KI)' : (aiProvider ?? ANTHROPIC)}, damit er
+            antworten kann. Telefonnummern, E-Mail-Adressen und IBANs entfernen wir vorher
+            automatisch, soweit wir sie erkennen, auch aus eingefügten Inseraten. Andere Angaben
+            eines eingefügten Inserats gehen mit, etwa der Name und der Ort des Verkäufers; für
+            diese Angaben Dritter ist Rechtsgrundlage unser und dein berechtigtes Interesse, ein
+            Angebot vor dem Kauf zu prüfen (Art. 6 Abs. 1 lit. f DSGVO). Schreib bitte nichts über
+            dich, was der Assistent nicht braucht, etwa Name oder Anschrift. Den Verlauf speichert
+            nur dein Browser, und nur für den geöffneten Tab (Session Storage): In der Regel ist er
+            weg, wenn du den Tab schließt, und sofort, wenn du „Neues Gespräch“ wählst. Auf unserem
+            Server speichern wir vom Gespräch nichts; wir zählen nur, wie viele Nachrichten dein
+            Browser (Kennung kc_anon) oder dein Konto am Tag schickt. Damit niemand das Tageslimit
+            umgeht, indem er die Kennung löscht oder neue Konten anlegt, zählen wir ohne Pro
+            außerdem die Nachrichten je Internetanschluss (bei IPv6 auch je Adressbereich): Dafür
+            speichern wir keine IP-Adresse, sondern nur mit einem geheimen Schlüssel gebildete
+            Prüfwerte, die jeden Tag wechseln (Rechtsgrundlage: unser berechtigtes Interesse,
+            Missbrauch und Kosten zu begrenzen, Art. 6 Abs. 1 lit. f DSGVO). Alle Zähler löschen wir
+            nach sieben Tagen. Prüft der Assistent ein Inserat, das du einfügst, ist das eine
+            Prüfung wie unter „Geprüfte Inserate“ beschrieben.
+            {!chat.isMock &&
+              ' Der Anbieter kann die Daten außerhalb der EU verarbeiten; die Übermittlung erfolgt auf Grundlage geeigneter Garantien wie der EU-Standardvertragsklauseln (Art. 46 Abs. 2 lit. c DSGVO).'}{' '}
+            Rechtsgrundlage ist die Bereitstellung des angefragten Dienstes (Art. 6 Abs. 1 lit. b
+            DSGVO).
+          </p>
+          <p>
+            <strong>Spracheingabe:</strong> Nutzt du das Mikrofon im Assistenten, erkennt dein
+            Browser die Sprache mit seiner eigenen Spracherkennung (Web Speech API); KaufCheck
+            bekommt nur den erkannten Text, keine Aufnahme. Viele Browser schicken die Aufnahme
+            dafür an einen Dienst ihres Herstellers, Chrome etwa an Google. Dafür ist der Hersteller
+            deines Browsers verantwortlich, es gelten seine Datenschutzhinweise. Das Mikrofon läuft
+            nur, wenn du die Taste drückst und es im Browser erlaubst; du kannst stattdessen auch
+            die Diktierfunktion deiner Tastatur nutzen.
           </p>
         </>
       )}

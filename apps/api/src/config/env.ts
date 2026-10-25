@@ -166,6 +166,20 @@ const EnvSchema = z
     AI_MAX_CONCURRENCY: z.coerce.number().int().min(1).max(100).default(6),
     AI_PHOTO_ANALYSIS: booleanString.default(true),
     AI_MAX_PHOTOS: z.coerce.number().int().min(1).max(10).default(4),
+    /** The chat assistant on the start page; runs with AI_PROVIDER=anthropic (or mock outside production). */
+    CHAT_ENABLED: booleanString.default(true),
+    /** Defaults to ANTHROPIC_MODEL. */
+    CHAT_MODEL: optionalString,
+    CHAT_EFFORT: z.enum(['low', 'medium', 'high', 'xhigh', 'max']).default('low'),
+    /** Messages per day without an account and with a free account. */
+    CHAT_DAILY_FREE: z.coerce.number().int().min(0).max(10_000).default(15),
+    CHAT_DAILY_PRO: z.coerce.number().int().min(0).max(10_000).default(150),
+    /** All messages of all visitors per day, to cap the costs. */
+    CHAT_DAILY_TOTAL: z.coerce.number().int().min(0).max(1_000_000).default(500),
+    /** Messages per internet connection and day without an account: no fresh cookie gets around the limit. */
+    CHAT_DAILY_PER_ADDRESS: z.coerce.number().int().min(0).max(1_000_000).default(60),
+    /** Messages per IP address and minute. */
+    CHAT_RATE_PER_MINUTE: z.coerce.number().int().min(1).max(1000).default(10),
 
     ANON_MONTHLY_ANALYSES: z.coerce.number().int().min(0).optional(),
     FREE_MONTHLY_ANALYSES: z.coerce.number().int().min(0).optional(),
@@ -360,6 +374,16 @@ export interface AppConfig {
     photoAnalysis: boolean;
     maxPhotos: number;
   };
+  chat: {
+    enabled: boolean;
+    model: string;
+    effort: Env['CHAT_EFFORT'];
+    dailyFree: number;
+    dailyPro: number;
+    dailyTotal: number;
+    dailyPerAddress: number;
+    ratePerMinute: number;
+  };
   limits: {
     anonymousMonthlyAnalyses?: number;
     freeMonthlyAnalyses?: number;
@@ -508,6 +532,16 @@ export function loadConfig(source: NodeJS.ProcessEnv = process.env): AppConfig {
       maxConcurrency: env.AI_MAX_CONCURRENCY,
       photoAnalysis: env.AI_PHOTO_ANALYSIS,
       maxPhotos: env.AI_MAX_PHOTOS,
+    },
+    chat: {
+      enabled: env.CHAT_ENABLED,
+      model: env.CHAT_MODEL ?? env.ANTHROPIC_MODEL,
+      effort: env.CHAT_EFFORT,
+      dailyFree: env.CHAT_DAILY_FREE,
+      dailyPro: env.CHAT_DAILY_PRO,
+      dailyTotal: env.CHAT_DAILY_TOTAL,
+      dailyPerAddress: env.CHAT_DAILY_PER_ADDRESS,
+      ratePerMinute: env.CHAT_RATE_PER_MINUTE,
     },
     limits: {
       anonymousMonthlyAnalyses: env.ANON_MONTHLY_ANALYSES,
