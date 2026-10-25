@@ -1,4 +1,4 @@
-import type Anthropic from '@anthropic-ai/sdk';
+import Anthropic from '@anthropic-ai/sdk';
 import { describe, expect, it } from 'vitest';
 import { AnthropicChatModel } from './anthropic-chat-model';
 import type { ChatModelRequest } from './chat-model';
@@ -76,6 +76,65 @@ describe('AnthropicChatModel', () => {
     expect(requests[0]?.tools).toMatchObject([
       { name: 'financing', strict: true },
       { name: 'search_cars', strict: false },
+    ]);
+  });
+
+  it('falls back to the basic request once the API rejects the full one, and says why', async () => {
+    const bodies: Record<string, unknown>[] = [];
+    const rejected: string[] = [];
+    const client = {
+      beta: {
+        messages: {
+          stream: (body: Record<string, unknown>) => {
+            bodies.push(body);
+            const tools = body.tools as Record<string, unknown>[];
+            const full = tools.some((tool) => 'strict' in tool);
+            return {
+              on: () => undefined,
+              finalMessage: () =>
+                full
+                  ? Promise.reject(
+                      new Anthropic.BadRequestError(
+                        400,
+                        {
+                          type: 'error',
+                          error: {
+                            type: 'invalid_request_error',
+                            message: 'tools.0: unsupported field',
+                          },
+                        },
+                        'tools.0: unsupported field',
+                        new Headers(),
+                      ),
+                    )
+                  : Promise.resolve({
+                      content: [{ type: 'text', text: 'Hallo' }],
+                      stop_reason: 'end_turn',
+                      usage: {},
+                    }),
+            };
+          },
+        },
+      },
+    } as unknown as Anthropic;
+    const model = new AnthropicChatModel({
+      apiKey: 'x',
+      model: 'claude-opus-5-5',
+      effort: 'low',
+      client,
+      onRejected: (detail) => rejected.push(detail),
+    });
+    expect((await model.turn(request())).text).toBe('Hallo');
+    expect(rejected).toHaveLength(1);
+    expect(rejected[0]).toContain('tools.0: unsupported field');
+    expect(bodies[1]).not.toHaveProperty('cache_control');
+    expect(bodies[1]).not.toHaveProperty('fallbacks');
+    // Later turns go straight to the basic request.
+    await model.turn(request());
+    expect(bodies).toHaveLength(3);
+    expect(bodies[2]?.tools).toEqual([
+      { name: 'financing', description: 'Rechnet', input_schema: { type: 'object' } },
+      { name: 'search_cars', description: 'Sucht', input_schema: { type: 'object' } },
     ]);
   });
 });
