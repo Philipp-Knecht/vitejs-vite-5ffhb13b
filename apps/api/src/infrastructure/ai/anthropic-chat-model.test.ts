@@ -1,6 +1,6 @@
 import Anthropic from '@anthropic-ai/sdk';
 import { describe, expect, it } from 'vitest';
-import { AnthropicChatModel } from './anthropic-chat-model';
+import { AnthropicChatModel, supportsAdaptiveThinking } from './anthropic-chat-model';
 import type { ChatModelRequest } from './chat-model';
 
 /** A client that answers every request with one fixed message and records the request. */
@@ -127,8 +127,10 @@ describe('AnthropicChatModel', () => {
     expect((await model.turn(request())).text).toBe('Hallo');
     expect(rejected).toHaveLength(1);
     expect(rejected[0]).toContain('tools.0: unsupported field');
-    expect(bodies[1]).not.toHaveProperty('cache_control');
-    expect(bodies[1]).not.toHaveProperty('fallbacks');
+    expect(bodies[0]).toMatchObject({ thinking: { type: 'adaptive' } });
+    for (const key of ['cache_control', 'fallbacks', 'thinking', 'output_config'])
+      expect(bodies[1]).not.toHaveProperty(key);
+    expect(typeof bodies[1]?.system).toBe('string');
     // Later turns go straight to the basic request.
     await model.turn(request());
     expect(bodies).toHaveLength(3);
@@ -136,5 +138,27 @@ describe('AnthropicChatModel', () => {
       { name: 'financing', description: 'Rechnet', input_schema: { type: 'object' } },
       { name: 'search_cars', description: 'Sucht', input_schema: { type: 'object' } },
     ]);
+  });
+
+  it('thinks adaptively only on models that can', async () => {
+    expect(supportsAdaptiveThinking('claude-opus-5-5')).toBe(true);
+    expect(supportsAdaptiveThinking('claude-sonnet-4-6')).toBe(true);
+    expect(supportsAdaptiveThinking('claude-haiku-5-5')).toBe(true);
+    expect(supportsAdaptiveThinking('claude-fable-5-1')).toBe(true);
+    expect(supportsAdaptiveThinking('claude-haiku-4-5')).toBe(false);
+    expect(supportsAdaptiveThinking('claude-sonnet-4-5-20250929')).toBe(false);
+    expect(supportsAdaptiveThinking('claude-opus-4-1')).toBe(false);
+    expect(supportsAdaptiveThinking('something-else')).toBe(false);
+
+    const { client, requests } = fakeClient([{ type: 'text', text: 'Hallo' }], 'end_turn');
+    const model = new AnthropicChatModel({
+      apiKey: 'x',
+      model: 'claude-haiku-4-5',
+      effort: 'low',
+      client,
+    });
+    await model.turn(request());
+    expect(requests[0]).not.toHaveProperty('thinking');
+    expect(requests[0]).not.toHaveProperty('output_config');
   });
 });
