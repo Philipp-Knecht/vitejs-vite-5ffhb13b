@@ -13,6 +13,22 @@ export interface AnthropicChatModelOptions {
   onRejected?: (detail: string) => void;
 }
 
+/**
+ * Adaptive thinking exists on Opus and Sonnet 4.6+, Haiku 5+, Fable and
+ * Mythos; older models (e.g. `claude-haiku-4-5`) reject it.
+ */
+export function supportsAdaptiveThinking(model: string): boolean {
+  const match = /^claude-(opus|sonnet|haiku|fable|mythos)-(\d+)(?:-(\d{1,2}))?(?:-\d{8})?$/.exec(
+    model,
+  );
+  if (!match) return false;
+  const [, family, major = '0', minor = '0'] = match;
+  const version = Number(major) + Number(minor) / 100;
+  if (family === 'fable' || family === 'mythos') return true;
+  if (family === 'haiku') return version >= 5;
+  return version >= 4.06;
+}
+
 /** Room for adaptive thinking and the answer; more effort thinks longer. */
 const MAX_TOKENS: Record<AnthropicChatModelOptions['effort'], number> = {
   low: 8_000,
@@ -66,11 +82,13 @@ export class AnthropicChatModel implements ChatModel {
   private readonly client: Anthropic;
   private readonly effort: AnthropicChatModelOptions['effort'];
   private readonly features: ReturnType<typeof claudeModelFeatures>;
+  private readonly thinking: boolean;
   private readonly onRejected: (detail: string) => void;
   /**
    * After the API rejected the full request once, the chat runs with the
-   * basic form (no strict schemas, eager tool streaming, automatic caching or
-   * refusal fallback) until the next restart.
+   * basic form (plain tools and messages only: no thinking, effort, strict
+   * schemas, eager tool streaming, caching or refusal fallback) until the
+   * next restart.
    */
   private basic = false;
 
@@ -78,6 +96,7 @@ export class AnthropicChatModel implements ChatModel {
     this.model = options.model;
     this.effort = options.effort;
     this.features = claudeModelFeatures(options.model);
+    this.thinking = supportsAdaptiveThinking(options.model);
     this.client = options.client ?? new Anthropic({ apiKey: options.apiKey, maxRetries: 1 });
     this.onRejected = options.onRejected ?? (() => undefined);
   }
@@ -88,19 +107,21 @@ export class AnthropicChatModel implements ChatModel {
       max_tokens: MAX_TOKENS[this.effort],
       // The conversation so far is cached too: the next step and the next message read it.
       ...(basic ? {} : { cache_control: { type: 'ephemeral' as const } }),
-      thinking: { type: 'adaptive' as const },
-      ...(this.features.effort ? { output_config: { effort: this.effort } } : {}),
+      ...(this.thinking && !basic ? { thinking: { type: 'adaptive' as const } } : {}),
+      ...(this.features.effort && !basic ? { output_config: { effort: this.effort } } : {}),
       ...(this.features.refusalFallbacks && !basic
         ? { betas: ['server-side-fallback-2026-07-01'], fallbacks: 'default' as const }
         : {}),
-      system: [
-        {
-          type: 'text' as const,
-          text: request.system.stable,
-          cache_control: { type: 'ephemeral' as const },
-        },
-        { type: 'text' as const, text: request.system.dynamic },
-      ],
+      system: basic
+        ? `${request.system.stable}\n\n${request.system.dynamic}`
+        : [
+            {
+              type: 'text' as const,
+              text: request.system.stable,
+              cache_control: { type: 'ephemeral' as const },
+            },
+            { type: 'text' as const, text: request.system.dynamic },
+          ],
       tools: request.tools.map((tool) => ({
         name: tool.name,
         description: tool.description,
