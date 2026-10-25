@@ -113,7 +113,13 @@ test('the start page is the assistant: a listing goes straight into the chat', a
   await expect(page.getByRole('heading', { level: 2, name: 'Häufige Fragen' })).toBeVisible();
   const chat = page.getByRole('region', { name: 'KI-Assistent von KaufCheck' });
   await chat.getByRole('button', { name: 'Inserat prüfen' }).click();
-  await expect(chat.getByText(/füg ihn unten ins Eingabefeld ein/)).toBeVisible();
+  await expect(
+    chat
+      .getByRole('region', { name: 'Gesprächsverlauf' })
+      .getByText(/füg ihn unten ins Eingabefeld ein/),
+  ).toBeVisible();
+  // Screen readers hear the hint too.
+  await expect(chat.getByRole('status')).toContainText('füg ihn unten ins Eingabefeld ein');
   await expect(chat.getByLabel('Nachricht an den KI-Assistenten von KaufCheck')).toBeFocused();
   await expect(chat.getByRole('form')).toHaveCount(0);
 });

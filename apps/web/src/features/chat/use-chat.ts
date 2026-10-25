@@ -1,4 +1,5 @@
 import {
+  CHAT_FORMS,
   CHAT_LIMITS,
   germanDay,
   type ChatCard,
@@ -48,8 +49,11 @@ const MAX_ITEMS = 60;
 
 const isRecord = (value: unknown): value is Record<string, unknown> =>
   typeof value === 'object' && value !== null && !Array.isArray(value);
+/** A card this version can show: a form of an older version (say, the listing form) is dropped. */
 const isCard = (value: unknown): value is ChatCard =>
-  isRecord(value) && typeof value.type === 'string';
+  isRecord(value) &&
+  typeof value.type === 'string' &&
+  (value.type !== 'form' || (CHAT_FORMS as readonly unknown[]).includes(value.form));
 
 /** Drops what an older version of the page left behind; the chat's error boundary catches the rest. */
 function isItem(value: unknown): value is ChatItem {
@@ -63,10 +67,7 @@ function isItem(value: unknown): value is ChatItem {
       return typeof value.text === 'string';
     case 'assistant':
       return (
-        typeof value.text === 'string' &&
-        Array.isArray(value.cards) &&
-        value.cards.every(isCard) &&
-        Array.isArray(value.tools)
+        typeof value.text === 'string' && Array.isArray(value.cards) && Array.isArray(value.tools)
       );
     default:
       return false;
@@ -95,6 +96,9 @@ function load(): Stored {
     // An answer cut off by a reload stays cut off.
     const items = value.items
       .filter(isItem)
+      .map((item) =>
+        item.role === 'assistant' ? { ...item, cards: item.cards.filter(isCard) } : item,
+      )
       .map((item) =>
         item.role === 'assistant' && item.status === 'streaming'
           ? { ...item, status: 'error' as const, error: 'Die Antwort wurde unterbrochen.' }
@@ -186,6 +190,13 @@ export function useChat() {
         switch (event.type) {
           case 'text':
             update((item) => ({ ...item, text: item.text + event.delta }));
+            break;
+          case 'jump':
+            update((item) =>
+              item.jumps?.some((jump) => jump.href === event.jump.href)
+                ? item
+                : { ...item, jumps: [...(item.jumps ?? []), event.jump] },
+            );
             break;
           case 'retract':
             update((item) => ({ ...item, text: item.text.slice(0, event.length) }));

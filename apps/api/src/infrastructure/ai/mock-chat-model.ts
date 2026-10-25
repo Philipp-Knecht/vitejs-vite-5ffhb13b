@@ -55,24 +55,15 @@ export class MockChatModel implements ChatModel {
     }
     const text = last?.role === 'user' ? last.text : '';
 
-    // A pasted listing KaufCheck already checked: the result follows the message.
-    const checked =
-      /\[KaufCheck (hat dieses Inserat schon geprüft|konnte dieses Inserat nicht prüfen)[^\n]*\n?([\s\S]*)\]$/.exec(
-        text,
-      );
-    if (checked) {
-      const summary = (checked[2] ?? '')
+    // A pasted listing KaufCheck already checked: its note follows the message.
+    const note = text.lastIndexOf('[KaufCheck-Prüfung ');
+    if (note !== -1) {
+      const summary = text
+        .slice(note)
         .split('\n')
         .filter((line) => line.startsWith('Empfehlung zum Preis'))
         .join(' ');
-      return Promise.resolve(
-        this.stream(
-          request,
-          checked[1]?.startsWith('konnte')
-            ? '(Entwicklungsmodus) Die Prüfung hat nicht geklappt.'
-            : `(Entwicklungsmodus) ${summary || 'Geprüft.'}`,
-        ),
-      );
+      return Promise.resolve(this.stream(request, `(Entwicklungsmodus) ${summary || 'Geprüft.'}`));
     }
 
     // A pasted listing: long, with the usual detail labels.

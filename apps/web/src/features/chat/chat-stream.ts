@@ -46,6 +46,8 @@ export function parseChatEvent(value: unknown): ChatStreamEvent | null {
   switch (value.type) {
     case 'text':
       return typeof value.delta === 'string' ? { type: 'text', delta: value.delta } : null;
+    case 'jump':
+      return isJump(value.jump) ? { type: 'jump', jump: value.jump } : null;
     case 'retract':
       return typeof value.length === 'number' && value.length >= 0
         ? { type: 'retract', length: value.length }

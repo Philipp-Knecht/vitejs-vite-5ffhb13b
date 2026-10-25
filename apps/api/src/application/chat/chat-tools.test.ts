@@ -40,6 +40,13 @@ describe('chat tool schemas', () => {
     const listing = `Nissan Leaf\n8.700 €\nOhne Bewertung\nab 93 € mtl.\nFinanzierung berechnen\nKilometerstand 57.000 km\nErstzulassung 05/2021\nLeistung 110 kW (150 PS)\nKraftstoffart Elektro\nGetriebe Automatik\nFahrzeughalter 1\nStandort O Porriño, Spanien`;
     expect(looksLikePastedListing(listing)).toBe(true);
     expect(looksLikePastedListing('Was kostet ein Golf mit 100.000 km für 8.000 €?')).toBe(false);
+    // Questions with a price, a mileage and a registration in sentences are no listing.
+    for (const question of [
+      'Wir suchen ein Familienauto bis 15.000 €, höchstens 100.000 km, Erstzulassung ab 2018, gern Kombi mit Automatik. Was würdest du uns empfehlen und worauf sollten wir bei der Besichtigung achten?',
+      'VW Golf 7 1.4 TSI\n120.000 km\n9.500 €\nEZ 2016\nLohnt sich das?\nWas meinst du dazu und was sollte ich fragen?',
+      'Mein Auto: Opel Astra K, 2017, 90.000 km. Ich will es verkaufen, 8.000 € wären gut. Was muss ich beachten, und wie schreibe ich das Inserat am besten? Brauche ich einen Kaufvertrag?',
+    ])
+      expect(looksLikePastedListing(question)).toBe(false);
     expect(looksLikePastedListing('Erzähl mir etwas über Autos. '.repeat(20))).toBe(false);
   });
 
@@ -51,5 +58,11 @@ describe('chat tool schemas', () => {
       '/auto-besichtigung-checkliste',
     );
     expect(topicJumps('Hallo', 'Wie kann ich helfen?')).toHaveLength(2);
+    // Words that only look like a topic.
+    expect(topicJumps('Golf 7, Erstzulassung 2016 – typische Probleme?')[0]?.href).toBe('/modelle');
+    expect(topicJumps('Ist die Steuerkette beim 1.4 TSI ein Problem?')[0]?.href).not.toBe(
+      '/kfz-steuer-rechner',
+    );
+    expect(topicJumps('Ich versuche, mich zu entscheiden.')).toHaveLength(2);
   });
 });

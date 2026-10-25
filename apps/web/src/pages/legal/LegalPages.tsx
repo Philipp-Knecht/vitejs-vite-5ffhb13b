@@ -347,8 +347,9 @@ export function PrivacyPage() {
             speichern wir keine IP-Adresse, sondern nur mit einem geheimen Schlüssel gebildete
             Prüfwerte, die jeden Tag wechseln (Rechtsgrundlage: unser berechtigtes Interesse,
             Missbrauch und Kosten zu begrenzen, Art. 6 Abs. 1 lit. f DSGVO). Alle Zähler löschen wir
-            nach sieben Tagen. Prüft der Assistent ein Inserat, das du einfügst, ist das eine
-            Prüfung wie unter „Geprüfte Inserate“ beschrieben.
+            nach sieben Tagen. Fügst du den Text eines Inserats ein, prüft KaufCheck ihn
+            automatisch: Das ist eine Prüfung wie unter „Geprüfte Inserate“ beschrieben und zählt
+            als eine deiner Prüfungen im Monat.
             {!chat.isMock &&
               ' Der Anbieter kann die Daten außerhalb der EU verarbeiten; die Übermittlung erfolgt auf Grundlage geeigneter Garantien wie der EU-Standardvertragsklauseln (Art. 46 Abs. 2 lit. c DSGVO).'}{' '}
             Rechtsgrundlage ist die Bereitstellung des angefragten Dienstes (Art. 6 Abs. 1 lit. b

@@ -31,8 +31,8 @@ const STARTERS: { label: string; card?: ChatCard; message?: string; hint?: strin
 
 /** When an answer failed: the tools work without the assistant. */
 const FALLBACK_JUMPS: ChatJump[] = [
-  { label: 'Auto finden öffnen', href: '/auto-finden' },
-  { label: 'Inserat prüfen öffnen', href: '/inserat-pruefen' },
+  { label: 'Zur Autosuche', href: '/auto-finden' },
+  { label: 'Zur Inseratsprüfung', href: '/inserat-pruefen' },
 ];
 
 const TITLE = 'KI-Assistent von KaufCheck';
@@ -119,7 +119,10 @@ function AssistantMessage({
         </p>
       )}
       {item.status === 'done' && <Jumps jumps={item.jumps ?? []} />}
-      {item.status === 'error' && <Jumps jumps={FALLBACK_JUMPS} />}
+      {/* A check that is done stays reachable, also when the answer to it failed. */}
+      {item.status === 'error' && (
+        <Jumps jumps={item.jumps && item.jumps.length > 0 ? item.jumps : FALLBACK_JUMPS} />
+      )}
     </div>
   );
 }
@@ -132,25 +135,26 @@ function Jumps({ jumps }: { jumps: readonly ChatJump[] }) {
   });
   if (safe.length === 0) return null;
   return (
-    <nav className="chat-jumps" aria-label="Selbst weitermachen">
+    <div className="chat-jumps" role="group" aria-label="Selbst weitermachen">
       <span className="chat-jumps__label">Lieber selbst?</span>
       {safe.map((jump) => (
         <Link key={jump.href} to={jump.href} className="chat-jumps__link">
           {jump.label} <ArrowRight aria-hidden size={14} />
         </Link>
       ))}
-    </nav>
+    </div>
   );
 }
 
 /** What screen readers hear: the step while it works, the whole answer once it is done. */
 function announcement(last: ChatItem | undefined): string {
+  if (last?.role === 'hint') return last.text;
   if (last?.role !== 'assistant') return '';
   if (last.status === 'streaming') {
     const running = last.tools.findLast((step) => step.status === 'started');
     return `${running?.label ?? 'Der Assistent antwortet'} …`;
   }
-  return last.status === 'done' ? spokenAnswer(last.text, last.cards) : '';
+  return last.status === 'done' ? spokenAnswer(last.text, last.cards, last.jumps ?? []) : '';
 }
 
 /**

@@ -1,4 +1,4 @@
-import type { ChatCard, ChatForm } from '@kaufcheck/shared';
+import type { ChatCard, ChatForm, ChatJump } from '@kaufcheck/shared';
 
 export const FORM_TITLES: Record<ChatForm, string> = {
   search: 'Auto suchen',
@@ -32,7 +32,11 @@ export function cardSummary(card: ChatCard): string {
 }
 
 /** The answer as screen readers get it: plain text, then the cards below it. */
-export function spokenAnswer(text: string, cards: readonly ChatCard[]): string {
+export function spokenAnswer(
+  text: string,
+  cards: readonly ChatCard[],
+  jumps: readonly ChatJump[] = [],
+): string {
   const plain = text
     .replace(/\*\*(.+?)\*\*/g, '$1')
     .replace(/\[([^\]\n]+)\]\([^)\s]+\)/g, '$1')
@@ -40,5 +44,7 @@ export function spokenAnswer(text: string, cards: readonly ChatCard[]): string {
     .replace(/\s+/g, ' ')
     .trim();
   const below = cards.length > 0 ? ` Darunter: ${cards.map(cardSummary).join('; ')}.` : '';
-  return `${plain}${below}`.trim();
+  const self =
+    jumps.length > 0 ? ` Selbst weitermachen: ${jumps.map((jump) => jump.label).join('; ')}.` : '';
+  return `${plain}${below}${self}`.trim();
 }

@@ -734,7 +734,7 @@ const carAdvisor = tool(
       return Promise.resolve({
         content:
           'Keine recherchierten Modelle passen zu allen Angaben. Schlag vor, das Budget oder die Anforderungen anzupassen, oder verweise auf /auto-berater.',
-        jump: pageJump('advisor', 'Zum ausführlichen Auto-Berater'),
+        jump: pageJump('advisor'),
       });
     const items = results.map((result) => {
       const params = toSearchParams({
@@ -759,7 +759,7 @@ const carAdvisor = tool(
         .join('\n')}`,
       card: { type: 'advisor', items },
       context: `Berater-Vorschläge: ${items.map((item) => item.name).join(', ')}`,
-      jump: pageJump('advisor', 'Zum ausführlichen Auto-Berater'),
+      jump: pageJump('advisor'),
     });
   },
 );
@@ -913,33 +913,62 @@ export type AppPage = keyof typeof APP_PAGES;
 
 const TAX_JUMP = 'Im Kfz-Steuer-Rechner selbst rechnen';
 
-/** A page of KaufCheck to do it yourself, e.g. „Finanzierungsrechner öffnen“. */
-function pageJump(key: AppPage, label = `${APP_PAGES[key].label} öffnen`): ChatJump {
+/** How the button to each page reads, e.g. „Zum Finanzierungsrechner“. */
+const JUMP_LABELS: Record<AppPage, string> = {
+  check: 'Zur Inseratsprüfung',
+  search: 'Zur Autosuche',
+  advisor: 'Zum Auto-Berater',
+  models: 'Zu den Modellen und Schwachstellen',
+  tax: 'Zum Kfz-Steuer-Rechner',
+  financing: 'Zum Finanzierungsrechner',
+  costs: 'Zu den Autokosten im Monat',
+  contract: 'Zum Kaufvertrag',
+  buying_guide: 'Zum Ratgeber Gebrauchtwagenkauf',
+  checklist: 'Zur Checkliste für die Besichtigung',
+  register: 'Zum Ratgeber Auto ummelden',
+  recalls: 'Zu den Rückrufen',
+  netherlands: 'Zum Ratgeber Auto aus den Niederlanden',
+  selling: 'Zum Ratgeber Auto verkaufen',
+  listing_text: 'Zum Inseratstext',
+  my_car: 'Zu Mein Auto',
+  saved: 'Zu den gespeicherten Angeboten',
+  pro: 'Zu KaufCheck Pro',
+};
+
+/** A page of KaufCheck to do it yourself. */
+function pageJump(key: AppPage, label = JUMP_LABELS[key]): ChatJump {
   return { label, href: APP_PAGES[key].href };
 }
 
 const FORM_JUMPS: Record<ChatFormKind, () => ChatJump> = {
-  search: () => pageJump('search', 'Auto finden öffnen'),
+  search: () => pageJump('search'),
   financing: () => pageJump('financing'),
   tax: () => pageJump('tax'),
   rdw: () => pageJump('netherlands', 'RDW-Check und Ratgeber Niederlande'),
 };
 
-/** Topics of a message without a tool, and the page for each – the first match counts. */
+/**
+ * Topics of a message without a tool, and the page for each – the first match
+ * counts. Word stems with boundaries: „Erstzulassung“ is no re-registration,
+ * „Steuerkette“ no tax and „versuche“ no search.
+ */
 const TOPICS: readonly [RegExp, AppPage][] = [
-  [/finanzier|kredit|\brate\b|leasing|anzahlung/i, 'financing'],
-  [/steuer/i, 'tax'],
-  [/unterhalt|kosten im monat|monatlich|verbrauch|versicherung/i, 'costs'],
-  [/kaufvertrag|vertrag/i, 'contract'],
+  [/finanzier|\bkredit|\braten?\b|leasing|anzahlung/i, 'financing'],
+  [/kfz-steuer|\bsteuer\b|\bsteuern\b|\bversteuer/i, 'tax'],
+  [/schwachstell|zuverlässig|typische probleme|\bmacken\b/i, 'models'],
+  [/unterhalt|kosten im monat|\bverbrauch|versicherung/i, 'costs'],
+  [/kaufvertrag|\bvertrag\b/i, 'contract'],
   [/besichtig|probefahrt|checkliste/i, 'checklist'],
-  [/ummeld|\bmelde\b[^.?!]*\bum\b|zulass|anmeld/i, 'register'],
+  [
+    /\bummeld|\bmelde\b[^.?!]*\bum\b|\bzulassen\b|zulassungsstelle|\b(?:auto|wagen|fahrzeug)\s+(?:an|um)melden/i,
+    'register',
+  ],
   [/rückruf/i, 'recalls'],
-  [/niederland|holland|rdw|import/i, 'netherlands'],
-  [/verkaufen|verkauf (?:mein|unser)|inzahlung/i, 'selling'],
-  [/schwachstell|zuverlässig|typische probleme|macken/i, 'models'],
-  [/welches auto|passt zu mir|empfiehl|empfehl|berat/i, 'advisor'],
-  [/inserat|anzeige|prüf/i, 'check'],
-  [/such|finde|gebrauchtwagen/i, 'search'],
+  [/niederland|holland|\brdw\b|\bimport/i, 'netherlands'],
+  [/\bverkaufen\b|\bverkauf (?:mein|unser)|inzahlung/i, 'selling'],
+  [/welches auto|passt zu mir|empfiehlst|empfehlung|\bberat/i, 'advisor'],
+  [/\binserat|\bprüf/i, 'check'],
+  [/\bsuche\b|\bsuchen\b|\bsuch\b|\bfinden\b|\bfinde ich\b|gebrauchtwagen/i, 'search'],
 ];
 
 /**
@@ -954,14 +983,49 @@ export function topicJumps(...texts: string[]): ChatJump[] {
   return [pageJump('search'), pageJump('check')];
 }
 
-/** A pasted listing: long, with a price and the usual detail labels. */
+/** Labels of a copied listing, each at the start of a line („Kilometerstand 57.000 km“). */
+const LISTING_LABELS = [
+  /^kilometer(?:stand)?\b/i,
+  /^laufleistung\b/i,
+  /^erstzulassung\b/i,
+  /^leistung\b/i,
+  /^kraftstoff(?:art)?\b/i,
+  /^getriebe(?:art)?\b/i,
+  /^fahrzeughalter\b|^anzahl der (?:fahrzeug)?halter\b|^vorbesitzer\b/i,
+  /^hubraum\b/i,
+  /^(?:außen)?farbe\b/i,
+  /^(?:hu|tüv)\b/i,
+  /^schadstoffklasse\b|^emissionsklasse\b|^umweltplakette\b/i,
+  /^(?:anzahl der )?(?:sitzplätze|türen)\b/i,
+  /^fahrzeugzustand\b|^zustand\b/i,
+  /^karosserieform\b|^fahrzeugtyp\b|^kategorie\b/i,
+  /^(?:fahrzeug)?beschreibung\b/i,
+  /^ausstattung\b/i,
+  /^antriebsart\b/i,
+  /^baujahr\b/i,
+];
+
+/** A line with only a price: „8.700 €“, „€ 12.990,-“, „8.450 € VB“, „Preis: 9.500 EUR“. */
+const PRICE_LINE =
+  /^(?:preis:?\s*)?(?:€\s?)?\d{1,3}(?:[.\s]\d{3})+(?:,-|,\d{2})?\s?(?:€|eur)?\s*(?:vb|verhandlungsbasis|festpreis)?\s*$/i;
+
+/**
+ * A pasted listing: many lines, a line with only the price and several of the
+ * labels a listing page shows, each on its own line. A question with a price
+ * and a mileage in a sentence is not one – checking it would cost one of the
+ * visitor's monthly checks.
+ */
 export function looksLikePastedListing(text: string): boolean {
-  return (
-    text.length >= 200 &&
-    /€|\beur\b|\bvb\b/i.test(text) &&
-    /kilometerstand|laufleistung|erstzulassung|\bez\b|\d\s?km\b/i.test(text)
-  );
+  const lines = text
+    .split(/\r?\n/)
+    .map((line) => line.trim())
+    .filter((line) => line !== '');
+  if (text.length < 200 || lines.length < 6) return false;
+  if (!lines.some((line) => PRICE_LINE.test(line) && /€|eur/i.test(line))) return false;
+  const labels = LISTING_LABELS.filter((label) => lines.some((line) => label.test(line)));
+  return labels.length >= 3;
 }
+
 const PAGE_KEYS = Object.keys(APP_PAGES) as [AppPage, ...AppPage[]];
 
 const showLinks = tool(

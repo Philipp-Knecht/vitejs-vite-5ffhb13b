@@ -142,6 +142,8 @@ export type ChatUsage = z.infer<typeof ChatUsageSchema>;
 /** The answer streams as NDJSON: text pieces, tool steps and cards, then `done` or `error`. */
 export const ChatStreamEventSchema = z.discriminatedUnion('type', [
   z.object({ type: z.literal('text'), delta: z.string() }),
+  /** A page of KaufCheck for doing it yourself, from a tool that just ran. */
+  z.object({ type: z.literal('jump'), jump: LinkSchema }),
   /** The text from `length` on is withdrawn: a step was repeated or declined. */
   z.object({ type: z.literal('retract'), length: z.number().int().nonnegative() }),
   z.object({

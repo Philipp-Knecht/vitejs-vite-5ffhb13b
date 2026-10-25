@@ -15,6 +15,8 @@ import { usePageMeta } from '../seo/use-page-meta';
 interface FaqContext {
   anonymous: number;
   free: number;
+  /** Messages a day to the assistant without Pro; null when it is off. */
+  chatDaily: number | null;
   retrieval: boolean;
   ads: boolean;
   retentionDays: number;
@@ -30,8 +32,12 @@ interface FaqItem {
 const FAQ: FaqItem[] = [
   {
     question: 'Was kostet KaufCheck?',
-    answer: ({ anonymous, free }) =>
-      `Die Suche ist kostenlos. Ohne Anmeldung kannst du ${anonymous} Inserate im Monat prüfen, mit einem kostenlosen Konto ${free}. Für mehr Prüfungen, Verlauf und größere Vergleiche gibt es KaufCheck Pro.`,
+    answer: ({ anonymous, free, chatDaily }) =>
+      `Die Suche ist kostenlos. Ohne Anmeldung kannst du ${anonymous} Inserate im Monat prüfen, mit einem kostenlosen Konto ${free}.${
+        chatDaily !== null
+          ? ` Dem Assistenten kannst du ${chatDaily} Nachrichten am Tag schicken.`
+          : ''
+      } Für mehr Prüfungen, Verlauf und größere Vergleiche gibt es KaufCheck Pro.`,
   },
   {
     question: 'Durchsucht KaufCheck die Plattformen selbst?',
@@ -72,8 +78,12 @@ const FAQ: FaqItem[] = [
   },
   {
     question: 'Was passiert mit meinen Daten?',
-    answer: ({ ads, retentionDays }) =>
-      `Telefonnummern und E-Mail-Adressen aus dem Inserat werden vor dem Speichern entfernt. Ohne Konto werden Prüfungen nach ${retentionDays} Tagen gelöscht. ${
+    answer: ({ ads, retentionDays, chatDaily }) =>
+      `Telefonnummern und E-Mail-Adressen aus dem Inserat werden vor dem Speichern entfernt. Ohne Konto werden Prüfungen nach ${retentionDays} Tagen gelöscht.${
+        chatDaily !== null
+          ? ' Nachrichten an den Assistenten gehen an den KI-Anbieter; das Gespräch speichert nur dein Browser.'
+          : ''
+      } ${
         ads
           ? 'Werbung von Google zeigen wir nur mit deiner Einwilligung, mit KaufCheck Pro gar nicht'
           : 'Es gibt keine Werbe-Tracker'
@@ -153,6 +163,7 @@ export function LandingPage() {
                   {item.answer({
                     anonymous: plans.anonymous.monthlyAnalyses,
                     free: plans.free.monthlyAnalyses,
+                    chatDaily: chat?.dailyFree ?? null,
                     retrieval,
                     ads: config?.ads != null,
                     retentionDays: config?.privacy.anonymousRetentionDays ?? 90,
