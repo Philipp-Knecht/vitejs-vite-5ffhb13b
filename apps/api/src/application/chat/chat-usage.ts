@@ -23,7 +23,7 @@ export interface ChatReservation {
 const ALL = { subjectType: 'all', subjectId: 'all' } as const;
 
 /** Free accounts count per connection too (no e-mail confirmation needed), with more room. */
-const ACCOUNT_FACTOR = 5;
+const ACCOUNT_FACTOR = 2;
 /** No single IPv6 /48 takes more than this many times the limit of one connection. */
 const BLOCK_FACTOR = 5;
 
@@ -124,7 +124,17 @@ export class ChatUsageService {
             actor.userId
               ? { id: `account|${subscriber}`, limit: perConnection * ACCOUNT_FACTOR }
               : { id: `visitor|${subscriber}`, limit: perConnection },
-            ...(block ? [{ id: `block|${block}`, limit: perConnection * BLOCK_FACTOR }] : []),
+            // Apart for accounts too, so the way out the message offers really is one.
+            ...(block
+              ? [
+                  actor.userId
+                    ? {
+                        id: `account-block|${block}`,
+                        limit: perConnection * ACCOUNT_FACTOR * BLOCK_FACTOR,
+                      }
+                    : { id: `visitor-block|${block}`, limit: perConnection * BLOCK_FACTOR },
+                ]
+              : []),
           ];
     for (const { id, limit: connectionLimit } of connectionLimits) {
       const key = this.addressKey(id, day);

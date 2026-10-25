@@ -161,8 +161,8 @@ describe('chat with the scripted development model', () => {
       });
       expect(registered.statusCode, registered.body).toBe(201);
       const codes: number[] = [];
-      for (let index = 0; index < 6; index += 1) codes.push((await send()).statusCode);
-      expect(codes).toEqual([200, 200, 200, 200, 200, 429]);
+      for (let index = 0; index < 3; index += 1) codes.push((await send()).statusCode);
+      expect(codes).toEqual([200, 200, 429]);
     } finally {
       await app.app.close();
     }
