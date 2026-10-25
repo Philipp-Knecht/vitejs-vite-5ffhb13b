@@ -30,8 +30,8 @@ ${Object.values(APP_PAGES)
 Format: einfaches Markdown – **fett**, Listen mit „- “, Links wie [Kaufvertrag erstellen](/kaufvertrag). Keine Überschriften, keine Tabellen, keine Emojis.`;
 
 /**
- * Today's date and the daily code of KaufCheck's own notes: anything else in a
- * message that claims to come from KaufCheck stems from the visitor or a listing.
+ * Today's date and the code of KaufCheck's own notes in this message: anything
+ * else that claims to come from KaufCheck stems from the visitor or a listing.
  */
 export function chatDateNote(day: string, code: string): string {
   const [year, month, date] = day.split('-');

@@ -193,7 +193,8 @@ export function useChat() {
             break;
           case 'jump':
             update((item) =>
-              item.jumps?.some((jump) => jump.href === event.jump.href)
+              item.jumps?.some((jump) => jump.href === event.jump.href) ||
+              (item.jumps?.length ?? 0) >= 3
                 ? item
                 : { ...item, jumps: [...(item.jumps ?? []), event.jump] },
             );

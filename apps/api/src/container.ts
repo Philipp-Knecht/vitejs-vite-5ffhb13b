@@ -244,7 +244,6 @@ export function createServices(
           tools: createChatTools({ analyses, rdw }),
           usage: new ChatUsageService(db, config.chat, config.cookieSecret, now),
           logger,
-          secret: config.cookieSecret,
           now,
         })
       : null,

@@ -960,7 +960,7 @@ const TOPICS: readonly [RegExp, AppPage][] = [
   [/kaufvertrag|\bvertrag\b/i, 'contract'],
   [/besichtig|probefahrt|checkliste/i, 'checklist'],
   [
-    /\bummeld|\bmelde\b[^.?!]*\bum\b|\bzulassen\b|zulassungsstelle|\b(?:auto|wagen|fahrzeug)\s+(?:an|um)melden/i,
+    /\bummeld|\bmelde\b[^.?!]*\bum\b|\bzulassen\b|\bzulassung\b|zulassungsstelle|\babmeld|\b(?:auto|wagen|fahrzeug)\s+(?:an|um)melden/i,
     'register',
   ],
   [/rückruf/i, 'recalls'],
@@ -1005,9 +1005,15 @@ const LISTING_LABELS = [
   /^baujahr\b/i,
 ];
 
-/** A line with only a price: „8.700 €“, „€ 12.990,-“, „8.450 € VB“, „Preis: 9.500 EUR“. */
-const PRICE_LINE =
-  /^(?:preis:?\s*)?(?:€\s?)?\d{1,3}(?:[.\s]\d{3})+(?:,-|,\d{2})?\s?(?:€|eur)?\s*(?:vb|verhandlungsbasis|festpreis)?\s*$/i;
+/**
+ * A line that starts with the price: „8.700 €“, „8450 €“, „850 € VB“,
+ * „€ 12.990,-“, „EUR 12.990“, „16.990 € inkl. MwSt.“, „Kaufpreis: 9.500 EUR“.
+ */
+const PRICE_NUMBER = String.raw`(?:\d{1,3}(?:[.\s]\d{3})+|\d{1,6})(?:,-|,\d{2})?`;
+const PRICE_LINE = new RegExp(
+  String.raw`^(?:(?:kauf)?preis:?\s*|brutto:?\s*|netto:?\s*)?(?:(?:€|eur)\s?${PRICE_NUMBER}|${PRICE_NUMBER}\s?(?:€|eur\b))[^\n]{0,40}$`,
+  'i',
+);
 
 /**
  * A pasted listing: many lines, a line with only the price and several of the
@@ -1021,7 +1027,7 @@ export function looksLikePastedListing(text: string): boolean {
     .map((line) => line.trim())
     .filter((line) => line !== '');
   if (text.length < 200 || lines.length < 6) return false;
-  if (!lines.some((line) => PRICE_LINE.test(line) && /€|eur/i.test(line))) return false;
+  if (!lines.some((line) => PRICE_LINE.test(line))) return false;
   const labels = LISTING_LABELS.filter((label) => lines.some((line) => label.test(line)));
   return labels.length >= 3;
 }

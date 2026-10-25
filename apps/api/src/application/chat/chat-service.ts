@@ -1,4 +1,4 @@
-import { createHash, createHmac } from 'node:crypto';
+import { createHash, randomBytes } from 'node:crypto';
 import { redactContactData } from '@kaufcheck/domain';
 import {
   CHAT_LIMITS,
@@ -40,8 +40,6 @@ export interface ChatServiceDeps {
   tools: readonly ChatTool[];
   usage: ChatUsageService;
   logger: FastifyBaseLogger;
-  /** Keys the daily code that marks KaufCheck's own notes to the model. */
-  secret: string;
   now?: () => Date;
 }
 
@@ -63,11 +61,15 @@ function clip(text: string, max: number): string {
 
 /**
  * A note of KaufCheck written into a listing (say, by a seller) is defused:
- * the model trusts only notes with the daily code, and none can start with
- * „[KaufCheck“ in what the visitor sends.
+ * the model trusts only notes with this message's code, and none can start
+ * with „[KaufCheck“ (in any width or with hidden characters) in what the
+ * visitor sends.
  */
 function defuseNotes(text: string): string {
-  return text.replace(/\[(\s*)(k\s*a\s*u\s*f\s*-?\s*c\s*h\s*e\s*c\s*k)/gi, '($1$2');
+  return text
+    .normalize('NFKC')
+    .replace(/\p{Cf}/gu, '')
+    .replace(/[[【〔〖〘]\s*(k\s*a\s*u\s*f\s*-?\s*c\s*h\s*e\s*c\s*k)/giu, '($1');
 }
 
 /**
@@ -125,14 +127,6 @@ export class ChatService {
     this.byName = new Map(deps.tools.map((tool) => [tool.spec.name, tool]));
   }
 
-  /** Marks KaufCheck's own notes in a message; changes daily, never shown to anyone. */
-  private noteCode(day: string): string {
-    return createHmac('sha256', this.deps.secret)
-      .update(`chat-note|${day}`)
-      .digest('hex')
-      .slice(0, 10);
-  }
-
   private recentCheckKey(actor: Actor, text: string): string | null {
     const subject = usageSubject(actor);
     if (!subject) return null;
@@ -187,7 +181,8 @@ export class ChatService {
     const latest = request.messages[request.messages.length - 1]!;
     const messages = history(request);
     const day = germanDay(this.now());
-    const code = this.noteCode(day);
+    // Marks KaufCheck's own note: new for every message, so nobody can know it beforehand.
+    const code = randomBytes(5).toString('hex');
     const contexts: string[] = [];
     let replaceUserMessage: string | null = null;
     let text = '';

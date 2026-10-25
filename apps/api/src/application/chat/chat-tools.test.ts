@@ -39,6 +39,18 @@ describe('chat tool schemas', () => {
   it('recognize a pasted listing', () => {
     const listing = `Nissan Leaf\n8.700 €\nOhne Bewertung\nab 93 € mtl.\nFinanzierung berechnen\nKilometerstand 57.000 km\nErstzulassung 05/2021\nLeistung 110 kW (150 PS)\nKraftstoffart Elektro\nGetriebe Automatik\nFahrzeughalter 1\nStandort O Porriño, Spanien`;
     expect(looksLikePastedListing(listing)).toBe(true);
+    // Cheap cars and price lines with a note are listings too.
+    for (const price of [
+      '850 € VB',
+      '8450 €',
+      'EUR 12.990',
+      'Kaufpreis: 12.990 €',
+      '12.990 € (Brutto)',
+      '16.990 € inkl. MwSt.',
+      'Brutto 21.490 €',
+      '€ 12.990,-',
+    ])
+      expect(looksLikePastedListing(listing.replace('8.700 €', price))).toBe(true);
     expect(looksLikePastedListing('Was kostet ein Golf mit 100.000 km für 8.000 €?')).toBe(false);
     // Questions with a price, a mileage and a registration in sentences are no listing.
     for (const question of [
@@ -64,5 +76,9 @@ describe('chat tool schemas', () => {
       '/kfz-steuer-rechner',
     );
     expect(topicJumps('Ich versuche, mich zu entscheiden.')).toHaveLength(2);
+    expect(topicJumps('Was kostet die Zulassung?')[0]?.href).toBe('/auto-ummelden');
+    expect(topicJumps('Muss ich das Auto vor dem Verkauf abmelden?')[0]?.href).toBe(
+      '/auto-ummelden',
+    );
   });
 });
