@@ -1,7 +1,7 @@
 import { CHAT_LIMITS, type ChatForm as ChatFormKind } from '@kaufcheck/shared';
 import { useEffect, useRef, useState, type FormEvent } from 'react';
 import { Button } from '../../components/ui/Button';
-import { SelectField, TextAreaField, TextField } from '../../components/ui/Field';
+import { SelectField, TextField } from '../../components/ui/Field';
 import { FORM_TITLES } from './chat-labels';
 
 type Prefill = Record<string, string | number>;
@@ -52,7 +52,6 @@ export function ChatForm({
     zip: '',
     fuel: '',
     plate: text(prefill, 'plate'),
-    listing: '',
   }));
   const [problem, setProblem] = useState<string | null>(null);
   const set = (key: string) => (value: string) =>
@@ -66,8 +65,6 @@ export function ChatForm({
   const message = (): string | null => {
     const v = values;
     switch (form) {
-      case 'listing':
-        return v.listing?.trim() || null;
       case 'search': {
         const parts = [
           v.make && `Marke ${v.make}`,
@@ -125,15 +122,6 @@ export function ChatForm({
   return (
     <form ref={element} className="chat-form" onSubmit={submit} aria-label={FORM_TITLES[form]}>
       <p className="chat-form__title">{FORM_TITLES[form]}</p>
-      {form === 'listing' && (
-        <TextAreaField
-          label="Text des Inserats"
-          hint="Markiere auf der Seite des Inserats alles und kopiere es hierher. Kontaktdaten entfernt KaufCheck."
-          rows={6}
-          required
-          {...field('listing')}
-        />
-      )}
       {form === 'search' && (
         <div className="chat-form__grid">
           <TextField label="Marke" {...field('make')} />

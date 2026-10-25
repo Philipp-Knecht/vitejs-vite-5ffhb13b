@@ -70,9 +70,6 @@ export function ChatCardView({
               </ul>
             </>
           )}
-          <ButtonLink to={`/analyse/${encodeURIComponent(card.analysisId)}`} size="sm">
-            Ganze Prüfung öffnen
-          </ButtonLink>
         </article>
       );
     case 'search':
@@ -96,7 +93,6 @@ export function ChatCardView({
               </li>
             ))}
           </ul>
-          <InternalLink href={card.findUrl}>Suche bei KaufCheck anpassen</InternalLink>
         </article>
       );
     case 'tax':
@@ -119,7 +115,6 @@ export function ChatCardView({
           <p className="chat-card__hint">
             {card.rule} Verbindlich setzt das Hauptzollamt die Steuer fest.
           </p>
-          <InternalLink href={card.calculatorUrl}>Im Steuerrechner ansehen</InternalLink>
         </article>
       );
     case 'financing':
@@ -151,7 +146,6 @@ export function ChatCardView({
               Angebot. KaufCheck vermittelt keine Kredite.
             </p>
           )}
-          <InternalLink href={card.calculatorUrl}>Mit eigenen Werten rechnen</InternalLink>
         </article>
       );
     case 'model':
@@ -176,7 +170,6 @@ export function ChatCardView({
               Für diese Generation sind keine Schwachstellen erfasst.
             </p>
           )}
-          <InternalLink href={card.url}>Alle Schwachstellen mit Quellen</InternalLink>
         </article>
       );
     case 'advisor':
@@ -213,9 +206,6 @@ export function ChatCardView({
               </div>
             ))}
           </dl>
-          <InternalLink href="/auto-aus-den-niederlanden">
-            Mehr zu Autos aus den Niederlanden
-          </InternalLink>
         </article>
       );
     case 'links':

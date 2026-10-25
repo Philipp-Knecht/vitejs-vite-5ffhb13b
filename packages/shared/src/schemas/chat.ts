@@ -44,10 +44,12 @@ export const ChatRequestSchema = z.object({
 export type ChatRequest = z.infer<typeof ChatRequestSchema>;
 
 /** Input fields the assistant can put into the chat. */
-export const CHAT_FORMS = ['listing', 'search', 'financing', 'tax', 'rdw'] as const;
+export const CHAT_FORMS = ['search', 'financing', 'tax', 'rdw'] as const;
 export type ChatForm = (typeof CHAT_FORMS)[number];
 
 const LinkSchema = z.object({ label: z.string(), href: z.string() });
+/** A page of KaufCheck: a button under an answer or in a card. */
+export type ChatJump = z.infer<typeof LinkSchema>;
 
 /** Results of the tools, shown as cards; built by the server from KaufCheck's own data only. */
 export const ChatCardSchema = z.discriminatedUnion('type', [
@@ -155,6 +157,8 @@ export const ChatStreamEventSchema = z.discriminatedUnion('type', [
     turn: ChatTurnSchema,
     /** A shorter version of the last user message to keep instead (a pasted listing). */
     replaceUserMessage: z.string().max(CHAT_LIMITS.messageChars).nullable(),
+    /** Pages of KaufCheck to do it yourself, e.g. the calculator the answer used. */
+    jumps: z.array(LinkSchema).max(3),
     usage: ChatUsageSchema,
     /** True when another Claude model answered because the first one declined. */
     fallbackModel: z.boolean(),

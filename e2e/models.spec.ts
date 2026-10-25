@@ -116,9 +116,7 @@ test('the advisor waits for enough researched models', async ({ page, request })
 test('the advisor suggests models and opens their search', async ({ page }) => {
   test.skip(!ADVISOR_AVAILABLE, `fewer than ${ADVISOR_MIN_MODELS} researched models`);
   const errors = consoleErrors(page);
-  await page.goto('/');
-  await page.getByRole('link', { name: 'Auto-Berater (2 Min.)' }).click();
-  await expect(page).toHaveURL('/auto-berater');
+  await page.goto('/auto-berater');
   await expect(page.getByText('Frage 1 von 7')).toBeVisible();
 
   const next = page.getByRole('button', { name: 'Weiter' });

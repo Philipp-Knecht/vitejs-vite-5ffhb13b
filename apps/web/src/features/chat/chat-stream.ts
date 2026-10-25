@@ -1,6 +1,7 @@
 import {
   NDJSON_CONTENT_TYPE,
   type ChatCard,
+  type ChatJump,
   type ChatStreamEvent,
   type ChatTurn,
 } from '@kaufcheck/shared';
@@ -21,6 +22,10 @@ const CARD_TYPES: readonly ChatCard['type'][] = [
 
 function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === 'object' && value !== null && !Array.isArray(value);
+}
+
+function isJump(value: unknown): value is ChatJump {
+  return isRecord(value) && typeof value.label === 'string' && typeof value.href === 'string';
 }
 
 function isTurn(value: unknown): value is ChatTurn {
@@ -68,6 +73,7 @@ export function parseChatEvent(value: unknown): ChatStreamEvent | null {
           limit: usage.limit,
           resetsOn: typeof usage.resetsOn === 'string' ? usage.resetsOn : '',
         },
+        jumps: Array.isArray(value.jumps) ? value.jumps.filter(isJump).slice(0, 3) : [],
         fallbackModel: value.fallbackModel === true,
       };
     }

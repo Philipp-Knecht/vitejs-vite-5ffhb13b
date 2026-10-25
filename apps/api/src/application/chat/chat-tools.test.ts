@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { createChatTools } from './chat-tools';
+import { createChatTools, looksLikePastedListing, topicJumps } from './chat-tools';
 
 /** https://platform.claude.com/docs/en/build-with-claude/structured-outputs – schema complexity limits. */
 const STRICT_LIMITS = { tools: 20, optionalParameters: 24, unionParameters: 16 };
@@ -34,5 +34,22 @@ describe('chat tool schemas', () => {
   it('close every object', () => {
     for (const spec of specs)
       expect(spec.inputSchema).toMatchObject({ additionalProperties: false });
+  });
+
+  it('recognize a pasted listing', () => {
+    const listing = `Nissan Leaf\n8.700 €\nOhne Bewertung\nab 93 € mtl.\nFinanzierung berechnen\nKilometerstand 57.000 km\nErstzulassung 05/2021\nLeistung 110 kW (150 PS)\nKraftstoffart Elektro\nGetriebe Automatik\nFahrzeughalter 1\nStandort O Porriño, Spanien`;
+    expect(looksLikePastedListing(listing)).toBe(true);
+    expect(looksLikePastedListing('Was kostet ein Golf mit 100.000 km für 8.000 €?')).toBe(false);
+    expect(looksLikePastedListing('Erzähl mir etwas über Autos. '.repeat(20))).toBe(false);
+  });
+
+  it('point to the page that fits a message', () => {
+    expect(topicJumps('Lohnt sich ein Kredit für das Auto?')[0]?.href).toBe(
+      '/kfz-steuer-rechner#finanzierung',
+    );
+    expect(topicJumps('Was muss ich bei der Probefahrt beachten?')[0]?.href).toBe(
+      '/auto-besichtigung-checkliste',
+    );
+    expect(topicJumps('Hallo', 'Wie kann ich helfen?')).toHaveLength(2);
   });
 });

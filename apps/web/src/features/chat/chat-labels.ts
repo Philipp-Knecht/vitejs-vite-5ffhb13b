@@ -1,7 +1,6 @@
 import type { ChatCard, ChatForm } from '@kaufcheck/shared';
 
 export const FORM_TITLES: Record<ChatForm, string> = {
-  listing: 'Inserat einfügen',
   search: 'Auto suchen',
   financing: 'Finanzierung rechnen',
   tax: 'Kfz-Steuer berechnen',

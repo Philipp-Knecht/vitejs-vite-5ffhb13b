@@ -82,6 +82,10 @@ describe('chat with the scripted development model', () => {
         averageRate: true,
       }),
     ]);
+    // Under the answer: the calculator, for doing it yourself.
+    expect(done(list)?.jumps).toEqual([
+      { label: 'Im Finanzierungsrechner selbst rechnen', href: '/kfz-steuer-rechner#finanzierung' },
+    ]);
   });
 
   it('builds search links and shows forms', async () => {
@@ -375,6 +379,59 @@ describe('chat tool loop', () => {
     expect(done(list)?.turn.content).toBe(
       'Ich rechne.\n\nWeiter kann ich dabei leider nicht helfen.',
     );
+  });
+
+  it('checks a pasted listing before the model answers, and links the full check', async () => {
+    const model = new ScriptedModel([say('Der Preis ist laut Preis-Check fair.')]);
+    await built?.app.close();
+    built = await createTestApp({ ANON_MONTHLY_ANALYSES: '100' }, { chatModel: model });
+    await resetDatabase(built.services.db);
+    const list = events(
+      await new TestClient(built.app).post('/api/chat', { messages: [user(PASTED_LISTING)] }),
+    );
+    expect(cards(list).map((card) => card.type)).toEqual(['analysis']);
+    const sent = model.requests[0]?.messages.at(-1);
+    expect(sent?.role === 'user' ? sent.text : '').toContain(
+      '[KaufCheck hat dieses Inserat schon geprüft',
+    );
+    const jumps = done(list)?.jumps ?? [];
+    expect(jumps).toHaveLength(1);
+    expect(jumps[0]?.label).toBe('Ganze Prüfung öffnen');
+    expect(jumps[0]?.href).toMatch(/^\/analyse\/[0-9a-f-]{36}$/);
+    expect(await built.services.db.analysis.count()).toBe(1);
+  });
+
+  it('points to the fitting page after an answer without a tool', async () => {
+    const ask = async (message: string) => {
+      const model = new ScriptedModel([say('Gern.')]);
+      await built?.app.close();
+      built = await createTestApp({}, { chatModel: model });
+      await resetDatabase(built.services.db);
+      const list = events(
+        await new TestClient(built.app).post('/api/chat', { messages: [user(message)] }),
+      );
+      return done(list)?.jumps;
+    };
+    expect(await ask('Wie melde ich das Auto um?')).toEqual([
+      { label: 'Auto ummelden öffnen', href: '/auto-ummelden' },
+    ]);
+    expect(await ask('Hallo')).toEqual([
+      { label: 'Auto finden öffnen', href: '/auto-finden' },
+      { label: 'Inserat prüfen öffnen', href: '/inserat-pruefen' },
+    ]);
+  });
+
+  it('adds no pages under buttons to pages', async () => {
+    const model = new ScriptedModel([call('show_links', { pages: ['contract'] }), say('Hier.')]);
+    await built?.app.close();
+    built = await createTestApp({}, { chatModel: model });
+    await resetDatabase(built.services.db);
+    const list = events(
+      await new TestClient(built.app).post('/api/chat', {
+        messages: [user('Wo ist der Kaufvertrag?')],
+      }),
+    );
+    expect(done(list)?.jumps).toEqual([]);
   });
 
   it('checks a listing only once per message', async () => {

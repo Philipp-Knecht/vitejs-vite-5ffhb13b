@@ -1,11 +1,7 @@
 import { expect, test } from '@playwright/test';
 
-test('the homepage search opens the platform links with the filters', async ({ page }) => {
-  await page.goto('/');
-  await expect(page.getByRole('tab', { name: 'Auto finden' })).toHaveAttribute(
-    'aria-selected',
-    'true',
-  );
+test('the search opens the platform links with the filters', async ({ page }) => {
+  await page.goto('/auto-finden');
   const search = page.getByRole('search', { name: 'Gebrauchtwagen suchen' });
   await search.getByLabel('Marke').selectOption('vw');
   await search.getByLabel('Modell').fill('Golf');
@@ -56,25 +52,6 @@ test('searching the same again shows the results again', async ({ page }) => {
   await expect(page.getByRole('region', { name: /Deine Suche auf/ })).toBeFocused();
   await expect.poll(() => page.evaluate(() => window.scrollY)).toBeGreaterThan(0);
   await expect(heading).toBeInViewport();
-});
-
-test('the check tab is remembered and reachable with the keyboard', async ({ page }) => {
-  await page.goto('/');
-  const findTab = page.getByRole('tab', { name: 'Auto finden' });
-  const checkTab = page.getByRole('tab', { name: 'Inserat prüfen' });
-  // The page is prerendered: keys pressed before hydration have no handler yet.
-  await expect(async () => {
-    await findTab.focus();
-    await page.keyboard.press('ArrowRight');
-    await expect(checkTab).toBeFocused({ timeout: 1_000 });
-  }).toPass();
-  await expect(checkTab).toHaveAttribute('aria-selected', 'true');
-  await expect(page.getByLabel('Inseratstext oder Link zum Auto-Inserat')).toBeVisible();
-  await page.reload();
-  await expect(page.getByRole('tab', { name: 'Inserat prüfen' })).toHaveAttribute(
-    'aria-selected',
-    'true',
-  );
 });
 
 test('the search page is prerendered for search engines', async ({ request }) => {

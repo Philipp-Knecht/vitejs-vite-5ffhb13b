@@ -2,6 +2,7 @@ import {
   CHAT_LIMITS,
   germanDay,
   type ChatCard,
+  type ChatJump,
   type ChatStreamEvent,
   type ChatTurn,
   type ChatUsage,
@@ -26,9 +27,13 @@ export type ChatItem =
       status: 'streaming' | 'done' | 'error';
       error?: string;
       fallback?: boolean;
+      /** Pages of KaufCheck to do it yourself, from the server. */
+      jumps?: ChatJump[];
     }
   /** A form the visitor opened from a suggestion: no message to the server yet. */
-  | { id: string; role: 'local'; card: ChatCard };
+  | { id: string; role: 'local'; card: ChatCard }
+  /** A hint of the page itself (no message to the server), e.g. where to paste a listing. */
+  | { id: string; role: 'hint'; text: string };
 
 interface Stored {
   version: 1;
@@ -54,6 +59,8 @@ function isItem(value: unknown): value is ChatItem {
       return typeof value.text === 'string';
     case 'local':
       return isCard(value.card);
+    case 'hint':
+      return typeof value.text === 'string';
     case 'assistant':
       return (
         typeof value.text === 'string' &&
@@ -211,7 +218,7 @@ export function useChat() {
               usage: event.usage,
               items: current.items.map((item) =>
                 item.id === assistantId && item.role === 'assistant'
-                  ? { ...item, status: 'done', fallback: event.fallbackModel }
+                  ? { ...item, status: 'done', fallback: event.fallbackModel, jumps: event.jumps }
                   : item,
               ),
             }));
@@ -260,6 +267,14 @@ export function useChat() {
     [busy, state.history],
   );
 
+  /** Shows a hint of the page in the chat, without asking the server. */
+  const showHint = useCallback((text: string) => {
+    setState((current) => ({
+      ...current,
+      items: [...current.items, { id: nextId(), role: 'hint', text }],
+    }));
+  }, []);
+
   /** Shows a form in the chat without asking the server; returns its id. */
   const showForm = useCallback((card: ChatCard) => {
     const id = nextId();
@@ -278,5 +293,5 @@ export function useChat() {
     setState((current) => ({ version: 1, items: [], history: [], usage: current.usage }));
   }, []);
 
-  return { items: state.items, usage: state.usage, busy, send, showForm, reset };
+  return { items: state.items, usage: state.usage, busy, send, showForm, showHint, reset };
 }

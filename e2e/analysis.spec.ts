@@ -6,7 +6,9 @@ test('homepage → analysis result with all sections', async ({ page, context })
   await expect(page).toHaveTitle(
     'KaufCheck – Gebrauchtwagen finden und Inserate prüfen: mobile.de, AutoScout24 & Co.',
   );
-  await expect(page.getByRole('heading', { level: 1 })).toContainText('Gebrauchtwagen finden.');
+  await expect(page.getByRole('heading', { level: 1 })).toContainText(
+    'Gebrauchtwagen finden, prüfen und durchrechnen',
+  );
 
   await analyzeFromHomepage(page, LISTINGS.audi);
 

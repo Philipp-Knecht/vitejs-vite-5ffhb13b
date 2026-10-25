@@ -1,5 +1,11 @@
 import { redactContactData } from '@kaufcheck/domain';
-import { CHAT_LIMITS, germanDay, type ChatRequest, type ChatStreamEvent } from '@kaufcheck/shared';
+import {
+  CHAT_LIMITS,
+  germanDay,
+  type ChatJump,
+  type ChatRequest,
+  type ChatStreamEvent,
+} from '@kaufcheck/shared';
 import type { FastifyBaseLogger } from 'fastify';
 import type {
   ChatModel,
@@ -11,11 +17,14 @@ import { AiProviderError } from '../../infrastructure/ai/types';
 import { AppError, isAppError } from '../../lib/errors';
 import type { Actor } from '../actor';
 import { CHAT_SYSTEM_PROMPT, chatDateNote } from './chat-prompt';
-import type { ChatTool } from './chat-tools';
+import { looksLikePastedListing, topicJumps, type ChatTool } from './chat-tools';
 import type { ChatReservation, ChatUsageService } from './chat-usage';
 
 /** Model calls per message: a tool or two, then the answer. */
 const MAX_STEPS = 5;
+const LISTING_TOOL = 'analyze_listing';
+/** Pages to go on yourself under one answer. */
+const MAX_JUMPS = 3;
 
 export interface ChatServiceDeps {
   model: ChatModel;
@@ -138,6 +147,10 @@ export class ChatService {
     let shownCards = 0;
     /** Tools that run once per message, with what they answered. */
     const ran = new Map<string, ChatToolResult>();
+    /** Pages of KaufCheck to go on yourself, from the tools that ran. */
+    const jumps: ChatJump[] = [];
+    /** Buttons to pages are an answer of their own: no further pages under it. */
+    let linked = false;
 
     /** Takes back what a step wrote: it is repeated or was declined. */
     const retract = (length: number, separateBefore: boolean) => {
@@ -159,6 +172,78 @@ export class ChatService {
       shown.text = text;
       ctx.emit({ type: 'text', delta });
     };
+
+    /** Runs one tool call: its steps and card go to the browser, its result to the model. */
+    const runTool = async (id: string, name: string, input: unknown): Promise<ChatToolResult> => {
+      const tool = this.byName.get(name);
+      if (!tool) return { toolUseId: id, content: 'Unbekanntes Werkzeug.', isError: true };
+      const earlier = ran.get(tool.spec.name);
+      if (earlier !== undefined) {
+        return {
+          toolUseId: id,
+          content: `Schon in dieser Nachricht aufgerufen: ${earlier.content}`,
+          isError: earlier.isError,
+        };
+      }
+      ctx.emit({ type: 'tool', label: tool.label, status: 'started' });
+      try {
+        const outcome = await tool.run(input, {
+          actor: ctx.actor,
+          signal: ctx.signal,
+          latestUserText: latest.content,
+          now: this.now(),
+        });
+        const result = {
+          toolUseId: id,
+          content: outcome.content,
+          isError: outcome.isError ?? false,
+        };
+        ctx.emit({
+          type: 'tool',
+          label: tool.label,
+          status: outcome.isError ? 'failed' : 'completed',
+        });
+        if (!outcome.isError) shown.tools += 1;
+        if (tool.once) ran.set(tool.spec.name, result);
+        if (outcome.card) {
+          ctx.emit({ type: 'card', card: outcome.card });
+          shownCards += 1;
+          if (outcome.card.type === 'links') linked = true;
+        }
+        if (outcome.context) contexts.push(outcome.context);
+        if (outcome.replaceUserMessage) replaceUserMessage = outcome.replaceUserMessage;
+        if (outcome.jump && !jumps.some((jump) => jump.href === outcome.jump?.href))
+          jumps.push(outcome.jump);
+        return result;
+      } catch (error) {
+        if (ctx.signal.aborted) throw new AppError('REQUEST_ABORTED');
+        this.deps.logger.warn({ err: error, tool: name }, 'chat tool failed');
+        ctx.emit({ type: 'tool', label: tool.label, status: 'failed' });
+        return {
+          toolUseId: id,
+          content:
+            'Das hat gerade nicht geklappt. Sag dem Nutzer, er soll es gleich noch einmal versuchen.',
+          isError: true,
+        };
+      }
+    };
+
+    // A pasted listing is checked right away – the model gets the result with the message
+    // and never has to remember to ask for it.
+    if (this.byName.has(LISTING_TOOL) && looksLikePastedListing(latest.content)) {
+      const result = await runTool('pasted-listing', LISTING_TOOL, {});
+      const last = messages[messages.length - 1];
+      if (last?.role === 'user') {
+        messages[messages.length - 1] = {
+          role: 'user',
+          text: `${last.text}\n\n[${
+            result.isError
+              ? `KaufCheck konnte dieses Inserat nicht prüfen: ${result.content}`
+              : `KaufCheck hat dieses Inserat schon geprüft (analyze_listing), die Karte mit dem Ergebnis sieht der Nutzer unter deiner Antwort:\n${result.content}`
+          }]`,
+        };
+      }
+    }
 
     for (let step = 0; step < MAX_STEPS; step += 1) {
       const mark = text.length;
@@ -203,64 +288,8 @@ export class ChatService {
 
       messages.push({ role: 'assistant_turn', turn });
       const results: ChatToolResult[] = [];
-      for (const call of turn.toolCalls) {
-        const tool = this.byName.get(call.name);
-        if (!tool) {
-          results.push({ toolUseId: call.id, content: 'Unbekanntes Werkzeug.', isError: true });
-          continue;
-        }
-        const earlier = ran.get(tool.spec.name);
-        if (earlier !== undefined) {
-          results.push({
-            toolUseId: call.id,
-            content: `Schon in dieser Nachricht aufgerufen: ${earlier.content}`,
-            isError: earlier.isError,
-          });
-          continue;
-        }
-        ctx.emit({ type: 'tool', label: tool.label, status: 'started' });
-        try {
-          const outcome = await tool.run(call.input, {
-            actor: ctx.actor,
-            signal: ctx.signal,
-            latestUserText: latest.content,
-            now: this.now(),
-          });
-          results.push({
-            toolUseId: call.id,
-            content: outcome.content,
-            isError: outcome.isError ?? false,
-          });
-          ctx.emit({
-            type: 'tool',
-            label: tool.label,
-            status: outcome.isError ? 'failed' : 'completed',
-          });
-          if (!outcome.isError) shown.tools += 1;
-          if (tool.once)
-            ran.set(tool.spec.name, {
-              toolUseId: call.id,
-              content: outcome.content,
-              isError: outcome.isError ?? false,
-            });
-          if (outcome.card) {
-            ctx.emit({ type: 'card', card: outcome.card });
-            shownCards += 1;
-          }
-          if (outcome.context) contexts.push(outcome.context);
-          if (outcome.replaceUserMessage) replaceUserMessage = outcome.replaceUserMessage;
-        } catch (error) {
-          if (ctx.signal.aborted) throw new AppError('REQUEST_ABORTED');
-          this.deps.logger.warn({ err: error, tool: call.name }, 'chat tool failed');
-          ctx.emit({ type: 'tool', label: tool.label, status: 'failed' });
-          results.push({
-            toolUseId: call.id,
-            content:
-              'Das hat gerade nicht geklappt. Sag dem Nutzer, er soll es gleich noch einmal versuchen.',
-            isError: true,
-          });
-        }
-      }
+      for (const call of turn.toolCalls)
+        results.push(await runTool(call.id, call.name, call.input));
       messages.push({ role: 'tool_results', results });
       separate = true;
     }
@@ -287,6 +316,11 @@ export class ChatService {
       replaceUserMessage: replaceUserMessage
         ? clip(replaceUserMessage, CHAT_LIMITS.messageChars)
         : null,
+      // Not happy with the answer? Do it yourself in the tool of KaufCheck.
+      jumps: (jumps.length > 0 ? jumps : linked ? [] : topicJumps(latest.content, text)).slice(
+        0,
+        MAX_JUMPS,
+      ),
       fallbackModel: fallback,
     };
   }

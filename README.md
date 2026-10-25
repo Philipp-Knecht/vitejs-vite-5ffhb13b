@@ -325,14 +325,18 @@ How AI output is handled:
 
 ## Chat assistant
 
-The start page offers a chat assistant (`POST /api/chat`, NDJSON stream). It runs with
-`AI_PROVIDER=anthropic` (or the scripted `mock` outside production) and can be switched off with
-`CHAT_ENABLED=false`.
+The start page is a chat assistant (`POST /api/chat`, NDJSON stream) with the frequent questions
+below it. It runs with `AI_PROVIDER=anthropic` (or the scripted `mock` outside production) and can
+be switched off with `CHAT_ENABLED=false`; the start page then shows buttons to the search and the
+listing check.
 
 - The model calls KaufCheck's own functions as tools: listing check (with price check), marketplace
   search links, model knowledge, Kfz tax (with EU engine data), financing, the car advisor, the RDW
   check, input forms in the chat and buttons to app pages. Cards in the chat show the tool results;
   links in the model's text are only rendered for KaufCheck's own pages.
+- A pasted listing is checked before the model answers, and the model gets the result with the
+  message. Under every answer, „Lieber selbst?“ links to the KaufCheck page of the tool it used
+  (else the page that fits the question, else the search and the listing check).
 - The browser keeps the conversation (session storage of the tab) and sends it with each message;
   the server stores nothing of it, only daily counts (`ChatUsage`, deleted after seven days).
   Phone numbers, e-mail addresses and IBANs are removed before messages reach the model; the

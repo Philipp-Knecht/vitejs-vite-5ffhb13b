@@ -1,20 +1,38 @@
-import { CHAT_LIMITS, germanDay, type ChatCard } from '@kaufcheck/shared';
-import { Bot, CircleAlert, Loader2, Mic, RotateCcw, SendHorizontal } from 'lucide-react';
+import { CHAT_LIMITS, germanDay, type ChatCard, type ChatJump } from '@kaufcheck/shared';
+import {
+  ArrowRight,
+  Bot,
+  CircleAlert,
+  Loader2,
+  Mic,
+  RotateCcw,
+  SendHorizontal,
+} from 'lucide-react';
 import { useEffect, useId, useRef, useState, type FormEvent, type KeyboardEvent } from 'react';
 import { Link } from 'react-router';
 import { cn } from '../../lib/format';
 import { ChatCardView } from './ChatCards';
 import { ChatText } from './ChatText';
 import { spokenAnswer } from './chat-labels';
+import { safeHref } from './safe-href';
 import { useChat, type ChatItem } from './use-chat';
 import { useSpeech } from './use-speech';
 
-const STARTERS: { label: string; card?: ChatCard; message?: string }[] = [
-  { label: 'Inserat prüfen', card: { type: 'form', form: 'listing', prefill: {} } },
+const STARTERS: { label: string; card?: ChatCard; message?: string; hint?: string }[] = [
+  {
+    label: 'Inserat prüfen',
+    hint: 'Markier auf der Seite des Inserats den ganzen Text, kopier ihn und füg ihn unten ins Eingabefeld ein. Ich prüfe ihn sofort – Kontaktdaten entferne ich vorher.',
+  },
   { label: 'Auto finden', card: { type: 'form', form: 'search', prefill: {} } },
+  { label: 'Welches Auto passt zu mir?', message: 'Welches Auto passt zu mir?' },
   { label: 'Finanzierung rechnen', card: { type: 'form', form: 'financing', prefill: {} } },
   { label: 'Kfz-Steuer berechnen', card: { type: 'form', form: 'tax', prefill: {} } },
-  { label: 'Welches Auto passt zu mir?', message: 'Welches Auto passt zu mir?' },
+];
+
+/** When an answer failed: the tools work without the assistant. */
+const FALLBACK_JUMPS: ChatJump[] = [
+  { label: 'Auto finden öffnen', href: '/auto-finden' },
+  { label: 'Inserat prüfen öffnen', href: '/inserat-pruefen' },
 ];
 
 const TITLE = 'KI-Assistent von KaufCheck';
@@ -41,14 +59,10 @@ function Welcome({
   return (
     <div className="chat__welcome">
       <p className="chat__welcome-title">
-        <Bot aria-hidden size={20} /> Ich bin der KI-Assistent von KaufCheck. Was kann ich für dich
-        tun?
+        <Bot aria-hidden size={20} /> Willkommen bei KaufCheck, deinem KI-Assistenten für den
+        Gebrauchtwagenkauf!
       </p>
-      <p>
-        Füg ein Inserat ein: Ich prüfe es und sag dir, worauf du achten musst – und ob der Preis
-        passt, sobald es genug Vergleichsangebote gibt. Ich stelle dir Suchen für alle großen Börsen
-        zusammen, rechne Steuer und Finanzierung und helfe bis zum Kaufvertrag.
-      </p>
+      <p>Was möchtest du machen? Such dir etwas aus oder schreib einfach los.</p>
       <div className="chat__starters">
         {STARTERS.map((starter, index) => (
           <button
@@ -104,7 +118,28 @@ function AssistantMessage({
           hat.
         </p>
       )}
+      {item.status === 'done' && <Jumps jumps={item.jumps ?? []} />}
+      {item.status === 'error' && <Jumps jumps={FALLBACK_JUMPS} />}
     </div>
+  );
+}
+
+/** Not happy with the answer? The tool of KaufCheck that does it, one tap away. */
+function Jumps({ jumps }: { jumps: readonly ChatJump[] }) {
+  const safe = jumps.flatMap((jump) => {
+    const href = safeHref(jump.href);
+    return href ? [{ label: jump.label, href }] : [];
+  });
+  if (safe.length === 0) return null;
+  return (
+    <nav className="chat-jumps" aria-label="Selbst weitermachen">
+      <span className="chat-jumps__label">Lieber selbst?</span>
+      {safe.map((jump) => (
+        <Link key={jump.href} to={jump.href} className="chat-jumps__link">
+          {jump.label} <ArrowRight aria-hidden size={14} />
+        </Link>
+      ))}
+    </nav>
   );
 }
 
@@ -131,7 +166,7 @@ export function ChatPanel({
   /** Messages per day for this visitor's plan, until the first answer says. */
   dailyLimit: number;
 }) {
-  const { items, usage, busy, send, showForm, reset } = useChat();
+  const { items, usage, busy, send, showForm, showHint, reset } = useChat();
   const [input, setInput] = useState('');
   const [focusId, setFocusId] = useState<string | null>(null);
   const base = useRef('');
@@ -209,6 +244,12 @@ export function ChatPanel({
     const starter = STARTERS[index];
     if (starter?.card) setFocusId(showForm(starter.card));
     else if (starter?.message) sendMessage(starter.message);
+    else if (starter?.hint) {
+      showHint(starter.hint);
+      // The listing goes into the input: there it is, ready for pasting.
+      textarea.current?.focus({ preventScroll: true });
+      textarea.current?.scrollIntoView({ block: 'nearest' });
+    }
   };
 
   const left = today ? Math.max(0, today.limit - today.used) : null;
@@ -239,6 +280,12 @@ export function ChatPanel({
               >
                 {item.text}
               </p>
+            </div>
+          ) : item.role === 'hint' ? (
+            <div key={item.id} className="chat-message chat-message--assistant">
+              <div className="chat-message__text">
+                <ChatText text={item.text} />
+              </div>
             </div>
           ) : item.role === 'local' ? (
             <div key={item.id} className="chat-message chat-message--assistant">
