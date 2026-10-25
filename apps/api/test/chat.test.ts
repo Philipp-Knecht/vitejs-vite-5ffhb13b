@@ -168,6 +168,26 @@ describe('chat with the scripted development model', () => {
     }
   });
 
+  it('gives one IPv6 /48 at most 30 % of the day, however many /64 it uses', async () => {
+    const app = await createTestApp({
+      AI_PROVIDER: 'mock',
+      CHAT_DAILY_PER_ADDRESS: '1',
+      CHAT_DAILY_TOTAL: '10',
+    });
+    try {
+      await resetDatabase(app.services.db);
+      const codes: number[] = [];
+      for (let network = 1; network <= 4; network += 1) {
+        const client = new TestClient(app.app);
+        Object.defineProperty(client, 'remoteAddress', { value: `2001:db8:7:${network}::1` });
+        codes.push((await client.post('/api/chat', { messages: [user('Hallo')] })).statusCode);
+      }
+      expect(codes).toEqual([200, 200, 200, 429]);
+    } finally {
+      await app.app.close();
+    }
+  });
+
   it('rejects a conversation that does not end with the visitor', async () => {
     const client = new TestClient(built.app);
     const response = await client.post('/api/chat', {

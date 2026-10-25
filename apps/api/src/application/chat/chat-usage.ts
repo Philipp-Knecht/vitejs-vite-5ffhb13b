@@ -24,8 +24,12 @@ const ALL = { subjectType: 'all', subjectId: 'all' } as const;
 
 /** Free accounts count per connection too (no e-mail confirmation needed), with more room. */
 const ACCOUNT_FACTOR = 2;
-/** No single IPv6 /48 takes more than this many times the limit of one connection. */
-const BLOCK_FACTOR = 5;
+/**
+ * The share of the daily total one IPv6 /48 may take, for visitors and for
+ * accounts each: together never more than 60 % of the day, also when the
+ * total is raised.
+ */
+const BLOCK_SHARE = 0.3;
 
 /** The German day after `day`, „YYYY-MM-DD“. */
 function nextDay(day: string): string {
@@ -117,6 +121,7 @@ export class ChatUsageService {
     const perConnection = this.limits.dailyPerAddress;
     const subscriber = subscriberOf(address);
     const block = blockOf(address);
+    const blockLimit = Math.floor(this.limits.dailyTotal * BLOCK_SHARE);
     const connectionLimits =
       actor.plan === 'pro'
         ? []
@@ -130,9 +135,9 @@ export class ChatUsageService {
                   actor.userId
                     ? {
                         id: `account-block|${block}`,
-                        limit: perConnection * ACCOUNT_FACTOR * BLOCK_FACTOR,
+                        limit: Math.max(perConnection * ACCOUNT_FACTOR, blockLimit),
                       }
-                    : { id: `visitor-block|${block}`, limit: perConnection * BLOCK_FACTOR },
+                    : { id: `visitor-block|${block}`, limit: Math.max(perConnection, blockLimit) },
                 ]
               : []),
           ];
