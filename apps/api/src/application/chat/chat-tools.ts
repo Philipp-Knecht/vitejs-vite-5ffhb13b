@@ -1010,8 +1010,10 @@ const LISTING_LABELS = [
  * „€ 12.990,-“, „EUR 12.990“, „16.990 € inkl. MwSt.“, „Kaufpreis: 9.500 EUR“.
  */
 const PRICE_NUMBER = String.raw`(?:\d{1,3}(?:[.\s]\d{3})+|\d{1,6})(?:,-|,\d{2})?`;
+/** What may follow the price on its line – nothing a wish list would write („maximal“). */
+const PRICE_SUFFIX = String.raw`(?:\s*(?:vb|verhandlungsbasis|festpreis|\(?brutto\)?|\(?netto\)?|inkl\.[^\n]{0,30}|zzgl\.[^\n]{0,30}|mwst\.?|[¹²³*]))*`;
 const PRICE_LINE = new RegExp(
-  String.raw`^(?:(?:kauf)?preis:?\s*|brutto:?\s*|netto:?\s*)?(?:(?:€|eur)\s?${PRICE_NUMBER}|${PRICE_NUMBER}\s?(?:€|eur\b))[^\n]{0,40}$`,
+  String.raw`^(?:(?:kauf)?preis:?\s*|brutto:?\s*|netto:?\s*)?(?:(?:€|eur)\s?${PRICE_NUMBER}|${PRICE_NUMBER}\s?(?:€|eur\b))${PRICE_SUFFIX}\s*$`,
   'i',
 );
 

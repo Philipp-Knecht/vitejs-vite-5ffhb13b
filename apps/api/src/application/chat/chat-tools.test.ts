@@ -46,6 +46,7 @@ describe('chat tool schemas', () => {
       'EUR 12.990',
       'Kaufpreis: 12.990 €',
       '12.990 € (Brutto)',
+      '12.990 €¹',
       '16.990 € inkl. MwSt.',
       'Brutto 21.490 €',
       '€ 12.990,-',
@@ -57,6 +58,7 @@ describe('chat tool schemas', () => {
       'Wir suchen ein Familienauto bis 15.000 €, höchstens 100.000 km, Erstzulassung ab 2018, gern Kombi mit Automatik. Was würdest du uns empfehlen und worauf sollten wir bei der Besichtigung achten?',
       'VW Golf 7 1.4 TSI\n120.000 km\n9.500 €\nEZ 2016\nLohnt sich das?\nWas meinst du dazu und was sollte ich fragen?',
       'Mein Auto: Opel Astra K, 2017, 90.000 km. Ich will es verkaufen, 8.000 € wären gut. Was muss ich beachten, und wie schreibe ich das Inserat am besten? Brauche ich einen Kaufvertrag?',
+      'Ich suche einen VW Golf mit folgenden Wünschen:\nBudget:\n15.000 € maximal, gern weniger\nBaujahr ab 2018\nGetriebe Automatik\nKraftstoff Diesel oder Hybrid\nFarbe egal\nWas würdest du mir empfehlen?',
     ])
       expect(looksLikePastedListing(question)).toBe(false);
     expect(looksLikePastedListing('Erzähl mir etwas über Autos. '.repeat(20))).toBe(false);

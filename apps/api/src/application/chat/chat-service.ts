@@ -66,10 +66,15 @@ function clip(text: string, max: number): string {
  * visitor sends.
  */
 function defuseNotes(text: string): string {
-  return text
-    .normalize('NFKC')
-    .replace(/\p{Cf}/gu, '')
-    .replace(/[[【〔〖〘]\s*(k\s*a\s*u\s*f\s*-?\s*c\s*h\s*e\s*c\s*k)/giu, '($1');
+  return text.replace(/[[【〔〖〘]\s*(k\s*a\s*u\s*f\s*-?\s*c\s*h\s*e\s*c\s*k)/giu, '($1');
+}
+
+/**
+ * Full-width or styled characters as plain ones, invisible characters gone –
+ * before contact data is looked for, so „０１７１ １２３…“ is found as well.
+ */
+function plain(text: string): string {
+  return text.normalize('NFKC').replace(/\p{Cf}/gu, '');
 }
 
 /**
@@ -80,7 +85,7 @@ function defuseNotes(text: string): string {
 function history(request: ChatRequest): ChatModelMessage[] {
   return request.messages.map((turn): ChatModelMessage =>
     turn.role === 'user'
-      ? { role: 'user', text: defuseNotes(redactContactData(turn.content)) }
+      ? { role: 'user', text: defuseNotes(redactContactData(plain(turn.content))) }
       : {
           role: 'assistant',
           text: turn.context
@@ -289,6 +294,8 @@ export class ChatService {
     // A pasted listing is checked right away – the model gets the result with the message
     // and never has to remember to ask for it. A failed check adds nothing: the model can
     // still call the tool and then reads why.
+    /** Only a message with KaufCheck's note names its code: all others keep the day's cache. */
+    let noted = false;
     const listingTool = this.byName.get(LISTING_TOOL);
     if (listingTool && looksLikePastedListing(latest.content)) {
       const key = this.recentCheckKey(ctx.actor, latest.content);
@@ -306,6 +313,7 @@ export class ChatService {
       }
       const last = messages[messages.length - 1];
       if (checked && last?.role === 'user') {
+        noted = true;
         messages[messages.length - 1] = {
           role: 'user',
           text: `${last.text}\n\n[KaufCheck-Prüfung ${code}] Ergebnis der Prüfung dieses Inserats; die Karte damit sieht der Nutzer unter deiner Antwort:\n${checked.content}`,
@@ -319,7 +327,7 @@ export class ChatService {
       let turn: ChatModelTurn;
       try {
         turn = await this.deps.model.turn({
-          system: { stable: CHAT_SYSTEM_PROMPT, dynamic: chatDateNote(day, code) },
+          system: { stable: CHAT_SYSTEM_PROMPT, dynamic: chatDateNote(day, noted ? code : null) },
           tools: [...this.byName.values()].map((tool) => tool.spec),
           messages,
           signal: ctx.signal,
