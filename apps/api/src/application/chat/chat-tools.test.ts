@@ -83,4 +83,19 @@ describe('chat tool schemas', () => {
       '/auto-ummelden',
     );
   });
+
+  it('recognize a listing quickly also for a line made to slow the check down', () => {
+    const lines = [
+      'Ein sehr langer erster Satz, damit die Nachricht lang genug für die Prüfung wird, ganz harmlos.',
+      'Kilometerstand 1',
+      'Erstzulassung 2',
+      'Leistung 3',
+      'Getriebe 4',
+      `12.990 € ${'inkl. '.repeat(14)}${'#'.repeat(40)}`,
+      `12.990 € ${'inkl.'.repeat(11)}${'#'.repeat(20)}`,
+    ];
+    const started = performance.now();
+    looksLikePastedListing(lines.join('\n'));
+    expect(performance.now() - started).toBeLessThan(50);
+  });
 });

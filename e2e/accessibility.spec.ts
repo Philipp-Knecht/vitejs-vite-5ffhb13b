@@ -22,21 +22,30 @@ test('static pages meet WCAG 2.1 AA checks', async ({ page }) => {
     '/inserat-pruefen',
     '/inseratstext',
     '/pro',
+    '/anmelden',
+    '/registrieren',
+    '/meine-angebote',
+    '/pro/bestellen',
+  ]) {
+    await page.goto(path);
+    await expect(page.getByRole('heading', { level: 1 })).toBeVisible();
+    await expectAccessible(page);
+  }
+});
+
+test('the guide and legal pages meet WCAG 2.1 AA checks', async ({ page }) => {
+  for (const path of [
     '/gebrauchtwagen-kaufen',
     '/gebrauchtwagen-checkliste',
     '/auto-ummelden',
     '/auto-rueckruf-pruefen',
     '/auto-aus-den-niederlanden',
     '/autokosten-im-monat',
-    '/anmelden',
-    '/registrieren',
-    '/meine-angebote',
     '/datenschutz',
     '/agb',
     '/widerrufsbelehrung',
     '/vertrag-kuendigen',
     '/vertrag-widerrufen',
-    '/pro/bestellen',
   ]) {
     await page.goto(path);
     await expect(page.getByRole('heading', { level: 1 })).toBeVisible();

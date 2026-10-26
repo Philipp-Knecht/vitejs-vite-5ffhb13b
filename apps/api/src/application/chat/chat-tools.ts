@@ -1010,8 +1010,14 @@ const LISTING_LABELS = [
  * „€ 12.990,-“, „EUR 12.990“, „16.990 € inkl. MwSt.“, „Kaufpreis: 9.500 EUR“.
  */
 const PRICE_NUMBER = String.raw`(?:\d{1,3}(?:[.\s]\d{3})+|\d{1,6})(?:,-|,\d{2})?`;
-/** What may follow the price on its line – nothing a wish list would write („maximal“). */
-const PRICE_SUFFIX = String.raw`(?:\s*(?:vb|verhandlungsbasis|festpreis|\(?brutto\)?|\(?netto\)?|inkl\.[^\n]{0,30}|zzgl\.[^\n]{0,30}|mwst\.?|[¹²³*]))*`;
+/**
+ * What may follow the price on its line – nothing a wish list would write
+ * („maximal“). Free text only once and at the end („inkl. MwSt.“): words that
+ * can swallow each other would make the check take exponentially long.
+ */
+const PRICE_SUFFIX = String.raw`(?:\s*(?:vb|verhandlungsbasis|festpreis|\(?brutto\)?|\(?netto\)?|mwst\.?|[¹²³*]))*(?:\s*(?:inkl|zzgl)\.[^\n]{0,30})?`;
+/** A price line is short; longer lines are not even tested. */
+const MAX_PRICE_LINE = 80;
 const PRICE_LINE = new RegExp(
   String.raw`^(?:(?:kauf)?preis:?\s*|brutto:?\s*|netto:?\s*)?(?:(?:€|eur)\s?${PRICE_NUMBER}|${PRICE_NUMBER}\s?(?:€|eur\b))${PRICE_SUFFIX}\s*$`,
   'i',
@@ -1029,7 +1035,7 @@ export function looksLikePastedListing(text: string): boolean {
     .map((line) => line.trim())
     .filter((line) => line !== '');
   if (text.length < 200 || lines.length < 6) return false;
-  if (!lines.some((line) => PRICE_LINE.test(line))) return false;
+  if (!lines.some((line) => line.length <= MAX_PRICE_LINE && PRICE_LINE.test(line))) return false;
   const labels = LISTING_LABELS.filter((label) => lines.some((line) => label.test(line)));
   return labels.length >= 3;
 }
