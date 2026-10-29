@@ -22,21 +22,30 @@ test('static pages meet WCAG 2.1 AA checks', async ({ page }) => {
     '/inserat-pruefen',
     '/inseratstext',
     '/pro',
+    '/anmelden',
+    '/registrieren',
+    '/meine-angebote',
+    '/pro/bestellen',
+  ]) {
+    await page.goto(path);
+    await expect(page.getByRole('heading', { level: 1 })).toBeVisible();
+    await expectAccessible(page);
+  }
+});
+
+test('the guide and legal pages meet WCAG 2.1 AA checks', async ({ page }) => {
+  for (const path of [
     '/gebrauchtwagen-kaufen',
     '/gebrauchtwagen-checkliste',
     '/auto-ummelden',
     '/auto-rueckruf-pruefen',
     '/auto-aus-den-niederlanden',
     '/autokosten-im-monat',
-    '/anmelden',
-    '/registrieren',
-    '/meine-angebote',
     '/datenschutz',
     '/agb',
     '/widerrufsbelehrung',
     '/vertrag-kuendigen',
     '/vertrag-widerrufen',
-    '/pro/bestellen',
   ]) {
     await page.goto(path);
     await expect(page.getByRole('heading', { level: 1 })).toBeVisible();
@@ -60,10 +69,11 @@ test('the advisor and model pages meet WCAG 2.1 AA checks', async ({ page }) => 
   }
 });
 
-test('the homepage tabs meet WCAG 2.1 AA checks on both tabs', async ({ page }) => {
+test('the assistant on the start page meets WCAG 2.1 AA checks with a form', async ({ page }) => {
   await page.goto('/');
-  await page.getByRole('tab', { name: 'Inserat prüfen' }).click();
-  await expect(page.getByLabel('Inseratstext oder Link zum Auto-Inserat')).toBeVisible();
+  const chat = page.getByRole('region', { name: 'KI-Assistent von KaufCheck' });
+  await chat.getByRole('button', { name: 'Finanzierung rechnen' }).click();
+  await expect(chat.getByRole('form', { name: 'Finanzierung rechnen' })).toBeVisible();
   await expectAccessible(page);
 });
 

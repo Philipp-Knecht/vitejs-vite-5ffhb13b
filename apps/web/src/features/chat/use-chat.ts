@@ -1,7 +1,9 @@
 import {
+  CHAT_FORMS,
   CHAT_LIMITS,
   germanDay,
   type ChatCard,
+  type ChatJump,
   type ChatStreamEvent,
   type ChatTurn,
   type ChatUsage,
@@ -26,9 +28,13 @@ export type ChatItem =
       status: 'streaming' | 'done' | 'error';
       error?: string;
       fallback?: boolean;
+      /** Pages of KaufCheck to do it yourself, from the server. */
+      jumps?: ChatJump[];
     }
   /** A form the visitor opened from a suggestion: no message to the server yet. */
-  | { id: string; role: 'local'; card: ChatCard };
+  | { id: string; role: 'local'; card: ChatCard }
+  /** A hint of the page itself (no message to the server), e.g. where to paste a listing. */
+  | { id: string; role: 'hint'; text: string };
 
 interface Stored {
   version: 1;
@@ -43,8 +49,11 @@ const MAX_ITEMS = 60;
 
 const isRecord = (value: unknown): value is Record<string, unknown> =>
   typeof value === 'object' && value !== null && !Array.isArray(value);
+/** A card this version can show: a form of an older version (say, the listing form) is dropped. */
 const isCard = (value: unknown): value is ChatCard =>
-  isRecord(value) && typeof value.type === 'string';
+  isRecord(value) &&
+  typeof value.type === 'string' &&
+  (value.type !== 'form' || (CHAT_FORMS as readonly unknown[]).includes(value.form));
 
 /** Drops what an older version of the page left behind; the chat's error boundary catches the rest. */
 function isItem(value: unknown): value is ChatItem {
@@ -54,12 +63,11 @@ function isItem(value: unknown): value is ChatItem {
       return typeof value.text === 'string';
     case 'local':
       return isCard(value.card);
+    case 'hint':
+      return typeof value.text === 'string';
     case 'assistant':
       return (
-        typeof value.text === 'string' &&
-        Array.isArray(value.cards) &&
-        value.cards.every(isCard) &&
-        Array.isArray(value.tools)
+        typeof value.text === 'string' && Array.isArray(value.cards) && Array.isArray(value.tools)
       );
     default:
       return false;
@@ -88,6 +96,9 @@ function load(): Stored {
     // An answer cut off by a reload stays cut off.
     const items = value.items
       .filter(isItem)
+      .map((item) =>
+        item.role === 'assistant' ? { ...item, cards: item.cards.filter(isCard) } : item,
+      )
       .map((item) =>
         item.role === 'assistant' && item.status === 'streaming'
           ? { ...item, status: 'error' as const, error: 'Die Antwort wurde unterbrochen.' }
@@ -180,6 +191,14 @@ export function useChat() {
           case 'text':
             update((item) => ({ ...item, text: item.text + event.delta }));
             break;
+          case 'jump':
+            update((item) =>
+              item.jumps?.some((jump) => jump.href === event.jump.href) ||
+              (item.jumps?.length ?? 0) >= 3
+                ? item
+                : { ...item, jumps: [...(item.jumps ?? []), event.jump] },
+            );
+            break;
           case 'retract':
             update((item) => ({ ...item, text: item.text.slice(0, event.length) }));
             break;
@@ -211,7 +230,7 @@ export function useChat() {
               usage: event.usage,
               items: current.items.map((item) =>
                 item.id === assistantId && item.role === 'assistant'
-                  ? { ...item, status: 'done', fallback: event.fallbackModel }
+                  ? { ...item, status: 'done', fallback: event.fallbackModel, jumps: event.jumps }
                   : item,
               ),
             }));
@@ -260,6 +279,14 @@ export function useChat() {
     [busy, state.history],
   );
 
+  /** Shows a hint of the page in the chat, without asking the server. */
+  const showHint = useCallback((text: string) => {
+    setState((current) => ({
+      ...current,
+      items: [...current.items, { id: nextId(), role: 'hint', text }],
+    }));
+  }, []);
+
   /** Shows a form in the chat without asking the server; returns its id. */
   const showForm = useCallback((card: ChatCard) => {
     const id = nextId();
@@ -278,5 +305,5 @@ export function useChat() {
     setState((current) => ({ version: 1, items: [], history: [], usage: current.usage }));
   }, []);
 
-  return { items: state.items, usage: state.usage, busy, send, showForm, reset };
+  return { items: state.items, usage: state.usage, busy, send, showForm, showHint, reset };
 }

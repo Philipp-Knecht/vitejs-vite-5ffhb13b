@@ -7,7 +7,9 @@ test('the assistant computes a financing from its form and keeps the conversatio
 }) => {
   await page.goto('/');
   const chat = page.getByRole('region', { name: 'KI-Assistent von KaufCheck' });
-  await expect(chat.getByText('Ich bin der KI-Assistent von KaufCheck.')).toBeVisible();
+  await expect(
+    chat.getByText('Willkommen bei KaufCheck, deinem KI-Assistenten für den Gebrauchtwagenkauf!'),
+  ).toBeVisible();
   await expect(chat.getByText('Entwicklungsmodus: feste Regeln statt KI.')).toBeVisible();
   const input = chat.getByLabel('Nachricht an den KI-Assistenten von KaufCheck');
 
@@ -32,12 +34,18 @@ test('the assistant computes a financing from its form and keeps the conversatio
   await expect(chat.getByText(/Heute noch 14 von 15 Nachrichten/)).toBeVisible();
   // Screen readers get the finished answer once, with what the cards show.
   await expect(chat.getByRole('status')).toContainText('Darunter: Finanzierung');
+  // Not happy with the answer? The calculator is one tap away.
+  await expect(
+    chat.getByRole('link', { name: 'Im Finanzierungsrechner selbst rechnen' }),
+  ).toHaveAttribute('href', '/kfz-steuer-rechner#finanzierung');
 
   // The conversation survives a reload in this tab and goes with „Neues Gespräch“.
   await page.reload();
   await expect(chat.locator('.chat-card').filter({ hasText: 'Finanzierung' })).toBeVisible();
   await chat.getByRole('button', { name: 'Neues Gespräch' }).click();
-  await expect(chat.getByText('Ich bin der KI-Assistent von KaufCheck.')).toBeVisible();
+  await expect(
+    chat.getByText('Willkommen bei KaufCheck, deinem KI-Assistenten für den Gebrauchtwagenkauf!'),
+  ).toBeVisible();
   await expect(input).toBeFocused();
 
   // Too long for one message: said, not cut off.
@@ -49,7 +57,9 @@ test('the assistant computes a financing from its form and keeps the conversatio
 test('the start page is prerendered with the empty chat, so nothing jumps', async ({ request }) => {
   const html = await (await request.get('/')).text();
   expect(html).toContain('data-prerendered="true"');
-  expect(html).toContain('Ich bin der KI-Assistent von KaufCheck.');
+  expect(html).toContain(
+    'Willkommen bei KaufCheck, deinem KI-Assistenten für den Gebrauchtwagenkauf!',
+  );
 });
 
 test('the assistant checks a pasted listing and links to the full check', async ({ page }) => {
@@ -64,7 +74,7 @@ test('the assistant checks a pasted listing and links to the full check', async 
   // A pasted listing and its card fit a phone screen.
   await page.setViewportSize({ width: 360, height: 780 });
   await expectNoHorizontalScroll(page);
-  await card.getByRole('link', { name: 'Ganze Prüfung öffnen' }).click();
+  await chat.getByRole('link', { name: 'Ganze Prüfung öffnen' }).click();
   await expect(page).toHaveURL(/\/analyse\/[0-9a-f-]{36}$/);
   await expect(page.getByRole('heading', { level: 1 })).toContainText('VW Golf');
 });
@@ -77,10 +87,11 @@ test('the assistant knows the researched models and builds marketplace searches'
   const input = chat.getByLabel('Nachricht an den KI-Assistenten von KaufCheck');
   await input.fill('Welche Schwachstellen hat der Golf?');
   await input.press('Enter');
-  const model = chat.locator('.chat-card').filter({ hasText: 'Modellwissen' });
-  await expect(
-    model.getByRole('link', { name: 'Alle Schwachstellen mit Quellen' }),
-  ).toHaveAttribute('href', '/modelle/vw-golf');
+  await expect(chat.locator('.chat-card').filter({ hasText: 'Modellwissen' })).toBeVisible();
+  await expect(chat.getByRole('link', { name: 'Alle Schwachstellen mit Quellen' })).toHaveAttribute(
+    'href',
+    '/modelle/vw-golf',
+  );
 
   await input.fill('Such mir einen Golf');
   await input.press('Enter');
@@ -89,8 +100,26 @@ test('the assistant knows the researched models and builds marketplace searches'
     'href',
     /^https:\/\/suchen\.mobile\.de\//,
   );
-  await expect(search.getByRole('link', { name: 'Suche bei KaufCheck anpassen' })).toHaveAttribute(
+  await expect(chat.getByRole('link', { name: 'Suche bei KaufCheck anpassen' })).toHaveAttribute(
     'href',
     /^\/auto-finden\?marke=vw&modell=vw-golf/,
   );
+});
+
+test('the start page is the assistant: a listing goes straight into the chat', async ({ page }) => {
+  await page.goto('/');
+  // Nothing but the assistant and the frequent questions.
+  await expect(page.getByRole('tab')).toHaveCount(0);
+  await expect(page.getByRole('heading', { level: 2, name: 'Häufige Fragen' })).toBeVisible();
+  const chat = page.getByRole('region', { name: 'KI-Assistent von KaufCheck' });
+  await chat.getByRole('button', { name: 'Inserat prüfen' }).click();
+  await expect(
+    chat
+      .getByRole('region', { name: 'Gesprächsverlauf' })
+      .getByText(/füg ihn unten ins Eingabefeld ein/),
+  ).toBeVisible();
+  // Screen readers hear the hint too.
+  await expect(chat.getByRole('status')).toContainText('füg ihn unten ins Eingabefeld ein');
+  await expect(chat.getByLabel('Nachricht an den KI-Assistenten von KaufCheck')).toBeFocused();
+  await expect(chat.getByRole('form')).toHaveCount(0);
 });

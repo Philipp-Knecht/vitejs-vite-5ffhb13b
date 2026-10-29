@@ -42,6 +42,8 @@ import {
   vehicleTax,
   type AnalysisDto,
   type ChatCard,
+  type ChatForm as ChatFormKind,
+  type ChatJump,
   type VehicleTaxResult,
 } from '@kaufcheck/shared';
 import { z } from 'zod';
@@ -68,6 +70,8 @@ export interface ChatToolOutcome {
   context?: string;
   /** Kept instead of the latest user message (a long pasted listing). */
   replaceUserMessage?: string;
+  /** The page of KaufCheck to do this yourself, shown under the answer. */
+  jump?: ChatJump;
 }
 
 export interface ChatTool {
@@ -171,6 +175,7 @@ function analysisOutcome(dto: AnalysisDto): ChatToolOutcome {
       verdict ? PRICE_VERDICT_LABELS[verdict] : 'keine Preisstufe'
     }${advice ? `; ${advice.title}` : ''}; Auffälligkeiten: ${warnings.slice(0, 4).join(', ') || 'keine'}`,
     replaceUserMessage: `[Inserat eingefügt: ${title}${price ? `, ${price}` : ''} – geprüft: ${link}]`,
+    jump: { label: 'Ganze Prüfung öffnen', href: link },
   };
 }
 
@@ -319,6 +324,7 @@ const searchCars = tool(
         })),
       },
       context: `Suche erstellt: ${summary} (${findUrl})`,
+      jump: { label: 'Suche bei KaufCheck anpassen', href: findUrl },
     });
   },
 );
@@ -358,6 +364,7 @@ const modelInfo = tool(
       return Promise.resolve({
         content: `Zu ${input.make} ${input.model} hat KaufCheck kein recherchiertes Modellwissen. Keine Schwachstellen nennen, die nicht belegt sind. Übersicht der Modelle: /modelle\n${recallLine}`,
         context: `Modellwissen: keins zu ${input.make} ${input.model}`,
+        jump: { label: 'Alle Modelle und Schwachstellen', href: '/modelle' },
       });
     }
     const year = input.year ?? null;
@@ -417,6 +424,7 @@ const modelInfo = tool(
         url,
       },
       context: `Modellwissen ${name} ${generations.map((item) => item.name).join(' oder ')}: ${issues.map((issue) => issue.title).join(', ') || 'keine Schwachstellen erfasst'} (${url})`,
+      jump: { label: 'Alle Schwachstellen mit Quellen', href: url },
     });
   },
 );
@@ -526,7 +534,7 @@ const vehicleTaxTool = tool(
     let note = '';
     if (input.drive !== 'electric' && (ccm === null || co2 === null)) {
       const values = await engineValues(input, firstRegistration, ctx.now);
-      if (typeof values === 'string') return { content: values };
+      if (typeof values === 'string') return { content: values, jump: pageJump('tax', TAX_JUMP) };
       if (values) {
         ccm ??= values.ccm;
         co2 ??= values.co2;
@@ -553,6 +561,7 @@ const vehicleTaxTool = tool(
     if (!sameTax(result, monthEnd)) {
       return {
         content: `Im Monat ${month?.split('-').reverse().join('/')} hängt die Steuer vom Tag der Erstzulassung ab (eine Stichtagsregel greift in diesem Monat). Frag nach dem genauen Datum (Fahrzeugschein, Feld B) und ruf das Werkzeug mit YYYY-MM-DD erneut auf.`,
+        jump: pageJump('tax', TAX_JUMP),
       };
     }
     const params = new URLSearchParams({ ez: firstRegistration.slice(0, 7) });
@@ -563,7 +572,8 @@ const vehicleTaxTool = tool(
     const calculatorUrl = `/kfz-steuer-rechner?${params.toString()}`;
     if (result.kind === 'missing') {
       return {
-        content: `Es fehlen Angaben: ${result.fields.join(', ')}${result.note ? ` (${result.note})` : ''}. Frag den Nutzer danach (Fahrzeugschein) oder zeig das Formular „tax“. Rechner: ${calculatorUrl}`,
+        content: `Es fehlen Angaben: ${result.fields.join(', ')}${result.note ? ` (${result.note})` : ''}. Frag den Nutzer danach (Fahrzeugschein) oder zeig das Formular „tax“.`,
+        jump: { label: TAX_JUMP, href: calculatorUrl },
       };
     }
     const inputs = [
@@ -587,7 +597,7 @@ const vehicleTaxTool = tool(
         ? `Kfz-Steuer: ${euro(result.annualEur)} im Jahr (${result.parts.map((part) => `${part.label}: ${euro(part.amountEur)}`).join(', ')}). Regel: ${result.rule}`
         : `Steuerfrei bis ${exemptUntil}${result.afterwardsEur !== null ? `, danach ${euro(result.afterwardsEur)} im Jahr` : ''}. Regel: ${result.rule}`;
     return {
-      content: `${text}\nEingaben: ${inputs.map((item) => `${item.label} ${item.value}`).join(', ')}. ${note} Verbindlich setzt das Hauptzollamt fest. Rechner: ${calculatorUrl}`,
+      content: `${text}\nEingaben: ${inputs.map((item) => `${item.label} ${item.value}`).join(', ')}. ${note} Verbindlich setzt das Hauptzollamt fest.`,
       card: {
         type: 'tax',
         annualEur: result.kind === 'amount' ? result.annualEur : null,
@@ -597,6 +607,7 @@ const vehicleTaxTool = tool(
         calculatorUrl,
       },
       context: text,
+      jump: { label: TAX_JUMP, href: calculatorUrl },
     };
   },
 );
@@ -650,7 +661,7 @@ const financing = tool(
       : 'Zins aus dem Angebot des Nutzers';
     const text = `Kredit ${euro(amount)} über ${months} Monate zu ${ratePercent.toLocaleString('de-DE')} % effektiv (${rateNote}): ${euro(result.monthlyRate)} im Monat, Zinsen gesamt ${euro(result.totalInterest)}, zurückgezahlt ${euro(result.totalPaid)}.`;
     return Promise.resolve({
-      content: `${text} Eigene Werte rechnen: /kfz-steuer-rechner#finanzierung`,
+      content: text,
       card: {
         type: 'financing',
         priceEur: input.price_eur,
@@ -665,6 +676,7 @@ const financing = tool(
         calculatorUrl: '/kfz-steuer-rechner#finanzierung',
       },
       context: text,
+      jump: pageJump('financing', 'Im Finanzierungsrechner selbst rechnen'),
     });
   },
 );
@@ -722,6 +734,7 @@ const carAdvisor = tool(
       return Promise.resolve({
         content:
           'Keine recherchierten Modelle passen zu allen Angaben. Schlag vor, das Budget oder die Anforderungen anzupassen, oder verweise auf /auto-berater.',
+        jump: pageJump('advisor'),
       });
     const items = results.map((result) => {
       const params = toSearchParams({
@@ -743,9 +756,10 @@ const carAdvisor = tool(
     return Promise.resolve({
       content: `Vorschläge (Reihenfolge nach Passung, ohne Gewähr):\n${items
         .map((item) => `${item.name}: ${item.detail} – ${item.url}`)
-        .join('\n')}\nDen ausführlichen Berater gibt es unter /auto-berater.`,
+        .join('\n')}`,
       card: { type: 'advisor', items },
       context: `Berater-Vorschläge: ${items.map((item) => item.name).join(', ')}`,
+      jump: pageJump('advisor'),
     });
   },
 );
@@ -809,11 +823,10 @@ const rdwCheck = (deps: ChatToolDeps) =>
         return {
           content: `RDW zu ${formatDutchPlate(plate)}: ${title}. ${facts
             .map((fact) => `${fact.label}: ${fact.value}`)
-            .join(
-              '; ',
-            )}. ${warnings.length > 0 ? `Achtung: ${warnings.join('; ')}.` : ''} Ausführlich: /auto-aus-den-niederlanden`,
+            .join('; ')}. ${warnings.length > 0 ? `Achtung: ${warnings.join('; ')}.` : ''}`,
           card: { type: 'rdw', plate: formatDutchPlate(plate), title, facts, warnings },
           context: `RDW ${formatDutchPlate(plate)}: ${title}; ${warnings.join(', ') || 'keine Warnungen'}`,
+          jump: pageJump('netherlands', 'RDW-Check und Ratgeber Niederlande'),
         };
       } catch (error) {
         if (isAppError(error)) return fail(error.message);
@@ -842,7 +855,7 @@ const showForm = tool(
     name: 'show_form',
     strict: false,
     description:
-      'Zeigt dem Nutzer ein Eingabefeld im Chat, wenn mehrere Angaben fehlen: „listing“ (Inseratstext einfügen), „search“ (Autosuche), „financing“ (Kaufpreis, Anzahlung, Laufzeit, Zins), „tax“ (Werte aus dem Fahrzeugschein), „rdw“ (niederländisches Kennzeichen). Bekannte Werte vorausfüllen. Danach nur kurz sagen, dass das Formular unten steht, und auf die Eingabe warten.',
+      'Zeigt dem Nutzer ein Eingabefeld im Chat, wenn mehrere Angaben fehlen: „search“ (Autosuche), „financing“ (Kaufpreis, Anzahlung, Laufzeit, Zins), „tax“ (Werte aus dem Fahrzeugschein), „rdw“ (niederländisches Kennzeichen). Bekannte Werte vorausfüllen. Danach nur kurz sagen, dass das Formular unten steht, und auf die Eingabe warten.',
     inputSchema: objectSchema(
       {
         form: oneOf(CHAT_FORMS, 'Welches Formular'),
@@ -862,6 +875,7 @@ const showForm = tool(
   ({ form, ...prefill }) =>
     Promise.resolve({
       content: `Formular „${form}“ wird angezeigt. Warte auf die Eingabe des Nutzers.`,
+      jump: FORM_JUMPS[form](),
       card: {
         type: 'form',
         form,
@@ -896,6 +910,136 @@ export const APP_PAGES = {
   pro: { label: 'KaufCheck Pro', href: '/pro' },
 } as const;
 export type AppPage = keyof typeof APP_PAGES;
+
+const TAX_JUMP = 'Im Kfz-Steuer-Rechner selbst rechnen';
+
+/** How the button to each page reads, e.g. „Zum Finanzierungsrechner“. */
+const JUMP_LABELS: Record<AppPage, string> = {
+  check: 'Zur Inseratsprüfung',
+  search: 'Zur Autosuche',
+  advisor: 'Zum Auto-Berater',
+  models: 'Zu den Modellen und Schwachstellen',
+  tax: 'Zum Kfz-Steuer-Rechner',
+  financing: 'Zum Finanzierungsrechner',
+  costs: 'Zu den Autokosten im Monat',
+  contract: 'Zum Kaufvertrag',
+  buying_guide: 'Zum Ratgeber Gebrauchtwagenkauf',
+  checklist: 'Zur Checkliste für die Besichtigung',
+  register: 'Zum Ratgeber Auto ummelden',
+  recalls: 'Zu den Rückrufen',
+  netherlands: 'Zum Ratgeber Auto aus den Niederlanden',
+  selling: 'Zum Ratgeber Auto verkaufen',
+  listing_text: 'Zum Inseratstext',
+  my_car: 'Zu Mein Auto',
+  saved: 'Zu den gespeicherten Angeboten',
+  pro: 'Zu KaufCheck Pro',
+};
+
+/** A page of KaufCheck to do it yourself. */
+function pageJump(key: AppPage, label = JUMP_LABELS[key]): ChatJump {
+  return { label, href: APP_PAGES[key].href };
+}
+
+const FORM_JUMPS: Record<ChatFormKind, () => ChatJump> = {
+  search: () => pageJump('search'),
+  financing: () => pageJump('financing'),
+  tax: () => pageJump('tax'),
+  rdw: () => pageJump('netherlands', 'RDW-Check und Ratgeber Niederlande'),
+};
+
+/**
+ * Topics of a message without a tool, and the page for each – the first match
+ * counts. Word stems with boundaries: „Erstzulassung“ is no re-registration,
+ * „Steuerkette“ no tax and „versuche“ no search.
+ */
+const TOPICS: readonly [RegExp, AppPage][] = [
+  [/finanzier|\bkredit|\braten?\b|leasing|anzahlung/i, 'financing'],
+  [/kfz-steuer|\bsteuer\b|\bsteuern\b|\bversteuer/i, 'tax'],
+  [/schwachstell|zuverlässig|typische probleme|\bmacken\b/i, 'models'],
+  [/unterhalt|kosten im monat|\bverbrauch|versicherung/i, 'costs'],
+  [/kaufvertrag|\bvertrag\b/i, 'contract'],
+  [/besichtig|probefahrt|checkliste/i, 'checklist'],
+  [
+    /\bummeld|\bmelde\b[^.?!]{0,60}\bum\b|\bzulassen\b|\bzulassung\b|zulassungsstelle|\babmeld|\b(?:auto|wagen|fahrzeug)\s+(?:an|um)melden/i,
+    'register',
+  ],
+  [/rückruf/i, 'recalls'],
+  [/niederland|holland|\brdw\b|\bimport/i, 'netherlands'],
+  [/\bverkaufen\b|\bverkauf (?:mein|unser)|inzahlung/i, 'selling'],
+  [/welches auto|passt zu mir|empfiehlst|empfehlung|\bberat/i, 'advisor'],
+  [/\binserat|\bprüf/i, 'check'],
+  [/\bsuche\b|\bsuchen\b|\bsuch\b|\bfinden\b|\bfinde ich\b|gebrauchtwagen/i, 'search'],
+];
+
+/**
+ * Where to go on yourself after an answer without a tool: the page that fits
+ * the message, otherwise the two main tools.
+ */
+export function topicJumps(...texts: string[]): ChatJump[] {
+  for (const text of texts) {
+    const match = TOPICS.find(([pattern]) => pattern.test(text));
+    if (match) return [pageJump(match[1])];
+  }
+  return [pageJump('search'), pageJump('check')];
+}
+
+/** Labels of a copied listing, each at the start of a line („Kilometerstand 57.000 km“). */
+const LISTING_LABELS = [
+  /^kilometer(?:stand)?\b/i,
+  /^laufleistung\b/i,
+  /^erstzulassung\b/i,
+  /^leistung\b/i,
+  /^kraftstoff(?:art)?\b/i,
+  /^getriebe(?:art)?\b/i,
+  /^fahrzeughalter\b|^anzahl der (?:fahrzeug)?halter\b|^vorbesitzer\b/i,
+  /^hubraum\b/i,
+  /^(?:außen)?farbe\b/i,
+  /^(?:hu|tüv)\b/i,
+  /^schadstoffklasse\b|^emissionsklasse\b|^umweltplakette\b/i,
+  /^(?:anzahl der )?(?:sitzplätze|türen)\b/i,
+  /^fahrzeugzustand\b|^zustand\b/i,
+  /^karosserieform\b|^fahrzeugtyp\b|^kategorie\b/i,
+  /^(?:fahrzeug)?beschreibung\b/i,
+  /^ausstattung\b/i,
+  /^antriebsart\b/i,
+  /^baujahr\b/i,
+];
+
+/**
+ * A line that starts with the price: „8.700 €“, „8450 €“, „850 € VB“,
+ * „€ 12.990,-“, „EUR 12.990“, „16.990 € inkl. MwSt.“, „Kaufpreis: 9.500 EUR“.
+ */
+const PRICE_NUMBER = String.raw`(?:\d{1,3}(?:[.\s]\d{3})+|\d{1,6})(?:,-|,\d{2})?`;
+/**
+ * What may follow the price on its line – nothing a wish list would write
+ * („maximal“). Free text only once and at the end („inkl. MwSt.“): words that
+ * can swallow each other would make the check take exponentially long.
+ */
+const PRICE_SUFFIX = String.raw`(?:\s*(?:vb|verhandlungsbasis|festpreis|\(?brutto\)?|\(?netto\)?|mwst\.?|[¹²³*]))*(?:\s*(?:inkl|zzgl)\.[^\n]{0,30})?`;
+/** A price line is short; longer lines are not even tested. */
+const MAX_PRICE_LINE = 80;
+const PRICE_LINE = new RegExp(
+  String.raw`^(?:(?:kauf)?preis:?\s*|brutto:?\s*|netto:?\s*)?(?:(?:€|eur)\s?${PRICE_NUMBER}|${PRICE_NUMBER}\s?(?:€|eur\b))${PRICE_SUFFIX}\s*$`,
+  'i',
+);
+
+/**
+ * A pasted listing: many lines, a line with only the price and several of the
+ * labels a listing page shows, each on its own line. A question with a price
+ * and a mileage in a sentence is not one – checking it would cost one of the
+ * visitor's monthly checks.
+ */
+export function looksLikePastedListing(text: string): boolean {
+  const lines = text
+    .split(/\r?\n/)
+    .map((line) => line.trim())
+    .filter((line) => line !== '');
+  if (text.length < 200 || lines.length < 6) return false;
+  if (!lines.some((line) => line.length <= MAX_PRICE_LINE && PRICE_LINE.test(line))) return false;
+  const labels = LISTING_LABELS.filter((label) => lines.some((line) => label.test(line)));
+  return labels.length >= 3;
+}
+
 const PAGE_KEYS = Object.keys(APP_PAGES) as [AppPage, ...AppPage[]];
 
 const showLinks = tool(

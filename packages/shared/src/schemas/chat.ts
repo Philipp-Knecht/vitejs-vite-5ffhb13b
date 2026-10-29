@@ -44,10 +44,12 @@ export const ChatRequestSchema = z.object({
 export type ChatRequest = z.infer<typeof ChatRequestSchema>;
 
 /** Input fields the assistant can put into the chat. */
-export const CHAT_FORMS = ['listing', 'search', 'financing', 'tax', 'rdw'] as const;
+export const CHAT_FORMS = ['search', 'financing', 'tax', 'rdw'] as const;
 export type ChatForm = (typeof CHAT_FORMS)[number];
 
 const LinkSchema = z.object({ label: z.string(), href: z.string() });
+/** A page of KaufCheck: a button under an answer or in a card. */
+export type ChatJump = z.infer<typeof LinkSchema>;
 
 /** Results of the tools, shown as cards; built by the server from KaufCheck's own data only. */
 export const ChatCardSchema = z.discriminatedUnion('type', [
@@ -140,6 +142,8 @@ export type ChatUsage = z.infer<typeof ChatUsageSchema>;
 /** The answer streams as NDJSON: text pieces, tool steps and cards, then `done` or `error`. */
 export const ChatStreamEventSchema = z.discriminatedUnion('type', [
   z.object({ type: z.literal('text'), delta: z.string() }),
+  /** A page of KaufCheck for doing it yourself, from a tool that just ran. */
+  z.object({ type: z.literal('jump'), jump: LinkSchema }),
   /** The text from `length` on is withdrawn: a step was repeated or declined. */
   z.object({ type: z.literal('retract'), length: z.number().int().nonnegative() }),
   z.object({
@@ -155,6 +159,8 @@ export const ChatStreamEventSchema = z.discriminatedUnion('type', [
     turn: ChatTurnSchema,
     /** A shorter version of the last user message to keep instead (a pasted listing). */
     replaceUserMessage: z.string().max(CHAT_LIMITS.messageChars).nullable(),
+    /** Pages of KaufCheck to do it yourself, e.g. the calculator the answer used. */
+    jumps: z.array(LinkSchema).max(3),
     usage: ChatUsageSchema,
     /** True when another Claude model answered because the first one declined. */
     fallbackModel: z.boolean(),

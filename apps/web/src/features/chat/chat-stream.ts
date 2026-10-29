@@ -1,6 +1,7 @@
 import {
   NDJSON_CONTENT_TYPE,
   type ChatCard,
+  type ChatJump,
   type ChatStreamEvent,
   type ChatTurn,
 } from '@kaufcheck/shared';
@@ -23,6 +24,10 @@ function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === 'object' && value !== null && !Array.isArray(value);
 }
 
+function isJump(value: unknown): value is ChatJump {
+  return isRecord(value) && typeof value.label === 'string' && typeof value.href === 'string';
+}
+
 function isTurn(value: unknown): value is ChatTurn {
   return (
     isRecord(value) &&
@@ -41,6 +46,8 @@ export function parseChatEvent(value: unknown): ChatStreamEvent | null {
   switch (value.type) {
     case 'text':
       return typeof value.delta === 'string' ? { type: 'text', delta: value.delta } : null;
+    case 'jump':
+      return isJump(value.jump) ? { type: 'jump', jump: value.jump } : null;
     case 'retract':
       return typeof value.length === 'number' && value.length >= 0
         ? { type: 'retract', length: value.length }
@@ -68,6 +75,7 @@ export function parseChatEvent(value: unknown): ChatStreamEvent | null {
           limit: usage.limit,
           resetsOn: typeof usage.resetsOn === 'string' ? usage.resetsOn : '',
         },
+        jumps: Array.isArray(value.jumps) ? value.jumps.filter(isJump).slice(0, 3) : [],
         fallbackModel: value.fallbackModel === true,
       };
     }

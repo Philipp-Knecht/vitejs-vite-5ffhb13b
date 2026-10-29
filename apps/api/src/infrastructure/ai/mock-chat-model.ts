@@ -55,6 +55,17 @@ export class MockChatModel implements ChatModel {
     }
     const text = last?.role === 'user' ? last.text : '';
 
+    // A pasted listing KaufCheck already checked: its note follows the message.
+    const note = text.lastIndexOf('[KaufCheck-Prüfung ');
+    if (note !== -1) {
+      const summary = text
+        .slice(note)
+        .split('\n')
+        .filter((line) => line.startsWith('Empfehlung zum Preis'))
+        .join(' ');
+      return Promise.resolve(this.stream(request, `(Entwicklungsmodus) ${summary || 'Geprüft.'}`));
+    }
+
     // A pasted listing: long, with the usual detail labels.
     if (text.length >= 200 && /kilometerstand|erstzulassung/i.test(text))
       return Promise.resolve(this.use('analyze_listing', {}));
