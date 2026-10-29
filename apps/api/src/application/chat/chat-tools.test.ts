@@ -82,6 +82,10 @@ describe('chat tool schemas', () => {
     expect(topicJumps('Muss ich das Auto vor dem Verkauf abmelden?')[0]?.href).toBe(
       '/auto-ummelden',
     );
+    expect(topicJumps('Wie melde ich das Auto aus Hamburg um?')[0]?.href).toBe('/auto-ummelden');
+    const started = performance.now();
+    topicJumps('melde '.repeat(3_333));
+    expect(performance.now() - started).toBeLessThan(50);
   });
 
   it('recognize a listing quickly also for a line made to slow the check down', () => {

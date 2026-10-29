@@ -960,7 +960,7 @@ const TOPICS: readonly [RegExp, AppPage][] = [
   [/kaufvertrag|\bvertrag\b/i, 'contract'],
   [/besichtig|probefahrt|checkliste/i, 'checklist'],
   [
-    /\bummeld|\bmelde\b[^.?!]*\bum\b|\bzulassen\b|\bzulassung\b|zulassungsstelle|\babmeld|\b(?:auto|wagen|fahrzeug)\s+(?:an|um)melden/i,
+    /\bummeld|\bmelde\b[^.?!]{0,60}\bum\b|\bzulassen\b|\bzulassung\b|zulassungsstelle|\babmeld|\b(?:auto|wagen|fahrzeug)\s+(?:an|um)melden/i,
     'register',
   ],
   [/rückruf/i, 'recalls'],
