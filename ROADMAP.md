@@ -11,35 +11,35 @@ PRs, **L** = mehrere Wochen.
 
 ## Erledigt
 
-| #   | Feature                                                                                   | PR        |
-| --- | ----------------------------------------------------------------------------------------- | --------- |
-| 1.1 | Kfz-Steuer-Rechner (aus den Werten im Fahrzeugschein)                                     | #20       |
-| 1.2 | Laufende Kosten überschlagen (eigene Werte, Steuer eingerechnet)                          | #20       |
-| 2.1 | Rückruf-Check: FIN erfragen, Herstellerseiten und KBA verlinken                           | #17       |
-| 2.2 | Kauf-Assistent: Checkliste bis Zulassung und „Nach dem Kauf“                              | #21       |
-| 2.4 | PDF-Mappe für die Besichtigung (Pro)                                                      | #18       |
-| 2.5 | Verhandlungshilfe (Pro)                                                                   | #22       |
-| 3.1 | Mein Auto: Auto anlegen, HU-Termin mit Kalenderdatei, Schwachstellen                      | #23       |
-| 1.3 | Typklasse: Erklärung und Link zur GDV-Abfrage                                             | #24       |
-| 5.5 | PWA: installierbar, Prüfung für die Besichtigung offline                                  | #25       |
-| 2.3 | Kaufvertrag für den Privatkauf als PDF (Pro)                                              | #28       |
-| 3.5 | Auto privat verkaufen: Ratgeber, Inseratstext (Pro), Übergabe an den Vertrag              | #30       |
-| 3.3 | Kostenbuch und Serviceheft (Pro): Kosten, Verbrauch, CSV, Serviceheft-PDF                 | #31       |
-| 1.4 | Kosten pro Monat im Vergleich (Pro), Hinweis im Auto-Berater                              | #32       |
-| 3.2 | Erinnerungen per E-Mail und Kalenderdatei: HU, Inspektion, Bremsflüssigkeit, Reifen (Pro) | #33       |
-| 5.4 | Ratgeber (Teil 1): Auto ummelden, Rückrufe prüfen, Autokosten im Monat                    | #34       |
-| 1.5 | Finanzierungsrechner (kostenlos) und Kreditkosten im Vergleich der Kosten pro Monat (Pro) | #35       |
-| 3.2 | Erinnerung an die HU per E-Mail auch ohne Pro                                             | #36       |
-| 5.3 | Affiliate-Link zum Vergleich von Kfz-Versicherungen in drei Ratgebern (ohne Pro)          | #37       |
-| 5.2 | Eigene Anzeigen (Sponsoring) vom eigenen Server statt AdSense, ohne Drittanbieter         | #39       |
-| 2.9 | Betrugshinweise (Vorkasse, Treuhand, Spedition, Ausland, Messenger, ungesehen)            | #40       |
-| 1.5 | Finanzierungsbeispiel in der Prüfung mit dem Bundesbank-Durchschnittszins                 | #42       |
-| 1.1 | Steuer- und Kostenrechner: Werte aus Modell und Motor (EU-Daten, 319 Modelle)             | #43       |
-| neu | Affiliate-Link zu Berichten über die Fahrzeughistorie (aus, bis der Partner zustimmt)     | #44       |
-| neu | Auto aus den Niederlanden: Kennzeichen bei der RDW prüfen (Tacho, Rückrufe, APK)          | #45       |
-| 4.3 | Preis-Check: Preisstufe und Empfehlung aus bei KaufCheck geprüften Inseraten              | #46       |
-| neu | Chat-Assistent als Startpunkt: Prüfung, Preis-Check, Suche, Steuer, Finanzierung, Sprache | #47       |
-| neu | Startseite nur noch Chat und FAQ, Absprung zum Werkzeug unter jeder Antwort               | dieser PR |
+| #   | Feature                                                                                   | PR  |
+| --- | ----------------------------------------------------------------------------------------- | --- |
+| 1.1 | Kfz-Steuer-Rechner (aus den Werten im Fahrzeugschein)                                     | #20 |
+| 1.2 | Laufende Kosten überschlagen (eigene Werte, Steuer eingerechnet)                          | #20 |
+| 2.1 | Rückruf-Check: FIN erfragen, Herstellerseiten und KBA verlinken                           | #17 |
+| 2.2 | Kauf-Assistent: Checkliste bis Zulassung und „Nach dem Kauf“                              | #21 |
+| 2.4 | PDF-Mappe für die Besichtigung (Pro)                                                      | #18 |
+| 2.5 | Verhandlungshilfe (Pro)                                                                   | #22 |
+| 3.1 | Mein Auto: Auto anlegen, HU-Termin mit Kalenderdatei, Schwachstellen                      | #23 |
+| 1.3 | Typklasse: Erklärung und Link zur GDV-Abfrage                                             | #24 |
+| 5.5 | PWA: installierbar, Prüfung für die Besichtigung offline                                  | #25 |
+| 2.3 | Kaufvertrag für den Privatkauf als PDF (Pro)                                              | #28 |
+| 3.5 | Auto privat verkaufen: Ratgeber, Inseratstext (Pro), Übergabe an den Vertrag              | #30 |
+| 3.3 | Kostenbuch und Serviceheft (Pro): Kosten, Verbrauch, CSV, Serviceheft-PDF                 | #31 |
+| 1.4 | Kosten pro Monat im Vergleich (Pro), Hinweis im Auto-Berater                              | #32 |
+| 3.2 | Erinnerungen per E-Mail und Kalenderdatei: HU, Inspektion, Bremsflüssigkeit, Reifen (Pro) | #33 |
+| 5.4 | Ratgeber (Teil 1): Auto ummelden, Rückrufe prüfen, Autokosten im Monat                    | #34 |
+| 1.5 | Finanzierungsrechner (kostenlos) und Kreditkosten im Vergleich der Kosten pro Monat (Pro) | #35 |
+| 3.2 | Erinnerung an die HU per E-Mail auch ohne Pro                                             | #36 |
+| 5.3 | Affiliate-Link zum Vergleich von Kfz-Versicherungen in drei Ratgebern (ohne Pro)          | #37 |
+| 5.2 | Eigene Anzeigen (Sponsoring) vom eigenen Server statt AdSense, ohne Drittanbieter         | #39 |
+| 2.9 | Betrugshinweise (Vorkasse, Treuhand, Spedition, Ausland, Messenger, ungesehen)            | #40 |
+| 1.5 | Finanzierungsbeispiel in der Prüfung mit dem Bundesbank-Durchschnittszins                 | #42 |
+| 1.1 | Steuer- und Kostenrechner: Werte aus Modell und Motor (EU-Daten, 319 Modelle)             | #43 |
+| neu | Affiliate-Link zu Berichten über die Fahrzeughistorie (aus, bis der Partner zustimmt)     | #44 |
+| neu | Auto aus den Niederlanden: Kennzeichen bei der RDW prüfen (Tacho, Rückrufe, APK)          | #45 |
+| 4.3 | Preis-Check: Preisstufe und Empfehlung aus bei KaufCheck geprüften Inseraten              | #46 |
+| neu | Chat-Assistent als Startpunkt: Prüfung, Preis-Check, Suche, Steuer, Finanzierung, Sprache | #47 |
+| neu | Startseite nur noch Chat und FAQ, Absprung zum Werkzeug unter jeder Antwort               | #51 |
 
 ## Arbeitsweise je Feature
 
