@@ -175,17 +175,23 @@ const notify = () => {
   listeners.forEach((listener) => listener());
 };
 
-/** The newest chats that fit: when the browser's storage is full, the oldest go first. */
-function writeStore(store: Store): void {
+/**
+ * The newest chats that fit: when the browser's storage is full, the oldest go first.
+ * Returns whether the store was written.
+ */
+function writeStore(store: Store): boolean {
   let pruned = prune(store);
+  let written = false;
   try {
     for (;;) {
       if (pruned.chats.length === 0 && pruned.usage === null) {
         window.localStorage.removeItem(CHATS_STORAGE_KEY);
+        written = true;
         break;
       }
       try {
         window.localStorage.setItem(CHATS_STORAGE_KEY, JSON.stringify(pruned));
+        written = true;
         break;
       } catch (error) {
         if (pruned.chats.length <= 1) throw error;
@@ -196,14 +202,22 @@ function writeStore(store: Store): void {
     // Blocked, or not even the newest chat fits: the open chat still works, it is just not kept.
   }
   notify();
+  return written;
 }
 
-/** Deletes what is past the retention period from the device, not only from the list. */
+/**
+ * Deletes what is past the retention period from the device, not only from the list
+ * (run when the app starts). Writes only when something is gone.
+ */
 export function pruneStoredChats(): void {
   try {
     const raw = window.localStorage.getItem(CHATS_STORAGE_KEY);
+    if (raw === null) return;
+    const before = JSON.parse(raw) as { chats?: unknown; usage?: unknown };
     const store = parseStore(raw);
-    if (raw !== null && JSON.stringify(store) !== raw) writeStore(store);
+    const count = Array.isArray(before.chats) ? before.chats.length : 0;
+    if (count !== store.chats.length || (before.usage != null && store.usage === null))
+      writeStore(store);
   } catch {
     // ignore
   }
@@ -237,18 +251,22 @@ export function saveChat(chat: Omit<StoredChat, 'title'>, keptBefore: boolean): 
   if (keptBefore && !earlier) return false;
   const title = earlier?.title ?? chatTitle(chat.items);
   if (title === null) return false;
+  const shorten = (text: string) =>
+    text.length > MAX_KEPT_TEXT ? `${text.slice(0, MAX_KEPT_TEXT).trimEnd()} …` : text;
   const items = chat.items
     .slice(-MAX_ITEMS)
-    .map((item) =>
-      item.role === 'user' && item.text.length > MAX_KEPT_TEXT
-        ? { ...item, text: `${item.text.slice(0, MAX_KEPT_TEXT).trimEnd()} …` }
-        : item,
-    );
-  writeStore({
+    .map((item) => (item.role === 'user' ? { ...item, text: shorten(item.text) } : item));
+  const history = chat.history.map((turn) =>
+    turn.role === 'user' ? { ...turn, content: shorten(turn.content) } : turn,
+  );
+  // Storage blocked or full: not kept – which is not the same as deleted.
+  return writeStore({
     ...store,
-    chats: [{ ...chat, title, items }, ...store.chats.filter((item) => item.id !== chat.id)],
+    chats: [
+      { ...chat, title, items, history },
+      ...store.chats.filter((item) => item.id !== chat.id),
+    ],
   });
-  return true;
 }
 
 export function deleteChat(id: string): void {
@@ -295,18 +313,18 @@ export function setCurrentChatId(id: string): void {
   }
 }
 
+/** Another tab changed the chats (a new message, deleted, logged out): one listener for all. */
+function onStorage(event: StorageEvent): void {
+  if (event.key !== CHATS_STORAGE_KEY && event.key !== null) return;
+  notify();
+}
+
 function subscribe(listener: () => void): () => void {
+  if (listeners.size === 0) window.addEventListener('storage', onStorage);
   listeners.add(listener);
-  // Another tab changed the chats (a new message, deleted, logged out).
-  const onStorage = (event: StorageEvent) => {
-    if (event.key !== CHATS_STORAGE_KEY && event.key !== null) return;
-    version += 1;
-    listener();
-  };
-  window.addEventListener('storage', onStorage);
   return () => {
     listeners.delete(listener);
-    window.removeEventListener('storage', onStorage);
+    if (listeners.size === 0) window.removeEventListener('storage', onStorage);
   };
 }
 

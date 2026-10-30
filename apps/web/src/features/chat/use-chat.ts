@@ -6,7 +6,6 @@ import {
   currentChatId,
   loadChat,
   loadUsage,
-  pruneStoredChats,
   saveChat,
   saveUsage,
   setCurrentChatId,
@@ -106,7 +105,6 @@ export function useChat(plan: string | null) {
   const chats = useStoredChats();
 
   useEffect(() => setCurrentChatId(conversation.id), [conversation.id]);
-  useEffect(() => pruneStoredChats(), []);
 
   useEffect(() => {
     if (conversation === saved.current.conversation) return;

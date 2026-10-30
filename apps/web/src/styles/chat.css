@@ -15,6 +15,11 @@
   overscroll-behavior: contain;
 }
 
+.chat__log:focus-visible {
+  /* Inside the area: the page around it cuts off a ring outside. */
+  outline-offset: -3px;
+}
+
 /* Empty: the welcome and the suggestions sit just above the input. */
 .chat__log--empty {
   display: flex;

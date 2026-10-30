@@ -91,6 +91,8 @@ function PastChats({
   const chats = useStoredChats();
   const headingId = useId();
   const [confirming, setConfirming] = useState(false);
+  // The page behind the open menu is inert: deletions are announced here.
+  const [deleted, setDeleted] = useState('');
   const confirmButton = useRef<HTMLButtonElement>(null);
   const deleteAllButton = useRef<HTMLButtonElement>(null);
   const heading = useRef<HTMLHeadingElement>(null);
@@ -101,8 +103,9 @@ function PastChats({
   }, [confirming]);
 
   // The deleted row is gone: the focus goes to the next one, or to the heading.
-  const remove = (index: number, id: string) => {
+  const remove = (index: number, id: string, title: string) => {
     deleteChat(id);
+    setDeleted(`Chat „${title}“ gelöscht.`);
     requestAnimationFrame(() => {
       const buttons = list.current?.querySelectorAll<HTMLButtonElement>('.drawer__chat');
       const next = buttons?.[Math.min(index, (buttons?.length ?? 1) - 1)];
@@ -115,6 +118,9 @@ function PastChats({
       <h2 id={headingId} ref={heading} className="drawer__heading" tabIndex={-1}>
         Chats
       </h2>
+      <p className="visually-hidden" role="status">
+        {deleted}
+      </p>
       {chats.length === 0 ? (
         <p className="drawer__note">
           Noch keine Chats. Sie bleiben nur auf diesem Gerät und werden nach {CHAT_RETENTION_DAYS}{' '}
@@ -138,7 +144,7 @@ function PastChats({
                   type="button"
                   className="drawer__chat-delete"
                   aria-label={`Chat „${chat.title}“ löschen`}
-                  onClick={() => remove(index, chat.id)}
+                  onClick={() => remove(index, chat.id, chat.title)}
                 >
                   <Trash2 aria-hidden size={16} />
                 </button>
@@ -159,6 +165,7 @@ function PastChats({
                 onClick={() => {
                   deleteAllChats();
                   setConfirming(false);
+                  setDeleted('Alle Chats gelöscht.');
                   requestAnimationFrame(() => heading.current?.focus());
                 }}
               >

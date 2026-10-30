@@ -331,7 +331,11 @@ export function ChatPanel({
     last?.role === 'assistant' ? last.text.length + last.cards.length + last.tools.length : 0;
   useEffect(() => {
     const element = log.current;
-    if (element) element.scrollTop = element.scrollHeight;
+    if (!element) return;
+    element.scrollTop = element.scrollHeight;
+    // On a low screen the page scrolls instead: it follows to the input.
+    if (items.length > 0 && window.matchMedia('(max-height: 520px)').matches)
+      window.scrollTo({ top: document.documentElement.scrollHeight });
   }, [id, items.length, lastLength]);
 
   /**

@@ -278,3 +278,23 @@ test('on a low screen the start page scrolls and the contract buttons stay reach
     .evaluate((element) => element.getBoundingClientRect().height);
   expect(input).toBeLessThanOrEqual(100);
 });
+
+test('with the browser storage blocked the chat still works, it is just not kept', async ({
+  page,
+}) => {
+  await page.addInitScript(() => {
+    const setItem = Storage.prototype.setItem;
+    Storage.prototype.setItem = function (key: string, value: string) {
+      if (key === 'kaufcheck:chats') throw new DOMException('blocked', 'SecurityError');
+      setItem.call(this, key, value);
+    };
+  });
+  await page.goto('/');
+  const chat = page.getByRole('region', { name: 'KI-Assistent von KaufCheck' });
+  const input = chat.getByLabel('Nachricht an den KI-Assistenten von KaufCheck');
+  await input.fill('Welche Schwachstellen hat der Golf?');
+  await input.press('Enter');
+  await expect(chat.locator('.chat-card').filter({ hasText: 'Modellwissen' })).toBeVisible();
+  await expect(chat.getByRole('status')).not.toContainText('gelöscht');
+  await expect(chat.getByText('Was möchtest du machen?')).toHaveCount(0);
+});
