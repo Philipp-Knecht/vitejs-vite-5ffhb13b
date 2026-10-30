@@ -1,6 +1,7 @@
 import { makeById } from '@kaufcheck/catalog';
 import {
   ENGINE_SOURCE,
+  engineCo2,
   engineKey,
   engineLabels,
   engineYear,
@@ -21,6 +22,7 @@ const day = (iso: string) => iso.split('-').reverse().join('.');
  * in the registration certificate stay binding.
  */
 export function EnginePicker({
+  legend = 'Dein Auto',
   index,
   engines,
   enginesFailed,
@@ -33,7 +35,9 @@ export function EnginePicker({
   index: EngineIndex | undefined;
   /** The engines of the picked model, while loaded. */
   engines: readonly EngineRecord[] | undefined;
+  legend?: string;
   enginesFailed: boolean;
+  /** As YYYY-MM-DD, or YYYY-MM-01 when only the month is known. */
   firstRegistration: string;
   currentYear: number;
   value: EnginePick;
@@ -72,7 +76,7 @@ export function EnginePicker({
 
   return (
     <fieldset className="engine-picker">
-      <legend>Werte aus dem Modell übernehmen</legend>
+      <legend>{legend}</legend>
       <SelectField
         label="Marke"
         value={value.makeId}
@@ -124,8 +128,13 @@ export function EnginePicker({
         {picked && (
           <div className="field__hint engine-picker__source">
             <p>
-              Eingetragen sind typische Werte von {formatNumber(picked.registrations)}{' '}
-              Neuzulassungen; verbindlich ist dein Fahrzeugschein (P.1, V.7).
+              Gerechnet wird mit typischen Werten von {formatNumber(picked.registrations)}{' '}
+              Neuzulassungen
+              {picked.ccm !== null && `: Hubraum ${formatNumber(picked.ccm)} cm³`}
+              {engineCo2(picked, firstRegistration) !== null &&
+                picked.fuel !== 'electric' &&
+                `, CO₂ ${formatNumber(Math.round(engineCo2(picked, firstRegistration) ?? 0))} g/km`}
+              . Verbindlich ist dein Fahrzeugschein (P.1, V.7).
               {picked.fuel === 'electric' &&
                 ' Die kW sind die an die EU gemeldete Leistung; im Inserat steht oft eine höhere Spitzenleistung.'}
               {missing.length > 0 &&

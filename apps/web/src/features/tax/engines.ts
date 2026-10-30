@@ -21,8 +21,13 @@ export interface EnginePick {
 
 export const NO_PICK: EnginePick = { makeId: '', modelId: '', engineKey: '' };
 
-export function useEngineIndex() {
-  return useQuery({ queryKey: ['engine-index'], queryFn: loadEngineIndex, staleTime: Infinity });
+export function useEngineIndex(enabled = true) {
+  return useQuery({
+    queryKey: ['engine-index'],
+    queryFn: loadEngineIndex,
+    staleTime: Infinity,
+    enabled,
+  });
 }
 
 export function useModelEngines(modelId: string) {

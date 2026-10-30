@@ -82,7 +82,25 @@ export class MockChatModel implements ChatModel {
         }),
       );
     }
-    if (/steuer/i.test(text)) return Promise.resolve(this.use('show_form', { form: 'tax' }));
+    if (/steuer/i.test(text)) {
+      // The tax form: first registration, drive and the values from the picked engine.
+      const registration = /erstzulassung (\d{1,2})\/(\d{4})/i.exec(text);
+      const drive = { benzin: 'petrol', diesel: 'diesel', elektro: 'electric' }[
+        /antrieb (benzin|diesel|elektro)/i.exec(text)?.[1]?.toLowerCase() ?? ''
+      ];
+      if (!registration || !drive) return Promise.resolve(this.use('show_form', { form: 'tax' }));
+      const ccm = amount(/hubraum\D{0,3}([\d.,]+)/i.exec(text)?.[1]);
+      // Messages reach the model NFKC-normalised: „CO₂“ arrives as „CO2“.
+      const co2 = amount(/co[₂2]\D{0,3}([\d.,]+)/i.exec(text)?.[1]);
+      return Promise.resolve(
+        this.use('vehicle_tax', {
+          first_registration: `${registration[2]}-${registration[1]!.padStart(2, '0')}`,
+          drive,
+          ...(ccm !== undefined ? { displacement_ccm: ccm } : {}),
+          ...(co2 !== undefined ? { co2_g_per_km: co2 } : {}),
+        }),
+      );
+    }
     if (/such|finde/i.test(text)) {
       const golf = /golf/i.test(text);
       return Promise.resolve(

@@ -1,13 +1,38 @@
+import { makeById } from '@kaufcheck/catalog';
+import {
+  engineCo2,
+  engineKey,
+  engineLabels,
+  enginesOfYear,
+  engineTaxDrive,
+  engineYear,
+} from '@kaufcheck/catalog/engines';
 import { CHAT_LIMITS, type ChatForm as ChatFormKind } from '@kaufcheck/shared';
 import { useEffect, useRef, useState, type FormEvent } from 'react';
 import { Button } from '../../components/ui/Button';
 import { SelectField, TextField } from '../../components/ui/Field';
+import { EnginePicker } from '../tax/EnginePicker';
+import { NO_PICK, useEngineIndex, useModelEngines, type EnginePick } from '../tax/engines';
 import { FORM_TITLES } from './chat-labels';
 
 type Prefill = Record<string, string | number>;
 
 const text = (prefill: Prefill, key: string) =>
   prefill[key] === undefined ? '' : String(prefill[key]);
+
+const DRIVE_NAMES: Record<string, string> = {
+  petrol: 'Benzin',
+  diesel: 'Diesel',
+  electric: 'Elektro',
+};
+
+/** A first registration typed as month and year („03/2016“) as the first of that month. */
+function registrationMonth(text: string): string {
+  const match = /^\s*(\d{1,2})\s*[./-]\s*(\d{4})\s*$/.exec(text);
+  if (!match) return '';
+  const month = Number(match[1]);
+  return month >= 1 && month <= 12 ? `${match[2]}-${String(month).padStart(2, '0')}-01` : '';
+}
 
 const euros = (value: string) => {
   const number = Number(value.replace(/\./g, '').replace(',', '.'));
@@ -46,7 +71,6 @@ export function ChatForm({
     drive: 'petrol',
     ccm: '',
     co2: '',
-    kw: '',
     year: '',
     km: '',
     zip: '',
@@ -54,6 +78,29 @@ export function ChatForm({
     plate: text(prefill, 'plate'),
   }));
   const [problem, setProblem] = useState<string | null>(null);
+
+  // Tax: make, model and engine from the EU data; the values of the registration certificate
+  // only where the data has nothing, or when the visitor wants to type them.
+  const index = useEngineIndex(form === 'tax');
+  const [pick, setPick] = useState<EnginePick>(NO_PICK);
+  const [manual, setManual] = useState(false);
+  const engines = useModelEngines(form === 'tax' ? pick.modelId : '');
+  const engineList = engines.data?.engines;
+  const currentYear = new Date().getFullYear();
+  const registration = registrationMonth(values.registration ?? '');
+  const year =
+    engineList && registration ? engineYear(engineList, registration, currentYear) : null;
+  const yearEngines = engineList && year !== null ? enginesOfYear(engineList, year) : [];
+  const pickedEngine = yearEngines.find((engine) => engineKey(engine) === pick.engineKey) ?? null;
+  const noData =
+    engines.isError ||
+    (pick.modelId !== '' && engineList !== undefined && registration !== '' && year === null);
+  const typed = manual || noData;
+  const carName = () => {
+    const make = makeById(pick.makeId)?.name ?? pick.makeId;
+    const model = index.data?.makes[pick.makeId]?.find((entry) => entry.id === pick.modelId)?.name;
+    return model ? `${make} ${model}` : '';
+  };
   const set = (key: string) => (value: string) =>
     setValues((current) => ({ ...current, [key]: value }));
   const field = (key: string) => ({
@@ -83,17 +130,27 @@ export function ChatForm({
           v.rate ? `, effektiver Jahreszins ${v.rate} %` : ''
         }`;
       case 'tax': {
-        if (!v.registration) return null;
-        const drive =
-          { petrol: 'Benzin', diesel: 'Diesel', electric: 'Elektro' }[v.drive ?? ''] ?? '';
+        if (!registration) return null;
+        if (!typed && pickedEngine) {
+          const co2 =
+            pickedEngine.fuel === 'electric' ? null : engineCo2(pickedEngine, registration);
+          const parts = [
+            `Erstzulassung ${v.registration}`,
+            carName(),
+            `Motor ${engineLabels(yearEngines).get(engineKey(pickedEngine))}`,
+            `Antrieb ${DRIVE_NAMES[engineTaxDrive(pickedEngine.fuel)]}`,
+            pickedEngine.ccm !== null && `Hubraum ${pickedEngine.ccm} cm³`,
+            co2 !== null && `CO₂ ${Math.round(co2)} g/km`,
+          ].filter(Boolean);
+          return `Kfz-Steuer berechnen: ${parts.join(', ')} (Hubraum und CO₂ aus den EU-Motordaten)`;
+        }
+        if (!typed) return null;
         const parts = [
           `Erstzulassung ${v.registration}`,
-          `Antrieb ${drive}`,
+          carName(),
+          `Antrieb ${DRIVE_NAMES[v.drive ?? ''] ?? ''}`,
           v.ccm && `Hubraum ${v.ccm} cm³`,
           v.co2 && `CO₂ ${v.co2} g/km`,
-          v.make && `Marke ${v.make}`,
-          v.model && `Modell ${v.model}`,
-          v.kw && `Leistung ${v.kw} kW`,
         ].filter(Boolean);
         return `Kfz-Steuer berechnen: ${parts.join(', ')}`;
       }
@@ -106,7 +163,13 @@ export function ChatForm({
     event.preventDefault();
     const text = message();
     if (!text) {
-      setProblem('Gib mindestens eine Angabe ein.');
+      setProblem(
+        form !== 'tax'
+          ? 'Gib mindestens eine Angabe ein.'
+          : !registration
+            ? 'Gib die Erstzulassung als Monat und Jahr an, zum Beispiel 03/2016.'
+            : 'Wähl Marke, Modell und Motor – oder trag die Werte aus dem Fahrzeugschein ein.',
+      );
       return;
     }
     if (text.length > CHAT_LIMITS.messageChars) {
@@ -159,24 +222,49 @@ export function ChatForm({
         </div>
       )}
       {form === 'tax' && (
-        <div className="chat-form__grid">
-          <TextField
-            label="Erstzulassung (MM/JJJJ)"
-            placeholder="03/2016"
-            required
-            {...field('registration')}
+        <>
+          <div className="chat-form__grid">
+            <TextField
+              label="Erstzulassung (MM/JJJJ)"
+              placeholder="03/2016"
+              required
+              {...field('registration')}
+            />
+          </div>
+          <EnginePicker
+            index={index.data}
+            engines={engineList}
+            enginesFailed={engines.isError}
+            firstRegistration={registration}
+            currentYear={currentYear}
+            value={pick}
+            missing={[]}
+            onChange={(next) => setPick(next)}
           />
-          <SelectField label="Antrieb" {...field('drive')}>
-            <option value="petrol">Benzin, Autogas, Erdgas</option>
-            <option value="diesel">Diesel</option>
-            <option value="electric">Elektro</option>
-          </SelectField>
-          <TextField label="Hubraum in cm³ (P.1)" inputMode="numeric" {...field('ccm')} />
-          <TextField label="CO₂ in g/km (V.7)" inputMode="numeric" {...field('co2')} />
-          <TextField label="Marke (falls Werte fehlen)" {...field('make')} />
-          <TextField label="Modell" {...field('model')} />
-          <TextField label="Leistung in kW" inputMode="numeric" {...field('kw')} />
-        </div>
+          {!noData && (
+            <button
+              type="button"
+              className="link-button chat-form__switch"
+              disabled={disabled}
+              onClick={() => setManual((current) => !current)}
+            >
+              {manual
+                ? 'Doch Modell und Motor aus der Liste wählen'
+                : 'Auto nicht in der Liste? Werte aus dem Fahrzeugschein eintragen'}
+            </button>
+          )}
+          {typed && (
+            <div className="chat-form__grid">
+              <SelectField label="Antrieb" {...field('drive')}>
+                <option value="petrol">Benzin, Autogas, Erdgas</option>
+                <option value="diesel">Diesel</option>
+                <option value="electric">Elektro</option>
+              </SelectField>
+              <TextField label="Hubraum in cm³ (P.1)" inputMode="numeric" {...field('ccm')} />
+              <TextField label="CO₂ in g/km (V.7)" inputMode="numeric" {...field('co2')} />
+            </div>
+          )}
+        </>
       )}
       {form === 'rdw' && (
         <TextField

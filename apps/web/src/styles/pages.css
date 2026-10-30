@@ -1328,6 +1328,14 @@
   margin-bottom: 8px;
 }
 
+.tax-form__switch {
+  margin: -4px 0 12px;
+}
+
+.tax-form__switch:empty {
+  display: none;
+}
+
 .tax-result {
   padding: 20px;
   border: 1px solid var(--c-primary-100);

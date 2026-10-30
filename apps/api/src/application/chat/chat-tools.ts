@@ -500,7 +500,7 @@ async function engineValues(
     .map((engine) => labels.get(`${engine.fuel}|${engine.ccm ?? ''}|${engine.kw}`))
     .join(
       '; ',
-    )}. Frag nach der Leistung in kW oder PS und ruf das Werkzeug mit power_kw erneut auf.`;
+    )}. Frag, welcher Motor es ist, oder zeig das Formular „tax“ – dort wählt der Nutzer Modell und Motor aus der Liste; dann ruf das Werkzeug mit power_kw erneut auf.`;
 }
 
 const vehicleTaxTool = tool(
@@ -508,7 +508,7 @@ const vehicleTaxTool = tool(
     name: 'vehicle_tax',
     strict: true,
     description:
-      'Rechnet die jährliche Kfz-Steuer nach KraftStG. Braucht die Erstzulassung und den Antrieb (petrol gilt für Benzin, Autogas, Erdgas und Benzin-Hybride). Hubraum und CO₂ stehen im Fahrzeugschein (P.1 und V.7); fehlen sie, mit Marke, Modell und Leistung aus den EU-Motordaten ergänzen lassen. Nie Werte raten.',
+      'Rechnet die jährliche Kfz-Steuer nach KraftStG. Braucht die Erstzulassung und den Antrieb (petrol gilt für Benzin, Autogas, Erdgas und Benzin-Hybride). Hubraum und CO₂ kommen aus den EU-Motordaten (Marke, Modell, Leistung) oder aus dem Fahrzeugschein (P.1 und V.7). Fehlt der Motor, zeig lieber das Formular „tax“ mit der Motorliste, statt nach Hubraum, CO₂ oder kW zu fragen. Nie Werte raten.',
     inputSchema: objectSchema(
       {
         first_registration: string('Erstzulassung als YYYY-MM-DD oder YYYY-MM'),
