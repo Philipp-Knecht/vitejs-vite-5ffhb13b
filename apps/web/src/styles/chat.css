@@ -64,6 +64,8 @@
   list-style: none;
   overflow-y: auto;
   overscroll-behavior: contain;
+  /* A suggestion reached by keyboard stays clear of the fade. */
+  scroll-padding-block: 4px calc(0.6 * var(--starter-h) + 4px);
   scrollbar-width: none;
   mask-image: linear-gradient(to bottom, #000 calc(100% - 0.6 * var(--starter-h)), transparent);
 }
@@ -86,6 +88,11 @@
   font: inherit;
   text-align: left;
   cursor: pointer;
+}
+
+.chat__starter:focus-visible {
+  /* Inside the button: the list would cut off a ring around it. */
+  outline-offset: -3px;
 }
 
 .chat__starter:hover:not(:disabled) {
@@ -259,7 +266,7 @@
   flex: 1;
   min-width: 0;
   min-height: 44px;
-  max-height: 200px;
+  max-height: min(200px, 25dvh);
   padding: 11px 0;
   border: 0;
   background: transparent;

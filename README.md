@@ -339,8 +339,8 @@ listing check.
 - A pasted listing is checked before the model answers, and the model gets the result with the
   message. Under every answer, „Lieber selbst?“ links to the KaufCheck page of the tool it used
   (else the page that fits the question, else the search and the listing check).
-- The browser keeps the conversations on the device (local storage: the 20 newest, each for at most
-  30 days, deleted on logout) and sends the open one with each message; the server stores nothing
+- The browser keeps the conversations on the device (local storage: the 20 newest, pasted listings
+  shortened, deleted after 30 days without a new message and on logout) and sends the open one with each message; the server stores nothing
   of it, only daily counts (`ChatUsage`, deleted after seven days).
   Phone numbers, e-mail addresses and IBANs are removed before messages reach the model; the
   tools read the original. A message may be as long as a listing the check accepts (20,000

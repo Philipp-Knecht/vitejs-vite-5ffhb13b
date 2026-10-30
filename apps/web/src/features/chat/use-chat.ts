@@ -1,10 +1,4 @@
-import {
-  CHAT_LIMITS,
-  type ChatCard,
-  type ChatStreamEvent,
-  type ChatTurn,
-  type ChatUsage,
-} from '@kaufcheck/shared';
+import { CHAT_LIMITS, type ChatCard, type ChatStreamEvent, type ChatTurn } from '@kaufcheck/shared';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { ApiRequestError } from '../../api/client';
 import { streamChat } from './chat-stream';
@@ -12,11 +6,13 @@ import {
   currentChatId,
   loadChat,
   loadUsage,
+  pruneStoredChats,
   saveChat,
   saveUsage,
   setCurrentChatId,
   useStoredChats,
   type ChatItem,
+  type StoredUsage,
 } from './chat-store';
 
 export type { ChatItem, ChatToolStep } from './chat-store';
@@ -25,6 +21,16 @@ interface Conversation {
   id: string;
   items: ChatItem[];
   history: ChatTurn[];
+  /** When this tab last wrote or read it: a newer copy from another tab is taken over. */
+  updatedAt: number;
+}
+
+/** What screen readers hear when another conversation shows. */
+export interface ChatNotice {
+  id: string;
+  text: string;
+  /** Deleted in another tab or by logging out there: what is typed stays. */
+  external: boolean;
 }
 
 /**
@@ -46,23 +52,44 @@ const newConversation = (): Conversation => ({
   id: `k${Date.now().toString(36)}${Math.random().toString(36).slice(2, 8)}`,
   items: [],
   history: [],
+  updatedAt: 0,
 });
+
+const storedConversation = (id: string): Conversation | null => {
+  const stored = loadChat(id);
+  return (
+    stored && {
+      id: stored.id,
+      items: stored.items,
+      history: stored.history,
+      updatedAt: stored.updatedAt,
+    }
+  );
+};
 
 /** The conversation of this tab, or a new one. */
 function loadCurrent(): Conversation {
   const id = currentChatId();
-  const stored = id ? loadChat(id) : null;
-  return stored
-    ? { id: stored.id, items: stored.items, history: stored.history }
-    : newConversation();
+  return (id && storedConversation(id)) || newConversation();
 }
 
 const streaming = (items: readonly ChatItem[]) =>
   items.some((item) => item.role === 'assistant' && item.status === 'streaming');
 
-export function useChat() {
+/** Shows another tab's newer copy of the open conversation. */
+function takeOver(set: (next: Conversation) => void, next: Conversation): void {
+  set(next);
+}
+
+/**
+ * The conversation of the start page. `plan` is the visitor's plan once known: the daily
+ * count kept on the device only applies to the plan it was counted for, so a count used up
+ * without an account does not block after signing up or buying Pro.
+ */
+export function useChat(plan: string | null) {
   const [conversation, setConversation] = useState<Conversation>(loadCurrent);
-  const [usage, setUsage] = useState<ChatUsage | null>(loadUsage);
+  const [usage, setUsage] = useState<StoredUsage | null>(loadUsage);
+  const [notice, setNotice] = useState<ChatNotice | null>(null);
   const [busy, setBusy] = useState(false);
   const controller = useRef<AbortController | null>(null);
   // Two clicks in one frame must not send twice; `busy` only changes on the next render.
@@ -72,17 +99,25 @@ export function useChat() {
     conversation,
     count: conversation.items.length,
   });
+  // Kept on the device once (so gone from there means deleted), and when this tab last
+  // wrote or read it (so a newer copy is another tab's).
+  const kept = useRef(conversation.updatedAt > 0);
+  const stamp = useRef(conversation.updatedAt);
   const chats = useStoredChats();
-  const kept = useRef(false);
 
   useEffect(() => setCurrentChatId(conversation.id), [conversation.id]);
+  useEffect(() => pruneStoredChats(), []);
 
   useEffect(() => {
     if (conversation === saved.current.conversation) return;
     // While an answer streams in, only a new message is written – not every word.
     if (streaming(conversation.items) && conversation.items.length === saved.current.count) return;
     saved.current = { conversation, count: conversation.items.length };
-    saveChat({ ...conversation, updatedAt: Date.now() });
+    const updatedAt = Date.now();
+    if (saveChat({ ...conversation, updatedAt }, kept.current)) {
+      kept.current = true;
+      stamp.current = updatedAt;
+    }
   }, [conversation]);
 
   useEffect(() => saveUsage(usage), [usage]);
@@ -97,32 +132,46 @@ export function useChat() {
   useEffect(() => () => controller.current?.abort(), []);
 
   const show = useCallback(
-    (next: Conversation) => {
+    (next: Conversation, text: string | null, external = false) => {
       stop();
       saved.current = { conversation: next, count: next.items.length };
-      kept.current = false;
+      kept.current = next.updatedAt > 0;
+      stamp.current = next.updatedAt;
       setConversation(next);
+      setNotice(text === null ? null : { id: next.id, text, external });
     },
     [stop],
   );
 
-  const reset = useCallback(() => show(newConversation()), [show]);
+  const reset = useCallback(() => show(newConversation(), 'Neuer Chat.'), [show]);
 
   /** Opens a conversation kept on this device. */
   const open = useCallback(
     (id: string) => {
-      const stored = loadChat(id);
-      if (stored) show({ id: stored.id, items: stored.items, history: stored.history });
+      const stored = storedConversation(id);
+      if (stored) show(stored, `Chat „${loadChat(id)?.title ?? ''}“ geöffnet.`);
     },
     [show],
   );
 
-  // Deleted here or in another tab (or logged out there): the chat starts over.
-  const present = chats.some((chat) => chat.id === conversation.id);
+  // Deleted here or in another tab (or by logging out there): the chat starts over. Written
+  // by another tab that has it open too: its newer copy is taken over.
   useEffect(() => {
-    if (present) kept.current = true;
-    else if (kept.current) reset();
-  }, [present, reset]);
+    // Read afresh: this tab may have saved it a moment ago, after `chats` was read.
+    const stored = loadChat(conversation.id);
+    if (!stored) {
+      if (kept.current) show(newConversation(), 'Dieser Chat wurde gelöscht. Neuer Chat.', true);
+      return;
+    }
+    if (!busy && stored.updatedAt > stamp.current) {
+      const next = storedConversation(stored.id);
+      if (next) {
+        saved.current = { conversation: next, count: next.items.length };
+        stamp.current = next.updatedAt;
+        takeOver(setConversation, next);
+      }
+    }
+  }, [chats, conversation.id, busy, show]);
 
   const send = useCallback(
     (text: string) => {
@@ -194,7 +243,7 @@ export function useChat() {
             update((item) => ({ ...item, cards: [...item.cards, event.card] }));
             break;
           case 'done':
-            setUsage(event.usage);
+            setUsage({ ...event.usage, plan: plan ?? '' });
             change((current) => ({
               ...current,
               history: [
@@ -229,7 +278,7 @@ export function useChat() {
             details.resetsAt !== undefined
           ) {
             const { limit, resetsAt } = details;
-            setUsage({ used: details.used ?? limit, limit, resetsOn: resetsAt });
+            setUsage({ used: details.used ?? limit, limit, resetsOn: resetsAt, plan: plan ?? '' });
           }
           update((item) => ({
             ...item,
@@ -247,7 +296,7 @@ export function useChat() {
           setBusy(false);
         });
     },
-    [busy, conversation.id, conversation.history],
+    [busy, conversation.id, conversation.history, plan],
   );
 
   /** Shows a hint of the page in the chat, without asking the server. */
@@ -271,7 +320,9 @@ export function useChat() {
   return {
     id: conversation.id,
     items: conversation.items,
-    usage,
+    // A count for another plan (before signing up, before Pro) no longer applies.
+    usage: usage && plan !== null && usage.plan === plan ? usage : null,
+    notice: notice?.id === conversation.id ? notice : null,
     busy,
     send,
     showForm,

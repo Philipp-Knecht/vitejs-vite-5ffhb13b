@@ -75,7 +75,7 @@ const FAQ: FaqItem[] = [
     answer: ({ ads, retentionDays, chatDaily }) =>
       `Telefonnummern und E-Mail-Adressen aus dem Inserat werden vor dem Speichern entfernt. Ohne Konto werden Prüfungen nach ${retentionDays} Tagen gelöscht.${
         chatDaily !== null
-          ? ` Nachrichten an den Assistenten gehen an den KI-Anbieter; deine Chats speichert nur dein Browser auf diesem Gerät, höchstens ${CHAT_RETENTION_DAYS} Tage.`
+          ? ` Nachrichten an den Assistenten gehen an den KI-Anbieter; deine Chats speichert nur dein Browser auf diesem Gerät und löscht sie nach ${CHAT_RETENTION_DAYS} Tagen ohne neue Nachricht.`
           : ''
       } ${
         ads

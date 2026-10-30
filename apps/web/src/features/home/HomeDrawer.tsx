@@ -15,6 +15,13 @@ import {
   X,
   type LucideIcon,
 } from 'lucide-react';
+import {
+  CANCEL_BUTTON_LABEL,
+  CANCEL_PATH,
+  TERMS_PATH,
+  WITHDRAW_BUTTON_LABEL,
+  WITHDRAW_PATH,
+} from '@kaufcheck/shared';
 import { useEffect, useId, useRef, useState, type RefObject } from 'react';
 import { Link } from 'react-router';
 import { useMe } from '../../api/queries';
@@ -86,30 +93,32 @@ function PastChats({
   const [confirming, setConfirming] = useState(false);
   const confirmButton = useRef<HTMLButtonElement>(null);
   const deleteAllButton = useRef<HTMLButtonElement>(null);
+  const heading = useRef<HTMLHeadingElement>(null);
   const list = useRef<HTMLUListElement>(null);
 
   useEffect(() => {
     if (confirming) confirmButton.current?.focus();
   }, [confirming]);
 
-  // The deleted row is gone: the focus goes to the next one, or to the heading's list.
+  // The deleted row is gone: the focus goes to the next one, or to the heading.
   const remove = (index: number, id: string) => {
     deleteChat(id);
     requestAnimationFrame(() => {
       const buttons = list.current?.querySelectorAll<HTMLButtonElement>('.drawer__chat');
       const next = buttons?.[Math.min(index, (buttons?.length ?? 1) - 1)];
-      (next ?? deleteAllButton.current)?.focus();
+      (next ?? heading.current)?.focus();
     });
   };
 
   return (
     <section className="drawer__section drawer__chats" aria-labelledby={headingId}>
-      <h2 id={headingId} className="drawer__heading">
+      <h2 id={headingId} ref={heading} className="drawer__heading" tabIndex={-1}>
         Chats
       </h2>
       {chats.length === 0 ? (
         <p className="drawer__note">
-          Noch keine Chats. Sie bleiben nur auf diesem Gerät, höchstens {CHAT_RETENTION_DAYS} Tage.
+          Noch keine Chats. Sie bleiben nur auf diesem Gerät und werden nach {CHAT_RETENTION_DAYS}{' '}
+          Tagen ohne neue Nachricht gelöscht.
         </p>
       ) : (
         <>
@@ -137,7 +146,8 @@ function PastChats({
             ))}
           </ul>
           <p className="drawer__note">
-            Nur auf diesem Gerät gespeichert, höchstens {CHAT_RETENTION_DAYS} Tage.
+            Nur auf diesem Gerät gespeichert; nach {CHAT_RETENTION_DAYS} Tagen ohne neue Nachricht
+            gelöscht.
           </p>
           {confirming ? (
             <div className="drawer__confirm" role="group" aria-label="Alle Chats löschen?">
@@ -149,6 +159,7 @@ function PastChats({
                 onClick={() => {
                   deleteAllChats();
                   setConfirming(false);
+                  requestAnimationFrame(() => heading.current?.focus());
                 }}
               >
                 <span>Ja, löschen</span>
@@ -205,7 +216,6 @@ export function HomeDrawer({
   offlineChecks: readonly OfflineCheck[];
 }) {
   const ref = useRef<HTMLDialogElement>(null);
-  const titleId = useId();
   const me = useMe();
   const pro = me.data?.plan === 'pro';
 
@@ -227,7 +237,7 @@ export function HomeDrawer({
       ref={ref}
       id={id}
       className="drawer"
-      aria-labelledby={titleId}
+      aria-label="KaufCheck-Menü"
       onClose={onClose}
       onClick={(event) => {
         // A click on the backdrop targets the dialog element itself.
@@ -237,10 +247,9 @@ export function HomeDrawer({
       {open && (
         <div className="drawer__panel">
           <div className="drawer__top">
-            <h2 id={titleId} className="drawer__title">
+            <p className="drawer__title">
               <Logo />
-              <span className="visually-hidden">Menü</span>
-            </h2>
+            </p>
             <button
               type="button"
               className="icon-button"
@@ -309,6 +318,23 @@ export function HomeDrawer({
                 })
               }
             />
+            <nav className="drawer__section drawer__legal" aria-label="Rechtliches im Menü">
+              <Link to="/impressum" onClick={onClose}>
+                Impressum
+              </Link>
+              <Link to="/datenschutz" onClick={onClose}>
+                Datenschutz
+              </Link>
+              <Link to={TERMS_PATH} onClick={onClose}>
+                AGB
+              </Link>
+              <Link to={CANCEL_PATH} onClick={onClose}>
+                {CANCEL_BUTTON_LABEL}
+              </Link>
+              <Link to={WITHDRAW_PATH} onClick={onClose}>
+                {WITHDRAW_BUTTON_LABEL}
+              </Link>
+            </nav>
           </div>
           <div className="drawer__bottom">
             {onNewChat && (

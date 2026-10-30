@@ -21,12 +21,14 @@ export function LegalBar() {
         <Link to="/datenschutz">Datenschutz</Link>
         <Link to={TERMS_PATH}>AGB</Link>
         <PrivacySettingsButton />
-        <Link to={CANCEL_PATH} className="legal-bar__contract">
-          {CANCEL_BUTTON_LABEL}
-        </Link>
-        <Link to={WITHDRAW_PATH} className="legal-bar__contract">
-          {WITHDRAW_BUTTON_LABEL}
-        </Link>
+        <span className="legal-bar__contracts">
+          <Link to={CANCEL_PATH} className="legal-bar__contract">
+            {CANCEL_BUTTON_LABEL}
+          </Link>
+          <Link to={WITHDRAW_PATH} className="legal-bar__contract">
+            {WITHDRAW_BUTTON_LABEL}
+          </Link>
+        </span>
       </nav>
     </footer>
   );

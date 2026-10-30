@@ -290,7 +290,7 @@ export function ChatPanel({
   /** Counts up when the input should get the focus, e.g. after „Neuer Chat“. */
   focusInput: number;
 }) {
-  const { id, items, usage, busy, send, showForm, showHint } = chat;
+  const { id, items, usage, notice, busy, send, showForm, showHint } = chat;
   const [input, setInput] = useState('');
   const [focusId, setFocusId] = useState<string | null>(null);
   const [speechAsk, setSpeechAsk] = useState(false);
@@ -311,7 +311,9 @@ export function ChatPanel({
     const element = textarea.current;
     if (!element) return;
     element.style.height = 'auto';
-    element.style.height = `${Math.min(element.scrollHeight, MAX_INPUT_HEIGHT)}px`;
+    // On a low screen (a phone held sideways) the input leaves room for the conversation.
+    const limit = Math.min(MAX_INPUT_HEIGHT, window.innerHeight / 4);
+    element.style.height = `${Math.min(element.scrollHeight, Math.max(limit, 44))}px`;
   }, [input]);
 
   // New content scrolls into view, inside the log only.
@@ -321,7 +323,8 @@ export function ChatPanel({
   const [quiet, setQuiet] = useState({ id, last: last?.id });
   if (quiet.id !== id) {
     setQuiet({ id, last: last?.id });
-    setInput('');
+    // Deleted in another tab: what was typed here stays.
+    if (!notice?.external) setInput('');
     setSpeechAsk(false);
   }
   const lastLength =
@@ -466,7 +469,7 @@ export function ChatPanel({
         </div>
       </div>
       <p className="visually-hidden" role="status">
-        {quiet.id === id && last?.id === quiet.last ? '' : announcement(last)}
+        {quiet.id === id && last?.id === quiet.last ? (notice?.text ?? '') : announcement(last)}
       </p>
 
       <div className="chat__bottom">

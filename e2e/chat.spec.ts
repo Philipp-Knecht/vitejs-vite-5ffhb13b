@@ -180,8 +180,10 @@ test('past chats stay on this device and open from the menu', async ({ page }) =
     .click();
   await expect(menu).toBeHidden();
   await expect(otherChat.locator('.chat-card').filter({ hasText: 'Modellwissen' })).toBeVisible();
-  // Opened again, it is not read out again.
-  await expect(otherChat.getByRole('status')).toHaveText('');
+  // Opened again, it is not read out again: only which chat it is.
+  await expect(otherChat.getByRole('status')).toHaveText(
+    'Chat „Welche Schwachstellen hat der Golf?“ geöffnet.',
+  );
 
   // Deleted in one tab, gone in the other.
   await other.getByRole('button', { name: 'Menü öffnen' }).click();
@@ -213,4 +215,66 @@ test('the frequent questions have their own page', async ({ page }) => {
   await expect(
     page.getByText(/deine Chats speichert nur dein Browser auf diesem Gerät/),
   ).toBeVisible();
+});
+
+test('a count used up for one plan does not block another, and old chats leave the device', async ({
+  page,
+}) => {
+  const old = Date.now() - 40 * 24 * 60 * 60 * 1000;
+  const store = (plan: string) =>
+    JSON.stringify({
+      version: 2,
+      chats: [
+        {
+          id: 'kold',
+          title: 'Ein alter Chat',
+          updatedAt: old,
+          items: [{ id: 'c1', role: 'user', text: 'Ein alter Chat' }],
+          history: [],
+        },
+      ],
+      usage: { used: 15, limit: 15, resetsOn: '2999-01-01', plan },
+    });
+  // Used up without an account: blocked.
+  await page.addInitScript(
+    (value) => localStorage.setItem('kaufcheck:chats', value),
+    store('anonymous'),
+  );
+  await page.goto('/');
+  const chat = page.getByRole('region', { name: 'KI-Assistent von KaufCheck' });
+  await expect(chat.getByText(/Für heute sind alle 15 Nachrichten verbraucht/)).toBeVisible();
+  // A chat 40 days old is gone from the device, not only from the menu.
+  await expect
+    .poll(() => page.evaluate(() => localStorage.getItem('kaufcheck:chats') ?? ''))
+    .not.toContain('Ein alter Chat');
+
+  // Counted for another plan (say, before signing up): it does not apply.
+  const other = await page.context().newPage();
+  await other.addInitScript(
+    (value) => localStorage.setItem('kaufcheck:chats', value),
+    store('free'),
+  );
+  await other.goto('/');
+  const otherChat = other.getByRole('region', { name: 'KI-Assistent von KaufCheck' });
+  await expect(otherChat.getByText(/15 Nachrichten am Tag kostenlos/)).toBeVisible();
+  await expect(otherChat.getByRole('button', { name: 'Auto finden' })).toBeEnabled();
+});
+
+test('on a low screen the start page scrolls and the contract buttons stay reachable', async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 640, height: 360 });
+  await page.goto('/');
+  const chat = page.getByRole('region', { name: 'KI-Assistent von KaufCheck' });
+  await chat.getByLabel('Nachricht an den KI-Assistenten von KaufCheck').fill('Zeile\n'.repeat(30));
+  const cancel = page
+    .getByRole('navigation', { name: 'Rechtliches' })
+    .getByRole('link', { name: 'Verträge hier kündigen' });
+  await cancel.scrollIntoViewIfNeeded();
+  await expect(cancel).toBeInViewport();
+  // The input does not take the whole screen.
+  const input = await chat
+    .getByLabel('Nachricht an den KI-Assistenten von KaufCheck')
+    .evaluate((element) => element.getBoundingClientRect().height);
+  expect(input).toBeLessThanOrEqual(100);
 });

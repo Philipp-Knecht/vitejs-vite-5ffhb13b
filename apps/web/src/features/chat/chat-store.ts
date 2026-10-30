@@ -42,10 +42,15 @@ export interface StoredChat {
   history: ChatTurn[];
 }
 
+/** Today's count of messages, for the plan it was counted for. */
+export interface StoredUsage extends ChatUsage {
+  plan: string;
+}
+
 interface Store {
   version: 2;
   chats: StoredChat[];
-  usage: ChatUsage | null;
+  usage: StoredUsage | null;
 }
 
 /** Past conversations stay on this device only (localStorage), never on the server. */
@@ -58,6 +63,8 @@ export const CHAT_RETENTION_DAYS = 30;
 export const MAX_CHATS = 20;
 const MAX_ITEMS = 60;
 const MAX_TITLE = 60;
+/** A pasted listing is kept shortened: the check has it, and the device stays light. */
+const MAX_KEPT_TEXT = 3000;
 const DAY_MS = 24 * 60 * 60 * 1000;
 
 const isRecord = (value: unknown): value is Record<string, unknown> =>
@@ -92,11 +99,12 @@ const isTurn = (value: unknown): value is ChatTurn =>
   (value.role === 'user' || value.role === 'assistant') &&
   typeof value.content === 'string';
 
-const isUsage = (value: unknown): value is ChatUsage =>
+const isUsage = (value: unknown): value is StoredUsage =>
   isRecord(value) &&
   typeof value.used === 'number' &&
   typeof value.limit === 'number' &&
-  typeof value.resetsOn === 'string';
+  typeof value.resetsOn === 'string' &&
+  typeof value.plan === 'string';
 
 /** An answer cut off by a reload stays cut off. */
 function cleanItems(items: unknown[]): ChatItem[] {
@@ -134,44 +142,71 @@ function prune(store: Store, now = Date.now()): Store {
   return { version: 2, chats, usage };
 }
 
-let cachedRaw: string | null | undefined;
+// Read again only after a change here or in another tab, not on every render.
+let version = 0;
+let cachedVersion = -1;
 let cachedStore: Store = EMPTY;
 
+function parseStore(raw: string | null): Store {
+  if (!raw) return EMPTY;
+  const value = JSON.parse(raw) as unknown;
+  if (!isRecord(value) || value.version !== 2 || !Array.isArray(value.chats)) return EMPTY;
+  return prune({
+    version: 2,
+    chats: value.chats.map(parseChat).filter((chat) => chat !== null),
+    usage: isUsage(value.usage) ? value.usage : null,
+  });
+}
+
 function readStore(): Store {
+  if (cachedVersion === version) return cachedStore;
   try {
-    const raw = window.localStorage.getItem(CHATS_STORAGE_KEY);
-    if (raw === cachedRaw) return cachedStore;
-    cachedRaw = raw;
-    cachedStore = EMPTY;
-    if (!raw) return cachedStore;
-    const value = JSON.parse(raw) as unknown;
-    if (!isRecord(value) || value.version !== 2 || !Array.isArray(value.chats)) return cachedStore;
-    cachedStore = prune({
-      version: 2,
-      chats: value.chats.map(parseChat).filter((chat) => chat !== null),
-      usage: isUsage(value.usage) ? value.usage : null,
-    });
-    return cachedStore;
+    cachedStore = parseStore(window.localStorage.getItem(CHATS_STORAGE_KEY));
   } catch {
-    return EMPTY;
+    cachedStore = EMPTY;
   }
+  cachedVersion = version;
+  return cachedStore;
 }
 
 const listeners = new Set<() => void>();
-const notify = () => listeners.forEach((listener) => listener());
+const notify = () => {
+  version += 1;
+  listeners.forEach((listener) => listener());
+};
 
+/** The newest chats that fit: when the browser's storage is full, the oldest go first. */
 function writeStore(store: Store): void {
+  let pruned = prune(store);
   try {
-    const pruned = prune(store);
-    if (pruned.chats.length === 0 && pruned.usage === null) {
-      window.localStorage.removeItem(CHATS_STORAGE_KEY);
-    } else {
-      window.localStorage.setItem(CHATS_STORAGE_KEY, JSON.stringify(pruned));
+    for (;;) {
+      if (pruned.chats.length === 0 && pruned.usage === null) {
+        window.localStorage.removeItem(CHATS_STORAGE_KEY);
+        break;
+      }
+      try {
+        window.localStorage.setItem(CHATS_STORAGE_KEY, JSON.stringify(pruned));
+        break;
+      } catch (error) {
+        if (pruned.chats.length <= 1) throw error;
+        pruned = { ...pruned, chats: pruned.chats.slice(0, -1) };
+      }
     }
   } catch {
-    // Full or blocked: the open chat still works, it is just not kept.
+    // Blocked, or not even the newest chat fits: the open chat still works, it is just not kept.
   }
   notify();
+}
+
+/** Deletes what is past the retention period from the device, not only from the list. */
+export function pruneStoredChats(): void {
+  try {
+    const raw = window.localStorage.getItem(CHATS_STORAGE_KEY);
+    const store = parseStore(raw);
+    if (raw !== null && JSON.stringify(store) !== raw) writeStore(store);
+  } catch {
+    // ignore
+  }
 }
 
 /** The first line of the first message, as the name in the list of chats. */
@@ -190,13 +225,30 @@ export function loadChat(id: string): StoredChat | null {
   return readStore().chats.find((chat) => chat.id === id) ?? null;
 }
 
-/** Keeps a conversation once it has a message; a chat with only forms or hints is not kept. */
-export function saveChat(chat: Omit<StoredChat, 'title'>): void {
-  const title = chatTitle(chat.items);
-  if (title === null) return;
+/**
+ * Keeps a conversation once it has a message; a chat with only forms or hints is not kept.
+ * A chat kept before that is gone now was deleted (here, in another tab, or by logging out):
+ * an answer that arrives afterwards does not bring it back. Returns whether it was kept.
+ */
+export function saveChat(chat: Omit<StoredChat, 'title'>, keptBefore: boolean): boolean {
+  version += 1; // Another tab may have written since: read afresh.
   const store = readStore();
-  const kept: StoredChat = { ...chat, title, items: chat.items.slice(-MAX_ITEMS) };
-  writeStore({ ...store, chats: [kept, ...store.chats.filter((item) => item.id !== chat.id)] });
+  const earlier = store.chats.find((item) => item.id === chat.id);
+  if (keptBefore && !earlier) return false;
+  const title = earlier?.title ?? chatTitle(chat.items);
+  if (title === null) return false;
+  const items = chat.items
+    .slice(-MAX_ITEMS)
+    .map((item) =>
+      item.role === 'user' && item.text.length > MAX_KEPT_TEXT
+        ? { ...item, text: `${item.text.slice(0, MAX_KEPT_TEXT).trimEnd()} …` }
+        : item,
+    );
+  writeStore({
+    ...store,
+    chats: [{ ...chat, title, items }, ...store.chats.filter((item) => item.id !== chat.id)],
+  });
+  return true;
 }
 
 export function deleteChat(id: string): void {
@@ -215,11 +267,11 @@ export function deleteAllChats(): void {
   notify();
 }
 
-export function loadUsage(): ChatUsage | null {
+export function loadUsage(): StoredUsage | null {
   return readStore().usage;
 }
 
-export function saveUsage(usage: ChatUsage | null): void {
+export function saveUsage(usage: StoredUsage | null): void {
   const store = readStore();
   if (JSON.stringify(store.usage) === JSON.stringify(usage)) return;
   writeStore({ ...store, usage });
@@ -247,7 +299,9 @@ function subscribe(listener: () => void): () => void {
   listeners.add(listener);
   // Another tab changed the chats (a new message, deleted, logged out).
   const onStorage = (event: StorageEvent) => {
-    if (event.key === CHATS_STORAGE_KEY || event.key === null) listener();
+    if (event.key !== CHATS_STORAGE_KEY && event.key !== null) return;
+    version += 1;
+    listener();
   };
   window.addEventListener('storage', onStorage);
   return () => {

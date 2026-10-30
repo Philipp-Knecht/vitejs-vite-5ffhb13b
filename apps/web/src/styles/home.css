@@ -66,6 +66,30 @@
   flex: 1;
   flex-direction: column;
   min-height: 0;
+  /* Never over the legal links below. */
+  overflow: hidden;
+}
+
+/*
+ * A low screen (a phone held sideways, a large zoom): the page scrolls like any
+ * other, so that the conversation, the input and the legal links all fit.
+ */
+@media (max-height: 520px) {
+  .app--home {
+    height: auto;
+    min-height: 100vh;
+    min-height: 100dvh;
+    overflow: visible;
+  }
+
+  .home__main {
+    overflow: visible;
+  }
+
+  .home .chat__log {
+    flex: none;
+    min-height: 180px;
+  }
 }
 
 .home__title {
@@ -114,8 +138,14 @@
   flex-wrap: wrap;
   justify-content: center;
   align-items: center;
-  gap: 2px 12px;
+  gap: 4px 12px;
   font-size: 0.75rem;
+}
+
+.legal-bar__contracts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
 }
 
 .legal-bar__links a,
@@ -127,17 +157,21 @@
   font-size: inherit;
 }
 
+/* Buttons, as on every other page: set apart from the links and easy to see. */
 .legal-bar__links a.legal-bar__contract {
-  padding: 0 8px;
-  border: 1px solid var(--c-border-strong);
+  min-height: 30px;
+  padding: 0 12px;
+  border: 1px solid var(--c-primary);
   border-radius: var(--radius-pill);
-  color: var(--c-text-2);
-  font-weight: 600;
+  background: var(--c-surface);
+  color: var(--c-primary);
+  font-size: 0.875rem;
+  font-weight: 650;
   text-decoration: none;
 }
 
 .legal-bar__links a.legal-bar__contract:hover {
-  background: var(--c-surface-2);
+  background: var(--c-primary-50);
 }
 
 /* ---------- The menu of the start page: a side bar from the left ---------- */
@@ -289,6 +323,10 @@
   list-style: none;
 }
 
+.drawer__heading:focus {
+  outline: none;
+}
+
 .drawer__heading {
   margin: 4px 10px 6px;
   font-size: 0.8rem;
@@ -368,6 +406,21 @@
   gap: 8px;
   margin: 4px 10px;
   font-size: 0.9rem;
+}
+
+.drawer__legal {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 14px;
+  padding-inline: 10px;
+  font-size: 0.85rem;
+}
+
+.drawer__legal a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 28px;
+  color: var(--c-text-2);
 }
 
 .drawer__bottom {

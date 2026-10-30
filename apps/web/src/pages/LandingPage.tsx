@@ -29,11 +29,12 @@ export function LandingPage() {
   // The prerendered page shows an empty chat until the configuration says more: nothing jumps.
   const hydrated = useHydrated();
   const configQuery = useConfig();
-  const chatPending = !hydrated || configQuery.isPending;
+  // Offline without a saved configuration the request waits: the tools show instead.
+  const chatPending = !hydrated || (configQuery.isPending && configQuery.fetchStatus !== 'paused');
   const withChat = chatPending || chatConfig !== null;
   const me = useMe();
   const online = useOnline();
-  const chat = useChat();
+  const chat = useChat(me.data?.plan ?? null);
   const [menuOpen, setMenuOpen] = useState(false);
   const [focusInput, setFocusInput] = useState(0);
   const menuId = useId();
