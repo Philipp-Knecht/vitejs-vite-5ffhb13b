@@ -333,9 +333,12 @@ export function ChatPanel({
     const element = log.current;
     if (!element) return;
     element.scrollTop = element.scrollHeight;
-    // On a low screen the page scrolls instead: it follows to the input.
-    if (items.length > 0 && window.matchMedia('(max-height: 520px)').matches)
-      window.scrollTo({ top: document.documentElement.scrollHeight });
+    // On a low screen the page scrolls instead: it follows to the input, unless the
+    // visitor scrolled up to read.
+    const page = document.documentElement;
+    const atEnd = page.scrollHeight - window.scrollY - window.innerHeight < 160;
+    if (items.length > 0 && atEnd && window.matchMedia('(max-height: 520px)').matches)
+      window.scrollTo({ top: page.scrollHeight });
   }, [id, items.length, lastLength]);
 
   /**

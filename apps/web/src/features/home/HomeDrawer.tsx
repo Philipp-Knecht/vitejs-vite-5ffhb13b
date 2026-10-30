@@ -93,6 +93,11 @@ function PastChats({
   const [confirming, setConfirming] = useState(false);
   // The page behind the open menu is inert: deletions are announced here.
   const [deleted, setDeleted] = useState('');
+  // Emptied first, so that the same text (two chats with one title) is announced again.
+  const announce = (text: string) => {
+    setDeleted('');
+    requestAnimationFrame(() => setDeleted(text));
+  };
   const confirmButton = useRef<HTMLButtonElement>(null);
   const deleteAllButton = useRef<HTMLButtonElement>(null);
   const heading = useRef<HTMLHeadingElement>(null);
@@ -105,7 +110,7 @@ function PastChats({
   // The deleted row is gone: the focus goes to the next one, or to the heading.
   const remove = (index: number, id: string, title: string) => {
     deleteChat(id);
-    setDeleted(`Chat „${title}“ gelöscht.`);
+    announce(`Chat „${title}“ gelöscht.`);
     requestAnimationFrame(() => {
       const buttons = list.current?.querySelectorAll<HTMLButtonElement>('.drawer__chat');
       const next = buttons?.[Math.min(index, (buttons?.length ?? 1) - 1)];
@@ -165,7 +170,7 @@ function PastChats({
                 onClick={() => {
                   deleteAllChats();
                   setConfirming(false);
-                  setDeleted('Alle Chats gelöscht.');
+                  announce('Alle Chats gelöscht.');
                   requestAnimationFrame(() => heading.current?.focus());
                 }}
               >
