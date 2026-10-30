@@ -20,6 +20,7 @@ import { TaxGuidePage } from './pages/guides/TaxGuidePage';
 import { AdvisorPage } from './pages/AdvisorPage';
 import { CheckListingPage } from './pages/CheckListingPage';
 import { FindCarPage } from './pages/FindCarPage';
+import { FaqPage } from './pages/FaqPage';
 import { LandingPage } from './pages/LandingPage';
 import { ModelPage } from './pages/ModelPage';
 import { ModelsPage } from './pages/ModelsPage';
@@ -193,6 +194,7 @@ export function App({ queryClient }: { queryClient: QueryClient }) {
               <Route path="/auto-aus-den-niederlanden" element={<NlImportPage />} />
               <Route path="/autokosten-im-monat" element={<CostsGuidePage />} />
               <Route path="/pro" element={<ProPage />} />
+              <Route path="/haeufige-fragen" element={<FaqPage />} />
               <Route path="/bot" element={<BotPage />} />
               <Route path="/datenschutz" element={<PrivacyPage />} />
               <Route path="/impressum" element={<ImprintPage />} />

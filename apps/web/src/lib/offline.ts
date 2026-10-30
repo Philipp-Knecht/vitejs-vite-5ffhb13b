@@ -1,4 +1,4 @@
-import { useSyncExternalStore } from 'react';
+import { useEffect, useState, useSyncExternalStore } from 'react';
 
 /** Caches shared with the service worker (public/sw.js). */
 const APP_PREFIX = 'kc-app-';
@@ -227,4 +227,22 @@ export function useOnline(): boolean {
     () => navigator.onLine,
     () => true,
   );
+}
+
+/** The checks saved in this browser for use without a connection. */
+export function useOfflineChecks(shown: boolean): OfflineCheck[] {
+  const [checks, setChecks] = useState<OfflineCheck[]>([]);
+  useEffect(() => {
+    if (!shown) return;
+    let active = true;
+    savedOfflineChecks()
+      .then((items) => {
+        if (active) setChecks(items);
+      })
+      .catch(() => {});
+    return () => {
+      active = false;
+    };
+  }, [shown]);
+  return shown ? checks : [];
 }

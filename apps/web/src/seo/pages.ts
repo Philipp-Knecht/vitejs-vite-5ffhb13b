@@ -89,6 +89,11 @@ export const STATIC_PAGE_META: Readonly<Record<string, PageMeta>> = {
     description:
       'KaufCheck Pro: mehr Prüfungen pro Monat, Verlauf aller Analysen, größere Vergleiche und keine Werbung. Monatlich kündbar.',
   },
+  '/haeufige-fragen': {
+    title: 'Häufige Fragen zu KaufCheck: Kosten, Inserate, Daten | KaufCheck',
+    description:
+      'Was kostet KaufCheck, welche Inserate lassen sich prüfen, woher stammt das Modellwissen und was passiert mit deinen Daten? Die Antworten auf die häufigsten Fragen.',
+  },
   '/bot': {
     title: 'KaufCheckBot – Informationen für Websitebetreiber | KaufCheck',
     description:

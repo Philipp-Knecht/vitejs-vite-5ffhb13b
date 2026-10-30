@@ -15,7 +15,7 @@ import { ButtonLink } from '../ui/Button';
 import { Logo } from './Logo';
 
 /** Reopens Google's consent dialog (required while AdSense is active). */
-function PrivacySettingsButton() {
+export function PrivacySettingsButton() {
   // The configuration only exists in the browser (never while prerendering).
   const ads = useConfig().data?.ads ?? null;
   if (!ads || privacySignal()) return null;
@@ -46,6 +46,7 @@ export function Footer() {
           <Link to="/inseratstext">Inseratstext einfügen</Link>
           <Link to="/meine-angebote">Meine Angebote</Link>
           <Link to="/pro">KaufCheck Pro</Link>
+          <Link to="/haeufige-fragen">Häufige Fragen</Link>
         </nav>
         <nav className="footer__column" aria-label="Ratgeber">
           <p className="footer__heading">Ratgeber</p>

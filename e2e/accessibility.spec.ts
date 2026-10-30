@@ -22,6 +22,7 @@ test('static pages meet WCAG 2.1 AA checks', async ({ page }) => {
     '/inserat-pruefen',
     '/inseratstext',
     '/pro',
+    '/haeufige-fragen',
     '/anmelden',
     '/registrieren',
     '/meine-angebote',
@@ -74,6 +75,13 @@ test('the assistant on the start page meets WCAG 2.1 AA checks with a form', asy
   const chat = page.getByRole('region', { name: 'KI-Assistent von KaufCheck' });
   await chat.getByRole('button', { name: 'Finanzierung rechnen' }).click();
   await expect(chat.getByRole('form', { name: 'Finanzierung rechnen' })).toBeVisible();
+  await expectAccessible(page);
+  // The menu with a chat in it.
+  await chat.getByLabel('Nachricht an den KI-Assistenten von KaufCheck').fill('Hallo');
+  await chat.getByLabel('Nachricht an den KI-Assistenten von KaufCheck').press('Enter');
+  await expect(page.getByRole('button', { name: 'Neuer Chat' })).toBeVisible();
+  await page.getByRole('button', { name: 'Menü öffnen' }).click();
+  await expect(page.getByRole('dialog', { name: /Menü/ }).locator('.drawer__chat')).toHaveCount(1);
   await expectAccessible(page);
 });
 

@@ -2,7 +2,7 @@ import { expect, test } from '@playwright/test';
 import { expectNoHorizontalScroll, PASTED_LISTING } from './helpers';
 
 /** The scripted development model answers (AI_PROVIDER=mock): fixed rules, no KI. */
-test('the assistant computes a financing from its form and keeps the conversation in the tab', async ({
+test('the assistant computes a financing from its form and keeps the conversation on reload', async ({
   page,
 }) => {
   await page.goto('/');
@@ -39,10 +39,10 @@ test('the assistant computes a financing from its form and keeps the conversatio
     chat.getByRole('link', { name: 'Im Finanzierungsrechner selbst rechnen' }),
   ).toHaveAttribute('href', '/kfz-steuer-rechner#finanzierung');
 
-  // The conversation survives a reload in this tab and goes with „Neues Gespräch“.
+  // The conversation survives a reload in this tab; „Neuer Chat“ starts another one.
   await page.reload();
   await expect(chat.locator('.chat-card').filter({ hasText: 'Finanzierung' })).toBeVisible();
-  await chat.getByRole('button', { name: 'Neues Gespräch' }).click();
+  await page.getByRole('button', { name: 'Neuer Chat' }).click();
   await expect(
     chat.getByText('Willkommen bei KaufCheck, deinem KI-Assistenten für den Gebrauchtwagenkauf!'),
   ).toBeVisible();
@@ -108,10 +108,36 @@ test('the assistant knows the researched models and builds marketplace searches'
 
 test('the start page is the assistant: a listing goes straight into the chat', async ({ page }) => {
   await page.goto('/');
-  // Nothing but the assistant and the frequent questions.
+  // Like a chat app: the assistant fills the screen, the page itself does not scroll.
   await expect(page.getByRole('tab')).toHaveCount(0);
-  await expect(page.getByRole('heading', { level: 2, name: 'Häufige Fragen' })).toBeVisible();
+  await expect(page.getByRole('heading', { level: 2, name: 'Häufige Fragen' })).toHaveCount(0);
+  await expect(page.getByRole('link', { name: 'Upgraden' })).toHaveAttribute('href', '/pro');
+  const { scrollHeight, innerHeight } = await page.evaluate(() => ({
+    scrollHeight: document.documentElement.scrollHeight,
+    innerHeight: window.innerHeight,
+  }));
+  expect(scrollHeight).toBeLessThanOrEqual(innerHeight);
+  // The required links and the contract buttons stay on the page (§§ 312k, 356a BGB).
+  const legal = page.getByRole('navigation', { name: 'Rechtliches' });
+  for (const name of ['Impressum', 'Datenschutz', 'Verträge hier kündigen', 'Vertrag widerrufen'])
+    await expect(legal.getByRole('link', { name })).toBeVisible();
   const chat = page.getByRole('region', { name: 'KI-Assistent von KaufCheck' });
+  // Three and a half suggestions show; the list scrolls in itself to the others.
+  const starters = chat.getByRole('list', { name: 'Was möchtest du machen?' });
+  await expect(starters.getByRole('listitem')).toHaveCount(10);
+  const box = await starters.evaluate((element) => ({
+    visible: element.clientHeight,
+    content: element.scrollHeight,
+    item: element.querySelector('li')?.getBoundingClientRect().height ?? 0,
+  }));
+  expect(box.content).toBeGreaterThan(box.visible);
+  expect(box.visible / box.item).toBeGreaterThan(3.4);
+  expect(box.visible / box.item).toBeLessThan(4.1);
+  await starters
+    .getByRole('button', { name: 'Auto ummelden: Was brauche ich?' })
+    .scrollIntoViewIfNeeded();
+  await expect(starters.getByRole('button', { name: 'Inserat prüfen' })).not.toBeInViewport();
+  await starters.getByRole('button', { name: 'Inserat prüfen' }).scrollIntoViewIfNeeded();
   await chat.getByRole('button', { name: 'Inserat prüfen' }).click();
   await expect(
     chat
@@ -122,4 +148,154 @@ test('the start page is the assistant: a listing goes straight into the chat', a
   await expect(chat.getByRole('status')).toContainText('füg ihn unten ins Eingabefeld ein');
   await expect(chat.getByLabel('Nachricht an den KI-Assistenten von KaufCheck')).toBeFocused();
   await expect(chat.getByRole('form')).toHaveCount(0);
+});
+
+test('past chats stay on this device and open from the menu', async ({ page }) => {
+  await page.goto('/');
+  const chat = page.getByRole('region', { name: 'KI-Assistent von KaufCheck' });
+  const input = chat.getByLabel('Nachricht an den KI-Assistenten von KaufCheck');
+  await input.fill('Welche Schwachstellen hat der Golf?');
+  await input.press('Enter');
+  await expect(chat.locator('.chat-card').filter({ hasText: 'Modellwissen' })).toBeVisible();
+
+  await page.getByRole('button', { name: 'Neuer Chat' }).click();
+  await input.fill('Such mir einen Golf');
+  await input.press('Enter');
+  await expect(chat.locator('.chat-card').filter({ hasText: 'Suche' })).toBeVisible();
+
+  // A new tab starts a new chat; the menu lists both, the newest first.
+  const other = await page.context().newPage();
+  await other.goto('/');
+  const otherChat = other.getByRole('region', { name: 'KI-Assistent von KaufCheck' });
+  await expect(otherChat.getByText('Was möchtest du machen?')).toBeVisible();
+  await other.getByRole('button', { name: 'Menü öffnen' }).click();
+  const menu = other.getByRole('dialog', { name: /Menü/ });
+  const chats = menu.getByRole('region', { name: 'Chats' });
+  await expect(chats.getByRole('button', { name: /^(Such mir|Welche Schwach)/ })).toHaveText([
+    'Such mir einen Golf',
+    'Welche Schwachstellen hat der Golf?',
+  ]);
+  await chats
+    .getByRole('button', { name: 'Welche Schwachstellen hat der Golf?', exact: true })
+    .click();
+  await expect(menu).toBeHidden();
+  await expect(otherChat.locator('.chat-card').filter({ hasText: 'Modellwissen' })).toBeVisible();
+  // Opened again, it is not read out again: only which chat it is.
+  await expect(otherChat.getByRole('status')).toHaveText(
+    'Chat „Welche Schwachstellen hat der Golf?“ geöffnet.',
+  );
+
+  // Deleted in one tab, gone in the other.
+  await other.getByRole('button', { name: 'Menü öffnen' }).click();
+  await chats
+    .getByRole('button', { name: 'Chat „Welche Schwachstellen hat der Golf?“ löschen' })
+    .click();
+  await expect(
+    chats.getByRole('button', { name: 'Welche Schwachstellen hat der Golf?' }),
+  ).toHaveCount(0);
+  await other.keyboard.press('Escape');
+  await expect(otherChat.getByText('Was möchtest du machen?')).toBeVisible();
+  await page.getByRole('button', { name: 'Menü öffnen' }).click();
+  const firstMenu = page.getByRole('dialog', { name: /Menü/ });
+  await expect(firstMenu.locator('.drawer__chat')).toHaveText(['Such mir einen Golf']);
+
+  // „Alle Chats löschen“ asks first.
+  await firstMenu.getByRole('button', { name: 'Alle Chats löschen' }).click();
+  await firstMenu.getByRole('button', { name: 'Ja, löschen' }).click();
+  await expect(firstMenu.getByText(/Noch keine Chats/)).toBeVisible();
+  await page.keyboard.press('Escape');
+  await expect(chat.getByText('Was möchtest du machen?')).toBeVisible();
+  expect(await page.evaluate(() => window.localStorage.getItem('kaufcheck:chats'))).toBeNull();
+});
+
+test('the frequent questions have their own page', async ({ page }) => {
+  await page.goto('/haeufige-fragen');
+  await expect(page.getByRole('heading', { level: 1, name: 'Häufige Fragen' })).toBeVisible();
+  await page.getByText('Was passiert mit meinen Daten?').click();
+  await expect(
+    page.getByText(/deine Chats speichert nur dein Browser auf diesem Gerät/),
+  ).toBeVisible();
+});
+
+test('a count used up for one plan does not block another, and old chats leave the device', async ({
+  page,
+}) => {
+  const old = Date.now() - 40 * 24 * 60 * 60 * 1000;
+  const store = (plan: string) =>
+    JSON.stringify({
+      version: 2,
+      chats: [
+        {
+          id: 'kold',
+          title: 'Ein alter Chat',
+          updatedAt: old,
+          items: [{ id: 'c1', role: 'user', text: 'Ein alter Chat' }],
+          history: [],
+        },
+      ],
+      usage: { used: 15, limit: 15, resetsOn: '2999-01-01', plan },
+    });
+  // Used up without an account: blocked.
+  await page.addInitScript(
+    (value) => localStorage.setItem('kaufcheck:chats', value),
+    store('anonymous'),
+  );
+  await page.goto('/');
+  const chat = page.getByRole('region', { name: 'KI-Assistent von KaufCheck' });
+  await expect(chat.getByText(/Für heute sind alle 15 Nachrichten verbraucht/)).toBeVisible();
+  // A chat 40 days old is gone from the device, not only from the menu.
+  await expect
+    .poll(() => page.evaluate(() => localStorage.getItem('kaufcheck:chats') ?? ''))
+    .not.toContain('Ein alter Chat');
+
+  // Counted for another plan (say, before signing up): it does not apply.
+  const other = await page.context().newPage();
+  await other.addInitScript(
+    (value) => localStorage.setItem('kaufcheck:chats', value),
+    store('free'),
+  );
+  await other.goto('/');
+  const otherChat = other.getByRole('region', { name: 'KI-Assistent von KaufCheck' });
+  await expect(otherChat.getByText(/15 Nachrichten am Tag kostenlos/)).toBeVisible();
+  await expect(otherChat.getByRole('button', { name: 'Auto finden' })).toBeEnabled();
+});
+
+test('on a low screen the start page scrolls and the contract buttons stay reachable', async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 640, height: 360 });
+  await page.goto('/');
+  const chat = page.getByRole('region', { name: 'KI-Assistent von KaufCheck' });
+  await chat.getByLabel('Nachricht an den KI-Assistenten von KaufCheck').fill('Zeile\n'.repeat(30));
+  const cancel = page
+    .getByRole('navigation', { name: 'Rechtliches' })
+    .getByRole('link', { name: 'Verträge hier kündigen' });
+  await cancel.scrollIntoViewIfNeeded();
+  await expect(cancel).toBeInViewport();
+  // The input does not take the whole screen.
+  const input = await chat
+    .getByLabel('Nachricht an den KI-Assistenten von KaufCheck')
+    .evaluate((element) => element.getBoundingClientRect().height);
+  expect(input).toBeLessThanOrEqual(100);
+});
+
+test('with the browser storage blocked the chat still works, it is just not kept', async ({
+  page,
+}) => {
+  await page.addInitScript(() => {
+    // eslint-disable-next-line @typescript-eslint/unbound-method -- called with `this` below
+    const setItem = Storage.prototype.setItem;
+    Storage.prototype.setItem = function (key: string, value: string) {
+      if (key === 'kaufcheck:chats') throw new DOMException('blocked', 'SecurityError');
+      setItem.call(this, key, value);
+    };
+  });
+  await page.goto('/');
+  const chat = page.getByRole('region', { name: 'KI-Assistent von KaufCheck' });
+  const input = chat.getByLabel('Nachricht an den KI-Assistenten von KaufCheck');
+  await input.fill('Welche Schwachstellen hat der Golf?');
+  await input.press('Enter');
+  await expect(chat.locator('.chat-card').filter({ hasText: 'Modellwissen' })).toBeVisible();
+  await expect(chat.getByRole('status')).not.toContainText('gelöscht');
+  await expect(chat.getByText('Was möchtest du machen?')).toHaveCount(0);
 });

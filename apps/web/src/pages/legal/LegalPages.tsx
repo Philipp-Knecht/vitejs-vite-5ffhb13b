@@ -1,6 +1,7 @@
 import { Link } from 'react-router';
 import { useConfig } from '../../api/queries';
 import { Alert } from '../../components/ui/Alert';
+import { CHAT_RETENTION_DAYS, MAX_CHATS } from '../../features/chat/chat-store';
 import { STATIC_PAGE_META } from '../../seo/pages';
 import { usePageMeta } from '../../seo/use-page-meta';
 import { IMPRINT, IMPRINT_COMPLETE } from './site-info';
@@ -241,13 +242,16 @@ export function PrivacyPage() {
         <li>
           Im lokalen Speicher deines Browsers merkt sich KaufCheck den Fortschritt deiner
           Checklisten, deine Notizen für die Preisverhandlung, deine Annahmen für die Kosten pro
-          Monat im Vergleich (Pro) und die gewählte Anrede (Sie/du). Diese Daten verlassen deinen
-          Browser nicht. Die Annahmen für die Kosten speichert er je Konto; sie bleiben, bis du dich
-          in diesem Browser bei KaufCheck abmeldest, dich mit einem anderen Konto anmeldest, hier
-          dein Konto löschst oder die Websitedaten deines Browsers löschst – auch wenn deine
-          Anmeldung vorher abläuft. Für diese Speicherung in deinem Browser ist nach § 25 Abs. 2 Nr.
-          2 TDDDG keine Einwilligung nötig, weil sie für die Funktionen, die du nutzt, unbedingt
-          erforderlich ist.
+          Monat im Vergleich (Pro), die gewählte Anrede (Sie/du), deine Chats mit dem Assistenten,
+          die Zahl deiner Nachrichten an ihn heute und ob du den Hinweis zur Spracheingabe schon
+          gesehen hast; welcher Chat in einem Tab offen ist, merkt sich nur dieser Tab (Session
+          Storage). Diese Daten verlassen deinen Browser nicht – außer dem Chat, dem du gerade
+          schreibst (siehe „Assistent auf der Startseite“). Die Annahmen für die Kosten speichert er
+          je Konto; sie bleiben, bis du dich in diesem Browser bei KaufCheck abmeldest, dich mit
+          einem anderen Konto anmeldest, hier dein Konto löschst oder die Websitedaten deines
+          Browsers löschst – auch wenn deine Anmeldung vorher abläuft. Für diese Speicherung in
+          deinem Browser ist nach § 25 Abs. 2 Nr. 2 TDDDG keine Einwilligung nötig, weil sie für die
+          Funktionen, die du nutzt, unbedingt erforderlich ist.
         </li>
         <li>
           Nur wenn du bei einer Prüfung „Offline verfügbar machen“ wählst, speichert dein Browser
@@ -337,19 +341,21 @@ export function PrivacyPage() {
             eines eingefügten Inserats gehen mit, etwa der Name und der Ort des Verkäufers; für
             diese Angaben Dritter ist Rechtsgrundlage unser und dein berechtigtes Interesse, ein
             Angebot vor dem Kauf zu prüfen (Art. 6 Abs. 1 lit. f DSGVO). Schreib bitte nichts über
-            dich, was der Assistent nicht braucht, etwa Name oder Anschrift. Den Verlauf speichert
-            nur dein Browser, und nur für den geöffneten Tab (Session Storage): In der Regel ist er
-            weg, wenn du den Tab schließt, und sofort, wenn du „Neues Gespräch“ wählst. Auf unserem
-            Server speichern wir vom Gespräch nichts; wir zählen nur, wie viele Nachrichten dein
-            Browser (Kennung kc_anon) oder dein Konto am Tag schickt. Damit niemand das Tageslimit
-            umgeht, indem er die Kennung löscht oder neue Konten anlegt, zählen wir ohne Pro
-            außerdem die Nachrichten je Internetanschluss (bei IPv6 auch je Adressbereich): Dafür
-            speichern wir keine IP-Adresse, sondern nur mit einem geheimen Schlüssel gebildete
-            Prüfwerte, die jeden Tag wechseln (Rechtsgrundlage: unser berechtigtes Interesse,
-            Missbrauch und Kosten zu begrenzen, Art. 6 Abs. 1 lit. f DSGVO). Alle Zähler löschen wir
-            nach sieben Tagen. Fügst du den Text eines Inserats ein, prüft KaufCheck ihn
-            automatisch: Das ist eine Prüfung wie unter „Geprüfte Inserate“ beschrieben und zählt
-            als eine deiner Prüfungen im Monat.
+            dich, was der Assistent nicht braucht, etwa Name oder Anschrift. Deine Chats speichert
+            nur dein Browser auf diesem Gerät (Local Storage), damit du sie im Menü wieder öffnen
+            kannst: höchstens die {MAX_CHATS} neuesten; ein eingefügtes Inserat darin gekürzt. Ein
+            Chat, der {CHAT_RETENTION_DAYS} Tage lang keine neue Nachricht bekommt, wird gelöscht,
+            sobald du KaufCheck danach wieder öffnest. Im Menü kannst du einzelne Chats oder alle
+            löschen; beim Abmelden löschen wir sie auf dem Gerät. Auf unserem Server speichern wir
+            vom Gespräch nichts; wir zählen nur, wie viele Nachrichten dein Browser (Kennung
+            kc_anon) oder dein Konto am Tag schickt. Damit niemand das Tageslimit umgeht, indem er
+            die Kennung löscht oder neue Konten anlegt, zählen wir ohne Pro außerdem die Nachrichten
+            je Internetanschluss (bei IPv6 auch je Adressbereich): Dafür speichern wir keine
+            IP-Adresse, sondern nur mit einem geheimen Schlüssel gebildete Prüfwerte, die jeden Tag
+            wechseln (Rechtsgrundlage: unser berechtigtes Interesse, Missbrauch und Kosten zu
+            begrenzen, Art. 6 Abs. 1 lit. f DSGVO). Alle Zähler löschen wir nach sieben Tagen. Fügst
+            du den Text eines Inserats ein, prüft KaufCheck ihn automatisch: Das ist eine Prüfung
+            wie unter „Geprüfte Inserate“ beschrieben und zählt als eine deiner Prüfungen im Monat.
             {!chat.isMock &&
               ' Der Anbieter kann die Daten außerhalb der EU verarbeiten; die Übermittlung erfolgt auf Grundlage geeigneter Garantien wie der EU-Standardvertragsklauseln (Art. 46 Abs. 2 lit. c DSGVO).'}{' '}
             Rechtsgrundlage ist die Bereitstellung des angefragten Dienstes (Art. 6 Abs. 1 lit. b

@@ -5,6 +5,7 @@ import { createRoot, hydrateRoot } from 'react-dom/client';
 import { BrowserRouter } from 'react-router';
 import { createQueryClient } from './api/queries';
 import { App } from './App';
+import { pruneStoredChats } from './features/chat/chat-store';
 import { PreloadedModelContext, readPageData } from './features/models/preloaded';
 import { updateServiceWorker } from './lib/offline';
 
@@ -26,3 +27,5 @@ if (container.dataset.prerendered === 'true') hydrateRoot(container, app);
 else createRoot(container).render(app);
 
 updateServiceWorker();
+// Chats past their retention period go when KaufCheck opens, on any page.
+pruneStoredChats();

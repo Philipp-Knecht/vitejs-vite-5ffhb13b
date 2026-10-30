@@ -76,7 +76,10 @@ test('save listings with a new account, compare, rename and delete them', async 
   await page.goto('/konto');
   await page.getByRole('button', { name: 'Abmelden' }).click();
   await expect(page).toHaveURL('/');
-  await expect(page.getByRole('link', { name: 'Anmelden' })).toBeVisible();
+  await page.getByRole('button', { name: 'Menü öffnen' }).click();
+  await expect(
+    page.getByRole('dialog', { name: /Menü/ }).getByRole('link', { name: 'Anmelden' }),
+  ).toBeVisible();
 });
 
 test('billing is honestly unavailable when no payment provider is configured', async ({ page }) => {
