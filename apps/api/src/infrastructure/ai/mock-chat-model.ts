@@ -84,7 +84,8 @@ export class MockChatModel implements ChatModel {
     }
     if (/steuer/i.test(text)) {
       // The tax form: first registration, drive and the values from the picked engine.
-      const registration = /erstzulassung (\d{1,2})\/(\d{4})/i.exec(text);
+      // „Erstzulassung 03/2016“, or with the day „Erstzulassung 15.03.2016“.
+      const registration = /erstzulassung (?:(\d{2})\.(\d{2})\.|(\d{2})\/)(\d{4})/i.exec(text);
       const drive = { benzin: 'petrol', diesel: 'diesel', elektro: 'electric' }[
         /antrieb (benzin|diesel|elektro)/i.exec(text)?.[1]?.toLowerCase() ?? ''
       ];
@@ -94,7 +95,9 @@ export class MockChatModel implements ChatModel {
       const co2 = amount(/co[₂2]\D{0,3}([\d.,]+)/i.exec(text)?.[1]);
       return Promise.resolve(
         this.use('vehicle_tax', {
-          first_registration: `${registration[2]}-${registration[1]!.padStart(2, '0')}`,
+          first_registration: registration[1]
+            ? `${registration[4]}-${registration[2]}-${registration[1]}`
+            : `${registration[4]}-${registration[3]}`,
           drive,
           ...(ccm !== undefined ? { displacement_ccm: ccm } : {}),
           ...(co2 !== undefined ? { co2_g_per_km: co2 } : {}),

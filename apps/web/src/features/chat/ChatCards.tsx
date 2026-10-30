@@ -1,3 +1,4 @@
+import { ENGINE_SOURCE } from '@kaufcheck/catalog/engines';
 import { PRICE_VERDICT_LABELS, type ChatCard } from '@kaufcheck/shared';
 import { ExternalLink } from 'lucide-react';
 import { Link } from 'react-router';
@@ -115,6 +116,20 @@ export function ChatCardView({
           <p className="chat-card__hint">
             {card.rule} Verbindlich setzt das Hauptzollamt die Steuer fest.
           </p>
+          {card.inputs.some((input) => input.label === 'Hubraum' || input.label === 'CO₂') && (
+            <p className="chat-card__hint">
+              Hubraum und CO₂, die nicht aus deinem Fahrzeugschein stammen, sind typische Werte aus
+              den EU-Motordaten: Quelle{' '}
+              <a href={ENGINE_SOURCE.url} target="_blank" rel="noopener noreferrer">
+                {ENGINE_SOURCE.name}
+              </a>
+              , © {ENGINE_SOURCE.holder}, Lizenz{' '}
+              <a href={ENGINE_SOURCE.licenceUrl} target="_blank" rel="noopener noreferrer">
+                {ENGINE_SOURCE.licence}
+              </a>
+              .
+            </p>
+          )}
         </article>
       );
     case 'financing':

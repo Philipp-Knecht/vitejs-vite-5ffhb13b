@@ -66,6 +66,15 @@ test('a changed first registration takes the values of that year and test', asyn
   await expect(page.getByLabel('Hubraum in cm³')).toHaveCount(0);
   await expect(picker(page).getByText(/fehlt der CO₂-Wert nach WLTP/)).toBeVisible();
 
+  // The value typed for the missing WLTP figure does not stay hidden in the tax: back in
+  // August 2018 the engine's NEDC value counts again (20 × 9.50 € + 18 × 2 € = 226 €).
+  await page.getByLabel('CO₂-Wert in g/km').fill('140');
+  await expect(page.getByRole('region', { name: 'Kfz-Steuer' })).toContainText('280 €');
+  await page.getByLabel('Erstzulassung').fill('2018-08-15');
+  await expect(page.getByLabel('CO₂-Wert in g/km')).toHaveCount(0);
+  await expect(page.getByRole('region', { name: 'Kfz-Steuer' })).toContainText('226 €');
+  await page.getByLabel('Erstzulassung').fill('2018-09-15');
+
   // A year without data for this model: the pick goes, the fields of the registration
   // certificate appear with what is known; a value typed in stays.
   await page.getByLabel('CO₂-Wert in g/km').fill('120');
@@ -94,7 +103,7 @@ test('a link from a check preselects model and engine, without overwriting typed
   // The values of the registration certificate can be typed in instead, the engine's prefilled.
   await page
     .getByRole('button', {
-      name: 'Auto nicht in der Liste? Werte aus dem Fahrzeugschein eintragen',
+      name: 'Werte aus dem Fahrzeugschein eintragen',
     })
     .click();
   await expect(page.getByLabel('Hubraum in cm³')).toHaveValue('1968');

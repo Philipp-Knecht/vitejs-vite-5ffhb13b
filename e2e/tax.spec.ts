@@ -12,7 +12,7 @@ test('the tax calculator computes the Kfz-Steuer from the registration values', 
   // Without the car in the list: the values from the registration certificate.
   await page
     .getByRole('button', {
-      name: 'Auto nicht in der Liste? Werte aus dem Fahrzeugschein eintragen',
+      name: 'Werte aus dem Fahrzeugschein eintragen',
     })
     .click();
   await expect(result).toContainText('Gib Erstzulassung und Antrieb an.');
@@ -87,7 +87,7 @@ test('a link from a check prefills first registration and drive', async ({ page 
   await expect(page.getByText('Laut Inserat 09/2016')).toBeVisible();
   await page
     .getByRole('button', {
-      name: 'Auto nicht in der Liste? Werte aus dem Fahrzeugschein eintragen',
+      name: 'Werte aus dem Fahrzeugschein eintragen',
     })
     .click();
   await expect(page.getByLabel('Antrieb')).toHaveValue('diesel');
@@ -102,7 +102,8 @@ test('the tax form in the chat asks for the car, not for its registration values
   const form = chat.getByRole('form', { name: 'Kfz-Steuer berechnen' });
   for (const label of ['Hubraum in cm³ (P.1)', 'CO₂ in g/km (V.7)', 'Leistung in kW', 'Antrieb'])
     await expect(form.getByLabel(label)).toHaveCount(0);
-  await form.getByLabel('Erstzulassung (MM/JJJJ)').fill('05/2021');
+  // Written as the assistant prefills it; the message names it as month and year.
+  await form.getByLabel('Erstzulassung (MM/JJJJ)').fill('2021-05');
   await form.getByLabel('Marke').selectOption({ label: 'Volkswagen' });
   await form.getByLabel('Modell').selectOption({ label: 'Golf' });
   await form.getByLabel('Motor').selectOption({ label: '1,5 l Benzin, 110 kW (150 PS)' });
