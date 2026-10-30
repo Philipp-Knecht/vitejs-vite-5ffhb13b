@@ -10,12 +10,14 @@
     "./knowledge": "./src/knowledge.ts",
     "./advisor-index": "./src/advisor-index.ts",
     "./knowledge-eager": "./src/knowledge-eager.ts",
-    "./engines": "./src/engines.ts"
+    "./engines": "./src/engines.ts",
+    "./images": "./src/images.ts"
   },
   "scripts": {
     "typecheck": "tsc --noEmit -p tsconfig.json",
     "catalog:index": "tsx scripts/build-index.ts && prettier --write --log-level warn data",
-    "catalog:engines": "tsx scripts/fetch-engines.ts && prettier --write --log-level warn data/engine-index.json"
+    "catalog:engines": "tsx scripts/fetch-engines.ts && prettier --write --log-level warn data/engine-index.json",
+    "catalog:images": "tsx scripts/fetch-images.ts && prettier --write --log-level warn data/model-images.json"
   },
   "dependencies": {
     "@kaufcheck/shared": "1.0.0",

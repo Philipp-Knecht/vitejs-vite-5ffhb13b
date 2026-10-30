@@ -61,6 +61,26 @@ test('model pages are prerendered and hydrate without errors', async ({ page, re
       page.getByRole('heading', { level: 2, name: new RegExp(`^${escaped}(?: \\(|,)`) }),
     ).toBeVisible();
   }
+  if (id === 'vw-golf') {
+    // A photo of the shown generation from Wikimedia Commons, from our server, with its credit.
+    const photo = page.getByRole('figure');
+    await expect(
+      photo.getByRole('img', { name: 'Volkswagen Golf, Generation Golf VI' }),
+    ).toHaveAttribute('src', '/model-images/vw-golf-6.webp');
+    await expect(photo.getByRole('link', { name: 'Wikimedia Commons' })).toHaveAttribute(
+      'href',
+      /^https:\/\/commons\.wikimedia\.org\/wiki\/File:VW_Golf_VI/,
+    );
+    await expect(photo).toContainText(/^Foto: .+, CC BY/);
+    expect(
+      await photo.getByRole('img').evaluate((image: HTMLImageElement) => image.naturalWidth),
+    ).toBeGreaterThan(0);
+    await page
+      .getByRole('group', { name: 'Generation wählen' })
+      .getByRole('button', { name: /^Golf VIII / })
+      .click();
+    await expect(photo.getByRole('img')).toHaveAttribute('src', '/model-images/vw-golf-8.webp');
+  }
   await expect(
     page.getByRole('heading', { level: 2, name: `Rückrufe prüfen: ${name}` }),
   ).toBeVisible();

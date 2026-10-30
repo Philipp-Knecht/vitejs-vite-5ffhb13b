@@ -173,6 +173,7 @@ npm run user:set-plan -w @kaufcheck/api -- nutzer@example.de pro
 | `npm run typecheck`               | TypeScript for all workspaces                           |
 | `npm run catalog:index`           | Rebuilds `packages/catalog/data/index.json` (see below) |
 | `npm run catalog:engines`         | Rebuilds the engine data from the EEA (see below)       |
+| `npm run catalog:images`          | Fetches new or changed generation photos (see below)    |
 | `npm run loan-rate:update`        | Newest Bundesbank average rate for the loan example     |
 
 Model knowledge is one JSON file per model in `packages/catalog/data/models` (format and rules in
@@ -189,6 +190,13 @@ own. Each year is in the EEA table twice; the final figures are used, the provis
 year without final ones (marked in the index). A typical CO₂ value needs half of an engine's cars to
 report it. The raw rows are cached per query in the system temp directory (`ENGINES_CACHE`); delete
 the cache to fetch new data. The tax calculator offers the engines and names source and licence.
+
+Generation photos for the model pages are chosen in `packages/catalog/data/model-image-sources.json`
+(a Wikimedia Commons file per generation, usually the lead image of its Wikipedia article, checked
+by eye). `npm run catalog:images` fetches author and licence through the Wikidata Query Service,
+refuses anything but free licences, and stores the photo resized to 960 px as WebP in
+`apps/web/public/model-images` (needs ImageMagick); `data/model-images.json` holds the credit shown
+under the photo. Only new or changed files are fetched.
 
 Development helpers, all clearly labelled in the UI and rejected in production:
 

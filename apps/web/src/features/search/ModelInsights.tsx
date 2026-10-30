@@ -7,6 +7,7 @@ import {
   type CarModel,
   type Generation,
 } from '@kaufcheck/catalog';
+import { generationImage } from '@kaufcheck/catalog/images';
 import { hasKnowledge, loadKnowledge } from '@kaufcheck/catalog/knowledge';
 import { useQuery } from '@tanstack/react-query';
 import { useState } from 'react';
@@ -153,6 +154,41 @@ interface ModelKnowledgeViewProps {
   initialGenerationId?: string | null;
   /** For the owner of such a car („Mein Auto“): weaknesses only, no buying advice. */
   owner?: boolean;
+  /** A photo of the shown generation above the generations (the model page). */
+  showImage?: boolean;
+}
+
+/** The photo of a generation with the credit its licence asks for. */
+function GenerationPhoto({ model, generation }: { model: CarModel; generation: Generation }) {
+  const image = generationImage(generation.id);
+  if (!image) return null;
+  return (
+    <figure className="model-photo">
+      <div className="model-photo__frame">
+        <img
+          src={image.src}
+          width={image.width}
+          height={image.height}
+          alt={`${model.make} ${model.model}, Generation ${generation.name}`}
+          decoding="async"
+        />
+      </div>
+      <figcaption className="model-photo__credit">
+        Foto: {image.author},{' '}
+        {image.licenseUrl ? (
+          <a href={image.licenseUrl} target="_blank" rel="noopener noreferrer license">
+            {image.license}
+          </a>
+        ) : (
+          image.license
+        )}
+        , verkleinert –{' '}
+        <a href={image.source} target="_blank" rel="noopener noreferrer">
+          Wikimedia Commons
+        </a>
+      </figcaption>
+    </figure>
+  );
 }
 
 /** Generations with strengths, weaknesses (with sources), engines and inspection tips. */
@@ -164,6 +200,7 @@ export function ModelKnowledgeView({
   compact = false,
   initialGenerationId = null,
   owner = false,
+  showImage = false,
 }: ModelKnowledgeViewProps) {
   const [selected, setSelected] = useState<string | null>(initialGenerationId);
   const generation =
@@ -181,6 +218,7 @@ export function ModelKnowledgeView({
           die dort bekannten Schwachstellen gelten meist auch hier.
         </p>
       )}
+      {showImage && generation && <GenerationPhoto model={model} generation={generation} />}
       {model.generations.length > 1 && (
         <div className="segmented" role="group" aria-label="Generation wählen">
           {model.generations.map((item) => (

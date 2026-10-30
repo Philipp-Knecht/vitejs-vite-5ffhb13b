@@ -94,7 +94,7 @@ function ModelContent({ model }: { model: CarModel }) {
       </section>
       <section className="section" aria-label="Generationen, Schwachstellen und Motoren">
         <div className="container">
-          <ModelKnowledgeView model={model} generationHeading="h2" />
+          <ModelKnowledgeView model={model} generationHeading="h2" showImage />
         </div>
       </section>
       <section className="section section--muted" aria-labelledby="recalls-title">

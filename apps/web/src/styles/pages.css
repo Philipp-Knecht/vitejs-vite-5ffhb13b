@@ -1826,3 +1826,30 @@
     grid-template-columns: 1fr 1fr;
   }
 }
+
+/* ---------- Model page: a photo of the generation, with its credit ---------- */
+.model-photo {
+  max-width: 720px;
+  margin: 0 0 16px;
+}
+
+/* One shape for every generation, so the tabs below do not move; the photo is not cropped. */
+.model-photo__frame {
+  aspect-ratio: 3 / 2;
+  overflow: hidden;
+  border-radius: var(--radius-lg);
+  background: var(--c-surface-2);
+}
+
+.model-photo__frame img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.model-photo__credit {
+  margin-top: 6px;
+  font-size: 0.75rem;
+  color: var(--c-text-3);
+}

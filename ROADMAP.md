@@ -41,7 +41,8 @@ PRs, **L** = mehrere Wochen.
 | neu | Chat-Assistent als Startpunkt: Prüfung, Preis-Check, Suche, Steuer, Finanzierung, Sprache | #47       |
 | neu | Startseite nur noch Chat und FAQ, Absprung zum Werkzeug unter jeder Antwort               | #51       |
 | neu | Startseite wie eine Chat-App: Menü mit Funktionen und vergangenen Chats, 3,5 Vorschläge   | #53       |
-| 1.1 | Kfz-Steuer: Modell und Motor wählen statt Hubraum, CO₂ und kW einzutippen                 | dieser PR |
+| 1.1 | Kfz-Steuer: Modell und Motor wählen statt Hubraum, CO₂ und kW einzutippen                 | #54       |
+| neu | Modellseiten: Foto jeder Generation (Wikimedia Commons, mit Urheber und Lizenz)           | dieser PR |
 
 ## Arbeitsweise je Feature
 
