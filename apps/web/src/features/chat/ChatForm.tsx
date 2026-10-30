@@ -206,6 +206,10 @@ export function ChatForm({
 
   const submit = (event: FormEvent) => {
     event.preventDefault();
+    if (form === 'tax' && values.co2 && !/^\d{1,3}(?:[.,]\d)?$/.test(values.co2.trim())) {
+      setProblem('Gib den CO₂-Wert als Zahl in g/km an, zum Beispiel 120.');
+      return;
+    }
     const text = message();
     if (!text) {
       setProblem(
@@ -284,7 +288,10 @@ export function ChatForm({
           {emissionClassNeeded ? (
             <p className="chat-card__hint">
               Vor Juli 2009 zugelassen: Die Steuer hängt von der Schadstoffklasse ab. Rechne sie im{' '}
-              <Link to="/kfz-steuer-rechner">Kfz-Steuer-Rechner</Link> aus.
+              <Link to={`/kfz-steuer-rechner?ez=${registration.slice(0, 7)}`}>
+                Kfz-Steuer-Rechner
+              </Link>{' '}
+              aus.
             </p>
           ) : (
             <>
@@ -325,6 +332,18 @@ export function ChatForm({
                         disabled={disabled}
                         onClick={() => {
                           setManual(true);
+                          // The picked engine's values to start from, to correct from the certificate.
+                          if (pickedEngine) {
+                            const co2 = electricEngine
+                              ? null
+                              : engineCo2(pickedEngine, registration);
+                            setValues((current) => ({
+                              ...current,
+                              drive: engineTaxDrive(pickedEngine.fuel),
+                              ccm: pickedEngine.ccm === null ? '' : String(pickedEngine.ccm),
+                              co2: co2 === null ? (current.co2 ?? '') : String(Math.round(co2)),
+                            }));
+                          }
                           requestAnimationFrame(() =>
                             document.getElementById(`${formId}-tax-drive`)?.focus(),
                           );

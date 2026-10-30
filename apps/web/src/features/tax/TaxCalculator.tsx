@@ -250,7 +250,11 @@ export function TaxCalculator({
       plausibleDate &&
       engineYear(engineList, values.firstRegistration, currentYear) === null);
   const typed =
-    manual || noData || before2009 || (!pickedEngine && values.drive !== '' && hasValues(values));
+    manual ||
+    noData ||
+    before2009 ||
+    // Not while a year is still being typed: the pick's values would show for a moment.
+    (plausibleDate && !pickedEngine && values.drive !== '' && hasValues(values));
   const missingCo2 =
     pickedEngine !== null && missingValues(pickedEngine, values.firstRegistration).length > 0;
   const electric = typed ? values.drive === 'electric' : electricEngineOf(pickedEngine);
@@ -307,6 +311,13 @@ export function TaxCalculator({
           today,
         )
       : null;
+  // Missing values whose fields are hidden in the list mode: say what to do instead.
+  const hiddenMissing =
+    result?.kind === 'missing' &&
+    !typed &&
+    result.fields.every(
+      (field) => field === 'displacementCcm' || (field === 'co2GPerKm' && !missingCo2),
+    );
   const errorFor = (field: VehicleTaxField) =>
     result?.kind === 'invalid' && result.field === field ? result.message : undefined;
 
@@ -448,7 +459,7 @@ export function TaxCalculator({
             Kfz-Steuer
           </h3>
           <div aria-live="polite">
-            {result && !(result.kind === 'missing' && !typed && !missingCo2) ? (
+            {result && !hiddenMissing ? (
               <Result result={result} />
             ) : result ? (
               // The values are missing, but their fields are hidden: say what to do instead.
