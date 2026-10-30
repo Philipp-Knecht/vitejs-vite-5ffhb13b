@@ -8,6 +8,13 @@ test('the tax calculator computes the Kfz-Steuer from the registration values', 
     page.getByRole('heading', { level: 1, name: 'Kfz-Steuer für einen Gebrauchtwagen berechnen' }),
   ).toBeVisible();
   const result = page.getByRole('region', { name: 'Kfz-Steuer' });
+  await expect(result).toContainText('Gib die Erstzulassung an und wähl Marke, Modell und Motor.');
+  // Without the car in the list: the values from the registration certificate.
+  await page
+    .getByRole('button', {
+      name: 'Werte aus dem Fahrzeugschein eintragen',
+    })
+    .click();
   await expect(result).toContainText('Gib Erstzulassung und Antrieb an.');
 
   await page.getByLabel('Erstzulassung').fill('2021-02-15');
@@ -78,7 +85,55 @@ test('a link from a check prefills first registration and drive', async ({ page 
   await page.goto('/kfz-steuer-rechner?ez=2016-09&antrieb=diesel');
   await expect(page.getByLabel('Erstzulassung')).toHaveValue('');
   await expect(page.getByText('Laut Inserat 09/2016')).toBeVisible();
+  await page
+    .getByRole('button', {
+      name: 'Werte aus dem Fahrzeugschein eintragen',
+    })
+    .click();
   await expect(page.getByLabel('Antrieb')).toHaveValue('diesel');
+});
+
+test('the tax form in the chat asks for the car, not for its registration values', async ({
+  page,
+}) => {
+  await page.goto('/');
+  const chat = page.getByRole('region', { name: 'KI-Assistent von KaufCheck' });
+  await chat.getByRole('button', { name: 'Kfz-Steuer berechnen' }).click();
+  const form = chat.getByRole('form', { name: 'Kfz-Steuer berechnen' });
+  for (const label of ['Hubraum in cm³ (P.1)', 'CO₂ in g/km (V.7)', 'Leistung in kW', 'Antrieb'])
+    await expect(form.getByLabel(label)).toHaveCount(0);
+  // Written as the assistant prefills it; the message names it as month and year.
+  await form.getByLabel('Erstzulassung (MM/JJJJ)').fill('2021-05');
+  await form.getByLabel('Marke').selectOption({ label: 'Volkswagen' });
+  await form.getByLabel('Modell').selectOption({ label: 'Golf' });
+  await form.getByLabel('Motor').selectOption({ label: '1,5 l Benzin, 110 kW (150 PS)' });
+  await form.getByRole('button', { name: 'Absenden' }).click();
+  await expect(
+    chat.getByText(
+      /Kfz-Steuer berechnen: Erstzulassung 05\/2021, Volkswagen Golf, Motor 1,5 l Benzin/,
+    ),
+  ).toBeVisible();
+  // 15 × 2 € for 1,498 cm³ plus 20 × 2.00 € and 15 × 2.20 € for 130 g/km = 103 €.
+  await expect(chat.locator('.chat-card').filter({ hasText: 'Kfz-Steuer' })).toContainText('103 €');
+
+  // An older car: the EU data has nothing, so the fields of the registration certificate.
+  const other = await page.context().newPage();
+  await other.goto('/');
+  const otherChat = other.getByRole('region', { name: 'KI-Assistent von KaufCheck' });
+  await otherChat.getByRole('button', { name: 'Kfz-Steuer berechnen' }).click();
+  const older = otherChat.getByRole('form', { name: 'Kfz-Steuer berechnen' });
+  await older.getByLabel('Erstzulassung (MM/JJJJ)').fill('03/2010');
+  await older.getByLabel('Marke').selectOption({ label: 'Volkswagen' });
+  await older.getByLabel('Modell').selectOption({ label: 'Golf' });
+  await expect(older.getByLabel('Hubraum in cm³ (P.1)')).toBeVisible();
+  await older.getByLabel('Antrieb').selectOption('diesel');
+  await older.getByLabel('Hubraum in cm³ (P.1)').fill('1968');
+  await older.getByLabel('CO₂ in g/km (V.7)').fill('119');
+  await older.getByRole('button', { name: 'Absenden' }).click();
+  // 20 × 9.50 € for 1,968 cm³ – CO₂ below 120 g/km costs nothing before 2012.
+  await expect(otherChat.locator('.chat-card').filter({ hasText: 'Kfz-Steuer' })).toContainText(
+    '190 €',
+  );
 });
 
 test('the insurance class is explained and looked up at the GDV, without class values', async ({

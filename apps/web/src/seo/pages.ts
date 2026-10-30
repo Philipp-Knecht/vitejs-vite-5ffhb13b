@@ -52,7 +52,7 @@ export const STATIC_PAGE_META: Readonly<Record<string, PageMeta>> = {
   '/kfz-steuer-rechner': {
     title: 'Kfz-Steuer-Rechner für Gebrauchtwagen | KaufCheck',
     description:
-      'Kfz-Steuer berechnen mit den Werten aus dem Fahrzeugschein – nach dem Kraftfahrzeugsteuergesetz, auch für ältere Autos und Elektroautos – und die laufenden Kosten im Monat überschlagen.',
+      'Kfz-Steuer berechnen: Modell und Motor wählen oder die Werte aus dem Fahrzeugschein eintragen – nach dem Kraftfahrzeugsteuergesetz, auch für ältere Autos und Elektroautos – und die laufenden Kosten im Monat überschlagen.',
   },
   '/kaufvertrag': {
     title: 'Kaufvertrag Auto privat: Muster zum Ausfüllen | KaufCheck',

@@ -1,6 +1,7 @@
 import { makeById } from '@kaufcheck/catalog';
 import {
   ENGINE_SOURCE,
+  engineCo2,
   engineKey,
   engineLabels,
   engineYear,
@@ -21,6 +22,9 @@ const day = (iso: string) => iso.split('-').reverse().join('.');
  * in the registration certificate stay binding.
  */
 export function EnginePicker({
+  idPrefix,
+  legend = 'Dein Auto',
+  indexFailed = false,
   index,
   engines,
   enginesFailed,
@@ -33,7 +37,12 @@ export function EnginePicker({
   index: EngineIndex | undefined;
   /** The engines of the picked model, while loaded. */
   engines: readonly EngineRecord[] | undefined;
+  /** Gives the make field the id `<idPrefix>-make`, to move the focus there. */
+  idPrefix?: string;
+  legend?: string;
+  indexFailed?: boolean;
   enginesFailed: boolean;
+  /** As YYYY-MM-DD, or YYYY-MM-01 when only the month is known. */
   firstRegistration: string;
   currentYear: number;
   value: EnginePick;
@@ -54,9 +63,16 @@ export function EnginePicker({
   const range = engines ? engineYears(engines) : null;
   const registrationYear = Number(firstRegistration.slice(0, 4));
   const provisional = year !== null && index?.provisionalYears.includes(year);
+  const pickedCo2 =
+    picked && picked.fuel !== 'electric' ? engineCo2(picked, firstRegistration) : null;
+  const usedValues = [
+    picked?.ccm != null && `Hubraum ${formatNumber(picked.ccm)} cm³`,
+    pickedCo2 !== null && `CO₂ ${formatNumber(Math.round(pickedCo2))} g/km`,
+  ].filter((part): part is string => typeof part === 'string');
 
   let hint: string;
-  if (!value.modelId) hint = 'Wähl Marke und Modell, dann den Motor.';
+  if (indexFailed) hint = 'Die Liste der Modelle ließ sich nicht laden. Bitte lade die Seite neu.';
+  else if (!value.modelId) hint = 'Wähl Marke und Modell, dann den Motor.';
   else if (!firstRegistration)
     hint = 'Trag oben die Erstzulassung ein, dann zeigt KaufCheck die Motoren dieses Jahrgangs.';
   else if (enginesFailed) hint = 'Die Motoren ließen sich nicht laden. Bitte lade die Seite neu.';
@@ -72,8 +88,9 @@ export function EnginePicker({
 
   return (
     <fieldset className="engine-picker">
-      <legend>Werte aus dem Modell übernehmen</legend>
+      <legend>{legend}</legend>
       <SelectField
+        id={idPrefix ? `${idPrefix}-make` : undefined}
         label="Marke"
         value={value.makeId}
         disabled={!index}
@@ -81,7 +98,9 @@ export function EnginePicker({
           onChange({ makeId: event.target.value, modelId: '', engineKey: '' }, null)
         }
       >
-        <option value="">{index ? 'Bitte wählen' : 'Wird geladen …'}</option>
+        <option value="">
+          {index ? 'Bitte wählen' : indexFailed ? 'Nicht verfügbar' : 'Wird geladen …'}
+        </option>
         {makes.map((make) => (
           <option key={make.id} value={make.id}>
             {make.name}
@@ -122,30 +141,33 @@ export function EnginePicker({
       </SelectField>
       <div aria-live="polite">
         {picked && (
-          <div className="field__hint engine-picker__source">
-            <p>
-              Eingetragen sind typische Werte von {formatNumber(picked.registrations)}{' '}
-              Neuzulassungen; verbindlich ist dein Fahrzeugschein (P.1, V.7).
-              {picked.fuel === 'electric' &&
-                ' Die kW sind die an die EU gemeldete Leistung; im Inserat steht oft eine höhere Spitzenleistung.'}
-              {missing.length > 0 &&
-                ` In den EU-Daten fehlt ${missing.join(' und ')}: bitte aus dem Fahrzeugschein eintragen.`}
-            </p>
-            <p>
-              Quelle:{' '}
-              <a href={ENGINE_SOURCE.url} target="_blank" rel="noopener noreferrer">
-                {ENGINE_SOURCE.name}
-              </a>
-              , © {ENGINE_SOURCE.holder}, Lizenz{' '}
-              <a href={ENGINE_SOURCE.licenceUrl} target="_blank" rel="noopener noreferrer">
-                {ENGINE_SOURCE.licence}
-              </a>
-              ; von KaufCheck zusammengefasst (Median je Motor), abgerufen am{' '}
-              {index && day(index.retrieved)}.
-            </p>
-          </div>
+          <p className="field__hint engine-picker__source">
+            Gerechnet wird mit typischen Werten von {formatNumber(picked.registrations)}{' '}
+            Neuzulassungen
+            {usedValues.length > 0 && `: ${usedValues.join(', ')}`}.{' '}
+            {picked.fuel === 'electric'
+              ? 'Verbindlich ist dein Fahrzeugschein. Die kW sind die an die EU gemeldete Leistung; im Inserat steht oft eine höhere Spitzenleistung.'
+              : 'Verbindlich ist dein Fahrzeugschein (P.1, V.7).'}
+            {missing.length > 0 &&
+              ` In den EU-Daten fehlt ${missing.join(' und ')}: bitte aus dem Fahrzeugschein eintragen.`}
+          </p>
         )}
       </div>
+      {/* Outside the live region: read once where it stands, not after every pick. */}
+      {picked && (
+        <p className="field__hint engine-picker__source">
+          Quelle:{' '}
+          <a href={ENGINE_SOURCE.url} target="_blank" rel="noopener noreferrer">
+            {ENGINE_SOURCE.name}
+          </a>
+          , © {ENGINE_SOURCE.holder}, Lizenz{' '}
+          <a href={ENGINE_SOURCE.licenceUrl} target="_blank" rel="noopener noreferrer">
+            {ENGINE_SOURCE.licence}
+          </a>
+          ; von KaufCheck zusammengefasst (Median je Motor), abgerufen am{' '}
+          {index && day(index.retrieved)}.
+        </p>
+      )}
     </fieldset>
   );
 }

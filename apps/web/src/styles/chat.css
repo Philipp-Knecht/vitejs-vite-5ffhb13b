@@ -504,6 +504,11 @@
   gap: 10px;
 }
 
+.chat-form__switch {
+  margin: 0;
+  font-size: 0.875rem;
+}
+
 .chat-form .btn {
   justify-self: start;
 }

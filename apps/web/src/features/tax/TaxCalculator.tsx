@@ -6,6 +6,7 @@ import {
   type VehicleTaxResult,
 } from '@kaufcheck/shared';
 import {
+  engineCo2,
   engineKey,
   enginesOfYear,
   engineTaxDrive,
@@ -13,7 +14,7 @@ import {
   findIndexModel,
   type EngineRecord,
 } from '@kaufcheck/catalog/engines';
-import { useState } from 'react';
+import { useId, useState } from 'react';
 import { SelectField, TextField } from '../../components/ui/Field';
 import type { TaxFormValues } from './form';
 import { toNumber } from './numbers';
@@ -66,6 +67,13 @@ const euros = (value: number, fractions = 0) =>
 const day = (iso: string) => iso.split('-').reverse().join('.');
 
 const BINDING = 'Verbindlich ist der Steuerbescheid des Hauptzollamts.';
+
+const electricEngineOf = (engine: EngineRecord | null) =>
+  engine?.fuel === 'electric' || engine?.fuel === 'hydrogen';
+
+/** Values typed in (or from a link) that only the registration certificate has. */
+const hasValues = (values: TaxFormValues) =>
+  values.displacementCcm !== '' || values.co2GPerKm !== '' || values.emissionClass !== '';
 
 function todayIso(): string {
   const now = new Date();
@@ -140,6 +148,9 @@ export function TaxCalculator({
   listingModel?: { makeId: string; model: string; kw: number | null } | null;
 }) {
   const [values, setValues] = useState(initial);
+  // The values from the registration certificate, typed in instead of picking the engine.
+  const [manual, setManual] = useState(false);
+  const formId = useId();
   const set = (key: keyof TaxFormValues) => (event: { target: { value: string } }) =>
     setValues((current) => ({ ...current, [key]: event.target.value }));
 
@@ -228,22 +239,85 @@ export function TaxCalculator({
   const pickedEngine = pick.engineKey ? engineFor(pick.engineKey, values.firstRegistration) : null;
 
   const before2009 = values.firstRegistration !== '' && values.firstRegistration < '2009-07-01';
-  const electric = values.drive === 'electric';
   const ready = values.firstRegistration !== '' && values.drive !== '';
+  // The picked model has no engines for the year (the EU data covers 2011 to 2022), or they
+  // did not load: then the values come from the registration certificate.
+  const noData =
+    index.isError ||
+    engines.isError ||
+    (pick.modelId !== '' &&
+      engineList !== undefined &&
+      plausibleDate &&
+      engineYear(engineList, values.firstRegistration, currentYear) === null);
+  const typed =
+    manual ||
+    noData ||
+    before2009 ||
+    // Not while a year is still being typed: the pick's values would show for a moment.
+    (plausibleDate && !pickedEngine && values.drive !== '' && hasValues(values));
+  const missingCo2 =
+    pickedEngine !== null && missingValues(pickedEngine, values.firstRegistration).length > 0;
+  const electric = typed ? values.drive === 'electric' : electricEngineOf(pickedEngine);
+  const switchToList = () => {
+    setManual(false);
+    if (pickedEngine) applyEngine(pickedEngine, values.firstRegistration, true);
+    else
+      setValues((current) => ({
+        ...current,
+        drive: '',
+        displacementCcm: '',
+        co2GPerKm: '',
+        emissionClass: '',
+      }));
+    // The fields went: the focus goes back to the list.
+    requestAnimationFrame(() => document.getElementById(`${formId}-make`)?.focus());
+  };
+  const switchToTyped = () => {
+    setManual(true);
+    // The fields appeared after the button: the focus goes to the first one.
+    requestAnimationFrame(() => document.getElementById(`${formId}-drive`)?.focus());
+  };
   const today = todayIso();
-  const result = ready
-    ? vehicleTax(
-        {
-          firstRegistration: values.firstRegistration,
+  // In the list mode the tax counts what the picked engine says – nothing hidden from an
+  // earlier pick or typed before; a typed CO₂ value only while its field shows.
+  const electricEngine = electricEngineOf(pickedEngine);
+  const taxValues = typed
+    ? ready
+      ? {
           drive: values.drive as TaxDrive,
           displacementCcm: toNumber(values.displacementCcm),
           co2GPerKm: toNumber(values.co2GPerKm),
-          emissionClass: values.emissionClass || null,
-          grossWeightKg: toNumber(values.grossWeightKg),
-        },
-        today,
-      )
-    : null;
+        }
+      : null
+    : pickedEngine
+      ? {
+          drive: engineTaxDrive(pickedEngine.fuel),
+          displacementCcm: pickedEngine.ccm,
+          co2GPerKm: electricEngine
+            ? null
+            : (engineCo2(pickedEngine, values.firstRegistration) ??
+              (missingCo2 ? toNumber(values.co2GPerKm) : null)),
+        }
+      : null;
+  const result =
+    values.firstRegistration !== '' && taxValues
+      ? vehicleTax(
+          {
+            firstRegistration: values.firstRegistration,
+            ...taxValues,
+            emissionClass: values.emissionClass || null,
+            grossWeightKg: toNumber(values.grossWeightKg),
+          },
+          today,
+        )
+      : null;
+  // Missing values whose fields are hidden in the list mode: say what to do instead.
+  const hiddenMissing =
+    result?.kind === 'missing' &&
+    !typed &&
+    result.fields.every(
+      (field) => field === 'displacementCcm' || (field === 'co2GPerKm' && !missingCo2),
+    );
   const errorFor = (field: VehicleTaxField) =>
     result?.kind === 'invalid' && result.field === field ? result.message : undefined;
 
@@ -287,7 +361,9 @@ export function TaxCalculator({
             onChange={set('firstRegistration')}
           />
           <EnginePicker
+            idPrefix={formId}
             index={index.data}
+            indexFailed={index.isError}
             engines={engineList}
             enginesFailed={engines.isError}
             firstRegistration={values.firstRegistration}
@@ -296,14 +372,35 @@ export function TaxCalculator({
             missing={pickedEngine ? missingValues(pickedEngine, values.firstRegistration) : []}
             onChange={choose}
           />
-          <SelectField label="Antrieb" value={values.drive} onChange={set('drive')}>
-            <option value="">Bitte wählen</option>
-            {DRIVES.map((drive) => (
-              <option key={drive.value} value={drive.value}>
-                {drive.label}
-              </option>
-            ))}
-          </SelectField>
+          <p className="tax-form__switch">
+            {typed && !noData && !before2009 ? (
+              <button type="button" className="link-button" onClick={switchToList}>
+                Doch Modell und Motor aus der Liste wählen
+              </button>
+            ) : !typed ? (
+              <>
+                Genauer, und für Autos, die nicht in der Liste sind:{' '}
+                <button type="button" className="link-button" onClick={switchToTyped}>
+                  Werte aus dem Fahrzeugschein eintragen
+                </button>
+              </>
+            ) : null}
+          </p>
+          {typed && (
+            <SelectField
+              id={`${formId}-drive`}
+              label="Antrieb"
+              value={values.drive}
+              onChange={set('drive')}
+            >
+              <option value="">Bitte wählen</option>
+              {DRIVES.map((drive) => (
+                <option key={drive.value} value={drive.value}>
+                  {drive.label}
+                </option>
+              ))}
+            </SelectField>
+          )}
           {electric ? (
             <TextField
               label="Zulässiges Gesamtgewicht in kg"
@@ -315,26 +412,30 @@ export function TaxCalculator({
             />
           ) : (
             <>
-              <TextField
-                label="Hubraum in cm³"
-                hint="Fahrzeugschein, Feld P.1"
-                inputMode="numeric"
-                error={errorFor('displacementCcm')}
-                value={values.displacementCcm}
-                onChange={set('displacementCcm')}
-              />
-              <TextField
-                label="CO₂-Wert in g/km"
-                hint={
-                  before2009
-                    ? 'Fahrzeugschein, Feld V.7 – bei Erstzulassung vor Juli 2009 nur für Autos ab 05.11.2008 nötig'
-                    : 'Fahrzeugschein, Feld V.7'
-                }
-                inputMode="numeric"
-                error={errorFor('co2GPerKm')}
-                value={values.co2GPerKm}
-                onChange={set('co2GPerKm')}
-              />
+              {typed && (
+                <TextField
+                  label="Hubraum in cm³"
+                  hint="Fahrzeugschein, Feld P.1"
+                  inputMode="numeric"
+                  error={errorFor('displacementCcm')}
+                  value={values.displacementCcm}
+                  onChange={set('displacementCcm')}
+                />
+              )}
+              {(typed || missingCo2) && (
+                <TextField
+                  label="CO₂-Wert in g/km"
+                  hint={
+                    before2009
+                      ? 'Fahrzeugschein, Feld V.7 – bei Erstzulassung vor Juli 2009 nur für Autos ab 05.11.2008 nötig'
+                      : 'Fahrzeugschein, Feld V.7'
+                  }
+                  inputMode="numeric"
+                  error={errorFor('co2GPerKm')}
+                  value={values.co2GPerKm}
+                  onChange={set('co2GPerKm')}
+                />
+              )}
               {before2009 && (
                 <SelectField
                   label="Schadstoffklasse"
@@ -358,10 +459,19 @@ export function TaxCalculator({
             Kfz-Steuer
           </h3>
           <div aria-live="polite">
-            {result ? (
+            {result && !hiddenMissing ? (
               <Result result={result} />
+            ) : result ? (
+              // The values are missing, but their fields are hidden: say what to do instead.
+              <p className="tax-result__hint">
+                Wähl den Motor – oder trag Hubraum und CO₂ aus dem Fahrzeugschein ein.
+              </p>
             ) : (
-              <p className="tax-result__hint">Gib Erstzulassung und Antrieb an.</p>
+              <p className="tax-result__hint">
+                {typed
+                  ? 'Gib Erstzulassung und Antrieb an.'
+                  : 'Gib die Erstzulassung an und wähl Marke, Modell und Motor.'}
+              </p>
             )}
           </div>
         </section>

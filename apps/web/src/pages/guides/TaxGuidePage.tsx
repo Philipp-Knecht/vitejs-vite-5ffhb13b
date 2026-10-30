@@ -73,9 +73,11 @@ export function TaxGuidePage() {
       toc={TOC}
       intro={
         <p>
-          Die Kfz-Steuer hängt von Erstzulassung, Antrieb, Hubraum und CO₂-Ausstoß ab. Mit den
-          Werten aus dem Fahrzeugschein rechnet KaufCheck sie nach dem Kraftfahrzeugsteuergesetz aus
-          – direkt in deinem Browser, ohne dass etwas gespeichert wird.
+          Die Kfz-Steuer hängt von Erstzulassung, Antrieb, Hubraum und CO₂-Ausstoß ab. Wähl Modell
+          und Motor: Hubraum und CO₂ nimmt KaufCheck aus den EU-Daten der Neuzulassungen. Für ältere
+          Autos oder wenn dein Auto fehlt, trägst du die Werte aus dem Fahrzeugschein ein. Gerechnet
+          wird nach dem Kraftfahrzeugsteuergesetz – direkt in deinem Browser, ohne dass etwas
+          gespeichert wird.
         </p>
       }
     >
