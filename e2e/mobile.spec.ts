@@ -37,7 +37,7 @@ test('pages fit the phone screen without horizontal scrolling', async ({ page })
 });
 
 test('the mobile menu opens and navigates', async ({ page }) => {
-  await page.goto('/');
+  await page.goto('/auto-finden');
   await expect(page.getByRole('navigation', { name: 'Hauptnavigation' })).toBeHidden();
   await page.getByRole('button', { name: 'Menü öffnen' }).click();
   const menu = page.getByRole('navigation', { name: 'Menü' });
@@ -48,11 +48,33 @@ test('the mobile menu opens and navigates', async ({ page }) => {
 });
 
 test('Escape closes the mobile menu and returns focus to its button', async ({ page }) => {
-  await page.goto('/');
+  await page.goto('/auto-finden');
   await page.getByRole('button', { name: 'Menü öffnen' }).click();
   const menu = page.getByRole('navigation', { name: 'Menü' });
   await expect(menu).toBeVisible();
   await page.keyboard.press('Escape');
   await expect(menu).toBeHidden();
   await expect(page.getByRole('button', { name: 'Menü öffnen' })).toBeFocused();
+});
+
+test('the start page menu opens from the left with the functions and the chats', async ({
+  page,
+}) => {
+  await page.goto('/');
+  const button = page.getByRole('button', { name: 'Menü öffnen' });
+  await button.click();
+  const menu = page.getByRole('dialog', { name: /Menü/ });
+  await expect(menu).toBeVisible();
+  // It slides in from the left edge.
+  await expect.poll(async () => (await menu.boundingBox())?.x).toBe(0);
+  await expect(menu.getByRole('heading', { name: 'Chats' })).toBeVisible();
+  await page.keyboard.press('Escape');
+  await expect(menu).toBeHidden();
+  await expect(button).toBeFocused();
+
+  await button.click();
+  await menu.getByText('Ratgeber').click();
+  await menu.getByRole('link', { name: 'Auto ummelden' }).click();
+  await expect(page).toHaveURL(/\/auto-ummelden$/);
+  await expect(page.getByRole('heading', { level: 1 })).toContainText('Auto ummelden');
 });

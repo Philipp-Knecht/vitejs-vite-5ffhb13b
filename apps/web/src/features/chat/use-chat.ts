@@ -1,9 +1,6 @@
 import {
-  CHAT_FORMS,
   CHAT_LIMITS,
-  germanDay,
   type ChatCard,
-  type ChatJump,
   type ChatStreamEvent,
   type ChatTurn,
   type ChatUsage,
@@ -11,121 +8,23 @@ import {
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { ApiRequestError } from '../../api/client';
 import { streamChat } from './chat-stream';
+import {
+  currentChatId,
+  loadChat,
+  loadUsage,
+  saveChat,
+  saveUsage,
+  setCurrentChatId,
+  useStoredChats,
+  type ChatItem,
+} from './chat-store';
 
-export interface ChatToolStep {
-  label: string;
-  status: 'started' | 'completed' | 'failed';
-}
+export type { ChatItem, ChatToolStep } from './chat-store';
 
-export type ChatItem =
-  | { id: string; role: 'user'; text: string }
-  | {
-      id: string;
-      role: 'assistant';
-      text: string;
-      cards: ChatCard[];
-      tools: ChatToolStep[];
-      status: 'streaming' | 'done' | 'error';
-      error?: string;
-      fallback?: boolean;
-      /** Pages of KaufCheck to do it yourself, from the server. */
-      jumps?: ChatJump[];
-    }
-  /** A form the visitor opened from a suggestion: no message to the server yet. */
-  | { id: string; role: 'local'; card: ChatCard }
-  /** A hint of the page itself (no message to the server), e.g. where to paste a listing. */
-  | { id: string; role: 'hint'; text: string };
-
-interface Stored {
-  version: 1;
+interface Conversation {
+  id: string;
   items: ChatItem[];
   history: ChatTurn[];
-  usage: ChatUsage | null;
-}
-
-/** Kept for this tab only and gone when it closes. */
-export const CHAT_STORAGE_KEY = 'kaufcheck:chat';
-const MAX_ITEMS = 60;
-
-const isRecord = (value: unknown): value is Record<string, unknown> =>
-  typeof value === 'object' && value !== null && !Array.isArray(value);
-/** A card this version can show: a form of an older version (say, the listing form) is dropped. */
-const isCard = (value: unknown): value is ChatCard =>
-  isRecord(value) &&
-  typeof value.type === 'string' &&
-  (value.type !== 'form' || (CHAT_FORMS as readonly unknown[]).includes(value.form));
-
-/** Drops what an older version of the page left behind; the chat's error boundary catches the rest. */
-function isItem(value: unknown): value is ChatItem {
-  if (!isRecord(value) || typeof value.id !== 'string') return false;
-  switch (value.role) {
-    case 'user':
-      return typeof value.text === 'string';
-    case 'local':
-      return isCard(value.card);
-    case 'hint':
-      return typeof value.text === 'string';
-    case 'assistant':
-      return (
-        typeof value.text === 'string' && Array.isArray(value.cards) && Array.isArray(value.tools)
-      );
-    default:
-      return false;
-  }
-}
-
-const isTurn = (value: unknown): value is ChatTurn =>
-  isRecord(value) &&
-  (value.role === 'user' || value.role === 'assistant') &&
-  typeof value.content === 'string';
-
-const isUsage = (value: unknown): value is ChatUsage =>
-  isRecord(value) &&
-  typeof value.used === 'number' &&
-  typeof value.limit === 'number' &&
-  typeof value.resetsOn === 'string';
-
-function load(): Stored {
-  const empty: Stored = { version: 1, items: [], history: [], usage: null };
-  try {
-    const raw = window.sessionStorage.getItem(CHAT_STORAGE_KEY);
-    if (!raw) return empty;
-    const value = JSON.parse(raw) as unknown;
-    if (!isRecord(value) || value.version !== 1) return empty;
-    if (!Array.isArray(value.items) || !Array.isArray(value.history)) return empty;
-    // An answer cut off by a reload stays cut off.
-    const items = value.items
-      .filter(isItem)
-      .map((item) =>
-        item.role === 'assistant' ? { ...item, cards: item.cards.filter(isCard) } : item,
-      )
-      .map((item) =>
-        item.role === 'assistant' && item.status === 'streaming'
-          ? { ...item, status: 'error' as const, error: 'Die Antwort wurde unterbrochen.' }
-          : item,
-      );
-    return {
-      version: 1,
-      items,
-      history: value.history.filter(isTurn),
-      // Yesterday's count no longer applies.
-      usage:
-        isUsage(value.usage) && germanDay(new Date()) < value.usage.resetsOn ? value.usage : null,
-    };
-  } catch {
-    return empty;
-  }
-}
-
-function save(state: Stored): void {
-  try {
-    window.sessionStorage.setItem(
-      CHAT_STORAGE_KEY,
-      JSON.stringify({ ...state, items: state.items.slice(-MAX_ITEMS) }),
-    );
-  } catch {
-    // Not kept – the chat still works.
-  }
 }
 
 /**
@@ -143,25 +42,97 @@ export function trimHistory(turns: readonly ChatTurn[]): ChatTurn[] {
 
 let counter = 0;
 const nextId = () => `c${Date.now().toString(36)}${(counter += 1)}`;
+const newConversation = (): Conversation => ({
+  id: `k${Date.now().toString(36)}${Math.random().toString(36).slice(2, 8)}`,
+  items: [],
+  history: [],
+});
+
+/** The conversation of this tab, or a new one. */
+function loadCurrent(): Conversation {
+  const id = currentChatId();
+  const stored = id ? loadChat(id) : null;
+  return stored
+    ? { id: stored.id, items: stored.items, history: stored.history }
+    : newConversation();
+}
+
+const streaming = (items: readonly ChatItem[]) =>
+  items.some((item) => item.role === 'assistant' && item.status === 'streaming');
 
 export function useChat() {
-  const [state, setState] = useState<Stored>(load);
+  const [conversation, setConversation] = useState<Conversation>(loadCurrent);
+  const [usage, setUsage] = useState<ChatUsage | null>(loadUsage);
   const [busy, setBusy] = useState(false);
   const controller = useRef<AbortController | null>(null);
   // Two clicks in one frame must not send twice; `busy` only changes on the next render.
   const sending = useRef(false);
+  // What is already on the device: opening a chat does not make it the newest.
+  const saved = useRef<{ conversation: Conversation; count: number }>({
+    conversation,
+    count: conversation.items.length,
+  });
+  const chats = useStoredChats();
+  const kept = useRef(false);
 
-  useEffect(() => save(state), [state]);
+  useEffect(() => setCurrentChatId(conversation.id), [conversation.id]);
+
+  useEffect(() => {
+    if (conversation === saved.current.conversation) return;
+    // While an answer streams in, only a new message is written – not every word.
+    if (streaming(conversation.items) && conversation.items.length === saved.current.count) return;
+    saved.current = { conversation, count: conversation.items.length };
+    saveChat({ ...conversation, updatedAt: Date.now() });
+  }, [conversation]);
+
+  useEffect(() => saveUsage(usage), [usage]);
+
+  const stop = useCallback(() => {
+    controller.current?.abort();
+    controller.current = null;
+    sending.current = false;
+    setBusy(false);
+  }, []);
+
   useEffect(() => () => controller.current?.abort(), []);
+
+  const show = useCallback(
+    (next: Conversation) => {
+      stop();
+      saved.current = { conversation: next, count: next.items.length };
+      kept.current = false;
+      setConversation(next);
+    },
+    [stop],
+  );
+
+  const reset = useCallback(() => show(newConversation()), [show]);
+
+  /** Opens a conversation kept on this device. */
+  const open = useCallback(
+    (id: string) => {
+      const stored = loadChat(id);
+      if (stored) show({ id: stored.id, items: stored.items, history: stored.history });
+    },
+    [show],
+  );
+
+  // Deleted here or in another tab (or logged out there): the chat starts over.
+  const present = chats.some((chat) => chat.id === conversation.id);
+  useEffect(() => {
+    if (present) kept.current = true;
+    else if (kept.current) reset();
+  }, [present, reset]);
 
   const send = useCallback(
     (text: string) => {
       const content = text.trim();
       if (!content || content.length > CHAT_LIMITS.messageChars || busy || sending.current) return;
       sending.current = true;
+      const chatId = conversation.id;
       const assistantId = nextId();
-      const turns = trimHistory([...state.history, { role: 'user', content }]);
-      setState((current) => ({
+      const turns = trimHistory([...conversation.history, { role: 'user', content }]);
+      setConversation((current) => ({
         ...current,
         items: [
           ...current.items,
@@ -178,11 +149,14 @@ export function useChat() {
       }));
       setBusy(true);
 
-      const update = (change: (item: Extract<ChatItem, { role: 'assistant' }>) => ChatItem) =>
-        setState((current) => ({
+      /** Changes this conversation only: another one may be open by now. */
+      const change = (apply: (current: Conversation) => Conversation) =>
+        setConversation((current) => (current.id === chatId ? apply(current) : current));
+      const update = (edit: (item: Extract<ChatItem, { role: 'assistant' }>) => ChatItem) =>
+        change((current) => ({
           ...current,
           items: current.items.map((item) =>
-            item.id === assistantId && item.role === 'assistant' ? change(item) : item,
+            item.id === assistantId && item.role === 'assistant' ? edit(item) : item,
           ),
         }));
 
@@ -220,14 +194,14 @@ export function useChat() {
             update((item) => ({ ...item, cards: [...item.cards, event.card] }));
             break;
           case 'done':
-            setState((current) => ({
+            setUsage(event.usage);
+            change((current) => ({
               ...current,
               history: [
                 ...turns.slice(0, -1),
                 { role: 'user', content: event.replaceUserMessage ?? content },
                 event.turn,
               ],
-              usage: event.usage,
               items: current.items.map((item) =>
                 item.id === assistantId && item.role === 'assistant'
                   ? { ...item, status: 'done', fallback: event.fallbackModel, jumps: event.jumps }
@@ -255,10 +229,7 @@ export function useChat() {
             details.resetsAt !== undefined
           ) {
             const { limit, resetsAt } = details;
-            setState((current) => ({
-              ...current,
-              usage: { used: details.used ?? limit, limit, resetsOn: resetsAt },
-            }));
+            setUsage({ used: details.used ?? limit, limit, resetsOn: resetsAt });
           }
           update((item) => ({
             ...item,
@@ -276,12 +247,12 @@ export function useChat() {
           setBusy(false);
         });
     },
-    [busy, state.history],
+    [busy, conversation.id, conversation.history],
   );
 
   /** Shows a hint of the page in the chat, without asking the server. */
   const showHint = useCallback((text: string) => {
-    setState((current) => ({
+    setConversation((current) => ({
       ...current,
       items: [...current.items, { id: nextId(), role: 'hint', text }],
     }));
@@ -290,20 +261,24 @@ export function useChat() {
   /** Shows a form in the chat without asking the server; returns its id. */
   const showForm = useCallback((card: ChatCard) => {
     const id = nextId();
-    setState((current) => ({
+    setConversation((current) => ({
       ...current,
       items: [...current.items, { id, role: 'local', card }],
     }));
     return id;
   }, []);
 
-  const reset = useCallback(() => {
-    controller.current?.abort();
-    controller.current = null;
-    sending.current = false;
-    setBusy(false);
-    setState((current) => ({ version: 1, items: [], history: [], usage: current.usage }));
-  }, []);
-
-  return { items: state.items, usage: state.usage, busy, send, showForm, showHint, reset };
+  return {
+    id: conversation.id,
+    items: conversation.items,
+    usage,
+    busy,
+    send,
+    showForm,
+    showHint,
+    reset,
+    open,
+  };
 }
+
+export type Chat = ReturnType<typeof useChat>;

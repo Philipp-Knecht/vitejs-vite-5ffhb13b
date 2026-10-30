@@ -27,6 +27,7 @@ import type {
   WithdrawalRequest,
 } from '@kaufcheck/shared';
 import { QueryClient, useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { deleteAllChats } from '../features/chat/chat-store';
 import { clearSaleContractDraft } from '../features/sale-contract/draft';
 import { clearListingTextDraft } from '../features/selling/draft';
 import {
@@ -310,6 +311,8 @@ function useInvalidateSession() {
       clearListingTextDraft();
       // Own assumptions for saved offers of this account.
       removeByPrefix(MONTHLY_COSTS_STORAGE_PREFIX);
+      // The conversations with the assistant on this device.
+      deleteAllChats();
     }
     queryClient.removeQueries({ queryKey: queryKeys.savedListings });
     queryClient.removeQueries({ queryKey: queryKeys.savedSearches });

@@ -1,48 +1,145 @@
-/* ---------- Chat assistant (start page) ---------- */
+/* ---------- Chat assistant (start page, laid out like a chat app) ---------- */
 .chat {
-  display: grid;
-  /* Long words or wide cards must not widen the chat beyond the screen. */
-  grid-template-columns: minmax(0, 1fr);
-  margin: 20px 0 8px;
-  border: 1px solid var(--c-border);
-  border-radius: var(--radius-xl);
-  background: var(--c-surface);
-  box-shadow: var(--shadow);
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-height: 0;
 }
 
+/* The conversation fills the screen and scrolls by itself; the page does not. */
 .chat__log {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr);
-  gap: 12px;
-  align-content: start;
-  max-height: min(70vh, 640px);
-  min-height: 160px;
-  padding: 16px;
+  flex: 1;
+  min-height: 0;
+  padding: 8px var(--gutter) 12px;
   overflow-y: auto;
   overscroll-behavior: contain;
 }
 
-.chat__welcome p {
-  margin: 0 0 10px;
+/* Empty: the welcome and the suggestions sit just above the input. */
+.chat__log--empty {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+
+.chat__column {
+  display: grid;
+  /* Long words or wide cards must not widen the chat beyond the screen. */
+  grid-template-columns: minmax(0, 1fr);
+  gap: 12px;
+  width: 100%;
+  max-width: 768px;
+  margin: 0 auto;
+}
+
+.chat__welcome {
+  display: grid;
+  gap: 6px;
+}
+
+.chat__welcome-lead {
+  margin: 0;
+  color: var(--c-text-2);
 }
 
 .chat__welcome-title {
-  display: flex;
-  align-items: flex-start;
-  gap: 8px;
-  font-size: 1.1rem;
+  margin: 0 0 6px;
+  font-size: 1.5rem;
   font-weight: 650;
+  line-height: 1.25;
 }
 
-.chat__welcome-title svg {
-  flex-shrink: 0;
-  margin-top: 0.2em;
-}
-
+/* Three and a half suggestions at a time; the list scrolls, its height stays. */
 .chat__starters {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
+  --starter-h: 48px;
+  --starter-gap: 8px;
+  display: grid;
+  grid-auto-rows: var(--starter-h);
+  align-content: start;
+  gap: var(--starter-gap);
+  height: calc(3.5 * var(--starter-h) + 3 * var(--starter-gap));
+  margin: 0;
+  /* Room below the last one, so that it can scroll out of the fade. */
+  padding: 0 0 calc(0.5 * var(--starter-h) + var(--starter-gap));
+  list-style: none;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-width: none;
+  mask-image: linear-gradient(to bottom, #000 calc(100% - 0.6 * var(--starter-h)), transparent);
+}
+
+.chat__starters::-webkit-scrollbar {
+  display: none;
+}
+
+.chat__starter {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  max-width: 100%;
+  height: 100%;
+  padding: 0 18px 0 8px;
+  border: 1px solid var(--c-border);
+  border-radius: var(--radius-pill);
+  background: var(--c-surface-2);
+  color: var(--c-text);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.chat__starter:hover:not(:disabled) {
+  background: var(--c-primary-50);
+}
+
+.chat__starter:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.chat__starter-label {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.chat__starter-icon {
+  display: inline-grid;
+  flex-shrink: 0;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+}
+
+.chat__starter-icon--blue {
+  background: #e3edfb;
+  color: #1c559e;
+}
+
+.chat__starter-icon--green {
+  background: #e3f4ea;
+  color: #146c43;
+}
+
+.chat__starter-icon--amber {
+  background: #fff1d6;
+  color: #8f5100;
+}
+
+.chat__starter-icon--violet {
+  background: #efeafb;
+  color: #55369f;
+}
+
+.chat__starter-icon--rose {
+  background: #fde8ea;
+  color: #b42318;
+}
+
+.chat__starter-icon--teal {
+  background: #dff3f1;
+  color: #0d6b64;
 }
 
 .chip-button {
@@ -132,36 +229,57 @@
   animation: spin 1s linear infinite;
 }
 
+.chat__bottom {
+  flex-shrink: 0;
+  width: 100%;
+  max-width: calc(768px + 2 * var(--gutter));
+  margin: 0 auto;
+  padding: 0 var(--gutter);
+}
+
+/* One rounded field with the buttons inside, like a chat app. */
 .chat__composer {
   display: flex;
   align-items: flex-end;
-  gap: 8px;
-  padding: 12px;
-  border-top: 1px solid var(--c-border);
+  gap: 4px;
+  padding: 4px 4px 4px 18px;
+  border: 1px solid var(--c-border-strong);
+  border-radius: 26px;
+  background: var(--c-surface);
+  box-shadow: var(--shadow);
+}
+
+/* The field has no frame of its own: the focus shows on the whole input. */
+.chat__composer:focus-within {
+  outline: 3px solid var(--c-focus);
+  outline-offset: 2px;
 }
 
 .chat__input {
   flex: 1;
   min-width: 0;
-  min-height: 48px;
+  min-height: 44px;
   max-height: 200px;
-  padding: 10px 12px;
-  border: 1px solid var(--c-border-strong);
-  border-radius: var(--radius);
-  background: var(--c-surface);
+  padding: 11px 0;
+  border: 0;
+  background: transparent;
   color: var(--c-text);
   font: inherit;
-  resize: vertical;
+  line-height: 1.4;
+  resize: none;
 }
 
 .chat__input:focus-visible {
-  outline: 2px solid var(--c-focus);
-  outline-offset: 1px;
+  outline: none;
+}
+
+.chat__input::placeholder {
+  color: var(--c-text-3);
 }
 
 .chat__actions {
   display: flex;
-  gap: 6px;
+  gap: 4px;
 }
 
 .chat__icon-button {
@@ -169,20 +287,23 @@
   place-items: center;
   width: 44px;
   height: 44px;
-  border: 1px solid var(--c-border-strong);
-  border-radius: var(--radius);
-  background: var(--c-surface);
-  color: var(--c-primary);
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--c-text-2);
   cursor: pointer;
 }
 
+.chat__icon-button:focus-visible {
+  outline-offset: -3px;
+}
+
 .chat__icon-button.is-active {
-  border-color: var(--c-danger);
+  background: var(--c-danger-bg);
   color: var(--c-danger);
 }
 
 .chat__send {
-  border-color: var(--c-primary);
   background: var(--c-primary);
   color: #fff;
 }
@@ -194,32 +315,44 @@
 
 .chat__speech-error {
   margin: 0;
-  padding: 0 12px 8px;
+  padding: 6px 12px 0;
   font-size: 0.875rem;
   color: var(--c-danger);
 }
 
 .chat__footer {
-  padding: 0 12px 12px;
-  font-size: 0.8rem;
+  margin: 6px 0 0;
+  font-size: 0.75rem;
   color: var(--c-text-3);
+  text-align: center;
 }
 
-.chat__footer p {
-  margin: 0 0 4px;
+/* Before the first use of the microphone: where the voice goes. */
+.chat__speech-ask {
+  display: grid;
+  gap: 8px;
+  margin-bottom: 8px;
+  padding: 12px 14px;
+  border: 1px solid var(--c-border);
+  border-radius: var(--radius-lg);
+  background: var(--c-surface-2);
+  font-size: 0.875rem;
+}
+
+.chat__speech-ask p {
+  margin: 0;
+}
+
+.chat__speech-ask-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
 }
 
 .chat-form__problem {
   margin: 0;
   font-size: 0.875rem;
   color: var(--c-danger);
-}
-
-.chat__reset {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  font-size: 0.8rem;
 }
 
 /* Cards with the results of KaufCheck's tools. */
@@ -373,19 +506,6 @@
   .spin {
     animation: none;
   }
-}
-
-/* The start page is the chat: little space around it. */
-.hero--chat {
-  padding-block: 16px 32px;
-}
-
-.hero--chat .chat {
-  margin-top: 0;
-}
-
-.home-start {
-  margin-top: 24px;
 }
 
 /* Under each answer: the tool of KaufCheck that does the same, for doing it yourself. */

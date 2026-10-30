@@ -1,5 +1,12 @@
 import { Component, Fragment, type ErrorInfo, type ReactNode } from 'react';
-import { CHAT_STORAGE_KEY } from './use-chat';
+
+interface Props {
+  children: ReactNode;
+  /** Forgets the conversation that broke, so that it does not break again. */
+  onFailed: () => void;
+  /** Starts a new conversation. */
+  onRetry: () => void;
+}
 
 interface State {
   failed: boolean;
@@ -10,7 +17,7 @@ interface State {
  * Keeps a broken conversation (say, one an older version of the page saved)
  * from taking the start page with it: the chat starts over instead.
  */
-export class ChatBoundary extends Component<{ children: ReactNode }, State> {
+export class ChatBoundary extends Component<Props, State> {
   override state: State = { failed: false, attempt: 0 };
 
   static getDerivedStateFromError(): Partial<State> {
@@ -19,11 +26,7 @@ export class ChatBoundary extends Component<{ children: ReactNode }, State> {
 
   override componentDidCatch(error: Error, info: ErrorInfo): void {
     console.error('Chat failed', error, info.componentStack);
-    try {
-      window.sessionStorage.removeItem(CHAT_STORAGE_KEY);
-    } catch {
-      // Nothing kept, nothing to clear.
-    }
+    this.props.onFailed();
   }
 
   override render(): ReactNode {
@@ -35,9 +38,12 @@ export class ChatBoundary extends Component<{ children: ReactNode }, State> {
         <button
           type="button"
           className="btn btn--secondary btn--sm"
-          onClick={() => this.setState((state) => ({ failed: false, attempt: state.attempt + 1 }))}
+          onClick={() => {
+            this.props.onRetry();
+            this.setState((state) => ({ failed: false, attempt: state.attempt + 1 }));
+          }}
         >
-          <span>Neues Gespräch</span>
+          <span>Neuer Chat</span>
         </button>
       </div>
     );

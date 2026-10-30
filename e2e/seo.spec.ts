@@ -10,11 +10,13 @@ test('the homepage is prerendered with the required title and description', asyn
   expect(html).toContain(
     '<meta name="description" content="Eine Suche für mobile.de, AutoScout24, Kleinanzeigen &amp; Co. und die Prüfung jedes Inserats: Angaben, Lücken, Widersprüche und passende Fragen an den Verkäufer." />',
   );
-  // The supported marketplaces are part of the prerendered page (in the frequent questions).
-  expect(html).toContain('Welche Inserate kann ich prüfen?');
   expect(html).toContain('<link rel="canonical"');
   expect(html).toContain('data-prerendered="true"');
   expect(html).toContain('Gebrauchtwagen finden, prüfen und durchrechnen');
+  // The supported marketplaces are on the prerendered page of the frequent questions.
+  const faq = await (await request.get('/haeufige-fragen')).text();
+  expect(faq).toContain('Welche Inserate kann ich prüfen?');
+  expect(faq).toContain('data-prerendered="true"');
 });
 
 test('guides are readable without JavaScript', async ({ browser }) => {

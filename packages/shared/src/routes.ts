@@ -26,6 +26,7 @@ export const STATIC_PAGES: readonly StaticPage[] = [
   { path: '/auto-aus-den-niederlanden', indexable: true },
   { path: '/autokosten-im-monat', indexable: true },
   { path: '/pro', indexable: true },
+  { path: '/haeufige-fragen', indexable: true },
   { path: '/bot', indexable: false },
   { path: '/datenschutz', indexable: false },
   { path: '/impressum', indexable: false },

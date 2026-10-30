@@ -108,7 +108,7 @@ test('logging out deletes the offline copy', async ({ page }) => {
 
   await page.goto('/konto');
   await page.getByRole('button', { name: 'Abmelden' }).click();
-  await expect(page.getByRole('link', { name: 'Anmelden' }).first()).toBeVisible();
+  await expect(page).toHaveURL('/');
   await expect.poll(() => page.evaluate(() => caches.keys())).toEqual([]);
 });
 
@@ -126,8 +126,10 @@ test('signing up after saving keeps the copy, which then lists on the homepage',
   expect(await page.evaluate(() => caches.keys())).toContain('kc-saved-v1');
 
   await page.goto('/');
+  await page.getByRole('button', { name: 'Menü öffnen' }).click();
   await expect(
     page
+      .getByRole('dialog', { name: /Menü/ })
       .getByRole('navigation', { name: 'Offline gespeicherte Prüfungen' })
       .getByRole('link', { name: /Audi A7/ }),
   ).toBeVisible();
