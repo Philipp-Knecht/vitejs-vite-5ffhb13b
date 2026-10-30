@@ -40,7 +40,8 @@ PRs, **L** = mehrere Wochen.
 | 4.3 | Preis-Check: Preisstufe und Empfehlung aus bei KaufCheck geprüften Inseraten              | #46       |
 | neu | Chat-Assistent als Startpunkt: Prüfung, Preis-Check, Suche, Steuer, Finanzierung, Sprache | #47       |
 | neu | Startseite nur noch Chat und FAQ, Absprung zum Werkzeug unter jeder Antwort               | #51       |
-| neu | Startseite wie eine Chat-App: Menü mit Funktionen und vergangenen Chats, 3,5 Vorschläge   | dieser PR |
+| neu | Startseite wie eine Chat-App: Menü mit Funktionen und vergangenen Chats, 3,5 Vorschläge   | #53       |
+| 1.1 | Kfz-Steuer: Modell und Motor wählen statt Hubraum, CO₂ und kW einzutippen                 | dieser PR |
 
 ## Arbeitsweise je Feature
 
