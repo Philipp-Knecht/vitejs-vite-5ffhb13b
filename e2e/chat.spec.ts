@@ -283,6 +283,7 @@ test('with the browser storage blocked the chat still works, it is just not kept
   page,
 }) => {
   await page.addInitScript(() => {
+    // eslint-disable-next-line @typescript-eslint/unbound-method -- called with `this` below
     const setItem = Storage.prototype.setItem;
     Storage.prototype.setItem = function (key: string, value: string) {
       if (key === 'kaufcheck:chats') throw new DOMException('blocked', 'SecurityError');
