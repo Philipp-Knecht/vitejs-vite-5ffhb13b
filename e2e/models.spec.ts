@@ -70,17 +70,21 @@ test('model pages are prerendered and hydrate without errors', async ({ page, re
     await expect(
       photo.getByRole('link', { name: 'Wikimedia Commons (öffnet in neuem Tab)' }),
     ).toHaveAttribute('href', /^https:\/\/commons\.wikimedia\.org\/wiki\/File:VW_Golf_VI/);
-    await expect(photo).toContainText(/^Foto „.+“ von .+, CC BY.+, verkleinert – Wikimedia/);
+    // Only the shown generation's credit is visible; the others keep its place.
+    const credit = photo.locator('.model-photo__credit:visible');
+    await expect(credit).toHaveCount(1);
+    await expect(credit).toHaveText(/^Foto „.+“ von .+, CC BY.+, verkleinert – Wikimedia/);
     expect(
       await photo.getByRole('img').evaluate((image: HTMLImageElement) => image.naturalWidth),
     ).toBeGreaterThan(0);
-    await page
-      .getByRole('group', { name: 'Generation wählen' })
-      .getByRole('button', { name: /^Golf VIII / })
-      .click();
+    const generations = page.getByRole('group', { name: 'Generation wählen' });
+    const top = (await generations.boundingBox())?.y;
+    await generations.getByRole('button', { name: /^Golf VIII / }).click();
     await expect(photo.getByRole('img')).toHaveAttribute('src', '/model-images/vw-golf-8.webp');
     // Its number plate is pixelated, and the credit says so.
-    await expect(photo).toContainText('verkleinert, Kennzeichen unkenntlich gemacht');
+    await expect(credit).toContainText('verkleinert, Kennzeichen unkenntlich gemacht');
+    // Another credit does not move the tabs.
+    expect((await generations.boundingBox())?.y).toBe(top);
   }
   await expect(
     page.getByRole('heading', { level: 2, name: `Rückrufe prüfen: ${name}` }),

@@ -1856,11 +1856,20 @@
   color: var(--c-text-3);
 }
 
-.model-photo__credit {
-  /* Two lines kept free, so that a shorter credit does not move the tabs. */
-  min-height: calc(2 * 1.5 * 0.75rem);
-  margin: 6px 0 0;
+/* The credits of all generations in one cell: as high as the longest, only the shown one visible. */
+.model-photo__credits {
+  display: grid;
+  margin-top: 6px;
   font-size: 0.75rem;
   line-height: 1.5;
   color: var(--c-text-3);
+}
+
+.model-photo__credit {
+  grid-area: 1 / 1;
+}
+
+/* Hidden from sight, screen readers and the tab order; it only keeps the place. */
+.model-photo__credit.is-hidden {
+  visibility: hidden;
 }

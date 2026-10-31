@@ -188,33 +188,38 @@ async function download(
   const type = (response.headers.get('content-type') ?? '').split(';')[0]?.trim() ?? '';
   const coder = CODERS[type];
   if (!coder) throw new Error(`${id}: unexpected content type „${type}“ for ${url}`);
+  if (Number(response.headers.get('content-length') ?? 0) > MAX_BYTES) {
+    throw new Error(`${id}: too large: ${url}`);
+  }
   const bytes = Buffer.from(await response.arrayBuffer());
   if (bytes.length > MAX_BYTES) throw new Error(`${id}: ${bytes.length} bytes for ${url}`);
   const raw = path.join(work, `${id}.${coder}`);
   const target = path.join(work, `${id}.webp`);
   writeFileSync(raw, bytes);
-  // The plate boxes were found on a copy of this size: anything else would miss them.
-  const actual = execFileSync('convert', [
+  const [actual = '', ...exif] = execFileSync('convert', [
     `${coder}:${raw}[0]`,
     '-auto-orient',
     '-format',
-    '%w %h',
+    '%w %h\n%[EXIF:*]',
     'info:',
   ])
     .toString()
-    .trim();
+    .trim()
+    .split('\n');
+  // The plate boxes were found on a copy of this size: anything else would miss them.
   if (actual !== `${size.width} ${size.height}`) {
     throw new Error(`${id}: got ${actual} instead of ${size.width} ${size.height} from ${url}`);
   }
   // Resized (credited as „verkleinert“), plates pixelated. Wikimedia's thumbnails carry
-  // only the colour profile and the author: both are kept. An original (as small as the
-  // copy) might carry more, such as where it was taken: only its colour profile is kept.
+  // the colour profile and a few EXIF tags such as the author: both are kept. An original
+  // (as small as the copy), or EXIF with where the photo was taken, keeps only the colour profile.
+  const keepExif = pathname.includes('/thumb/') && !exif.some((tag) => /^exif:GPS/i.test(tag));
   execFileSync('convert', [
     `${coder}:${raw}[0]`,
     '-auto-orient',
     ...pixelate(plates),
     '+profile',
-    pathname.includes('/thumb/') ? '!icc,!exif,!xmp,*' : '!icc,*',
+    keepExif ? '!icc,!exif,*' : '!icc,*',
     '-quality',
     QUALITY,
     `webp:${target}`,
