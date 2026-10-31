@@ -67,11 +67,10 @@ test('model pages are prerendered and hydrate without errors', async ({ page, re
     await expect(
       photo.getByRole('img', { name: 'Volkswagen Golf, Generation Golf VI' }),
     ).toHaveAttribute('src', '/model-images/vw-golf-6.webp');
-    await expect(photo.getByRole('link', { name: 'Wikimedia Commons' })).toHaveAttribute(
-      'href',
-      /^https:\/\/commons\.wikimedia\.org\/wiki\/File:VW_Golf_VI/,
-    );
-    await expect(photo).toContainText(/^Foto: .+, CC BY/);
+    await expect(
+      photo.getByRole('link', { name: 'Wikimedia Commons (öffnet in neuem Tab)' }),
+    ).toHaveAttribute('href', /^https:\/\/commons\.wikimedia\.org\/wiki\/File:VW_Golf_VI/);
+    await expect(photo).toContainText(/^Foto „.+“ von .+, CC BY.+, verkleinert – Wikimedia/);
     expect(
       await photo.getByRole('img').evaluate((image: HTMLImageElement) => image.naturalWidth),
     ).toBeGreaterThan(0);
@@ -80,6 +79,8 @@ test('model pages are prerendered and hydrate without errors', async ({ page, re
       .getByRole('button', { name: /^Golf VIII / })
       .click();
     await expect(photo.getByRole('img')).toHaveAttribute('src', '/model-images/vw-golf-8.webp');
+    // Its number plate is pixelated, and the credit says so.
+    await expect(photo).toContainText('verkleinert, Kennzeichen unkenntlich gemacht');
   }
   await expect(
     page.getByRole('heading', { level: 2, name: `Rückrufe prüfen: ${name}` }),
@@ -91,6 +92,17 @@ test('model pages are prerendered and hydrate without errors', async ({ page, re
   await expect(page).toHaveURL(new RegExp(`/auto-finden\\?marke=[a-z-]+&modell=${id}$`));
   await expect(page.getByRole('heading', { level: 2, name: /Deine Suche auf/ })).toBeVisible();
   expect(errors).toEqual([]);
+});
+
+test('a generation without a free photo keeps the frame', async ({ page }) => {
+  test.skip(!MODEL_IDS.includes('ford-kuga'), 'Ford Kuga not researched');
+  await page.goto('/modelle/ford-kuga');
+  const generations = page.getByRole('group', { name: 'Generation wählen' });
+  await generations.getByRole('button', { name: /^Kuga III / }).click();
+  await expect(page.getByRole('img', { name: 'Ford Kuga, Generation Kuga III' })).toBeVisible();
+  await generations.getByRole('button', { name: /^Kuga I \d/ }).click();
+  await expect(page.getByText('Kein freies Foto dieser Generation')).toBeVisible();
+  await expect(page.getByRole('img', { name: /^Ford Kuga, Generation/ })).toHaveCount(0);
 });
 
 test('the search shows what to know about a researched model', async ({ page }) => {

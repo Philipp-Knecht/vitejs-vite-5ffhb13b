@@ -12,6 +12,7 @@ import { useQuery } from '@tanstack/react-query';
 import { ClipboardCheck, Search } from 'lucide-react';
 import { Link, useParams } from 'react-router';
 import { PageLoading } from '../components/ui/Spinner';
+import { GenerationPhoto } from '../features/models/GenerationPhoto';
 import { usePreloadedModel } from '../features/models/preloaded';
 import { RecallCheck } from '../features/recalls/RecallCheck';
 import { RECALL_LEAD } from '../features/recalls/texts';
@@ -94,7 +95,11 @@ function ModelContent({ model }: { model: CarModel }) {
       </section>
       <section className="section" aria-label="Generationen, Schwachstellen und Motoren">
         <div className="container">
-          <ModelKnowledgeView model={model} generationHeading="h2" showImage />
+          <ModelKnowledgeView
+            model={model}
+            generationHeading="h2"
+            photo={(generation) => <GenerationPhoto model={model} generation={generation} />}
+          />
         </div>
       </section>
       <section className="section section--muted" aria-labelledby="recalls-title">

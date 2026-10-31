@@ -4,21 +4,33 @@
   "audi-a4-b8": "Audi_A4_B8_Limousine_Ambiente_2.0_TDI_Eissilber.JPG",
   "audi-a4-b9": "Audi_A4_B9_Limousine_3.0_TDI_quattro.JPG",
   "audi-a6-c6": "Audi_A6_C6_20090717_front.JPG",
-  "audi-a6-c7": "Audi_A6_2.0_TDI_(C7)_–_Frontansicht,_1._November_2012,_Velbert.jpg",
+  "audi-a6-c7": {
+    "file": "Audi_A6_2.0_TDI_(C7)_–_Frontansicht,_1._November_2012,_Velbert.jpg",
+    "plates": [[118, 320, 146, 54]]
+  },
   "audi-a6-c8": "2018_Audi_A6_TDi_Quattro_Front.jpg",
-  "audi-a6-c9": "Audi_A6_Avant_C9_IMG_5088.jpg",
+  "audi-a6-c9": { "file": "Audi_A6_Avant_C9_IMG_5088.jpg", "plates": [[72, 304, 112, 48]] },
   "audi-q3-8u": "Audi_Q3_2.0_TDI_quattro_S_tronic_Karibubraun.JPG",
   "audi-q3-f3": "Audi_Q3_F3_DSC_7494.jpg",
   "audi-q3-fj": "Audi_Q3_FJ_IMG_6709_(cropped).jpg",
   "bmw-1er-e87": "BMW_E87_front_20080719.jpg",
   "bmw-1er-f20": "BMW_116i_M-Sportpaket_(F20)_–_Frontansicht,_24._Juni_2012,_Düsseldorf.jpg",
-  "bmw-1er-f40": "BMW_F40_IMG_4894.jpg",
+  "bmw-1er-f40": { "file": "BMW_F40_IMG_4894.jpg", "plates": [[680, 394, 164, 58]] },
   "bmw-1er-f70": "BMW_120_(F70)_IMG_1166.jpg",
   "bmw-2er-active-tourer-f45": "BMW_218i_Active_Tourer_Advantage_(F45)_–_Frontansicht,_15._März_2015,_Düsseldorf.jpg",
-  "bmw-2er-active-tourer-u06": "BMW_U06_218i_1X7A1832.jpg",
+  "bmw-2er-active-tourer-u06": {
+    "file": "BMW_U06_218i_1X7A1832.jpg",
+    "plates": [[130, 452, 140, 54]]
+  },
   "bmw-3er-e90": "BMW_325i_front.JPG",
-  "bmw-3er-f30": "MA62_PFK_(8157584799).jpg",
-  "bmw-3er-g20": "BMW_G20_IMG0167-crop.jpg",
+  "bmw-3er-f30": {
+    "file": "MA62_PFK_(8157584799).jpg",
+    "plates": [
+      [132, 336, 176, 72],
+      [852, 52, 56, 26]
+    ]
+  },
+  "bmw-3er-g20": { "file": "BMW_G20_IMG0167-crop.jpg", "plates": [[78, 284, 122, 52]] },
   "bmw-5er-e60": "BMW_E60_front_20080417.jpg",
   "bmw-5er-f10": "BMW_520d_M-Sportpaket_(F10)_–_Frontansicht,_2._Juli_2011,_Düsseldorf.jpg",
   "bmw-5er-g30": "2018_BMW_520d_xDrive_M_Sport_Automatic_2.0_Front.jpg",
@@ -26,103 +38,251 @@
   "citroen-c1-ii": "2017_Citroen_C1_Flair_Puretech_1.2_Front.jpg",
   "ford-fiesta-vii": "FordFiesta_2009.jpg",
   "ford-fiesta-viii": "2017_Ford_Fiesta_Zetec_Turbo_1.0_Front.jpg",
-  "ford-focus-iii": "Ford_Focus_Trend_(III)_–_Frontansicht,_17._September_2011,_Ratingen.jpg",
+  "ford-focus-iii": {
+    "file": "Ford_Focus_Trend_(III)_–_Frontansicht,_17._September_2011,_Ratingen.jpg",
+    "plates": [[792, 346, 108, 56]]
+  },
   "ford-focus-iv": "2018_Ford_Focus_Titanium_X_1.0.jpg",
   "ford-kuga-iii": "2020_Ford_Kuga_Titanium_First_Edition_EcoBlue_1.5.jpg",
   "ford-mondeo-iv": "2009_Ford_Mondeo_Titanium_X_First_Patrol_2.0_Front.jpg",
-  "ford-mondeo-v": "Ford_Mondeo_registered_March_2015_1999cc_(cropped,_2).jpg",
+  "ford-mondeo-v": {
+    "file": "Ford_Mondeo_registered_March_2015_1999cc_(cropped,_2).jpg",
+    "plates": [
+      [86, 330, 148, 68],
+      [916, 194, 44, 42]
+    ]
+  },
   "hyundai-i10-ac3": "Hyundai_i10_1.0_Intro_(III)_–_f_03012021.jpg",
   "hyundai-i20-bc3": "Hyundai_i20_(III,_Facelift)_–_f_11102025.jpg",
-  "hyundai-i30-fd": "Hyundai_i30_(front)_-_Flickr_-_mick_-_Lumix.jpg",
+  "hyundai-i30-fd": {
+    "file": "Hyundai_i30_(front)_-_Flickr_-_mick_-_Lumix.jpg",
+    "plates": [[726, 444, 142, 102]]
+  },
   "hyundai-i30-gd": "Hyundai_i30_1.6_CRDi_Style_(II)_–_Frontansicht,_14._Juli_2013,_Münster.jpg",
-  "hyundai-i30-pd": "Hyundai_i30_1.4_T-GDI_Intro_(III)_–_Frontansicht,_3._Juni_2017,_Düsseldorf.jpg",
+  "hyundai-i30-pd": {
+    "file": "Hyundai_i30_1.4_T-GDI_Intro_(III)_–_Frontansicht,_3._Juni_2017,_Düsseldorf.jpg",
+    "plates": [[72, 296, 126, 56]]
+  },
   "kia-ceed-cd": "Kia_Ceed_Genf_2018_Red.jpg",
   "kia-ceed-ed": "Kia_cee'd_1.6_CRDi_115_EX_Top-Star_Zilinaschwarz.JPG",
-  "kia-ceed-jd": "Kia_cee'd_1.6_CRDi_128_Spirit_(JD)_–_Frontansicht,_11._April_2015,_Düsseldorf.jpg",
-  "kia-picanto-ba": "Kia_Picanto_(SA)_DSC_7988.jpg",
+  "kia-ceed-jd": {
+    "file": "Kia_cee'd_1.6_CRDi_128_Spirit_(JD)_–_Frontansicht,_11._April_2015,_Düsseldorf.jpg",
+    "plates": [[60, 328, 126, 58]]
+  },
+  "kia-picanto-ba": { "file": "Kia_Picanto_(SA)_DSC_7988.jpg", "plates": [[88, 414, 150, 72]] },
   "kia-picanto-ja": "2018_Kia_Picanto_3_Automatic_1.2_Front.jpg",
   "kia-picanto-ta": "Kia_Picanto_Fünftürer_Vision_1.0_CVVT_Schneeweiß.JPG",
   "kia-rio-yb": "2021_Kia_Rio_3_MHEV_facelift_1.0.jpg",
-  "kia-sportage-nq5": "2025_Kia_Sportage_S_front_only.jpg",
+  "kia-sportage-nq5": {
+    "file": "2025_Kia_Sportage_S_front_only.jpg",
+    "plates": [[856, 278, 58, 56]]
+  },
   "mercedes-a-klasse-w169": "Mercedes-Benz_A_180_CDI_Elegance_(W_169)_–_Frontansicht_(1),_30._März_2011,_Wülfrath.jpg",
-  "mercedes-a-klasse-w176": "Mercedes-Benz_A_180_Urban_(W_176)_–_Heckansicht,_25._Mai_2013,_Hilden.jpg",
+  "mercedes-a-klasse-w176": {
+    "file": "Mercedes-Benz_A_180_Urban_(W_176)_–_Heckansicht,_25._Mai_2013,_Hilden.jpg",
+    "plates": [[698, 198, 124, 54]]
+  },
   "mercedes-a-klasse-w177": "Mercedes-Benz_A_180_Progressive_(W_177)_–_f_16032019.jpg",
   "mercedes-b-klasse-w245": "Mercedes-Benz_B_180_CDI_(T_245)_–_Frontansicht,_15._Juni_2011,_Wülfrath.jpg",
-  "mercedes-b-klasse-w246": "Mercedes-Benz_B_180_BlueEFFICIENCY_(W_246)_–_Frontansicht,_1._April_2012,_Essen.jpg",
+  "mercedes-b-klasse-w246": {
+    "file": "Mercedes-Benz_B_180_BlueEFFICIENCY_(W_246)_–_Frontansicht,_1._April_2012,_Essen.jpg",
+    "plates": [[138, 362, 144, 64]]
+  },
   "mercedes-b-klasse-w247": "Mercedes-Benz_B_180_Progressive_(W_247)_–_f_21032021.jpg",
-  "mercedes-c-klasse-w204": "2013_Mercedes-Benz_C_200_(W_204)_sedan_(2015-07-03)_01.jpg",
-  "mercedes-c-klasse-w205": "Mercedes-Benz_C_220_BlueTEC_Exclusive_(W_205)_–_Frontansicht,_12._Juli_2014,_Düsseldorf.jpg",
-  "mercedes-c-klasse-w206": "Mercedes-Benz_W206_IMG_5796.jpg",
+  "mercedes-c-klasse-w204": {
+    "file": "2013_Mercedes-Benz_C_200_(W_204)_sedan_(2015-07-03)_01.jpg",
+    "plates": [[790, 424, 92, 66]]
+  },
+  "mercedes-c-klasse-w205": {
+    "file": "Mercedes-Benz_C_220_BlueTEC_Exclusive_(W_205)_–_Frontansicht,_12._Juli_2014,_Düsseldorf.jpg",
+    "plates": [[82, 316, 134, 60]]
+  },
+  "mercedes-c-klasse-w206": {
+    "file": "Mercedes-Benz_W206_IMG_5796.jpg",
+    "plates": [[88, 334, 126, 58]]
+  },
   "mercedes-e-klasse-w212": "Mercedes_E_350_CDI_BlueEFFICIENCY_Elegance_(W212)_front-1_20100822.jpg",
-  "mercedes-e-klasse-w213": "2019_Mercedes-Benz_E220d_SE_Automatic_2.0_Front.jpg",
-  "mercedes-e-klasse-w214": "Mercedes-Benz_W214_1X7A1841.jpg",
+  "mercedes-e-klasse-w213": {
+    "file": "2019_Mercedes-Benz_E220d_SE_Automatic_2.0_Front.jpg",
+    "plates": [[96, 292, 132, 56]]
+  },
+  "mercedes-e-klasse-w214": {
+    "file": "Mercedes-Benz_W214_1X7A1841.jpg",
+    "plates": [
+      [88, 318, 120, 54],
+      [918, 210, 42, 42]
+    ]
+  },
   "opel-astra-h": "Opel_Astra_H_1.6_Twinport_front_20100509.jpg",
   "opel-astra-j": "Opel_Astra_Design_Edition_(J)_–_Frontansicht,_14._August_2011,_Heiligenhaus.jpg",
   "opel-astra-k": "Opel_Astra_1.6_CDTI_ecoFLEX_Dynamic_(K)_–_Frontansicht,_23._Dezember_2016,_Düsseldorf.jpg",
   "opel-astra-l": "Opel_Astra_1.2_Turbo_Ultimate_(L)_–_f_13122024.jpg",
   "opel-corsa-d": "Opel_Corsa_D_20090912_front.JPG",
   "opel-corsa-e": "Opel_Corsa_1.3_CDTI_ecoFLEX_Innovation_(E)_–_Frontansicht,_24._Dezember_2015,_Ratingen.jpg",
-  "opel-corsa-f": "Opel_Corsa_F_IMG_8196.jpg",
+  "opel-corsa-f": { "file": "Opel_Corsa_F_IMG_8196.jpg", "plates": [[80, 438, 144, 64]] },
   "opel-insignia-a": "Opel_Insignia_20090717_front.jpg",
   "opel-insignia-b": "Opel_Insignia_Grand_Sport_1.6_Diesel_Business_Innovation_(B)_–_Frontansicht,_5._Mai_2017,_Düsseldorf.jpg",
   "opel-mokka-a": "Opel_Mokka_1.4_Turbo_ecoFLEX_Innovation_–_Frontansicht,_13._Oktober_2015,_Düsseldorf.jpg",
-  "opel-mokka-b": "Opel_Mokka_B_1X7A0317.jpg",
-  "peugeot-2008-i": "Peugeot_2008_82_VTi_Access_–_Frontansicht,_28._Mai_2014,_Düsseldorf.jpg",
-  "peugeot-2008-ii": "Peugeot_2008_B_Retro_Classics_2020_IMG_0025.jpg",
-  "peugeot-208-i": "Peugeot_208_95_VTi_Active_–_Frontansicht,_5._Mai_2012,_Düsseldorf.jpg",
+  "opel-mokka-b": { "file": "Opel_Mokka_B_1X7A0317.jpg", "plates": [[752, 368, 132, 60]] },
+  "peugeot-2008-i": {
+    "file": "Peugeot_2008_82_VTi_Access_–_Frontansicht,_28._Mai_2014,_Düsseldorf.jpg",
+    "plates": [[80, 376, 132, 62]]
+  },
+  "peugeot-2008-ii": {
+    "file": "Peugeot_2008_B_Retro_Classics_2020_IMG_0025.jpg",
+    "plates": [[52, 272, 104, 46]]
+  },
+  "peugeot-208-i": {
+    "file": "Peugeot_208_95_VTi_Active_–_Frontansicht,_5._Mai_2012,_Düsseldorf.jpg",
+    "plates": [[720, 374, 140, 56]]
+  },
   "peugeot-208-ii": "Peugeot_208_PureTech_130_EAT8_Allure_GT-Line_(II)_–_f_17102021.jpg",
   "peugeot-308-i": "Peugeot_308_5-Türer_front.JPG",
-  "peugeot-308-ii": "Peugeot_308_82_VTi_Active_(II)_–_Frontansicht,_4._Januar_2014,_Düsseldorf.jpg",
+  "peugeot-308-ii": {
+    "file": "Peugeot_308_82_VTi_Active_(II)_–_Frontansicht,_4._Januar_2014,_Düsseldorf.jpg",
+    "plates": [[755, 340, 128, 58]]
+  },
   "peugeot-308-iii": "2022_-_Peugeot_308_III_(C)_-_196.jpg",
-  "renault-captur-i": "Renault_Captur1.jpg",
+  "renault-captur-i": { "file": "Renault_Captur1.jpg", "plates": [[792, 442, 98, 66]] },
   "renault-captur-ii": "Renault_Captur_II_at_IAA_2019_IMG_0446.jpg",
   "renault-clio-iii": "Renault_Clio_III_20090527_front.JPG",
-  "renault-clio-iv": "Renault_Clio_TCe_90_Luxe_(IV)_–_Frontansicht,_17._Mai_2013,_Münster.jpg",
-  "renault-clio-v": "Renault_Clio_V_1X7A0393.jpg",
+  "renault-clio-iv": {
+    "file": "Renault_Clio_TCe_90_Luxe_(IV)_–_Frontansicht,_17._Mai_2013,_Münster.jpg",
+    "plates": [[76, 376, 108, 66]]
+  },
+  "renault-clio-v": {
+    "file": "Renault_Clio_V_1X7A0393.jpg",
+    "plates": [
+      [88, 438, 152, 62],
+      [920, 284, 40, 42]
+    ]
+  },
   "renault-megane-e-tech": "Renault_Megane_E-Tech_IAA_2021_1X7A0209.jpg",
   "renault-megane-iii": "Renault_Mégane_III_Phase_I_Fünftürer_Dynamique_Perlmuttschwarz.JPG",
-  "renault-megane-iv": "Renault_Mégane_IV_chez_Roi_Merlin_(cropped).jpg",
-  "renault-twingo-iii": "Renault_Twingo_Dynamique_(III)_–_Frontansicht,_24._Oktober_2015,_Münster.jpg",
-  "seat-ibiza-6f": "Seat_Ibiza_6F_IMG_3967.jpg",
+  "renault-megane-iv": {
+    "file": "Renault_Mégane_IV_chez_Roi_Merlin_(cropped).jpg",
+    "plates": [
+      [745, 396, 142, 64],
+      [0, 148, 70, 34]
+    ]
+  },
+  "renault-twingo-iii": {
+    "file": "Renault_Twingo_Dynamique_(III)_–_Frontansicht,_24._Oktober_2015,_Münster.jpg",
+    "plates": [
+      [90, 396, 132, 54],
+      [914, 314, 46, 44]
+    ]
+  },
+  "seat-ibiza-6f": { "file": "Seat_Ibiza_6F_IMG_3967.jpg", "plates": [[142, 414, 172, 68]] },
   "seat-ibiza-6j": "Seat_Ibiza_6J_1.4_Good_Stuff_Magicoschwarz.JPG",
   "seat-leon-1p": "Seat_Leon_(1P)_–_Frontansicht,_17._April_2011,_Düsseldorf.jpg",
-  "seat-leon-5f": "Seat_Leon_1.4_TSI_Start&Stop_Style_(III)_–_Frontansicht,_10._August_2013,_Ratingen.jpg",
-  "seat-leon-kl": "SEAT_Leon_Mk4_1X7A5842.jpg",
-  "seat-mii-1": "Seat_Mii_1.0_Style_–_Frontansicht,_15._September_2012,_Düsseldorf.jpg",
-  "skoda-citigo-1": "Skoda_Citigo_1.0_Ambition_–_Frontansicht_(1),_17._März_2012,_Düsseldorf.jpg",
+  "seat-leon-5f": {
+    "file": "Seat_Leon_1.4_TSI_Start&Stop_Style_(III)_–_Frontansicht,_10._August_2013,_Ratingen.jpg",
+    "plates": [
+      [92, 314, 126, 58],
+      [926, 198, 34, 34]
+    ]
+  },
+  "seat-leon-kl": {
+    "file": "SEAT_Leon_Mk4_1X7A5842.jpg",
+    "plates": [
+      [668, 382, 158, 62],
+      [30, 264, 40, 42]
+    ]
+  },
+  "seat-mii-1": {
+    "file": "Seat_Mii_1.0_Style_–_Frontansicht,_15._September_2012,_Düsseldorf.jpg",
+    "plates": [[752, 342, 118, 56]]
+  },
+  "skoda-citigo-1": {
+    "file": "Skoda_Citigo_1.0_Ambition_–_Frontansicht_(1),_17._März_2012,_Düsseldorf.jpg",
+    "plates": [[0, 206, 46, 42]]
+  },
   "skoda-fabia-ii": "Skoda_Fabia_II_20090426_front.JPG",
-  "skoda-fabia-iii": "Skoda_Fabia_Style_(III)_–_Frontansicht,_2._Mai_2015,_Düsseldorf.jpg",
-  "skoda-fabia-iv": "Škoda_Fabia_IV_1X7A7110_(cropped).jpg",
+  "skoda-fabia-iii": {
+    "file": "Skoda_Fabia_Style_(III)_–_Frontansicht,_2._Mai_2015,_Düsseldorf.jpg",
+    "plates": [
+      [785, 312, 122, 62],
+      [22, 148, 90, 32]
+    ]
+  },
+  "skoda-fabia-iv": {
+    "file": "Škoda_Fabia_IV_1X7A7110_(cropped).jpg",
+    "plates": [[70, 348, 128, 54]]
+  },
   "skoda-octavia-i": "Skoda_Octavia_I_front_20080213.jpg",
-  "skoda-octavia-ii": "Skoda_Octavia_II_front_20100923.jpg",
-  "skoda-octavia-iii": "Skoda_Octavia_1.8_TSI_Green_tec_Elegance_(III)_–_Frontansicht,_14._April_2013,_Düsseldorf.jpg",
+  "skoda-octavia-ii": {
+    "file": "Skoda_Octavia_II_front_20100923.jpg",
+    "plates": [[60, 400, 136, 70]]
+  },
+  "skoda-octavia-iii": {
+    "file": "Skoda_Octavia_1.8_TSI_Green_tec_Elegance_(III)_–_Frontansicht,_14._April_2013,_Düsseldorf.jpg",
+    "plates": [[74, 276, 116, 56]]
+  },
   "skoda-octavia-iv": "Skoda_Octavia_IV_liftback_(cropped).jpg",
-  "skoda-superb-ii": "SkodaSuperbII.jpg",
-  "skoda-superb-iii": "Škoda_Superb_III_02.12.17_JM.jpg",
+  "skoda-superb-ii": { "file": "SkodaSuperbII.jpg", "plates": [[124, 400, 130, 66]] },
+  "skoda-superb-iii": {
+    "file": "Škoda_Superb_III_02.12.17_JM.jpg",
+    "plates": [[135, 412, 138, 58]]
+  },
   "skoda-superb-iv": "Škoda_Superb_IV_Combi_Automesse_Ludwigsburg_2024_IMG_1400.jpg",
-  "toyota-aygo-ii": "Toyota_Aygo_(cropped).jpg",
-  "toyota-aygo-x": "2022_Toyota_Aygo_X_Edge_1.0_VVT-i_(Front).jpg",
-  "toyota-corolla-auris-ii": "Toyota_Auris_2.0_D-4D_Executive_(II)_–_Frontansicht,_1._Juni_2013,_Düsseldorf.jpg",
-  "toyota-corolla-e210": "2018_Toyota_Corolla_(MZEA12R)_Ascent_Sport_hatchback_(2018-11-02)_01.jpg",
+  "toyota-aygo-ii": { "file": "Toyota_Aygo_(cropped).jpg", "plates": [[76, 322, 128, 60]] },
+  "toyota-aygo-x": {
+    "file": "2022_Toyota_Aygo_X_Edge_1.0_VVT-i_(Front).jpg",
+    "plates": [[80, 390, 134, 72]]
+  },
+  "toyota-corolla-auris-ii": {
+    "file": "Toyota_Auris_2.0_D-4D_Executive_(II)_–_Frontansicht,_1._Juni_2013,_Düsseldorf.jpg",
+    "plates": [[762, 310, 118, 58]]
+  },
+  "toyota-corolla-e210": {
+    "file": "2018_Toyota_Corolla_(MZEA12R)_Ascent_Sport_hatchback_(2018-11-02)_01.jpg",
+    "plates": [[790, 302, 90, 56]]
+  },
   "toyota-yaris-ii": "Toyota_Yaris_front_20081204.jpg",
-  "toyota-yaris-iii": "Toyota_Yaris_(XP130)_–_Frontansicht,_21._Juli_2012,_Heiligenhaus.jpg",
+  "toyota-yaris-iii": {
+    "file": "Toyota_Yaris_(XP130)_–_Frontansicht,_21._Juli_2012,_Heiligenhaus.jpg",
+    "plates": [
+      [112, 350, 142, 60],
+      [140, 194, 76, 28]
+    ]
+  },
   "toyota-yaris-iv": "Toyota_Yaris_Hybrid_(XP210)_1X7A0353.jpg",
   "vw-caddy-iii-iv": "VW_Caddy_front_20071026.jpg",
-  "vw-caddy-v": "Volkswagen_Caddy_V_IMG_4136.jpg",
+  "vw-caddy-v": { "file": "Volkswagen_Caddy_V_IMG_4136.jpg", "plates": [[118, 436, 164, 72]] },
   "vw-golf-6": "VW_Golf_VI_1.6_TDI_Comfortline_Reflexsilber.JPG",
-  "vw-golf-7": "VW_Golf_1.4_TSI_BlueMotion_Technology_CUP_(VII)_–_Frontansicht,_15._Juni_2014,_Düsseldorf.jpg",
-  "vw-golf-8": "Volkswagen_Golf_VIII_IMG_9737.jpg",
+  "vw-golf-7": {
+    "file": "VW_Golf_1.4_TSI_BlueMotion_Technology_CUP_(VII)_–_Frontansicht,_15._Juni_2014,_Düsseldorf.jpg",
+    "plates": [
+      [770, 296, 134, 66],
+      [600, 112, 58, 32]
+    ]
+  },
+  "vw-golf-8": { "file": "Volkswagen_Golf_VIII_IMG_9737.jpg", "plates": [[105, 330, 150, 58]] },
   "vw-passat-b7": "VW_Passat_B7_2.0_TDI_DSG_Highline_Kaschmirbraun.JPG",
   "vw-passat-b8": "VW_Passat_B8_Limousine_2.0_TDI_Highline.JPG",
-  "vw-passat-b9": "Volkswagen_Passat_Variant_B9_IMG_1218.jpg",
+  "vw-passat-b9": {
+    "file": "Volkswagen_Passat_Variant_B9_IMG_1218.jpg",
+    "plates": [
+      [120, 344, 154, 62],
+      [78, 154, 78, 44],
+      [902, 130, 50, 36]
+    ]
+  },
   "vw-polo-5": "VW_Polo_V_1.2_Comfortline_Pepper_Grey.JPG",
   "vw-polo-6": "VW_Polo_beats_(VI)_–_f_03032019.jpg",
   "vw-t-roc-1": "VW_T-Roc_1.5_TSI_Style_–_f_03012021.jpg",
-  "vw-t-roc-2": "Volkswagen_T-Roc_II_IMG_5347.jpg",
+  "vw-t-roc-2": { "file": "Volkswagen_T-Roc_II_IMG_5347.jpg", "plates": [[808, 336, 104, 50]] },
   "vw-tiguan-i": "VW_Tiguan_TDI_2.0,_Bj._2008-06_(Sp).jpg",
   "vw-tiguan-ii": "VW_Tiguan_2.0_TSI_BlueMotion_Technology_4MOTION_Sound_(II)_–_Frontansicht,_24._Dezember_2017,_Düsseldorf.jpg",
-  "vw-tiguan-iii": "Volkswagen_Tiguan_III_IMG_8388.jpg",
+  "vw-tiguan-iii": {
+    "file": "Volkswagen_Tiguan_III_IMG_8388.jpg",
+    "plates": [[748, 382, 132, 56]]
+  },
   "vw-touran-i": "VW_Touran_20090611_front.JPG",
   "vw-touran-ii": "VW_Touran_Highline_Black_Style.jpg",
-  "vw-up-1": "VW_cup_up!_1.0_BlueMotion_Technology_–_Frontansicht,_19._Juni_2014,_Düsseldorf.jpg"
+  "vw-up-1": {
+    "file": "VW_cup_up!_1.0_BlueMotion_Technology_–_Frontansicht,_19._Juni_2014,_Düsseldorf.jpg",
+    "plates": [[725, 357, 148, 72]]
+  }
 }

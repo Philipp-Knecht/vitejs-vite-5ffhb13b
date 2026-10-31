@@ -193,10 +193,12 @@ the cache to fetch new data. The tax calculator offers the engines and names sou
 
 Generation photos for the model pages are chosen in `packages/catalog/data/model-image-sources.json`
 (a Wikimedia Commons file per generation, usually the lead image of its Wikipedia article, checked
-by eye). `npm run catalog:images` fetches author and licence through the Wikidata Query Service,
-refuses anything but free licences, and stores the photo resized to 960 px as WebP in
-`apps/web/public/model-images` (needs ImageMagick); `data/model-images.json` holds the credit shown
-under the photo. Only new or changed files are fetched.
+by eye). A file with readable number plates lists their boxes (`plates`, x/y/width/height in pixels
+of the 960 px copy, found by eye); they are pixelated. `npm run catalog:images` fetches title, author
+and licence through the Wikidata Query Service, refuses anything but free licences and files with
+restrictions, and stores the photo resized to 960 px as WebP in `apps/web/public/model-images`
+(needs ImageMagick); `data/model-images.json` holds the credit shown under the photo. Only new or
+changed files are fetched, and the photos on disk only change once all of them are ready.
 
 Development helpers, all clearly labelled in the UI and rejected in production:
 

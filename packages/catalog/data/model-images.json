@@ -1,8 +1,9 @@
 {
-  "retrieved": "2026-10-30",
+  "retrieved": "2026-10-31",
   "images": {
     "audi-a3-8v": {
       "file": "Audi_A3_8V_1.4_TFSI_Ambiente_Misanorot.JPG",
+      "title": "Audi A3 8V 1.4 TFSI Ambiente Misanorot",
       "author": "Thomas doerfer",
       "license": "CC BY 3.0",
       "licenseUrl": "https://creativecommons.org/licenses/by/3.0",
@@ -11,7 +12,8 @@
     },
     "audi-a3-8y": {
       "file": "Audi_A3_Sportback_35_TFSI_(8Y)_–_f_02042021.jpg",
-      "author": "© M 93",
+      "title": "Audi A3 Sportback 35 TFSI (8Y) – f 02042021",
+      "author": "M 93",
       "license": "CC BY-SA 3.0 de",
       "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/de/deed.en",
       "width": 960,
@@ -19,6 +21,7 @@
     },
     "audi-a4-b8": {
       "file": "Audi_A4_B8_Limousine_Ambiente_2.0_TDI_Eissilber.JPG",
+      "title": "Audi A4 B8 Limousine Ambiente 2.0 TDI Eissilber",
       "author": "Thomas doerfer",
       "license": "CC BY 3.0",
       "licenseUrl": "https://creativecommons.org/licenses/by/3.0",
@@ -27,6 +30,7 @@
     },
     "audi-a4-b9": {
       "file": "Audi_A4_B9_Limousine_3.0_TDI_quattro.JPG",
+      "title": "Audi A4 B9 Limousine 3.0 TDI quattro",
       "author": "Thomas doerfer",
       "license": "CC BY-SA 3.0",
       "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
@@ -35,6 +39,7 @@
     },
     "audi-a6-c6": {
       "file": "Audi_A6_C6_20090717_front.JPG",
+      "title": "Audi A6 C6 20090717 front",
       "author": "M 93",
       "license": "Attribution",
       "licenseUrl": null,
@@ -43,14 +48,17 @@
     },
     "audi-a6-c7": {
       "file": "Audi_A6_2.0_TDI_(C7)_–_Frontansicht,_1._November_2012,_Velbert.jpg",
+      "title": "Audi A6 2.0 TDI (C7) – Frontansicht, 1. November 2012, Velbert",
       "author": "M 93",
       "license": "CC BY-SA 3.0 de",
       "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/de/deed.en",
       "width": 960,
-      "height": 509
+      "height": 509,
+      "plates": [[118, 320, 146, 54]]
     },
     "audi-a6-c8": {
       "file": "2018_Audi_A6_TDi_Quattro_Front.jpg",
+      "title": "2018 Audi A6 TDi Quattro Front",
       "author": "Vauxford",
       "license": "CC BY-SA 4.0",
       "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
@@ -59,14 +67,17 @@
     },
     "audi-a6-c9": {
       "file": "Audi_A6_Avant_C9_IMG_5088.jpg",
+      "title": "Audi A6 Avant C9 IMG 5088",
       "author": "Alexander Migl",
       "license": "CC BY-SA 4.0",
       "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
       "width": 960,
-      "height": 475
+      "height": 475,
+      "plates": [[72, 304, 112, 48]]
     },
     "audi-q3-8u": {
       "file": "Audi_Q3_2.0_TDI_quattro_S_tronic_Karibubraun.JPG",
+      "title": "Audi Q3 2.0 TDI quattro S tronic Karibubraun",
       "author": "Thomas doerfer",
       "license": "CC BY 3.0",
       "licenseUrl": "https://creativecommons.org/licenses/by/3.0",
@@ -75,6 +86,7 @@
     },
     "audi-q3-f3": {
       "file": "Audi_Q3_F3_DSC_7494.jpg",
+      "title": "Audi Q3 F3 DSC 7494",
       "author": "Alexander Migl",
       "license": "CC BY-SA 4.0",
       "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
@@ -83,6 +95,7 @@
     },
     "audi-q3-fj": {
       "file": "Audi_Q3_FJ_IMG_6709_(cropped).jpg",
+      "title": "Audi Q3 FJ IMG 6709 (cropped)",
       "author": "Alexander Migl",
       "license": "CC BY-SA 4.0",
       "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
@@ -91,6 +104,7 @@
     },
     "bmw-1er-e87": {
       "file": "BMW_E87_front_20080719.jpg",
+      "title": "BMW E87 front 20080719",
       "author": "Rudolf Stricker",
       "license": "Attribution",
       "licenseUrl": null,
@@ -99,6 +113,7 @@
     },
     "bmw-1er-f20": {
       "file": "BMW_116i_M-Sportpaket_(F20)_–_Frontansicht,_24._Juni_2012,_Düsseldorf.jpg",
+      "title": "BMW 116i M-Sportpaket (F20) – Frontansicht, 24. Juni 2012, Düsseldorf",
       "author": "M 93",
       "license": "CC BY-SA 3.0 de",
       "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/de/deed.en",
@@ -107,14 +122,17 @@
     },
     "bmw-1er-f40": {
       "file": "BMW_F40_IMG_4894.jpg",
+      "title": "BMW F40 IMG 4894",
       "author": "Alexander Migl",
       "license": "CC BY-SA 4.0",
       "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
       "width": 960,
-      "height": 570
+      "height": 570,
+      "plates": [[680, 394, 164, 58]]
     },
     "bmw-1er-f70": {
       "file": "BMW_120_(F70)_IMG_1166.jpg",
+      "title": "BMW 120 (F70) IMG 1166",
       "author": "Alexander-93",
       "license": "CC BY-SA 4.0",
       "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
@@ -123,6 +141,7 @@
     },
     "bmw-2er-active-tourer-f45": {
       "file": "BMW_218i_Active_Tourer_Advantage_(F45)_–_Frontansicht,_15._März_2015,_Düsseldorf.jpg",
+      "title": "BMW 218i Active Tourer Advantage (F45) – Frontansicht, 15. März 2015, Düsseldorf",
       "author": "M 93",
       "license": "CC BY-SA 3.0 de",
       "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/de/deed.en",
@@ -131,14 +150,17 @@
     },
     "bmw-2er-active-tourer-u06": {
       "file": "BMW_U06_218i_1X7A1832.jpg",
+      "title": "BMW U06 218i 1X7A1832",
       "author": "Alexander-93",
       "license": "CC BY-SA 4.0",
       "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
       "width": 960,
-      "height": 641
+      "height": 641,
+      "plates": [[130, 452, 140, 54]]
     },
     "bmw-3er-e90": {
       "file": "BMW_325i_front.JPG",
+      "title": "BMW 325i front",
       "author": "M 93",
       "license": "CC BY-SA 3.0",
       "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
@@ -147,22 +169,30 @@
     },
     "bmw-3er-f30": {
       "file": "MA62_PFK_(8157584799).jpg",
+      "title": "MA62 PFK (8157584799)",
       "author": "Jonathan Palombo",
       "license": "CC BY 2.0",
       "licenseUrl": "https://creativecommons.org/licenses/by/2.0",
       "width": 960,
-      "height": 545
+      "height": 545,
+      "plates": [
+        [132, 336, 176, 72],
+        [852, 52, 56, 26]
+      ]
     },
     "bmw-3er-g20": {
       "file": "BMW_G20_IMG0167-crop.jpg",
+      "title": "BMW G20 IMG0167-crop",
       "author": "Alexander Migl",
       "license": "CC BY-SA 4.0",
       "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
       "width": 960,
-      "height": 452
+      "height": 452,
+      "plates": [[78, 284, 122, 52]]
     },
     "bmw-5er-e60": {
       "file": "BMW_E60_front_20080417.jpg",
+      "title": "BMW E60 front 20080417",
       "author": "Rudolf Stricker",
       "license": "CC BY-SA 3.0",
       "licenseUrl": "http://creativecommons.org/licenses/by-sa/3.0/",
@@ -171,6 +201,7 @@
     },
     "bmw-5er-f10": {
       "file": "BMW_520d_M-Sportpaket_(F10)_–_Frontansicht,_2._Juli_2011,_Düsseldorf.jpg",
+      "title": "BMW 520d M-Sportpaket (F10) – Frontansicht, 2. Juli 2011, Düsseldorf",
       "author": "M 93",
       "license": "CC BY-SA 3.0 de",
       "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/de/deed.en",
@@ -179,6 +210,7 @@
     },
     "bmw-5er-g30": {
       "file": "2018_BMW_520d_xDrive_M_Sport_Automatic_2.0_Front.jpg",
+      "title": "2018 BMW 520d xDrive M Sport Automatic 2.0 Front",
       "author": "Vauxford",
       "license": "CC BY-SA 4.0",
       "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
@@ -187,6 +219,7 @@
     },
     "bmw-5er-g60": {
       "file": "BMW_G60_520d_IAA_2023_1X7A0757.jpg",
+      "title": "BMW G60 520d IAA 2023 1X7A0757",
       "author": "Alexander-93",
       "license": "CC BY-SA 4.0",
       "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
@@ -195,6 +228,7 @@
     },
     "citroen-c1-ii": {
       "file": "2017_Citroen_C1_Flair_Puretech_1.2_Front.jpg",
+      "title": "2017 Citroen C1 Flair Puretech 1.2 Front",
       "author": "Vauxford",
       "license": "CC BY-SA 4.0",
       "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
@@ -203,6 +237,7 @@
     },
     "ford-fiesta-vii": {
       "file": "FordFiesta_2009.jpg",
+      "title": "FordFiesta 2009",
       "author": "Nize, Nicolai Schäfer",
       "license": "CC BY-SA 3.0",
       "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
@@ -211,6 +246,7 @@
     },
     "ford-fiesta-viii": {
       "file": "2017_Ford_Fiesta_Zetec_Turbo_1.0_Front.jpg",
+      "title": "2017 Ford Fiesta Zetec Turbo 1.0 Front",
       "author": "Vauxford",
       "license": "CC BY-SA 4.0",
       "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
@@ -219,14 +255,17 @@
     },
     "ford-focus-iii": {
       "file": "Ford_Focus_Trend_(III)_–_Frontansicht,_17._September_2011,_Ratingen.jpg",
+      "title": "Ford Focus Trend (III) – Frontansicht, 17. September 2011, Ratingen",
       "author": "M 93",
       "license": "CC BY-SA 3.0 de",
       "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/de/deed.en",
       "width": 960,
-      "height": 536
+      "height": 536,
+      "plates": [[792, 346, 108, 56]]
     },
     "ford-focus-iv": {
       "file": "2018_Ford_Focus_Titanium_X_1.0.jpg",
+      "title": "2018 Ford Focus Titanium X 1.0",
       "author": "Vauxford",
       "license": "CC BY-SA 4.0",
       "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
@@ -235,6 +274,7 @@
     },
     "ford-kuga-iii": {
       "file": "2020_Ford_Kuga_Titanium_First_Edition_EcoBlue_1.5.jpg",
+      "title": "2020 Ford Kuga Titanium First Edition EcoBlue 1.5",
       "author": "Vauxford",
       "license": "CC BY-SA 4.0",
       "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
@@ -243,6 +283,7 @@
     },
     "ford-mondeo-iv": {
       "file": "2009_Ford_Mondeo_Titanium_X_First_Patrol_2.0_Front.jpg",
+      "title": "2009 Ford Mondeo Titanium X First Patrol 2.0 Front",
       "author": "Vauxford",
       "license": "CC BY-SA 4.0",
       "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
@@ -251,15 +292,21 @@
     },
     "ford-mondeo-v": {
       "file": "Ford_Mondeo_registered_March_2015_1999cc_(cropped,_2).jpg",
+      "title": "Ford Mondeo registered March 2015 1999cc (cropped, 2)",
       "author": "Charles01",
       "license": "CC BY-SA 4.0",
       "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
       "width": 960,
-      "height": 521
+      "height": 521,
+      "plates": [
+        [86, 330, 148, 68],
+        [916, 194, 44, 42]
+      ]
     },
     "hyundai-i10-ac3": {
       "file": "Hyundai_i10_1.0_Intro_(III)_–_f_03012021.jpg",
-      "author": "© M 93",
+      "title": "Hyundai i10 1.0 Intro (III) – f 03012021",
+      "author": "M 93",
       "license": "CC BY-SA 3.0 de",
       "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/de/deed.en",
       "width": 960,
@@ -267,7 +314,8 @@
     },
     "hyundai-i20-bc3": {
       "file": "Hyundai_i20_(III,_Facelift)_–_f_11102025.jpg",
-      "author": "© M 93",
+      "title": "Hyundai i20 (III, Facelift) – f 11102025",
+      "author": "M 93",
       "license": "CC BY-SA 3.0 de",
       "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/de/deed.en",
       "width": 960,
@@ -275,14 +323,17 @@
     },
     "hyundai-i30-fd": {
       "file": "Hyundai_i30_(front)_-_Flickr_-_mick_-_Lumix.jpg",
+      "title": "Hyundai i30 (front) - Flickr - mick - Lumix",
       "author": "Mick from Northamptonshire, England",
       "license": "CC BY 2.0",
       "licenseUrl": "https://creativecommons.org/licenses/by/2.0",
       "width": 960,
-      "height": 667
+      "height": 667,
+      "plates": [[726, 444, 142, 102]]
     },
     "hyundai-i30-gd": {
       "file": "Hyundai_i30_1.6_CRDi_Style_(II)_–_Frontansicht,_14._Juli_2013,_Münster.jpg",
+      "title": "Hyundai i30 1.6 CRDi Style (II) – Frontansicht, 14. Juli 2013, Münster",
       "author": "M 93",
       "license": "CC BY-SA 3.0 de",
       "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/de/deed.en",
@@ -291,14 +342,17 @@
     },
     "hyundai-i30-pd": {
       "file": "Hyundai_i30_1.4_T-GDI_Intro_(III)_–_Frontansicht,_3._Juni_2017,_Düsseldorf.jpg",
-      "author": "© M 93",
+      "title": "Hyundai i30 1.4 T-GDI Intro (III) – Frontansicht, 3. Juni 2017, Düsseldorf",
+      "author": "M 93",
       "license": "CC BY-SA 3.0 de",
       "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/de/deed.en",
       "width": 960,
-      "height": 481
+      "height": 481,
+      "plates": [[72, 296, 126, 56]]
     },
     "kia-ceed-cd": {
       "file": "Kia_Ceed_Genf_2018_Red.jpg",
+      "title": "Kia Ceed Genf 2018 Red",
       "author": "Alexander Migl",
       "license": "CC BY-SA 4.0",
       "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
@@ -307,6 +361,7 @@
     },
     "kia-ceed-ed": {
       "file": "Kia_cee'd_1.6_CRDi_115_EX_Top-Star_Zilinaschwarz.JPG",
+      "title": "Kia cee'd 1.6 CRDi 115 EX Top-Star Zilinaschwarz",
       "author": "Thomas doerfer",
       "license": "CC BY-SA 3.0",
       "licenseUrl": "http://creativecommons.org/licenses/by-sa/3.0/",
@@ -315,22 +370,27 @@
     },
     "kia-ceed-jd": {
       "file": "Kia_cee'd_1.6_CRDi_128_Spirit_(JD)_–_Frontansicht,_11._April_2015,_Düsseldorf.jpg",
+      "title": "Kia cee'd 1.6 CRDi 128 Spirit (JD) – Frontansicht, 11. April 2015, Düsseldorf",
       "author": "M 93",
       "license": "CC BY-SA 3.0 de",
       "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/de/deed.en",
       "width": 960,
-      "height": 498
+      "height": 498,
+      "plates": [[60, 328, 126, 58]]
     },
     "kia-picanto-ba": {
       "file": "Kia_Picanto_(SA)_DSC_7988.jpg",
+      "title": "Kia Picanto (SA) DSC 7988",
       "author": "Alexander Migl",
       "license": "CC BY-SA 4.0",
       "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
       "width": 960,
-      "height": 642
+      "height": 642,
+      "plates": [[88, 414, 150, 72]]
     },
     "kia-picanto-ja": {
       "file": "2018_Kia_Picanto_3_Automatic_1.2_Front.jpg",
+      "title": "2018 Kia Picanto 3 Automatic 1.2 Front",
       "author": "Vauxford",
       "license": "CC BY-SA 4.0",
       "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
@@ -339,6 +399,7 @@
     },
     "kia-picanto-ta": {
       "file": "Kia_Picanto_Fünftürer_Vision_1.0_CVVT_Schneeweiß.JPG",
+      "title": "Kia Picanto Fünftürer Vision 1.0 CVVT Schneeweiß",
       "author": "Thomas doerfer",
       "license": "CC BY 3.0",
       "licenseUrl": "https://creativecommons.org/licenses/by/3.0",
@@ -347,6 +408,7 @@
     },
     "kia-rio-yb": {
       "file": "2021_Kia_Rio_3_MHEV_facelift_1.0.jpg",
+      "title": "2021 Kia Rio 3 MHEV facelift 1.0",
       "author": "Vauxford",
       "license": "CC BY-SA 4.0",
       "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
@@ -355,14 +417,17 @@
     },
     "kia-sportage-nq5": {
       "file": "2025_Kia_Sportage_S_front_only.jpg",
+      "title": "2025 Kia Sportage S front only",
       "author": "LuvsMG481",
       "license": "CC BY-SA 4.0",
       "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
       "width": 960,
-      "height": 503
+      "height": 503,
+      "plates": [[856, 278, 58, 56]]
     },
     "mercedes-a-klasse-w169": {
       "file": "Mercedes-Benz_A_180_CDI_Elegance_(W_169)_–_Frontansicht_(1),_30._März_2011,_Wülfrath.jpg",
+      "title": "Mercedes-Benz A 180 CDI Elegance (W 169) – Frontansicht (1), 30. März 2011, Wülfrath",
       "author": "M 93",
       "license": "Attribution",
       "licenseUrl": null,
@@ -371,15 +436,18 @@
     },
     "mercedes-a-klasse-w176": {
       "file": "Mercedes-Benz_A_180_Urban_(W_176)_–_Heckansicht,_25._Mai_2013,_Hilden.jpg",
+      "title": "Mercedes-Benz A 180 Urban (W 176) – Heckansicht, 25. Mai 2013, Hilden",
       "author": "M 93",
       "license": "CC BY-SA 3.0 de",
       "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/de/deed.en",
       "width": 960,
-      "height": 493
+      "height": 493,
+      "plates": [[698, 198, 124, 54]]
     },
     "mercedes-a-klasse-w177": {
       "file": "Mercedes-Benz_A_180_Progressive_(W_177)_–_f_16032019.jpg",
-      "author": "© M 93",
+      "title": "Mercedes-Benz A 180 Progressive (W 177) – f 16032019",
+      "author": "M 93",
       "license": "CC BY-SA 3.0 de",
       "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/de/deed.en",
       "width": 960,
@@ -387,6 +455,7 @@
     },
     "mercedes-b-klasse-w245": {
       "file": "Mercedes-Benz_B_180_CDI_(T_245)_–_Frontansicht,_15._Juni_2011,_Wülfrath.jpg",
+      "title": "Mercedes-Benz B 180 CDI (T 245) – Frontansicht, 15. Juni 2011, Wülfrath",
       "author": "M 93",
       "license": "CC BY-SA 3.0 de",
       "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/de/deed.en",
@@ -395,15 +464,18 @@
     },
     "mercedes-b-klasse-w246": {
       "file": "Mercedes-Benz_B_180_BlueEFFICIENCY_(W_246)_–_Frontansicht,_1._April_2012,_Essen.jpg",
+      "title": "Mercedes-Benz B 180 BlueEFFICIENCY (W 246) – Frontansicht, 1. April 2012, Essen",
       "author": "M 93",
       "license": "CC BY-SA 3.0 de",
       "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/de/deed.en",
       "width": 960,
-      "height": 559
+      "height": 559,
+      "plates": [[138, 362, 144, 64]]
     },
     "mercedes-b-klasse-w247": {
       "file": "Mercedes-Benz_B_180_Progressive_(W_247)_–_f_21032021.jpg",
-      "author": "© M 93",
+      "title": "Mercedes-Benz B 180 Progressive (W 247) – f 21032021",
+      "author": "M 93",
       "license": "CC BY-SA 3.0 de",
       "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/de/deed.en",
       "width": 960,
@@ -411,30 +483,37 @@
     },
     "mercedes-c-klasse-w204": {
       "file": "2013_Mercedes-Benz_C_200_(W_204)_sedan_(2015-07-03)_01.jpg",
+      "title": "2013 Mercedes-Benz C 200 (W 204) sedan (2015-07-03) 01",
       "author": "OSX",
       "license": "Public domain",
       "licenseUrl": null,
       "width": 960,
-      "height": 642
+      "height": 642,
+      "plates": [[790, 424, 92, 66]]
     },
     "mercedes-c-klasse-w205": {
       "file": "Mercedes-Benz_C_220_BlueTEC_Exclusive_(W_205)_–_Frontansicht,_12._Juli_2014,_Düsseldorf.jpg",
+      "title": "Mercedes-Benz C 220 BlueTEC Exclusive (W 205) – Frontansicht, 12. Juli 2014, Düsseldorf",
       "author": "M 93",
       "license": "CC BY-SA 3.0 de",
       "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/de/deed.en",
       "width": 960,
-      "height": 493
+      "height": 493,
+      "plates": [[82, 316, 134, 60]]
     },
     "mercedes-c-klasse-w206": {
       "file": "Mercedes-Benz_W206_IMG_5796.jpg",
+      "title": "Mercedes-Benz W206 IMG 5796",
       "author": "Alexander Migl",
       "license": "CC BY-SA 4.0",
       "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
       "width": 960,
-      "height": 486
+      "height": 486,
+      "plates": [[88, 334, 126, 58]]
     },
     "mercedes-e-klasse-w212": {
       "file": "Mercedes_E_350_CDI_BlueEFFICIENCY_Elegance_(W212)_front-1_20100822.jpg",
+      "title": "Mercedes E 350 CDI BlueEFFICIENCY Elegance (W212) front-1 20100822",
       "author": "M 93",
       "license": "Attribution",
       "licenseUrl": null,
@@ -443,22 +522,30 @@
     },
     "mercedes-e-klasse-w213": {
       "file": "2019_Mercedes-Benz_E220d_SE_Automatic_2.0_Front.jpg",
+      "title": "2019 Mercedes-Benz E220d SE Automatic 2.0 Front",
       "author": "Vauxford",
       "license": "CC BY-SA 4.0",
       "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
       "width": 960,
-      "height": 450
+      "height": 450,
+      "plates": [[96, 292, 132, 56]]
     },
     "mercedes-e-klasse-w214": {
       "file": "Mercedes-Benz_W214_1X7A1841.jpg",
+      "title": "Mercedes-Benz W214 1X7A1841",
       "author": "Alexander-93",
       "license": "CC BY-SA 4.0",
       "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
       "width": 960,
-      "height": 456
+      "height": 456,
+      "plates": [
+        [88, 318, 120, 54],
+        [918, 210, 42, 42]
+      ]
     },
     "opel-astra-h": {
       "file": "Opel_Astra_H_1.6_Twinport_front_20100509.jpg",
+      "title": "Opel Astra H 1.6 Twinport front 20100509",
       "author": "M 93",
       "license": "Attribution",
       "licenseUrl": null,
@@ -467,6 +554,7 @@
     },
     "opel-astra-j": {
       "file": "Opel_Astra_Design_Edition_(J)_–_Frontansicht,_14._August_2011,_Heiligenhaus.jpg",
+      "title": "Opel Astra Design Edition (J) – Frontansicht, 14. August 2011, Heiligenhaus",
       "author": "M 93",
       "license": "CC BY-SA 3.0 de",
       "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/de/deed.en",
@@ -475,7 +563,8 @@
     },
     "opel-astra-k": {
       "file": "Opel_Astra_1.6_CDTI_ecoFLEX_Dynamic_(K)_–_Frontansicht,_23._Dezember_2016,_Düsseldorf.jpg",
-      "author": "© M 93",
+      "title": "Opel Astra 1.6 CDTI ecoFLEX Dynamic (K) – Frontansicht, 23. Dezember 2016, Düsseldorf",
+      "author": "M 93",
       "license": "CC BY-SA 3.0 de",
       "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/de/deed.en",
       "width": 960,
@@ -483,7 +572,8 @@
     },
     "opel-astra-l": {
       "file": "Opel_Astra_1.2_Turbo_Ultimate_(L)_–_f_13122024.jpg",
-      "author": "© M 93",
+      "title": "Opel Astra 1.2 Turbo Ultimate (L) – f 13122024",
+      "author": "M 93",
       "license": "CC BY-SA 3.0 de",
       "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/de/deed.en",
       "width": 960,
@@ -491,6 +581,7 @@
     },
     "opel-corsa-d": {
       "file": "Opel_Corsa_D_20090912_front.JPG",
+      "title": "Opel Corsa D 20090912 front",
       "author": "M 93",
       "license": "Attribution",
       "licenseUrl": null,
@@ -499,6 +590,7 @@
     },
     "opel-corsa-e": {
       "file": "Opel_Corsa_1.3_CDTI_ecoFLEX_Innovation_(E)_–_Frontansicht,_24._Dezember_2015,_Ratingen.jpg",
+      "title": "Opel Corsa 1.3 CDTI ecoFLEX Innovation (E) – Frontansicht, 24. Dezember 2015, Ratingen",
       "author": "M 93",
       "license": "CC BY-SA 3.0 de",
       "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/de/deed.en",
@@ -507,14 +599,17 @@
     },
     "opel-corsa-f": {
       "file": "Opel_Corsa_F_IMG_8196.jpg",
+      "title": "Opel Corsa F IMG 8196",
       "author": "Alexander-93",
       "license": "CC BY-SA 4.0",
       "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
       "width": 960,
-      "height": 639
+      "height": 639,
+      "plates": [[80, 438, 144, 64]]
     },
     "opel-insignia-a": {
       "file": "Opel_Insignia_20090717_front.jpg",
+      "title": "Opel Insignia 20090717 front",
       "author": "M 93",
       "license": "Attribution",
       "licenseUrl": null,
@@ -523,7 +618,8 @@
     },
     "opel-insignia-b": {
       "file": "Opel_Insignia_Grand_Sport_1.6_Diesel_Business_Innovation_(B)_–_Frontansicht,_5._Mai_2017,_Düsseldorf.jpg",
-      "author": "© M 93",
+      "title": "Opel Insignia Grand Sport 1.6 Diesel Business Innovation (B) – Frontansicht, 5. Mai 2017, Düsseldorf",
+      "author": "M 93",
       "license": "CC BY-SA 3.0 de",
       "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/de/deed.en",
       "width": 960,
@@ -531,6 +627,7 @@
     },
     "opel-mokka-a": {
       "file": "Opel_Mokka_1.4_Turbo_ecoFLEX_Innovation_–_Frontansicht,_13._Oktober_2015,_Düsseldorf.jpg",
+      "title": "Opel Mokka 1.4 Turbo ecoFLEX Innovation – Frontansicht, 13. Oktober 2015, Düsseldorf",
       "author": "M 93",
       "license": "CC BY-SA 3.0 de",
       "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/de/deed.en",
@@ -539,39 +636,48 @@
     },
     "opel-mokka-b": {
       "file": "Opel_Mokka_B_1X7A0317.jpg",
+      "title": "Opel Mokka B 1X7A0317",
       "author": "Alexander Migl",
       "license": "CC BY-SA 4.0",
       "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
       "width": 960,
-      "height": 582
+      "height": 582,
+      "plates": [[752, 368, 132, 60]]
     },
     "peugeot-2008-i": {
       "file": "Peugeot_2008_82_VTi_Access_–_Frontansicht,_28._Mai_2014,_Düsseldorf.jpg",
+      "title": "Peugeot 2008 82 VTi Access – Frontansicht, 28. Mai 2014, Düsseldorf",
       "author": "M 93",
       "license": "CC BY-SA 3.0 de",
       "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/de/deed.en",
       "width": 960,
-      "height": 571
+      "height": 571,
+      "plates": [[80, 376, 132, 62]]
     },
     "peugeot-2008-ii": {
       "file": "Peugeot_2008_B_Retro_Classics_2020_IMG_0025.jpg",
+      "title": "Peugeot 2008 B Retro Classics 2020 IMG 0025",
       "author": "Alexander Migl",
       "license": "CC BY-SA 4.0",
       "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
       "width": 960,
-      "height": 448
+      "height": 448,
+      "plates": [[52, 272, 104, 46]]
     },
     "peugeot-208-i": {
       "file": "Peugeot_208_95_VTi_Active_–_Frontansicht,_5._Mai_2012,_Düsseldorf.jpg",
+      "title": "Peugeot 208 95 VTi Active – Frontansicht, 5. Mai 2012, Düsseldorf",
       "author": "M 93",
       "license": "CC BY-SA 3.0 de",
       "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/de/deed.en",
       "width": 960,
-      "height": 587
+      "height": 587,
+      "plates": [[720, 374, 140, 56]]
     },
     "peugeot-208-ii": {
       "file": "Peugeot_208_PureTech_130_EAT8_Allure_GT-Line_(II)_–_f_17102021.jpg",
-      "author": "© M 93",
+      "title": "Peugeot 208 PureTech 130 EAT8 Allure GT-Line (II) – f 17102021",
+      "author": "M 93",
       "license": "CC BY-SA 3.0 de",
       "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/de/deed.en",
       "width": 960,
@@ -579,6 +685,7 @@
     },
     "peugeot-308-i": {
       "file": "Peugeot_308_5-Türer_front.JPG",
+      "title": "Peugeot 308 5-Türer front",
       "author": "M 93",
       "license": "CC BY-SA 3.0",
       "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
@@ -587,14 +694,17 @@
     },
     "peugeot-308-ii": {
       "file": "Peugeot_308_82_VTi_Active_(II)_–_Frontansicht,_4._Januar_2014,_Düsseldorf.jpg",
+      "title": "Peugeot 308 82 VTi Active (II) – Frontansicht, 4. Januar 2014, Düsseldorf",
       "author": "M 93",
       "license": "CC BY-SA 3.0 de",
       "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/de/deed.en",
       "width": 960,
-      "height": 521
+      "height": 521,
+      "plates": [[755, 340, 128, 58]]
     },
     "peugeot-308-iii": {
       "file": "2022_-_Peugeot_308_III_(C)_-_196.jpg",
+      "title": "2022 - Peugeot 308 III (C) - 196",
       "author": "A.BourgeoisP",
       "license": "CC BY-SA 4.0",
       "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
@@ -603,14 +713,17 @@
     },
     "renault-captur-i": {
       "file": "Renault_Captur1.jpg",
+      "title": "Renault Captur1",
       "author": "Máth Dávid - Mdavid89",
       "license": "CC0",
       "licenseUrl": "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
       "width": 960,
-      "height": 635
+      "height": 635,
+      "plates": [[792, 442, 98, 66]]
     },
     "renault-captur-ii": {
       "file": "Renault_Captur_II_at_IAA_2019_IMG_0446.jpg",
+      "title": "Renault Captur II at IAA 2019 IMG 0446",
       "author": "Alexander Migl",
       "license": "CC BY-SA 4.0",
       "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
@@ -619,6 +732,7 @@
     },
     "renault-clio-iii": {
       "file": "Renault_Clio_III_20090527_front.JPG",
+      "title": "Renault Clio III 20090527 front",
       "author": "M 93",
       "license": "Public domain",
       "licenseUrl": null,
@@ -627,22 +741,30 @@
     },
     "renault-clio-iv": {
       "file": "Renault_Clio_TCe_90_Luxe_(IV)_–_Frontansicht,_17._Mai_2013,_Münster.jpg",
+      "title": "Renault Clio TCe 90 Luxe (IV) – Frontansicht, 17. Mai 2013, Münster",
       "author": "M 93",
       "license": "CC BY-SA 3.0 de",
       "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/de/deed.en",
       "width": 960,
-      "height": 514
+      "height": 514,
+      "plates": [[76, 376, 108, 66]]
     },
     "renault-clio-v": {
       "file": "Renault_Clio_V_1X7A0393.jpg",
+      "title": "Renault Clio V 1X7A0393",
       "author": "Alexander Migl",
       "license": "CC BY-SA 4.0",
       "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
       "width": 960,
-      "height": 569
+      "height": 569,
+      "plates": [
+        [88, 438, 152, 62],
+        [920, 284, 40, 42]
+      ]
     },
     "renault-megane-e-tech": {
       "file": "Renault_Megane_E-Tech_IAA_2021_1X7A0209.jpg",
+      "title": "Renault Megane E-Tech IAA 2021 1X7A0209",
       "author": "Alexander Migl",
       "license": "CC BY-SA 4.0",
       "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
@@ -651,6 +773,7 @@
     },
     "renault-megane-iii": {
       "file": "Renault_Mégane_III_Phase_I_Fünftürer_Dynamique_Perlmuttschwarz.JPG",
+      "title": "Renault Mégane III Phase I Fünftürer Dynamique Perlmuttschwarz",
       "author": "Thomas doerfer",
       "license": "CC BY-SA 3.0",
       "licenseUrl": "http://creativecommons.org/licenses/by-sa/3.0/",
@@ -659,30 +782,43 @@
     },
     "renault-megane-iv": {
       "file": "Renault_Mégane_IV_chez_Roi_Merlin_(cropped).jpg",
+      "title": "Renault Mégane IV chez Roi Merlin (cropped)",
       "author": "Charles01",
       "license": "CC BY-SA 4.0",
       "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
       "width": 960,
-      "height": 534
+      "height": 534,
+      "plates": [
+        [745, 396, 142, 64],
+        [0, 148, 70, 34]
+      ]
     },
     "renault-twingo-iii": {
       "file": "Renault_Twingo_Dynamique_(III)_–_Frontansicht,_24._Oktober_2015,_Münster.jpg",
+      "title": "Renault Twingo Dynamique (III) – Frontansicht, 24. Oktober 2015, Münster",
       "author": "M 93",
       "license": "CC BY-SA 3.0 de",
       "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/de/deed.en",
       "width": 960,
-      "height": 607
+      "height": 607,
+      "plates": [
+        [90, 396, 132, 54],
+        [914, 314, 46, 44]
+      ]
     },
     "seat-ibiza-6f": {
       "file": "Seat_Ibiza_6F_IMG_3967.jpg",
+      "title": "Seat Ibiza 6F IMG 3967",
       "author": "Alexander Migl",
       "license": "CC BY-SA 4.0",
       "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
       "width": 960,
-      "height": 639
+      "height": 639,
+      "plates": [[142, 414, 172, 68]]
     },
     "seat-ibiza-6j": {
       "file": "Seat_Ibiza_6J_1.4_Good_Stuff_Magicoschwarz.JPG",
+      "title": "Seat Ibiza 6J 1.4 Good Stuff Magicoschwarz",
       "author": "Thomas doerfer",
       "license": "CC BY 3.0",
       "licenseUrl": "https://creativecommons.org/licenses/by/3.0",
@@ -691,6 +827,7 @@
     },
     "seat-leon-1p": {
       "file": "Seat_Leon_(1P)_–_Frontansicht,_17._April_2011,_Düsseldorf.jpg",
+      "title": "Seat Leon (1P) – Frontansicht, 17. April 2011, Düsseldorf",
       "author": "M 93",
       "license": "CC BY-SA 3.0 de",
       "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/de/deed.en",
@@ -699,38 +836,53 @@
     },
     "seat-leon-5f": {
       "file": "Seat_Leon_1.4_TSI_Start&Stop_Style_(III)_–_Frontansicht,_10._August_2013,_Ratingen.jpg",
+      "title": "Seat Leon 1.4 TSI Start&Stop Style (III) – Frontansicht, 10. August 2013, Ratingen",
       "author": "M 93",
       "license": "CC BY-SA 3.0 de",
       "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/de/deed.en",
       "width": 960,
-      "height": 493
+      "height": 493,
+      "plates": [
+        [92, 314, 126, 58],
+        [926, 198, 34, 34]
+      ]
     },
     "seat-leon-kl": {
       "file": "SEAT_Leon_Mk4_1X7A5842.jpg",
+      "title": "SEAT Leon Mk4 1X7A5842",
       "author": "Alexander Migl",
       "license": "CC BY-SA 4.0",
       "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
       "width": 960,
-      "height": 555
+      "height": 555,
+      "plates": [
+        [668, 382, 158, 62],
+        [30, 264, 40, 42]
+      ]
     },
     "seat-mii-1": {
       "file": "Seat_Mii_1.0_Style_–_Frontansicht,_15._September_2012,_Düsseldorf.jpg",
+      "title": "Seat Mii 1.0 Style – Frontansicht, 15. September 2012, Düsseldorf",
       "author": "M 93",
       "license": "CC BY-SA 3.0 de",
       "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/de/deed.en",
       "width": 960,
-      "height": 551
+      "height": 551,
+      "plates": [[752, 342, 118, 56]]
     },
     "skoda-citigo-1": {
       "file": "Skoda_Citigo_1.0_Ambition_–_Frontansicht_(1),_17._März_2012,_Düsseldorf.jpg",
+      "title": "Skoda Citigo 1.0 Ambition – Frontansicht (1), 17. März 2012, Düsseldorf",
       "author": "M 93",
       "license": "CC BY-SA 3.0 de",
       "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/de/deed.en",
       "width": 960,
-      "height": 608
+      "height": 608,
+      "plates": [[0, 206, 46, 42]]
     },
     "skoda-fabia-ii": {
       "file": "Skoda_Fabia_II_20090426_front.JPG",
+      "title": "Skoda Fabia II 20090426 front",
       "author": "M 93",
       "license": "Public domain",
       "licenseUrl": null,
@@ -739,22 +891,30 @@
     },
     "skoda-fabia-iii": {
       "file": "Skoda_Fabia_Style_(III)_–_Frontansicht,_2._Mai_2015,_Düsseldorf.jpg",
+      "title": "Skoda Fabia Style (III) – Frontansicht, 2. Mai 2015, Düsseldorf",
       "author": "M 93",
       "license": "CC BY-SA 3.0 de",
       "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/de/deed.en",
       "width": 960,
-      "height": 511
+      "height": 511,
+      "plates": [
+        [785, 312, 122, 62],
+        [22, 148, 90, 32]
+      ]
     },
     "skoda-fabia-iv": {
       "file": "Škoda_Fabia_IV_1X7A7110_(cropped).jpg",
+      "title": "Škoda Fabia IV 1X7A7110 (cropped)",
       "author": "Alexander-93",
       "license": "CC BY-SA 4.0",
       "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
       "width": 960,
-      "height": 498
+      "height": 498,
+      "plates": [[70, 348, 128, 54]]
     },
     "skoda-octavia-i": {
       "file": "Skoda_Octavia_I_front_20080213.jpg",
+      "title": "Skoda Octavia I front 20080213",
       "author": "Rudolf Stricker",
       "license": "CC BY-SA 3.0",
       "licenseUrl": "http://creativecommons.org/licenses/by-sa/3.0/",
@@ -763,22 +923,27 @@
     },
     "skoda-octavia-ii": {
       "file": "Skoda_Octavia_II_front_20100923.jpg",
+      "title": "Skoda Octavia II front 20100923",
       "author": "M 93",
       "license": "Attribution",
       "licenseUrl": null,
       "width": 960,
-      "height": 579
+      "height": 579,
+      "plates": [[60, 400, 136, 70]]
     },
     "skoda-octavia-iii": {
       "file": "Skoda_Octavia_1.8_TSI_Green_tec_Elegance_(III)_–_Frontansicht,_14._April_2013,_Düsseldorf.jpg",
+      "title": "Skoda Octavia 1.8 TSI Green tec Elegance (III) – Frontansicht, 14. April 2013, Düsseldorf",
       "author": "M 93",
       "license": "CC BY-SA 3.0 de",
       "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/de/deed.en",
       "width": 960,
-      "height": 455
+      "height": 455,
+      "plates": [[74, 276, 116, 56]]
     },
     "skoda-octavia-iv": {
       "file": "Skoda_Octavia_IV_liftback_(cropped).jpg",
+      "title": "Skoda Octavia IV liftback (cropped)",
       "author": "Mike-fiesta",
       "license": "CC BY-SA 4.0",
       "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
@@ -787,22 +952,27 @@
     },
     "skoda-superb-ii": {
       "file": "SkodaSuperbII.jpg",
+      "title": "SkodaSuperbII",
       "author": "© Michel de Vries",
       "license": "CC BY-SA 3.0 de",
       "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/de/deed.en",
       "width": 960,
-      "height": 679
+      "height": 679,
+      "plates": [[124, 400, 130, 66]]
     },
     "skoda-superb-iii": {
       "file": "Škoda_Superb_III_02.12.17_JM.jpg",
+      "title": "Škoda Superb III 02.12.17 JM",
       "author": "Johannes Maximilian",
       "license": "CC BY-SA 4.0",
       "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
       "width": 960,
-      "height": 640
+      "height": 640,
+      "plates": [[135, 412, 138, 58]]
     },
     "skoda-superb-iv": {
       "file": "Škoda_Superb_IV_Combi_Automesse_Ludwigsburg_2024_IMG_1400.jpg",
+      "title": "Škoda Superb IV Combi Automesse Ludwigsburg 2024 IMG 1400",
       "author": "Alexander-93",
       "license": "CC BY-SA 4.0",
       "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
@@ -811,38 +981,47 @@
     },
     "toyota-aygo-ii": {
       "file": "Toyota_Aygo_(cropped).jpg",
+      "title": "Toyota Aygo (cropped)",
       "author": "JoachimKohler-HB",
       "license": "CC BY-SA 4.0",
       "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
       "width": 960,
-      "height": 533
+      "height": 533,
+      "plates": [[76, 322, 128, 60]]
     },
     "toyota-aygo-x": {
       "file": "2022_Toyota_Aygo_X_Edge_1.0_VVT-i_(Front).jpg",
+      "title": "2022 Toyota Aygo X Edge 1.0 VVT-i (Front)",
       "author": "DieselFordMondeo",
       "license": "CC BY-SA 4.0",
       "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
       "width": 960,
-      "height": 620
+      "height": 620,
+      "plates": [[80, 390, 134, 72]]
     },
     "toyota-corolla-auris-ii": {
       "file": "Toyota_Auris_2.0_D-4D_Executive_(II)_–_Frontansicht,_1._Juni_2013,_Düsseldorf.jpg",
+      "title": "Toyota Auris 2.0 D-4D Executive (II) – Frontansicht, 1. Juni 2013, Düsseldorf",
       "author": "M 93",
       "license": "CC BY-SA 3.0 de",
       "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/de/deed.en",
       "width": 960,
-      "height": 485
+      "height": 485,
+      "plates": [[762, 310, 118, 58]]
     },
     "toyota-corolla-e210": {
       "file": "2018_Toyota_Corolla_(MZEA12R)_Ascent_Sport_hatchback_(2018-11-02)_01.jpg",
+      "title": "2018 Toyota Corolla (MZEA12R) Ascent Sport hatchback (2018-11-02) 01",
       "author": "EurovisionNim",
       "license": "CC BY-SA 4.0",
       "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
       "width": 960,
-      "height": 473
+      "height": 473,
+      "plates": [[790, 302, 90, 56]]
     },
     "toyota-yaris-ii": {
       "file": "Toyota_Yaris_front_20081204.jpg",
+      "title": "Toyota Yaris front 20081204",
       "author": "Rudolf Stricker",
       "license": "Attribution",
       "licenseUrl": null,
@@ -851,14 +1030,20 @@
     },
     "toyota-yaris-iii": {
       "file": "Toyota_Yaris_(XP130)_–_Frontansicht,_21._Juli_2012,_Heiligenhaus.jpg",
+      "title": "Toyota Yaris (XP130) – Frontansicht, 21. Juli 2012, Heiligenhaus",
       "author": "M 93",
       "license": "CC BY-SA 3.0 de",
       "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/de/deed.en",
       "width": 960,
-      "height": 540
+      "height": 540,
+      "plates": [
+        [112, 350, 142, 60],
+        [140, 194, 76, 28]
+      ]
     },
     "toyota-yaris-iv": {
       "file": "Toyota_Yaris_Hybrid_(XP210)_1X7A0353.jpg",
+      "title": "Toyota Yaris Hybrid (XP210) 1X7A0353",
       "author": "Alexander Migl",
       "license": "CC BY-SA 4.0",
       "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
@@ -867,6 +1052,7 @@
     },
     "vw-caddy-iii-iv": {
       "file": "VW_Caddy_front_20071026.jpg",
+      "title": "VW Caddy front 20071026",
       "author": "Rudolf Stricker",
       "license": "CC BY-SA 3.0",
       "licenseUrl": "http://creativecommons.org/licenses/by-sa/3.0/",
@@ -875,14 +1061,17 @@
     },
     "vw-caddy-v": {
       "file": "Volkswagen_Caddy_V_IMG_4136.jpg",
+      "title": "Volkswagen Caddy V IMG 4136",
       "author": "Alexander Migl",
       "license": "CC BY-SA 4.0",
       "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
       "width": 960,
-      "height": 639
+      "height": 639,
+      "plates": [[118, 436, 164, 72]]
     },
     "vw-golf-6": {
       "file": "VW_Golf_VI_1.6_TDI_Comfortline_Reflexsilber.JPG",
+      "title": "VW Golf VI 1.6 TDI Comfortline Reflexsilber",
       "author": "Thomas doerfer",
       "license": "CC BY 3.0",
       "licenseUrl": "https://creativecommons.org/licenses/by/3.0",
@@ -891,22 +1080,30 @@
     },
     "vw-golf-7": {
       "file": "VW_Golf_1.4_TSI_BlueMotion_Technology_CUP_(VII)_–_Frontansicht,_15._Juni_2014,_Düsseldorf.jpg",
+      "title": "VW Golf 1.4 TSI BlueMotion Technology CUP (VII) – Frontansicht, 15. Juni 2014, Düsseldorf",
       "author": "M 93",
       "license": "CC BY-SA 3.0 de",
       "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/de/deed.en",
       "width": 960,
-      "height": 487
+      "height": 487,
+      "plates": [
+        [770, 296, 134, 66],
+        [600, 112, 58, 32]
+      ]
     },
     "vw-golf-8": {
       "file": "Volkswagen_Golf_VIII_IMG_9737.jpg",
+      "title": "Volkswagen Golf VIII IMG 9737",
       "author": "Alexander-93",
       "license": "CC BY-SA 4.0",
       "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
       "width": 960,
-      "height": 523
+      "height": 523,
+      "plates": [[105, 330, 150, 58]]
     },
     "vw-passat-b7": {
       "file": "VW_Passat_B7_2.0_TDI_DSG_Highline_Kaschmirbraun.JPG",
+      "title": "VW Passat B7 2.0 TDI DSG Highline Kaschmirbraun",
       "author": "Thomas doerfer",
       "license": "CC BY 3.0",
       "licenseUrl": "https://creativecommons.org/licenses/by/3.0",
@@ -915,6 +1112,7 @@
     },
     "vw-passat-b8": {
       "file": "VW_Passat_B8_Limousine_2.0_TDI_Highline.JPG",
+      "title": "VW Passat B8 Limousine 2.0 TDI Highline",
       "author": "TD",
       "license": "CC BY-SA 3.0",
       "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
@@ -923,14 +1121,21 @@
     },
     "vw-passat-b9": {
       "file": "Volkswagen_Passat_Variant_B9_IMG_1218.jpg",
+      "title": "Volkswagen Passat Variant B9 IMG 1218",
       "author": "Alexander-93",
       "license": "CC BY-SA 4.0",
       "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
       "width": 960,
-      "height": 539
+      "height": 539,
+      "plates": [
+        [120, 344, 154, 62],
+        [78, 154, 78, 44],
+        [902, 130, 50, 36]
+      ]
     },
     "vw-polo-5": {
       "file": "VW_Polo_V_1.2_Comfortline_Pepper_Grey.JPG",
+      "title": "VW Polo V 1.2 Comfortline Pepper Grey",
       "author": "Thomas doerfer",
       "license": "CC BY 3.0",
       "licenseUrl": "https://creativecommons.org/licenses/by/3.0",
@@ -939,7 +1144,8 @@
     },
     "vw-polo-6": {
       "file": "VW_Polo_beats_(VI)_–_f_03032019.jpg",
-      "author": "© M 93",
+      "title": "VW Polo beats (VI) – f 03032019",
+      "author": "M 93",
       "license": "CC BY-SA 3.0 de",
       "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/de/deed.en",
       "width": 960,
@@ -947,7 +1153,8 @@
     },
     "vw-t-roc-1": {
       "file": "VW_T-Roc_1.5_TSI_Style_–_f_03012021.jpg",
-      "author": "© M 93",
+      "title": "VW T-Roc 1.5 TSI Style – f 03012021",
+      "author": "M 93",
       "license": "CC BY-SA 3.0 de",
       "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/de/deed.en",
       "width": 960,
@@ -955,14 +1162,17 @@
     },
     "vw-t-roc-2": {
       "file": "Volkswagen_T-Roc_II_IMG_5347.jpg",
+      "title": "Volkswagen T-Roc II IMG 5347",
       "author": "Alexander Migl",
       "license": "CC BY-SA 4.0",
       "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
       "width": 960,
-      "height": 515
+      "height": 515,
+      "plates": [[808, 336, 104, 50]]
     },
     "vw-tiguan-i": {
       "file": "VW_Tiguan_TDI_2.0,_Bj._2008-06_(Sp).jpg",
+      "title": "VW Tiguan TDI 2.0, Bj. 2008-06 (Sp)",
       "author": "Spurzem - Lothar Spurzem",
       "license": "CC BY-SA 2.0 de",
       "licenseUrl": "https://creativecommons.org/licenses/by-sa/2.0/de/deed.en",
@@ -971,7 +1181,8 @@
     },
     "vw-tiguan-ii": {
       "file": "VW_Tiguan_2.0_TSI_BlueMotion_Technology_4MOTION_Sound_(II)_–_Frontansicht,_24._Dezember_2017,_Düsseldorf.jpg",
-      "author": "© M 93",
+      "title": "VW Tiguan 2.0 TSI BlueMotion Technology 4MOTION Sound (II) – Frontansicht, 24. Dezember 2017, Düsseldorf",
+      "author": "M 93",
       "license": "CC BY-SA 3.0 de",
       "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/de/deed.en",
       "width": 960,
@@ -979,14 +1190,17 @@
     },
     "vw-tiguan-iii": {
       "file": "Volkswagen_Tiguan_III_IMG_8388.jpg",
+      "title": "Volkswagen Tiguan III IMG 8388",
       "author": "Alexander-93",
       "license": "CC BY-SA 4.0",
       "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
       "width": 960,
-      "height": 559
+      "height": 559,
+      "plates": [[748, 382, 132, 56]]
     },
     "vw-touran-i": {
       "file": "VW_Touran_20090611_front.JPG",
+      "title": "VW Touran 20090611 front",
       "author": "M 93",
       "license": "Public domain",
       "licenseUrl": null,
@@ -995,6 +1209,7 @@
     },
     "vw-touran-ii": {
       "file": "VW_Touran_Highline_Black_Style.jpg",
+      "title": "VW Touran Highline Black Style",
       "author": "Thomas doerfer",
       "license": "CC BY-SA 4.0",
       "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
@@ -1003,11 +1218,13 @@
     },
     "vw-up-1": {
       "file": "VW_cup_up!_1.0_BlueMotion_Technology_–_Frontansicht,_19._Juni_2014,_Düsseldorf.jpg",
+      "title": "VW cup up! 1.0 BlueMotion Technology – Frontansicht, 19. Juni 2014, Düsseldorf",
       "author": "M 93",
       "license": "CC BY-SA 3.0 de",
       "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/de/deed.en",
       "width": 960,
-      "height": 572
+      "height": 572,
+      "plates": [[725, 357, 148, 72]]
     }
   }
 }
