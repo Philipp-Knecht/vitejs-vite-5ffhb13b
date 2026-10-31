@@ -29,7 +29,10 @@ import { fileURLToPath } from 'node:url';
 import { z } from 'zod';
 
 const USER_AGENT = 'KaufCheckBot/1.0 (+https://kaufcheck-app.de/bot)';
+/** How the copies are made; raised when that changes, so that all of them are made again. */
+const VERSION = 2;
 const WIDTH = 960;
+const MAX_BYTES = 20 * 1024 * 1024;
 const QUALITY = '72';
 /** Licences that allow showing the photo with a credit; anything else is refused. */
 const FREE = /^(CC BY(-SA)? \d\.\d( [a-z]{2})?|CC0|Public domain|Attribution)$/i;
@@ -98,6 +101,7 @@ ${outputs}
   } }`;
   const attempts = 4;
   for (let attempt = 1; attempt <= attempts; attempt++) {
+    // A dropped connection counts as a failed attempt, like an error answer.
     const response = await fetch('https://query.wikidata.org/sparql', {
       method: 'POST',
       headers: {
@@ -106,8 +110,8 @@ ${outputs}
         'Content-Type': 'application/x-www-form-urlencoded',
       },
       body: new URLSearchParams({ query }),
-    });
-    if (response.ok) {
+    }).catch(() => null);
+    if (response?.ok) {
       const body = (await response.json()) as {
         results: { bindings: Record<string, { value: string }>[] };
       };
@@ -171,26 +175,46 @@ async function download(
   url: string,
   work: string,
   id: string,
+  size: { width: number; height: number },
   plates: readonly z.infer<typeof Box>[],
 ): Promise<string> {
-  const { protocol, hostname } = new URL(url);
+  const { protocol, hostname, pathname } = new URL(url);
   if (protocol !== 'https:' || !HOSTS.has(hostname)) {
     throw new Error(`${id}: thumbnail not on Wikimedia's servers: ${url}`);
   }
-  const response = await fetch(url, { headers: { 'User-Agent': USER_AGENT } });
+  // No redirect: the photo comes from the server checked above.
+  const response = await fetch(url, { headers: { 'User-Agent': USER_AGENT }, redirect: 'error' });
   if (!response.ok) throw new Error(`${response.status} for ${url}`);
   const type = (response.headers.get('content-type') ?? '').split(';')[0]?.trim() ?? '';
   const coder = CODERS[type];
   if (!coder) throw new Error(`${id}: unexpected content type „${type}“ for ${url}`);
+  const bytes = Buffer.from(await response.arrayBuffer());
+  if (bytes.length > MAX_BYTES) throw new Error(`${id}: ${bytes.length} bytes for ${url}`);
   const raw = path.join(work, `${id}.${coder}`);
   const target = path.join(work, `${id}.webp`);
-  writeFileSync(raw, Buffer.from(await response.arrayBuffer()));
-  // Resized (credited as „verkleinert“), plates pixelated; only the colour profile is kept.
+  writeFileSync(raw, bytes);
+  // The plate boxes were found on a copy of this size: anything else would miss them.
+  const actual = execFileSync('convert', [
+    `${coder}:${raw}[0]`,
+    '-auto-orient',
+    '-format',
+    '%w %h',
+    'info:',
+  ])
+    .toString()
+    .trim();
+  if (actual !== `${size.width} ${size.height}`) {
+    throw new Error(`${id}: got ${actual} instead of ${size.width} ${size.height} from ${url}`);
+  }
+  // Resized (credited as „verkleinert“), plates pixelated. Wikimedia's thumbnails carry
+  // only the colour profile and the author: both are kept. An original (as small as the
+  // copy) might carry more, such as where it was taken: only its colour profile is kept.
   execFileSync('convert', [
-    `${coder}:${raw}`,
+    `${coder}:${raw}[0]`,
+    '-auto-orient',
     ...pixelate(plates),
     '+profile',
-    '!icc,*',
+    pathname.includes('/thumb/') ? '!icc,!exif,!xmp,*' : '!icc,*',
     '-quality',
     QUALITY,
     `webp:${target}`,
@@ -203,11 +227,12 @@ const sources = Object.fromEntries(
     Sources.parse(JSON.parse(readFileSync(path.join(dataDir, 'model-image-sources.json'), 'utf8'))),
   ).map(([id, source]) => [id, typeof source === 'string' ? { file: source, plates: [] } : source]),
 );
-// A photo already fetched for the same file and boxes is kept; only new or changed ones are fetched.
+// A photo already made the same way from the same file and boxes is kept; only new or changed
+// ones are fetched.
 const earlier = (() => {
   try {
     return z
-      .object({ images: z.record(z.string(), z.unknown()) })
+      .object({ version: z.literal(VERSION), images: z.record(z.string(), z.unknown()) })
       .parse(JSON.parse(readFileSync(path.join(dataDir, 'model-images.json'), 'utf8'))).images;
   } catch {
     return {};
@@ -245,7 +270,7 @@ try {
         throw new Error(`${id}: plate box ${[x, y, w, h].join(',')} outside ${width}×${height}`);
       }
     }
-    fetched.set(id, await download(found.thumb, work, id, plates));
+    fetched.set(id, await download(found.thumb, work, id, { width, height }, plates));
     images[id] = {
       file,
       title: plain(found.ObjectName) || file.replace(/\.[a-z]+$/i, '').replaceAll('_', ' '),
@@ -274,5 +299,5 @@ for (const name of readdirSync(imageDir)) {
 }
 writeFileSync(
   path.join(dataDir, 'model-images.json'),
-  `${JSON.stringify({ retrieved: new Date().toISOString().slice(0, 10), images }, null, 2)}\n`,
+  `${JSON.stringify({ version: VERSION, retrieved: new Date().toISOString().slice(0, 10), images }, null, 2)}\n`,
 );

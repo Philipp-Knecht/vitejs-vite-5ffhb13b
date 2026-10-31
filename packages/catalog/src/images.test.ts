@@ -59,6 +59,7 @@ describe('generation photos', () => {
       const plates = sources[id]?.plates ?? [];
       expect(image.plates ?? [], id).toEqual(plates);
       expect(generationImage(id)?.platesHidden, id).toBe(plates.length > 0);
+      expect(generationImage(id)?.shareAlike, id).toBe(image.license.startsWith('CC BY-SA'));
       for (const [x, y, w, h] of plates) {
         expect(x + w, id).toBeLessThanOrEqual(image.width);
         expect(y + h, id).toBeLessThanOrEqual(image.height);

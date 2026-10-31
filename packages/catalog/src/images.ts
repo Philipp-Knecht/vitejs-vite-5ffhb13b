@@ -39,6 +39,8 @@ export interface GenerationImage {
   licenseUrl: string | null;
   /** Number plates were made unreadable. */
   platesHidden: boolean;
+  /** „Share alike“: a changed copy is under the same licence, which the credit says. */
+  shareAlike: boolean;
   /** The file page on Wikimedia Commons. */
   source: string;
 }
@@ -76,6 +78,7 @@ export function generationImage(generationId: string): GenerationImage | null {
     license: licenseName(image.license),
     licenseUrl: germanDeed(image.licenseUrl),
     platesHidden: (image.plates?.length ?? 0) > 0,
+    shareAlike: /^CC BY-SA /i.test(image.license),
     source: `https://commons.wikimedia.org/wiki/File:${encodeURIComponent(image.file.replaceAll(' ', '_'))}`,
   };
 }

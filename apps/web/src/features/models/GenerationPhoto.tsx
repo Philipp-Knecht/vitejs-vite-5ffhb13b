@@ -48,7 +48,10 @@ export function GenerationPhoto({
         ) : (
           image.license
         )}
-        , verkleinert{image.platesHidden ? ', Kennzeichen unkenntlich gemacht' : ''} –{' '}
+        , verkleinert
+        {image.platesHidden &&
+          `, Kennzeichen unkenntlich gemacht${image.shareAlike ? ', Bearbeitung unter derselben Lizenz' : ''}`}{' '}
+        –{' '}
         <a href={image.source} target="_blank" rel="noopener noreferrer">
           Wikimedia Commons
           {NEW_TAB}
