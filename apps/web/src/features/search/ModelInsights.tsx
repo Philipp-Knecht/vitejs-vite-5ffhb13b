@@ -9,7 +9,7 @@ import {
 } from '@kaufcheck/catalog';
 import { hasKnowledge, loadKnowledge } from '@kaufcheck/catalog/knowledge';
 import { useQuery } from '@tanstack/react-query';
-import { useState } from 'react';
+import { useState, type ReactNode } from 'react';
 import { Link } from 'react-router';
 import { cn } from '../../lib/format';
 
@@ -153,6 +153,8 @@ interface ModelKnowledgeViewProps {
   initialGenerationId?: string | null;
   /** For the owner of such a car („Mein Auto“): weaknesses only, no buying advice. */
   owner?: boolean;
+  /** Shown above the generations for the shown one, e.g. its photo (the model page). */
+  photo?: (generation: Generation) => ReactNode;
 }
 
 /** Generations with strengths, weaknesses (with sources), engines and inspection tips. */
@@ -164,6 +166,7 @@ export function ModelKnowledgeView({
   compact = false,
   initialGenerationId = null,
   owner = false,
+  photo,
 }: ModelKnowledgeViewProps) {
   const [selected, setSelected] = useState<string | null>(initialGenerationId);
   const generation =
@@ -181,6 +184,7 @@ export function ModelKnowledgeView({
           die dort bekannten Schwachstellen gelten meist auch hier.
         </p>
       )}
+      {photo && generation && photo(generation)}
       {model.generations.length > 1 && (
         <div className="segmented" role="group" aria-label="Generation wählen">
           {model.generations.map((item) => (
