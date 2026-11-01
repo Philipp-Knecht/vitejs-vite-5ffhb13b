@@ -61,12 +61,27 @@ test('the start page menu opens from the left with the functions and the chats',
   page,
 }) => {
   await page.goto('/');
+  // The page itself does not scroll or bounce, and its edges are as white as the page.
+  expect(
+    await page.evaluate(() => {
+      const root = document.documentElement;
+      return {
+        fits: root.scrollHeight <= window.innerHeight,
+        overscroll: getComputedStyle(root).overscrollBehaviorY,
+        edge: getComputedStyle(root).backgroundColor,
+      };
+    }),
+  ).toEqual({ fits: true, overscroll: 'none', edge: 'rgb(255, 255, 255)' });
   const button = page.getByRole('button', { name: 'Menü öffnen' });
   await button.click();
   const menu = page.getByRole('dialog', { name: /Menü/ });
   await expect(menu).toBeVisible();
-  // It slides in from the left edge.
+  // It slides in from the left edge, from the top: white under the status bar, too.
   await expect.poll(async () => (await menu.boundingBox())?.x).toBe(0);
+  expect((await menu.boundingBox())?.y).toBe(0);
+  expect(
+    await menu.evaluate((dialog) => getComputedStyle(dialog, '::backdrop').backgroundImage),
+  ).toContain('rgb(255, 255, 255)');
   await expect(menu.getByRole('heading', { name: 'Chats' })).toBeVisible();
   await page.keyboard.press('Escape');
   await expect(menu).toBeHidden();
