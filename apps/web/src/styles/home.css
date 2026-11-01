@@ -7,6 +7,22 @@
   background: var(--c-surface);
 }
 
+/*
+ * The page itself neither scrolls nor bounces: on iPhones 100vh is taller than the
+ * screen, and pulling at the page showed a grey gap below it. Should it still bounce,
+ * the edge is the same white as the page.
+ */
+html:has(.app--home) {
+  overflow: hidden;
+  overscroll-behavior: none;
+  background: var(--c-surface);
+}
+
+html:has(.app--home) body {
+  min-height: 0;
+  background: var(--c-surface);
+}
+
 .home {
   display: flex;
   flex-direction: column;
@@ -75,6 +91,10 @@
  * other, so that the conversation, the input and the legal links all fit.
  */
 @media (max-height: 520px) {
+  html:has(.app--home) {
+    overflow: visible;
+  }
+
   .app--home {
     height: auto;
     min-height: 100vh;
@@ -190,7 +210,12 @@
 }
 
 .drawer::backdrop {
-  background: rgb(16 24 40 / 40%);
+  /*
+   * White under the status bar, like the menu: iPhones colour the status bar after
+   * what is at the top edge, which would otherwise be the grey of the backdrop.
+   * (A colour, not a variable: older browsers do not pass variables to ::backdrop.)
+   */
+  background: linear-gradient(#ffffff env(safe-area-inset-top), rgb(16 24 40 / 40%) 0);
 }
 
 .drawer[open] {
