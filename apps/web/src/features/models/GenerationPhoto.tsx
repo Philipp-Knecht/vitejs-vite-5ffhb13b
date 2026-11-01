@@ -10,7 +10,7 @@ function Credit({ image }: { image: GenerationImage }) {
     <>
       Foto „{image.title}“ von {image.author},{' '}
       {image.licenseUrl ? (
-        <a href={image.licenseUrl} target="_blank" rel="noopener noreferrer license">
+        <a href={image.licenseUrl} target="_blank" rel="noopener noreferrer">
           {image.license}
           {NEW_TAB}
         </a>
