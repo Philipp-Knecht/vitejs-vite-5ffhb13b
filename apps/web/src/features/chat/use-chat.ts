@@ -143,11 +143,12 @@ export function useChat(plan: string | null) {
 
   const reset = useCallback(() => show(newConversation(), 'Neuer Chat.'), [show]);
 
-  /** Opens a conversation kept on this device. */
+  /** Opens a conversation kept on this device; one deleted meanwhile (in another tab) is gone. */
   const open = useCallback(
     (id: string) => {
       const stored = storedConversation(id);
       if (stored) show(stored, `Chat „${loadChat(id)?.title ?? ''}“ geöffnet.`);
+      else show(newConversation(), 'Dieser Chat wurde gelöscht. Neuer Chat.');
     },
     [show],
   );

@@ -51,7 +51,8 @@ export function LandingPage() {
   useEffect(() => track('landing_page_view'), []);
 
   // A chat chosen, or a new one asked for, in the menu of another page: opened here, and
-  // announced as here. The request is cleared, so that a reload does not repeat it.
+  // announced as here. The request is cleared, so that a reload does not repeat it. (After
+  // useChat's own effects, not in a layout effect: those would see a stale conversation.)
   const navigate = useNavigate();
   const request = (useLocation().state as StartRequest | null) ?? null;
   const openChatId = request?.openChat ?? null;
