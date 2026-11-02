@@ -310,6 +310,17 @@ html:has(.app--home) body {
   color: var(--c-text-2);
 }
 
+/* Where you are. */
+.drawer__link[aria-current='page'],
+.drawer__sublink[aria-current='page'] {
+  background: var(--c-primary-50);
+  color: var(--c-primary);
+}
+
+.drawer__link[aria-current='page'] svg {
+  color: var(--c-primary);
+}
+
 .drawer__guides > summary {
   list-style: none;
 }

@@ -71,7 +71,8 @@ test('an ad sold directly comes from our own server, is counted there and gone w
   await expect(page).not.toHaveURL(/\/registrieren$/);
   await makePro(email);
   await page.goto('/auto-ummelden');
-  // The plan is known once the bar offers no upgrade.
+  // The plan is known once the bar is there and offers no upgrade.
+  await expect(page.getByRole('button', { name: 'Menü öffnen' })).toBeVisible();
   await expect(page.getByRole('link', { name: 'Upgraden' })).toHaveCount(0);
   await page.waitForFunction(() =>
     performance.getEntriesByType('resource').some((entry) => entry.name.includes('/api/config')),

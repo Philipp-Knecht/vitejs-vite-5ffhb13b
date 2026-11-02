@@ -46,7 +46,9 @@ test('the insurance comparison link is labelled, plain and gone with Pro', async
   await expect(page.getByRole('complementary', { name: 'Werbung: Affiliate-Link' })).toHaveCount(1);
   await makePro(email);
   await page.reload();
-  // Plan and configuration are loaded once the bar offers no upgrade and /api/config was fetched.
+  // Plan and configuration are loaded once the bar is there and offers no upgrade, and
+  // /api/config was fetched.
+  await expect(page.getByRole('button', { name: 'Menü öffnen' })).toBeVisible();
   await expect(page.getByRole('link', { name: 'Upgraden' })).toHaveCount(0);
   await page.waitForFunction(() =>
     performance.getEntriesByType('resource').some((entry) => entry.name.includes('/api/config')),
@@ -124,6 +126,7 @@ test('the vehicle history link is labelled, plain, apart from the recall check, 
   await makePro(email);
   for (const path of ['/gebrauchtwagen-checkliste', new URL(check).pathname]) {
     await page.goto(path);
+    await expect(page.getByRole('button', { name: 'Menü öffnen' })).toBeVisible();
     await expect(page.getByRole('link', { name: 'Upgraden' })).toHaveCount(0);
     await page.waitForFunction(() =>
       performance.getEntriesByType('resource').some((entry) => entry.name.includes('/api/config')),

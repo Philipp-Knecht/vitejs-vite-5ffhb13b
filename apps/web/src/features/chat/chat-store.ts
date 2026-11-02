@@ -313,15 +313,6 @@ export function setCurrentChatId(id: string): void {
   }
 }
 
-/** The start page shows a new chat next time (asked for on another page). */
-export function forgetCurrentChat(): void {
-  try {
-    window.sessionStorage.removeItem(CURRENT_KEY);
-  } catch {
-    // ignore
-  }
-}
-
 /** Another tab changed the chats (a new message, deleted, logged out): one listener for all. */
 function onStorage(event: StorageEvent): void {
   if (event.key !== CHATS_STORAGE_KEY && event.key !== null) return;

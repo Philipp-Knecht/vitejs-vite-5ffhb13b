@@ -1,9 +1,9 @@
 import { useId, useRef, useState } from 'react';
 import { useNavigate } from 'react-router';
-import { useHydratedConfig } from '../../api/queries';
+import { useConfig } from '../../api/queries';
 import { useOfflineChecks } from '../../lib/offline';
 import { useHydrated } from '../../lib/use-hydrated';
-import { forgetCurrentChat, setCurrentChatId } from '../chat/chat-store';
+import type { StartRequest } from '../../pages/LandingPage';
 import { HomeBar } from './HomeBar';
 import { HomeDrawer } from './HomeDrawer';
 
@@ -17,19 +17,20 @@ export function SiteBar() {
   const menuButton = useRef<HTMLButtonElement>(null);
   const navigate = useNavigate();
   const hydrated = useHydrated();
-  const offlineChecks = useOfflineChecks(hydrated);
-  // Only once the configuration says the assistant is off are the chats closed to it.
-  const config = useHydratedConfig();
-  const chatOn = config === undefined || config.features.chat !== null;
+  // Read only for the open menu: no page load waits on the cache for it.
+  const offlineChecks = useOfflineChecks(hydrated && menuOpen);
+  // As on the start page: the assistant counts as there until the configuration says
+  // otherwise, or cannot be loaded (then the start page shows the tools instead).
+  const config = useConfig();
+  const chatOn =
+    !hydrated ||
+    (config.data
+      ? config.data.features.chat !== null
+      : config.isPending && config.fetchStatus !== 'paused');
 
-  const openChat = (id: string) => {
-    setCurrentChatId(id);
-    void navigate('/');
-  };
-  const newChat = () => {
-    forgetCurrentChat();
-    void navigate('/');
-  };
+  const toStart = (request: StartRequest) => void navigate('/', { state: request });
+  const openChat = (id: string) => toStart({ openChat: id });
+  const newChat = () => toStart({ newChat: true });
 
   return (
     <>

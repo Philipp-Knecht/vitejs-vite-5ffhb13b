@@ -51,6 +51,7 @@ export function HomeBar({
           type="button"
           className="home-bar__button home-bar__new"
           aria-label="Neuer Chat"
+          title="Neuer Chat"
           onClick={onNewChat}
         >
           <SquarePen aria-hidden size={20} />

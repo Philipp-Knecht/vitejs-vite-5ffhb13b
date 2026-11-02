@@ -227,12 +227,29 @@ test('on every other page the menu opens a past chat, and „Neuer Chat“ start
     .click();
   await expect(page).toHaveURL(/\/$/);
   await expect(chat.getByText('Such mir einen Golf', { exact: true })).toBeVisible();
+  // Announced as on the start page itself.
+  await expect(chat.getByRole('status')).toHaveText('Chat „Such mir einen Golf“ geöffnet.');
+
+  // „Chat“ in the menu leads back to the chat that was open.
+  await page.goto('/auto-finden');
+  await page.getByRole('button', { name: 'Menü öffnen' }).click();
+  await expect(menu.getByRole('link', { name: 'Auto finden' })).toHaveAttribute(
+    'aria-current',
+    'page',
+  );
+  await menu.getByRole('link', { name: 'Chat', exact: true }).click();
+  await expect(page).toHaveURL(/\/$/);
+  await expect(chat.getByText('Such mir einen Golf', { exact: true })).toBeVisible();
 
   await page.goto('/auto-finden');
   await page.getByRole('button', { name: 'Neuer Chat' }).click();
   await expect(page).toHaveURL(/\/$/);
   await expect(chat.getByText('Was möchtest du machen?')).toBeVisible();
   await expect(chat.getByText('Such mir einen Golf', { exact: true })).toHaveCount(0);
+  await expect(chat.getByRole('status')).toHaveText('Neuer Chat.');
+  // A reload keeps the new chat: the request is not repeated.
+  await page.reload();
+  await expect(chat.getByText('Was möchtest du machen?')).toBeVisible();
 });
 
 test('the frequent questions have their own page', async ({ page }) => {
