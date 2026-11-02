@@ -36,21 +36,26 @@ test('pages fit the phone screen without horizontal scrolling', async ({ page })
   await expect(page).toHaveURL(/#fragen$/);
 });
 
-test('the mobile menu opens and navigates', async ({ page }) => {
+test('every page has the bar and menu of the start page, and the menu navigates', async ({
+  page,
+}) => {
   await page.goto('/auto-finden');
-  await expect(page.getByRole('navigation', { name: 'Hauptnavigation' })).toBeHidden();
   await page.getByRole('button', { name: 'Menü öffnen' }).click();
-  const menu = page.getByRole('navigation', { name: 'Menü' });
+  const menu = page.getByRole('dialog', { name: /Menü/ });
   await expect(menu).toBeVisible();
+  await menu.getByText('Ratgeber').click();
   await menu.getByRole('link', { name: 'Gebrauchtwagen kaufen' }).click();
   await expect(page).toHaveURL(/\/gebrauchtwagen-kaufen$/);
   await expect(menu).toBeHidden();
+  // The bar stays at the top while the page scrolls.
+  await page.mouse.wheel(0, 1500);
+  await expect(page.getByRole('button', { name: 'Menü öffnen' })).toBeInViewport();
 });
 
-test('Escape closes the mobile menu and returns focus to its button', async ({ page }) => {
+test('Escape closes the menu and returns focus to its button', async ({ page }) => {
   await page.goto('/auto-finden');
   await page.getByRole('button', { name: 'Menü öffnen' }).click();
-  const menu = page.getByRole('navigation', { name: 'Menü' });
+  const menu = page.getByRole('dialog', { name: /Menü/ });
   await expect(menu).toBeVisible();
   await page.keyboard.press('Escape');
   await expect(menu).toBeHidden();

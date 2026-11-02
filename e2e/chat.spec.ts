@@ -208,6 +208,33 @@ test('past chats stay on this device and open from the menu', async ({ page }) =
   expect(await page.evaluate(() => window.localStorage.getItem('kaufcheck:chats'))).toBeNull();
 });
 
+test('on every other page the menu opens a past chat, and „Neuer Chat“ starts one', async ({
+  page,
+}) => {
+  await page.goto('/');
+  const chat = page.getByRole('region', { name: 'KI-Assistent von KaufCheck' });
+  const input = chat.getByLabel('Nachricht an den KI-Assistenten von KaufCheck');
+  await input.fill('Such mir einen Golf');
+  await input.press('Enter');
+  await expect(chat.locator('.chat-card').filter({ hasText: 'Suche' })).toBeVisible();
+
+  await page.goto('/auto-finden');
+  await page.getByRole('button', { name: 'Menü öffnen' }).click();
+  const menu = page.getByRole('dialog', { name: /Menü/ });
+  await menu
+    .getByRole('region', { name: 'Chats' })
+    .getByRole('button', { name: 'Such mir einen Golf', exact: true })
+    .click();
+  await expect(page).toHaveURL(/\/$/);
+  await expect(chat.getByText('Such mir einen Golf', { exact: true })).toBeVisible();
+
+  await page.goto('/auto-finden');
+  await page.getByRole('button', { name: 'Neuer Chat' }).click();
+  await expect(page).toHaveURL(/\/$/);
+  await expect(chat.getByText('Was möchtest du machen?')).toBeVisible();
+  await expect(chat.getByText('Such mir einen Golf', { exact: true })).toHaveCount(0);
+});
+
 test('the frequent questions have their own page', async ({ page }) => {
   await page.goto('/haeufige-fragen');
   await expect(page.getByRole('heading', { level: 1, name: 'Häufige Fragen' })).toBeVisible();

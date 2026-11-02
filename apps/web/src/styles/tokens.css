@@ -62,7 +62,8 @@
 
   --container: 1160px;
   --gutter: 16px;
-  --header-h: 60px;
+  /* The bar at the top: 44 px buttons, 8 px below, above them 8 px or the status bar. */
+  --header-h: calc(52px + max(8px, env(safe-area-inset-top)));
 }
 
 @media (min-width: 768px) {
@@ -74,6 +75,5 @@
 @media (min-width: 1024px) {
   :root {
     --gutter: 32px;
-    --header-h: 68px;
   }
 }
