@@ -19,29 +19,7 @@
   max-width: calc(760px + 2 * var(--gutter));
 }
 
-/* ---------- Header ---------- */
-.header {
-  position: sticky;
-  top: 0;
-  z-index: 30;
-  background: rgb(255 255 255 / 96%);
-  border-bottom: 1px solid var(--c-border);
-  backdrop-filter: saturate(1.4) blur(8px);
-}
-
-.header__bar {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  height: var(--header-h);
-}
-
-.header__logo {
-  display: inline-flex;
-  color: var(--c-text);
-  text-decoration: none;
-}
-
+/* ---------- Logo ---------- */
 .logo {
   display: inline-flex;
   align-items: center;
@@ -53,101 +31,6 @@
   font-weight: 750;
   letter-spacing: -0.02em;
   color: var(--c-text);
-}
-
-.header__nav {
-  display: none;
-  gap: 4px;
-  margin-left: 16px;
-}
-
-.header__link {
-  padding: 8px 12px;
-  white-space: nowrap;
-  border-radius: var(--radius);
-  color: var(--c-text-2);
-  font-weight: 550;
-  text-decoration: none;
-}
-
-.header__link:hover {
-  background: var(--c-surface-2);
-  color: var(--c-text);
-}
-
-.header__link--active {
-  color: var(--c-primary);
-  background: var(--c-primary-50);
-}
-
-.header__actions {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  margin-left: auto;
-}
-
-.header__account-placeholder {
-  display: inline-block;
-  width: 96px;
-  height: 36px;
-}
-
-.mobile-menu {
-  border-top: 1px solid var(--c-border);
-  background: var(--c-surface);
-  box-shadow: var(--shadow);
-}
-
-.mobile-menu[hidden] {
-  display: none;
-}
-
-.mobile-menu__nav {
-  display: flex;
-  flex-direction: column;
-  padding-block: 8px 16px;
-}
-
-.mobile-menu__link {
-  display: flex;
-  align-items: center;
-  min-height: 48px;
-  padding-inline: 4px;
-  border-bottom: 1px solid var(--c-border);
-  color: var(--c-text);
-  font-weight: 550;
-  text-decoration: none;
-}
-
-.mobile-menu__link[aria-current='page'] {
-  color: var(--c-primary);
-}
-
-.mobile-menu__link--sub {
-  padding-left: 16px;
-  font-weight: 450;
-}
-
-.mobile-menu__heading {
-  margin: 16px 4px 4px;
-  font-size: 0.8rem;
-  font-weight: 700;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  color: var(--c-text-3);
-}
-
-/* Six links and the account button need about 950 px at 16 px; em scales with the font size. */
-@media (min-width: 67.5em) {
-  .header__nav {
-    display: flex;
-  }
-
-  .header__menu-button,
-  .mobile-menu {
-    display: none;
-  }
 }
 
 /* ---------- Footer ---------- */

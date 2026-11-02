@@ -217,7 +217,8 @@ test('another car starts its own contract', async ({ page }) => {
   await page.getByLabel('Fahrzeug-Identifizierungsnummer (FIN)').fill('TMBZZZ5JZJ0000001');
   // In-app navigation keeps the drafts; a reload would clear them.
   await page.getByRole('link', { name: 'Zurück zum Inseratstext' }).click();
-  await page.getByRole('link', { name: 'Mein Auto' }).first().click();
+  await page.getByRole('button', { name: 'Menü öffnen' }).click();
+  await page.getByRole('dialog', { name: /Menü/ }).getByRole('link', { name: 'Mein Auto' }).click();
   await page.getByRole('link', { name: 'Inseratstext schreiben für Škoda Octavia' }).click();
   await page.getByRole('button', { name: 'Inseratstext erstellen' }).click();
   await page.getByRole('link', { name: /Kaufvertrag mit diesen Angaben vorbereiten/ }).click();

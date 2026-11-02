@@ -7,6 +7,7 @@ import {
   CircleHelp,
   ClipboardCheck,
   Compass,
+  MessagesSquare,
   Search,
   Sparkles,
   SquarePen,
@@ -23,7 +24,7 @@ import {
   WITHDRAW_PATH,
 } from '@kaufcheck/shared';
 import { useEffect, useId, useRef, useState, type RefObject } from 'react';
-import { Link } from 'react-router';
+import { Link, NavLink } from 'react-router';
 import { useMe } from '../../api/queries';
 import { OfflineChecksNav } from '../../components/layout/Layout';
 import { Logo } from '../../components/layout/Logo';
@@ -274,12 +275,19 @@ export function HomeDrawer({
           <div className="drawer__scroll">
             <nav className="drawer__section" aria-label="Funktionen und Seiten">
               <ul className="drawer__links">
+                {/* Back to the assistant from every other page, with the chat open there. */}
+                <li>
+                  <NavLink to="/" end className="drawer__link" onClick={onClose}>
+                    <MessagesSquare aria-hidden size={20} />
+                    <span>{onNewChat ? 'Chat' : 'Startseite'}</span>
+                  </NavLink>
+                </li>
                 {FUNCTIONS.map((entry) => (
                   <li key={entry.to}>
-                    <Link to={entry.to} className="drawer__link" onClick={onClose}>
+                    <NavLink to={entry.to} className="drawer__link" onClick={onClose}>
                       <entry.icon aria-hidden size={20} />
                       <span>{entry.label}</span>
-                    </Link>
+                    </NavLink>
                   </li>
                 ))}
                 <li>
@@ -291,26 +299,26 @@ export function HomeDrawer({
                     <ul className="drawer__sublinks">
                       {GUIDES.map((guide) => (
                         <li key={guide.to}>
-                          <Link to={guide.to} className="drawer__sublink" onClick={onClose}>
+                          <NavLink to={guide.to} className="drawer__sublink" onClick={onClose}>
                             {guide.label}
-                          </Link>
+                          </NavLink>
                         </li>
                       ))}
                     </ul>
                   </details>
                 </li>
                 <li>
-                  <Link to="/haeufige-fragen" className="drawer__link" onClick={onClose}>
+                  <NavLink to="/haeufige-fragen" className="drawer__link" onClick={onClose}>
                     <CircleHelp aria-hidden size={20} />
                     <span>Häufige Fragen</span>
-                  </Link>
+                  </NavLink>
                 </li>
                 {!pro && (
                   <li>
-                    <Link to="/pro" className="drawer__link" onClick={onClose}>
+                    <NavLink to="/pro" className="drawer__link" onClick={onClose}>
                       <Sparkles aria-hidden size={20} />
                       <span>KaufCheck Pro</span>
-                    </Link>
+                    </NavLink>
                   </li>
                 )}
               </ul>

@@ -1,6 +1,6 @@
 import { Scale, Search } from 'lucide-react';
 import { useEffect, useId, useRef, useState } from 'react';
-import { Link } from 'react-router';
+import { Link, useLocation, useNavigate } from 'react-router';
 import { useConfig, useHydratedConfig, useMe } from '../api/queries';
 import { OfflineBanner, OfflineChecksNav } from '../components/layout/Layout';
 import { ChatBoundary } from '../features/chat/ChatBoundary';
@@ -15,6 +15,12 @@ import { useOfflineChecks, useOnline } from '../lib/offline';
 import { useHydrated } from '../lib/use-hydrated';
 import { STATIC_PAGE_META } from '../seo/pages';
 import { usePageMeta } from '../seo/use-page-meta';
+
+/** What the menu of another page asks the start page to show. */
+export interface StartRequest {
+  openChat?: string;
+  newChat?: true;
+}
 
 /**
  * The start page is the assistant, laid out like a chat app: a bar with the
@@ -43,6 +49,21 @@ export function LandingPage() {
   const chatReady = hydrated && chatConfig !== null && !chatPending;
 
   useEffect(() => track('landing_page_view'), []);
+
+  // A chat chosen, or a new one asked for, in the menu of another page: opened here, and
+  // announced as here. The request is cleared, so that a reload does not repeat it. (After
+  // useChat's own effects, not in a layout effect: those would see a stale conversation.)
+  const navigate = useNavigate();
+  const request = (useLocation().state as StartRequest | null) ?? null;
+  const openChatId = request?.openChat ?? null;
+  const wantsNewChat = request?.newChat === true;
+  const { open: openChat, reset: resetChat } = chat;
+  useEffect(() => {
+    if (!openChatId && !wantsNewChat) return;
+    if (openChatId) openChat(openChatId);
+    else resetChat();
+    void navigate('/', { replace: true });
+  }, [openChatId, wantsNewChat, openChat, resetChat, navigate]);
 
   const newChat = () => {
     chat.reset();

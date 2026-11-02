@@ -1,9 +1,9 @@
 import type { ReactNode } from 'react';
 import { Link, useLocation } from 'react-router';
+import { SiteBar } from '../../features/home/SiteBar';
 import { useOfflineChecks, useOnline, type OfflineCheck } from '../../lib/offline';
 import { ErrorBoundary } from './ErrorBoundary';
 import { Footer } from './Footer';
-import { Header } from './Header';
 
 export function OfflineChecksNav({
   checks,
@@ -76,7 +76,7 @@ export function Layout({ children }: { children: ReactNode }) {
       <a className="skip-link" href="#inhalt">
         Zum Inhalt springen
       </a>
-      <Header />
+      <SiteBar />
       <main id="inhalt" className="main" tabIndex={-1}>
         <OfflineBanner online={online} />
         <OfflineChecks online={online} />

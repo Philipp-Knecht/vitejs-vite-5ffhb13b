@@ -38,6 +38,18 @@ html:has(.app--home) body {
   padding-top: max(8px, env(safe-area-inset-top));
 }
 
+/* On every other page: at the top while the page scrolls, over its content. */
+.home-bar--sticky {
+  position: sticky;
+  top: 0;
+  z-index: 30;
+  height: var(--header-h);
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--c-border);
+  background: rgb(255 255 255 / 96%);
+  backdrop-filter: saturate(1.4) blur(8px);
+}
+
 .home-bar__button {
   display: inline-grid;
   place-items: center;
@@ -296,6 +308,17 @@ html:has(.app--home) body {
 .drawer__link svg {
   flex-shrink: 0;
   color: var(--c-text-2);
+}
+
+/* Where you are. */
+.drawer__link[aria-current='page'],
+.drawer__sublink[aria-current='page'] {
+  background: var(--c-primary-50);
+  color: var(--c-primary);
+}
+
+.drawer__link[aria-current='page'] svg {
+  color: var(--c-primary);
 }
 
 .drawer__guides > summary {
