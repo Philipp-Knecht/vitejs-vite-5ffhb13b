@@ -122,9 +122,9 @@ export function useDrawerSwipe({
             if (element.open) element.close();
             clearSwipe(element);
           } else {
+            // The darkening stays until the menu is a dialog with its own backdrop.
             element.style.transition = '';
             element.style.transform = '';
-            element.style.removeProperty('--drawer-shown');
           }
           done();
         },
