@@ -37,7 +37,7 @@ import {
   deleteChat,
   useStoredChats,
 } from '../chat/chat-store';
-import { useDrawerSwipe } from './use-drawer-swipe';
+import { clearSwipe, useDrawerSwipe } from './use-drawer-swipe';
 
 interface Entry {
   to: string;
@@ -244,17 +244,26 @@ export function HomeDrawer({
   // Pulled open by a swipe: shown before it is open.
   const pulling = useDrawerSwipe({ dialog: ref, open, onOpen, onClose: close });
   const shown = open || pulling;
+  const modal = useRef(false);
 
   useEffect(() => {
     const dialog = ref.current;
     if (!dialog) return;
-    if (shown && !dialog.open) dialog.showModal();
-    if (!shown && dialog.open) {
-      dialog.close();
-      // Opened by a swipe, it went without the slide-in; the next time it slides in again.
-      dialog.style.animation = '';
+    if (open) {
+      // Pulled open by a swipe, it was only shown; now it is a dialog over the page.
+      if (dialog.open && !modal.current) dialog.close();
+      if (!dialog.open) dialog.showModal();
+      modal.current = true;
+    } else if (pulling) {
+      // Following the finger: shown, but the page, its focus and the keyboard stay.
+      if (!dialog.open) dialog.show();
+      modal.current = false;
+    } else {
+      if (dialog.open) dialog.close();
+      modal.current = false;
+      clearSwipe(dialog);
     }
-  }, [shown]);
+  }, [open, pulling]);
 
   return (
     <dialog
@@ -262,7 +271,10 @@ export function HomeDrawer({
       id={id}
       className="drawer"
       aria-label="KaufCheck-Menü"
-      onClose={onClose}
+      // Not when it was closed only to open again as a dialog (after a swipe).
+      onClose={() => {
+        if (!ref.current?.open) onClose();
+      }}
       onClick={(event) => {
         // A click on the backdrop targets the dialog element itself.
         if (event.target === event.currentTarget) close();

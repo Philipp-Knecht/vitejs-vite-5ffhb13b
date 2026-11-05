@@ -131,7 +131,8 @@ const MAX_INPUT_HEIGHT = 200;
 const touchScreen = () =>
   typeof window !== 'undefined' && window.matchMedia('(pointer: coarse)').matches;
 
-const TEMPORARY_NOTE = 'Er wird nicht gespeichert und erscheint nicht in deinen Chats.';
+const TEMPORARY_NOTE =
+  'Er wird nicht auf diesem Gerät gespeichert und erscheint nicht in deinen Chats. Geprüfte Inserate werden wie sonst gespeichert.';
 
 function Welcome({
   disabled,

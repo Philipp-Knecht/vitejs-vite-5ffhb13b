@@ -4,11 +4,14 @@ import { ApiRequestError } from '../../api/client';
 import { streamChat } from './chat-stream';
 import {
   currentChatId,
+  keepTemporaryChat,
   loadChat,
+  loadTemporaryChat,
   loadUsage,
   saveChat,
   saveUsage,
   setCurrentChatId,
+  useChatsCleared,
   useStoredChats,
   type ChatItem,
   type StoredUsage,
@@ -69,9 +72,11 @@ const storedConversation = (id: string): Conversation | null => {
   );
 };
 
-/** The conversation of this tab, or a new one. */
+/** The conversation of this tab (a temporary one from memory), or a new one. */
 function loadCurrent(): Conversation {
   const id = currentChatId();
+  const temporary = id ? loadTemporaryChat(id) : null;
+  if (temporary) return { ...temporary, updatedAt: 0, temporary: true };
   return (id && storedConversation(id)) || newConversation();
 }
 
@@ -106,6 +111,7 @@ export function useChat(plan: string | null) {
   const kept = useRef(conversation.updatedAt > 0);
   const stamp = useRef(conversation.updatedAt);
   const chats = useStoredChats();
+  const cleared = useChatsCleared();
 
   useEffect(() => setCurrentChatId(conversation.id), [conversation.id]);
 
@@ -147,14 +153,15 @@ export function useChat(plan: string | null) {
 
   const reset = useCallback(() => show(newConversation(), 'Neuer Chat.'), [show]);
 
-  /** A temporary chat, or a normal one again: only before the first message. */
+  /** A temporary chat, or a normal one again: only before the first message; what is typed stays. */
   const setTemporary = useCallback(
     (on: boolean) =>
       show(
         newConversation(on),
         on
-          ? 'Temporärer Chat: Er wird nicht gespeichert und erscheint nicht in deinen Chats.'
-          : 'Temporärer Chat aus. Neuer Chat.',
+          ? 'Temporärer Chat: Er wird nicht auf diesem Gerät gespeichert und erscheint nicht in deinen Chats.'
+          : 'Temporärer Chat aus.',
+        true,
       ),
     [show],
   );
@@ -169,13 +176,21 @@ export function useChat(plan: string | null) {
     [show],
   );
 
+  const temporary = conversation.temporary === true;
+  // A temporary chat stays in memory while the visitor is on another page.
+  useEffect(() => {
+    keepTemporaryChat(conversation.temporary ? conversation : null);
+  }, [conversation]);
+
   // Deleted here or in another tab (or by logging out there): the chat starts over. Written
   // by another tab that has it open too: its newer copy is taken over.
   useEffect(() => {
     // Read afresh: this tab may have saved it a moment ago, after `chats` was read.
     const stored = loadChat(conversation.id);
     if (!stored) {
-      if (kept.current) show(newConversation(), 'Dieser Chat wurde gelöscht. Neuer Chat.', true);
+      // A temporary chat is never stored: it goes when logging out (for the next person).
+      const gone = temporary ? !loadTemporaryChat(conversation.id) : kept.current;
+      if (gone) show(newConversation(), 'Dieser Chat wurde gelöscht. Neuer Chat.', true);
       return;
     }
     if (!busy && stored.updatedAt > stamp.current) {
@@ -186,7 +201,7 @@ export function useChat(plan: string | null) {
         takeOver(setConversation, next);
       }
     }
-  }, [chats, conversation.id, busy, show]);
+  }, [chats, cleared, conversation.id, temporary, busy, show]);
 
   const send = useCallback(
     (text: string) => {
@@ -335,7 +350,7 @@ export function useChat(plan: string | null) {
   return {
     id: conversation.id,
     items: conversation.items,
-    temporary: conversation.temporary === true,
+    temporary,
     // A count for another plan (before signing up, before Pro) no longer applies.
     usage: usage && plan !== null && usage.plan === plan ? usage : null,
     notice: notice?.id === conversation.id ? notice : null,

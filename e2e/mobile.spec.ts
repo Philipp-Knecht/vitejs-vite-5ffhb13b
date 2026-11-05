@@ -57,26 +57,54 @@ test('a swipe right opens the menu, a swipe left closes it', async ({ page }) =>
   const menu = page.getByRole('dialog', { name: /Menü/ });
   await expect(page.getByRole('button', { name: 'Menü öffnen' })).toBeVisible();
   const cdp = await page.context().newCDPSession(page);
-  const swipe = async (from: number, to: number, y = 300) => {
-    await cdp.send('Input.dispatchTouchEvent', {
-      type: 'touchStart',
-      touchPoints: [{ x: from, y }],
-    });
-    for (let step = 1; step <= 10; step += 1) {
-      await cdp.send('Input.dispatchTouchEvent', {
-        type: 'touchMove',
-        touchPoints: [{ x: from + ((to - from) * step) / 10, y }],
-      });
-    }
-    await cdp.send('Input.dispatchTouchEvent', { type: 'touchEnd', touchPoints: [] });
+  const touch = (
+    type: 'touchStart' | 'touchMove' | 'touchEnd' | 'touchCancel',
+    points: { x: number; y: number }[],
+  ) => cdp.send('Input.dispatchTouchEvent', { type, touchPoints: points });
+  /** Puts a finger down at `from` and moves it to `to`, without letting go. */
+  const pull = async (from: number, to: number, y: number) => {
+    await touch('touchStart', [{ x: from, y }]);
+    for (let step = 1; step <= 10; step += 1)
+      await touch('touchMove', [{ x: from + ((to - from) * step) / 10, y }]);
   };
+  const swipe = async (from: number, to: number, y = 300) => {
+    await pull(from, to, y);
+    await touch('touchEnd', []);
+  };
+  const dialogState = () =>
+    page.evaluate(() => {
+      const dialog = document.querySelector<HTMLDialogElement>('dialog.drawer');
+      return {
+        shown: dialog?.open ?? false,
+        modal: dialog?.matches(':modal') ?? false,
+        x: dialog?.getBoundingClientRect().x ?? 0,
+      };
+    });
 
-  // A short pull slides back.
-  await swipe(60, 100);
+  // While pulled, the menu follows the finger, shown but not yet over the page; a short
+  // pull slides back.
+  await pull(60, 100, 300);
+  await expect.poll(dialogState).toMatchObject({ shown: true, modal: false });
+  expect((await dialogState()).x).toBeLessThan(0);
+  await touch('touchEnd', []);
   await expect(menu).toBeHidden();
+  // A second finger, or the system taking the touch over, lets it slide back, too.
+  await pull(60, 250, 300);
+  await touch('touchStart', [
+    { x: 250, y: 300 },
+    { x: 200, y: 500 },
+  ]);
+  await touch('touchEnd', []);
+  await expect(menu).toBeHidden();
+  await pull(60, 250, 300);
+  await touch('touchCancel', []);
+  await expect(menu).toBeHidden();
+
   await swipe(60, 320);
   await expect(menu).toBeVisible();
   await expect.poll(async () => (await menu.boundingBox())?.x).toBe(0);
+  // Let go, it is a dialog over the page like after a tap on the button.
+  expect((await dialogState()).modal).toBe(true);
   await expect(page.getByRole('button', { name: 'Menü öffnen' })).toHaveAttribute(
     'aria-expanded',
     'true',
@@ -92,7 +120,7 @@ test('a swipe right opens the menu, a swipe left closes it', async ({ page }) =>
   await page.goto('/auto-finden');
   await expect(page.getByRole('button', { name: 'Menü öffnen' })).toBeVisible();
   const field = await page.getByLabel('Marke').boundingBox();
-  await swipe(60, 320, (field?.y ?? 0) + 10);
+  await swipe((field?.x ?? 0) + 10, 320, (field?.y ?? 0) + 10);
   await expect(menu).toBeHidden();
   await swipe(60, 320, 250);
   await expect(menu).toBeVisible();

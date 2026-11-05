@@ -6,6 +6,8 @@ const SLOP = 10;
 const SHARE = 1 / 3;
 const FLICK = 0.4; // px per ms
 const SETTLE_MS = 200;
+/** In Safari a swipe from the left edge goes back a page; in the installed app it is free. */
+const EDGE = 24;
 
 /** Where a swipe must not begin: text being edited, or something that scrolls sideways itself. */
 function blocked(target: EventTarget | null): boolean {
@@ -20,9 +22,23 @@ function blocked(target: EventTarget | null): boolean {
   return false;
 }
 
+const standalone = () =>
+  window.matchMedia('(display-mode: standalone)').matches ||
+  (navigator as Navigator & { standalone?: boolean }).standalone === true;
+
 /** The menu's width, also while it is still closed (as in the style sheet). */
 function menuWidth(dialog: HTMLDialogElement): number {
-  return dialog.open ? dialog.offsetWidth : Math.min(window.innerWidth * 0.86, 320);
+  return dialog.open && dialog.offsetWidth > 0
+    ? dialog.offsetWidth
+    : Math.min(window.innerWidth * 0.86, 320);
+}
+
+/** Takes back what a swipe set on the menu; the slide-in only once it is closed again. */
+export function clearSwipe(dialog: HTMLDialogElement, keepAnimation = false): void {
+  dialog.style.transition = '';
+  dialog.style.transform = '';
+  dialog.style.removeProperty('--drawer-shown');
+  if (!keepAnimation) dialog.style.animation = '';
 }
 
 interface Gesture {
@@ -40,8 +56,10 @@ interface Gesture {
 
 /**
  * Swiping right opens the menu, swiping left closes it, as in the chat apps: the menu
- * follows the finger and, let go, slides open or back. Touch only; the menu button stays.
- * Returns whether the menu is being pulled open (then it is shown before it is open).
+ * follows the finger and, let go, slides open or back. A second finger, a gesture the
+ * system takes over or leaving the app lets it slide back. Touch only; the menu button
+ * stays. Returns whether the menu is being pulled open: then it is shown, but not yet
+ * opened as a dialog (the focus and the keyboard stay where they are).
  */
 export function useDrawerSwipe({
   dialog,
@@ -63,36 +81,66 @@ export function useDrawerSwipe({
   }, [open, onOpen, onClose]);
 
   useEffect(() => {
+    let timer = 0;
+    let settling = false;
+
     const place = (element: HTMLDialogElement, x: number, width: number) => {
       element.style.transform = `translateX(${x}px)`;
       element.style.setProperty('--drawer-shown', String((width + x) / width));
     };
 
-    const settle = (element: HTMLDialogElement, x: number, width: number, done: () => void) => {
+    /**
+     * Slides the menu to x, then finishes. Where it goes away it is closed before the
+     * position is taken back, so that it never shows fully open for a moment.
+     */
+    const settle = (
+      element: HTMLDialogElement,
+      x: number,
+      width: number,
+      away: boolean,
+      done: () => void,
+    ) => {
+      settling = true;
       const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
       element.style.transition = reduced ? 'none' : `transform ${SETTLE_MS}ms ease-out`;
       place(element, x, width);
-      window.setTimeout(
+      timer = window.setTimeout(
         () => {
-          element.style.transition = '';
-          element.style.transform = '';
-          element.style.removeProperty('--drawer-shown');
+          settling = false;
+          if (away && element.open) element.close();
+          clearSwipe(element, !away);
           done();
         },
         reduced ? 0 : SETTLE_MS,
       );
     };
 
+    /** Back to where the gesture began. */
+    const cancel = () => {
+      const element = dialog.current;
+      const state = gesture.current;
+      gesture.current = null;
+      if (!element || !state || state.mode !== 'drag') return;
+      const width = menuWidth(element);
+      if (state.opening) settle(element, -width, width, true, () => setPulling(false));
+      else settle(element, 0, width, false, () => undefined);
+    };
+
     const onStart = (event: TouchEvent) => {
       const element = dialog.current;
       const touch = event.touches[0];
+      if (settling) return;
+      if (event.touches.length > 1) {
+        cancel();
+        return;
+      }
       gesture.current = null;
-      if (!element || !touch || event.touches.length > 1) return;
+      if (!element || !touch) return;
       const { open: isOpen } = latest.current;
       // Another dialog is open (a form, a confirmation): its own business.
       const modal = document.querySelector('dialog[open]');
       if (modal && modal !== element) return;
-      if (!isOpen && blocked(event.target)) return;
+      if (!isOpen && (blocked(event.target) || (touch.clientX < EDGE && !standalone()))) return;
       const now = performance.now();
       gesture.current = {
         x: touch.clientX,
@@ -150,28 +198,39 @@ export function useDrawerSwipe({
       const speed = (state.lastX - state.prevX) / Math.max(1, state.lastT - state.prevT);
       if (state.opening) {
         if (moved > width * SHARE || speed > FLICK) {
-          latest.current.onOpen();
-          settle(element, 0, width, () => setPulling(false));
+          settle(element, 0, width, false, () => {
+            setPulling(false);
+            latest.current.onOpen();
+          });
         } else {
-          settle(element, -width, width, () => setPulling(false));
+          settle(element, -width, width, true, () => setPulling(false));
         }
       } else if (-moved > width * SHARE || speed < -FLICK) {
-        settle(element, -width, width, () => latest.current.onClose());
+        settle(element, -width, width, true, () => latest.current.onClose());
       } else {
-        settle(element, 0, width, () => undefined);
+        settle(element, 0, width, false, () => undefined);
       }
     };
 
+    const onHidden = () => {
+      if (document.visibilityState === 'hidden') cancel();
+    };
+
     document.addEventListener('touchstart', onStart, { passive: true });
-    // Not passive: a sideways swipe must not scroll the page as well.
+    // Not passive: a sideways swipe must not scroll the page as well. Without a gesture
+    // the listener returns at once.
     document.addEventListener('touchmove', onMove, { passive: false });
     document.addEventListener('touchend', onEnd);
-    document.addEventListener('touchcancel', onEnd);
+    // Taken over by the system (say, its own back gesture): back, not through.
+    document.addEventListener('touchcancel', cancel);
+    document.addEventListener('visibilitychange', onHidden);
     return () => {
       document.removeEventListener('touchstart', onStart);
       document.removeEventListener('touchmove', onMove);
       document.removeEventListener('touchend', onEnd);
-      document.removeEventListener('touchcancel', onEnd);
+      document.removeEventListener('touchcancel', cancel);
+      document.removeEventListener('visibilitychange', onHidden);
+      window.clearTimeout(timer);
     };
   }, [dialog]);
 

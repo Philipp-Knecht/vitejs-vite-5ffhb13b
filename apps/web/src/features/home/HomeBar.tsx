@@ -68,8 +68,8 @@ export function HomeBar({
             aria-pressed={temporary.on}
             title={
               temporary.on
-                ? 'Temporärer Chat: an. Er wird nicht gespeichert.'
-                : 'Temporärer Chat: wird nicht gespeichert'
+                ? 'Temporärer Chat: an. Er wird nicht auf diesem Gerät gespeichert.'
+                : 'Temporärer Chat: wird nicht auf diesem Gerät gespeichert'
             }
             onClick={temporary.onToggle}
           >
