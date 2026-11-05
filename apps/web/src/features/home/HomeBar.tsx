@@ -1,4 +1,4 @@
-import { Menu, Sparkles, SquarePen } from 'lucide-react';
+import { Menu, MessageCircleDashed, Sparkles, SquarePen } from 'lucide-react';
 import type { RefObject } from 'react';
 import { Link } from 'react-router';
 import { useMe } from '../../api/queries';
@@ -14,6 +14,7 @@ export function HomeBar({
   menuButton,
   onMenu,
   onNewChat,
+  temporary = null,
   sticky = false,
 }: {
   menuId: string;
@@ -22,6 +23,8 @@ export function HomeBar({
   onMenu: () => void;
   /** Null while the conversation is empty. */
   onNewChat: (() => void) | null;
+  /** A temporary chat, on and off: offered before the first message of a chat. */
+  temporary?: { on: boolean; onToggle: () => void } | null;
   sticky?: boolean;
 }) {
   const me = useMe();
@@ -46,7 +49,7 @@ export function HomeBar({
           <span>Upgraden</span>
         </Link>
       )}
-      {onNewChat && (
+      {onNewChat ? (
         <button
           type="button"
           className="home-bar__button home-bar__new"
@@ -56,6 +59,23 @@ export function HomeBar({
         >
           <SquarePen aria-hidden size={20} />
         </button>
+      ) : (
+        temporary && (
+          <button
+            type="button"
+            className={cn('home-bar__button home-bar__new', temporary.on && 'is-on')}
+            aria-label="Temporärer Chat"
+            aria-pressed={temporary.on}
+            title={
+              temporary.on
+                ? 'Temporärer Chat: an. Er wird nicht auf diesem Gerät gespeichert.'
+                : 'Temporärer Chat: wird nicht auf diesem Gerät gespeichert'
+            }
+            onClick={temporary.onToggle}
+          >
+            <MessageCircleDashed aria-hidden size={20} />
+          </button>
+        )
       )}
     </header>
   );

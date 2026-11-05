@@ -1,4 +1,4 @@
-import { useId, useRef, useState } from 'react';
+import { useCallback, useId, useRef, useState } from 'react';
 import { useNavigate } from 'react-router';
 import { useConfig } from '../../api/queries';
 import { useOfflineChecks } from '../../lib/offline';
@@ -28,6 +28,8 @@ export function SiteBar() {
       ? config.data.features.chat !== null
       : config.isPending && config.fetchStatus !== 'paused');
 
+  const openMenu = useCallback(() => setMenuOpen(true), []);
+  const closeMenu = useCallback(() => setMenuOpen(false), []);
   const toStart = (request: StartRequest) => void navigate('/', { state: request });
   const openChat = (id: string) => toStart({ openChat: id });
   const newChat = () => toStart({ newChat: true });
@@ -45,7 +47,8 @@ export function SiteBar() {
       <HomeDrawer
         id={menuId}
         open={menuOpen}
-        onClose={() => setMenuOpen(false)}
+        onOpen={openMenu}
+        onClose={closeMenu}
         returnFocus={menuButton}
         currentChatId={null}
         onOpenChat={chatOn ? openChat : null}

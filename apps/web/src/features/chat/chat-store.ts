@@ -274,11 +274,37 @@ export function deleteChat(id: string): void {
   writeStore({ ...store, chats: store.chats.filter((chat) => chat.id !== id) });
 }
 
+/**
+ * The temporary chat of this tab, in memory only: it stays while the visitor goes to
+ * another page and back, and is gone with a reload or on logging out.
+ */
+let temporaryChat: { id: string; items: ChatItem[]; history: ChatTurn[] } | null = null;
+
+export function keepTemporaryChat(chat: typeof temporaryChat): void {
+  temporaryChat = chat;
+}
+
+/** An answer cut off by leaving the page stays cut off. */
+export function loadTemporaryChat(id: string): typeof temporaryChat {
+  return temporaryChat?.id === id
+    ? { ...temporaryChat, items: cleanItems(temporaryChat.items) }
+    : null;
+}
+
+/** Counts „all chats deleted“: also noticed when there was no kept chat to delete. */
+let cleared = 0;
+/** Set and removed at once when all chats are deleted: tells the other tabs. */
+const CLEARED_KEY = 'kaufcheck:chats:cleared';
+
 /** Deletes every conversation on this device, e.g. on logout on a shared device. */
 export function deleteAllChats(): void {
+  temporaryChat = null;
+  cleared += 1;
   try {
     window.localStorage.removeItem(CHATS_STORAGE_KEY);
     window.sessionStorage.removeItem(CURRENT_KEY);
+    window.localStorage.setItem(CLEARED_KEY, String(Date.now()));
+    window.localStorage.removeItem(CLEARED_KEY);
   } catch {
     // ignore
   }
@@ -315,7 +341,11 @@ export function setCurrentChatId(id: string): void {
 
 /** Another tab changed the chats (a new message, deleted, logged out): one listener for all. */
 function onStorage(event: StorageEvent): void {
-  if (event.key !== CHATS_STORAGE_KEY && event.key !== null) return;
+  if (event.key === CLEARED_KEY || event.key === null) {
+    // Logged out there: this tab's temporary chat goes, too.
+    temporaryChat = null;
+    cleared += 1;
+  } else if (event.key !== CHATS_STORAGE_KEY) return;
   notify();
 }
 
@@ -329,6 +359,15 @@ function subscribe(listener: () => void): () => void {
 }
 
 const NO_CHATS: StoredChat[] = [];
+
+/** Changes whenever all chats were deleted (logging out), here or in another tab. */
+export function useChatsCleared(): number {
+  return useSyncExternalStore(
+    subscribe,
+    () => cleared,
+    () => 0,
+  );
+}
 
 /** The kept conversations, newest first; empty while prerendering. */
 export function useStoredChats(): StoredChat[] {

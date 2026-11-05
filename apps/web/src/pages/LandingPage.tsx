@@ -1,11 +1,11 @@
 import { Scale, Search } from 'lucide-react';
-import { useEffect, useId, useRef, useState } from 'react';
+import { useCallback, useEffect, useId, useRef, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router';
 import { useConfig, useHydratedConfig, useMe } from '../api/queries';
 import { OfflineBanner, OfflineChecksNav } from '../components/layout/Layout';
 import { ChatBoundary } from '../features/chat/ChatBoundary';
 import { ChatPanel, ChatPlaceholder } from '../features/chat/ChatPanel';
-import { deleteChat } from '../features/chat/chat-store';
+import { deleteChat, keepTemporaryChat } from '../features/chat/chat-store';
 import { useChat } from '../features/chat/use-chat';
 import { HomeBar } from '../features/home/HomeBar';
 import { HomeDrawer } from '../features/home/HomeDrawer';
@@ -65,6 +65,9 @@ export function LandingPage() {
     void navigate('/', { replace: true });
   }, [openChatId, wantsNewChat, openChat, resetChat, navigate]);
 
+  const openMenu = useCallback(() => setMenuOpen(true), []);
+  const closeMenu = useCallback(() => setMenuOpen(false), []);
+
   const newChat = () => {
     chat.reset();
     setFocusInput((count) => count + 1);
@@ -78,6 +81,11 @@ export function LandingPage() {
         menuButton={menuButton}
         onMenu={() => setMenuOpen(true)}
         onNewChat={chatReady && chat.items.length > 0 ? newChat : null}
+        temporary={
+          chatReady && chat.items.length === 0
+            ? { on: chat.temporary, onToggle: () => chat.setTemporary(!chat.temporary) }
+            : null
+        }
       />
       <main id="inhalt" className="home__main" tabIndex={-1}>
         <OfflineBanner online={online} />
@@ -88,7 +96,14 @@ export function LandingPage() {
         {chatPending ? (
           <ChatPlaceholder />
         ) : chatConfig ? (
-          <ChatBoundary onFailed={() => deleteChat(chat.id)} onRetry={chat.reset}>
+          <ChatBoundary
+            onFailed={() => {
+              deleteChat(chat.id);
+              // A temporary chat that broke the page does not come back from memory either.
+              if (chat.temporary) keepTemporaryChat(null);
+            }}
+            onRetry={chat.reset}
+          >
             <ChatPanel
               chat={chat}
               isMock={chatConfig.isMock}
@@ -113,7 +128,8 @@ export function LandingPage() {
       <HomeDrawer
         id={menuId}
         open={menuOpen}
-        onClose={() => setMenuOpen(false)}
+        onOpen={openMenu}
+        onClose={closeMenu}
         returnFocus={menuButton}
         currentChatId={chatReady ? chat.id : null}
         onOpenChat={chatReady ? chat.open : null}
