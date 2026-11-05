@@ -75,19 +75,22 @@ test('a swipe right opens the menu, a swipe left closes it', async ({ page }) =>
     page.evaluate(() => {
       const dialog = document.querySelector<HTMLDialogElement>('dialog.drawer');
       return {
-        shown: dialog?.open ?? false,
+        visible: dialog ? getComputedStyle(dialog).display !== 'none' : false,
         modal: dialog?.matches(':modal') ?? false,
         x: dialog?.getBoundingClientRect().x ?? 0,
+        focus: document.activeElement?.tagName ?? '',
       };
     });
 
-  // While pulled, the menu follows the finger, shown but not yet over the page; a short
-  // pull slides back.
+  // While pulled, the menu follows the finger, seen but not yet a dialog over the page: the
+  // focus (and the keyboard) stay in the input. A short pull slides back.
+  await page.getByLabel('Nachricht an den KI-Assistenten von KaufCheck').focus();
   await pull(60, 100, 300);
-  await expect.poll(dialogState).toMatchObject({ shown: true, modal: false });
+  await expect.poll(dialogState).toMatchObject({ visible: true, modal: false, focus: 'TEXTAREA' });
   expect((await dialogState()).x).toBeLessThan(0);
   await touch('touchEnd', []);
   await expect(menu).toBeHidden();
+  expect((await dialogState()).focus).toBe('TEXTAREA');
   // A second finger, or the system taking the touch over, lets it slide back, too.
   await pull(60, 250, 300);
   await touch('touchStart', [

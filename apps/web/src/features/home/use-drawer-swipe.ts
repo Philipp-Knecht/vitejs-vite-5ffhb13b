@@ -33,8 +33,17 @@ function menuWidth(dialog: HTMLDialogElement): number {
     : Math.min(window.innerWidth * 0.86, 320);
 }
 
+/** Shows the closed menu while it is pulled: not yet a dialog, so the focus stays put. */
+function showPulled(dialog: HTMLDialogElement): void {
+  dialog.classList.add('is-pulled');
+  // Seen, not yet used: no focus, no clicks, nothing read out half-way.
+  dialog.inert = true;
+}
+
 /** Takes back what a swipe set on the menu; the slide-in only once it is closed again. */
 export function clearSwipe(dialog: HTMLDialogElement, keepAnimation = false): void {
+  dialog.classList.remove('is-pulled');
+  dialog.inert = false;
   dialog.style.transition = '';
   dialog.style.transform = '';
   dialog.style.removeProperty('--drawer-shown');
@@ -59,7 +68,8 @@ interface Gesture {
  * follows the finger and, let go, slides open or back. A second finger, a gesture the
  * system takes over or leaving the app lets it slide back. Touch only; the menu button
  * stays. Returns whether the menu is being pulled open: then it is shown, but not yet
- * opened as a dialog (the focus and the keyboard stay where they are).
+ * opened as a dialog (the focus and the keyboard stay where they are) – it opens as one
+ * when the finger lets go far enough.
  */
 export function useDrawerSwipe({
   dialog,
@@ -90,8 +100,9 @@ export function useDrawerSwipe({
     };
 
     /**
-     * Slides the menu to x, then finishes. Where it goes away it is closed before the
-     * position is taken back, so that it never shows fully open for a moment.
+     * Slides the menu to x, then finishes. Where it goes away it is closed (or hidden) before
+     * the position is taken back, so that it never shows fully open for a moment. Where it
+     * opens, the pulled look stays until it is a dialog.
      */
     const settle = (
       element: HTMLDialogElement,
@@ -107,8 +118,14 @@ export function useDrawerSwipe({
       timer = window.setTimeout(
         () => {
           settling = false;
-          if (away && element.open) element.close();
-          clearSwipe(element, !away);
+          if (away) {
+            if (element.open) element.close();
+            clearSwipe(element);
+          } else {
+            element.style.transition = '';
+            element.style.transform = '';
+            element.style.removeProperty('--drawer-shown');
+          }
           done();
         },
         reduced ? 0 : SETTLE_MS,
@@ -175,6 +192,7 @@ export function useDrawerSwipe({
         element.style.animation = 'none';
         if (state.opening) {
           place(element, -menuWidth(element), menuWidth(element));
+          showPulled(element);
           setPulling(true);
         }
       }

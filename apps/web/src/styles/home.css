@@ -215,7 +215,7 @@ html:has(.app--home) body {
 
 /* ---------- The menu of the start page: a side bar from the left ---------- */
 .drawer {
-  /* Also while a swipe only shows it (not yet as a dialog over the page). */
+  /* Also while a swipe only shows it, closed (not yet a dialog over the page). */
   position: fixed;
   inset: 0 auto 0 0;
   z-index: 100;
@@ -232,8 +232,9 @@ html:has(.app--home) body {
   box-shadow: var(--shadow-lg);
 }
 
-/* Pulled by a swipe, before it opens: the page darkens with it. */
-.drawer:not(:modal) {
+/* Pulled by a swipe, before it opens: shown, and the page darkens with it. */
+.drawer.is-pulled:not([open]) {
+  display: block;
   box-shadow:
     var(--shadow-lg),
     0 0 0 100vmax rgb(16 24 40 / calc(0.4 * var(--drawer-shown, 0)));

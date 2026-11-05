@@ -293,6 +293,8 @@ export function loadTemporaryChat(id: string): typeof temporaryChat {
 
 /** Counts „all chats deleted“: also noticed when there was no kept chat to delete. */
 let cleared = 0;
+/** Set and removed at once when all chats are deleted: tells the other tabs. */
+const CLEARED_KEY = 'kaufcheck:chats:cleared';
 
 /** Deletes every conversation on this device, e.g. on logout on a shared device. */
 export function deleteAllChats(): void {
@@ -301,6 +303,8 @@ export function deleteAllChats(): void {
   try {
     window.localStorage.removeItem(CHATS_STORAGE_KEY);
     window.sessionStorage.removeItem(CURRENT_KEY);
+    window.localStorage.setItem(CLEARED_KEY, String(Date.now()));
+    window.localStorage.removeItem(CLEARED_KEY);
   } catch {
     // ignore
   }
@@ -337,7 +341,11 @@ export function setCurrentChatId(id: string): void {
 
 /** Another tab changed the chats (a new message, deleted, logged out): one listener for all. */
 function onStorage(event: StorageEvent): void {
-  if (event.key !== CHATS_STORAGE_KEY && event.key !== null) return;
+  if (event.key === CLEARED_KEY || event.key === null) {
+    // Logged out there: this tab's temporary chat goes, too.
+    temporaryChat = null;
+    cleared += 1;
+  } else if (event.key !== CHATS_STORAGE_KEY) return;
   notify();
 }
 

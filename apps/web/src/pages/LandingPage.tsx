@@ -5,7 +5,7 @@ import { useConfig, useHydratedConfig, useMe } from '../api/queries';
 import { OfflineBanner, OfflineChecksNav } from '../components/layout/Layout';
 import { ChatBoundary } from '../features/chat/ChatBoundary';
 import { ChatPanel, ChatPlaceholder } from '../features/chat/ChatPanel';
-import { deleteChat } from '../features/chat/chat-store';
+import { deleteChat, keepTemporaryChat } from '../features/chat/chat-store';
 import { useChat } from '../features/chat/use-chat';
 import { HomeBar } from '../features/home/HomeBar';
 import { HomeDrawer } from '../features/home/HomeDrawer';
@@ -96,7 +96,14 @@ export function LandingPage() {
         {chatPending ? (
           <ChatPlaceholder />
         ) : chatConfig ? (
-          <ChatBoundary onFailed={() => deleteChat(chat.id)} onRetry={chat.reset}>
+          <ChatBoundary
+            onFailed={() => {
+              deleteChat(chat.id);
+              // A temporary chat that broke the page does not come back from memory either.
+              if (chat.temporary) keepTemporaryChat(null);
+            }}
+            onRetry={chat.reset}
+          >
             <ChatPanel
               chat={chat}
               isMock={chatConfig.isMock}

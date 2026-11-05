@@ -244,23 +244,19 @@ export function HomeDrawer({
   // Pulled open by a swipe: shown before it is open.
   const pulling = useDrawerSwipe({ dialog: ref, open, onOpen, onClose: close });
   const shown = open || pulling;
-  const modal = useRef(false);
 
   useEffect(() => {
     const dialog = ref.current;
     if (!dialog) return;
     if (open) {
-      // Pulled open by a swipe, it was only shown; now it is a dialog over the page.
-      if (dialog.open && !modal.current) dialog.close();
-      if (!dialog.open) dialog.showModal();
-      modal.current = true;
-    } else if (pulling) {
-      // Following the finger: shown, but the page, its focus and the keyboard stay.
-      if (!dialog.open) dialog.show();
-      modal.current = false;
-    } else {
+      if (!dialog.open) {
+        // Pulled open by a swipe: from the pulled look straight to the dialog.
+        dialog.inert = false;
+        dialog.showModal();
+      }
+      dialog.classList.remove('is-pulled');
+    } else if (!pulling) {
       if (dialog.open) dialog.close();
-      modal.current = false;
       clearSwipe(dialog);
     }
   }, [open, pulling]);
@@ -271,10 +267,7 @@ export function HomeDrawer({
       id={id}
       className="drawer"
       aria-label="KaufCheck-Menü"
-      // Not when it was closed only to open again as a dialog (after a swipe).
-      onClose={() => {
-        if (!ref.current?.open) onClose();
-      }}
+      onClose={onClose}
       onClick={(event) => {
         // A click on the backdrop targets the dialog element itself.
         if (event.target === event.currentTarget) close();
