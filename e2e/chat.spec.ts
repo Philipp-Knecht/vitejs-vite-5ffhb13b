@@ -252,6 +252,47 @@ test('on every other page the menu opens a past chat, and „Neuer Chat“ start
   await expect(chat.getByText('Was möchtest du machen?')).toBeVisible();
 });
 
+test('a temporary chat is not kept and does not show among the chats', async ({ page }) => {
+  await page.goto('/');
+  const chat = page.getByRole('region', { name: 'KI-Assistent von KaufCheck' });
+  const toggle = page.getByRole('button', { name: 'Temporärer Chat' });
+  await expect(toggle).toHaveAttribute('aria-pressed', 'false');
+  await toggle.click();
+  await expect(toggle).toHaveAttribute('aria-pressed', 'true');
+  await expect(chat.getByText(/^Temporärer Chat\. Er wird nicht gespeichert/)).toBeVisible();
+  await expect(chat.getByRole('status')).toHaveText(/^Temporärer Chat: Er wird nicht gespeichert/);
+  // Off and on again before the first message.
+  await toggle.click();
+  await expect(toggle).toHaveAttribute('aria-pressed', 'false');
+  await expect(chat.getByText(/^Willkommen bei KaufCheck/)).toBeVisible();
+  await toggle.click();
+
+  const input = chat.getByLabel('Nachricht an den KI-Assistenten von KaufCheck');
+  await input.fill('Such mir einen Golf');
+  await input.press('Enter');
+  await expect(chat.locator('.chat-card').filter({ hasText: 'Suche' })).toBeVisible();
+  // During the conversation: a note above it, „Neuer Chat“ instead of the switch.
+  await expect(chat.locator('.chat__temporary')).toBeVisible();
+  await expect(toggle).toHaveCount(0);
+  await expect(page.getByRole('button', { name: 'Neuer Chat' })).toBeVisible();
+  expect(await page.evaluate(() => localStorage.getItem('kaufcheck:chats'))).not.toContain(
+    'Such mir einen Golf',
+  );
+  await page.getByRole('button', { name: 'Menü öffnen' }).click();
+  await expect(
+    page.getByRole('dialog', { name: /Menü/ }).getByText(/Noch keine Chats/),
+  ).toBeVisible();
+  await page.keyboard.press('Escape');
+
+  // Gone with a reload; the next chat is a normal one.
+  await page.reload();
+  await expect(chat.getByText(/^Willkommen bei KaufCheck/)).toBeVisible();
+  await expect(page.getByRole('button', { name: 'Temporärer Chat' })).toHaveAttribute(
+    'aria-pressed',
+    'false',
+  );
+});
+
 test('the frequent questions have their own page', async ({ page }) => {
   await page.goto('/haeufige-fragen');
   await expect(page.getByRole('heading', { level: 1, name: 'Häufige Fragen' })).toBeVisible();

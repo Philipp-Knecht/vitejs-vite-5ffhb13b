@@ -43,7 +43,8 @@ PRs, **L** = mehrere Wochen.
 | neu | Startseite wie eine Chat-App: Menü mit Funktionen und vergangenen Chats, 3,5 Vorschläge   | #53       |
 | 1.1 | Kfz-Steuer: Modell und Motor wählen statt Hubraum, CO₂ und kW einzutippen                 | #54       |
 | neu | Modellseiten: Foto jeder Generation (Wikimedia Commons, Kennzeichen verpixelt)            | #55       |
-| neu | Alle Seiten mit der Leiste und dem Menü der Startseite                                    | dieser PR |
+| neu | Alle Seiten mit der Leiste und dem Menü der Startseite                                    | #57       |
+| neu | Temporärer Chat und Wischgesten für das Menü                                              | dieser PR |
 
 ## Arbeitsweise je Feature
 

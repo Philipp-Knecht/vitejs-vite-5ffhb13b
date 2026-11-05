@@ -52,6 +52,52 @@ test('every page has the bar and menu of the start page, and the menu navigates'
   await expect(page.getByRole('button', { name: 'Menü öffnen' })).toBeInViewport();
 });
 
+test('a swipe right opens the menu, a swipe left closes it', async ({ page }) => {
+  await page.goto('/');
+  const menu = page.getByRole('dialog', { name: /Menü/ });
+  await expect(page.getByRole('button', { name: 'Menü öffnen' })).toBeVisible();
+  const cdp = await page.context().newCDPSession(page);
+  const swipe = async (from: number, to: number, y = 300) => {
+    await cdp.send('Input.dispatchTouchEvent', {
+      type: 'touchStart',
+      touchPoints: [{ x: from, y }],
+    });
+    for (let step = 1; step <= 10; step += 1) {
+      await cdp.send('Input.dispatchTouchEvent', {
+        type: 'touchMove',
+        touchPoints: [{ x: from + ((to - from) * step) / 10, y }],
+      });
+    }
+    await cdp.send('Input.dispatchTouchEvent', { type: 'touchEnd', touchPoints: [] });
+  };
+
+  // A short pull slides back.
+  await swipe(60, 100);
+  await expect(menu).toBeHidden();
+  await swipe(60, 320);
+  await expect(menu).toBeVisible();
+  await expect.poll(async () => (await menu.boundingBox())?.x).toBe(0);
+  await expect(page.getByRole('button', { name: 'Menü öffnen' })).toHaveAttribute(
+    'aria-expanded',
+    'true',
+  );
+  await swipe(300, 40);
+  await expect(menu).toBeHidden();
+  // The button opens it as before, also after a swipe.
+  await page.getByRole('button', { name: 'Menü öffnen' }).click();
+  await expect.poll(async () => (await menu.boundingBox())?.x).toBe(0);
+  await page.keyboard.press('Escape');
+
+  // On another page, too, but not from a form field: there the finger chooses a value.
+  await page.goto('/auto-finden');
+  await expect(page.getByRole('button', { name: 'Menü öffnen' })).toBeVisible();
+  const field = await page.getByLabel('Marke').boundingBox();
+  await swipe(60, 320, (field?.y ?? 0) + 10);
+  await expect(menu).toBeHidden();
+  await swipe(60, 320, 250);
+  await expect(menu).toBeVisible();
+});
+
 test('Escape closes the menu and returns focus to its button', async ({ page }) => {
   await page.goto('/auto-finden');
   await page.getByRole('button', { name: 'Menü öffnen' }).click();

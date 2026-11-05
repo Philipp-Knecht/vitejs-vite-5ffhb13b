@@ -66,6 +66,13 @@ html:has(.app--home) body {
   background: var(--c-surface-2);
 }
 
+/* The temporary chat is on. */
+.home-bar__button.is-on {
+  border-color: var(--c-text);
+  background: var(--c-text);
+  color: var(--c-surface);
+}
+
 .home-bar__upgrade {
   display: inline-flex;
   align-items: center;
@@ -228,6 +235,8 @@ html:has(.app--home) body {
    * (A colour, not a variable: older browsers do not pass variables to ::backdrop.)
    */
   background: linear-gradient(#ffffff env(safe-area-inset-top), rgb(16 24 40 / 40%) 0);
+  /* While a swipe pulls the menu, the page darkens with it. */
+  opacity: var(--drawer-shown, 1);
 }
 
 .drawer[open] {

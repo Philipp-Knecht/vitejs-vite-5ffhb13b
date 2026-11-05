@@ -1,5 +1,5 @@
 import { Scale, Search } from 'lucide-react';
-import { useEffect, useId, useRef, useState } from 'react';
+import { useCallback, useEffect, useId, useRef, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router';
 import { useConfig, useHydratedConfig, useMe } from '../api/queries';
 import { OfflineBanner, OfflineChecksNav } from '../components/layout/Layout';
@@ -65,6 +65,9 @@ export function LandingPage() {
     void navigate('/', { replace: true });
   }, [openChatId, wantsNewChat, openChat, resetChat, navigate]);
 
+  const openMenu = useCallback(() => setMenuOpen(true), []);
+  const closeMenu = useCallback(() => setMenuOpen(false), []);
+
   const newChat = () => {
     chat.reset();
     setFocusInput((count) => count + 1);
@@ -78,6 +81,11 @@ export function LandingPage() {
         menuButton={menuButton}
         onMenu={() => setMenuOpen(true)}
         onNewChat={chatReady && chat.items.length > 0 ? newChat : null}
+        temporary={
+          chatReady && chat.items.length === 0
+            ? { on: chat.temporary, onToggle: () => chat.setTemporary(!chat.temporary) }
+            : null
+        }
       />
       <main id="inhalt" className="home__main" tabIndex={-1}>
         <OfflineBanner online={online} />
@@ -113,7 +121,8 @@ export function LandingPage() {
       <HomeDrawer
         id={menuId}
         open={menuOpen}
-        onClose={() => setMenuOpen(false)}
+        onOpen={openMenu}
+        onClose={closeMenu}
         returnFocus={menuButton}
         currentChatId={chatReady ? chat.id : null}
         onOpenChat={chatReady ? chat.open : null}

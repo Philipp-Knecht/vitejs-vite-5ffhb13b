@@ -23,7 +23,7 @@ import {
   WITHDRAW_BUTTON_LABEL,
   WITHDRAW_PATH,
 } from '@kaufcheck/shared';
-import { useEffect, useId, useRef, useState, type RefObject } from 'react';
+import { useCallback, useEffect, useId, useRef, useState, type RefObject } from 'react';
 import { Link, NavLink } from 'react-router';
 import { useMe } from '../../api/queries';
 import { OfflineChecksNav } from '../../components/layout/Layout';
@@ -37,6 +37,7 @@ import {
   deleteChat,
   useStoredChats,
 } from '../chat/chat-store';
+import { useDrawerSwipe } from './use-drawer-swipe';
 
 interface Entry {
   to: string;
@@ -206,11 +207,13 @@ function PastChats({
 
 /**
  * The menu of the start page, like the side bar of a chat app: KaufCheck's
- * functions and pages first, the kept conversations below.
+ * functions and pages first, the kept conversations below. A swipe right opens it,
+ * a swipe left closes it.
  */
 export function HomeDrawer({
   id,
   open,
+  onOpen,
   onClose,
   returnFocus,
   currentChatId,
@@ -220,6 +223,7 @@ export function HomeDrawer({
 }: {
   id: string;
   open: boolean;
+  onOpen: () => void;
   onClose: () => void;
   returnFocus: RefObject<HTMLElement | null>;
   currentChatId: string | null;
@@ -232,18 +236,25 @@ export function HomeDrawer({
   const me = useMe();
   const pro = me.data?.plan === 'pro';
 
-  useEffect(() => {
-    const dialog = ref.current;
-    if (!dialog) return;
-    if (open && !dialog.open) dialog.showModal();
-    if (!open && dialog.open) dialog.close();
-  }, [open]);
-
-  const close = () => {
+  const close = useCallback(() => {
     onClose();
     // Not every browser returns the focus to the menu button by itself.
     requestAnimationFrame(() => returnFocus.current?.focus());
-  };
+  }, [onClose, returnFocus]);
+  // Pulled open by a swipe: shown before it is open.
+  const pulling = useDrawerSwipe({ dialog: ref, open, onOpen, onClose: close });
+  const shown = open || pulling;
+
+  useEffect(() => {
+    const dialog = ref.current;
+    if (!dialog) return;
+    if (shown && !dialog.open) dialog.showModal();
+    if (!shown && dialog.open) {
+      dialog.close();
+      // Opened by a swipe, it went without the slide-in; the next time it slides in again.
+      dialog.style.animation = '';
+    }
+  }, [shown]);
 
   return (
     <dialog
@@ -257,7 +268,7 @@ export function HomeDrawer({
         if (event.target === event.currentTarget) close();
       }}
     >
-      {open && (
+      {shown && (
         <div className="drawer__panel">
           <div className="drawer__top">
             <p className="drawer__title">

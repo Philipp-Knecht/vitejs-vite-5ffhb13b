@@ -9,6 +9,7 @@ import {
   Flag,
   Gauge,
   Loader2,
+  MessageCircleDashed,
   Mic,
   PiggyBank,
   Receipt,
@@ -130,19 +131,29 @@ const MAX_INPUT_HEIGHT = 200;
 const touchScreen = () =>
   typeof window !== 'undefined' && window.matchMedia('(pointer: coarse)').matches;
 
+const TEMPORARY_NOTE = 'Er wird nicht gespeichert und erscheint nicht in deinen Chats.';
+
 function Welcome({
   disabled,
+  temporary = false,
   onStarter,
 }: {
   disabled: boolean;
+  temporary?: boolean;
   onStarter?: (index: number) => void;
 }) {
   const titleId = useId();
   return (
     <div className="chat__welcome">
-      <p className="chat__welcome-lead">
-        Willkommen bei KaufCheck, deinem KI-Assistenten für den Gebrauchtwagenkauf!
-      </p>
+      {temporary ? (
+        <p className="chat__welcome-lead">
+          <strong>Temporärer Chat.</strong> {TEMPORARY_NOTE}
+        </p>
+      ) : (
+        <p className="chat__welcome-lead">
+          Willkommen bei KaufCheck, deinem KI-Assistenten für den Gebrauchtwagenkauf!
+        </p>
+      )}
       <p className="chat__welcome-title" id={titleId}>
         Was möchtest du machen?
       </p>
@@ -290,7 +301,7 @@ export function ChatPanel({
   /** Counts up when the input should get the focus, e.g. after „Neuer Chat“. */
   focusInput: number;
 }) {
-  const { id, items, usage, notice, busy, send, showForm, showHint } = chat;
+  const { id, items, usage, notice, busy, send, showForm, showHint, temporary } = chat;
   const [input, setInput] = useState('');
   const [focusId, setFocusId] = useState<string | null>(null);
   const [speechAsk, setSpeechAsk] = useState(false);
@@ -435,7 +446,18 @@ export function ChatPanel({
         tabIndex={0}
       >
         <div className="chat__column">
-          {items.length === 0 && <Welcome disabled={busy || exhausted} onStarter={onStarter} />}
+          {items.length === 0 ? (
+            <Welcome disabled={busy || exhausted} temporary={temporary} onStarter={onStarter} />
+          ) : (
+            temporary && (
+              <p className="chat__temporary">
+                <MessageCircleDashed aria-hidden size={16} />
+                <span>
+                  <strong>Temporärer Chat.</strong> {TEMPORARY_NOTE}
+                </span>
+              </p>
+            )
+          )}
           {items.map((item) =>
             item.role === 'user' ? (
               <div key={item.id} className="chat-message chat-message--user">

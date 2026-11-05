@@ -47,6 +47,24 @@
   color: var(--c-text-2);
 }
 
+/* Above a temporary conversation: it is not kept. */
+.chat__temporary {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  margin: 0 0 12px;
+  padding: 8px 12px;
+  border-radius: var(--radius);
+  background: var(--c-surface-2);
+  color: var(--c-text-2);
+  font-size: 0.875rem;
+}
+
+.chat__temporary svg {
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
 .chat__welcome-title {
   margin: 0 0 6px;
   font-size: 1.5rem;

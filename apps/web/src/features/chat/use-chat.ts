@@ -22,6 +22,8 @@ interface Conversation {
   history: ChatTurn[];
   /** When this tab last wrote or read it: a newer copy from another tab is taken over. */
   updatedAt: number;
+  /** A temporary chat is never kept on the device and not listed among the chats. */
+  temporary?: boolean;
 }
 
 /** What screen readers hear when another conversation shows. */
@@ -47,11 +49,12 @@ export function trimHistory(turns: readonly ChatTurn[]): ChatTurn[] {
 
 let counter = 0;
 const nextId = () => `c${Date.now().toString(36)}${(counter += 1)}`;
-const newConversation = (): Conversation => ({
+const newConversation = (temporary = false): Conversation => ({
   id: `k${Date.now().toString(36)}${Math.random().toString(36).slice(2, 8)}`,
   items: [],
   history: [],
   updatedAt: 0,
+  ...(temporary ? { temporary } : {}),
 });
 
 const storedConversation = (id: string): Conversation | null => {
@@ -111,6 +114,7 @@ export function useChat(plan: string | null) {
     // While an answer streams in, only a new message is written – not every word.
     if (streaming(conversation.items) && conversation.items.length === saved.current.count) return;
     saved.current = { conversation, count: conversation.items.length };
+    if (conversation.temporary) return;
     const updatedAt = Date.now();
     if (saveChat({ ...conversation, updatedAt }, kept.current)) {
       kept.current = true;
@@ -142,6 +146,18 @@ export function useChat(plan: string | null) {
   );
 
   const reset = useCallback(() => show(newConversation(), 'Neuer Chat.'), [show]);
+
+  /** A temporary chat, or a normal one again: only before the first message. */
+  const setTemporary = useCallback(
+    (on: boolean) =>
+      show(
+        newConversation(on),
+        on
+          ? 'Temporärer Chat: Er wird nicht gespeichert und erscheint nicht in deinen Chats.'
+          : 'Temporärer Chat aus. Neuer Chat.',
+      ),
+    [show],
+  );
 
   /** Opens a conversation kept on this device; one deleted meanwhile (in another tab) is gone. */
   const open = useCallback(
@@ -319,6 +335,7 @@ export function useChat(plan: string | null) {
   return {
     id: conversation.id,
     items: conversation.items,
+    temporary: conversation.temporary === true,
     // A count for another plan (before signing up, before Pro) no longer applies.
     usage: usage && plan !== null && usage.plan === plan ? usage : null,
     notice: notice?.id === conversation.id ? notice : null,
@@ -328,6 +345,7 @@ export function useChat(plan: string | null) {
     showHint,
     reset,
     open,
+    setTemporary,
   };
 }
 
