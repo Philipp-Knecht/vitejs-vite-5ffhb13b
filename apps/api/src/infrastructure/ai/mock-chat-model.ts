@@ -104,6 +104,18 @@ export class MockChatModel implements ChatModel {
         }),
       );
     }
+    // The guided start's question for suitable models: „… bis 15.000 €, …, 3–4 Personen, …“.
+    if (/passt zu mir/i.test(text)) {
+      const budget = amount(/bis ([\d.]+) €/.exec(text)?.[1]);
+      const people = /(\d)(?:–\d)? Personen/.exec(text)?.[0];
+      const seats = people ? Number(/(\d) Personen/.exec(people)?.[1] ?? 0) : undefined;
+      return Promise.resolve(
+        this.use('car_advisor', {
+          ...(budget !== undefined ? { budget_eur: budget } : {}),
+          ...(seats ? { people: seats <= 2 ? 2 : seats <= 4 ? 4 : seats <= 5 ? 5 : 7 } : {}),
+        }),
+      );
+    }
     if (/such|finde/i.test(text)) {
       const golf = /golf/i.test(text);
       return Promise.resolve(

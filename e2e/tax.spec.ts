@@ -98,7 +98,8 @@ test('the tax form in the chat asks for the car, not for its registration values
 }) => {
   await page.goto('/');
   const chat = page.getByRole('region', { name: 'KI-Assistent von KaufCheck' });
-  await chat.getByRole('button', { name: 'Kfz-Steuer berechnen' }).click();
+  await chat.getByRole('button', { name: 'Ich will Kosten ausrechnen' }).click();
+  await chat.getByRole('button', { name: 'Kfz-Steuer' }).click();
   const form = chat.getByRole('form', { name: 'Kfz-Steuer berechnen' });
   for (const label of ['Hubraum in cm³ (P.1)', 'CO₂ in g/km (V.7)', 'Leistung in kW', 'Antrieb'])
     await expect(form.getByLabel(label)).toHaveCount(0);
@@ -120,7 +121,8 @@ test('the tax form in the chat asks for the car, not for its registration values
   const other = await page.context().newPage();
   await other.goto('/');
   const otherChat = other.getByRole('region', { name: 'KI-Assistent von KaufCheck' });
-  await otherChat.getByRole('button', { name: 'Kfz-Steuer berechnen' }).click();
+  await otherChat.getByRole('button', { name: 'Ich will Kosten ausrechnen' }).click();
+  await otherChat.getByRole('button', { name: 'Kfz-Steuer' }).click();
   const older = otherChat.getByRole('form', { name: 'Kfz-Steuer berechnen' });
   await older.getByLabel('Erstzulassung (MM/JJJJ)').fill('03/2010');
   await older.getByLabel('Marke').selectOption({ label: 'Volkswagen' });

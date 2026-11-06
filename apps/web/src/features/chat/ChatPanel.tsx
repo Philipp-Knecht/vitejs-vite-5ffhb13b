@@ -1,22 +1,13 @@
-import { CHAT_LIMITS, germanDay, type ChatCard, type ChatJump } from '@kaufcheck/shared';
+import { EMPTY_ANSWERS, type AdvisorAnswers } from '@kaufcheck/catalog';
+import { CHAT_LIMITS, germanDay, type ChatJump } from '@kaufcheck/shared';
 import {
+  ArrowLeft,
   ArrowRight,
   ArrowUp,
   CircleAlert,
-  ClipboardCheck,
-  Compass,
-  FileText,
-  Flag,
-  Gauge,
   Loader2,
   MessageCircleDashed,
   Mic,
-  PiggyBank,
-  Receipt,
-  Search,
-  Wallet,
-  Wrench,
-  type LucideIcon,
 } from 'lucide-react';
 import {
   useEffect,
@@ -35,79 +26,14 @@ import { ChatText } from './ChatText';
 import { spokenAnswer } from './chat-labels';
 import { safeHref } from './safe-href';
 import type { Chat, ChatItem } from './use-chat';
+import {
+  advisorQuestion,
+  guideStep,
+  type GuideAction,
+  type GuideAnswer,
+  type StepId,
+} from './guide';
 import { useSpeech } from './use-speech';
-
-type Tone = 'blue' | 'green' | 'amber' | 'violet' | 'rose' | 'teal';
-
-const STARTERS: {
-  label: string;
-  icon: LucideIcon;
-  tone: Tone;
-  card?: ChatCard;
-  message?: string;
-  hint?: string;
-}[] = [
-  {
-    label: 'Inserat prüfen',
-    icon: ClipboardCheck,
-    tone: 'blue',
-    hint: 'Markier auf der Seite des Inserats den ganzen Text, kopier ihn und füg ihn unten ins Eingabefeld ein. Ich prüfe ihn sofort – Kontaktdaten entferne ich vorher.',
-  },
-  {
-    label: 'Auto finden',
-    icon: Search,
-    tone: 'green',
-    card: { type: 'form', form: 'search', prefill: {} },
-  },
-  {
-    label: 'Welches Auto passt zu mir?',
-    icon: Compass,
-    tone: 'violet',
-    message: 'Welches Auto passt zu mir?',
-  },
-  {
-    label: 'Finanzierung rechnen',
-    icon: Wallet,
-    tone: 'amber',
-    card: { type: 'form', form: 'financing', prefill: {} },
-  },
-  {
-    label: 'Kfz-Steuer berechnen',
-    icon: Receipt,
-    tone: 'teal',
-    card: { type: 'form', form: 'tax', prefill: {} },
-  },
-  {
-    label: 'Schwachstellen vom VW Golf',
-    icon: Wrench,
-    tone: 'rose',
-    message: 'Welche Schwachstellen hat der VW Golf?',
-  },
-  {
-    label: 'Auto aus den Niederlanden prüfen',
-    icon: Flag,
-    tone: 'blue',
-    card: { type: 'form', form: 'rdw', prefill: {} },
-  },
-  {
-    label: 'Worauf achte ich bei der Probefahrt?',
-    icon: Gauge,
-    tone: 'green',
-    message: 'Worauf muss ich bei der Probefahrt achten?',
-  },
-  {
-    label: 'Was kostet ein Auto im Monat?',
-    icon: PiggyBank,
-    tone: 'amber',
-    message: 'Was kostet ein Auto im Monat?',
-  },
-  {
-    label: 'Auto ummelden: Was brauche ich?',
-    icon: FileText,
-    tone: 'violet',
-    message: 'Was brauche ich, um ein gekauftes Auto umzumelden?',
-  },
-];
 
 /** When an answer failed: the tools work without the assistant. */
 const FALLBACK_JUMPS: ChatJump[] = [
@@ -135,15 +61,56 @@ const TEMPORARY_NOTE =
   'Er wird nicht auf diesem Gerät gespeichert und erscheint nicht in deinen Chats. Geprüfte Inserate werden wie sonst gespeichert.';
 
 function Welcome({
-  disabled,
+  disabled = false,
+  exhausted = false,
   temporary = false,
-  onStarter,
+  onAction,
 }: {
-  disabled: boolean;
+  /** The placeholder before the assistant is ready: nothing to choose yet. */
+  disabled?: boolean;
+  /** Today's messages are used up: no form or question to the assistant. */
+  exhausted?: boolean;
   temporary?: boolean;
-  onStarter?: (index: number) => void;
+  onAction?: (action: GuideAction, answers: AdvisorAnswers) => void;
 }) {
   const titleId = useId();
+  const [guide, setGuide] = useState<{ step: StepId; trail: StepId[]; answers: AdvisorAnswers }>({
+    step: 'start',
+    trail: [],
+    answers: EMPTY_ANSWERS,
+  });
+  const question = useRef<HTMLParagraphElement>(null);
+  const moved = useRef(false);
+  const current = guideStep(guide.step, guide.answers);
+
+  // The next question is read out and the answers follow it in the tab order.
+  useEffect(() => {
+    if (moved.current) question.current?.focus({ preventScroll: true });
+  }, [guide.step]);
+
+  const choose = (answer: GuideAnswer) => {
+    const answers = answer.set ? answer.set(guide.answers) : guide.answers;
+    const { action } = answer;
+    if (action.type !== 'step') {
+      onAction?.(action, answers);
+      return;
+    }
+    moved.current = true;
+    setGuide({
+      step: action.to,
+      trail: action.to === 'start' ? [] : [...guide.trail, guide.step],
+      answers,
+    });
+  };
+  const back = () => {
+    moved.current = true;
+    setGuide((state) => ({
+      ...state,
+      step: state.trail.at(-1) ?? 'start',
+      trail: state.trail.slice(0, -1),
+    }));
+  };
+
   return (
     <div className="chat__welcome">
       {temporary ? (
@@ -155,26 +122,54 @@ function Welcome({
           Willkommen bei KaufCheck, deinem KI-Assistenten für den Gebrauchtwagenkauf!
         </p>
       )}
-      <p className="chat__welcome-title" id={titleId}>
-        Was möchtest du machen?
-      </p>
-      {/* Three and a half suggestions show: the half one says there are more to scroll to. */}
-      <ul className="chat__starters" aria-labelledby={titleId}>
-        {STARTERS.map((starter, index) => (
-          <li key={starter.label}>
-            <button
-              type="button"
-              className="chat__starter"
-              disabled={disabled}
-              onClick={() => onStarter?.(index)}
-            >
-              <span className={`chat__starter-icon chat__starter-icon--${starter.tone}`}>
-                <starter.icon aria-hidden size={18} />
-              </span>
-              <span className="chat__starter-label">{starter.label}</span>
+      {(guide.trail.length > 0 || current.progress) && (
+        <div className="chat__guide-bar">
+          {guide.trail.length > 0 && (
+            <button type="button" className="link-button chat__guide-back" onClick={back}>
+              <ArrowLeft aria-hidden size={16} />
+              <span>Zurück</span>
             </button>
-          </li>
-        ))}
+          )}
+          {current.progress && <span className="chat__guide-progress">{current.progress}</span>}
+        </div>
+      )}
+      <p className="chat__welcome-title" id={titleId} ref={question} tabIndex={-1}>
+        {current.question}
+      </p>
+      {current.note && <p className="chat__guide-note">{current.note}</p>}
+      {/* Three and a half answers show: the half one says there are more to scroll to. */}
+      <ul className="chat__starters" aria-labelledby={titleId} key={guide.step}>
+        {current.answers.map((answer) => {
+          const content = (
+            <>
+              <span className={`chat__starter-icon chat__starter-icon--${answer.tone}`}>
+                <answer.icon aria-hidden size={18} />
+              </span>
+              <span className="chat__starter-label">{answer.label}</span>
+            </>
+          );
+          const { action } = answer;
+          return (
+            <li key={answer.label}>
+              {action.type === 'link' && !disabled ? (
+                <Link to={action.to} className="chat__starter">
+                  {content}
+                </Link>
+              ) : (
+                <button
+                  type="button"
+                  className="chat__starter"
+                  disabled={
+                    disabled || (exhausted && (action.type === 'ask' || action.type === 'form'))
+                  }
+                  onClick={() => choose(answer)}
+                >
+                  {content}
+                </button>
+              )}
+            </li>
+          );
+        })}
       </ul>
     </div>
   );
@@ -420,12 +415,13 @@ export function ChatPanel({
     startSpeech();
   };
 
-  const onStarter = (index: number) => {
-    const starter = STARTERS[index];
-    if (starter?.card) setFocusId(showForm(starter.card));
-    else if (starter?.message) sendMessage(starter.message);
-    else if (starter?.hint) {
-      showHint(starter.hint);
+  /** Where the guided start ends: a form, a hint, or the question for suitable models. */
+  const onGuide = (action: GuideAction, answers: AdvisorAnswers) => {
+    if (action.type === 'form')
+      setFocusId(showForm({ type: 'form', form: action.form, prefill: {} }));
+    else if (action.type === 'ask') sendMessage(advisorQuestion(answers));
+    else if (action.type === 'hint') {
+      showHint(action.text);
       // The listing goes into the input: there it is, ready for pasting.
       textarea.current?.focus({ preventScroll: true });
     }
@@ -448,7 +444,7 @@ export function ChatPanel({
       >
         <div className="chat__column">
           {items.length === 0 ? (
-            <Welcome disabled={busy || exhausted} temporary={temporary} onStarter={onStarter} />
+            <Welcome exhausted={busy || exhausted} temporary={temporary} onAction={onGuide} />
           ) : (
             temporary && (
               <p className="chat__temporary">
