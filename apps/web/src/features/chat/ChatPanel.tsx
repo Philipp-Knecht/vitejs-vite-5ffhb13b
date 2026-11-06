@@ -68,7 +68,7 @@ function Welcome({
 }: {
   /** The placeholder before the assistant is ready: nothing to choose yet. */
   disabled?: boolean;
-  /** Today's messages are used up: no form or question to the assistant. */
+  /** Today's messages are used up: no question to the assistant. */
   exhausted?: boolean;
   temporary?: boolean;
   onAction?: (action: GuideAction, answers: AdvisorAnswers) => void;
@@ -130,10 +130,16 @@ function Welcome({
               <span>Zurück</span>
             </button>
           )}
-          {current.progress && <span className="chat__guide-progress">{current.progress}</span>}
+          {current.progress && (
+            // Read out with the question instead.
+            <span className="chat__guide-progress" aria-hidden>
+              {current.progress}
+            </span>
+          )}
         </div>
       )}
       <p className="chat__welcome-title" id={titleId} ref={question} tabIndex={-1}>
+        {current.progress && <span className="visually-hidden">{current.progress}: </span>}
         {current.question}
       </p>
       {current.note && <p className="chat__guide-note">{current.note}</p>}
@@ -149,19 +155,24 @@ function Welcome({
             </>
           );
           const { action } = answer;
+          // Nothing can be sent today: a listing is checked on its own page instead.
+          const to =
+            action.type === 'link'
+              ? action.to
+              : exhausted && action.type === 'hint'
+                ? '/inserat-pruefen'
+                : null;
           return (
             <li key={answer.label}>
-              {action.type === 'link' && !disabled ? (
-                <Link to={action.to} className="chat__starter">
+              {to !== null && !disabled ? (
+                <Link to={to} className="chat__starter">
                   {content}
                 </Link>
               ) : (
                 <button
                   type="button"
                   className="chat__starter"
-                  disabled={
-                    disabled || (exhausted && (action.type === 'ask' || action.type === 'form'))
-                  }
+                  disabled={disabled || (exhausted && action.type === 'ask')}
                   onClick={() => choose(answer)}
                 >
                   {content}
@@ -297,9 +308,8 @@ export function ChatPanel({
   /** Counts up when the input should get the focus, e.g. after „Neuer Chat“. */
   focusInput: number;
 }) {
-  const { id, items, usage, notice, busy, send, showForm, showHint, temporary } = chat;
+  const { id, items, usage, notice, busy, send, showHint, temporary } = chat;
   const [input, setInput] = useState('');
-  const [focusId, setFocusId] = useState<string | null>(null);
   const [speechAsk, setSpeechAsk] = useState(false);
   const base = useRef('');
   const inputId = useId();
@@ -415,11 +425,9 @@ export function ChatPanel({
     startSpeech();
   };
 
-  /** Where the guided start ends: a form, a hint, or the question for suitable models. */
+  /** Where the guided start ends in the chat: a hint, or the question for suitable models. */
   const onGuide = (action: GuideAction, answers: AdvisorAnswers) => {
-    if (action.type === 'form')
-      setFocusId(showForm({ type: 'form', form: action.form, prefill: {} }));
-    else if (action.type === 'ask') sendMessage(advisorQuestion(answers));
+    if (action.type === 'ask') sendMessage(advisorQuestion(answers));
     else if (action.type === 'hint') {
       showHint(action.text);
       // The listing goes into the input: there it is, ready for pasting.
@@ -476,12 +484,7 @@ export function ChatPanel({
               </div>
             ) : item.role === 'local' ? (
               <div key={item.id} className="chat-message chat-message--assistant">
-                <ChatCardView
-                  card={item.card}
-                  busy={busy || exhausted}
-                  autoFocus={item.id === focusId}
-                  onSubmit={sendMessage}
-                />
+                <ChatCardView card={item.card} busy={busy || exhausted} onSubmit={sendMessage} />
               </div>
             ) : (
               <AssistantMessage

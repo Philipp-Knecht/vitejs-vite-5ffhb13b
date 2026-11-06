@@ -13,11 +13,10 @@ test('the assistant computes a financing from its form and keeps the conversatio
   await expect(chat.getByText('Entwicklungsmodus: feste Regeln statt KI.')).toBeVisible();
   const input = chat.getByLabel('Nachricht an den KI-Assistenten von KaufCheck');
 
-  // The form opens with the focus in its first field and gives it back to the input.
-  await chat.getByRole('button', { name: 'Ich will Kosten ausrechnen' }).click();
-  await chat.getByRole('button', { name: 'Finanzierung', exact: true }).click();
+  // Asked for in the chat, the assistant brings its form; sent, the focus is back in the input.
+  await input.fill('Ich möchte eine Finanzierung rechnen');
+  await input.press('Enter');
   const form = chat.getByRole('form', { name: 'Finanzierung rechnen' });
-  await expect(form.getByLabel('Kaufpreis in €')).toBeFocused();
   await form.getByLabel('Kaufpreis in €').fill('12000');
   await form.getByLabel('Anzahlung in €').fill('2000');
   await form.getByRole('button', { name: 'Absenden' }).click();
@@ -32,7 +31,7 @@ test('the assistant computes a financing from its form and keeps the conversatio
   await expect(card.getByText(/im Monat$/)).toBeVisible();
   await expect(card.getByText('10.000 €')).toBeVisible();
   await expect(card.getByText(/Durchschnittszins der Bundesbank/)).toBeVisible();
-  await expect(chat.getByText(/Heute noch 14 von 15 Nachrichten/)).toBeVisible();
+  await expect(chat.getByText(/Heute noch 13 von 15 Nachrichten/)).toBeVisible();
   // Screen readers get the finished answer once, with what the cards show.
   await expect(chat.getByRole('status')).toContainText('Darunter: Finanzierung');
   // Not happy with the answer? The calculator is one tap away.
@@ -319,7 +318,11 @@ test('the guided start asks one question at a time and hands suitable models to 
   await chat.getByRole('button', { name: 'Ich weiß noch nicht, was ich will' }).click();
   // The next question is read out, with how far it is.
   await expect(chat.getByText('Wie viel möchtest du höchstens ausgeben?')).toBeFocused();
-  await expect(chat.getByText('Frage 1 von 7')).toBeVisible();
+  await expect(chat.locator('.chat__guide-progress')).toHaveText('Frage 1 von 7');
+  // Screen readers hear it with the question.
+  await expect(chat.locator('.chat__welcome-title')).toHaveText(
+    'Frage 1 von 7: Wie viel möchtest du höchstens ausgeben?',
+  );
   await chat.getByRole('button', { name: 'Zurück' }).click();
   await expect(chat.getByText('Wo stehst du gerade?')).toBeFocused();
   await chat.getByRole('button', { name: 'Ich weiß noch nicht, was ich will' }).click();
@@ -354,7 +357,7 @@ test('the guided start asks one question at a time and hands suitable models to 
       'Welches Auto passt zu mir? bis 15.000 €, Familie und Alltag, 3–4 Personen, kann nicht laden, Automatik, am wichtigsten: Zuverlässigkeit.',
     ),
   ).toBeVisible();
-  await expect(chat.locator('.chat-message--assistant').last()).toContainText('Entwicklungsmodus');
+  await expect(chat.locator('.chat-card').filter({ hasText: 'Passende Modelle' })).toBeVisible();
   // With a message in the chat, the questions are gone.
   await expect(chat.getByText('Wo stehst du gerade?')).toHaveCount(0);
 
@@ -414,8 +417,8 @@ test('a count used up for one plan does not block another, and old chats leave t
   await other.goto('/');
   const otherChat = other.getByRole('region', { name: 'KI-Assistent von KaufCheck' });
   await expect(otherChat.getByText(/15 Nachrichten am Tag kostenlos/)).toBeVisible();
-  await otherChat.getByRole('button', { name: 'Ich will Kosten ausrechnen' }).click();
-  await expect(otherChat.getByRole('button', { name: 'Kfz-Steuer' })).toBeEnabled();
+  await otherChat.getByLabel('Nachricht an den KI-Assistenten von KaufCheck').fill('Hallo');
+  await expect(otherChat.getByRole('button', { name: 'Senden' })).toBeEnabled();
 });
 
 test('on a low screen the start page scrolls and the contract buttons stay reachable', async ({

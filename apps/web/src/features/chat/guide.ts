@@ -11,7 +11,6 @@ import {
   type AdvisorAnswers,
   type Usage,
 } from '@kaufcheck/catalog';
-import type { CHAT_FORMS } from '@kaufcheck/shared';
 import {
   Building2,
   Calculator,
@@ -49,9 +48,9 @@ import { ADVISOR_AVAILABLE, MODEL_PAGES_AVAILABLE } from '../advisor/availabilit
 
 /**
  * The guided start of a new chat: one question at a time with fixed answers, chosen by
- * rules, not by the AI. It ends in a tool of KaufCheck (a form, a page, a hint where to
- * paste a listing) or, for finding suitable models, in a question to the AI with
- * everything answered so far. Typing into the chat works at any time.
+ * rules, not by the AI. It ends in a tool of KaufCheck that works without the AI (a page,
+ * or a hint where to paste a listing) or, for finding suitable models, in a question to
+ * the AI with everything answered so far. Typing into the chat works at any time.
  */
 
 export type Tone = 'blue' | 'green' | 'violet' | 'amber' | 'teal' | 'rose';
@@ -59,8 +58,6 @@ export type Tone = 'blue' | 'green' | 'violet' | 'amber' | 'teal' | 'rose';
 export type GuideAction =
   /** The next question. */
   | { type: 'step'; to: StepId }
-  /** A form of the chat (no message to the server until it is sent). */
-  | { type: 'form'; form: (typeof CHAT_FORMS)[number] }
   /** A hint of the page in the chat, e.g. where to paste a listing. */
   | { type: 'hint'; text: string }
   /** A page of KaufCheck. */
@@ -377,10 +374,10 @@ export function guideStep(id: StepId, answers: AdvisorAnswers): GuideStep {
         question: 'Wobei kann ich dir helfen?',
         answers: [
           {
-            label: 'Inserate auf allen Börsen suchen',
+            label: 'Suche für alle Börsen zusammenstellen',
             icon: Search,
             tone: 'green',
-            action: { type: 'form', form: 'search' },
+            action: link('/auto-finden'),
           },
           ...(MODEL_PAGES_AVAILABLE
             ? [
@@ -411,10 +408,10 @@ export function guideStep(id: StepId, answers: AdvisorAnswers): GuideStep {
             action: { type: 'hint', text: PASTE_HINT },
           },
           {
-            label: 'Aus den Niederlanden',
+            label: 'Niederländisches Kennzeichen (RDW)',
             icon: Flag,
             tone: 'amber',
-            action: { type: 'form', form: 'rdw' },
+            action: link('/auto-aus-den-niederlanden'),
           },
           {
             label: 'Mehrere Inserate vergleichen',
@@ -432,6 +429,12 @@ export function guideStep(id: StepId, answers: AdvisorAnswers): GuideStep {
         question: 'Was steht als Nächstes an?',
         answers: [
           {
+            label: 'Inserat prüfen lassen',
+            icon: ClipboardCheck,
+            tone: 'blue',
+            action: { type: 'hint', text: PASTE_HINT },
+          },
+          {
             label: 'Besichtigung und Probefahrt',
             icon: ClipboardList,
             tone: 'green',
@@ -447,7 +450,7 @@ export function guideStep(id: StepId, answers: AdvisorAnswers): GuideStep {
             label: 'Finanzierung rechnen',
             icon: Wallet,
             tone: 'amber',
-            action: { type: 'form', form: 'financing' },
+            action: link('/kfz-steuer-rechner#finanzierung'),
           },
           {
             label: 'Auto ummelden',
@@ -501,13 +504,13 @@ export function guideStep(id: StepId, answers: AdvisorAnswers): GuideStep {
             label: 'Kfz-Steuer',
             icon: Receipt,
             tone: 'teal',
-            action: { type: 'form', form: 'tax' },
+            action: link('/kfz-steuer-rechner'),
           },
           {
             label: 'Finanzierung',
             icon: Wallet,
             tone: 'amber',
-            action: { type: 'form', form: 'financing' },
+            action: link('/kfz-steuer-rechner#finanzierung'),
           },
           {
             label: 'Alle Kosten im Monat',
@@ -516,7 +519,7 @@ export function guideStep(id: StepId, answers: AdvisorAnswers): GuideStep {
             action: link('/autokosten-im-monat'),
           },
           {
-            label: 'Versicherung und Typklasse',
+            label: 'Typklasse nachschlagen',
             icon: ShieldCheck,
             tone: 'blue',
             action: link('/kfz-steuer-rechner#typklasse'),
