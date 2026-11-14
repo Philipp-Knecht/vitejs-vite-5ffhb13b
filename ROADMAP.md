@@ -44,7 +44,8 @@ PRs, **L** = mehrere Wochen.
 | 1.1 | Kfz-Steuer: Modell und Motor wählen statt Hubraum, CO₂ und kW einzutippen                 | #54       |
 | neu | Modellseiten: Foto jeder Generation (Wikimedia Commons, Kennzeichen verpixelt)            | #55       |
 | neu | Alle Seiten mit der Leiste und dem Menü der Startseite                                    | #57       |
-| neu | Temporärer Chat und Wischgesten für das Menü                                              | dieser PR |
+| neu | Temporärer Chat und Wischgesten für das Menü                                              | #58       |
+| neu | Geführter Einstieg: Fragen mit festen Antworten, KI erst bei der Modellsuche              | dieser PR |
 
 ## Arbeitsweise je Feature
 

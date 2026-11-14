@@ -1,4 +1,4 @@
-import { CHAT_LIMITS, type ChatCard, type ChatStreamEvent, type ChatTurn } from '@kaufcheck/shared';
+import { CHAT_LIMITS, type ChatStreamEvent, type ChatTurn } from '@kaufcheck/shared';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { ApiRequestError } from '../../api/client';
 import { streamChat } from './chat-stream';
@@ -337,16 +337,6 @@ export function useChat(plan: string | null) {
     }));
   }, []);
 
-  /** Shows a form in the chat without asking the server; returns its id. */
-  const showForm = useCallback((card: ChatCard) => {
-    const id = nextId();
-    setConversation((current) => ({
-      ...current,
-      items: [...current.items, { id, role: 'local', card }],
-    }));
-    return id;
-  }, []);
-
   return {
     id: conversation.id,
     items: conversation.items,
@@ -356,7 +346,6 @@ export function useChat(plan: string | null) {
     notice: notice?.id === conversation.id ? notice : null,
     busy,
     send,
-    showForm,
     showHint,
     reset,
     open,

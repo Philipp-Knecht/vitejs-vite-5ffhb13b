@@ -694,8 +694,13 @@ const carAdvisor = tool(
     inputSchema: objectSchema({
       budget_eur: integer('Höchster Kaufpreis in Euro'),
       usage: oneOf(USAGES, 'Hauptnutzung'),
-      mileage: oneOf(MILEAGES, 'Fahrleistung: wenig, mittel, viel'),
-      people: integer('Personen, die meist mitfahren: 2, 4, 5 oder 7'),
+      mileage: oneOf(
+        MILEAGES,
+        'Fahrleistung im Jahr: wenig (unter 10.000 km), mittel (10.000 bis 20.000 km), viel (über 20.000 km)',
+      ),
+      people: integer(
+        'Personen, die meist mitfahren: 2, 4, 5 oder 7 (1–2 Personen → 2, 3–4 → 4, 5 → 5, 6–7 → 7)',
+      ),
       charging: { type: 'boolean', description: 'Kann zu Hause oder bei der Arbeit laden' },
       transmission: oneOf(['manual', 'automatic'], 'Getriebe'),
       priorities: {

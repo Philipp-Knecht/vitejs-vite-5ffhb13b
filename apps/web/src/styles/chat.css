@@ -72,6 +72,38 @@
   line-height: 1.25;
 }
 
+/* Focused when the next question shows, so that it is read out: no ring around text. */
+.chat__welcome-title:focus {
+  outline: none;
+}
+
+/* „Zurück“ and „Frage 2 von 7“ above the question. */
+.chat__guide-bar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 24px;
+  color: var(--c-text-3);
+  font-size: 0.875rem;
+}
+
+.chat__guide-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  min-height: 32px;
+}
+
+.chat__guide-progress {
+  margin-left: auto;
+}
+
+.chat__guide-note {
+  margin: -2px 0 6px;
+  color: var(--c-text-2);
+  font-size: 0.875rem;
+}
+
 /* Three and a half suggestions at a time; the list scrolls, its height stays. */
 .chat__starters {
   --starter-h: 48px;
@@ -113,6 +145,12 @@
   cursor: pointer;
 }
 
+/* An answer that leads to a page looks like the others. */
+a.chat__starter {
+  color: var(--c-text);
+  text-decoration: none;
+}
+
 .chat__starter:focus-visible {
   /* Inside the button: the list would cut off a ring around it. */
   outline-offset: -3px;
@@ -127,10 +165,13 @@
   opacity: 0.6;
 }
 
+/* A long answer takes a second line rather than being cut off. */
 .chat__starter-label {
+  display: -webkit-box;
   overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-height: 1.2;
 }
 
 .chat__starter-icon {
