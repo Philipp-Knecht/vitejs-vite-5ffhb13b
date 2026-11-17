@@ -1,13 +1,13 @@
 import { useId } from 'react';
-import { useConfig, useMe } from '../api/queries';
+import { useConfig } from '../api/queries';
 import { track } from '../lib/analytics';
 import { useHydrated } from '../lib/use-hydrated';
 
 export type HistoryPlacement = 'result' | 'guide_checklist';
 
 /**
- * A partner link to vehicle history reports by VIN (affiliate), for visitors
- * without Pro, configured on the server. A plain link: nothing is loaded from
+ * A partner link to vehicle history reports by VIN (affiliate), configured on the
+ * server; Pro members see it too (it is a possibility, not an advertisement banner). A plain link: nothing is loaded from
  * the partner before the click, and no VIN or other data is handed over.
  * KaufCheck does not check the reports; the note says what they can miss.
  * Placed between sections, never inside the recall check, its steps or
@@ -15,13 +15,12 @@ export type HistoryPlacement = 'result' | 'guide_checklist';
  */
 export function VehicleHistoryLink({ placement }: { placement: HistoryPlacement }) {
   const id = useId();
-  // Not part of the prerendered page: it appears only once the plan is known.
+  // Not part of the prerendered page: it appears once the configuration is loaded.
   const hydrated = useHydrated();
-  const me = useMe();
   const config = useConfig();
   // A configuration cached before this field existed (HTTP cache, offline copy) lacks it.
   const partner = config.data?.affiliates?.vehicleHistory ?? null;
-  if (!hydrated || !partner || me.data?.entitlements.showAds !== true) return null;
+  if (!hydrated || !partner) return null;
   return (
     <aside className="affiliate" aria-label="Werbung: Affiliate-Link" data-placement={placement}>
       <span className="ad-slot__label" aria-hidden>

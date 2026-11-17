@@ -101,7 +101,10 @@ export function proFeatures(pro: Entitlements, options: { photoAnalysis: boolean
   if (pro.photoAnalysis && options.photoAnalysis) {
     features.push('KI-Fotoanalyse bei Inseraten mit Fotos');
   }
-  if (!pro.showAds) features.push('keine Werbung');
+  if (!pro.showAds)
+    features.push(
+      'keine Werbebanner und keine Anzeigen von Google (gekennzeichnete Partner-Links, etwa zu Berichten zur Fahrzeughistorie, bleiben)',
+    );
   features.push(
     'alle Funktionen der kostenlosen Nutzung, etwa Fragen an den Verkäufer, Checkliste und Preisrechnung',
   );
