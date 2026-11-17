@@ -46,7 +46,8 @@ PRs, **L** = mehrere Wochen.
 | neu | Alle Seiten mit der Leiste und dem Menü der Startseite                                    | #57       |
 | neu | Temporärer Chat und Wischgesten für das Menü                                              | #58       |
 | neu | Geführter Einstieg: Fragen mit festen Antworten, KI erst bei der Modellsuche              | #59       |
-| neu | Link zur Fahrzeughistorie (carVertical) auch für Pro                                      | dieser PR |
+| neu | Link zur Fahrzeughistorie (carVertical) auch für Pro                                      | #60       |
+| neu | Link zur Fahrzeughistorie mit der FIN aus dem Inserat                                     | dieser PR |
 
 ## Arbeitsweise je Feature
 

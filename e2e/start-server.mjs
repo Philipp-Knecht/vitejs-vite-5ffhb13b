@@ -86,6 +86,7 @@ const server = spawn(process.execPath, [path.join(root, 'apps/api/dist/server.js
     AFFILIATE_CAR_INSURANCE_NAME: 'Beispielportal',
     AFFILIATE_VEHICLE_HISTORY_URL: 'https://history.example/check?aff=e2e',
     AFFILIATE_VEHICLE_HISTORY_NAME: 'Beispielhistorie',
+    AFFILIATE_VEHICLE_HISTORY_VIN_URL: 'https://history.example/check?aff=e2e&vin={vin}',
     // A synthetic ad sold directly, in the guides only; its image is a file of the site.
     SPONSOR_ADS: JSON.stringify([
       {
