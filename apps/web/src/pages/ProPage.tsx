@@ -152,7 +152,7 @@ function rows(
       ],
     },
     {
-      label: 'Ohne Werbung',
+      label: 'Ohne Werbeanzeigen',
       cells: [flag(!plans.anonymous.showAds), flag(!plans.free.showAds), flag(!plans.pro.showAds)],
     },
   ];
@@ -225,7 +225,7 @@ export function ProPage() {
         <h1>Mehr Prüfungen für die heiße Phase der Autosuche</h1>
         <p className="page__lead">
           Wenn du viele Inserate vergleichst: mehr Prüfungen pro Monat, ein Verlauf aller Prüfungen,
-          größere Vergleiche und keine Werbung. Monatlich kündbar.
+          größere Vergleiche und keine Werbeanzeigen. Monatlich kündbar.
         </p>
       </div>
 
@@ -252,7 +252,8 @@ export function ProPage() {
           <p>
             {plans.pro.monthlyAnalyses} Prüfungen im Monat, Verlauf, Vergleiche mit bis zu{' '}
             {plans.pro.compareMax} Angeboten
-            {photoAnalysis ? ', Fotoanalyse' : ''} und keine Werbung.
+            {photoAnalysis ? ', Fotoanalyse' : ''} und keine Werbeanzeigen – gekennzeichnete
+            Partner-Links, etwa zu Berichten zur Fahrzeughistorie, bleiben.
           </p>
           <div className="plan-card__cta">{cta()}</div>
         </article>

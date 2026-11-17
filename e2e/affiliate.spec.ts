@@ -124,18 +124,19 @@ test('the vehicle history link is labelled, plain, apart from the recall check, 
   await page.getByRole('button', { name: 'Konto erstellen' }).click();
   await expect(page).not.toHaveURL(/\/registrieren$/);
   await makePro(email);
+  // Pro members see it too: a possibility, not an advertisement banner (Pro promises no ad slots).
   for (const path of ['/gebrauchtwagen-checkliste', new URL(check).pathname]) {
     await page.goto(path);
     await expect(page.getByRole('button', { name: 'Menü öffnen' })).toBeVisible();
     await expect(page.getByRole('link', { name: 'Upgraden' })).toHaveCount(0);
-    await page.waitForFunction(() =>
-      performance.getEntriesByType('resource').some((entry) => entry.name.includes('/api/config')),
-    );
-    await page.evaluate(() => new Promise((resolve) => requestAnimationFrame(resolve)));
     await expect(page.getByRole('complementary', { name: 'Werbung: Affiliate-Link' })).toHaveCount(
-      0,
+      1,
     );
   }
+  await page.goto('/datenschutz');
+  await expect(
+    page.getByText(/Fahrzeughistorie bei Beispielhistorie \(auch mit KaufCheck Pro\)/),
+  ).toBeVisible();
 });
 
 test('a configuration cached before the vehicle history link still shows the insurance link', async ({

@@ -518,7 +518,8 @@ workshop). `SPONSOR_ADS` is a JSON array, at most 20 entries:
   Kfz-Direktlink from the partner account unchanged, and get the link text and the name approved
   in writing by the partner support before setting the variables.
 - The same way, `AFFILIATE_VEHICLE_HISTORY_URL` and `AFFILIATE_VEHICLE_HISTORY_NAME` (e.g.
-  „carVertical“) show „Kostenpflichtigen Bericht zur Fahrzeughistorie bei … abrufen*“ in a check
+  „carVertical“) show „Kostenpflichtigen Bericht zur Fahrzeughistorie bei … abrufen*“, also to Pro
+  members (Pro promises no ad slots, not no partner links), in a check
   (between the checklist and the negotiation section, never inside the recall check with its
   official steps and warnings) and in the checklist guide, with the note that a report only holds
   what the provider's sources recorded. No VIN or other data goes to the partner; the visitor

@@ -85,9 +85,9 @@ export const STATIC_PAGE_META: Readonly<Record<string, PageMeta>> = {
       'Wertverlust, Fixkosten, Betrieb und Werkstatt: woraus sich Autokosten zusammensetzen, Beispiele des ADAC, was die Versicherung bestimmt und wie du sparst.',
   },
   '/pro': {
-    title: 'KaufCheck Pro – mehr Prüfungen, Verlauf und keine Werbung',
+    title: 'KaufCheck Pro – mehr Prüfungen, Verlauf und keine Werbeanzeigen',
     description:
-      'KaufCheck Pro: mehr Prüfungen pro Monat, Verlauf aller Analysen, größere Vergleiche und keine Werbung. Monatlich kündbar.',
+      'KaufCheck Pro: mehr Prüfungen pro Monat, Verlauf aller Analysen, größere Vergleiche und keine Werbeanzeigen. Monatlich kündbar.',
   },
   '/haeufige-fragen': {
     title: 'Häufige Fragen zu KaufCheck: Kosten, Inserate, Daten | KaufCheck',

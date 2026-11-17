@@ -497,8 +497,8 @@ export function PrivacyPage() {
           <p>
             Auf Ergebnisseiten und in den Ratgebern zeigen wir Werbung über Google AdSense, einen
             Dienst der Google Ireland Limited, Gordon House, Barrow Street, Dublin 4, Irland
-            („Google“). Mit KaufCheck Pro siehst du keine Werbung. Sendet dein Browser „Do Not
-            Track“ oder „Global Privacy Control“, laden wir Google AdSense gar nicht.
+            („Google“). Mit KaufCheck Pro siehst du diese Anzeigen nicht. Sendet dein Browser „Do
+            Not Track“ oder „Global Privacy Control“, laden wir Google AdSense gar nicht.
           </p>
           <p>
             Auf einer Seite mit Werbung lädt dein Browser Programmcode von Google; dabei erhält
@@ -514,8 +514,8 @@ export function PrivacyPage() {
             Wirkung zu messen und – wenn du auch dem zustimmst – Anzeigen nach deinen Interessen
             auszuwählen. Die Partner und ihre Zwecke sind im Dialog aufgeführt. Rechtsgrundlage ist
             deine Einwilligung (§ 25 Abs. 1 TDDDG, Art. 6 Abs. 1 lit. a DSGVO). Ohne Einwilligung
-            zeigen wir keine Werbung. Deine Entscheidung speichert Google in einem Cookie auf deinem
-            Gerät.
+            zeigen wir keine Anzeigen von Google. Deine Entscheidung speichert Google in einem
+            Cookie auf deinem Gerät.
           </p>
           <p>
             Deine Einwilligung kannst du jederzeit mit Wirkung für die Zukunft ändern oder
@@ -538,18 +538,19 @@ export function PrivacyPage() {
       {affiliates && (
         <>
           <h2>Affiliate-Links</h2>
-          <p>Für Besucher ohne KaufCheck Pro zeigen wir, gekennzeichnet als Werbung:</p>
+          <p>Gekennzeichnet als Werbung zeigen wir:</p>
           <ul>
             {insurancePartner && (
               <li>
                 in einigen Ratgebern einen Link zum Vergleich von Kfz-Versicherungen bei{' '}
-                {insurancePartner.name}
+                {insurancePartner.name} (nicht mit KaufCheck Pro)
               </li>
             )}
             {historyPartner && (
               <li>
                 in der Inseratsprüfung und im Ratgeber „Gebrauchtwagen-Checkliste“ einen Link zu
-                kostenpflichtigen Berichten über die Fahrzeughistorie bei {historyPartner.name}
+                kostenpflichtigen Berichten über die Fahrzeughistorie bei {historyPartner.name}{' '}
+                (auch mit KaufCheck Pro)
               </li>
             )}
           </ul>
