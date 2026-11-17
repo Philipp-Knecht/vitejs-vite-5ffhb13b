@@ -742,6 +742,12 @@
   }
 }
 
+.plan-table__note {
+  margin: 8px 0 0;
+  color: var(--c-text-3);
+  font-size: 0.875rem;
+}
+
 .plan-table {
   width: 100%;
   border-collapse: collapse;

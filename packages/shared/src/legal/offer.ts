@@ -103,7 +103,7 @@ export function proFeatures(pro: Entitlements, options: { photoAnalysis: boolean
   }
   if (!pro.showAds)
     features.push(
-      'keine Werbeanzeigen (gekennzeichnete Partner-Links, etwa zu Berichten zur Fahrzeughistorie, bleiben)',
+      'keine Werbebanner und keine Anzeigen von Google (gekennzeichnete Partner-Links, etwa zu Berichten zur Fahrzeughistorie, bleiben)',
     );
   features.push(
     'alle Funktionen der kostenlosen Nutzung, etwa Fragen an den Verkäufer, Checkliste und Preisrechnung',
