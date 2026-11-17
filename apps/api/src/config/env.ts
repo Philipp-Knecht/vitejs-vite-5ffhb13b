@@ -50,6 +50,17 @@ function affiliateUrl(value: string): string | null {
   }
 }
 
+/**
+ * A partner link with `{vin}` once in its query, where the FIN of a listing goes (a FIN
+ * is letters and digits only, so it needs no encoding). Null if anything else is off.
+ */
+function vinUrlTemplate(value: string): string | null {
+  if (value.split('{vin}').length !== 2) return null;
+  const sample = value.replace('{vin}', 'WVWZZZ1KZAW000001');
+  const url = affiliateUrl(sample);
+  return url && new URL(sample).search.includes('WVWZZZ1KZAW000001') ? value : null;
+}
+
 const isoDay = z
   .string()
   .regex(/^\d{4}-\d{2}-\d{2}$/, 'must be a day like 2026-11-01')
@@ -237,11 +248,16 @@ const EnvSchema = z
     AFFILIATE_CAR_INSURANCE_NAME: optionalString,
     /**
      * Partner link to vehicle history reports by VIN (affiliate program, e.g.
-     * carVertical), shown in a check and the checklist to visitors without Pro.
+     * carVertical), shown in a check and the checklist.
      */
     AFFILIATE_VEHICLE_HISTORY_URL: optionalString,
     /** The partner named in the link text, e.g. „carVertical“. */
     AFFILIATE_VEHICLE_HISTORY_NAME: optionalString,
+    /**
+     * The same partner link for a listing whose text names a FIN, with `{vin}` where the
+     * FIN goes: the visitor does not have to type it again. Optional.
+     */
+    AFFILIATE_VEHICLE_HISTORY_VIN_URL: optionalString,
 
     /**
      * Ads sold directly (JSON array, see README): text and an optional image
@@ -294,6 +310,18 @@ const EnvSchema = z
       else if (!affiliateUrl(url)) issue(urlKey, 'must be an https:// link without user name');
       if ((name ?? '').length > 100 || /[\p{Cc}\p{Cf}]/u.test(name ?? ''))
         issue(nameKey, 'must be at most 100 characters without control characters');
+    }
+    if (env.AFFILIATE_VEHICLE_HISTORY_VIN_URL) {
+      if (!env.AFFILIATE_VEHICLE_HISTORY_URL)
+        issue(
+          'AFFILIATE_VEHICLE_HISTORY_VIN_URL',
+          'needs AFFILIATE_VEHICLE_HISTORY_URL and AFFILIATE_VEHICLE_HISTORY_NAME',
+        );
+      else if (!vinUrlTemplate(env.AFFILIATE_VEHICLE_HISTORY_VIN_URL))
+        issue(
+          'AFFILIATE_VEHICLE_HISTORY_VIN_URL',
+          'must be an https:// link without user name with {vin} exactly once in its query',
+        );
     }
     if (env.EMAIL_TRANSPORT === 'smtp' && (!env.SMTP_URL || !env.EMAIL_FROM)) {
       issue('SMTP_URL', 'SMTP_URL and EMAIL_FROM are required for EMAIL_TRANSPORT=smtp');
@@ -413,7 +441,8 @@ export interface AppConfig {
   sponsorAds: SponsorAdConfig[];
   /** Affiliate link to a car insurance comparison; null = none. */
   affiliateCarInsurance: { url: string; name: string } | null;
-  affiliateVehicleHistory: { url: string; name: string } | null;
+  /** `vinUrl` holds `{vin}` where a listing's FIN goes. */
+  affiliateVehicleHistory: { url: string; name: string; vinUrl: string | null } | null;
   analyticsEnabled: boolean;
   serveWeb: boolean;
   webDistDir: string;
@@ -583,6 +612,9 @@ export function loadConfig(source: NodeJS.ProcessEnv = process.env): AppConfig {
         ? {
             url: affiliateUrl(env.AFFILIATE_VEHICLE_HISTORY_URL)!,
             name: env.AFFILIATE_VEHICLE_HISTORY_NAME,
+            vinUrl: env.AFFILIATE_VEHICLE_HISTORY_VIN_URL
+              ? vinUrlTemplate(env.AFFILIATE_VEHICLE_HISTORY_VIN_URL)
+              : null,
           }
         : null,
     analyticsEnabled: env.ANALYTICS_ENABLED,

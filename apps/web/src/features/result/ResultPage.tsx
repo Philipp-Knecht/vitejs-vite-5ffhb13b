@@ -1,4 +1,4 @@
-import type { AnalysisDto } from '@kaufcheck/shared';
+import { findVin, type AnalysisDto } from '@kaufcheck/shared';
 import { useParams } from 'react-router';
 import { ApiRequestError } from '../../api/client';
 import { useAnalysis, useConfig } from '../../api/queries';
@@ -117,7 +117,10 @@ function ResultView({ dto }: { dto: AnalysisDto }) {
           <RecallSection listing={listing} />
           <ChecklistSection analysisId={dto.id} sections={analysis.inspectionChecklist} />
           {/* Between sections, apart from the recall steps and warnings. */}
-          <VehicleHistoryLink placement="result" />
+          <VehicleHistoryLink
+            placement="result"
+            vin={findVin(`${listing.title ?? ''}\n${listing.description ?? ''}`)?.vin ?? null}
+          />
           <NegotiationSection
             analysisId={dto.id}
             observations={analysis.observations}

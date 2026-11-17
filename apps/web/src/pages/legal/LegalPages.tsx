@@ -556,7 +556,10 @@ export function PrivacyPage() {
           </ul>
           <p>
             Es sind einfache Links mit unserer Partnerkennung: Beim Aufruf unserer Seiten lädt dein
-            Browser nichts vom Partner, und wir geben keine Daten über dich oder das Auto weiter.
+            Browser nichts vom Partner, und wir geben keine Daten über dich weiter.
+            {historyPartner?.vinUrl
+              ? ` Über das Auto geben wir nur eines weiter: Nennt ein geprüftes Inserat eine Fahrzeug-Identifizierungsnummer (FIN), enthält der Link zu ${historyPartner.name} in der Prüfung diese FIN, damit du sie dort nicht abtippen musst; der Hinweis am Link sagt das. Sie geht erst mit deinem Klick an ${historyPartner.name}. Die FIN hat der Verkäufer im Inserat veröffentlicht; Rechtsgrundlage ist unser und dein berechtigtes Interesse, den Bericht für dieses Auto ohne Abtippen abzurufen (Art. 6 Abs. 1 lit. f DSGVO).`
+              : ' Auch über das Auto geben wir nichts weiter.'}{' '}
             Erst wenn du einen solchen Link anklickst, öffnet sich die Seite des Partners. Wie bei
             jedem Seitenaufruf erhält der Partner dabei technisch deine IP-Adresse und erfährt, dass
             du von KaufCheck kommst; mit Cookies oder ähnlichen Techniken kann er erfassen, ob über

@@ -117,21 +117,21 @@ All variables are documented in [`.env.example`](.env.example). The API validate
 and refuses unsafe production settings (for example the AI mock, fixture listings, console e-mail
 or a short cookie secret). Only `VITE_*` variables are compiled into the browser bundle.
 
-| Group             | Variables                                                                                                                                                 | Notes                                                                                          |
-| ----------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------- |
-| Core              | `PORT`, `HOST`, `PUBLIC_SITE_URL`, `ALLOWED_ORIGINS`, `TRUST_PROXY`, `CLIENT_IP_HEADER`, `LOG_LEVEL`                                                      | `PUBLIC_SITE_URL` is required in production and is also used at build time for canonical URLs. |
-| Database, secrets | `DATABASE_URL`, `COOKIE_SECRET`                                                                                                                           | `COOKIE_SECRET`: at least 32 random characters in production.                                  |
-| Listing retrieval | `LISTING_FETCH_MODE` (`off`/`live`/`fixtures`), `FETCH_USER_AGENT`, `FETCH_TIMEOUT_MS`, `FETCH_MAX_BYTES`, `FETCH_RATE_PER_MINUTE`, `SHOW_LISTING_PHOTOS` | Production default is `off`. `fixtures` is development/test only.                              |
-| AI                | `AI_PROVIDER`, `ANTHROPIC_*`, `OPENAI_*`, `AI_TIMEOUT_MS`, `AI_MAX_CONCURRENCY`, `AI_PHOTO_ANALYSIS`, `AI_MAX_PHOTOS`                                     | See [AI provider configuration](#ai-provider-configuration).                                   |
-| Plans             | `ANON_MONTHLY_ANALYSES`, `FREE_MONTHLY_ANALYSES`, `PRO_MONTHLY_ANALYSES`, `ANALYZE_RATE_PER_MINUTE`, `REGISTER_RATE_PER_HOUR`                             | Defaults: 3 without account, 10 free, 300 Pro per calendar month (UTC).                        |
-| Payments          | `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET`, `STRIPE_PRICE_ID_PRO`, `VAT_MODE`, `STRIPE_PAYMENT_METHODS`                                                 | All three Stripe values or none; payments also need SMTP e-mail and the full operator details. |
-| Ads               | `ADSENSE_CLIENT`, `ADSENSE_SLOT`                                                                                                                          | See [Google AdSense](#google-adsense).                                                         |
-| Affiliate         | `AFFILIATE_CAR_INSURANCE_URL`, `AFFILIATE_CAR_INSURANCE_NAME`                                                                                             | See [Affiliate link](#affiliate-link).                                                         |
-| Own ads           | `SPONSOR_ADS`                                                                                                                                             | See [Ads sold directly](#ads-sold-directly).                                                   |
-| E-mail            | `EMAIL_TRANSPORT` (`none`/`smtp`/`console`), `SMTP_URL`, `EMAIL_FROM`                                                                                     | Needed for password reset; without e-mail the feature is shown as unavailable.                 |
-| Operations        | `ANALYTICS_ENABLED`, `SERVE_WEB`, `WEB_DIST_DIR`, `ANON_RETENTION_DAYS`, `HOSTING_PROVIDER`                                                               | `HOSTING_PROVIDER=render` names Render in the privacy policy (detected automatically there).   |
-| Web (build time)  | `VITE_IMPRINT_NAME`, `VITE_IMPRINT_ADDRESS` (lines separated by `\|`), `VITE_CONTACT_EMAIL`, `VITE_CONTACT_PHONE`, `VITE_ADS_PROVIDER`                    | The imprint is legally required in Germany; the server reads the same values for contracts.    |
-| Tests             | `TEST_DATABASE_URL`, `E2E_DATABASE_URL`                                                                                                                   | Defaults: `kaufcheck_test` and `kaufcheck_e2e` on localhost.                                   |
+| Group             | Variables                                                                                                                                                             | Notes                                                                                          |
+| ----------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------- |
+| Core              | `PORT`, `HOST`, `PUBLIC_SITE_URL`, `ALLOWED_ORIGINS`, `TRUST_PROXY`, `CLIENT_IP_HEADER`, `LOG_LEVEL`                                                                  | `PUBLIC_SITE_URL` is required in production and is also used at build time for canonical URLs. |
+| Database, secrets | `DATABASE_URL`, `COOKIE_SECRET`                                                                                                                                       | `COOKIE_SECRET`: at least 32 random characters in production.                                  |
+| Listing retrieval | `LISTING_FETCH_MODE` (`off`/`live`/`fixtures`), `FETCH_USER_AGENT`, `FETCH_TIMEOUT_MS`, `FETCH_MAX_BYTES`, `FETCH_RATE_PER_MINUTE`, `SHOW_LISTING_PHOTOS`             | Production default is `off`. `fixtures` is development/test only.                              |
+| AI                | `AI_PROVIDER`, `ANTHROPIC_*`, `OPENAI_*`, `AI_TIMEOUT_MS`, `AI_MAX_CONCURRENCY`, `AI_PHOTO_ANALYSIS`, `AI_MAX_PHOTOS`                                                 | See [AI provider configuration](#ai-provider-configuration).                                   |
+| Plans             | `ANON_MONTHLY_ANALYSES`, `FREE_MONTHLY_ANALYSES`, `PRO_MONTHLY_ANALYSES`, `ANALYZE_RATE_PER_MINUTE`, `REGISTER_RATE_PER_HOUR`                                         | Defaults: 3 without account, 10 free, 300 Pro per calendar month (UTC).                        |
+| Payments          | `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET`, `STRIPE_PRICE_ID_PRO`, `VAT_MODE`, `STRIPE_PAYMENT_METHODS`                                                             | All three Stripe values or none; payments also need SMTP e-mail and the full operator details. |
+| Ads               | `ADSENSE_CLIENT`, `ADSENSE_SLOT`                                                                                                                                      | See [Google AdSense](#google-adsense).                                                         |
+| Affiliate         | `AFFILIATE_CAR_INSURANCE_URL`, `AFFILIATE_CAR_INSURANCE_NAME`, `AFFILIATE_VEHICLE_HISTORY_URL`, `AFFILIATE_VEHICLE_HISTORY_NAME`, `AFFILIATE_VEHICLE_HISTORY_VIN_URL` | See [Affiliate link](#affiliate-link).                                                         |
+| Own ads           | `SPONSOR_ADS`                                                                                                                                                         | See [Ads sold directly](#ads-sold-directly).                                                   |
+| E-mail            | `EMAIL_TRANSPORT` (`none`/`smtp`/`console`), `SMTP_URL`, `EMAIL_FROM`                                                                                                 | Needed for password reset; without e-mail the feature is shown as unavailable.                 |
+| Operations        | `ANALYTICS_ENABLED`, `SERVE_WEB`, `WEB_DIST_DIR`, `ANON_RETENTION_DAYS`, `HOSTING_PROVIDER`                                                                           | `HOSTING_PROVIDER=render` names Render in the privacy policy (detected automatically there).   |
+| Web (build time)  | `VITE_IMPRINT_NAME`, `VITE_IMPRINT_ADDRESS` (lines separated by `\|`), `VITE_CONTACT_EMAIL`, `VITE_CONTACT_PHONE`, `VITE_ADS_PROVIDER`                                | The imprint is legally required in Germany; the server reads the same values for contracts.    |
+| Tests             | `TEST_DATABASE_URL`, `E2E_DATABASE_URL`                                                                                                                               | Defaults: `kaufcheck_test` and `kaufcheck_e2e` on localhost.                                   |
 
 Do not set `NODE_ENV` in `.env`: it defaults to `development`, the Docker image sets `production`,
 and a `NODE_ENV` in `.env` would turn `vite build` into a development build (the build aborts in
@@ -522,8 +522,12 @@ workshop). `SPONSOR_ADS` is a JSON array, at most 20 entries:
   members (Pro promises no ad banners or Google ads, not no partner links), in a check
   (between the checklist and the negotiation section, never inside the recall check with its
   official steps and warnings) and in the checklist guide, with the note that a report only holds
-  what the provider's sources recorded. No VIN or other data goes to the partner; the visitor
-  enters the VIN there.
+  what the provider's sources recorded. Nothing about the visitor goes to the partner. With
+  `AFFILIATE_VEHICLE_HISTORY_VIN_URL` (the partner's link for a known VIN, with `{vin}` once in its
+  query, e.g. carVertical's `…&sub3={vin}`), a check of a listing that names a FIN links with that
+  FIN, so the visitor does not type it again; the note at the link and the privacy policy say so.
+  Without it, or without a FIN in the listing, the plain link is used and the visitor enters the
+  VIN there.
 - Partner terms of carVertical (https://www.carvertical.com/de/affiliate-program-terms, read on
   23.10.2026): own links and creatives only as provided (4.1, 5.4), disclosure on every page
   (5.6), no rebates from the commission (4.3) and no disparaging statements about carVertical

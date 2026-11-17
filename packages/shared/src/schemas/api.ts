@@ -500,8 +500,14 @@ export const PublicConfigSchema = z.object({
   /** Affiliate links (plain links with the partner ID); null = not configured. */
   affiliates: z.object({
     carInsurance: z.object({ url: z.string(), name: z.string() }).nullable(),
-    /** Vehicle history reports by VIN; missing in configurations cached before it existed. */
-    vehicleHistory: z.object({ url: z.string(), name: z.string() }).nullable().optional(),
+    /**
+     * Vehicle history reports by VIN; missing in configurations cached before it existed.
+     * `vinUrl` holds `{vin}` where a listing's FIN goes (missing in older configurations).
+     */
+    vehicleHistory: z
+      .object({ url: z.string(), name: z.string(), vinUrl: z.string().nullable().optional() })
+      .nullable()
+      .optional(),
   }),
   /** Operator facts the privacy policy depends on. */
   privacy: z.object({

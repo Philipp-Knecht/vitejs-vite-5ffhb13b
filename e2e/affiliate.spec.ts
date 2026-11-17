@@ -111,10 +111,33 @@ test('the vehicle history link is labelled, plain, apart from the recall check, 
   await expect(
     page.getByRole('region', { name: 'Rückrufe prüfen' }).locator('.affiliate'),
   ).toHaveCount(0);
+  // No FIN in the listing: the plain link.
+  await expect(
+    page.getByRole('complementary', { name: 'Werbung: Affiliate-Link' }).getByRole('link'),
+  ).toHaveAttribute('href', 'https://history.example/check?aff=e2e');
+
+  // A listing that names its FIN: the link takes it along, and the note says so.
+  await page.goto('/inserat-pruefen');
+  await page
+    .getByLabel('Inseratstext oder Link zum Auto-Inserat')
+    .fill(`${PASTED_LISTING}\nFIN: WVWZZZ1KZEW123456`);
+  await page.getByRole('button', { name: 'Inserat prüfen' }).click();
+  await expect(page).toHaveURL(/\/analyse\//);
+  const withVin = page.getByRole('complementary', { name: 'Werbung: Affiliate-Link' });
+  await expect(withVin.getByRole('link')).toHaveAttribute(
+    'href',
+    'https://history.example/check?aff=e2e&vin=WVWZZZ1KZEW123456',
+  );
+  await expect(withVin.getByRole('link')).toHaveAccessibleDescription(
+    /Der Link gibt die FIN aus dem Inserat \(WVWZZZ1KZEW123456\) an Beispielhistorie weiter/,
+  );
 
   await page.goto('/datenschutz');
   await expect(
     page.getByText(/kostenpflichtigen Berichten über die Fahrzeughistorie bei Beispielhistorie/),
+  ).toBeVisible();
+  await expect(
+    page.getByText(/enthält der Link zu Beispielhistorie in der Prüfung diese FIN/),
   ).toBeVisible();
 
   const email = uniqueEmail();

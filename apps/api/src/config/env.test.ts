@@ -74,7 +74,36 @@ describe('loadConfig', () => {
     expect(config.affiliateVehicleHistory).toEqual({
       url: 'https://partner.example/history?a=1',
       name: 'carVertical',
+      vinUrl: null,
     });
+    // With a link for listings that name a FIN.
+    const withVin = {
+      ...BASE,
+      AFFILIATE_VEHICLE_HISTORY_URL: 'https://partner.example/history?a=1',
+      AFFILIATE_VEHICLE_HISTORY_NAME: 'carVertical',
+    };
+    expect(
+      loadConfig({
+        ...withVin,
+        AFFILIATE_VEHICLE_HISTORY_VIN_URL: 'https://partner.example/history?a=1&sub3={vin}',
+      }).affiliateVehicleHistory?.vinUrl,
+    ).toBe('https://partner.example/history?a=1&sub3={vin}');
+    for (const vinUrl of [
+      'https://partner.example/history?a=1',
+      'https://partner.example/history?a={vin}&b={vin}',
+      'https://partner.example/{vin}/history',
+      'http://partner.example/history?sub3={vin}',
+    ])
+      expect(
+        () => loadConfig({ ...withVin, AFFILIATE_VEHICLE_HISTORY_VIN_URL: vinUrl }),
+        vinUrl,
+      ).toThrow(/AFFILIATE_VEHICLE_HISTORY_VIN_URL.*\{vin\} exactly once in its query/);
+    expect(() =>
+      loadConfig({
+        ...BASE,
+        AFFILIATE_VEHICLE_HISTORY_VIN_URL: 'https://partner.example/history?sub3={vin}',
+      }),
+    ).toThrow(/needs AFFILIATE_VEHICLE_HISTORY_URL and AFFILIATE_VEHICLE_HISTORY_NAME/);
     expect(describeConfig(config).affiliateVehicleHistory).toBe(true);
     for (const env of [
       { AFFILIATE_VEHICLE_HISTORY_URL: 'https://partner.example/' },
